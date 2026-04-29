@@ -1,45 +1,22 @@
 STATUS: DONE
 
 COMPLETED:
-- Audited the 4 original memory files.
-- Split multi-topic `feedback_workflow.md` into focused memory files.
-- Shortened memory files so each topic file stays under 25 lines.
-- Renamed the old underscore-prefixed memory folder to `MEMORY`.
-- Renamed the old underscore-prefixed staging folder to `STAGING`.
-- Renamed the old underscore-prefixed archive folder to `ARCHIVE`.
-- Updated allowed markdown references to `MEMORY`, `STAGING`, and `ARCHIVE`.
-- Verified remaining old underscore references are outside task scope or explicitly forbidden (`CODEX_TASKS.md`, README/Tools docs).
+- Applied CT-SKILL-01 deterministic text fixes to `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md`.
+- Warblade skill #6 renamed from `War Stomp` to `Earthsplitter`.
+- Warblade skill #7 chain condition updated to `Earthsplitter sonrasi`.
+- Inserted Rage additive clarification note after the Warblade Rage resource line.
+- Elementalist skill #11 renamed from `Combustion` to `Element Charge`.
+- Elementalist Fire Burst build axis updated to `Element Charge+...`.
+- Shadowblade numbered skill #7 renamed from `Sever` to `Severance`; resource `Sever (0-100)` was not touched.
+- Ravager `Undying Tenacity` row replaced with the pre-decided death-cheat behavior and updated Death Wish chain condition.
+- Ronin Iaido Burst build axis updated from `Quickdraw+...` to `Quickdraw Slash+...`.
 
-SPLIT FILES:
-- `MEMORY/feedback_workflow.md` was split and removed.
-- `MEMORY/feedback_agent_delegation.md`
-- `MEMORY/feedback_encoding.md`
-- `MEMORY/feedback_git_attribution.md`
-- `MEMORY/feedback_temp_files.md`
+VERIFICATION:
+- `rg` confirmed the expected replacement strings are present.
+- `git diff --numstat -- TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md` reports `8` added and `7` removed lines.
+- Remaining `War Stomp` references are outside the requested exact changes: Warblade `Control Breaker` build axis and Brawler `Aerial Rave` synergy.
+- Remaining `Combustion` references are only in the S41 revision summary old-name row.
+- `CT-SKILL-01 done — 8 lines changed.`
 
-RENAMED FOLDERS:
-- old underscore-prefixed memory folder -> `MEMORY/`
-- old underscore-prefixed staging folder -> `STAGING/`
-- old underscore-prefixed archive folder -> `ARCHIVE/`
-
-REF FILES UPDATED:
-- `AGENTS.md`
-- `ANTIGRAVITY.md`
-- `CLAUDE.md`
-- `CODEX.md`
-- `CURRENT_STATUS.md`
-- `OTHER_AGENTS.md`
-- `TASARIM/MASTER_KARAR_BELGESI.md`
-- `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md`
-- `STAGING/PLAYTEST_REPORT.md`
-- `STAGING/PROMPTS_S43/PIXELLAB_CFR_V3_PROMPTS.md`
-- `ARCHIVE/**/*.md` files that contained old underscore references
-
-ERRORS:
-- NONE
-
-NOTES:
-- `CODEX_TASKS.md` was not cleared because the task explicitly listed it under FORBIDDEN: "Do not change CODEX_TASKS.md".
-- Git commit was limited to task-scoped paths to avoid staging unrelated dirty work already present in the worktree.
-
-NEXT_SIGNAL: "Memory and folder cleanup done -- Claude review"
+ERRORS: NONE
+NEXT_SIGNAL: "CT-SKILL-01 done — Claude review deterministic doc edits"

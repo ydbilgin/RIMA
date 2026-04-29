@@ -104,6 +104,7 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 
 **Core Fantasy:** "Yaklaş. Sabitle. Zırhı kır. İnfaz et."
 **Kaynak:** Rage (0-100) — hasar VEREREK +10/vuruş, CC'li düşmana +20, boşta -5/sn *(savaş dışında — oda temizse — drain yok)*
+> Note: Skill Rage values (Rage+N) are additive burst gains on top of passive code accumulation. Canonical passive: 1/hit-dealt, 5/hit-taken, 3/kill, decay 10/s. Code is authoritative for base rate.
 **[V] Dolum (Dominance):** CC uygulamaları, başarılı Iron Counter (0.8s pencere), CC sonrası punish aksiyonları. Hasar verme döngüsünden ayrı ritim.
 **[V] Burst:** BLADESTORM — V Meter dolunca: 5s spin, CC immune, her 0.5s AoE %120 hasar
 **Demo sınıfı:** ✅ Faz 1'de mevcut
@@ -120,8 +121,8 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 | 3 | **Iron Crush** | ✦ | Core | 6s: tüm hasar +%30 | Sunder Mark aktif hedefte → katlanır |
 | 4 | **Gravity Cleave** | ⬡⚡ | Core | Silahı yere çarpar, 4m çapında çeker + %140 hasar, 0.8s slow | Iron Charge sonrası → çekilenler 1.5s stun, Rage+15 |
 | 5 | **Sunder Mark** | ✦↓ | Core | Hedefe işaret: 8s zırh -%40, tüm hasar bonusu görünür | Death Blow aktifken → zırh -%60 |
-| 6 | **War Stomp** | ⬡↑ | Core | 3m knockup 2s, Rage+25 | Bladestorm sırasında → +1s uzar |
-| 7 | **Ironclad Momentum** | ↑✦ | Core | 6s: alınan hasar %30 yok sayılır + her 10 hasar = +10 Rage | War Stomp sonrası → savunma %50'ye çıkar |
+| 6 | **Earthsplitter** | ⬡↑ | Core | 3m knockup 2s, Rage+25 | Bladestorm sırasında → +1s uzar |
+| 7 | **Ironclad Momentum** | ↑✦ | Core | 6s: alınan hasar %30 yok sayılır + her 10 hasar = +10 Rage | Earthsplitter sonrasi → savunma %50'ye çıkar |
 | 8 | **Iron Counter** | ↑⚡ | Core | 0.8s pencere: vurulursa %180 karşı saldırı + Rage+25 + 0.5s stun | Rage 80+ → knockback şok dalgası + 0.5s stagger |
 | 9 | **Blade Rush** | ▶↑ | Advanced | 6m dash + çizgideki herkese %120, Rage+15/hedef | 3+ hedef → Rage+50 |
 | 10 | **Battle Surge** | ✦↑ | Advanced | 8s: her Rage harcaması = HP +%5 *(harcama sonrası 2s internal CD — bu sürede ikinci harcama heal üretmez)* | Rage 80+'ta aktive → süre 12s |
@@ -161,10 +162,10 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 | 8 | **Frost Wall** | ⚓↑ | Core | Cursor placement LINE wall: 4s ışık-buz bariyeri, temas eden düşmanları yavaşlatır ve radiant çatlama hasarı verir | Frozen düşman yakında → Freeze'i 1s uzatır |
 | 9 | **Solar Flare** | ⚓⚡ | Advanced | Cursor cone radiant burst; hat boyunca kesişen düşmanlara piercing ışık hasarı uygular | Light State aktifken → cone içinde ek radiant pulse |
 | 10 | **Radiant Pillar** | ✦▶ | Advanced | 6s: kendine yakın aura; Fire/Frost skill'ler radiant echo oluşturur, Light skill recovery -%30 | Lightbreak sonrası cast → süre 10s'ye uzar |
-| 11 | **Combustion** | ✦▶ | Advanced | 8s: tüm Fire spell instant cast, mana maliyet ×2 | Fire State 5 stack → mana maliyet artışı yok |
+| 11 | **Element Charge** | ✦▶ | Advanced | 8s: tüm Fire spell instant cast, mana maliyet ×2 | Fire State 5 stack → mana maliyet artışı yok |
 | 12 | **Blizzard** | ⬡↑ | Master | 1s cast → bölge bağımsız 8s slow+tick (kanal gerekmez, hareket devam eder) | Meteor'dan önce → Meteor knockdown 4s |
 
-**Build Eksenleri:** "Fire Burst" (Combustion+Fireball+Living Bomb+Meteor) / "Frost Lock" (Glacial Spike+Blizzard+Frozen Orb+Meteor) / "Radiant Break" (Prism Beam+Radiant Pillar+Frost Wall+Solar Flare)
+**Build Eksenleri:** "Fire Burst" (Element Charge+Fireball+Living Bomb+Meteor) / "Frost Lock" (Glacial Spike+Blizzard+Frozen Orb+Meteor) / "Radiant Break" (Prism Beam+Radiant Pillar+Frost Wall+Solar Flare)
 
 ---
 
@@ -189,7 +190,7 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 4. Shadow Clone — decoy phantom
 5. Death Mark — 4sn delay patlama
 6. Veil Burst — etrafa 4 phase teleport-strike
-7. Sever — low-HP execute line
+7. Severance — low-HP execute line
 8. Smoke Veil — AoE stealth (kendi single player)
 9. Chain Cull — marked'den marked'e zıplar, 3 hop
 10. Shadow Pin — 1.5sn root, dagger fırlat
@@ -283,7 +284,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 5 | **Bloodthirst** | ⚓↑ | Core | Hızlı 5 vuruş, her vuruş küçük iyileşme | HP<%20 + Fury%100 → 8 vuruşa yükselir |
 | 6 | **Bloodied Roar** [S41] | ⬡ | Core | 3m çevresinde 3s stagger. % HP düştükçe buff güçlenir | Stagger'daki hedefe Bloodlust Strike → +%100 hasar |
 | 7 | **Barbaric Charge** | ▶⬡ | Core | Düz çizgide her şeyi iter, stun/root immune | Duvara çarparsa → stun 2s |
-| 8 | **[YENİ] Undying Tenacity** | ⚓↑ | Core | 4s: alınan hasar %40 yok sayılır, HP %20 altına düşemez, alınan her darbe +10 Fury | Death Wish aktifken → süre bitince biriken Fury'nin %20'si kadar HP yeniler |
+| 8 | **[YENİ] Undying Tenacity** | ⚓↑ | Core | Fatal hasar HP'yi 1'e indirir; 4s hasar bagisikligi kazanir, bu pencerede iyilesme devre disi. Cooldown: 45s. | Death Wish aktifken → pencere 6s'ye uzar, bitis aninda Fury +30 |
 | 9 | **Iron Grab** | ⬡▶ | Advanced | Yakala (≤3m): 1.5s hold, fırlat, Fury+30 | Fırlatılan 3.'e çarparsa → her ikisi stun |
 | 10 | **[YENİ] Blood-Drunk Leap** | ▶↓ | Advanced | Hedefe sıçrar, %120 hasar. Fury'nin %30'unu tüketir, her 10 Fury +%20 hasar | HP<%40 iken → vuruşun %15'i lifesteal + 2s CC bağışıklığı |
 | 11 | **Shatter Armor** | ✦▶ | Advanced | Hedefin savunması -%40, 10s | Warblade Sunder Mark aktifken → -%60 |
@@ -322,7 +323,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 11 | **Iai Pressure** | ✦↑ | Advanced | 6s: her Haste Dash Quickdraw bonusunu taşır | Tension 100'de iken → tüm dashler extra blade wave bırakır |
 | 12 | **Void Cleave** | 💥✦ | Master | Tension'ın tamamını boşalt → önündeki 10m koni içindeki tüm düşmanlara %15/Tension hasar, animasyon boyunca dokunulmaz *(yönlü finisher, ekran-wide değil)* | Iaido Stance öncesindeyse → hasar ×2, 1s hitstop |
 
-**Build Eksenleri:** "Iaido Burst" (Quickdraw+Iaido Stance+Tension 100+Void Cleave) / "Phantom Dance" (Haste Dash+Wind Step+Phantom Step+Flash Draw) / "Wave Clear" (Sōken-giri+Crescent Arc+Iai Pressure+Wind Step)
+**Build Eksenleri:** "Iaido Burst" (Quickdraw Slash+Iaido Stance+Tension 100+Void Cleave) / "Phantom Dance" (Haste Dash+Wind Step+Phantom Step+Flash Draw) / "Wave Clear" (Sōken-giri+Crescent Arc+Iai Pressure+Wind Step)
 
 ---
 
