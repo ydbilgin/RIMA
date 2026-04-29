@@ -1,55 +1,100 @@
 # CURRENT STATUS
-**2026-04-29 · S43 · Faz 1** · Pipeline → `_STAGING/PROMPTS_S43/PRODUCTION_GUIDE_S43.md`
-⚠️ Graphify son: 2026-04-22 — S43 batch sonrası güncelle.
+**2026-04-29 · S43 · Phase 1**
 
-## Anchor
+## ACTIVE BLOCK — Sprite Rotation Production (PixelLab CFR v3 → All 10 Classes)
+CFR v3 prompts ready for all 10 classes. Workflow: PixelLab UI → upload anchor → Low Top-Down → paste description → Generate v3 Rotation → save char_id → MCP animation production.
+Prompts: `STAGING/PROMPTS_S43/PIXELLAB_CFR_V3_PROMPTS.md`
 
-| Class | Anchor | char_id | Rot | Anim |
+### PlaytestScenarios Status
+`Assets/Tests/PlayMode/PlaytestScenarios.cs` created with 8 expanded PlayMode scenarios. Codex `validate_script` returned 0 diagnostics, but MCP PlayMode run did not complete because the first run stuck on `DeathScreen_PlayerDies_ShowsDeathScreen`.
+
+Claude follow-up applied test-only QC fixes:
+- `WaitForRoomCleared` uses `Time.unscaledDeltaTime`.
+- `RewardPickup` wait loop uses `Time.unscaledDeltaTime`.
+- `RageSystem_HitTaken_AddsRage` explicitly wires `Health.OnDamageTaken -> RageSystem.OnTakeDamage` inside the test.
+- Death screen wait already uses `WaitForSecondsRealtime`.
+
+Current state: test file is compile-clean by validator and needs a fresh Unity Test Runner / MCP re-run after the stuck MCP job is cleared. Memory sync reminder for Claude: update project memory with the PlaytestScenarios stuck-run pattern, realtime/unscaled wait rule, and explicit RageSystem event wiring note. Codex should not update memory directly for this handoff.
+
+### Locked Decisions
+| Item | Detail |
+|---|---|
+| Ranger Accent | Cold Blue `#7BA7BC` via RiftGlowVFX runtime |
+| Elementalist | Canonical = Tunic anchor, worn/crack via VFX |
+| Rift Crack | LINE baked (PixelLab), GLOW runtime (RiftGlowVFX.cs) |
+| Brawler | v3 Arena Veteran — warm tan, bald, torn vest, amber crack |
+| RageSystem | **CANONICAL = CODE**: 1/hit-dealt, 5/hit-taken, 3/kill, decay 10/s |
+| Camera/View | **CANONICAL = 35 deg ARPG** (CoplayDev High Top-Down). 80 deg concept abandoned. |
+| PixelLab CFR v3 | Upload anchor (south) → Low Top-Down → description → Generate v3 Rotation → char_id → MCP anim |
+| PixelLab Direction | S43 anchors are SW-facing (exact South not achievable). Raw PixelLab labels != canonical game dirs. Do NOT rename source files. Remap applied at Unity import. |
+| Playtest agent | Codex writes + runs PlayMode tests. Gemini CLI = web research only. |
+| Encoding rule | Internal .md files: ASCII-only. No Turkish diacritics. |
+
+## Anchor Status
+| Class | Status | char_id | Rot | Anim |
 |---|---|---|---|---|
-| Warblade | ✅ | ⏳ | ⏳ | ⏳ |
-| Shadowblade | ✅ | ⏳ | ⏳ | ⏳ |
-| Ranger | ✅ edit⏳ | ⏳ | ⏳ | ⏳ |
-| Ronin | ✅ edit⏳ | ⏳ | ⏳ | ⏳ |
-| Gunslinger | ✅ edit⏳ | ⏳ | ⏳ | ⏳ |
-| Brawler | ✅ 2026-04-29 | ⏳ | ⏳ | ⏳ |
-| Ravager | ✅ PASS 2026-04-29 · sol üst variant · PNG save bekliyor | ⏳ | ⏳ | ⏳ |
-| Elementalist | ⚠️ regen (drift) | `9fb46502` | ✅ offset | ⏳ |
-| Hexer | ⏳ regen | — | — | — |
-| Summoner | ⏳ regen | — | — | — |
+| Warblade | LOCKED | pending | pending | pending |
+| Ravager | LOCKED | pending | pending | pending |
+| Ronin | LOCKED | pending | pending | pending |
+| Gunslinger | LOCKED | pending | pending | pending |
+| Ranger | LOCKED | pending | pending | pending |
+| Shadowblade | LOCKED | pending | pending | pending |
+| Elementalist | LOCKED | pending | pending | pending |
+| Summoner | LOCKED | pending | pending | pending |
+| Hexer | LOCKED | pending | pending | pending |
+| Brawler | LOCKED | pending | pending | pending |
 
-Style refs: Warblade · Shadowblade · Ronin · Ravager · Gunslinger · Ranger · Brawler
-Elementalist = style anchor DEĞİL (drift var)
+## Priority Queue
+1. **Sprites:** All 10 classes — PixelLab CFR v3 rotations (user generates UI) → char_id per class → MCP anim
+2. **Playtest:** Re-run `PlaytestScenarios.cs` after MCP/Test Runner is unstuck; current file has Claude QC fixes but no completed PASS/FAIL run yet
+3. **Skill Review:** Full skill audit all classes — Claude + user approval required
+4. **Docs:** Update ARA_RAPOR_RIMA_v2.docx — re-embed anchor PNGs (manual)
 
-## Sıra (BURADA → PixelLab üretim)
-- Edit Image: Ranger · Ronin · Gunslinger
-- Regen: Elementalist · Hexer · Summoner
-- Create Character → char_id (tüm PASS sonrası)
-- Animate: Elementalist + Warblade (MCP)
-- Unity: PPU=128 refactor · death screen · skill draft UI · Faz 1 loop testi (Codex)
-- Doc: STYLE_BIBLE accent sync · AGENTS revize (rima-doc)
+## Script Status
+| Script | Status | Note |
+|---|---|---|
+| `BossAI_PenitentSovereign.cs` | Done | |
+| `HollowMite.cs` | Done | |
+| `TheWound.cs` | Done | |
+| `HandGlowVFX.cs` | Done | |
+| `RiftGlowVFX.cs` | Done | |
+| `SkillFlowTracker.cs` | Done | |
+| `DeathScreenManager.cs` | Done | |
+| `PrefabWiringSetup.cs` | Done | |
+| EditMode Tests (x6) | Done | |
+| PlayMode Tests (x16) | Done | 16/16 PASS — Codex MCP |
+| PlaytestScenarios.cs | Ready | 8 scenarios; 0 diagnostics; all 3 Claude QC fixes confirmed in file (unscaledDeltaTime x2, explicit rage wire); fresh MCP/Test Runner run pending |
+| Prefab Wiring | Setup Ready | Run Tools > RIMA > Setup All Prefabs & UI |
+| `RIMA.Editor.asmdef` | Fixed | |
 
-## Açık Sorular (2026-04-29 — yeni session'da konuş)
+## Doc Debt Status
+| Task | Status |
+|---|---|
+| F01: PRODUCTION_GUIDE ref cleaned | Done |
+| F02: RageSystem values → SYSTEM_MAP | Done |
+| F03: SYSTEM_MAP stale scripts | Done |
+| F07: CROSS_CLASS_SKILL_MATRIX archived | Done — Codex |
+| F08: STYLE_BIBLE camera sync | Done — Claude |
+| F09: STYLE_BIBLE color table sync | Done — Claude |
+| F10: Stale anim guides archived | Done — Codex |
+| F11: SINIF name drift cleaned | Done — Codex |
+| F12: Elementalist MASTER-SINIF sync | Done — Codex |
+| F13: FAZ3 Crusader/Lancer/Rift Parry removed | Done — Codex |
+| F14: FAZ5 stale class/skill updated | Done — Codex |
+| F15: GDD stale header | Done |
+| F16: BOSS_DESIGN, COMBAT_ROSTER S42 refs | Done |
+| SINIF QC (Claude) | PASS — Soul Dart written |
+| Encoding fix: STYLE_BIBLE.md rewritten ASCII | Done — Claude |
+| Agent routing update: AGENTS.md | Done — Claude |
 
-**"Delete-the-book" edit karakteri:**
-- Dosya: `pixellab-Delete-the-book-behind-the-cha-1777421830646 (1).png`
-- QC sonucu: Stil PASS (Gemma + Claude). Outline/shading/proporsiyon anchors ile tutarlı. Minor: mavi tunik biraz fazla saturated, weathered doku az.
-- İfade: Sinirli değil — kararlı/focused. Fractured Epic için uygun.
-- **❓ Soru 1:** Bu hangi class için üretildi? (Orb tutuyor → Elementalist sanılıyor ama outfit farklı: tunik+etek vs mevcut anchor'ın crop top+pantolon)
-- **❓ Soru 2:** Eğer Elementalist regen ise → mevcut Elementalist anchor'ı (contact sheet'teki) replace edecek mi? Outfit kimliği değişiyor.
-- **❓ Soru 3:** Onaylanırsa `_STAGING/anchors/elementalist/elementalist_anchor.png` güncellenir ve contact sheet regen edilir.
+## Infrastructure
+- Git repo (code/docs only, PNGs excluded)
+- .gitattributes added — LF normalization, binary exclusions
+- QC Master: `STAGING/anchors/_ANCHOR_QC_MASTER_S43.md`
+- ARA_RAPOR_RIMA_v2.docx — anchor PNGs updated, needs re-embed (manual)
+- MCP: CoplayDev v9.6.8 via uvx/mcpforunityserver
 
-## Beklemede
-- Edit Image: Ranger (bow crack) · Ronin (scabbard crack) · Gunslinger (barrel crack)
-- Ravager anchor QC: PASS; sol üst variant seçildi. Gerçek PNG workspace'e kaydedilince `_STAGING/anchors/ravager/ravager_anchor.png` güncellenecek.
-- Unity Batch 01-07 QC — Claude review pending
-- RageSystem inspector: ragePerHitDealt=2, ragePerKill=5, decayDelay=1.5, decayPerSecond=10 ⚠️ verify önce
-- FAZ_MASTER #17-#52 sync (Faz 2 başında)
-- Memory compact pass S40 (35 dosya)
-
-## Sonraki Temizlik (S43 sprite batch bittikten sonra)
-- /lint çalıştır → tutarsızlık + stale entry tara
-- Genel temizlik: _STAGING düzeni, arşiv taşıması, orphan dosyalar
-- Daha temiz workflow önlemleri: belirsiz prompt → önce uyar, yeni dosya açma disiplini
-
-## Ref
-Sahne: `Assets/Scenes/_IsoGame.unity` · Sistemler: SYSTEM_MAP.md · Kararlar: MASTER_KARAR_BELGESI.md
+## Refs
+- **Scene:** `Assets/Scenes/_IsoGame.unity`
+- **Architecture:** `SYSTEM_MAP.md`
+- **Decisions:** `MASTER_KARAR_BELGESI.md`

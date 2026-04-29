@@ -1,4 +1,4 @@
-﻿# CODEX BRAIN (Persistent)
+# CODEX BRAIN (Persistent)
 
 ## Purpose
 This file is Codex's persistent operational memory for this project.
@@ -7,6 +7,28 @@ Read this file first on every new user request.
 ## Protection Rule
 - CODEX.md is protected and must NOT be deleted.
 - If missing, recreate immediately and restore these rules.
+
+## Memory Sources (Shared -- Read These)
+| File | Contents |
+|---|---|
+| `MEMORY/INDEX.md` | Master memory index -- read this first, open files on demand |
+| CURRENT_STATUS.md | Active phase, locked decisions, anchor status, priority queue |
+| SYSTEM_MAP.md | Unity system wiring, Inspector refs, prefab slots |
+| MASTER_KARAR_BELGESI.md | All major locked design decisions, numbered |
+| AGENTS.md | Agent routing matrix |
+| ANTIGRAVITY.md | Antigravity context (asset/analysis agent) |
+| OTHER_AGENTS.md | Gemini CLI, Ollama, occasional agents |
+
+All memory lives in `MEMORY/`. No private/local paths.
+
+## Git Attribution Rule (MANDATORY)
+When Codex edits CURRENT_STATUS.md, SYSTEM_MAP.md, or any TASARIM/ doc, commit immediately:
+```
+git add <changed files>
+git commit -m "CODEX: <one line describing what changed and why>"
+```
+Example: `git commit -m "CODEX: Fixed RageSystem default values in SYSTEM_MAP.md"`
+Claude edits memory via Claude Code (no git needed). Antigravity uses ANTIGRAVITY: prefix.
 
 ## Priority Order
 1. User's latest explicit command
@@ -28,6 +50,17 @@ Read this file first on every new user request.
 - Do NOT call any MCP tool unless the current task truly requires it (Unity MCP, Canva, etc.).
 - Avoid "just in case" MCP calls; they add latency and can increase token burn.
 - Default: solve via local files + shell. Escalate to MCP only when needed (e.g., Unity scene inspection, automated import/wiring).
+
+### MCP run_tests — Authority & Syntax
+When a task explicitly grants MCP `run_tests` authority:
+```
+run_tests mode=PlayMode assembly=RIMA.Tests.PlayMode
+run_tests mode=EditMode assembly=RIMA.Tests
+```
+- PlayMode tests require Unity scene loaded; EditMode tests do not.
+- Compile errors → fix in test file, re-run. Max 2 attempts.
+- Runtime failures from missing scene objects → report as-is, do NOT fix game logic.
+- Test file: `Assets/Tests/PlayMode/RoomFlowTests.cs` (namespace: `RIMA.Tests`)
 
 ## Codex Capability Memory for RIMA (Permanent)
 - RIMA'da asıl ihtiyaç yeni Unity paketi/araç değil; asset QC, import disiplini, local script doğrulaması, test okuma/yazma, denge analizi ve playtest loop doğrulaması.
@@ -68,6 +101,10 @@ Read this file first on every new user request.
   - `CURRENT_STATUS.md` is the active next-work source: PixelLab production, Warblade character_id, Elementalist/Brawler/Hexer/Summoner regeneration, Unity Batch QC, Death screen, Skill draft UI, Faz 1 loop test.
   - Possible `RageSystem` default mismatch: status says `ragePerHitDealt=2`, `ragePerKill=5`; script may show `1` and `3`. Verify before changing.
   - `AGENTS.md` may display Turkish mojibake/encoding corruption in terminal. Content may still be readable, but fix only when explicitly tasked.
+- Test memory:
+  - 2026-04-29 MCP PlayMode `RIMA.Tests.PlayMode` room loop run passed 16/16; Phase 1 room clear, reward spawn, and OnRoomCleared event tests passed without code changes.
+  - 2026-04-29 `PlaytestScenarios.cs` added expanded PlayMode scenarios; Unity validator reported 0 diagnostics. Initial run exposed a scaled-time wait hang after player death; death-screen tests should use `WaitForSecondsRealtime` because death can pause `Time.timeScale`.
+  - `RewardPickup` currently has no public `Interact()`/`Collect()` API; interaction is implemented by private `DoInteract()` coroutine.
 
 ## Claude Handoff Prompt - 2026-04-29 (ASCII-safe)
 
@@ -145,7 +182,7 @@ Review whether this should be synced into CURRENT_STATUS.md / CLAUDE.md / AGENTS
 | BOSS_DESIGN.md | Boss mechanics |
 | FAZLAR/FAZ_MASTER.md | Phase roadmap — which features belong to which phase |
 
-### _STAGING/
+### STAGING/
 | Path | Purpose |
 |---|---|
 | PROMPTS_S43/PRODUCTION_GUIDE_S43.md | Active PixelLab prompt guide — all 10 class descriptions |
@@ -167,7 +204,7 @@ Review whether this should be synced into CURRENT_STATUS.md / CLAUDE.md / AGENTS
 | Characters/ | Raw PixelLab export PNGs before Unity import |
 | GUIDES/ | Production contracts, pipeline guides, how-tos |
 | CONCEPT_ART/ | Gemini/ComfyUI concept renders (non-production) |
-| _ARCHIVE/ | Completed/deprecated files — do not edit |
+| ARCHIVE/ | Completed/deprecated files — do not edit |
 | Tools/ | Python QC/audit scripts |
 
 ## Reporting Memory (Permanent)
@@ -225,16 +262,20 @@ If any step is missed:
 
 Tüm 8-yön animasyon wiring işlerinde bu tabloyu kullan. Blend position ASLA tersine çevrilmez.
 
-| Direction | DirX  | DirY  | Sprite suffix | BlendPos      |
-|-----------|-------|-------|---------------|---------------|
-| S         | 0     | -1    | _S            | (0, -1)       |
-| SE        | +0.71 | -0.71 | _SE           | (0.71, -0.71) |
-| E         | +1    | 0     | _E            | (1, 0)        |
-| NE        | +0.71 | +0.71 | _NE           | (0.71, 0.71)  |
-| N         | 0     | +1    | _N            | (0, 1)        |
-| NW        | -0.71 | +0.71 | _NW           | (-0.71, 0.71) |
-| W         | -1    | 0     | _W            | (-1, 0)       |
-| SW        | -0.71 | -0.71 | _SW           | (-0.71, -0.71)|
+| Direction | DirX  | DirY  | Sprite suffix | BlendPos       | PixelLab source file (S43 offset) |
+|-----------|-------|-------|---------------|----------------|-----------------------------------|
+| S         | 0     | -1    | _S            | (0, -1)        | south-east.png                    |
+| SE        | +0.71 | -0.71 | _SE           | (0.71, -0.71)  | east.png                          |
+| E         | +1    | 0     | _E            | (1, 0)         | north-east.png                    |
+| NE        | +0.71 | +0.71 | _NE           | (0.71, 0.71)   | north.png                         |
+| N         | 0     | +1    | _N            | (0, 1)         | north-west.png                    |
+| NW        | -0.71 | +0.71 | _NW           | (-0.71, 0.71)  | west.png                          |
+| W         | -1    | 0     | _W            | (-1, 0)        | south-west.png                    |
+| SW        | -0.71 | -0.71 | _SW           | (-0.71, -0.71) | south.png                         |
+
+S43 offset note: anchors generated SW-facing (1 step CW offset). Use PixelLab source file column for import.
+When PixelLab direction remap becomes editable, this column will be updated to match label names directly.
+Full details: `MEMORY/feedback_pixellab_direction.md`
 
 Import standard (tüm animasyon tipleri):
 - PPU = 64

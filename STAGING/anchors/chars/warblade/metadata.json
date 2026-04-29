@@ -1,0 +1,30 @@
+{
+  "character": {
+    "id": "4a5b12e6-f565-444a-a84e-a1fa8ed80021",
+    "name": "Male warrior, short dark brown",
+    "prompt": "Male warrior, short dark brown hair, short beard, broad heroic build.\nSteel-blue pauldrons over brown leather coat and padded chest armor,\ndark leather pants and heavy boots. Carries a large two-handed sword\nwith a glowing cold-blue crystalline edge (#7BA7BC). Hairline cold-blue\ncracks visible on armor plates. Weathered, battle-worn. No hand glow,\nno purple. Dark fantasy pixel art, Diablo 2 / Hades style, heavy black\noutline, muted palette with cold-blue accent, transparent background.",
+    "size": {
+      "width": 252,
+      "height": 252
+    },
+    "template_id": "mannequin",
+    "directions": 8,
+    "view": "low top-down",
+    "created_at": "2026-04-29T13:24:34.530019+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "south-east": "rotations/south-east.png",
+      "east": "rotations/east.png",
+      "north-east": "rotations/north-east.png",
+      "north": "rotations/north.png",
+      "north-west": "rotations/north-west.png",
+      "west": "rotations/west.png",
+      "south-west": "rotations/south-west.png"
+    },
+    "animations": {}
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-29T16:05:35.918406"
+}

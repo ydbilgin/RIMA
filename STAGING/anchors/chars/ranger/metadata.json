@@ -1,0 +1,30 @@
+{
+  "character": {
+    "id": "bd7e535b-f5a1-42cf-9289-a656c439c481",
+    "name": "Female ranger, long wild white-silver",
+    "prompt": "Female ranger, long wild white-silver hair, athletic build. Brown\nleather chest armor, leather pants, tall brown boots. Holding a\nwooden recurve bow, arrow quiver strapped to back. Cold-blue accent\n(#7BA7BC) on arrow tips only. Feral, wilderness hunter. No purple,\nno orange. Dark fantasy pixel art, Diablo 2 / Hades style, heavy\nblack outline, muted palette with cold-blue arrow accent, transparent\nbackground.",
+    "size": {
+      "width": 252,
+      "height": 252
+    },
+    "template_id": "mannequin",
+    "directions": 8,
+    "view": "low top-down",
+    "created_at": "2026-04-29T15:18:23.14175+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "south-east": "rotations/south-east.png",
+      "east": "rotations/east.png",
+      "north-east": "rotations/north-east.png",
+      "north": "rotations/north.png",
+      "north-west": "rotations/north-west.png",
+      "west": "rotations/west.png",
+      "south-west": "rotations/south-west.png"
+    },
+    "animations": {}
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-29T16:10:01.087915"
+}

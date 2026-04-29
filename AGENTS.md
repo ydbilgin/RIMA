@@ -1,4 +1,4 @@
-﻿# AGENTS.md
+# AGENTS.md
 > **Ne zaman yÃ¼kle:** Ajan seÃ§imi, gÃ¶rev daÄŸÄ±lÄ±mÄ± veya routing kararÄ± yaparken.
 
 ---
@@ -22,6 +22,8 @@ Claude orkestra ÅŸefidir â€” her iÅŸi kendisi yapmaz, doÄŸru agent'a 
 | **TÃ¼m bilgi prompt'a sÄ±ÄŸan Ã¼retim/dÃ¶nÃ¼ÅŸtÃ¼rme** | **general-purpose** | Dosya okumadan Ã§Ä±ktÄ± Ã¼ret |
 | Class/skill/boss/oda tasarÄ±m kararÄ± | **rima-design** | TasarÄ±m karar ver |
 | Cross-system trade-off kararÄ± | **rima-design** | TasarÄ±m karar ver |
+| Playtest design + execution (MCP scenarios) | **Codex (GPT-5.5)** | Senaryo yaz, run_tests koş, rapor dön |
+| Web araştırma / dış kaynak lookup | **Gemini CLI** | Web search only — Unity/kod kararı yok |
 | Root cause debug, mimari karar | **Claude** | Devredilmez |
 | Cross-file refactor, test yazma | **Claude** | Devredilmez |
 | 1-2 satÄ±r direkt edit | **Claude** | Devredilmez |
@@ -39,7 +41,7 @@ Claude orkestra ÅŸefidir â€” her iÅŸi kendisi yapmaz, doÄŸru agent'a 
 | `rima-design` | Opus 4.7 | TasarÄ±m kararÄ± â€” class/skill/boss/oda/trade-off | âŒ |
 | `rima-doc` | Sonnet 4.6 | Doc yaz/gÃ¼ncelle â€” status, guide, memory, arÅŸiv | âœ… |
 | `rima-qc` | Sonnet 4.6 | Validate et, rapor dÃ¶n â€” kod, gÃ¶rsel, lint | âŒ |
-| `rima-asset` | Sonnet 4.6 | Prompt Ã¼ret (4-yÃ¶n kilit) â€” PixelLab/ChatGPT, `_STAGING/` altÄ±na | âœ… (`_STAGING/`) |
+| `rima-asset` | Sonnet 4.6 | Prompt Ã¼ret (4-yÃ¶n kilit) â€” PixelLab/ChatGPT, `STAGING/` altÄ±na | âœ… (`STAGING/`) |
 | `general-purpose` | Sonnet 4.6 | Prompt-only Ã¼retim â€” dosya okumadan, spec'ten Ã§Ä±ktÄ± | âœ… (belirtilirse) |
 
 **Kural:** HiÃ§bir sub-agent baÅŸka sub-agent spawn edemez.
@@ -95,7 +97,7 @@ FORBIDDEN:
 - Bu listede olmayan hiÃ§bir dosyaya, scripte, prefaba veya sahneye dokunma
 - HiÃ§bir ÅŸeyi silme
 - Yeni dosya oluÅŸturma â€” aksi belirtilmedikÃ§e
-- TASARIM/, GUIDES/, _ARCHIVE/ klasÃ¶rlerine dokunma
+- TASARIM/, GUIDES/, ARCHIVE/ klasÃ¶rlerine dokunma
 
 UNITY MCP WORKFLOW:
 1. read_console â†’ mevcut hata sayÄ±sÄ±nÄ± not al
@@ -111,6 +113,16 @@ COMPLETED: [liste]
 ERRORS: [hata veya NONE]
 NEXT_SIGNAL: "[Claude'a tetikleyici]"
 ```
+
+---
+
+## Gemini CLI — Web Research Only
+
+**Can do:** Web search, external documentation lookup, Unity forum/changelog research
+**Cannot do:** Unity MCP execution, playtest, code decisions, project file writes
+**Handoff:** Claude asks specific question → user runs Gemini → pastes result back
+
+**Rule:** Gemini researches, Claude decides. No MCP, no playtest, no design.
 
 ---
 

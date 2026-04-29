@@ -1,0 +1,30 @@
+{
+  "character": {
+    "id": "ce954699-1675-4748-a71c-b60a206185c2",
+    "name": "Female mage, short blonde hair,",
+    "prompt": "Female mage, short blonde hair, slim light build. Sleeveless blue-gray\ntunic, short skirt, brown leather boots. Holding a neutral glowing\nenergy orb in raised hand \u2014 orb base color warm neutral (element\napplied at runtime: fire, frost, light). Tunic has weathered wear\nmarks and fabric cracks. No fixed element color locked in anchor.\nDark fantasy pixel art, Diablo 2 / Hades style, heavy black outline,\nmuted cool palette, transparent background.",
+    "size": {
+      "width": 248,
+      "height": 248
+    },
+    "template_id": "mannequin",
+    "directions": 8,
+    "view": "low top-down",
+    "created_at": "2026-04-29T15:27:11.228693+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "south-east": "rotations/south-east.png",
+      "east": "rotations/east.png",
+      "north-east": "rotations/north-east.png",
+      "north": "rotations/north.png",
+      "north-west": "rotations/north-west.png",
+      "west": "rotations/west.png",
+      "south-west": "rotations/south-west.png"
+    },
+    "animations": {}
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-29T16:10:25.491896"
+}

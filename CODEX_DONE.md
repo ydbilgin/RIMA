@@ -1,47 +1,45 @@
 STATUS: DONE
-TASK: TASK_S43_05 — Rift Remnant Design Research + Anchor Action Plan
 
 COMPLETED:
-- `CODEX.md` okundu ve aktif görev öncelik sırasına göre `CODEX_TASKS.md` içindeki en üst görev yürütüldü.
-- Lore kaynakları incelendi: `TASARIM/GDD.md`, `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md`, `TASARIM/MASTER_KARAR_BELGESI.md`, `CURRENT_STATUS.md`, `_STAGING/PROMPTS_S43/styleref_cheatsheet_v1.md`.
-- 10 anchor PNG görsel olarak kontrol edildi; PNG dosyalarına yazma yapılmadı.
-- Output raporu yazıldı: `_STAGING/RIFT_REMNANT_PLAN_S43.md`.
-- `CODEX_TASKS.md` görevin tamamlanması sonrası temizlendi.
+- Audited the 4 original memory files.
+- Split multi-topic `feedback_workflow.md` into focused memory files.
+- Shortened memory files so each topic file stays under 25 lines.
+- Renamed the old underscore-prefixed memory folder to `MEMORY`.
+- Renamed the old underscore-prefixed staging folder to `STAGING`.
+- Renamed the old underscore-prefixed archive folder to `ARCHIVE`.
+- Updated allowed markdown references to `MEMORY`, `STAGING`, and `ARCHIVE`.
+- Verified remaining old underscore references are outside task scope or explicitly forbidden (`CODEX_TASKS.md`, README/Tools docs).
 
-DIRECT RESULTS:
-- Warblade: DOKUNMA; cold blue sword/chest crack zaten rift remnant.
-- Shadowblade: Edit Image; tiny void purple eye slit/veil üstü remnant.
-- Ranger: Edit Image önerildi; Claude'un Regenerate kararına itiraz edildi çünkü değişiklik yalnız bow gold hairline crack.
-- Ravager: Regenerate action desteklendi, fakat remnant rift değil blood/fury class scar olarak etiketlenmeli.
-- Ronin: Edit Image; scabbard edge pure white crack.
-- Brawler: Regenerate; deep ebony skin fix + left arm amber rift fracture büyük değişiklik.
-- Gunslinger: Edit Image; pistol brass hairline crack.
-- Elementalist: Regenerate ama rift remnant yok; element/Light enerji.
-- Hexer: Regenerate ama rift remnant yok; curse/hex enerji.
-- Summoner: Regenerate ama rift remnant yok; death/necro enerji.
+SPLIT FILES:
+- `MEMORY/feedback_workflow.md` was split and removed.
+- `MEMORY/feedback_agent_delegation.md`
+- `MEMORY/feedback_encoding.md`
+- `MEMORY/feedback_git_attribution.md`
+- `MEMORY/feedback_temp_files.md`
 
-EVIDENCE TABLE:
-| Source | Claim | Confidence |
-|---|---|---|
-| `MASTER_KARAR_BELGESI.md` #22-#23 | Rift Break sistemik context phase; tüm classlara bağlanıyor ama her class resource'u rift değil. | High |
-| `MASTER_KARAR_BELGESI.md` #37-#38 | Ranger rift hunter, Gunslinger rift-tech identity. | High |
-| `SINIF_VE_SKILL_KARAR_BELGESI.md` | Shadowblade/Ranger/Gunslinger doğrudan Rift skill dili taşıyor; Hexer/Summoner/Ravager ana kaynakları farklı. | High |
-| `CURRENT_STATUS.md` | Accent hex ve yerleşimleri #163 kilitli. | High |
-| `_STAGING/PROMPTS_S43/styleref_cheatsheet_v1.md` | Brawler explicit amber rift fractures; Warblade cold blue crack; Elementalist/Hexer/Summoner non-rift enerji dili. | High |
-| Anchor PNG visual check | Edit vs Regenerate önerileri mevcut görsel değişiklik büyüklüğüne göre belirlendi. | Medium |
+RENAMED FOLDERS:
+- old underscore-prefixed memory folder -> `MEMORY/`
+- old underscore-prefixed staging folder -> `STAGING/`
+- old underscore-prefixed archive folder -> `ARCHIVE/`
 
-ASSUMPTIONS AND GAPS:
-- GDD rift'i açık bir lore sistemi olarak detaylandırmıyor; sonuçlar class skill/master karar çıkarımıdır.
-- Ravager için "blood red rune scar" üretimsel olarak doğru olabilir, ancak rift remnant diye adlandırmak mevcut lore'a göre zayıf.
-- Elementalist `Rift Bolt` adı ile elemental core arasında terminoloji drift var; final lore kararı Claude'a ait.
+REF FILES UPDATED:
+- `AGENTS.md`
+- `ANTIGRAVITY.md`
+- `CLAUDE.md`
+- `CODEX.md`
+- `CURRENT_STATUS.md`
+- `OTHER_AGENTS.md`
+- `TASARIM/MASTER_KARAR_BELGESI.md`
+- `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md`
+- `STAGING/PLAYTEST_REPORT.md`
+- `STAGING/PROMPTS_S43/PIXELLAB_CFR_V3_PROMPTS.md`
+- `ARCHIVE/**/*.md` files that contained old underscore references
 
-REVIEWER CHECKLIST:
-- PASS: 10 karakter tabloya işlendi.
-- PASS: GDD/SINIF_KARAR/MASTER_KARAR/CURRENT_STATUS kaynakları kullanıldı.
-- PASS: Edit Image / Regenerate kararları gerekçelendirildi.
-- PASS: Claude'dan farklı görüşler açıkça işaretlendi.
-- PASS: PNG dosyaları read-only kaldı.
-- PASS: Output dosyası mevcut: `_STAGING/RIFT_REMNANT_PLAN_S43.md`.
+ERRORS:
+- NONE
 
-ERRORS: NONE
-NEXT_SIGNAL: "Claude rift remnant planını review etsin; Ranger ve Ravager farklarını final karara bağlasın."
+NOTES:
+- `CODEX_TASKS.md` was not cleared because the task explicitly listed it under FORBIDDEN: "Do not change CODEX_TASKS.md".
+- Git commit was limited to task-scoped paths to avoid staging unrelated dirty work already present in the worktree.
+
+NEXT_SIGNAL: "Memory and folder cleanup done -- Claude review"

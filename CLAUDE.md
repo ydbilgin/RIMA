@@ -1,82 +1,69 @@
-# RIMA — Claude Code Talimatları
-Working dir: `F:/Antigravity Projeler/2d roguelite/RIMA/`. `../` yasak.
+# RIMA — Claude Code Instructions
+Working dir: `F:/Antigravity Projeler/2d roguelite/RIMA/`. No `../`.
 
-## Session Başı
-`CURRENT_STATUS.md` oku, kaldığı yerden devam. Kullanıcı hatırlatmaz.
+## Session Start
+Read `CURRENT_STATUS.md`, continue from there. Do not ask for reminders.
 
 ## Memory
-Private: `C:/Users/ydbil/.claude/projects/F--Antigravity-Projeler-2d-roguelite-RIMA/memory/MEMORY.md` → ilgili `*.md` aç.
-Başka AI isen: repo `.md` + bu klasörü tara.
+Shared: `MEMORY/INDEX.md` → open related `*.md` on demand.
+All agents (Claude, Codex, Antigravity, others) read from `MEMORY/`.
+No private/local memory path. Claude writes memory files directly; other agents must git commit after editing.
 
-## Klasörler
-`Assets/` · `TASARIM/` · `GUIDES/` · `CONCEPT_ART/` · `_ARCHIVE/` · `_STAGING/`
-Root: CLAUDE.md, CURRENT_STATUS.md, AGENTS.md, README.md, Unity files. Yeni doc → GUIDES/ veya TASARIM/.
+## Folders
+`Assets/`, `TASARIM/`, `GUIDES/`, `CONCEPT_ART/`, `ARCHIVE/`, `STAGING/`.
+Root: CLAUDE.md, CURRENT_STATUS.md, AGENTS.md, README.md, Unity files. New docs → GUIDES/ or TASARIM/.
 
-## Temizlik
-Bitmiş `CODEX_*.md` → `_ARCHIVE/CODEX_TAMAMLANDI/` · Geçici → `_ARCHIVE/` · Silinecek → başına `# [ARCHIVE]`
+## Cleanup
+Completed `CODEX_*.md` → `ARCHIVE/CODEX_TAMAMLANDI/`. Temp → `ARCHIVE/`. Deletions → mark with `# [ARCHIVE]`.
+**Temp files rule:** When creating a one-time file (QC report, review prompt, eval), note its deletion target in the same message. Delete immediately after use — do not accumulate.
 
-## Rol
-**Claude:** tasarım, mimari, debug, karar, QC yargısı.
-**Codex:** mekanik+analitik (sprite import, anim, prefab, SO, izole C#, dosya, doc, review).
-**Delegation Gate (tümü EVET → Codex):** Deterministik · Mekanik · İzole · Net sınırlı
+## Roles
+**Claude:** Design, architecture, debug, decisions, QC judgment.
+**Codex:** Mechanical+Analytical (import, anim, prefab, SO, isolated C#, files, doc, review).
+**Delegation Gate (Codex if all YES):** Deterministic · Mechanical · Isolated · Defined boundaries.
 
-### Agent Routing (detay: `AGENTS.md`)
-| İş | Agent |
-|---|---|
-| doc/memory/arşiv | rima-doc |
-| QC/lint/görsel review | rima-qc |
-| Prompt üretimi | rima-asset |
-| Tasarım kararı | rima-design (Opus 4.7) |
-| Prompt'a sığan üretim | general-purpose |
-| 1-2 satır edit | Claude |
-
-Claude üretim/review/prompt yazmaz — orkestra eder.
-Token-first · State (spawn öncesi kaydet) · Scope kayması → Claude'a eskalat
+### Agent Routing
+Agent routing → see `AGENTS.md`.
+Claude orchestrates; does not write prompts/reviews. Token-first · Save state before spawn · Escalate scope creep to Claude.
 
 ## /clear
-Review PASS · yeni faz · 20+ mesaj · ağır batch → "/clear at"
+Call after: Review PASS · New phase · 20+ messages · Heavy batch.
 
 ## Test
-NUnit + Unity Test Runner + MCP `run_tests`. Sonnet yaz+koş+düzelt.
-- EditMode: `Awake()` yok → explicit init (`SetMaxHP(100)`)
-- Seeded: `Random.InitState(42)` SetUp'ta
-- DungeonGraph: `Is.InRange(12,14)` · Coroutine/Singleton → PlayMode
+NUnit + Unity Test Runner + MCP `run_tests`. Sonnet: write+run+fix.
+- EditMode: No `Awake()` → explicit init.
+- Seeded: `Random.InitState(42)` in SetUp.
+- DungeonGraph: `Is.InRange` · Coroutine/Singleton → PlayMode.
 
 ## Sprite/Asset (S43)
-128px canvas · Create from Style Reference PRO · MCP `create_character` YASAK (kredi)
-User PixelLab UI üretir → Claude prompt+style ref verir → Codex import → rima-qc → Claude karar
-Detay: `_STAGING/PROMPTS_S43/PRODUCTION_GUIDE_S43.md` · `memory/feedback_pixellab_create_character_workflow.md`
+128px canvas · Style Reference PRO · MCP `create_character` FORBIDDEN (credit).
+User generates PixelLab UI → Claude provides prompt+style ref → Codex imports → QC → Claude decides.
+Detail: `STAGING/PROMPTS_S43/PRODUCTION_GUIDE_S43.md`, `memory/feedback_pixellab_create_character_workflow.md`.
 
-## Token Tasarrufu
-1. Session başı: `CURRENT_STATUS.md` + `SYSTEM_MAP.md`. Kaynak dosya açma.
-2. Edit: sadece ilgili satır aralığı.
-3. Yapısal değişiklik → SYSTEM_MAP güncelle.
-4. Analiz/cleanup → Gemma (`gemma4:e4b`) veya Codex; silme → PowerShell direkt.
-**Compact default:** tüm internal .md compact. Guide hariç.
-**/lint:** faz geçişi · 5+ karar · asset öncesi · tutarsızlık şüphesi
+## Token Saving
+1. Session start: `CURRENT_STATUS.md` only. Open other files on demand. Do not open source files for reference.
+2. Edit: surgical line ranges only.
+3. Update `SYSTEM_MAP.md` for structural changes.
+4. Analysis/Cleanup: Gemma/Codex; deletion: PowerShell.
+**Compact default:** All internal .md compact (except Guides).
+**/lint:** Phase transition · 5+ decisions · Before asset work · Inconsistency check.
 
 ## Model
-Sonnet 4.6 default. Opus 4.7: multi-system trade-off. Claude yönetir.
+Sonnet 4.6 (default). Opus 4.7 for multi-system trade-offs. Claude manages.
 
-## Dil
-Kullanıcı: Türkçe · CODEX_*.md: İngilizce · PixelLab prompt: İngilizce · Kod: İngilizce
+## Language
+User: Turkish · Internal files (.md, prompts, code, internal files): English.
+**Encoding rule:** Internal .md files must use ASCII-only characters. No Turkish special chars (s/i/g/u/o/c with diacritics). Use plain English or ASCII-safe workarounds (e.g. "derece" instead of degree symbol). Reason: Claude and Codex write files with different encoding, causing double-encoding corruption on Turkish chars.
 
-## Dosya Haritası
-**Her session:** `CURRENT_STATUS.md` · `SYSTEM_MAP.md` · `AGENTS.md`
-**Gerektikçe:** `TASARIM/STYLE_BIBLE.md` · `TASARIM/GDD.md` · `MASTER_KARAR_BELGESI.md` · `ROOM_MECHANICS.md` · `SINIF_VE_SKILL_KARAR_BELGESI.md` · `COMBAT_ROSTER.md` · `BOSS_DESIGN.md`
-**Faz scope:** `TASARIM/FAZLAR/FAZ_MASTER.md` → aktif faz dosyası
-**PixelLab ref** (`F:/Antigravity Projeler/Pixellab/`): `PIXELLAB_PIPELINE.md` · `PIXELLAB_API_V2.md` · `AGENTS.md`
+## File Map
+**Every session:** `CURRENT_STATUS.md` only.
+**On demand:** `SYSTEM_MAP.md`, `AGENTS.md` (open when architecture/routing needed).
+**As needed:** `TASARIM/STYLE_BIBLE.md`, `GDD.md`, `MASTER_KARAR_BELGESI.md`, `ROOM_MECHANICS.md`, `SINIF_VE_SKILL_KARAR_BELGESI.md`, `COMBAT_ROSTER.md`, `BOSS_DESIGN.md`.
+**Phase scope:** `TASARIM/FAZLAR/FAZ_MASTER.md` → active phase file.
+**PixelLab ref** (`F:/Antigravity Projeler/Pixellab/`): `PIXELLAB_PIPELINE.md`, `PIXELLAB_API_V2.md`, `AGENTS.md`.
 
-## Proje
-Unity 2D URP · Namespace RIMA · Sahne `Assets/Scenes/_IsoGame.unity`
-**S43:** Karakter canvas 128² · Zemin 64×32 · Duvar 64×96 · PPU=64
-Ton: Fractured Epic (Hero Siege/Diablo kompakt, ne chibi ne portrait)
-
-## Interaksiyon (G tuşu)
-- RewardPickup: proximity→`[G]`→G→DraftManager.ShowDraft→Destroy
-- MapFragment: proximity→`[G]`→G→DungeonGraph.RevealAhead→Destroy
-- Kapı: hemen açılır; ödül alınmamışsa HUD reminder
-- World prompt: WorldSpace Canvas · sortingOrder=20 · scale=0.012 · interactRadius 1.5-1.8
-
-## Inspector (SYSTEM_MAP.md → detay)
-RuntimeRoomManager: bossPrefab · hud(HUDController) · playerTransform · rewardPickupPrefab · mapFragmentPrefab
+## Project Specs
+Unity 2D URP · Namespace RIMA · Scene `Assets/Scenes/_IsoGame.unity`.
+**S43:** Char 128² · Floor 64×32 · Wall 64×96 · PPU=64.
+Tone: Fractured Epic (compact, non-chibi).
+Interaction (G-key) / Inspector → see `SYSTEM_MAP.md`.
