@@ -1,0 +1,30 @@
+{
+  "character": {
+    "id": "7dc83b4a-6fcf-462e-8c52-6ea405457cc9",
+    "name": "Female mage. Deep indigo blue",
+    "prompt": "Female mage. Deep indigo blue fitted crop top and dark layered skirt with leather belt and small pouches. Honey-blonde hair pulled back in a low bun at the nape. Glowing warm amber-gold arcane orb held in one palm at chest height. Slender build, heroic 7-head proportion. Subtle gold filigree edge detail on clothing. Crisp pixel art style, single-color dark outline, no ground shadow.",
+    "size": {
+      "width": 256,
+      "height": 256
+    },
+    "template_id": "mannequin",
+    "directions": 8,
+    "view": "low top-down",
+    "created_at": "2026-04-27T15:38:42.734755+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "south-east": "rotations/south-east.png",
+      "east": "rotations/east.png",
+      "north-east": "rotations/north-east.png",
+      "north": "rotations/north.png",
+      "north-west": "rotations/north-west.png",
+      "west": "rotations/west.png",
+      "south-west": "rotations/south-west.png"
+    },
+    "animations": {}
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-28T11:57:22.324650"
+}

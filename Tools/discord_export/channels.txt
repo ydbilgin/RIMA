@@ -1,0 +1,13 @@
+# PixelLab Discord — kritik kanal ID'leri
+# Format: <channel_id> <label>
+# Label dosya adında kullanılır, sade tut (boşluk yok, alfanumerik + tire/alt-tire)
+
+1402323253695090741  mcp-and-vibe-coding
+1123503550325084190  share-tips-tricks
+1100184456997900288  pixellab-art-gallery
+1115580783663521862  help-questions-support
+1311383256372875324  api-and-sdk
+1393507999867207720  projects
+1116120381921706025  tutorials
+1196572418035167292  helpful-posts
+1124095198004269218  announcements

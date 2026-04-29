@@ -1,0 +1,23 @@
+# Yetkili rol pattern'leri (case-insensitive substring match)
+# Bu pattern'lerden birini iceren rol adi = AUTHORITY
+# Mesaja [AUTHORITY: <rol adi>] tag eklenir, Ollama bu mesajlari daha agirlikli analiz eder
+# Digestde ayri "From Authority" bolumu cikar
+#
+# Pixellab Discord'unda gorursen ekle/cikar. Default geneleyici:
+
+staff
+moderator
+mod
+admin
+developer
+dev
+team
+pixellab
+verified
+expert
+veteran
+pro
+contributor
+artist
+helper
+trusted

@@ -1,0 +1,44 @@
+﻿[
+    {
+        "id":  "vOvYazUBlpQ",
+        "publish":  "2026-02-18T07:23:52-08:00",
+        "title":  "How to Build a 2D Game Asset Pack with Free AI  #AI#SpriteSheets#GameAnimations#GameAssets",
+        "desc":  "In this video, I show you how to build a complete 2D game asset pack using FREE AI tools. || We create: || • A professional character || • A full 2D animation || • Platforms and backgrounds || • UI elements",
+        "url":  "https://youtu.be/vOvYazUBlpQ"
+    },
+    {
+        "id":  "4_u5Ues1zPY",
+        "publish":  "2026-03-03T03:08:51-08:00",
+        "title":  "Create a FREE 2D Parallax System Using AI ( Game Ready )",
+        "desc":  "Today I’m showing you how to create a Universal Parallax Layer System for 2D platformer games using AI. || We start by generating a production-ready in-game scene, then convert it into perfectly aligned depth layers ready for Unity, Godot, Unreal, or any modern 2D/2.5D engine. || This workflow lets you: || • Generate a full playable scene using AI || • Lock camera angle and horizon for consistency || • Separate far, mid, and foreground layers",
+        "url":  "https://youtu.be/4_u5Ues1zPY"
+    },
+    {
+        "id":  "M1dWBasJqqY",
+        "publish":  "2026-03-01T16:16:00-08:00",
+        "title":  "Turn Any Image Into a 3D Animated Character (FREE AI Tools)",
+        "desc":  "Learn how to turn any 2D character image into a fully animated 3D model using free AI tools. || In this tutorial you\u0027ll learn how to: || • Generate orthographic views using AI || • Create a 3D model from images || • Automatically rig the character || • Add animation in minutes",
+        "url":  "https://youtu.be/M1dWBasJqqY"
+    },
+    {
+        "id":  "iqn0g-RYNx0",
+        "publish":  "2022-12-27T06:11:21-08:00",
+        "title":  "Getting that 2D look in 3D!   BPR Filters and Cartoon Materials for Stunning  2D Look !",
+        "desc":  "Sculpt your next character with 2D materials || https://artstn.co/m/YDjvj || Introducing our incredible product: \"2D Magic Pack for ZBrush - Elevate Your Art with BPR Filters and Cartoon Materials!\" || Are you ready to unlock the enchanting world of 2D magic in ZBrush? Look no further! Our 2D Magic Pack is specifically designed to take your artistic creations to the next level by providing you with a powerful set of tools: BPR filters and cartoon materials. || With our BPR filters, you can effortlessly enhance your artwork by applying various effects that emulate popular 2D art styles. These filters will bring a captivating 2D look to your 3D sculptures. Say goodbye to flat renders and embrace stunning visuals that pop off the screen! || Whether you\u0027re a professional artist, a hobbyist, or a student, our 2D Magic Pack is an invaluable asset for anyone using ZBrush. It will not only save you time by providing ready-to-use filters and materials, but it will also inspire your creativity and open up new artistic possibilities.",
+        "url":  "https://youtu.be/iqn0g-RYNx0"
+    },
+    {
+        "id":  "qHlhWNk97IA",
+        "publish":  "2020-10-30T04:46:37-07:00",
+        "title":  "2D \\ 3D Game Art",
+        "desc":  "Hello, here are some of my attempts to take my models to my new game ... the models were made in Zbrush software. The game will be in Unity. || Please subscribe to my channel  :) || https://www.youtube.com/IrisOgli  || https://www.instagram.com/iris_ogli || https://www.facebook.com/ogli3d || https://www.artstation.com/irisogli",
+        "url":  "https://youtu.be/qHlhWNk97IA"
+    },
+    {
+        "id":  "WNaWjcQZcYI",
+        "publish":  "2021-04-01T10:25:50-07:00",
+        "title":  "From ZBrush to Unity – Building My First Game Character",
+        "desc":  "In this project, I sculpted my character in ZBrush and brought it into Unity to explore animation and visual style. || My focus was not on mechanics, but on movement and atmosphere — seeing how my sculpted art could live and breathe inside a game engine. || This was an exploration of motion, form, and presence. || A moment where static sculpture began to move. || zbrush || unity",
+        "url":  "https://youtu.be/WNaWjcQZcYI"
+    }
+]

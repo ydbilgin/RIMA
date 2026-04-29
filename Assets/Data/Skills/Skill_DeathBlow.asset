@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6b129952618bf46bb6a44104f7dd61, type: 3}
+  m_Name: Skill_DeathBlow
+  m_EditorClassIdentifier: Assembly-CSharp::RIMA.SkillData
+  skillName: Death Blow
+  description: "Sadece HP<%30 aktif: %400 hasar, Rage bo\u015Falt\u0131r."
+  tier: 2
+  icon: {fileID: -4641296832340837819, guid: d938f87b0417dae49b7d5d822b9daf70, type: 3}
+  damage: 120
+  cooldown: 12
+  tags: 
+  isPassive: 0
+  passiveDescription: 
+  appliesEffect: 0

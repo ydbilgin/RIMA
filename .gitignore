@@ -1,0 +1,55 @@
+# Unity generated — never commit
+Library/
+Temp/
+Logs/
+obj/
+Build/
+Builds/
+
+# IDE generated — Unity regenerates these
+*.csproj
+*.sln
+*.slnx
+.vs/
+
+# Graphify tool output
+.graphify_incremental.json
+.graphify_python
+.graphifyignore
+graphify-out/
+
+# User-local settings
+UserSettings/
+
+# External tools
+Pixellab extension/
+
+# _STAGING: heavy / ephemeral subdirectories
+_STAGING/research/tweets/
+_STAGING/temp_*/
+_STAGING/discord_pixellab/
+_STAGING/discord_pixellab_test/
+_STAGING/chatgpt_pixel_grid_s42/
+_STAGING/hero_siege_wiki_sprites/
+
+# Binary assets — versioned in PixelLab, not git
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tga
+*.psd
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.ogg
+*.fbx
+*.obj
+*.blend
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

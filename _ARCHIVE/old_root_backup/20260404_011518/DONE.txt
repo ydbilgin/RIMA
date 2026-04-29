@@ -1,0 +1,87 @@
+# PixelLab Batch Completion Log
+# Generated: 2026-04-03
+
+## PLAYER CHARACTERS (4/4)
+[DONE] Warblade | 43503ec5-8523-4d83-af82-1c4c1983ef51 | 2026-04-03
+[DONE] Elementalist | 07ad3bf6-2600-4f29-80ff-616fd5941d7f | 2026-04-03
+[DONE] Shadowblade | e47a5347-8800-40e2-a741-c4db69b6c64a | 2026-04-03
+[DONE] Ranger | 989529d2-6d75-48d8-8fbe-27df303869bd | 2026-04-03
+
+## ACT 1 NORMAL ENEMIES (8/8)
+[DONE] ShardWalker | 37b27f25-e666-4d07-ab6e-f8c3bc8d9911 | 2026-04-03
+[DONE] SeamCrawler | 387ecbc5-ee54-4973-95a2-28f591c01400 | 2026-04-03
+[DONE] VoidThrall | 1fb034d0-4903-4522-9d4b-b1fe6bef4050 | 2026-04-03
+[DONE] ChainWarden | 192bedcb-58e8-4da0-a03f-2756bee6ba8d | 2026-04-03
+[DONE] Penitent | f98ca3f6-b87f-4a91-aed1-15e0893a263b | 2026-04-03
+[DONE] RelicCaster | 59bdec8c-44f3-4ea4-8305-b74e3088afe7 | 2026-04-03
+[DONE] FractureImp | b39cf717-e5d6-4035-9ccd-4119c0bc487a | 2026-04-03
+
+## ACT 1 ELITE ENEMIES (5/5)
+[DONE] IronWarden | 91585f58-386a-45f5-9d1f-1193601100c0 | 2026-04-03
+[DONE] TwiceBorn_Primary | 33344e0b-6025-4ac4-ac2d-ddd8050820c2 | 2026-04-03
+[DONE] TwiceBorn_Secondary | e27102bd-4f6a-499c-9b73-7a70d3a6a48f | 2026-04-03
+[DONE] FractureKnight | 7eae9785-c818-4e94-9b77-74df63682c59 | 2026-04-03
+[DONE] Reliquary | 5265c304-5784-4842-be10-6cc7ca13d458 | 2026-04-03
+
+## ACT 2 ENEMIES (2/2)
+[DONE] MireStalker | 0e1fbc46-ffb2-48bb-b679-e2836ebb42d0 | 2026-04-03
+[DONE] RotPriest | 342b75fe-8714-466c-9096-54c108a87feb | 2026-04-03
+
+## SKILL ICONS (16/16)
+[DONE] Warblade/IronCharge | aa0b0f61-24fd-4dd0-9b14-8ec16fc86452 | 2026-04-03
+[DONE] Warblade/GravityCleave | e3846e91-db5c-4ff6-942d-7b9aebff4519 | 2026-04-03
+[DONE] Warblade/WarStomp | 9ed449c6-36b3-4240-a864-4990e9bf4e28 | 2026-04-03
+[DONE] Warblade/DeathBlow | 6de02faa-8741-4d7d-bce0-abc2a150034b | 2026-04-03
+[DONE] Elementalist/Fireball | 343d5ee0-c78e-4d49-a267-0d4535368784 | 2026-04-03
+[DONE] Elementalist/GlacialSpike | a203494f-3cf5-4ad2-80f2-f09b27638af5 | 2026-04-03
+[DONE] Elementalist/Blink | 92e26475-bd5a-4538-85ae-d906d97217f8 | 2026-04-03
+[DONE] Elementalist/Meteor | 5a5ba856-581f-4cbf-b653-afdfae6553e1 | 2026-04-03
+[DONE] Shadowblade/Backstab | 08ebbceb-fdb8-4982-9d56-7b42b9ebc59e | 2026-04-03
+[DONE] Shadowblade/Shadowstep | 676e7a8e-4d9c-44ef-ad21-dd0239903708 | 2026-04-03
+[DONE] Shadowblade/FanOfKnives | d991be20-a280-4031-9004-f8c494ec7b06 | 2026-04-03
+[DONE] Shadowblade/Vanish | aafef68b-2439-4908-8b6c-f636ad082339 | 2026-04-03
+[DONE] Ranger/AimedShot | 67c43298-df8e-4457-92fc-09578a7c2869 | 2026-04-03
+[DONE] Ranger/RainOfArrows | d16e4d8c-822d-4bc0-8892-c7812991a6d6 | 2026-04-03
+[DONE] Ranger/ConcussiveArrow | 5fac9a06-b506-43e7-8282-5297984fb6d5 | 2026-04-03
+[DONE] Ranger/EvasiveRoll | 7cb94adb-3e11-45a8-b449-6cd3f034c549 | 2026-04-03
+
+## TILES (2/2)
+[DONE] floor_stone | 437e0897-0787-42b6-8ffa-e89fe38058ac | 2026-04-03
+[DONE] wall_stone | 846b3181-0599-45f7-a617-28c4b7abae47 | 2026-04-03
+
+## SUMMARY
+Total Assets Generated: 37
+- Player Characters: 4 (96px, 8 directions, pro mode)
+- Act 1 Normal Enemies: 8 (various sizes, 8 directions, pro mode)
+- Act 1 Elite Enemies: 5 (various sizes, 8 directions, pro mode)
+- Act 2 Enemies: 2 (64px, 8 directions, pro mode)
+- Skill Icons: 16 (64x64px, transparent background)
+- Tiles: 2 (32x32px, square top-down)
+
+All assets saved to _STAGING/ directory structure.
+No failures recorded.
+
+---
+
+## REDO BATCH 2 (6 assets regenerated)
+# Regenerated: 2026-04-03
+
+[DONE-REDO] Warblade | f3465121-2282-4faa-a955-60b29fd2a628 | 2026-04-03
+  Reason: Knight helmet issue - regenerated with bare head, visible face
+
+[DONE-REDO] Elementalist | 480b2223-2c10-4120-94a4-2956795a38e6 | 2026-04-03
+  Reason: Male with hood on head - regenerated as female, open hair, hood behind
+
+[DONE-REDO] ShardWalker | 15b8d12a-07bf-42e6-a9ec-89bbce32a908 | 2026-04-03
+  Reason: Solid blue humanoid - regenerated with visible gaps showing rift light
+
+[DONE-REDO] IronCharge icon | a46d8a81-78e3-439a-8adb-2769057e3e22 | 2026-04-03
+  Reason: Gun/cannon appearance - regenerated as shoulder charge with impact
+
+[DONE-REDO] Shadowstep icon | 6c577804-c870-4663-8148-f165689ec4a9 | 2026-04-03
+  Reason: Magic staff appearance - regenerated as dash afterimage movement
+
+[DONE-REDO] EvasiveRoll icon | 71a8ea2f-e238-42a0-9220-bac472902916 | 2026-04-03
+  Reason: Ball/bomb appearance - regenerated as rolling dodge with motion trail
+
+REDO Summary: 6 assets successfully regenerated and replaced in _STAGING/

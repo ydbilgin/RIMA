@@ -1,0 +1,104 @@
+Sınıf,#,İsim,Tag1,Tag2,Tür,Efekt (Özet),Chain Koşulu,Chain Bonus,Build Ekseni
+WARBLADE,1,Charge,▶ OPENER,⬡ CONTROL,Core,8m dash+stun 1.5s — Rage+20,Stun'daki hedefe ilk saldırı,+%80 hasar,Executioner / Last Stand
+WARBLADE,2,Mortal Strike,⚡ CHAIN,💥 FINISHER,Core,Büyük hasar + iyileşme -%50 (6s),Charge sonrası,iyileşme -%100,Executioner
+WARBLADE,3,Colossus Smash,✦ AMPLIFIER,,Core,6s window: tüm hasar +%30,Dual-class burst window,Amplify katlanır,Executioner / Bleed Lord
+WARBLADE,4,Whirlwind,⚓ ANCHOR,↓ SPENDER,Core,2s spin AoE + hareket mümkün — Rage -25/sn,Rage biterken,Cleave açılır,Bleed Lord
+WARBLADE,5,Shield Slam,⬡ CONTROL,,Core,Guaranteed knockback 3m — Rage -20. Duvara=+1.5s stun,War Stomp sonrası,CD yarıya iner,Last Stand
+WARBLADE,6,Execute,💥 FINISHER,,Core,SADECE HP<%30: %400 hasar — Rage boşaltır,Mortal Strike aktifken,%600 hasar,Executioner
+WARBLADE,7,Hamstring,⬡ CONTROL,▶ OPENER,Core,%50 slow 8s + bleed 3s DoT,Hamstring'li hedefe Charge,Stun 3s (normal 1.5s),Bleed Lord
+WARBLADE,8,War Stomp,⬡ CONTROL,↑ BUILDER,Core,3m knockup 2s — Rage+25,Whirlwind sırasında,+1s uzar,Last Stand
+WARBLADE,9,Heroic Leap,▶ OPENER,⬡ CONTROL,Advanced,12m atla — iniş AoE 3m — Rage+15,İnişte 2+ düşman,Rage+30,Last Stand
+WARBLADE,10,Rallying Cry,✦ AMPLIFIER,↑ BUILDER,Advanced,8s: her Rage harcaması = HP +%5 iyileşme,Rage %80+'ta aktive edilirse,Süre 12s (8s yerine),Bleed Lord
+WARBLADE,11,Rupture Strike,⚡ CHAIN,↑ BUILDER,Advanced,Bleed DoT 8s + Rage+20,Colossus Smash window'unda,Bleed tick 2× hızlı,Bleed Lord
+WARBLADE,12,Last Man Standing,⚓ ANCHOR,↑ BUILDER,Master,4s ölümsüzlük (HP 1 altına düşemez) — sonra Rage tam dolar,Execute ile birlikte,Ölümsüzlük içinde %600 Execute,Last Stand
+
+ELEMENTALİST,1,Fireball,↑ BUILDER,▶ OPENER,Core,Orta hasar + ateş DoT 4s — Fire State +1 stack (max 5),3 ard arda → 3. cast,Living Bomb ücretsiz tetiklenir,Fire Burst
+ELEMENTALİST,2,Frostbolt,⬡ CONTROL,↑ BUILDER,Core,Orta hasar + %30 slow 3s — Fire State tüketir (+Mana regen),Fireball DoT aktifken,Shatter (+%60 hasar amplifikasyonu),Frost Control
+ELEMENTALİST,3,Living Bomb,⚡ CHAIN,↓ SPENDER,Core,5s sonra patlama — öldürünce 3 komşuya kopyalanır,Frostbolt slow altında,Patlama yarıçapı 2×,Fire Burst
+ELEMENTALİST,4,Blink,▶ OPENER,⚓ ANCHOR,Core,6m ışınlanma — geçilen düşmanlara hasar — sonraki spell +%20,Düşmanın tam içinden geçilirse,0.5s stun,Arcane Storm
+ELEMENTALİST,5,Frozen Orb,⬡ CONTROL,⚓ ANCHOR,Core,Yavaş hareket eden küre — yolundakileri 5s chill,Orb üzerinden Blink,Orb patlar — chilled=Frozen 2s,Frost Control
+ELEMENTALİST,6,Arcane Blast,↑ BUILDER,↓ SPENDER,Core,Her cast +%20 hasar ama +%30 mana maliyet — 4. cast Barrage açar,Colossus Smash window'unda Barrage,Hasar cap kaldırılır,Arcane Storm
+ELEMENTALİST,7,Meteor,💥 FINISHER,⬡ CONTROL,Core,1.5s kanal → büyük AoE knockdown,Frozen/slowed hedef,Knockdown 3s + hasar +%50,Frost Control / Fire Burst
+ELEMENTALİST,8,Mirror Image,⚓ ANCHOR,,Core,2 kopya 8s — kopya hasar önce alır — ölünce AoE patlama,Kopyalar ölünce,Ölüm patlaması AoE,Arcane Storm
+ELEMENTALİST,9,Chain Lightning,⚓ ANCHOR,✦ AMPLIFIER,Advanced,5 hedefe sekiyor — her seki ayrı hasar — Storm element açar,Hedef yavaşlamışsa,7 seki (5 yerine),Arcane Storm
+ELEMENTALİST,10,Mana Shield,↑ BUILDER,⚓ ANCHOR,Advanced,6s: hasar HP yerine Mana'ya gelir — Mana biter=shield düşer,Mana %100'ken aktive,+2s süre,Arcane Storm
+ELEMENTALİST,11,Combustion,✦ AMPLIFIER,▶ OPENER,Advanced,8s: tüm Fire spell instant cast ama mana ×2,Fire State 5 stack'ta aktive,Mana maliyet artışı yok,Fire Burst
+ELEMENTALİST,12,Blizzard,⬡ CONTROL,↑ BUILDER,Master,3s kanal → 5m alana 8s slow+tick hasar,Meteor'dan önce,Meteor knockdown 4s'e çıkar,Frost Control
+
+ROGUE,1,Backstab,▶ OPENER,↑ BUILDER,Core,Arkadan: %200 hasar+3CP. Önden: normal — CP yok,Shadowstep sonrası,+%50 ekstra hasar,Assassin / Duelist
+ROGUE,2,Hemorrhage,↑ BUILDER,,Core,Bleed 8s DoT+2CP — öldürünce yakına yayılır,Bleed aktif hedefe Rupture,Hasar +%100,Bleeder
+ROGUE,3,Rupture,💥 FINISHER,↓ SPENDER,Core,5CP finisher: bleed+hasar — CP sayısına göre süre uzar max 12s,Zaten bleed varsa,Birikmiş hasar anında patlar,Bleeder
+ROGUE,4,Shadowstep,▶ OPENER,⬡ CONTROL,Core,Hedefe anında ışınlan 8m — 0.5s stun — Energy-25,Evasion aktifken,CD sıfırlanır,Assassin / Duelist
+ROGUE,5,Kidney Shot,⬡ CONTROL,↓ SPENDER,Core,5CP: 4s stun — CP sayısına göre uzar,Mortal Strike (Warblade dual) aktifken,Stun'da iyileşme yok (Warblade dual),Duelist
+ROGUE,6,Ambush,💥 FINISHER,▶ OPENER,Core,Sadece stealth'ten: %300 hasar+4CP+%20 slow,3s+ stealth süresinden sonra,"Cold Blood" +%100 hasar,Assassin
+ROGUE,7,Fan of Knives,⚓ ANCHOR,⬡ CONTROL,Core,360° AoE — tüm aktif bleed/zehir/debuffları tüm düşmanlara uygular — Energy-40,Hexer dual,Hexer debuffları da yayılır,Bleeder
+ROGUE,8,Evasion,⚓ ANCHOR,↑ BUILDER,Core,4s %100 dodge — her dodge=+1CP — kill=CD sıfırlanır,Evasion bitince,Sonraki saldırı guaranteed crit,Duelist
+ROGUE,9,Deadly Poison,↑ BUILDER,▶ OPENER,Advanced,10s silah zehiri: her saldırı ayrı zehir DoT — bleed'den bağımsız,Hexer dual → her zehir DoT,1 Hex stack uygular,Bleeder
+ROGUE,10,Sprint,▶ OPENER,⚓ ANCHOR,Advanced,3s hız +%100 — geçtiğin düşmanlara hasar,Sprint sırasında Backstab,Arka pozisyon garantilenir,Duelist
+ROGUE,11,Preparation,↑ BUILDER,✦ AMPLIFIER,Advanced,Tüm Rogue skill CD'lerini sıfırla — 90s CD,Evasion aktifken kullanılırsa,Preparation kendi CD'si 60s (90s yerine),Assassin
+ROGUE,12,Vanish,⚓ ANCHOR,⬡ CONTROL,Master,Savaşta anlık stealth — tüm düşmanlar hedef kaybeder — 3s — 50s CD,Vanish sonrası Ambush,"Cold Blood" bonus garantili,Assassin
+
+RANGER,1,Aimed Shot,💥 FINISHER,⚡ CHAIN,Core,1.5s şarj → büyük tek hasar+%50 crit şansı — hedef immobile=anında,Concussive Arrow root'u sonrası,Guaranteed instant ateş,Sniper
+RANGER,2,Concussive Arrow,⬡ CONTROL,▶ OPENER,Core,Anında knockback 4m + root 2s,Backward Dash sırasında,Uzaklık 6m + slow 3s,Sniper / Trap Master
+RANGER,3,Serpent Sting,↑ BUILDER,▶ OPENER,Core,Zehir DoT 10s + armor debuff -%20 — max 30s devam eder,Disengage+Serpent Sting,Daha geniş alana zehir,Hunter Pack
+RANGER,4,Explosive Trap,⬡ CONTROL,↑ BUILDER,Core,Zemine tuzak — 3s sonra patlama+slow 3s,Summoner dual,Trap minyona konulabilir (mobil),Trap Master
+RANGER,5,Multi-Shot,⚓ ANCHOR,↑ BUILDER,Core,Delici ok: tüm düşmanlardan geçer — her birine Serpent Sting stack,5+ düşman vurulursa,Tüm CD -3s,Trap Master / Hunter Pack
+RANGER,6,Disengage,▶ OPENER,⬡ CONTROL,Core,6m geri atla — slow alanı bırak — havada hasar -%30,Disengage+anında Aimed Shot,Atlama sırasında ateş + ekstra hasar,Sniper / Trap Master
+RANGER,7,Black Arrow,↑ BUILDER,⚡ CHAIN,Core,DoT + özel: bu DoT ile ölen düşman 8s ruh bırakır,Summoner dual → ruh,Minyon sayılır (Blood for Power tetikler),Hunter Pack
+RANGER,8,Volley,⬡ CONTROL,⚓ ANCHOR,Core,4m alana 3s yağmur — slow+tick — sen hareket edebilirsin,Explosive Trap üzerine,Tam kilitlenme combo,Trap Master
+RANGER,9,Rapid Fire,⚓ ANCHOR,↓ SPENDER,Advanced,2s kanal: 8 hızlı ok — toplam > Aimed Shot — Focus -30,Focus 100'de başlarsa,10 ok + Focus maliyeti yok,Sniper
+RANGER,10,Spirit Wolf,↑ BUILDER,⚓ ANCHOR,Advanced,12s hayalet kurt — bağımsız saldırır — Serpent Sting otomatik uygular,Summoner dual,Minyon sayılır — Blood for Power tetikler,Hunter Pack
+RANGER,11,Flare,⬡ CONTROL,✦ AMPLIFIER,Advanced,6m flare: stealth düşmanları açığa çıkarır+6s slow — Focus+20,Rogue dual,Vanish/stealth iptal + CP kaybettirir,Trap Master
+RANGER,12,Point Blank,💥 FINISHER,⬡ CONTROL,Master,≤2m yakınlıkta: ×3 hasar+5m knockback — Focus 100 gerektirir,Disengage sonrası anında,CD sıfırlanır,Sniper
+
+BRAWLER,1,Bloodlust Strike,⚡ CHAIN,💥 FINISHER,Core,Koni saldırı — HP'ye göre hasar artar (%100HP=baz %30HP=+%120),Fury %80+,Slaughter anında açılır,Glass Cannon
+BRAWLER,2,Whirlwind,⚓ ANCHOR,↓ SPENDER,Core,2s spin AoE — her düşman vuruşu savunma -%5 (max -%30),Savunma -%30'da Whirlwind,Fury +20/spin,Fury Engine
+BRAWLER,3,Frenzied Leap,▶ OPENER,↑ BUILDER,Core,Hedefe atla — iniş AoE — hit=CD anında sıfırlanır,3 ard arda farklı hedefe,5s Frenzy buff +%50 hasar,Control Brawler
+BRAWLER,4,Reckless Swing,💥 FINISHER,↓ SPENDER,Core,Devasa tek hasar — 2s tam savunmasız,Hasar alırsan savunmasızlıkta,Fury+40 + 0.8s invuln counter,Glass Cannon
+BRAWLER,5,Bloodthirst,⚓ ANCHOR,↑ BUILDER,Core,Hızlı 5 vuruş — her vuruş küçük iyileşme — HP düşükse daha fazla,HP<%20 + Fury%100,8 vuruşa yükselir,Fallen Saint combo
+BRAWLER,6,Intimidating Shout,⬡ CONTROL,,Core,3m çevresinde 3s panik/kaçar,Panikleyen düşmana Bloodlust Strike,+%100 hasar (sırta vuruluyor),Control Brawler
+BRAWLER,7,Barbaric Charge,▶ OPENER,⬡ CONTROL,Core,Düz çizgide her şeyi iter — stun/root immune,Duvara çarparsa,İtilen düşmanlar stun 2s,Control Brawler
+BRAWLER,8,Last Rites,💥 FINISHER,,Core,SADECE HP<%15: %600 hasar — sonra 4s tam savunmasız,Eğer öldürürse,Savunmasızlık 2s'ye iner (4s yerine),Glass Cannon
+BRAWLER,9,Iron Grab,⬡ CONTROL,▶ OPENER,Advanced,Yakala (≤2m): 1.5s hold → seçtiğin yöne fırlat — Fury+30,Fırlatılan düşman 3.'e çarparsa,Her ikisi de stun,Control Brawler
+BRAWLER,10,War Cry,↑ BUILDER,✦ AMPLIFIER,Advanced,8s: Fury üretimi ×2,Fury %50 altındayken aktive,Süre 12s (8s yerine),Fury Engine
+BRAWLER,11,Shatter Armor,✦ AMPLIFIER,▶ OPENER,Advanced,Hedefin savunması -%40 (10s — tüm kaynaklar yararlanır),Warblade dual Colossus Smash window'unda,Savunma -%60,Fury Engine
+BRAWLER,12,Death Wish,⚓ ANCHOR,↑ BUILDER,Master,5s ölümsüz — Fury ×3 hızlı dolar — sonra 8s +%80 hasar,Fury %100'e ulaşırsa içinde,[V] Burst anında tetiklenebilir,Glass Cannon
+
+PALADİN,1,Crusader Strike,↑ BUILDER,▶ OPENER,Core,Temel melee + Holy Power+25,Crusader→Judgment→Crusader zinciri,Her 3.'de +%60 hasar,Tank Rhythm
+PALADİN,2,Divine Storm,↑ BUILDER,✦ AMPLIFIER,Core,360° melee AoE + HP+15/hedef,3+ düşman vurulursa,HP+50 (flat yerine),Holy Burst
+PALADİN,3,Judgment,↑ BUILDER,⚡ CHAIN,Core,Ranged holy blast 6m — debuffluysa +%50 hasar,Hexer dual: Hexer debuff varsa,+%100 hasar,Tank Rhythm / Holy Burst
+PALADİN,4,Consecration,↑ BUILDER,⚓ ANCHOR,Core,5s kutsal zemin — tick hasar + HP+5/sn,Consecration + Warblade Battle Cry,Düşmanlar koşarak zeminde patlar,Tank Rhythm / Army Support
+PALADİN,5,Hammer of Wrath,💥 FINISHER,⚡ CHAIN,Core,SADECE HP<%20 hedefe: büyük hasar + HP+30,Execute (Warblade dual) ile arka arkaya,Her ikisi de HP eşiği,Holy Burst
+PALADİN,6,Avenger's Shield,⬡ CONTROL,↑ BUILDER,Core,Kalkan fırlat: 3 hedefe sekip silence + HP+15/düşman,3 farklı hedefe sekerse,Her biri 2s slow alır,Tank Rhythm
+PALADİN,7,Holy Shock,⚓ ANCHOR,↑ BUILDER,Core,Düşman=hasar+HP+15 / kendin=iyileşme,HP<%30'da kendin üzerine,İyileşme ×3,Holy Burst
+PALADİN,8,Shield of Retribution,⚡ CHAIN,↓ SPENDER,Core,3s blok — engellenen hasar birikir → AoE olarak serbest,Consecration üzerindeyken,AoE ×2,Tank Rhythm
+PALADİN,9,Blessed Weapon,↑ BUILDER,✦ AMPLIFIER,Advanced,12s: tüm melee +15 HP/hit (normal 5-10 yerine),HP %80+'ta başlatılırsa,Süre 18s (12s yerine),Tank Rhythm
+PALADİN,10,Lay on Hands,⚓ ANCHOR,↓ SPENDER,Advanced,Anlık tam HP iyileşme — 90s CD,HP sıfırlandıktan sonraki 5s,HP üretim ×2,Holy Burst
+PALADİN,11,Devotion Aura,✦ AMPLIFIER,↑ BUILDER,Advanced,8s: sen+minyonlar -%30 hasar — HP+5/sn,Summoner dual 3+ minyon hayattaysa,Süre 12s (8s yerine),Army Support
+PALADİN,12,Divine Sacrifice,⚡ CHAIN,↑ BUILDER,Master,5s: minyon hasarının %60'ını üstlen — ama HP ×3 üretirsin,Fallen Saint (Brawler dual),Üstlenilen hasar Fury doldurur,Army Support
+
+SUMMONER,1,Raise Skeleton,↑ BUILDER,▶ OPENER,Core,1 Charge → melee iskelet (max 3). 3 birden=Rally Cry +%40,3 iskelet varken sonraki,+%20 hasar katkısı,Army Commander
+SUMMONER,2,Summon Golem,⚓ ANCHOR,⬡ CONTROL,Core,2 Charge → 1 tank Golem. HP<%20=kendini patlatır AoE,Golem'e Commanding Strike,Duvara çarpma stun,Army Commander
+SUMMONER,3,Rally Cry,✦ AMPLIFIER,,Core,Tüm minyonlar +%20 hasar+hız 10s,Karışık minyon tipleri varsa,Bonus +%40'a çıkar,Army Commander / Sacrifice Engine
+SUMMONER,4,Corpse Explosion,💥 FINISHER,⚡ CHAIN,Core,Düşman veya minyon cesedini patlatır — AoE,3+ cesetle,Zincir patlama,Sacrifice Engine / Lich Burst
+SUMMONER,5,Death Nova,⚡ CHAIN,⬡ CONTROL,Core,1 minyonu feda: 8s zehir bulutu bırakır,Hexer dual,Zehir bulutu Hexer debufflarını yayar,Sacrifice Engine
+SUMMONER,6,Commanding Strike,✦ AMPLIFIER,⬡ CONTROL,Core,Seçili minyona emir ×4 hasar+invuln — minyon yoksa Summoner ×2 atar,Golem'e emir,Hedefi duvara çarpar,Army Commander
+SUMMONER,7,Blood for Power,↑ BUILDER,↓ SPENDER,Core,Minyon feda → Charge+1 + tüm CD -%30,3 minyon ard arda feda edilirse,Charge+3 + [V] Burst meter +30,Sacrifice Engine
+SUMMONER,8,Bone Shield,⚓ ANCHOR,↑ BUILDER,Core,3s: minyon kalkan olur — absorb → Charge+1,Golem kalkan olursa,Absorbe ×2,Army Commander
+SUMMONER,9,Raise Archer,↑ BUILDER,⚓ ANCHOR,Advanced,1 Charge → uzak archer iskelet (max 2) — Ranger dual=Serpent Sting otomatik,2 archer+1 melee aynı anda,Rally Cry +%50'ye çıkar,Army Commander
+SUMMONER,10,Sacrificial Pact,↓ SPENDER,⚓ ANCHOR,Advanced,Tüm minyonlar intihar — HP+%8/minyon + tüm Charge geri,Boss fight tüm fedayla,+%40 HP tek seferlik,Sacrifice Engine
+SUMMONER,11,Dark Pact,↑ BUILDER,,Advanced,HP -%12 → Charge olmadan minyon çağır,Brawler dual → HP kaybı,Fury doldurur (Dark Army combo),Sacrifice Engine / Lich Burst
+SUMMONER,12,Lich Form,✦ AMPLIFIER,⚓ ANCHOR,Master,10s: Summoner ghostal — melee immune — tüm minyonlar +%60 hasar,Lich Form sırasında minyon feda,Feda hasarı ×3,Lich Burst
+
+HEXER,1,Corruption,▶ OPENER,↑ BUILDER,Core,Anında 3 stack + 4s orta DoT,Corruption→Agony ard arda,Agony başlangıç hızı ×2,Patient DoT
+HEXER,2,Agony,↑ BUILDER,,Core,Süregelen DoT — 2 stack/tick — durdurulamaz,Hedef Pressure Phase (4-6 stack),Stack tick 3'e çıkar (2 yerine),Patient DoT
+HEXER,3,Pandemic,✦ AMPLIFIER,⚡ CHAIN,Core,Bir hedefteki TÜM stack'ları yakın düşmanlara kopyalar,Hedef Overload Phase (7-9 stack),Kopyalanan stack +3 ekstra,Patient DoT / Mass Hexer
+HEXER,4,Hexblast,💥 FINISHER,↓ SPENDER,Core,10 stack patlaması: %100/stack — kill=CD sıfır — 2 stack yayılır,3+ hedef Pressure Phase'deyken,Hexblast zincirlenerek tüm odaya,Patient DoT / Soul Burst
+HEXER,5,Empathy,⚡ CHAIN,⬡ CONTROL,Core,Lanet: düşman saldırılarının %30'u kendine döner,Hedef Overload Phase'de,Dönen hasar %60'a çıkar,Mass Hexer
+HEXER,6,Haunt,↑ BUILDER,⬡ CONTROL,Core,Hayalet bağla: takip eder+tick+3 stack — 10 stack=otomatik Hexblast,Fan of Knives (Rogue dual),Haunt stack'ları tüm düşmanlara,Soul Burst
+HEXER,7,Unstable Affliction,💥 FINISHER,⚡ CHAIN,Core,Dispel/heal edilirse → anında patlama+stun,Hedef stun/CC altındayken,Patlama guaranteed full stack,Soul Burst
+HEXER,8,Enervate,⬡ CONTROL,✦ AMPLIFIER,Core,Hız -%50 — saldırı hızı -%40 — 10s,5+ stack hedefte Enervate,Süre ×2,Mass Hexer
+HEXER,9,Mass Hex,▶ OPENER,⬡ CONTROL,Advanced,Görüntüdeki TÜM düşmanlara aynı anda 2 stack — HP -%8 maliyet,Pressure Phase'deki düşmanlar varsa,3 stack uygular (2 yerine),Mass Hexer
+HEXER,10,Silence Hex,⬡ CONTROL,↑ BUILDER,Advanced,5s özel yetenek kilidi (elite burst suppressed) + 3 stack,Boss fight 7+ stack varken,Silence 8s,Mass Hexer
+HEXER,11,Cursed Mirror,⚡ CHAIN,↑ BUILDER,Advanced,8s: sana uygulanan her debuff → düşmana %50 güçle yansır + 2 stack/yansıma,Enervate sana uygulanırsa,Düşman kendi yavaşlatmasını alır,Mass Hexer
+HEXER,12,Soul Bargain,💥 FINISHER,↓ SPENDER,Master,HP -%25 feda → hedefe anında 5 stack,Hedef zaten Overload Phase (7-9)'daysa,Soul Bargain 10'a tamamlar → anında Hexblast,Soul Burst

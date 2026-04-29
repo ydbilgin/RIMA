@@ -1,0 +1,32 @@
+## ANİMASYON BATCH 1 - İLERLEME RAPORU
+Son güncelleme: 2026-04-03
+
+### DURUM: API ETA'ları güvenilir değil - kuyruğa alınıp Batch 2'ye geçiliyor
+
+**1. ELEMENTALIST** ✓ (Önceden tamamlanmış)
+- idle: 7/8 yön ✓
+- walk: 8/8 yön ✓
+- run: 8/8 yön ✓
+- cast: 8/8 yön ✓
+- hurt: 7/8 yön ✓
+- death: 7/8 yön ✓
+
+**2. SHADOWBLADE** (Kısmi - API sorunları)
+- idle: 8/8 yön ✓
+- walk: 8/8 yön ✓
+- run: 4/8 yön (4 yön API'de takılı)
+- basic_attack: 5/8 yön (3 yön API'de takılı)
+- KALAN: heavy_attack, dash_attack, dash, hurt, death (kuyruğa alınacak)
+
+**3. RANGER** (Başlatıldı)
+- idle: 2/8 yön (6 yön işleniyor)
+- KALAN: walk, run, skill_cast, dash, hurt, death (kuyruğa alınacak)
+
+**4. SHARDWALKER** (Başlanmadı)
+- KALAN: idle, walk, attack, hurt, death (kuyruğa alınacak)
+
+**5. WARBLADE** (Başlanmadı)
+- KALAN: idle, walk, run, heavy_attack, skill_cast, hurt, death, dash_attack, dash (kuyruğa alınacak)
+
+### SONRAKI ADIM
+KIRO_ANIMATION_BATCH2.md'ye geçiliyor.

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6b129952618bf46bb6a44104f7dd61, type: 3}
+  m_Name: Skill_WarStomp
+  m_EditorClassIdentifier: Assembly-CSharp::RIMA.SkillData
+  skillName: War Stomp
+  description: 3m knockup 2s. Rage +25.
+  tier: 0
+  icon: {fileID: -5274138706003518208, guid: bf4b4efea30c3a746b62a985dfac7b2a, type: 3}
+  damage: 20
+  cooldown: 5
+  tags: 
+  isPassive: 0
+  passiveDescription: 
+  appliesEffect: 0

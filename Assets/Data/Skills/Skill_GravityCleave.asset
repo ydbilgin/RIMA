@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6b129952618bf46bb6a44104f7dd61, type: 3}
+  m_Name: Skill_GravityCleave
+  m_EditorClassIdentifier: Assembly-CSharp::RIMA.SkillData
+  skillName: Gravity Cleave
+  description: "Silah\u0131 yere \xE7arpar, 4m \xE7ekim + hasar. 0.8s slow."
+  tier: 1
+  icon: {fileID: 2673768392814107888, guid: 0c3d2eb414ac2af4698364e47c8e96e8, type: 3}
+  damage: 55
+  cooldown: 8
+  tags: 
+  isPassive: 0
+  passiveDescription: 
+  appliesEffect: 0
