@@ -8,7 +8,7 @@ description: S43 anchors SW-facing offset; canonical game directions must map to
 - Raw PixelLab labels are not canonical RIMA game directions.
 - PixelLab developer knows this; editable direction mapping is on their roadmap.
 ## Do NOT
-- Do not rename source files in `STAGING/anchors/chars/<class>/rotations/`.
+- Do not rename source files in `Characters/anchors/<class>/rotations/`.
 - Do not ask PixelLab to "fix South"; this wastes credits and risks inconsistency.
 - Do not trust PixelLab panel labels as canonical.
 ## Mapping
@@ -17,5 +17,8 @@ description: S43 anchors SW-facing offset; canonical game directions must map to
 ## In Every Task
 - PixelLab generation: `keep current character direction setup, do not reinterpret facing`.
 - Unity import/wiring: `apply direction offset mapping before naming clips and wiring blend tree`.
+## Edit Image Prompts
+Edit Image mode only needs description of the target change.
+Do not add "keep X unchanged" boilerplate -- it adds noise and can confuse the model.
 ## Status
 All 10 S43 class anchor folders present with 8 rotations and matching metadata paths.

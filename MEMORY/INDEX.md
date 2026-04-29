@@ -6,7 +6,7 @@ All agents read this file first. Open only files relevant to the current task.
 - [feedback_encoding.md](feedback_encoding.md) -- ASCII-only markdown rule.
 - [feedback_git_attribution.md](feedback_git_attribution.md) -- commit attribution by agent.
 - [feedback_mcp_unity.md](feedback_mcp_unity.md) -- Unity MCP compile waits, test syntax, stuck-job recovery.
-- [feedback_pixellab_direction.md](feedback_pixellab_direction.md) -- S43 PixelLab direction offset and remap rule.
+- [feedback_pixellab_direction.md](feedback_pixellab_direction.md) -- SW-facing offset mapping table; edit image prompt rule; remap at Unity import.
 - [feedback_temp_files.md](feedback_temp_files.md) -- temporary report/prompt cleanup rule.
 
 ## Adding New Memory

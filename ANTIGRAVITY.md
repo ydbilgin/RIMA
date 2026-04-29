@@ -74,7 +74,7 @@ Codex uses CODEX: prefix. Antigravity uses ANTIGRAVITY: prefix.
 
 ### Direction Offset (S43 -- Permanent)
 All 10 S43 class anchors were generated SW-facing. Raw PixelLab direction labels are NOT canonical game directions.
-- Source files: `STAGING/anchors/chars/<class>/rotations/*.png` -- do NOT rename
+- Source files: `Characters/anchors/<class>/rotations/*.png` -- do NOT rename
 - Remap happens at Unity import time, not at generation time
 - In PixelLab generation tasks: always add "keep current character direction setup, do not reinterpret facing"
 - In Unity import/wiring tasks: always add "apply known direction offset mapping before naming/wiring"

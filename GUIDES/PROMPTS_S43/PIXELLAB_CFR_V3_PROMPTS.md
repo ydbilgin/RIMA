@@ -15,7 +15,7 @@ MCP animation production uses char_id.
 
 ## 1. WARBLADE
 
-**File:** `STAGING/anchors/warblade_anchor.png`
+**File:** `Characters/anchors/warblade/warblade_anchor.png`
 
 ```
 Male warrior, short dark brown hair, short beard, broad heroic build.
@@ -31,7 +31,7 @@ outline, muted palette with cold-blue accent, transparent background.
 
 ## 2. RAVAGER
 
-**File:** `STAGING/anchors/ravager_anchor.png`
+**File:** `Characters/anchors/ravager/ravager_anchor.png`
 
 ```
 Male barbarian, messy sandy-blonde hair, scarred face, muscular bare
@@ -46,7 +46,7 @@ black outline, muted palette with blood-red accent, transparent background.
 
 ## 3. RONIN
 
-**File:** `STAGING/anchors/ronin_anchor.png`
+**File:** `Characters/anchors/ronin/ronin_anchor.png`
 
 ```
 Male samurai, black hair tied in topknot, lean athletic build. All-dark
@@ -61,7 +61,7 @@ outline, muted palette with silver-blue edge accent, transparent background.
 
 ## 4. GUNSLINGER
 
-**File:** `STAGING/anchors/gunslinger_anchor.png`
+**File:** `Characters/anchors/gunslinger/gunslinger_anchor.png`
 
 ```
 Female gunslinger, red hair tied in loose updo, slim athletic build.
@@ -76,7 +76,7 @@ outline, muted palette with silver accent, transparent background.
 
 ## 5. RANGER
 
-**File:** `STAGING/anchors/ranger_anchor.png`
+**File:** `Characters/anchors/ranger/ranger_anchor.png`
 
 ```
 Female ranger, long wild white-silver hair, athletic build. Brown
@@ -92,7 +92,7 @@ background.
 
 ## 6. SHADOWBLADE
 
-**File:** `STAGING/anchors/shadowblade_anchor.png`
+**File:** `Characters/anchors/shadowblade/shadowblade_anchor.png`
 
 ```
 Male assassin, dark black hair, lean build. Dark navy hooded jacket
@@ -107,7 +107,7 @@ void-purple accent, transparent background.
 
 ## 7. ELEMENTALIST
 
-**File:** `STAGING/anchors/elementalist_anchor.png`
+**File:** `Characters/anchors/elementalist/elementalist_anchor.png`
 
 ```
 Female mage, short blonde hair, slim light build. Sleeveless blue-gray
@@ -123,7 +123,7 @@ muted cool palette, transparent background.
 
 ## 8. SUMMONER
 
-**File:** `STAGING/anchors/summoner_anchor.png`
+**File:** `Characters/anchors/summoner/summoner_anchor.png`
 
 ```
 Female necromancer, long pale white hair, pale skin, slim build. Dark
@@ -139,7 +139,7 @@ with cyan-blue accent, transparent background.
 
 ## 9. HEXER
 
-**File:** `STAGING/anchors/hexer_anchor.png`
+**File:** `Characters/anchors/hexer/hexer_anchor.png`
 
 ```
 Female hexer, short black hair, slim build. Dark vest over dark
@@ -155,7 +155,7 @@ palette with cursed-green and void-purple accent, transparent background.
 
 ## 10. BRAWLER
 
-**File:** `STAGING/anchors/brawler_anchor.png`
+**File:** `Characters/anchors/brawler/brawler_anchor.png`
 
 ```
 Male brawler, bald head, warm dark tan skin, stocky muscular build.

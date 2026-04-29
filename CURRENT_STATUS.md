@@ -3,7 +3,7 @@
 
 ## ACTIVE BLOCK — Sprite Rotation Production (PixelLab CFR v3 → All 10 Classes)
 CFR v3 prompts ready for all 10 classes. Workflow: PixelLab UI → upload anchor → Low Top-Down → paste description → Generate v3 Rotation → save char_id → MCP animation production.
-Prompts: `STAGING/PROMPTS_S43/PIXELLAB_CFR_V3_PROMPTS.md`
+Prompts: `GUIDES/PROMPTS_S43/PIXELLAB_CFR_V3_PROMPTS.md`
 
 ### PlaytestScenarios Status
 `Assets/Tests/PlayMode/PlaytestScenarios.cs` created with 8 expanded PlayMode scenarios. Codex `validate_script` returned 0 diagnostics, but MCP PlayMode run did not complete because the first run stuck on `DeathScreen_PlayerDies_ShowsDeathScreen`.
@@ -90,7 +90,7 @@ Current state: test file is compile-clean by validator and needs a fresh Unity T
 ## Infrastructure
 - Git repo (code/docs only, PNGs excluded)
 - .gitattributes added — LF normalization, binary exclusions
-- QC Master: `STAGING/anchors/_ANCHOR_QC_MASTER_S43.md`
+- QC Master: `TASARIM/_ANCHOR_QC_MASTER_S43.md`
 - ARA_RAPOR_RIMA_v2.docx — anchor PNGs updated, needs re-embed (manual)
 - MCP: CoplayDev v9.6.8 via uvx/mcpforunityserver
 
