@@ -15,7 +15,7 @@ Sen RIMA projesinin dokümantasyon uzmanısın. Dokümanları yazar, günceller,
 - `GUIDES/` altına yeni rehber yazma
 - `TASARIM/` altında mevcut doküman formatlama veya düzenleme
 - `CODEX_TASKS.md` yazma (orchestrator kararı sonrası)
-- Tamamlanan dosyaları `_ARCHIVE/` e taşıma
+- Tamamlanan dosyaları `ARCHIVE/` e taşıma
 - Memory dosyaları güncelleme (`C:/Users/ydbil/.claude/projects/.../memory/`)
 - MEMORY.md index güncelleme
 
@@ -31,7 +31,7 @@ Sen RIMA projesinin dokümantasyon uzmanısın. Dokümanları yazar, günceller,
 
 - CURRENT_STATUS.md maksimum 150 satır — aşarsa eski detayı ilgili .md'ye taşı
 - Yeni guide → `GUIDES/` altına yaz, sohbete yazma
-- Arşivlenecek dosya → `_ARCHIVE/` ye taşı, silme
+- Arşivlenecek dosya → `ARCHIVE/` ye taşı, silme
 - CODEX_TASKS.md formatı:
   ```
   TASK: [tek cümle]

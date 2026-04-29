@@ -97,7 +97,7 @@ Play test, görsel kalite, estetik karar?     → USER_DECISION → Antigravity
 ├── PIXELLAB.md                 ← PixelLab production reference
 ├── KIRO_TEMPLATE.md            ← Kiro dosyası şablonu (LOW-risk only)
 ├── KIRO_*.md                   ← Aktif Kiro görevleri (İngilizce)
-├── _STAGING/                   ← Kiro ham çıktıları
+├── STAGING/                   ← Kiro ham çıktıları
 ├── TASARIM/                    ← GDD · STYLE_BIBLE · SINIF_VE_SKILL_KARAR_BELGESI
 └── RIMA/                       ← Unity projesi
        └── Assets/Scripts/

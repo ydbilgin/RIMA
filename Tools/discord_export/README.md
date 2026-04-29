@@ -56,7 +56,7 @@ Format: `<id> <label>`. Label dosya adında kullanılır, sade tut. 4-5 kanal ye
 cd "Tools/discord_export"
 .\export.ps1 -DaysBack 30        # son 30 gün dump
 ```
-Sonuç: `_STAGING/discord_pixellab/<channel>.json` + `<channel>_media/`. **Ollama açık olmasına gerek yok.** Bilgisayarda başka iş yaparken arka planda dönebilir.
+Sonuç: `STAGING/discord_pixellab/<channel>.json` + `<channel>_media/`. **Ollama açık olmasına gerek yok.** Bilgisayarda başka iş yaparken arka planda dönebilir.
 
 Forum kanalı (`help-questions-support`) thread-merge için ayrıca:
 ```powershell
@@ -100,7 +100,7 @@ Video için `ffmpeg` gerek: `winget install Gyan.FFmpeg`
 
 ## Çıktılar
 
-Hepsi: `_STAGING/discord_pixellab/`
+Hepsi: `STAGING/discord_pixellab/`
 
 ```
 discord_pixellab/
@@ -176,5 +176,5 @@ Haftada 1 son 7 gün → hızlı export + analiz, yeni dev cevap/tip varsa Claud
 
 - `token.txt` → `.gitignore`'da
 - `dce/` → `.gitignore`'da (zip büyük)
-- `_STAGING/discord_pixellab/` → asset/dump bölgesi, repo'ya commit edilmez (Unity .gitignore zaten _STAGING'i tutar)
+- `STAGING/discord_pixellab/` → asset/dump bölgesi, repo'ya commit edilmez (Unity .gitignore zaten STAGING'i tutar)
 - Token sızdırırsa: Discord → Settings → Devices → Logout (token invalidate)
