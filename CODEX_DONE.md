@@ -644,3 +644,13 @@ INDEX.md lines before/after: 24 / 19
 Date: 2026-04-30
 Skills added: Warblade 2; Elementalist 2; Shadowblade 2; Ranger 2 plus 1 upgrade note; Ravager 3; Ronin 3; Gunslinger 3; Brawler 5; Summoner 2 plus 1 upgrade note; Hexer 2.
 Notes: Applied R4 ACCEPT_WITH_CHANGES items where deterministic: active/passive/upgrade split, Phase tags, Off-Balance rename, Beacon Pull as Command Beacon upgrade, Hawk Eye as existing aimed-shot upgrade note, Empty Mag Burst implementation warning, Wall Slam Combo no-wall fallback note, Glass Strike accepts Shattered or Sundered to avoid Brawler/Warblade ownership conflict.
+
+# CT-ARCH-01: STAGING Archive
+Date: 2026-04-30
+Files moved:
+- STAGING/CHATGPT_YORUMU_2026-04-29.md -> ARCHIVE/CODEX_TAMAMLANDI/CHATGPT_YORUMU_2026-04-29.md
+- STAGING/CODEX_DEGERLENDIRME_CHATGPT_YORUMU_2026-04-29.md -> ARCHIVE/CODEX_TAMAMLANDI/CODEX_DEGERLENDIRME_CHATGPT_YORUMU_2026-04-29.md
+- STAGING/REVIEW_R2_CLAUDE_DECISIONS_2026-04-30.md -> ARCHIVE/CODEX_TAMAMLANDI/REVIEW_R2_CLAUDE_DECISIONS_2026-04-30.md
+- STAGING/CHATGPT_R2_2026-04-30.md -> ARCHIVE/CODEX_TAMAMLANDI/CHATGPT_R2_2026-04-30.md
+- STAGING/CODEX_R2_2026-04-30.md -> ARCHIVE/CODEX_TAMAMLANDI/CODEX_R2_2026-04-30.md
+CURRENT_STATUS.md updated: yes
