@@ -654,3 +654,10 @@ Files moved:
 - STAGING/CHATGPT_R2_2026-04-30.md -> ARCHIVE/CODEX_TAMAMLANDI/CHATGPT_R2_2026-04-30.md
 - STAGING/CODEX_R2_2026-04-30.md -> ARCHIVE/CODEX_TAMAMLANDI/CODEX_R2_2026-04-30.md
 CURRENT_STATUS.md updated: yes
+
+# CT-TEST-01: PlaytestScenarios MCP Run
+Date: 2026-04-30
+Total: 24 | Passed: 24 | Failed: 0 | Skipped: 0
+Failures:
+- NONE
+Notes: Pre-check read_console succeeded. MCP run_tests mode=PlayMode assembly=RIMA.Tests.PlayMode completed successfully. No compile errors. No test file edits.

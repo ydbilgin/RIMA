@@ -32,7 +32,7 @@ All decisions locked. 3 design docs written.
 
 ### PlaytestScenarios Status
 `Assets/Tests/PlayMode/PlaytestScenarios.cs` — 8 scenarios, 0 diagnostics, 3 QC fixes applied.
-Fresh MCP run still pending.
+Fresh MCP run completed 2026-04-30: PlayMode `RIMA.Tests.PlayMode` passed 24/24; failed 0; skipped 0.
 
 ---
 
@@ -159,7 +159,7 @@ Will go into SINIF_VE_SKILL_KARAR_BELGESI.md after Codex R4 lock.
 | `PrefabWiringSetup.cs` | Done | |
 | EditMode Tests (x6) | Done | |
 | PlayMode Tests (x16) | Done | 16/16 PASS -- Codex MCP |
-| PlaytestScenarios.cs | Ready | 8 scenarios; 0 diagnostics; fresh MCP run pending |
+| PlaytestScenarios.cs | PASS | 8 scenarios; 0 diagnostics; MCP PlayMode run passed 24/24 on 2026-04-30 |
 | Prefab Wiring | Setup Ready | Run Tools > RIMA > Setup All Prefabs & UI |
 | `RIMA.Editor.asmdef` | Fixed | |
 
