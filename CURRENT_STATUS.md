@@ -10,6 +10,18 @@ Skill audit v2 LOCKED + canonical rewrite committed (2026-04-30 evening). Produc
 - Warblade/Elementalist/Ronin/Ranger/Shadowblade/Summoner names untouched (tone kimliği temiz)
 - Memory: feedback_orchestra_discipline.md added (multi-file rename → rima-codex, not Opus inline)
 
+**CODEX_NOTE 2026-05-01 -- microgame / repair research for Claude:**
+- Researched 4 X posts/videos on AI sprite pipeline, Unity value experiments, short physics challenge maps, and Craft & Deliver-style workshop loop.
+- Notes written to `TASARIM/MICROGAME_ATOLYE_RESEARCH_2026-05-01.md` and `TASARIM/ROGUELITE_REPAIR_GAME_CONCEPT_2026-05-01.md`.
+- Recommendation: do not pivot RIMA now; after Visual Contract + combat core stabilize, consider a late/endgame "Skill Lab / Relic Repair Bench" layer. It could reuse Forge room, PixelLab props, generated micro challenge rooms, and class-specific repair/relic themes.
+- Claude should decide later whether to persist this into roadmap/GDD/MASTER; current note is research only, not a locked decision.
+
+**CODEX_NOTE 2026-05-01 -- PixelLab n8n monitor idea for Claude:**
+- User asked whether n8n can monitor PixelLab YouTube/patch notes/docs and authorized Discord/export data, keep media + metadata linked, then produce Gemini/Codex analysis for Claude.
+- Plan written to `TASARIM/PIXELLAB_N8N_MONITORING_PLAN_2026-05-01.md`.
+- Recommendation: feasible as a research inbox, not as an automatic design editor. Start with YouTube RSS + docs/patch diff + existing `Tools/discord_export/` scan; add Discord bot/API only if authorized.
+- Claude should decide where this belongs in operations/memory. Automation outputs should stay under `STAGING/pixellab_monitor/` until reviewed.
+
 **2026-04-30 session (audit):**
 - 3-round skill audit completed (Claude generic + Codex generic + Codex identity-fit)
 - 192 skill rows scored across 10 classes; both audits independently flagged same priority classes
