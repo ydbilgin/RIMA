@@ -7,6 +7,7 @@
 *2026-04-17 v6 — RMB mekaniği eklendi (Ravager Battle Cry, Ronin Drawn Edge, Hexer Curse Grasp). Elementalist RMB/Dash ayrıştırıldı. Warblade [V] Dolum: Rift Parry → Iron Counter (Karar #6 uyumu).*
 *2026-04-25 v7 (S41) — Skill revizyon planı işlendi: Shadowblade+Ranger tam redesign, 8 class kısmi revizyon, VFX palette düzeltmeleri. Kaynak: `STAGING/SKILL_REVIZYON_PLANI.md`.*
 *2026-04-29 v8 (S43) — Eski skill isim drift'i temizlendi; Elementalist Light isimleri MASTER #16 ile senkronlandı; cross-class matrix arşiv notu eklendi.*
+*2026-04-30 v9 -- R4 extra skills integrated; active/passive + Phase tags added*
 
 ---
 
@@ -131,10 +132,14 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 
 **Build Eksenleri:**
 - **"Execution"** → Iron Charge + Crippling Blow + Iron Crush + Death Blow
-- **"Control Breaker"** → Gravity Cleave + War Stomp + Sunder Mark + Death Blow
+- **"Control Breaker"** → Gravity Cleave + Earthsplitter + Sunder Mark + Death Blow
 - **"Last Stand"** → Ironclad Momentum + Iron Counter + Battle Surge + Death Blow
 
 **Kaynak notu:** Rage VEREREK dolar (Ravager'dan farkı: Ravager alarak dolar)
+
+### R4 Extra Skills
+- **Quake Slam:** Sword to ground; 3 wave ground cracks, Broken stack per wave. [Active] [Phase 1]
+- **Iron Roar:** 360 shockwave; nearby mobs gain Sundered. [Active] [Phase 2]
 
 ---
 
@@ -166,6 +171,10 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 | 12 | **Blizzard** | ⬡↑ | Master | 1s cast → bölge bağımsız 8s slow+tick (kanal gerekmez, hareket devam eder) | Meteor'dan önce → Meteor knockdown 4s |
 
 **Build Eksenleri:** "Fire Burst" (Element Charge+Fireball+Living Bomb+Meteor) / "Frost Lock" (Glacial Spike+Blizzard+Frozen Orb+Meteor) / "Radiant Break" (Prism Beam+Radiant Pillar+Frost Wall+Solar Flare)
+
+### R4 Extra Skills
+- **Rune Anchor:** Place a ground rune; detonates after 4s or via skill trigger. [Active] [Phase 2]
+- **Element Trail:** Movement leaves element-specific trail: Fire=burn ground, Frost=slow zone. [Passive] [Phase 2]
 
 ---
 
@@ -215,6 +224,10 @@ Backstab Mark, Phase Step, Death Mark, Shadow Pin, Smoke Veil, Veil Burst, Sever
 - **"Mark Collapse"** → Backstab Mark + Death Mark + Shadow Pin + Sever
 - **"Smoke Duelist"** → Smoke Veil + Twin Carve + Shadow Clone + Night Aperture
 
+### R4 Extra Skills
+- **Mirror Cut:** Teleport to active Scar; mobs along path gain Scar. [Active] [Phase 1]
+- **Scar Echo:** 1s after collapse, first hit auto-applies Scar. [Passive] [Phase 2]
+
 ---
 
 ## 🏹 4. RANGER → RANGER / STRİDER
@@ -259,6 +272,11 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 
 **Build Eksenleri:** "Sniper Mark" (Rift Arrow+Predator's Mark+Multi-Mark+Final Strike) / "Trap Master" (Bone Trap+Marked Detonate+Pinning Shot+Hunter's Step) / "Kite Burst" (Sweep Volley+Rift Step+Skirmish Shot+Spirit Bow)
 
+### R4 Extra Skills
+- **Wireline Trap:** Tensioned line between two points; mobs crossing gain Snared+Marked. [Active] [Phase 1]
+- **Quiver Pulse:** Marked mobs reflect 20% damage to other Marked mobs. [Active] [Phase 2] [Ulti-capable]
+- **Hawk Eye:** Merged into existing aimed-shot upgrade path; not added as new active skill. [Upgrade] [Phase 2]
+
 ---
 
 ## 👊 5. RAVAGER
@@ -291,6 +309,11 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 12 | **Death Wish** | ⚓↑ | Master | 5s: HP 1 altına düşemez, Fury ×3 hızlı dolar | Fury %100'e ulaşırsa → [V] Burst anında tetiklenebilir |
 
 **Build Eksenleri:** "Glass Cannon" (Reckless Swing+Bloodlust Strike+Blood-Drunk Leap+Death Wish) / "Fury Engine" (Undying Tenacity+Bloodthirst+Carnage Spin+Shatter Armor) / "Crowd Crusher" (Iron Grab+Barbaric Charge+Bloodied Roar+Frenzied Leap)
+
+### R4 Extra Skills
+- **Wound Echo:** 30% of damage taken returns on next attack. [Passive] [Phase 1]
+- **Pain Reservoir:** HP below 50% -> Fury fills 2x. [Passive] [Phase 1]
+- **Crimson Pact:** Pay 15% HP -> 6s all damage +30%. [Active] [Phase 2]
 
 ---
 
@@ -325,6 +348,11 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 
 **Build Eksenleri:** "Iaido Burst" (Quickdraw Slash+Iaido Stance+Tension 100+Void Cleave) / "Phantom Dance" (Haste Dash+Wind Step+Phantom Step+Flash Draw) / "Wave Clear" (Sōken-giri+Crescent Arc+Iai Pressure+Wind Step)
 
+### R4 Extra Skills
+- **Stillness:** 1.5s motionless -> Tension +30. [Active] [Phase 1]
+- **Sheath Pressure:** While sheathed, nearby mobs grant passive Tension. [Passive] [Phase 2]
+- **Wind Read:** Enemy whiffs attack -> Tension +20 and can open an Opened-state trigger. [Passive] [Phase 2]
+
 ---
 
 ## 🔫 7. GUNSLİNGER ✦ YENİ — Faz 3
@@ -358,6 +386,11 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 
 **Build Eksenleri:** "Heat Engine" (Fan the Hammer+Burning Ammo+Cursor Storm+Full Metal Storm) / "Mobile Assassin" (Rift Dash+Quickdraw+Deadshot+Point Blank Execute) / "Crowd Suppressor" (Suppression Fire+Smoke Grenade+Ricochet+Cursor Storm)
 
+### R4 Extra Skills
+- **Empty Mag Burst:** Last bullet 3x damage + Heat reset; should gain Exposed Line/Suppressed interaction before implementation. [Active] [Phase 1] [Ulti-capable]
+- **Reload Roll:** Slide + reload simultaneously; perfect reload guaranteed as upgrade path. [Active] [Phase 1]
+- **Exposed Line:** At Heat MAX, fire causes self+enemy damage and resets Heat. [Active] [Phase 2]
+
 ---
 
 ## 👊 8. BRAWLER ✦ YENİ — Faz 3
@@ -383,13 +416,20 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 5 | **Guard Break** | ↑💥 | Core | Hedef savunma -%40, 6s, +3 Charge | Charged State → -%60 + 1s stun |
 | 6 | **Repulse** | ⬡↑ | Core | Çevredeki tüm düşmanları iter, +1 Charge/düşman | 4+ düşman → Charge anında 5 |
 | 7 | **Counter Blow** | ↑⚡ | Core | 0.4s pencere: gelen vuruşa %200 karşı punch + Charge +3 | Charged State'deyken → %350 + kısa stun |
-| 8 | **Aerial Rave** | ▶⬡ | Core | Düşmanı havaya atar, 3 hava vuruşu, Charge korunur | Warblade War Stomp sonrası → 5 hava vuruşu |
+| 8 | **Aerial Rave** | ▶⬡ | Core | Düşmanı havaya atar, 3 hava vuruşu, Charge korunur | Warblade Earthsplitter sonrasi → 5 hava vuruşu |
 | 9 | **Cyclone Drive** | ⬡⚓ | Advanced | 2s döner hareket, temas edene %100/tur, Charge dolmaya devam | Charged State ile → %150/tur |
 | 10 | **Seismic Stomp** | 💥⬡ | Advanced | 6m hat boyunca tüm düşmanlar 1.5s havaya kalkar | Aerial Rave combo → havadakilere +%100 hasar |
 | 11 | **Pivot Hook** [S41] | ✦⚡ | Advanced | Footwork-based hook, side step + power punch. Charge sayısı × çarpan: 5 Charge = %500 tek vuruş | Overdrive sırasında → hasar ×1.5 |
 | 12 | **Unstoppable Force** | ↑▶ | Master | 4s: Charge azalmaz, hız +%50, her dash = otomatik Combo Chain | Cyclone Drive ile → Charge sıfırlanmaz, Cyclone Drive süre +2s (loop yok) |
 
 **Build Eksenleri:** "Combo Machine" (Mach Punch+Combo Chain+Aerial Rave+Pivot Hook) / "Ground Breaker" (Shockwave Slam+Seismic Stomp+Guard Break+Overdrive) / "Counter Fighter" (Counter Blow+Repulse+Cyclone Drive+Unstoppable Force)
+
+### R4 Extra Skills
+- **Pulverize:** 3-punch combo; finisher detonates Cracked. [Active] [Phase 1] [Ulti-capable]
+- **Off-Balance:** Punch ground wave; short AoE ground crack VFX. [Active] [Phase 1]
+- **Glass Strike:** Hit on Shattered or Sundered mob -> crit + 4-direction shard scatter. [Active] [Phase 1] [Ulti-capable]
+- **Wall Slam Combo:** Combo finisher pushes mob to nearest wall and applies Wall-Slammed; requires no-wall fallback. [Active] [Phase 2]
+- **Pin Strike:** Hit on Cracked mob -> Pinned, opens body-shot crit window. [Active] [Phase 1]
 
 ---
 
@@ -424,6 +464,11 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 
 **Build Eksenleri:** "Sacrifice Engine" (Blood for Power+Death Nova+Mass Sacrifice+Command Beacon) / "Army Commander" (Raise Skeleton+Summon Golem+Commanding Strike+Soul Siphon Totem) / "Lich Burst" (Lich Form+Dark Pact+Corpse Explosion+Bone Shield)
 
+### R4 Extra Skills
+- **Bone Tide:** Mass summon 3 small skeletons in 2s; budget may push to Later. [Active] [Phase 2]
+- **Soul Tax:** Sacrifice 1 minion -> 6s later summon 2 minions. [Active] [Later]
+- **Command Beacon Upgrade -- Beacon Pull:** Recall all minions to Lantern Beacon. [Upgrade] [Phase 2]
+
 ---
 
 ## 🔮 10. HEXER → HEXER / WARLOCK
@@ -457,6 +502,10 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 12 | **Blight Sigil** [S41] | 💥↓ | Master | Cursor curse zone — basana stack biriktirir. HP -%8 → hedefe anında 3 stack | Hedef zaten Pressure Phase (4-6) → Overload Phase'e zorlar (7'ye iter), Hexblast tetiklenmez |
 
 **Build Eksenleri:** "Patient DoT" (Corruption+Agony+Pandemic+Hexblast) / "Hex Overload" (Hex Overload+Empathy+Mass Hex+Hexblast) / "Soul Burst" (Blight Sigil+Haunt+Unstable Affliction+Hex Overload)
+
+### R4 Extra Skills
+- **Whisper Mark:** Mobs near Hexed mob auto-gain Hex stack. [Passive] [Phase 1]
+- **Curse Bargain:** Pay 15% HP -> nearby mobs gain Hex stack +3. [Active] [Phase 2]
 
 ---
 

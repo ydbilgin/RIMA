@@ -639,3 +639,8 @@ Changes made:
 - statusline.md: tightened trigger and converted old arrow chars to ASCII.
 - INDEX.md: rewrote one-line WHEN entries; reduced broad sentence triggers.
 INDEX.md lines before/after: 24 / 19
+
+# CT-DOC-01: R4 Skill Integration
+Date: 2026-04-30
+Skills added: Warblade 2; Elementalist 2; Shadowblade 2; Ranger 2 plus 1 upgrade note; Ravager 3; Ronin 3; Gunslinger 3; Brawler 5; Summoner 2 plus 1 upgrade note; Hexer 2.
+Notes: Applied R4 ACCEPT_WITH_CHANGES items where deterministic: active/passive/upgrade split, Phase tags, Off-Balance rename, Beacon Pull as Command Beacon upgrade, Hawk Eye as existing aimed-shot upgrade note, Empty Mag Burst implementation warning, Wall Slam Combo no-wall fallback note, Glass Strike accepts Shattered or Sundered to avoid Brawler/Warblade ownership conflict.
