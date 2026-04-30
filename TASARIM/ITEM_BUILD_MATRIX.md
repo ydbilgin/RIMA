@@ -350,7 +350,7 @@ Fill Slot: Phantom Weave (dodge+void burst) · Arcane Bastion (shield) · Ghost 
 Recipe   : Phantom Weave (VF+SV) + Ghost Step (SV+SE)
 Path     : VF + SV×2 + SE
 Stat Core: AP + Dodge×2 + AS + void burst + phantom strike
-L-Efekt  : Empathy reflection %150. Reflection AoE patlama yapar
+L-Efekt  : Spitback reflection %150. Reflection AoE patlama yapar
 Fill Slot: Fracture Amp (AP+crit) · Arcane Bastion (shield) · Soul Tap
 ```
 

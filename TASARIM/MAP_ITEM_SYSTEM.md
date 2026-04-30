@@ -367,7 +367,7 @@ Her legendary = 1 build anchor (o class'ın farklı oynanış yönü).
 
 | Legendary | Build Anchor | Efekt |
 |-----------|-------------|-------|
-| **Mirror Abyss** | Reflection damage | Empathy reflection hasarı %150. Reflection AoE patlama yapar. |
+| **Mirror Abyss** | Reflection damage | Spitback reflection hasarı %150. Reflection AoE patlama yapar. |
 | **Hex Convergence** | Multi-hex | 3 farklı hex aktifken hasar aura (passive, yakın düşmanlar hasar alır). |
 | **Soul Debt** | Corruption escalation | Soul Bargain acceleration stack'leri kalıcı (run boyunca birikerek artar). Stack başına AP +%2. |
 

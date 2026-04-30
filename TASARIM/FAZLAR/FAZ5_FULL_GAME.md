@@ -1,5 +1,7 @@
 # FAZ 5 — FULL GAME (Early Access)
 
+*Updated: 2026-04-29 — S43 canonical class/skill list applied*
+
 *Claude: Sadece bu dosyayı oku. Faz 1-4 tamamlanmış varsay.*
 
 ---
@@ -27,10 +29,9 @@
 
 ## YENİ CLASS'LARIN DETAYLARI
 
-> **Not:** Ravager, Crusader, Lancer, Gunslinger → Faz 3'te eklendi.
+> **Not:** Ravager, Ronin, Gunslinger, Brawler → Faz 3'te eklendi.
 > Summoner, Hexer → Faz 4'te eklendi.
 > Bu fazda yeni class eklenmez. Skill tabloları için: `../SINIF_VE_SKILL_KARAR_BELGESI.md`
-> Lancer + Gunslinger detayları: `../MASTER_KARAR_BELGESI.md`
 
 ---
 
@@ -45,7 +46,7 @@
 |---|------|-----|------|-------|----------------------|
 | 1 | **Raise Skeleton** ★ | ↑▶ | Core | 1 Charge → melee iskelet (max 3) | 3 iskelet → sonraki +%20 hasar |
 | 2 | **Summon Golem** | ⚓⬡ | Core | 2 Charge → tank Golem, HP<%20 patlama AoE | — |
-| 3 | **Rally Cry** | ✦ | Core | Tüm minyonlar +%20 hasar+hız 10s | Karışık tip → +%40 |
+| 3 | **Command Beacon** | ✦ | Core | Cursor noktasına minyon kitleme + tüm minyonlar +%20 hasar+hız 10s | Karışık tip → +%40 |
 | 4 | **Corpse Explosion** | 💥⚡ | Core | Cesedi patlatır, AoE | 3+ cesetle → zincir patlama |
 | 5 | **Death Nova** | ⚡⬡ | Core | 1 minyon feda: 8s zehir bulutu | — |
 | 6 | **Commanding Strike** | ✦⬡ | Core | Seçili minyon ×4 hasar+invuln | Golem'e emir → duvara çarpar stun |
@@ -76,14 +77,14 @@
 | 2 | **Agony** | ↑ | Core | Süregelen DoT, 2 stack/tick | Pressure Phase → 3 tick |
 | 3 | **Pandemic** | ✦⚡ | Core | Bir hedefteki TÜM stack'ları yakına kopyalar | Overload hedefe → kopyalanan +3 |
 | 4 | **Hexblast** | 💥↓ | Core | 10 stack: %100/stack, kill=CD sıfır | 3+ Pressure → zincirleme tüm odaya |
-| 5 | **Empathy** | ⚡⬡ | Core | Lanet: saldırıların %30'u kendine döner | Overload → %60 |
+| 5 | **Spitback** [S43] | ⚡⬡ | Core | Lanet: saldırıların %30'u kendine döner | Overload → %60 |
 | 6 | **Haunt** | ↑⬡ | Core | Hayalet bağla: takip+tick+3 stack, 10=Hexblast | — |
 | 7 | **Unstable Affliction** | 💥⚡ | Core | Dispel/heal → patlama+stun | CC altında → guaranteed full stack |
 | 8 | **Enervate** | ⬡✦ | Core | Hız -%50, saldırı hızı -%40, 10s | 5+ stack → süre ×2 |
-| 9 | **Mass Hex** | ▶⬡ | Advanced | TÜM düşmanlara 2 stack, HP -%8 | Pressure Phase → 3 stack |
+| 9 | **Foul Wave** [S43] | ▶⬡ | Advanced | TÜM düşmanlara 2 stack, HP -%8 | Pressure Phase → 3 stack |
 | 10 | **Hex Overload** | ⚡💥 | Advanced | 6s: 4+ stack düşmana her hasar +1 stack, Hexblast ×2 | Corruption sonrası → 10s |
 | 11 | **Cursed Mirror** | ⚡↑ | Advanced | 8s: sana her debuff → düşmana %50 yansır | — |
-| 12 | **Soul Bargain** | 💥↓ | Master | HP -%25 → anında 5 stack | Overload hedefe → anında 10, Hexblast |
+| 12 | **Blight Sigil** | 💥↓ | Master | Cursor curse zone — basana stack biriktirir. HP -%8 → hedefe anında 3 stack | Hedef zaten Pressure Phase (4-6) → Overload Phase'e zorlar (7'ye iter), Hexblast tetiklenmez |
 
 **Build Eksenleri:** Patient DoT / Hex Overload / Soul Burst
 
@@ -98,9 +99,9 @@
 | Ranger | 80 Echo |
 | Shadowblade | 150 Echo VEYA Act 1'i 3 kez tamamla |
 | Ravager | 150 Echo VEYA Warblade ile Act 2 boss öldür |
-| Crusader | 150 Echo VEYA 3 farklı class ile Act 1'i tamamla |
-| Lancer | 200 Echo VEYA Warblade+Ranger ile run bitir |
+| Ronin | 150 Echo VEYA Shadowblade ile Act 2 boss öldür |
 | Gunslinger | 200 Echo VEYA Ranger ile Act 2'ye ulaş |
+| Brawler | 200 Echo VEYA Ravager ile Act 2'ye ulaş |
 | Summoner | 200 Echo VEYA üst üste 3 run'da Act 2'ye ulaş |
 | Hexer | 250 Echo + Elementalist ile run bitir |
 
@@ -218,9 +219,9 @@ Tüm önceki mekanikler aynı anda:
 | İçerik | PixelLab Gen |
 |--------|-------------|
 | ~~Ravager~~ (Faz 3'te) | — |
-| ~~Crusader~~ (Faz 3'te) | — |
-| ~~Lancer~~ (Faz 3'te) | — |
+| ~~Ronin~~ (Faz 3'te) | — |
 | ~~Gunslinger~~ (Faz 3'te) | — |
+| ~~Brawler~~ (Faz 3'te) | — |
 | ~~Summoner~~ (Faz 4'te) | — |
 | ~~Hexer~~ (Faz 4'te) | — |
 | Rift Maw sprite + anim | ~24 gen |

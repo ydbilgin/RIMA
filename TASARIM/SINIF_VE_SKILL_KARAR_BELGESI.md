@@ -74,6 +74,28 @@
 | Summoner | Rally Cry | **Command Beacon** (cursor noktasına minyon kitleme) |
 | Hexer | Soul Bargain (#12) | **Blight Sigil** (cursor curse zone, basana stack) |
 
+**[S43] Dirty-pass renames (sokak/foul/Western tonu — kimliği sleazy olan sınıflar):**
+
+> Brawler/Ravager/Hexer/Gunslinger gibi sokak/rot/Western tonlu sınıflarda mekaniği zaten kirli olan skill'lere "kirli ama mizansen" isimler verildi. Warblade/Elementalist/Ronin/Ranger/Shadowblade/Summoner kimliği temiz kalmaya devam eder.
+
+| Class | Eski | Yeni |
+|---|---|---|
+| Brawler | Mach Punch | **Bully** ★ |
+| Brawler | Combo Chain | **Crackjaw** |
+| Brawler | Guard Break | **Cheap Shot** |
+| Brawler | Repulse | **Shove Off** |
+| Brawler | Seismic Stomp | **Curbstomp** |
+| Brawler | Pivot Hook | **Kidney Hook** |
+| Brawler | Wall Slam Combo (R4) | **Wall Eat** |
+| Brawler | Pin Strike (R4) | **Liver Shot** |
+| Ravager | Reckless Swing | **Wild Hack** |
+| Ravager | Bloodthirst | **Gnash** |
+| Ravager | Iron Grab | **Choke Throw** |
+| Hexer | Empathy | **Spitback** |
+| Hexer | Mass Hex | **Foul Wave** |
+| Hexer | Curse Bargain (R4) | **Bleed Tax** |
+| Gunslinger | Burning Ammo | **Hot Lead** |
+
 ---
 
 ## İSİM TEMATİĞİ — 3 SEÇENEK
@@ -279,6 +301,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 ## 👊 5. RAVAGER
 
 > **[S41] ORTA REVİZYON** — Whirlwind→Carnage Spin, Intimidating Shout→Bloodied Roar, Battle Cry (RMB)→Blood Pact. VFX: mor halo kaldırıldı, sıcak kırmızı + et/kemik partikül.
+> **[S43] DIRTY-PASS RENAME** — Reckless Swing→Wild Hack, Bloodthirst→Gnash, Iron Grab→Choke Throw.
 
 **Core Fantasy:** "Az canken daha tehlikeliyim. Bu hata değil, strateji."
 **Identity Anchor:** OWNS HP trade, low-life danger, frenzy chain. AVOIDS armor break (Warblade owned).
@@ -296,15 +319,15 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 1 | **Bloodlust Strike** ★ | ⚡💥 | Core | Koni saldırı, HP'ye göre hasar artar (%30HP=+%120) | Fury %80+ → Slaughter anında açılır |
 | 2 | **Carnage Spin** [S41] | ⚓↓ | Core | 2s spin AoE, her vuruş savunma -%5 (max -%30). Silüet ayrımı: Bladestorm zarif/dans, Carnage Spin brute/parça uçar | Savunma -%30 → Fury +20/spin |
 | 3 | **Frenzied Leap** | ▶↑ | Advanced | Hedefe atla, iniş AoE, hit=CD sıfır. Fury %80+ iken: vurusun %15'i lifesteal + 2s CC bagisikligi | 3 farklı hedefe → 5s Frenzy +%50 hasar |
-| 4 | **Reckless Swing** | 💥↓ | Core | Devasa tek hasar, 2s tam savunmasız | Savunmasızken hasar → Fury+40 + 0.8s invuln |
-| 5 | **Bloodthirst** | ⚓↑ | Core | Hızlı 5 vuruş, her vuruş küçük iyileşme | HP<%20 + Fury%100 → 8 vuruşa yükselir |
+| 4 | **Wild Hack** [S43] | 💥↓ | Core | Devasa tek hasar, 2s tam savunmasız | Savunmasızken hasar → Fury+40 + 0.8s invuln |
+| 5 | **Gnash** [S43] | ⚓↑ | Core | Hızlı 5 vuruş, her vuruş küçük iyileşme | HP<%20 + Fury%100 → 8 vuruşa yükselir |
 | 6 | **Bloodied Roar** [S41] | ⬡ | Core | 3m çevresinde 3s stagger. % HP düştükçe buff güçlenir | Stagger'daki hedefe Bloodlust Strike → +%100 hasar |
 | 7 | **Barbaric Charge** | ▶⬡ | Core | Düz çizgide her şeyi iter, stun/root immune | Duvara çarparsa → stun 2s |
-| 9 | **Iron Grab** | ⬡▶ | Advanced | Yakala (≤3m): 1.5s hold, fırlat, Fury+30 | Fırlatılan 3.'e çarparsa → her ikisi stun |
+| 9 | **Choke Throw** [S43] | ⬡▶ | Advanced | Yakala (≤3m): 1.5s hold, fırlat, Fury+30 | Fırlatılan 3.'e çarparsa → her ikisi stun |
 | 11 | **Bone Crack** | ✦▶ | Advanced | Hedefin vital noktasini acar: 8s, sonraki Bloodlust Strike +%50 hasar (yalnizca tek hit) | Death Wish aktifken -> 12s sure + 2 hit empowered |
 | 12 | **Death Wish** | ⚓↑ | Master | 5s: HP 1 altina dusemez, Fury x3, fatal hasar HP'yi 1'e indirir + 4s damage immunity (heal devre disi). Cooldown: 45s. | Fury %100'e ulaşırsa → [V] Burst anında tetiklenebilir |
 
-**Build Eksenleri:** "Glass Cannon" (Reckless Swing+Bloodlust Strike+Frenzied Leap+Death Wish) / "Fury Engine" (Death Wish+Bloodthirst+Carnage Spin+Bone Crack) / "Crowd Crusher" (Iron Grab+Barbaric Charge+Bloodied Roar+Frenzied Leap)
+**Build Eksenleri:** "Glass Cannon" (Wild Hack+Bloodlust Strike+Frenzied Leap+Death Wish) / "Fury Engine" (Death Wish+Gnash+Carnage Spin+Bone Crack) / "Crowd Crusher" (Choke Throw+Barbaric Charge+Bloodied Roar+Frenzied Leap)
 
 ### R4 Extra Skills
 - **Wound Echo:** 30% of damage taken returns on next attack. [Passive] [Phase 1]
@@ -352,6 +375,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 ## 🔫 7. GUNSLİNGER ✦ YENİ — Faz 3
 
 > **[S41] ORTA REVİZYON** — Bullet Rain→Cursor Storm, Critical Shot→Deadshot, Dead Eye→Rift Grenade. VFX: mor patlama tekrarı ↓, yumruk impact motion blur. Karakter: bone/feather aksesuar + worn leather coat + rift-marked bandana.
+> **[S43] DIRTY-PASS RENAME** — Burning Ammo→Hot Lead.
 
 **Core Fantasy:** "Dur, nişan al değil — koş, ateş et, bitir."
 **Identity Anchor:** OWNS Heat rhythm, reload, slide+shoot, muzzle flash. AVOIDS mark/trap planning (Ranger).
@@ -376,10 +400,10 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 8 | **Rift Grenade** [S41] | ✦⚡ | Core | Cursor zone, gecikmeli patlama. Heat +20 | Hedef stun/root altında → patlama hasarı ×1.5 |
 | 9 | **Ricochet** | ⚓⬡ | Advanced | Mermi 3 düşmana sekiyor, her sekişte +%20 hasar | 3 farklı hedefe sekerse → Heat -30, CD sıfırlanır (tam reset yok) |
 | 10 | **Reload Dance** | ▶✦ | Advanced | Geri çekilme + reload: tüm skill CD -%20, Heat -30. Reload Dance Hold -> slide + reload simultaneously; perfect reload guaranteed | Rift Dash sonrası → CD -%40 |
-| 11 | **Burning Ammo** | ✦↓ | Advanced | 8s: tüm mermiler ateş DoT | Overheat sırasında → DoT anında patlama, AoE |
+| 11 | **Hot Lead** [S43] | ✦↓ | Advanced | 8s: tüm mermiler ateş DoT | Overheat sırasında → DoT anında patlama, AoE |
 | 12 | **Point Blank Execute** | 💥↓ | Master | <=2m + Heat <=20: %400 hasar; ate sonrasi Heat aninda 60'a cikar. Heat <=20 = clean barrel penceresi | Rift Dash'tan hemen sonra VE en az 2 düşmana isabetliyse → %600 hasar |
 
-**Build Eksenleri:** "Heat Engine" (Fan the Hammer+Burning Ammo+Cursor Storm+Full Metal Storm) / "Mobile Assassin" (Rift Dash+Quickdraw+Deadshot+Point Blank Execute) / "Crowd Suppressor" (Suppression Fire+Smoke Grenade+Ricochet+Cursor Storm)
+**Build Eksenleri:** "Heat Engine" (Fan the Hammer+Hot Lead+Cursor Storm+Full Metal Storm) / "Mobile Assassin" (Rift Dash+Quickdraw+Deadshot+Point Blank Execute) / "Crowd Suppressor" (Suppression Fire+Smoke Grenade+Ricochet+Cursor Storm)
 
 ### R4 Extra Skills
 - **Empty Mag Burst:** Last bullet 3x damage + Heat reset; should gain Exposed Line/Suppressed interaction before implementation. [Active] [Phase 1] [Ulti-capable]
@@ -390,6 +414,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 ## 👊 8. BRAWLER ✦ YENİ — Faz 3
 
 > **[S41] ORTA REVİZYON** — Rush Combo→Combo Chain, Momentum Strike→Pivot Hook. Karakter: dinamic guard pose (sol omuz öne, sol el yüksek, sağ el alt çene). Gauntlet silüeti net. VFX: mor patlama ↓, yumruk impact motion blur + omuz rotasyon ipucu.
+> **[S43] DIRTY-PASS RENAME** — Mach Punch→Bully, Combo Chain→Crackjaw, Guard Break→Cheap Shot, Repulse→Shove Off, Seismic Stomp→Curbstomp, Pivot Hook→Kidney Hook, Wall Slam Combo→Wall Eat, Pin Strike→Liver Shot.
 
 **Core Fantasy:** "Durma. Vur. Ritim bul. Tekrar."
 **Identity Anchor:** OWNS Cracked/Shattered state, launch/juggle, whiff body counter. AVOIDS weapon-armor break (Warblade), pre-draw counter (Ronin).
@@ -404,25 +429,25 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 
 | # | İsim | Tag | Tier | Efekt | Chain Koşulu → Bonus |
 |---|------|-----|------|-------|----------------------|
-| 1 | **Mach Punch** ★ | ⚡↑ | Core | 4 hızlı yumruk, +4 Charge | 5. Charge = son yumruk +%150 hasar |
-| 4 | **Combo Chain** [S41] | ▶⚡ | Core | jab→cross→hook→uppercut, 4-frame net pose. 5m atılır, +3 Charge | 5 Charge ile → son vuruş Charged State bonus |
-| 5 | **Guard Break** | ↑💥 | Core | Hedef savunma -%40, 6s, +3 Charge | Charged State → -%60 + 1s stun |
-| 6 | **Repulse** | ⬡↑ | Core | Çevredeki tüm düşmanları iter, +1 Charge/düşman | 4+ düşman → Charge anında 5 |
+| 1 | **Bully** ★ [S43] | ⚡↑ | Core | 4 hızlı yumruk, +4 Charge | 5. Charge = son yumruk +%150 hasar |
+| 4 | **Crackjaw** [S41/S43] | ▶⚡ | Core | jab→cross→hook→uppercut, 4-frame net pose. 5m atılır, +3 Charge | 5 Charge ile → son vuruş Charged State bonus |
+| 5 | **Cheap Shot** [S43] | ↑💥 | Core | Hedef savunma -%40, 6s, +3 Charge | Charged State → -%60 + 1s stun |
+| 6 | **Shove Off** [S43] | ⬡↑ | Core | Çevredeki tüm düşmanları iter, +1 Charge/düşman | 4+ düşman → Charge anında 5 |
 | 7 | **Counter Blow** | ↑⚡ | Core | 0.4s pencere: gelen vuruşa %200 karşı punch + Charge +3 | Charged State'deyken → %350 + kısa stun |
 | 8 | **Aerial Rave** | ▶⬡ | Core | Düşmanı havaya atar, 3 hava vuruşu, Charge korunur | Warblade Earthsplitter sonrasi → 5 hava vuruşu |
 | 9 | **Cyclone Drive** | ⬡⚓ | Advanced | 2s spin + temasta %100/tur, ilk donusta tek 360 kick (+2 Charge), spin sirasinda Charge dolmaya devam | Charged State ile → %150/tur |
-| 10 | **Seismic Stomp** | 💥⬡ | Advanced | 6m line yere yumruk, hat boyunca tum dusmanlar 1.5s havaya kalkar. Charge 3+ -> 8m line + ring patlama | Aerial Rave combo → havadakilere +%100 hasar |
-| 11 | **Pivot Hook** [S41] | ✦⚡ | Advanced | Footwork-based hook, side step + power punch. Charge sayısı × çarpan: 5 Charge = %500 tek vuruş | Overdrive sırasında → hasar ×1.5 |
-| 12 | **Unstoppable Force** | ↑▶ | Master | 4s: Charge azalmaz, hız +%50, her dash = otomatik Combo Chain | Cyclone Drive ile → Charge sıfırlanmaz, Cyclone Drive süre +2s (loop yok) |
+| 10 | **Curbstomp** [S43] | 💥⬡ | Advanced | 6m line yere yumruk, hat boyunca tum dusmanlar 1.5s havaya kalkar. Charge 3+ -> 8m line + ring patlama | Aerial Rave combo → havadakilere +%100 hasar |
+| 11 | **Kidney Hook** [S41/S43] | ✦⚡ | Advanced | Footwork-based hook, side step + power punch. Charge sayısı × çarpan: 5 Charge = %500 tek vuruş | Overdrive sırasında → hasar ×1.5 |
+| 12 | **Unstoppable Force** | ↑▶ | Master | 4s: Charge azalmaz, hız +%50, her dash = otomatik Crackjaw | Cyclone Drive ile → Charge sıfırlanmaz, Cyclone Drive süre +2s (loop yok) |
 
-**Build Eksenleri:** "Combo Machine" (Mach Punch+Combo Chain+Aerial Rave+Pivot Hook) / "Ground Breaker" (Seismic Stomp+Repulse+Guard Break+Overdrive) / "Counter Fighter" (Counter Blow+Repulse+Cyclone Drive+Unstoppable Force)
+**Build Eksenleri:** "Combo Machine" (Bully+Crackjaw+Aerial Rave+Kidney Hook) / "Ground Breaker" (Curbstomp+Shove Off+Cheap Shot+Overdrive) / "Counter Fighter" (Counter Blow+Shove Off+Cyclone Drive+Unstoppable Force)
 
 ### R4 Extra Skills
 - **Pulverize:** 3-punch combo; finisher detonates Cracked. [Active] [Phase 1] [Ulti-capable]
 - **Off-Balance:** Punch ground wave; short AoE ground crack VFX. [Active] [Phase 1]
 - **Glass Strike:** Hit on Shattered or Sundered mob -> crit + 4-direction shard scatter. [Active] [Phase 1] [Ulti-capable]
-- **Wall Slam Combo:** Combo finisher pushes mob to nearest wall and applies Wall-Slammed; requires no-wall fallback. [Active] [Phase 2]
-- **Pin Strike:** Hit on Cracked mob -> Pinned, opens body-shot crit window. [Active] [Phase 1]
+- **Wall Eat** [S43, was Wall Slam Combo]: Combo finisher pushes mob to nearest wall and applies Wall-Slammed; requires no-wall fallback. [Active] [Phase 2]
+- **Liver Shot** [S43, was Pin Strike]: Hit on Cracked mob -> Pinned, opens body-shot crit window. [Active] [Phase 1]
 
 ---
 
@@ -468,6 +493,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 ## 🔮 10. HEXER → HEXER / WARLOCK
 
 > **[S41] KÜÇÜK REVİZYON + CODEX EKLEMESİ** — Soul Bargain (#12)→Blight Sigil (cursor curse zone, basana stack). Karakter: floating sigil sembolleri + soul lantern yeşil (Summoner mavi, Hexer yeşil ayrımı).
+> **[S43] DIRTY-PASS RENAME** — Empathy→Spitback, Mass Hex→Foul Wave, Curse Bargain (R4)→Bleed Tax.
 
 **Core Fantasy:** "Sabır. 10'a gelince sen bitiyorsun."
 **Identity Anchor:** OWNS enemy stack accumulation, spread, curse phases. AVOIDS minion bodies / sacrifice (Summoner).
@@ -476,7 +502,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 **[V] Dolum (Dread):** Curse Grasp aktif tutma aksiyonları (hold süresi V üretir). Stack sayısından farklı ritim: fiziksel baskı eylemi, uygulama sayısı değil.
 **[V] Burst:** HEX CASCADE — V Meter dolunca: hedefte 10 stack varsa tüm düşmanlara 3 stack kopyalanır; yoksa en yüksek stack'lı hedefe Dread patlaması (stack × hasar)
 
-**Auto-Spread Exclusivity (v2 LOCK):** Pandemic, Mass Hex, and Whisper Mark cannot all be active in the same build. Pick max 1 auto-spread mechanic per build to avoid stack autopilot. Selection logic: Pandemic = single-target -> nearby copy, Mass Hex = visible-screen flat 2-stack, Whisper Mark = passive proximity stack.
+**Auto-Spread Exclusivity (v2 LOCK):** Pandemic, Foul Wave, and Whisper Mark cannot all be active in the same build. Pick max 1 auto-spread mechanic per build to avoid stack autopilot. Selection logic: Pandemic = single-target -> nearby copy, Foul Wave = visible-screen flat 2-stack, Whisper Mark = passive proximity stack.
 
 **🖱️ Temel:**
 - **LMB — Hex Bolt:** Hızlı projectile, isabette 1 Hex Stack. Her 3. bolt empowered: 3 stack uygular + 0.3s slow. Overload (7+) hedefte empowered bolt 4 stack uygular. Hızlı ve sürekli — stack'leri biriktirir.
@@ -489,19 +515,19 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 2 | **Agony** | ↑ | Core | Süregelen DoT, 2 stack/tick, durdurulamaz | Pressure Phase → tick 3'e çıkar |
 | 3 | **Pandemic** | ✦⚡ | Core | Bir hedefteki TÜM stack'ları yakın düşmanlara kopyalar | Overload Phase hedef → kopyalanan stack +3 |
 | 4 | **Hexblast** | 💥↓ | Core | **7-9 stack:** azaltılmış hasar (%70/stack), CD sıfırlanmaz. **10 stack:** %100/stack, kill=CD sıfır, yakına 2 stack yayılır | 3+ hedef Pressure Phase → zincirlenerek tüm odaya |
-| 5 | **Empathy** | ⚡⬡ | Core | Lanet: saldirilarin %30'u kendine doner; Pressure Phase (4-6) -> %60; Overload (7-9) -> %100 + 1s stun | Her refleksiyon -> +1 Hex Stack (max 2 stack/sn) |
+| 5 | **Spitback** [S43] | ⚡⬡ | Core | Lanet: saldirilarin %30'u kendine doner; Pressure Phase (4-6) -> %60; Overload (7-9) -> %100 + 1s stun | Her refleksiyon -> +1 Hex Stack (max 2 stack/sn) |
 | 6 | **Haunt** | ↑⬡ | Core | Hayalet bağla: takip+tick+3 stack, 10=otomatik Hexblast | Veil Burst (Shadowblade dual) → Haunt tüm düşmanlara |
 | 7 | **Unstable Affliction** | 💥⚡ | Core | Dispel/heal edilirse → patlama+stun | CC altında hedef → guaranteed full stack |
 | 8 | **Enervate** | ⬡✦ | Core | Hız -%50, saldırı hızı -%40, 10s | 5+ stack → süre ×2 |
-| 9 | **Mass Hex** | ▶⬡ | Advanced | Görüntüdeki TÜM düşmanlara 2 stack, HP -%8 | Pressure Phase düşmanlar → 3 stack |
+| 9 | **Foul Wave** [S43] | ▶⬡ | Advanced | Görüntüdeki TÜM düşmanlara 2 stack, HP -%8 | Pressure Phase düşmanlar → 3 stack |
 | 10 | **[YENİ] Hex Overload** | ⚡💥 | Advanced | 6s: hedef Pressure Phase (4+) veya üstündeyken aldığı her hasar +1 stack kazandırır (max 2 stack/sn, per-target cap), bu sürede Hexblast ×2 hasar | Corruption sonrası → süre 10s'ye çıkar |
 | 12 | **Blight Sigil** [S41] | 💥↓ | Master | Cursor curse zone — basana stack biriktirir. HP -%8 → hedefe anında 3 stack | Hedef zaten Pressure Phase (4-6) → Overload Phase'e zorlar (7'ye iter), Hexblast tetiklenmez |
 
-**Build Eksenleri:** "Patient DoT" (Corruption+Agony+Pandemic+Hexblast) / "Hex Overload" (Hex Overload+Empathy+Mass Hex+Hexblast) / "Soul Burst" (Blight Sigil+Haunt+Unstable Affliction+Hex Overload)
+**Build Eksenleri:** "Patient DoT" (Corruption+Agony+Pandemic+Hexblast) / "Hex Overload" (Hex Overload+Spitback+Foul Wave+Hexblast) / "Soul Burst" (Blight Sigil+Haunt+Unstable Affliction+Hex Overload)
 
 ### R4 Extra Skills
 - **Whisper Mark:** Mobs near Hexed mob auto-gain Hex stack. [Passive] [Phase 1]
-- **Curse Bargain:** Pay 15% HP -> nearby mobs gain Hex stack +3. [Active] [Phase 2]
+- **Bleed Tax** [S43, was Curse Bargain]: Pay 15% HP -> nearby mobs gain Hex stack +3. [Active] [Phase 2]
 
 ---
 
@@ -539,10 +565,10 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | Elementalist | Mirror Image 2 → 3 kopya | — |
 | Shadowblade | Kidney Shot 5CP → 3CP min gate | — |
 | Ranger | Flare Focus+20 → +40 | RMB Tactical Roll Focus+8 → +10 |
-| Ravager | Intimidating Shout fear → stagger | Iron Grab menzili ≤2m → ≤3m |
+| Ravager | Intimidating Shout fear → stagger | Choke Throw (was Iron Grab) menzili ≤2m → ≤3m |
 | Ronin | Phantom Step 2 → 3 afterimage | Iaido Stance 1s → 0.8s |
 | Gunslinger | Smoke Grenade 3m → 5m | — |
-| Brawler | Guard Break +2 → +3 Charge | — |
+| Brawler | Cheap Shot (was Guard Break) +2 → +3 Charge | — |
 | Summoner | Bone Shield 3s → 5s | — |
 | Hexer | Cursed Mirror %50 → %100 | Soul Bargain HP-%25 → -%20 |
 

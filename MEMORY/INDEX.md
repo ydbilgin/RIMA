@@ -14,6 +14,8 @@ Open a file ONLY when its keywords match the current task.
 - [pixellab_prompt_rules.md](pixellab_prompt_rules.md) -- WHEN: PixelLab prompt, edit image, prompt boilerplate
 - [pixellab_sprites.md](pixellab_sprites.md) -- WHEN: CFR v3, sprite production, char_id, rotation
 - [statusline.md](statusline.md) -- WHEN: statusline, usage_statusline.py, usage display
+- [feedback_current_status_format.md](feedback_current_status_format.md) -- WHEN: current_status, token, context window, status format
+- [feedback_orchestra_discipline.md](feedback_orchestra_discipline.md) -- WHEN: rename, mechanical refactor, multi-file edit, Opus mı Sonnet mi, dispatch
 
 ## Add Memory
 Create MEMORY/<topic>.md with frontmatter, then add one line here.
