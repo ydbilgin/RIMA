@@ -104,6 +104,7 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 ## ⚔️ 1. WARBLADE ✅ FİNAL
 
 **Core Fantasy:** "Yaklaş. Sabitle. Zırhı kır. İnfaz et."
+**Identity Anchor:** OWNS Sundered/Broken state, absorb-counter, weapon armor crack. AVOIDS armor language by other classes.
 **Kaynak:** Rage (0-100) — hasar VEREREK +10/vuruş, CC'li düşmana +20, boşta -5/sn *(savaş dışında — oda temizse — drain yok)*
 > Note: Skill Rage values (Rage+N) are additive burst gains on top of passive code accumulation. Canonical passive: 1/hit-dealt, 5/hit-taken, 3/kill, decay 10/s. Code is authoritative for base rate.
 **[V] Dolum (Dominance):** CC uygulamaları, başarılı Iron Counter (0.8s pencere), CC sonrası punish aksiyonları. Hasar verme döngüsünden ayrı ritim.
@@ -117,18 +118,17 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 
 | # | İsim | Tag | Tier | Efekt | Chain Koşulu → Bonus |
 |---|------|-----|------|-------|----------------------|
-| 1 | **Iron Charge** ★ | ▶⬡ | Core | 8m dash + 1.5s stun, Rage+20 | Stun'daki hedefe ilk vuruş → +%80 hasar |
+| 1 | **Iron Charge** ★ | ▶⬡ | Core | 8m dash + 1.5s stun, Rage+20. Iron Charge Hold (0.5s) -> Blade Rush mode: 6m line, cizgideki herkese %120, Rage+15/hedef | Stun'daki hedefe ilk vuruş → +%80 hasar. 3+ hedef -> Rage+50 |
 | 2 | **Crippling Blow** | ⚡💥 | Core | Büyük hasar + iyileşme -%50 (6s) | Iron Charge sonrası → iyileşme -%100 |
 | 3 | **Iron Crush** | ✦ | Core | 6s: tüm hasar +%30 | Sunder Mark aktif hedefte → katlanır |
 | 4 | **Gravity Cleave** | ⬡⚡ | Core | Silahı yere çarpar, 4m çapında çeker + %140 hasar, 0.8s slow | Iron Charge sonrası → çekilenler 1.5s stun, Rage+15 |
 | 5 | **Sunder Mark** | ✦↓ | Core | Hedefe işaret: 8s zırh -%40, tüm hasar bonusu görünür | Death Blow aktifken → zırh -%60 |
-| 6 | **Earthsplitter** | ⬡↑ | Core | 3m knockup 2s, Rage+25 | Bladestorm sırasında → +1s uzar |
+| 6 | **Earthsplitter** | ⬡↑ | Core | 3m knockup 2s, Rage+25. Earthsplitter Hold (0.4s) -> 3-wave variant: 3 ardisik ground crack, her wave Broken stack uygular | Bladestorm sırasında → +1s uzar |
 | 7 | **Ironclad Momentum** | ↑✦ | Core | 6s: alınan hasar %30 yok sayılır + her 10 hasar = +10 Rage | Earthsplitter sonrasi → savunma %50'ye çıkar |
 | 8 | **Iron Counter** | ↑⚡ | Core | 0.8s pencere: vurulursa %180 karşı saldırı + Rage+25 + 0.5s stun | Rage 80+ → knockback şok dalgası + 0.5s stagger |
-| 9 | **Blade Rush** | ▶↑ | Advanced | 6m dash + çizgideki herkese %120, Rage+15/hedef | 3+ hedef → Rage+50 |
 | 10 | **Battle Surge** | ✦↑ | Advanced | 8s: her Rage harcaması = HP +%5 *(harcama sonrası 2s internal CD — bu sürede ikinci harcama heal üretmez)* | Rage 80+'ta aktive → süre 12s |
 | 11 | **Deep Wound** | ⚡↑ | Advanced | Bleed DoT 8s + Rage+35 | Iron Crush window → bleed tick 2× |
-| 12 | **Death Blow** | 💥⬡ | Master | SADECE HP<%30: %400 hasar, Rage boşaltır | Crippling Blow aktifken → %600 |
+| 12 | **Death Blow** | 💥⬡ | Master | Hedef Broken VEYA Sundered iken: %400 hasar, Rage bosaltir | Crippling Blow aktifken → %600 |
 
 **Build Eksenleri:**
 - **"Execution"** → Iron Charge + Crippling Blow + Iron Crush + Death Blow
@@ -138,7 +138,6 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 **Kaynak notu:** Rage VEREREK dolar (Ravager'dan farkı: Ravager alarak dolar)
 
 ### R4 Extra Skills
-- **Quake Slam:** Sword to ground; 3 wave ground cracks, Broken stack per wave. [Active] [Phase 1]
 - **Iron Roar:** 360 shockwave; nearby mobs gain Sundered. [Active] [Phase 2]
 
 ---
@@ -146,6 +145,7 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 ## 🔥 2. ELEMENTALİST → ELEMENTALİST / ARCANİST
 
 **Core Fantasy:** "Her şeyi yakıyorum. Ama önce ritmi buluyorum."
+**Identity Anchor:** OWNS spell shapes (line/wall/orb/beam), element reactions, Lightbreak. AVOIDS physical traps (Ranger).
 **Kaynak:** Mana (0-100, +8/sn) + Elemental State (Fire veya Frost, max 5 stack)
 **[V] Dolum (Convergence):** Element reaksiyonları, Lightbreak tetiklemeleri, Fire→Frost / Frost→Fire combo switch pencereleri. Mana döngüsünden ayrı ritim — ritim ustalığını ödüllendirir.
 **[V] Burst:** TRINITY STORM — V Meter dolunca: 7s boyunca Fire/Frost/Light üçlemesini aynı anda döndüren central rune fırtınası
@@ -183,12 +183,13 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 > **[S41] TAM REDESIGN** — Eski isimler (Vanish, Fan of Knives, Kidney Shot, Backstab, Hemorrhage, Evasion, Ambush) geçersiz.
 
 **Core Fantasy:** "Yankını vuruyorum. Yara mekânda açık kalıyor."
+**Identity Anchor:** OWNS Scar placement/collapse, phase-through geometry. AVOIDS generic teleport-slash (Ronin overlap).
 **Kaynak:** Sever (0-100) — düşmandan geçerek, hedefe karşı tarafı değiştirerek veya saldırıdan faz geçerek dolar. Stack-on-hit değil: pozisyonel, geometrik hareket.
 **[V] Dolum (Predation):** Rift Scar collapse zincirleri ve collapse sonrası hızlı öldürme pencereleri. Sever'den farklı aksiyon tipi: sona erdirme vs. geçiş.
 **[V] Burst:** WRAITH FORM — 5sn ghost, Scar'larla tüm engeller geçilir.
 
 **🖱️ Temel:**
-- **LMB — Veil Strike:** Hızlı reverse-grip slash, mark koyar. Sever+8/vuruş.
+- **LMB — Veil Strike:** Hızlı reverse-grip slash, mark koyar. Sever+8/vuruş. LMB-LMB-LMB-Hold (0.3s) -> Twin Carve: 2 slash + arkaya phase-step bos kalir.
 - **RMB — Veil Flicker:** Düşmandan/vektörden kısa faz geçişi; geçilen hedef Rift Scar alır. Sever+15. CD 1.2s.
 - **Dash Attack — Seam Rend:** Evrensel dash + LMB hedeften geçerek keser, gecikmeli Rift Scar bırakır. Scar yalnızca karşı taraftan vurulursa collapse olur.
 
@@ -199,11 +200,10 @@ Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shad
 4. Shadow Clone — decoy phantom
 5. Death Mark — 4sn delay patlama
 6. Veil Burst — etrafa 4 phase teleport-strike
-7. Severance — low-HP execute line
+7. Severance — 3+ Scar tasiyan hedefe cizgi cek, tum Scarlari ayni anda collapse et, Sever+50/Scar
 8. Smoke Veil — AoE stealth (kendi single player)
 9. Chain Cull — marked'den marked'e zıplar, 3 hop
 10. Shadow Pin — 1.5sn root, dagger fırlat
-11. Twin Carve — önde 2 slash, ikincide phase-step arkaya
 12. Night Aperture — 6s: her dash/Veil Flicker giriş ve çıkış noktasında mirrored Scar
 
 **V Burst:** Wraith Form (5sn ghost)
@@ -222,7 +222,7 @@ Backstab Mark, Phase Step, Death Mark, Shadow Pin, Smoke Veil, Veil Burst, Sever
 **Build Eksenleri:**
 - **"Phase Predator"** → Phase Step + Veil Burst + Chain Cull + Wraith Form
 - **"Mark Collapse"** → Backstab Mark + Death Mark + Shadow Pin + Sever
-- **"Smoke Duelist"** → Smoke Veil + Twin Carve + Shadow Clone + Night Aperture
+- **"Smoke Duelist"** → Smoke Veil + Veil Strike (Twin Carve branch) + Shadow Clone + Night Aperture
 
 ### R4 Extra Skills
 - **Mirror Cut:** Teleport to active Scar; mobs along path gain Scar. [Active] [Phase 1]
@@ -235,47 +235,44 @@ Backstab Mark, Phase Step, Death Mark, Shadow Pin, Smoke Veil, Veil Burst, Sever
 > **[S41] TAM REDESIGN** — Eski isimler (Aimed Shot, Concussive Arrow, Disengage, Barbed Net Shot, Explosive Trap, Volley, Tethering Arrow, Flare) geçersiz ya da revize edildi.
 
 **Core Fantasy:** "Sana ulaşamazsın. Her saniye kayıp veriyorsun."
+**Identity Anchor:** OWNS trap lines, marks, kill zones, distance discipline. AVOIDS run-and-gun (Gunslinger).
 **Kaynak:** Focus (4m+: +10/sn | 2m-: -20/sn) — Focus 75+: +%25 hasar | Focus 100: next skill free cast
 **[V] Dolum (Kill Zone):** Tuzak tetiklemeleri, mark detonasyonları, menzilden onaylı öldürmeler. Distance-based Focus'tan farklı ritim: alan kontrolü olayları.
 **[V] Burst:** Spirit Bow — 6sn infinite ammo + mark all
 
 **🖱️ Temel:**
 - **LMB — Rift Arrow** (LMB hold = charge + mark): Anında tek ok, Focus+4. Hold 1s = charge + guaranteed mark.
-- **RMB — Tactical Roll:** Hareket yönüne kısa geri atlama + atlama sırasında 1 ok anında serbest ateş. Focus+10, CD 1.2s.
+- **RMB — Tactical Roll:** Hareket yönüne kısa geri atlama + atlama sırasında 1 ok anında serbest ateş. Focus+10, CD 1.2s. Hareket halinde RMB hold -> roll + 1 ok ates (Skirmish branch); Focus+15 isabette.
 
 **S41 skill listesi (12 + V):**
 1. Rift Arrow (LMB hold = charge + mark)
 2. Pinning Shot (1.5sn root)
 3. Marked Detonate (mark patlatır)
-4. Hunter's Step (dash + sonraki crit)
+4. Hunter's Step (tap = dash + sonraki crit; Hold 0.3s -> void short-dash 4m gecisli)
 5. Bone Trap (cursor zone — ground-target root+mark)
 6. Sweep Volley (cone, sağ-sol)
-7. Skirmish Shot (hareket halinde tek hedef vur-kaç)
-8. Predator's Mark (AoE mark zone)
-9. Multi-Mark (5 düşmana mark)
-10. Final Strike (mark'lı + low-HP execute)
-11. Rift Step (void short-dash)
+8. Predator's Mark (Cursor 4m AoE: alandaki tum dusmanlara mark; Focus 75+ -> 5 hedefe genisler)
+10. Final Strike (Marked VE Trapped (Bone/Wireline) hedefe %400 hasar; her iki kosul saglanmadan kullanilamaz)
+11. Wireline Trap [Advanced, ↑✦] — 2 nokta arasi tensioned line, gecen dusmanlara Snared + Marked, 8s sure. Chain Kosulu: Marked Detonate aktifken -> her line crossing patlama tetikler
 12. Spirit Bow (V Burst — büyük rift-bow, 6sn infinite ammo + mark all)
 
 **V Burst:** Spirit Bow (6sn)
 
 **Cross-class exportable pool (8):**
-Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's Mark, Sweep Volley, Rift Step
+Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's Mark, Sweep Volley, Wireline Trap
 
 **Sinerji skill güncellemesi:**
 - Predator's Advance (WB+Ranger): "Root altına Iron Charge" → Pinning Shot/Bone Trap kaynağı. "Rift Arrow CD yok" koşulu.
 - Storm Shot (Elem+Ranger): "Root altına spell" → Pinning/Bone Trap kaynağı. "Rift Arrow hold + element."
 - Hunter's Mark (Shadow+Ranger): "Smoke Veil içinde Bone Trap → Mark aktif hedefe Rift Arrow + crit guarantee."
 - War Hunter (Ranger+WB): "Predator's Mark alanındaki hedefe Iron Charge → mark patlar + bonus."
-- Elemental Arrow (Ranger+Elem): "Rift Arrow charge + slow (Glacial Spike). Rift Step + ok yanma."
+- Elemental Arrow (Ranger+Elem): "Rift Arrow charge + slow (Glacial Spike). Hunter's Step void branch + ok yanma."
 - Ghost Arrow (Ranger+Shadow): "Smoke Veil + Rift Arrow charge."
 
-**Build Eksenleri:** "Sniper Mark" (Rift Arrow+Predator's Mark+Multi-Mark+Final Strike) / "Trap Master" (Bone Trap+Marked Detonate+Pinning Shot+Hunter's Step) / "Kite Burst" (Sweep Volley+Rift Step+Skirmish Shot+Spirit Bow)
+**Build Eksenleri:** "Sniper Mark" (Rift Arrow+Predator's Mark+Final Strike+Wireline Trap) / "Trap Master" (Bone Trap+Wireline Trap+Marked Detonate+Pinning Shot) / "Kite Burst" (Sweep Volley+Hunter's Step+Tactical Roll Skirmish branch+Spirit Bow)
 
 ### R4 Extra Skills
-- **Wireline Trap:** Tensioned line between two points; mobs crossing gain Snared+Marked. [Active] [Phase 1]
 - **Quiver Pulse:** Marked mobs reflect 20% damage to other Marked mobs. [Active] [Phase 2] [Ulti-capable]
-- **Hawk Eye:** Merged into existing aimed-shot upgrade path; not added as new active skill. [Upgrade] [Phase 2]
 
 ---
 
@@ -284,36 +281,34 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 > **[S41] ORTA REVİZYON** — Whirlwind→Carnage Spin, Intimidating Shout→Bloodied Roar, Battle Cry (RMB)→Blood Pact. VFX: mor halo kaldırıldı, sıcak kırmızı + et/kemik partikül.
 
 **Core Fantasy:** "Az canken daha tehlikeliyim. Bu hata değil, strateji."
+**Identity Anchor:** OWNS HP trade, low-life danger, frenzy chain. AVOIDS armor break (Warblade owned).
 **Kaynak:** Fury (0-100) — SADECE hasar alarak +15/vuruş, HP düştükçe daha hızlı
 **[V] Dolum (Carnage):** Kill zinciri uzunluğu — her öldürme öncekinden 4s içindeyse V dolar, zincir uzadıkça her kill daha fazla V üretir. Zincir koparsa V duraklar (sıfırlanmaz). Fury'den (hasar alarak) farklı ritim: öldürmek vs. öldürülmek.
 **[V] Burst:** BERSERK MODE — V Meter dolunca: 6s kan siklozu. Ravager etrafında (2.5 birim yarıçap) dönen kan halkası alandaki tüm düşmanlara sn başına hasar verir. Her 0.5s ana hedefe konsantre kan darbesi. Her kill +0.8s uzatır (max +3s). Süre boyunca: Fury kazanımı 2×, hareket hızı +%20. Süre bitiminde kan halkası patlar (AoE hasar).
 
 **🖱️ Temel:**
 - **LMB — Brutal Swing:** 3 vuruşluk ağır balta zinciri (Geniş Yay → Overhead Slam → Ground Pound). Yay ve Slam 1-3 düşmana, Ground Pound yere çarparak AoE. Her vuruş Fury+12/isabet, son 1s hasar aldıysan Fury+20. 3. vuruş Fury+30 bonus. 1.0s duraksama = combo sıfırlanır.
-- **RMB — Blood Pact** [S41]: Kendi HP'sini harcar, Fury kazan. Fury+20. Savaş dışında kullanılamaz. CD 8s. *HP trade → Fury döngüsü için tetikleyici. Shout filler değil, resource trade.*
+- **RMB — Blood Pact** [S41]: Kendi HP'sini harcar, Fury kazan. Fury+20. Savaş dışında kullanılamaz. CD 8s. Hold (1s): %15 HP -> 6s tum hasar +%30. CD 12s. *HP trade → Fury döngüsü için tetikleyici. Shout filler değil, resource trade.*
 - **Dash Attack — Fury Tackle:** Dash sonrası 0.5s içinde LMB → lowered shoulder tackle, 0.5s stagger (knockback yok — berserker pocket'ta kalır) + Fury+20. Son 1s içinde hasar aldıysan Fury+30. 1.5m çevredeki düşmanları sana yönlendirir + 0.4s kısa zırh. CD 2s. Fury doldurma döngüsünü hızlandırır.
 
 | # | İsim | Tag | Tier | Efekt | Chain Koşulu → Bonus |
 |---|------|-----|------|-------|----------------------|
 | 1 | **Bloodlust Strike** ★ | ⚡💥 | Core | Koni saldırı, HP'ye göre hasar artar (%30HP=+%120) | Fury %80+ → Slaughter anında açılır |
 | 2 | **Carnage Spin** [S41] | ⚓↓ | Core | 2s spin AoE, her vuruş savunma -%5 (max -%30). Silüet ayrımı: Bladestorm zarif/dans, Carnage Spin brute/parça uçar | Savunma -%30 → Fury +20/spin |
-| 3 | **Frenzied Leap** | ▶↑ | Core | Hedefe atla, iniş AoE, hit=CD sıfır | 3 farklı hedefe → 5s Frenzy +%50 hasar |
+| 3 | **Frenzied Leap** | ▶↑ | Advanced | Hedefe atla, iniş AoE, hit=CD sıfır. Fury %80+ iken: vurusun %15'i lifesteal + 2s CC bagisikligi | 3 farklı hedefe → 5s Frenzy +%50 hasar |
 | 4 | **Reckless Swing** | 💥↓ | Core | Devasa tek hasar, 2s tam savunmasız | Savunmasızken hasar → Fury+40 + 0.8s invuln |
 | 5 | **Bloodthirst** | ⚓↑ | Core | Hızlı 5 vuruş, her vuruş küçük iyileşme | HP<%20 + Fury%100 → 8 vuruşa yükselir |
 | 6 | **Bloodied Roar** [S41] | ⬡ | Core | 3m çevresinde 3s stagger. % HP düştükçe buff güçlenir | Stagger'daki hedefe Bloodlust Strike → +%100 hasar |
 | 7 | **Barbaric Charge** | ▶⬡ | Core | Düz çizgide her şeyi iter, stun/root immune | Duvara çarparsa → stun 2s |
-| 8 | **[YENİ] Undying Tenacity** | ⚓↑ | Core | Fatal hasar HP'yi 1'e indirir; 4s hasar bagisikligi kazanir, bu pencerede iyilesme devre disi. Cooldown: 45s. | Death Wish aktifken → pencere 6s'ye uzar, bitis aninda Fury +30 |
 | 9 | **Iron Grab** | ⬡▶ | Advanced | Yakala (≤3m): 1.5s hold, fırlat, Fury+30 | Fırlatılan 3.'e çarparsa → her ikisi stun |
-| 10 | **[YENİ] Blood-Drunk Leap** | ▶↓ | Advanced | Hedefe sıçrar, %120 hasar. Fury'nin %30'unu tüketir, her 10 Fury +%20 hasar | HP<%40 iken → vuruşun %15'i lifesteal + 2s CC bağışıklığı |
-| 11 | **Shatter Armor** | ✦▶ | Advanced | Hedefin savunması -%40, 10s | Warblade Sunder Mark aktifken → -%60 |
-| 12 | **Death Wish** | ⚓↑ | Master | 5s: HP 1 altına düşemez, Fury ×3 hızlı dolar | Fury %100'e ulaşırsa → [V] Burst anında tetiklenebilir |
+| 11 | **Bone Crack** | ✦▶ | Advanced | Hedefin vital noktasini acar: 8s, sonraki Bloodlust Strike +%50 hasar (yalnizca tek hit) | Death Wish aktifken -> 12s sure + 2 hit empowered |
+| 12 | **Death Wish** | ⚓↑ | Master | 5s: HP 1 altina dusemez, Fury x3, fatal hasar HP'yi 1'e indirir + 4s damage immunity (heal devre disi). Cooldown: 45s. | Fury %100'e ulaşırsa → [V] Burst anında tetiklenebilir |
 
-**Build Eksenleri:** "Glass Cannon" (Reckless Swing+Bloodlust Strike+Blood-Drunk Leap+Death Wish) / "Fury Engine" (Undying Tenacity+Bloodthirst+Carnage Spin+Shatter Armor) / "Crowd Crusher" (Iron Grab+Barbaric Charge+Bloodied Roar+Frenzied Leap)
+**Build Eksenleri:** "Glass Cannon" (Reckless Swing+Bloodlust Strike+Frenzied Leap+Death Wish) / "Fury Engine" (Death Wish+Bloodthirst+Carnage Spin+Bone Crack) / "Crowd Crusher" (Iron Grab+Barbaric Charge+Bloodied Roar+Frenzied Leap)
 
 ### R4 Extra Skills
 - **Wound Echo:** 30% of damage taken returns on next attack. [Passive] [Phase 1]
 - **Pain Reservoir:** HP below 50% -> Fury fills 2x. [Passive] [Phase 1]
-- **Crimson Pact:** Pay 15% HP -> 6s all damage +30%. [Active] [Phase 2]
 
 ---
 
@@ -322,6 +317,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 > **[S41] KÜÇÜK REVİZYON** — Mille Feuille Cut→Sōken-giri, Blade Veil→Sakura Veil. VFX: mavi blur ↓, beyaz/silver edge + yumuşak motion line.
 
 **Core Fantasy:** "Çek. Kes. Bitir." — BDO Musa esinli iaido katana
+**Identity Anchor:** OWNS sheathe timing, Opened state, single draw release. AVOIDS generic mobility (Shadowblade overlap).
 **Kaynak:** Draw Tension (0-100) — hareket halinde +20/sn, Quickdraw'da +30, 3s hareketsiz = -30/sn *(savaş dışında — oda temizse — drain yok)*. Tension 100: sonraki Quickdraw ×2 hasar
 **[V] Dolum (Flow Cut):** Mükemmel deflectler (Sakura Veil timing), temiz stance çıkışları (Iaido Stance sonrası anında Quickdraw), hatasız hareket sekansları. Tension birikiminden farklı ritim: hassasiyet anları.
 **[V] Burst:** MUGEN NO KIRI — V Meter dolunca: 5s her input instant draw-cut, CD yok, cut anlarında iframes
@@ -336,20 +332,18 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 1 | **Quickdraw Slash** ★ | ▶⚡ | Core | Anlık katana çekimi, %180 ST hasar | Tension 80+ → +%100 hasar, 0.3s hitstop |
 | 2 | **Haste Dash** | ▶↑ | Core | İleri slide, geçilen düşmanlara %120, afterimage bırakır. *Tension bonusları yalnızca Iai Pressure aktifken uygulanır* | Afterimage 1s içinde vurulursa → kopyası da vurur (+%80) |
 | 3 | **Sōken-giri** [S41] | ⬡⚡ | Core | 3m önde 5 slash fan, her biri %80 AoE | Tension 60+ → 7 slash'a çıkar |
-| 4 | **Iaido Stance** | ✦⚓ | Core | 0.8s stance: hareketsiz durulsa bile Tension dolar, sonraki Quickdraw guaranteed crit | Quickdraw ile çıkılırsa → Iaido CD sıfır |
+| 4 | **Iaido Stance** | ✦⚓ | Core | 0.8s stance: hareketsiz durulsa bile Tension dolar, sonraki Quickdraw guaranteed crit. 0.8s stance + ek 1.5s motionless -> Tension +30 + Quickdraw guarantee crit | Quickdraw ile çıkılırsa → Iaido CD sıfır |
 | 5 | **Wind Step** | ▶⬡ | Core | 3 hızlı yön değişimi + her adımda kısa slash, Tension +10/adım | 3 yönde tamamlanırsa → Tension +40 bonus |
 | 6 | **Counter Draw** | ↑⚡ | Core | 0.5s pencere: gelen saldırıyı karşıla → %200 hasar + knockback, Tension +30 | Warblade Iron Counter ile aynı anda → knockback 2×, her ikisi ayrı tetiklenir |
-| 7 | **Phantom Step** | ⬡⚓ | Core | 3 konuma afterimage bırak 3s; düşmanlar afterimage'a saldırırken Ronin konumunu gizler *(tactical deception — MMO aggro değil)* | Summoner dual: afterimage minyon sayılır, feda edilebilir |
 | 8 | **Sakura Veil** [S41] | ⚓↑ | Core | 1s deflect penceresi, petal swirl + tek sakit cycle. Tension +20/deflect | Deflect sırasında Quickdraw → +%150 hasar |
 | 9 | **Crescent Arc** | ⬡💥 | Advanced | Daire çizerek geçme, çizgideki her düşmana %140, son hedefe %280 | 4+ hedef → Tension anında 100'e çıkar |
-| 10 | **Flash Draw** | ⚡▶ | Advanced | Görüş alanındaki en yakın 3 düşmana ışınla-kes, her biri %160 | Son hedef HP<%30 → %200 execute cut |
+| 10 | **Flash Draw** | ⚡▶ | Advanced | Görüş alanındaki en yakın 3 düşmana ışınla-kes, her biri %160 | Son hedef Opened VEYA Tension 100 -> %300 execute cut + 1s hitstop |
 | 11 | **Iai Pressure** | ✦↑ | Advanced | 6s: her Haste Dash Quickdraw bonusunu taşır | Tension 100'de iken → tüm dashler extra blade wave bırakır |
 | 12 | **Void Cleave** | 💥✦ | Master | Tension'ın tamamını boşalt → önündeki 10m koni içindeki tüm düşmanlara %15/Tension hasar, animasyon boyunca dokunulmaz *(yönlü finisher, ekran-wide değil)* | Iaido Stance öncesindeyse → hasar ×2, 1s hitstop |
 
-**Build Eksenleri:** "Iaido Burst" (Quickdraw Slash+Iaido Stance+Tension 100+Void Cleave) / "Phantom Dance" (Haste Dash+Wind Step+Phantom Step+Flash Draw) / "Wave Clear" (Sōken-giri+Crescent Arc+Iai Pressure+Wind Step)
+**Build Eksenleri:** "Iaido Burst" (Quickdraw Slash+Iaido Stance+Tension 100+Void Cleave) / "Draw Dance" (Haste Dash+Wind Step+Iaido Stance+Flash Draw) / "Wave Clear" (Sōken-giri+Crescent Arc+Iai Pressure+Wind Step)
 
 ### R4 Extra Skills
-- **Stillness:** 1.5s motionless -> Tension +30. [Active] [Phase 1]
 - **Sheath Pressure:** While sheathed, nearby mobs grant passive Tension. [Passive] [Phase 2]
 - **Wind Read:** Enemy whiffs attack -> Tension +20 and can open an Opened-state trigger. [Passive] [Phase 2]
 
@@ -360,6 +354,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 > **[S41] ORTA REVİZYON** — Bullet Rain→Cursor Storm, Critical Shot→Deadshot, Dead Eye→Rift Grenade. VFX: mor patlama tekrarı ↓, yumruk impact motion blur. Karakter: bone/feather aksesuar + worn leather coat + rift-marked bandana.
 
 **Core Fantasy:** "Dur, nişan al değil — koş, ateş et, bitir."
+**Identity Anchor:** OWNS Heat rhythm, reload, slide+shoot, muzzle flash. AVOIDS mark/trap planning (Ranger).
 **Kaynak:** Heat (0-100) — her ateşte +8. 100 = Overheat: 3s hasar +%50 + muzzle flash AoE, ardından 2s forced cooldown (Dual Fire + Fan the Hammer + Cursor Storm kilitli; Rift Dash, Deadshot, Quickdraw kullanılabilir). Heat yönetimi gerçek trade-off
 **[V] Dolum (Showtime):** Kontrollü Overheat girişleri, slide kills, iyi zamanlı Heat temizleme. Ateş hacminden farklı ritim: stil + döngü yönetimi.
 **[V] Burst:** FULL METAL STORM — V Meter dolunca: 5s position-lock yok, dual-fire, her ateş AoE muzzle flash
@@ -380,15 +375,14 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 7 | **Suppression Fire** | ⬡✦ | Core | 4m hat boyunca iter + %80 hasar | Cursor Storm aktifken → hasar %130 |
 | 8 | **Rift Grenade** [S41] | ✦⚡ | Core | Cursor zone, gecikmeli patlama. Heat +20 | Hedef stun/root altında → patlama hasarı ×1.5 |
 | 9 | **Ricochet** | ⚓⬡ | Advanced | Mermi 3 düşmana sekiyor, her sekişte +%20 hasar | 3 farklı hedefe sekerse → Heat -30, CD sıfırlanır (tam reset yok) |
-| 10 | **Reload Dance** | ▶✦ | Advanced | Geri çekilme + reload: tüm skill CD -%20, Heat -30 | Rift Dash sonrası → CD -%40 |
+| 10 | **Reload Dance** | ▶✦ | Advanced | Geri çekilme + reload: tüm skill CD -%20, Heat -30. Reload Dance Hold -> slide + reload simultaneously; perfect reload guaranteed | Rift Dash sonrası → CD -%40 |
 | 11 | **Burning Ammo** | ✦↓ | Advanced | 8s: tüm mermiler ateş DoT | Overheat sırasında → DoT anında patlama, AoE |
-| 12 | **Point Blank Execute** | 💥↓ | Master | ≤2m: %400 hasar, Heat anında 100 → Overheat tetikler | Rift Dash'tan hemen sonra VE en az 2 düşmana isabetliyse → %600 hasar |
+| 12 | **Point Blank Execute** | 💥↓ | Master | <=2m + Heat <=20: %400 hasar; ate sonrasi Heat aninda 60'a cikar. Heat <=20 = clean barrel penceresi | Rift Dash'tan hemen sonra VE en az 2 düşmana isabetliyse → %600 hasar |
 
 **Build Eksenleri:** "Heat Engine" (Fan the Hammer+Burning Ammo+Cursor Storm+Full Metal Storm) / "Mobile Assassin" (Rift Dash+Quickdraw+Deadshot+Point Blank Execute) / "Crowd Suppressor" (Suppression Fire+Smoke Grenade+Ricochet+Cursor Storm)
 
 ### R4 Extra Skills
 - **Empty Mag Burst:** Last bullet 3x damage + Heat reset; should gain Exposed Line/Suppressed interaction before implementation. [Active] [Phase 1] [Ulti-capable]
-- **Reload Roll:** Slide + reload simultaneously; perfect reload guaranteed as upgrade path. [Active] [Phase 1]
 - **Exposed Line:** At Heat MAX, fire causes self+enemy damage and resets Heat. [Active] [Phase 2]
 
 ---
@@ -398,6 +392,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 > **[S41] ORTA REVİZYON** — Rush Combo→Combo Chain, Momentum Strike→Pivot Hook. Karakter: dinamic guard pose (sol omuz öne, sol el yüksek, sağ el alt çene). Gauntlet silüeti net. VFX: mor patlama ↓, yumruk impact motion blur + omuz rotasyon ipucu.
 
 **Core Fantasy:** "Durma. Vur. Ritim bul. Tekrar."
+**Identity Anchor:** OWNS Cracked/Shattered state, launch/juggle, whiff body counter. AVOIDS weapon-armor break (Warblade), pre-draw counter (Ronin).
 **Kaynak:** Charge (0-5) — her vuruşta +1, 3s hareketsiz = sıfırlanır. Her Charge: hasar +%10, hız +%3. 5 Charge = Charged State: **Seçim:** sonraki skill anında +%50 güçlenir (Charge sıfırlanır) VEYA RMB ile Charged State "Overdrive Fuel" olarak bankala → Crowd Hype V meter'a transfer edilir.
 **[V] Dolum (Crowd Hype):** Mükemmel Weave timing (0.2s pencere), hava juggleleri, multi-target slam anları, banked Overdrive Fuel. Hit sayısından farklı ritim: timing olayları ve bilinçli erteleme.
 **[V] Burst:** OVERDRIVE — V Meter dolunca: 5s: her vuruş Charged State gibi davranır, Charge azalmaz
@@ -410,19 +405,17 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | # | İsim | Tag | Tier | Efekt | Chain Koşulu → Bonus |
 |---|------|-----|------|-------|----------------------|
 | 1 | **Mach Punch** ★ | ⚡↑ | Core | 4 hızlı yumruk, +4 Charge | 5. Charge = son yumruk +%150 hasar |
-| 2 | **Shockwave Slam** | ⬡💥 | Core | Yumruk yere, 4m şok dalgası AoE | Charged State → 6m + iter |
-| 3 | **Tornado Kick** | ⬡▶ | Core | 360° döner tekme, +2 Charge | 3+ hedefe → her hedef için +1 Charge bonus |
 | 4 | **Combo Chain** [S41] | ▶⚡ | Core | jab→cross→hook→uppercut, 4-frame net pose. 5m atılır, +3 Charge | 5 Charge ile → son vuruş Charged State bonus |
 | 5 | **Guard Break** | ↑💥 | Core | Hedef savunma -%40, 6s, +3 Charge | Charged State → -%60 + 1s stun |
 | 6 | **Repulse** | ⬡↑ | Core | Çevredeki tüm düşmanları iter, +1 Charge/düşman | 4+ düşman → Charge anında 5 |
 | 7 | **Counter Blow** | ↑⚡ | Core | 0.4s pencere: gelen vuruşa %200 karşı punch + Charge +3 | Charged State'deyken → %350 + kısa stun |
 | 8 | **Aerial Rave** | ▶⬡ | Core | Düşmanı havaya atar, 3 hava vuruşu, Charge korunur | Warblade Earthsplitter sonrasi → 5 hava vuruşu |
-| 9 | **Cyclone Drive** | ⬡⚓ | Advanced | 2s döner hareket, temas edene %100/tur, Charge dolmaya devam | Charged State ile → %150/tur |
-| 10 | **Seismic Stomp** | 💥⬡ | Advanced | 6m hat boyunca tüm düşmanlar 1.5s havaya kalkar | Aerial Rave combo → havadakilere +%100 hasar |
+| 9 | **Cyclone Drive** | ⬡⚓ | Advanced | 2s spin + temasta %100/tur, ilk donusta tek 360 kick (+2 Charge), spin sirasinda Charge dolmaya devam | Charged State ile → %150/tur |
+| 10 | **Seismic Stomp** | 💥⬡ | Advanced | 6m line yere yumruk, hat boyunca tum dusmanlar 1.5s havaya kalkar. Charge 3+ -> 8m line + ring patlama | Aerial Rave combo → havadakilere +%100 hasar |
 | 11 | **Pivot Hook** [S41] | ✦⚡ | Advanced | Footwork-based hook, side step + power punch. Charge sayısı × çarpan: 5 Charge = %500 tek vuruş | Overdrive sırasında → hasar ×1.5 |
 | 12 | **Unstoppable Force** | ↑▶ | Master | 4s: Charge azalmaz, hız +%50, her dash = otomatik Combo Chain | Cyclone Drive ile → Charge sıfırlanmaz, Cyclone Drive süre +2s (loop yok) |
 
-**Build Eksenleri:** "Combo Machine" (Mach Punch+Combo Chain+Aerial Rave+Pivot Hook) / "Ground Breaker" (Shockwave Slam+Seismic Stomp+Guard Break+Overdrive) / "Counter Fighter" (Counter Blow+Repulse+Cyclone Drive+Unstoppable Force)
+**Build Eksenleri:** "Combo Machine" (Mach Punch+Combo Chain+Aerial Rave+Pivot Hook) / "Ground Breaker" (Seismic Stomp+Repulse+Guard Break+Overdrive) / "Counter Fighter" (Counter Blow+Repulse+Cyclone Drive+Unstoppable Force)
 
 ### R4 Extra Skills
 - **Pulverize:** 3-punch combo; finisher detonates Cracked. [Active] [Phase 1] [Ulti-capable]
@@ -438,6 +431,7 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 > **[S41] KÜÇÜK REVİZYON + CODEX EKLEMELERİ** — Rally Cry→Command Beacon. Karakter: lantern + skeleton helm öne çıksın (hood ↓). VFX: soul mavi → cyan + bone white; command line (master→minion) net görünür.
 
 **Core Fantasy:** "Ben savaşmıyorum. Feda ediyorum. Ve feda anı en güçlü andır."
+**Identity Anchor:** OWNS minion bodies, corpses, sacrifice economy, command line. AVOIDS enemy-state stacks (Hexer).
 **Kaynak:** Charges (0-4, auto +1/8s; minyon ölünce +1 anında)
 **[V] Dolum (Grave Chorus):** Sacrifice detonasyonları (Blood for Power, Mass Sacrifice), komuta edilmiş odaklanmış öldürmeler, aktif cesedin dönüşümleri (Corpse Explosion). Pasif Charge üretiminden farklı ritim: aktif komuta aksiyonları.
 **[V] Burst:** ARMY OF THE DEAD — V Meter dolunca: 6s tüm minyonlar +%150, ölümsüz
@@ -476,10 +470,13 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 > **[S41] KÜÇÜK REVİZYON + CODEX EKLEMESİ** — Soul Bargain (#12)→Blight Sigil (cursor curse zone, basana stack). Karakter: floating sigil sembolleri + soul lantern yeşil (Summoner mavi, Hexer yeşil ayrımı).
 
 **Core Fantasy:** "Sabır. 10'a gelince sen bitiyorsun."
+**Identity Anchor:** OWNS enemy stack accumulation, spread, curse phases. AVOIDS minion bodies / sacrifice (Summoner).
 **Kaynak:** Hex Stacks (0-10/düşman, 5s decay)
 **Faz sistemi:** 0-3 Debuff / 4-6 Pressure (+%20 güç) / 7-9 Overload (+%30 hasar alır) / 10 HEXBLAST (tam ödül)
 **[V] Dolum (Dread):** Curse Grasp aktif tutma aksiyonları (hold süresi V üretir). Stack sayısından farklı ritim: fiziksel baskı eylemi, uygulama sayısı değil.
 **[V] Burst:** HEX CASCADE — V Meter dolunca: hedefte 10 stack varsa tüm düşmanlara 3 stack kopyalanır; yoksa en yüksek stack'lı hedefe Dread patlaması (stack × hasar)
+
+**Auto-Spread Exclusivity (v2 LOCK):** Pandemic, Mass Hex, and Whisper Mark cannot all be active in the same build. Pick max 1 auto-spread mechanic per build to avoid stack autopilot. Selection logic: Pandemic = single-target -> nearby copy, Mass Hex = visible-screen flat 2-stack, Whisper Mark = passive proximity stack.
 
 **🖱️ Temel:**
 - **LMB — Hex Bolt:** Hızlı projectile, isabette 1 Hex Stack. Her 3. bolt empowered: 3 stack uygular + 0.3s slow. Overload (7+) hedefte empowered bolt 4 stack uygular. Hızlı ve sürekli — stack'leri biriktirir.
@@ -492,13 +489,12 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 | 2 | **Agony** | ↑ | Core | Süregelen DoT, 2 stack/tick, durdurulamaz | Pressure Phase → tick 3'e çıkar |
 | 3 | **Pandemic** | ✦⚡ | Core | Bir hedefteki TÜM stack'ları yakın düşmanlara kopyalar | Overload Phase hedef → kopyalanan stack +3 |
 | 4 | **Hexblast** | 💥↓ | Core | **7-9 stack:** azaltılmış hasar (%70/stack), CD sıfırlanmaz. **10 stack:** %100/stack, kill=CD sıfır, yakına 2 stack yayılır | 3+ hedef Pressure Phase → zincirlenerek tüm odaya |
-| 5 | **Empathy** | ⚡⬡ | Core | Lanet: saldırıların %30'u kendine döner. Her refleksiyon → +1 Hex Stack (max 2 stack/sn) | Overload Phase → dönen hasar %60 |
+| 5 | **Empathy** | ⚡⬡ | Core | Lanet: saldirilarin %30'u kendine doner; Pressure Phase (4-6) -> %60; Overload (7-9) -> %100 + 1s stun | Her refleksiyon -> +1 Hex Stack (max 2 stack/sn) |
 | 6 | **Haunt** | ↑⬡ | Core | Hayalet bağla: takip+tick+3 stack, 10=otomatik Hexblast | Veil Burst (Shadowblade dual) → Haunt tüm düşmanlara |
 | 7 | **Unstable Affliction** | 💥⚡ | Core | Dispel/heal edilirse → patlama+stun | CC altında hedef → guaranteed full stack |
 | 8 | **Enervate** | ⬡✦ | Core | Hız -%50, saldırı hızı -%40, 10s | 5+ stack → süre ×2 |
 | 9 | **Mass Hex** | ▶⬡ | Advanced | Görüntüdeki TÜM düşmanlara 2 stack, HP -%8 | Pressure Phase düşmanlar → 3 stack |
 | 10 | **[YENİ] Hex Overload** | ⚡💥 | Advanced | 6s: hedef Pressure Phase (4+) veya üstündeyken aldığı her hasar +1 stack kazandırır (max 2 stack/sn, per-target cap), bu sürede Hexblast ×2 hasar | Corruption sonrası → süre 10s'ye çıkar |
-| 11 | **Cursed Mirror** | ⚡↑ | Advanced | 8s: sana uygulanan her debuff → düşmana %100 güçle yansır | Enervate sana uygulanırsa → düşman kendi slow'unu alır |
 | 12 | **Blight Sigil** [S41] | 💥↓ | Master | Cursor curse zone — basana stack biriktirir. HP -%8 → hedefe anında 3 stack | Hedef zaten Pressure Phase (4-6) → Overload Phase'e zorlar (7'ye iter), Hexblast tetiklenmez |
 
 **Build Eksenleri:** "Patient DoT" (Corruption+Agony+Pandemic+Hexblast) / "Hex Overload" (Hex Overload+Empathy+Mass Hex+Hexblast) / "Soul Burst" (Blight Sigil+Haunt+Unstable Affliction+Hex Overload)
