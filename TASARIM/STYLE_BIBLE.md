@@ -1,18 +1,19 @@
-﻿# STYLE_BIBLE.md
-> **Ne zaman yÃ¼kle:** Yeni asset Ã¼retmeden Ã¶nce â€” tek doÄŸruluk kaynaÄŸÄ±.
-> **Ne zaman yÃ¼kleme:** Kod yazma, Unity iÅŸleri sÄ±rasÄ±nda.
+# STYLE_BIBLE.md
+> **Ne zaman yukle:** Yeni asset uretmeden once — tek dogruluk kaynagi.
+> **Ne zaman yukleme:** Kod yazma, Unity isleri sirasinda.
 
-Bu dosya `SANAT_PROMPTLARI.md` ve `GORSEL_YONERGE.md`'nin Ã¶zeti. Detay iÃ§in o dosyalarÄ± aÃ§.
+Bu dosya `SANAT_PROMPTLARI.md` ve `GORSEL_YONERGE.md`'nin ozeti. Detay icin o dosyalari ac.
 
 ---
 
-## KÄ°MLÄ°K
+## KIMLIK
 
-- **TÃ¼r:** Dark fantasy action roguelite
-- **Perspektif:** 30-35Â° 3/4 ARPG view (Cursemark / Last Epoch / Hero Siege tarzÄ± â€” yÃ¼z okunaklÄ±, vertical faceler dominant)
-- **Referans:** Cursemark (kamera + netlik) + Hades (vibe) + Diablo 2 (atmosfer)
-- **PixelLab view parametresi:** `"low top-down"` (25-40Â° native zone) â€” tÃ¼m Ã¼retimlerde. **High top-down YASAK.**
-- **YÃ¶n Kilidi:** 4-yÃ¶n (South, East, North, West) + diagonal movement cheat.
+- **Tur:** Dark fantasy action roguelite
+- **Perspektif:** **35 derece 3/4 ARPG view — CANONICAL LOCKED.** (CoplayDev High Top-Down style reference). 80 derece overhead concept abandoned.
+- **Referanslar:** Cursemark (kamera + netlik) · Last Epoch · Hero Siege — yuz okunakli, vertical faceler dominant
+- **Atmosfer:** Hades (vibe) + Diablo 2 (atmosfer)
+- **PixelLab view parametresi:** `"low top-down"` (25-40 derece native zone) — tum uretimlerde. **Extreme overhead (80 derece+) YASAK.**
+- **Yon Kilidi:** 4-yon (South, East, North, West) + diagonal movement cheat.
 - **Style Anchor:** `F:/Antigravity Projeler/2d roguelite/TASARIM/CLASS_CONCEPTS/rima_style_anchor.png`
 - **Style anchor (S-XL description):** "Diablo 2 / Darkest Dungeon vibe, heavy dark outline, painterly weathered shading, muted cool palette with warm amber/cyan signature accents, gritty texture."
 
@@ -20,28 +21,28 @@ Bu dosya `SANAT_PROMPTLARI.md` ve `GORSEL_YONERGE.md`'nin Ã¶zeti. Detay iÃ§i
 
 ## BOYUT TABLOSU (S43 128px Pivot)
 
-Unity scale her zaman 1x. Boyut PixelLab'da verilir, Unity'de deÄŸiÅŸtirilmez.
+Unity scale her zaman 1x. Boyut PixelLab'da verilir, Unity'de degistirilmez.
 **PPU = 128.** (128px sprite = 1 Unity birimi).
 
 | Tip | PixelLab `size` | Oran | Ne zaman |
 |---|---|---|---|
-| **Player Class** | **128px** | 1.0x | baseline â€” PPU=128, scale=1.0 |
+| **Player Class** | **128px** | 1.0x | baseline — PPU=128, scale=1.0 |
 | Knee-high swarm | **80-96px** | 0.6-0.7x | True swarm (Fracture Imp) |
-| KÄ±rÄ±lgan support | **128px** | 1.0x (thin) | Thin tall targets (Relic Caster) |
-| **Normal grunt** | **128-144px** | 1.0-1.1x | Standart dÃ¼ÅŸmanlar, player'dan hafif bulky |
-| AÄŸÄ±r / Elite | **160-176px** | 1.25-1.4x | Odaya girince fark edilen tehdit (Shard Walker) |
+| Kirilgan support | **128px** | 1.0x (thin) | Thin tall targets (Relic Caster) |
+| **Normal grunt** | **128-144px** | 1.0-1.1x | Standart dusmanlar, player'dan hafif bulky |
+| Agir / Elite | **160-176px** | 1.25-1.4x | Odaya girince fark edilen tehdit (Shard Walker) |
 | **Mini-Boss** | **180-200px** | 1.4-1.5x | Penitent Sovereign Phase 0 |
 | **Boss** | **256-384px** | 2.0-3.0x | Ekrana hakim (Phase 1-2) |
-| Floor tile | **128x64** | â€” | Isometric diamond |
-| Wall tile | **128x192** | â€” | Two visible faces |
+| Floor tile | **128x64** | — | Isometric diamond |
+| Wall tile | **128x192** | — | Two visible faces |
 
 ---
 
-## PIXELLAB PARAMETRELERÄ° (S-XL / S43)
+## PIXELLAB PARAMETRELERI (S-XL / S43)
 
 ```
 mode: pro (final) | standard (prototype)
-view: low top-down (IMPORTANT: 30-35Â° target)
+view: low top-down (IMPORTANT: 35 degree canonical)
 detail: low detailed (for clarity)
 outline: single color outline (black)
 ai_freedom: 400
@@ -56,40 +57,40 @@ hades game art style, dark fantasy pixel art, transparent background
 
 ---
 
-## RENK PALETÄ° â€” ACT 1 (AKTÄ°F)
+## RENK PALETI — ACT 1 (AKTIF)
 
 ```
-Zemin:     #2C2A2A Â· #3D3535  (koyu enkaz taÅŸÄ±)
-Duvar:     #4A3F3F Â· #5C4E4E
-Ã‡atlak:    #7BA7BC             (soÄŸuk mavi rift Ä±ÅŸÄ±ÄŸÄ±)
-Tehlike:   #8B1A1A             (kan kÄ±rmÄ±zÄ±sÄ±)
+Zemin:     #2C2A2A · #3D3535  (koyu enkaz tasi)
+Duvar:     #4A3F3F · #5C4E4E
+Catlak:    #7BA7BC             (soguk mavi rift isigi)
+Tehlike:   #8B1A1A             (kan kirmizisi)
 UI vurgu:  #A8C8D8             (buzul mavi)
 ```
 
 ---
 
-## CLASS ENERGY RENK TABLOSU â€” KESÄ°N KURAL
+## CLASS ENERGY RENK TABLOSU — KESIN KURAL
 
-| Class | Accent Rengi | Nerede gÃ¶rÃ¼nÃ¼r | YASAK |
+| Class | Accent Rengi | Nerede gorunur | YASAK |
 |-------|-------------|----------------|-------|
-| Warblade | Cold blue (#7BA7BC) | ZÄ±rh Ã§atlaklarÄ±, kÄ±lÄ±Ã§ kenarlÄ±ÄŸÄ± | Ellerde glow, mor |
-| Elementalist | Fire/Frost/Lightning | Aktif elemente gÃ¶re | Void energy |
-| **Shadowblade** | **Void purple** | Silahtan smoke, gÃ¶zler, ayak tendrilleri | â€” |
-| Ranger | Cold blue (minimal) | Sadece ok uÃ§larÄ± | Mor |
-| Ravager | Blood red (#8B1A1A) | Rage aura, dÃ¶vme izleri | Mor, mavi |
-| **Brawler** | **Void purple** | Yumruklar, dÃ¶vmeler | â€” |
-| Ronin | Cold silver-blue | KÄ±lÄ±Ã§ aÄŸzÄ± shimmer | Alev, mor |
-| Gunslinger | Cold silver (minimal) | Namlu iÃ§i rift kazÄ±masÄ± | El glow, mor |        
-| **Hexer** | **Cursed green + void purple** | Fener, zemin tendrilleri | â€” |
-| Summoner | Cold blue | Kristal, Ã§aÄŸÄ±rma daireleri | Mor, yeÅŸil |
+| Warblade | Cold blue (#7BA7BC) | Zirh catlaklari, kilic kenarligi | Ellerde glow, mor |
+| Elementalist | Fire/Frost/Lightning | Aktif elemente gore | Void energy |
+| **Shadowblade** | **Void purple** | Silahtan smoke, gozler, ayak tendrilleri | — |
+| Ranger | Cold blue (#7BA7BC) — RiftGlowVFX runtime | Sadece ok uclari | Mor |
+| Ravager | Blood red (#8B1A1A) | Rage aura, dovme izleri | Mor, mavi |
+| **Brawler** | **Amber (#FF8800)** | Sol bilek crack, knuckle contact glow | Mor, void purple |
+| Ronin | Cold silver-blue | Kilic agzi shimmer | Alev, mor |
+| Gunslinger | Cold silver (minimal) | Namlu ici rift kazimasi | El glow, mor |
+| **Hexer** | **Cursed green + void purple** | Fener, zemin tendrilleri | — |
+| Summoner | Cold blue | Kristal, cagirma daireleri | Mor, yesil |
 
 ---
 
-## YASAK LÄ°STE
+## YASAK LISTE
 
-- **High top-down YASAK** â€” extreme tepeden aÃ§Ä± identity Ã¶ldÃ¼rÃ¼r.
-- **8-yÃ¶n Ã¼retim YASAK** â€” SADECE 4-yÃ¶n (S/E/N/W).
-- **64px native YASAK** â€” identity sÄ±kÄ±ÅŸmasÄ±na yol aÃ§ar, tÃ¼m Ã¼retim 128px native.
-- **PPU=64 YASAK** â€” yeni standart PPU=128.
-- **Upscale YASAK** â€” PixelLab'da ne Ã§Ä±ktÄ±ysa o (128px).
-- **Side view YASAK** â€” isometric/3/4 ARPG kuralÄ±.
+- **Extreme overhead (80 derece+) YASAK** — kimlik oldurur. 35 derece ARPG canonical locked.
+- **8-yon uretim YASAK** — SADECE 4-yon (S/E/N/W).
+- **64px native YASAK** — identity sikismasina yol acar, tum uretim 128px native.
+- **PPU=64 YASAK** — yeni standart PPU=128.
+- **Upscale YASAK** — PixelLab'da ne ciktiysa o (128px).
+- **Side view YASAK** — isometric/3/4 ARPG kurali.

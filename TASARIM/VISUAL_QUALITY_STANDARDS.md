@@ -1,4 +1,6 @@
 # RIMA — Görsel Kalite Standartları
+> [STALE — see MASTER #53 and #42]
+
 *Hedef referans: Hero Siege Season 9 seviyesi akıcı pixel art*
 *Son güncelleme: 2026-04-07*
 

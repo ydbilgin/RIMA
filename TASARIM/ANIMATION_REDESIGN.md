@@ -41,7 +41,7 @@
 - Frame 3-4: Göğüs şişiyor, void enerji birikimi
 - Frame 5-6: Enerji patlar, kollar öne geliyor
 **Mekanik:** AoE melee. VoidThrall_DeathSplit ile sinerji (öldürünce HalfThrall spawn).
-**Animasyon sayısı:** 4 yön × 6 frame + death 8 yön × 6 frame
+**Animasyon sayısı:** 4 yön × 6 frame + death 4 yön × 6 frame
 
 ---
 
@@ -55,7 +55,7 @@
 - Frame 7: Dönüş pozu
 **Mekanik:** MobAttack_PenitentCombo → bu animasyonla sync olacak.
 **Not:** Ölüm animasyonu da yeniden üretilecek — "çökmek" değil "diz çöküp öne kapanmak."
-**Animasyon sayısı:** 4 yön × 7 frame (attack) + 8 yön × 8 frame (death)
+**Animasyon sayısı:** 4 yön × 7 frame (attack) + 4 yön × 8 frame (death)
 
 ---
 

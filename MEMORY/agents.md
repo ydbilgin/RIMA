@@ -21,10 +21,15 @@ description: Authority order and routing gates for RIMA agents
 - Final QC judgment (PASS/FAIL) -> Claude. Non-delegatable.
 - Scope drift in any agent -> stop and report to Claude immediately.
 
-## Delegation Gate (delegate to Codex only when ALL YES)
-- Deterministic output
-- Mechanical task
-- Isolated files (no cross-system changes)
-- Defined file boundaries
+## Delegation Gate (delegate to Codex when ALL YES)
+- Isolated scope (no cross-system architecture decisions)
+- Defined input/output boundaries
+- Claude does NOT need to judge the result in real-time
+
+Codex handles BOTH mechanical tasks (C#, MCP, file ops) AND intelligent review/analysis tasks
+(skill audits, doc rewrites, reference checks, suggestion lists). GPT-5.5 high is capable of
+high-quality judgment within a defined brief. Do NOT refuse to delegate because a task
+"requires intelligence" -- only refuse when it requires Claude's non-delegatable authority
+(architecture decisions, final QC PASS/FAIL, design calls).
 
 Spawn threshold: 1-2 line direct edit -> Claude. Everything else -> relevant agent.

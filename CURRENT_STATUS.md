@@ -56,37 +56,12 @@ After gate clears -> V3 keyframe REST workflow, peak frames only, 15 gen/dir.
 3. **Unity state overlay spec** (Sundered, Scar, Mark, Heat, Charge, Hex pips)
 4. **Brawler anchor** -> when contracts done, V3 keyframe workflow
 
-## Pending User Decisions
-- (none — 3 open audit decisions LOCKED 2026-04-30 evening: Phantom Step CUT, Wireline Trap PROMOTE, Point Blank Execute Heat-zero gate)
-
 ## Critical Numbers
 - PixelLab gen budget: **2586/5000 used**, ~2414 left, deadline 2026-05-18
 - Tests: **24/24 PASS** (PlayMode, 2026-04-30)
 
-## Locked Design (summary)
-- States: 14 public (see SINIF_VE_SKILL_KARAR_BELGESI.md)
-- Ulti Toggle: Shift+skill, default Lock ON, Perfect Condition = empowered cast (#54)
-- Counter archetypes (#57): Warblade=absorb/break, Ronin=pre-draw timing, Brawler=whiff/evade body — no overlap
-- State ownership (#55): Sundered = Warblade only; Brawler = Cracked -> Shattered
-- Execute gates (#56): HP<%30 BANNED in all classes; state gates only
-- Movement (#58): Space = short dash neutral; max 1 skill movement per build
-- Encoding: ASCII-only in all .md files
-- Sprite direction: 4 cardinal (S/E/N/W). Symmetric classes: W = E flip. Asymmetric: W separate.
-- Brawler upgraded state: Shattered (Brawler Sundered = forbidden per #55)
-
-## Skill Audit Identity Anchors (LOCKED 2026-04-30)
-| Class | Owns | Avoids |
-|---|---|---|
-| Warblade | Sundered/Broken, absorb-counter | armor language by other classes |
-| Elementalist | spell shapes, element reactions, Lightbreak | physical traps |
-| Shadowblade | Scar placement/collapse, phase-through | generic teleport-slash |
-| Ranger | trap lines, marks, kill zones | run-and-gun |
-| Ravager | HP trade, frenzy chain | armor break |
-| Ronin | sheathe timing, Opened state | generic mobility |
-| Gunslinger | Heat rhythm, reload, slide+shoot | mark/trap planning |
-| Brawler | Cracked/Shattered, launch, body counter | armor break, pre-draw counter |
-| Summoner | minion bodies, sacrifice economy | enemy stacks |
-| Hexer | enemy stacks, spread, curse phases | minion bodies |
+## Locked Design
+See `MASTER_KARAR_BELGESI.md` (rules #54-#58) and `TASARIM/SKILL_AUDIT_DECISION_2026-04-30.md` (identity anchors, LOCKED 2026-04-30).
 
 ## Refs
 - Skills: `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md` (v2 canonical, commit 22ed58c)

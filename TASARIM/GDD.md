@@ -1,6 +1,8 @@
 # GAME DESIGN DOCUMENT — RIMA
 *Son güncelleme: 2026-03-30 | Solo dev — Antigravity | Unity 6.3 LTS, 2D URP | Steam hedefi*
 
+> **[STALE — S43]** Bu belge S41 dönemine aittir. Skill isimleri, PPU değerleri ve yön sistemi güncel değil. Canonical kaynaklar: `MASTER_KARAR_BELGESI.md`, `SINIF_VE_SKILL_KARAR_BELGESI.md`, `SYSTEM_MAP.md`. Sadece lore/elevator pitch için referans al.
+
 ---
 
 ## 1. OYUN TANIMI

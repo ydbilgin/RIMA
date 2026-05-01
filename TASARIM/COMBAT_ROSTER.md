@@ -1,6 +1,6 @@
 # COMBAT_ROSTER.md — RIMA Düşman Tasarımı
 
-> **[S42 SYNC — FAZ 1 GÜNCEL]** Faz 1 mob listesi S42 versiyonuyla senkronize edildi. Aktif enemy source: `_STAGING/MOB_BOSS_REDESIGN_S42.md`. Act 2-3 bölümleri henüz S42 sync bekliyor.
+> **[S43 GÜNCEL]** Faz 1 mob listesi canonical. Act 2-3 bölümleri henüz tasarım bekliyor.
 
 > Act bazlı, build-test odaklı düşman roster'ı.
 > Mevcut MOB_TASARIMI.md ile çakışmaz — bu combat karar belgesi, o lore+prompt belgesi.
@@ -9,7 +9,7 @@
 
 # FAZ 1 — S42 ONAYLI MOB ROSTER (8 MOB)
 
-> Kaynak: `_STAGING/MOB_BOSS_REDESIGN_S42.md`. Aşağıdaki listeyi kullan; Act 1 bölümündeki eski tanımlar S42 öncesi versiyondur.
+> Aşağıdaki liste canonical. Act 1 bölümündeki eski tanımlar S43 öncesi versiyondur, kullanma.
 
 **Tasarım felsefesi:** Her mob bir oyuncu alışkanlığını kırar ve bunu spesifik bir skill ile yapar. Auto-attack ≤%25 DPS. Tell max 1.5s, window min 0.4s.
 

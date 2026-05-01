@@ -8,23 +8,35 @@ Read CURRENT_STATUS.md only. Open other files only if the task explicitly requir
 
 ---
 
+## Authority Level
+Agents in this file are levels 4-5 of 5 in the RIMA authority order:
+1. Claude (highest) -- final decisions, architecture, QC. Non-delegatable.
+2. Codex -- isolated implementation, MCP execution, run_tests
+3. Antigravity -- asset prompts, analysis, STAGING/ writes
+4. Gemini CLI (this file) -- web research only. No code, no MCP, no design.
+5. Ollama (this file) -- offline prep only. No decisions.
+
+Agents in this file are READ-ONLY support roles. They prepare; Claude decides.
+They do NOT override any agent above them.
+
 ## Memory Architecture (Shared)
 | File | Contents |
 |---|---|
-| `MEMORY/INDEX.md` | Master memory index -- read this first, open files on demand |
+| `MEMORY/INDEX.md` | Master memory index -- read first, open files by trigger keyword |
 | CURRENT_STATUS.md | Active phase, locked decisions, priority queue |
 | SYSTEM_MAP.md | Unity system wiring |
 | MASTER_KARAR_BELGESI.md | Locked design decisions |
 | CODEX.md | Codex brain: import rules, conventions |
 | ANTIGRAVITY.md | Antigravity context and rules |
-| AGENTS.md | Full agent routing matrix |
+| AGENTS.md | Full agent routing matrix + authority order |
 
 All memory lives in `MEMORY/`. No private/local paths.
+Memory files have `trigger:` frontmatter -- open only when trigger keywords match the task.
 
 ---
 
 ## Git Attribution Rule (MANDATORY)
-If any agent in this file edits a tracked project file (CURRENT_STATUS.md, SYSTEM_MAP.md, any TASARIM/ doc):
+If any agent in this file edits a tracked project file (CURRENT_STATUS.md, SYSTEM_MAP.md, any TASARIM/ doc, or any file under MEMORY/):
 ```
 git add <changed files>
 git commit -m "<AGENT_NAME>: <one line describing what changed>"

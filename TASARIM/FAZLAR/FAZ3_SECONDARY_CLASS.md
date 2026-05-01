@@ -1,16 +1,18 @@
 # FAZ 3 — SECONDARY CLASS BREAK
 
+*Updated: 2026-04-29 — S43 canonical class list applied*
+
 *Claude: Sadece bu dosyayı oku. Faz 1-2 tamamlanmış varsay.*
 
 ---
 
 ## SCOPE
 
-**Hedef:** Act 1 boss sonrası secondary class seçimi, +4 yeni class (Ravager, Crusader, Lancer, Gunslinger), +2 slot, cross-class pasif, Rift Parry, Spirit Encounter, Act 2 başlangıcı.
+**Hedef:** Act 1 boss sonrası secondary class seçimi, +4 yeni class (Ravager, Ronin, Gunslinger, Brawler), +2 slot, cross-class pasif, class-specific parry/deflect mechanics, Spirit Encounter, Act 2 başlangıcı.
 
 **Ne VAR (Faz 2'ye ek):**
-- **+4 yeni class: Ravager, Crusader, Lancer, Gunslinger**
-- **Rift Parry sistemi** (tüm class'lara ortak dash-parry)
+- **+4 yeni class: Ravager, Ronin, Gunslinger, Brawler**
+- **Class-specific parry/deflect mechanics** (see SINIF_VE_SKILL_KARAR_BELGESI.md per class)
 - Secondary class seçim mekanizması (Act 1 boss sonrası)
 - +2 aktif slot (toplam 6)
 - Cross-class pasif sistemi (56 kombo: 8×7, her kombo için 1 pasif)
@@ -48,7 +50,7 @@
 
 ### Secondary Class Offer Kuralları
 - Primary class tekrar teklif edilmez
-- 7 class'tan 2'si rastgele gösterilir (Warblade hariç: Elementalist, Shadowblade, Ranger, Ravager, Crusader, Lancer, Gunslinger)
+- 7 class'tan 2'si rastgele gösterilir (Warblade hariç: Elementalist, Shadowblade, Ranger, Ravager, Ronin, Gunslinger, Brawler)
 - Her kartın üstünde: class ismi + core fantasy + imza skill + kaynak tipi
 
 ### Draft Oranları (Act 2)

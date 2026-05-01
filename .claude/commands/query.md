@@ -1,42 +1,43 @@
 ---
-description: RIMA bilgi tabanında token-verimli arama — heavy dosyaları yüklemeden önce memory'den cevap bul.
+description: Token-efficient RIMA knowledge lookup — check memory before opening heavy files.
+allowed-tools: Read, Glob, Grep
 ---
 
-# /query [soru] — Token-Verimli Bilgi Erişimi
+# /query [question] — Token-Efficient Knowledge Access
 
-Bu komutu çalıştırırken **önce memory'ye bak, sonra dosyaya git** prensibini uygula.
+Rule: **check memory first, open files second.**
 
-## Adım 1 — Memory Index Tara
+## Step 1 — Scan Memory Index
 
-Oku: `C:/Users/ydbil/.claude/projects/F--Antigravity-Projeler-2d-roguelite-RIMA/memory/MEMORY.md`
+Read: `C:/Users/ydbil/.claude/projects/F--Antigravity-Projeler-2d-roguelite-RIMA/memory/MEMORY.md`
 
-Soruyla ilgili memory entry var mı? Varsa o dosyayı oku. **Yeterliyse burda dur — ağır dosya yükleme.**
+Is there a relevant memory entry? If yes, read that file. **If sufficient — stop here. Do not load heavy docs.**
 
-## Adım 2 — Eşleşme Yoksa Doküman Haritasına Bak
+## Step 2 — No Match? Use the Document Map
 
-CLAUDE.md'deki dosya haritasına göre hangi belge ilgili?
+From CLAUDE.md, pick only the matching file:
 
-| Konu | Dosya |
+| Topic | File |
 |---|---|
-| Class skill detayı | `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md` |
-| Onaylı kararlar | `TASARIM/MASTER_KARAR_BELGESI.md` |
-| Mob/combat tasarımı | `TASARIM/COMBAT_ROSTER.md` |
-| Boss tasarımı | `TASARIM/BOSS_DESIGN.md` |
-| Oda mekaniği | `TASARIM/ROOM_MECHANICS.md` |
-| Animasyon | `TASARIM/ANIMATION_REDESIGN.md` |
-| Aktif faz scope | `TASARIM/FAZLAR/FAZ[N]_*.md` |
-| Genel oyun tasarımı | `TASARIM/GDD.md` |
+| Class skill detail | `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md` |
+| Approved decisions | `TASARIM/MASTER_KARAR_BELGESI.md` |
+| Mob/combat design | `TASARIM/COMBAT_ROSTER.md` |
+| Boss design | `TASARIM/BOSS_DESIGN.md` |
+| Room mechanics | `TASARIM/ROOM_MECHANICS.md` |
+| Animation | `TASARIM/ANIMATION_REDESIGN.md` |
+| Active phase scope | `TASARIM/FAZLAR/FAZ[N]_*.md` |
+| General game design | `TASARIM/GDD.md` |
 
-**Sadece eşleşen dosyayı yükle.** Diğerlerine dokunma.
+**Load only the matching file. Do not touch others.**
 
-## Adım 3 — Cevapla ve Dosya Kapat
+## Step 3 — Answer and Release
 
-Cevabı ver. Dosyanın tamamını bağlamda tutma — bilgi çıkarıldıktan sonra devam et.
+Give the answer. Do not hold the full file in context after extracting the information.
 
-## Adım 4 — Değerli Cevabı Memory'e Kaydet (opsiyonel)
+## Step 4 — Save to Memory (optional)
 
-Eğer bu soru tekrar sorulabilecek türdeyse ve cevap non-obvious ise, uygun memory dosyasına ekle.
+If this question is likely to recur and the answer is non-obvious, append it to the appropriate memory file.
 
 ---
 
-**Kullanım:** `/query warblade'in hangi skilli stagger veriyor?`
+**Usage:** `/query which warblade skill applies stagger?`

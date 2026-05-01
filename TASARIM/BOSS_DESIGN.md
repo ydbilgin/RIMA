@@ -21,7 +21,7 @@ Multi-faz geçişleri sadece HP eşiği değil — her geçiş **anlatı momenti
 
 ## ACT 1 BOSS — The Penitent Sovereign (3 Faz) [S42 — GÜNCEL]
 
-> **[S42]** 2-fazlı eski tasarım geçersiz. Aşağıdaki 3-fazlı versiyon kaynak: `_STAGING/MOB_BOSS_REDESIGN_S42.md`.
+> **[S43 GÜNCEL]** 2-fazlı eski tasarım geçersiz. Aşağıdaki 3-fazlı versiyon canonical.
 
 **Tema:** Boyun eğmiş ama kırılmamış. Zincirleriyle savaşır — ta ki onları kırana kadar.
 

@@ -110,14 +110,20 @@
 | #31 | Ghost Attack Opsiyon C — cross-class + Z/X secondary | Faz 2+ |
 | #32 | Mob Armor Variant — Normal/Armored/Heavily Armored tier | Faz 2+ |
 | #34 | Class cinsiyetleri 5E/5K kilitlendi | — |
-| #40/#45 | Kamera: PixelLab High Top-Down = ~35° ARPG (#36 override) | — |
+| #40/#45 | Kamera: PixelLab Low Top-Down = ~35° ARPG (#36 override) | — |
 | #37-38 | Ranger/Gunslinger identity kilitleri | — |
 | #46-48 | Animasyon: Run 6f, 4 yön, Death/Hit 4 yön | — |
 | #50-51 | Feel Toggles default ON / Localization Day 1 TR+EN | Faz 1+ |
 | #52 | Skill VFX + Projectile mimarisi kilitlendi | Faz 2+ |
 | #53 | 4 Cardinal yön S/E/N/W kilitlendi (#49 override) | — |
+| #54 | Ulti Toggle per-skill Shift+key, Lock ON default, Perfect Condition | Faz 1+ |
+| #55 | Brawler state = Shattered (Sundered IPTAL, sadece Warblade uretir) | Faz 1+ |
+| #56 | Execute gates: HP<30% YASAK, class-specific state gate | Faz 1+ |
+| #57 | Counter arketip ayrimi: Warblade=absorb, Ronin=pre-draw, Brawler=whiff | Faz 1+ |
+| #58 | Movement Option C: Space = kisa dash, no state/damage/resource | Faz 1+ |
+| #59 | Pixel Art Constraint: skill VFX mob-side efektler sinirli | Faz 1+ |
 
-**Durum: SYNC PENDING — Faz 2 başında tam işlenecek.**
+**Durum: SYNC GUNCELLENDI 2026-04-30 (#54-#59 eklendi). Faz 2 detayli guncelleme yapilacak.**
 
 ---
 

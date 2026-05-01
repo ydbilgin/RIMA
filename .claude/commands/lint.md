@@ -1,69 +1,66 @@
 ---
-description: RIMA bilgi tabanı sağlık taraması — çelişki, stale entry, orphan memory tespit et ve temizlik listesi çıkar.
+description: RIMA knowledge base health scan — detect conflicts, stale entries, and orphan memory files. Output a cleanup list.
+allowed-tools: Read, Glob, Grep
 ---
 
-# /lint — RIMA Knowledge Base Sağlık Taraması
+# /lint — RIMA Knowledge Base Health Scan
 
-Bu komutu çalıştırırken şu adımları izle. Kullanıcıya sormadan, doğrudan tara ve raporla.
+Run without asking the user. Scan and report directly.
 
-## Adım 1 — Index Yükle
+## Step 1 — Load Index
 
-Oku:
+Read:
 - `C:/Users/ydbil/.claude/projects/F--Antigravity-Projeler-2d-roguelite-RIMA/memory/MEMORY.md`
 - `F:/Antigravity Projeler/2d roguelite/RIMA/CURRENT_STATUS.md`
 
-## Adım 2 — Kritik Belgeleri Tara
+## Step 2 — Scan Critical Docs
 
-Şu dosyaları oku (hepsini aynı anda parallel):
+Read all in parallel:
 - `TASARIM/MASTER_KARAR_BELGESI.md`
 - `TASARIM/FAZLAR/FAZ_MASTER.md`
 - `TASARIM/ANIMATION_REDESIGN.md`
-- `TASARIM/GDD.md` (sadece ilk 100 satır)
+- `TASARIM/GDD.md` (first 100 lines only)
 
-## Adım 3 — Çelişki Taraması
+## Step 3 — Conflict Check
 
-Şunları karşılaştır:
-
-| Kontrol | Kaynak A | Kaynak B |
+| Check | Source A | Source B |
 |---|---|---|
-| Class roster (10 class?) | MEMORY: project_rima.md | MASTER_KARAR_BELGESI |
-| Aktif faz | CURRENT_STATUS | FAZ_MASTER |
-| Sprite sistemi (body+weapon ayrı?) | MEMORY: project_character_system.md | ANIMATION_REDESIGN |
-| PixelLab pipeline durumu | MEMORY: project_pixellab_pipeline.md | MASTER_KARAR_BELGESI |
-| Cross-class skill slotları (2 slot?) | MEMORY: project_cross_class_skills.md | GDD |
+| Class roster (10 classes?) | MEMORY: project_rima.md | MASTER_KARAR_BELGESI |
+| Active phase | CURRENT_STATUS | FAZ_MASTER |
+| Sprite system (body+weapon separate?) | MEMORY: project_character_system.md | ANIMATION_REDESIGN |
+| PixelLab pipeline status | MEMORY: project_pixellab_pipeline.md | MASTER_KARAR_BELGESI |
+| Cross-class skill slots (2 slots?) | MEMORY: project_cross_class_skills.md | GDD |
 
-## Adım 4 — Stale Memory Tespiti
+## Step 4 — Stale Memory Detection
 
-MEMORY.md'deki her entry için tarih ve içerik kontrolü:
-- "TAMAMLANDI" denen ama CURRENT_STATUS'ta hâlâ aktif sayılanlar
-- 2026-04 öncesi tarihli proje memoryleri — hâlâ geçerli mi?
-- Birbirini tekrar eden/çakışan memory dosyaları
+For each entry in MEMORY.md:
+- Marked "DONE" but still active in CURRENT_STATUS?
+- Project memories older than 2026-04 — still valid?
+- Duplicate or overlapping memory files?
 
-## Adım 5 — Orphan Kontrolü
+## Step 5 — Orphan Check
 
-MEMORY.md'de listelenen ama dosyası eksik olan entryleri tespit et (Read ile kontrol et).
+For each entry in MEMORY.md, verify the physical file exists (use Read to check).
 
-## Adım 6 — Rapor Çıkar
-
-Şu formatta özetle:
+## Step 6 — Report
 
 ```
-## LINT RAPORU — [tarih]
+## LINT REPORT — [date]
 
-### 🔴 Çelişkiler (acil düzeltme)
-- [A vs B: kısa açıklama]
+### 🔴 Conflicts (fix immediately)
+- [A vs B: description]
 
-### 🟡 Stale Entries (güncellenmeli)
-- [memory dosyası: neden stale]
+### 🟡 Stale Entries (needs update)
+- [memory file: why stale]
 
-### 🟢 Orphan / Eksik Dosyalar
-- [MEMORY.md'de var ama fiziksel dosya yok]
+### 🟢 Orphans / Missing Files
+- [listed in MEMORY.md but file not found]
 
-### ✅ Temiz
-- [kontrol edildi, sorun yok]
+### ✅ Clean
+- [checked, no issues]
 
-### Önerilen Aksiyon
-1. [yapılacak iş]
+### Recommended Actions
+1. [action]
 ```
 
-Raporu kullanıcıya göster, sonra "Hangisini düzeltelim?" diye sor.
+Show report, then ask "Which should we fix?"

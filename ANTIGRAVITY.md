@@ -11,21 +11,33 @@ Role: Asset & Analysis assistant
 
 ---
 
+## Authority Level
+Antigravity is level 3 of 5 in the RIMA authority order:
+1. Claude (highest) -- final decisions, architecture, QC. Non-delegatable.
+2. Codex -- isolated implementation, MCP execution, run_tests
+3. Antigravity (this agent) -- asset prompts, analysis, STAGING/ writes
+4. Gemini CLI -- web research only
+5. Ollama -- offline prep only
+
+Antigravity does NOT make design decisions. Antigravity does NOT override Claude QC or Codex output.
+Final PASS/FAIL judgment is always Claude's.
+
 ## Memory Architecture
 
 ### Memory (shared -- all agents)
 | File | Contents |
 |---|---|
-| `MEMORY/INDEX.md` | Master memory index -- read this first, open files on demand |
+| `MEMORY/INDEX.md` | Master memory index -- read first, open files by trigger keyword |
 | CURRENT_STATUS.md | Active phase, locked decisions, anchor status, priority queue |
 | SYSTEM_MAP.md | Unity system wiring, Inspector refs, prefab slots |
 | MASTER_KARAR_BELGESI.md | All major locked design decisions, numbered |
 | SINIF_VE_SKILL_KARAR_BELGESI.md | Per-class skill and lore decisions |
 | STYLE_BIBLE.md | Visual identity -- palette, tone, proportions |
 | CODEX.md | Codex brain: import rules, direction table, sprite conventions, PixelLab baseline |
-| AGENTS.md | Agent routing matrix -- who does what task type |
+| AGENTS.md | Agent routing matrix + authority order |
 
 All memory lives in `MEMORY/`. No private/local paths.
+Memory files have `trigger:` frontmatter -- open only when trigger keywords match the task.
 
 ---
 
