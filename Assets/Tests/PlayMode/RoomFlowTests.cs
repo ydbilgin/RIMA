@@ -205,5 +205,96 @@ namespace RIMA.Tests
                 "Yeni node visited=true olmalı.");
             AssertNoErrors();
         }
+
+        // ── Oda döngüsü (kill → clear → reward) ─────────────────────────
+
+        private IEnumerator KillAllEnemies()
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            var allHealth = Object.FindObjectsOfType<Health>();
+            foreach (var hp in allHealth)
+            {
+                if (player != null && hp.gameObject == player) continue;
+                hp.TakeDamage(9999);
+            }
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator RoomLoop_KillAllEnemies_RoomClears()
+        {
+            yield return new WaitForSeconds(1f);
+
+            var rrm = RuntimeRoomManager.Instance;
+            Assert.IsNotNull(rrm, "RuntimeRoomManager.Instance null.");
+
+            int initialEnemies = rrm.AliveEnemies;
+            Assert.Greater(initialEnemies, 0, "İlk odada en az 1 düşman olmalı.");
+
+            yield return KillAllEnemies();
+
+            float timeout = 3f;
+            while (!rrm.IsRoomCleared && timeout > 0f)
+            {
+                timeout -= Time.deltaTime;
+                yield return null;
+            }
+
+            Assert.IsTrue(rrm.IsRoomCleared,
+                $"Tüm {initialEnemies} düşman öldükten sonra IsRoomCleared=true olmalı.");
+            Assert.AreEqual(0, rrm.AliveEnemies, "Oda temizlenince AliveEnemies=0 olmalı.");
+            AssertNoErrors();
+        }
+
+        [UnityTest]
+        public IEnumerator RoomLoop_AfterClear_RewardPickupSpawns()
+        {
+            yield return new WaitForSeconds(1f);
+
+            var rrm = RuntimeRoomManager.Instance;
+            Assert.IsNotNull(rrm);
+            Assume.That(rrm.AliveEnemies, Is.GreaterThan(0), "Reward testi: odada düşman gerekirdi.");
+
+            yield return KillAllEnemies();
+
+            float timeout = 5f;
+            RewardPickup reward = null;
+            while (reward == null && timeout > 0f)
+            {
+                timeout -= Time.deltaTime;
+                reward = Object.FindObjectOfType<RewardPickup>();
+                yield return null;
+            }
+
+            Assert.IsNotNull(reward, "Oda temizlenince RewardPickup sahnede spawn olmalı.");
+            Assert.IsFalse(reward.WasCollected, "Henüz etkileşilmemiş — WasCollected=false olmalı.");
+            AssertNoErrors();
+        }
+
+        [UnityTest]
+        public IEnumerator RoomLoop_OnRoomCleared_EventFires()
+        {
+            yield return new WaitForSeconds(1f);
+
+            var rrm = RuntimeRoomManager.Instance;
+            Assert.IsNotNull(rrm);
+            Assume.That(rrm.AliveEnemies, Is.GreaterThan(0), "Event testi: odada düşman gerekirdi.");
+
+            bool eventFired = false;
+            rrm.OnRoomCleared.AddListener(() => eventFired = true);
+
+            yield return KillAllEnemies();
+
+            float timeout = 3f;
+            while (!eventFired && timeout > 0f)
+            {
+                timeout -= Time.deltaTime;
+                yield return null;
+            }
+
+            Assert.IsTrue(eventFired, "OnRoomCleared event'i tüm düşmanlar öldükten sonra tetiklenmeli.");
+            AssertNoErrors();
+        }
+
     }
 }

@@ -54,6 +54,9 @@ namespace RIMA
         /// </summary>
         public event Action<SkillBase, SkillBase> OnSkillChain;
 
+        /// <summary>Her başarılı skill kullanımında fırlar. VFX ve UI feedback için genel hook.</summary>
+        public event Action<SkillBase> OnSkillUsed;
+
         // ─── Public API ──────────────────────────────────────────────────────
 
         /// <summary>Her başarılı skill kullanımında çağrılır. SkillBase.TryActivate içinde.</summary>
@@ -61,6 +64,8 @@ namespace RIMA
         {
             if (IsChainedToSkill && lastSkillUsed != null && lastSkillUsed != skill)
                 OnSkillChain?.Invoke(lastSkillUsed, skill);
+
+            OnSkillUsed?.Invoke(skill);
 
             lastSkillUsed      = skill;
             skillToBasicTimer  = skillToBasicWindow;

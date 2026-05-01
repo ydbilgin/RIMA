@@ -170,11 +170,9 @@ namespace RIMA
 
         public void RestartRun()
         {
-            // Reset time scale
             Time.timeScale = 1f;
-
-            // Reload current scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            if (Application.isPlaying)
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
