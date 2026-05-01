@@ -1,109 +1,81 @@
 # RIMA
-2D roguelite — Hades tarzı combat, cross-class skill draft, rift dünyası.
-**Faz 1** — play test aşaması. Devam için: `CURRENT_STATUS.md`
+2D roguelite — Hades tarzi combat, cross-class skill draft, rift dunyasi.
+**S43 · Faz 1** — Visual Contract asamasi. Devam icin: `CURRENT_STATUS.md`
 
 ---
 
-## Takım
+## Takim
 
-| Rol | Kim | Otorite |
+| Rol | Kim | Gorev |
 |---|---|---|
-| **Tek Karar Mercii** | Claude Code | Mimari, routing, QC, script, entegrasyon |
-| **Deterministik Çalıştırıcı** | Kiro (Sonnet) | MECHANICAL_EXECUTION — LOW-risk, adımlar net |
-| **İzole Kod Uzmanı** | Codex | ISOLATED_CODE — utility, bounded implementasyon |
-| **Hazırlık Desteği** | Ollama Local (RTX 5080) | LOCAL_RESEARCH — log analizi, RAG, ilk geçiş |
-| **Ürün Sahibi** | Antigravity | Play test, görsel değerlendirme, USER_DECISION |
+| **Orkestra Sefi** | Claude Code (Sonnet 4.6) | Mimari, routing, QC, entegrasyon — tek karar mercii |
+| **Tasarim Danismani** | rima-design (Opus 4.7) | Cross-system denge, kimlik kararlari |
+| **Mekanik Calistirici** | rima-codex (Sonnet + cx CLI) | Codex CLI uzerinden bounded implementasyon |
+| **Dokuman / QC / Asset** | rima-doc · rima-qc · rima-asset · rima-research | Yazim, dogrulama, prompt, web arastirma |
+| **Urun Sahibi** | Antigravity | Play test, gorsel degerlendirme, kullanici karari |
 
-**Temel kural:**
-- CRITICAL_DECISION / ARCHITECTURE / QC → Claude only
-- MECHANICAL_EXECUTION → Kiro (LOW-risk, adımlar explicit)
-- ISOLATED_CODE → Codex (Claude scope belirler + doğrular)
-- LOCAL_RESEARCH → Ollama (Claude karar verir)
-- USER_DECISION → Antigravity'ye sor
+**Yonlendirme kurali:**
+- Mimari / sistem / QC karari → Claude only
+- Cross-system denge / kimlik → rima-design (Opus)
+- Sinirli mekanik is → rima-codex
+- Dok yaz / arsivle → rima-doc
+- Dogrula / lint → rima-qc
+- PixelLab / Gemini prompt → rima-asset
+- Dis arastirma → rima-research
+
+Detay: `AGENTS.md`
 
 ---
 
-## Görev Yönlendirme
+## Mevcut Durum (S43)
 
-```
-Mimari / sistem tasarımı?                   → ARCHITECTURE  → Claude only
-Root cause analizi, QC yargısı?             → CRITICAL_DECISION / QC → Claude only
-Bounded utility script / converter?          → ISOLATED_CODE → Codex (Claude doğrular)
-PixelLab API çağrısı + dosya kaydetme?       → MECHANICAL_EXECUTION → Kiro
-Unity MCP amele (texture/prefab/animation)?  → MECHANICAL_EXECUTION → Kiro
-Log analizi / döküman clustering / RAG?      → LOCAL_RESEARCH → Ollama
-Play test, görsel kalite, estetik karar?     → USER_DECISION → Antigravity
-```
-
-**Delegation Gate:** deterministik + mekanik + izole + net sınırlı + mekanik doğrulanabilir?
-→ Tümü EVET → devret | Herhangi biri HAYIR → Claude yapar
+- **10 sinif, 192 skill** — v2 audit kilitledi (2026-04-30)
+- **Production gate HOLD** — Visual Contract template bekleniyor
+- **PixelLab:** 2586/5000 gen kullanildi, son tarih 2026-05-18
+- **Testler:** 24/24 PASS
 
 ---
 
 ## Tamamlanan Sistemler
 
 **Core:**
-- Health (OnDamageTaken + SetMaxHP), RageSystem, StatusEffectSystem
-- PlayerController (WASD + 8 yön + dash), PlayerAttack (3-hit combo)
-- EnemyTier, EnemyAnimator, ShardWalker AI, HUDManager, SkillDraft sistemi
+- Health, RageSystem, StatusEffectSystem
+- PlayerController (WASD + 8 yon + dash), PlayerAttack (3-hit combo)
+- EnemyTier, EnemyAnimator, ShardWalker AI, HUDManager, SkillDraft
 
 **Kaynak Sistemi:**
 - PlayerResourceBase, RageSystem, ManaSystem, EnergySystem, ComboPointSystem, FocusSystem
-- PlayerProjectile, DamageZone (shared skill helpers)
+- PlayerProjectile, DamageZone
 
-**Skills (4/4 class × 12 skill = 48 skill):**
-- Warblade: 12/12 ✅ | Elementalist: 12/12 ✅ | Shadowblade: 12/12 ✅ | Ranger: 12/12 ✅
+**Skills (10 sinif × ~12 skill = 192 skill, v2 audit):**
+- Warblade · Elementalist · Shadowblade · Ranger · Ravager
+- Ronin · Gunslinger · Brawler · Summoner · Hexer
 
 **Mob AI:**
 - Penitent_AntiHealAura, VoidThrall_DeathSplit
-- ChainWarden, RelicCaster, FractureImp → mevcut MobAttack_* ile hazır
-
-**PixelLab (tamamlandı):**
-- 9 karakter + 6 enemy prefab, 9 AnimatorController
-- Act1 Test Room (20×15 tile), Floor + Wall tilemap
+- ChainWarden, RelicCaster, FractureImp
+- Boss: PenitentSovereign, HollowMite, TheWound
 
 ---
 
-## Sırada
+## Sirada
 
-- **Play test** — 4 class + mob + tilemap + animasyonlar (`_Sandbox.unity`)
-- Faz 2 planlama (backlog: `../memory/project_rima_backlog.md`)
+1. Visual Contract template (`TASARIM/SKILL_VISUAL_CONTRACT.md`)
+2. Top-4 sinif kontratlari (Brawler, Shadowblade, Ravager, Ranger)
+3. Unity state overlay spec
+4. Brawler char anchor → V3 keyframe workflow
 
 ---
 
-## Okuma Haritası
+## Okuma Haritasi
 
-| Dosya | Ne için |
+| Dosya | Ne icin |
 |---|---|
-| `CURRENT_STATUS.md` (RIMA/) | Her session başı — devam noktası |
-| `AGENTS.md` | Routing, escalation, ajan detayları |
-| `PIXELLAB.md` | PixelLab production reference |
-| `ASSET_MAP.md` | Sprite/prefab/animator yolları + araç kararları (aktif) |
-| `KIRO_TEMPLATE.md` | Kiro görevi şablonu |
-| `TASARIM/GDD.md` | Oyun tasarımı hakikati |
-| `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md` | Sınıf + skill kararları |
-| `GELISTIRME_PLANI.md` | Faz roadmap |
-
----
-
-## Proje Dizini
-
-```
-2d roguelite/
-├── CLAUDE.md (RIMA/ içinde)    ← Session başı otomatik yüklenir
-├── README.md                   ← Bu dosya
-├── CURRENT_STATUS.md (RIMA/)   ← Aktif durum
-├── AGENTS.md                   ← Routing + escalation
-├── PIXELLAB.md                 ← PixelLab production reference
-├── KIRO_TEMPLATE.md            ← Kiro dosyası şablonu (LOW-risk only)
-├── KIRO_*.md                   ← Aktif Kiro görevleri (İngilizce)
-├── STAGING/                   ← Kiro ham çıktıları
-├── TASARIM/                    ← GDD · STYLE_BIBLE · SINIF_VE_SKILL_KARAR_BELGESI
-└── RIMA/                       ← Unity projesi
-       └── Assets/Scripts/
-             ├── Skills/Warblade/      ← 12 skill ✅
-             ├── Skills/Elementalist/  ← 12 skill ✅
-             ├── Skills/Shadowblade/   ← 12 skill ✅
-             ├── Skills/Ranger/        ← 12 skill ✅
-             └── Systems/Resources/   ← PlayerResourceBase + 5 kaynak sistemi
-```
+| `CURRENT_STATUS.md` | Her session basi — devam noktasi |
+| `AGENTS.md` | Routing, model secimi, context kurallari |
+| `CODEX.md` | Codex gorev kurallari |
+| `TASARIM/GDD.md` | Oyun tasarimi hakikati |
+| `TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md` | Sinif + skill kararlari (v2 canonical) |
+| `TASARIM/MASTER_KARAR_BELGESI.md` | Kilitli sistem kararlari (#54-#58) |
+| `SYSTEM_MAP.md` | Mimari harita |
+| `MEMORY/INDEX.md` | Agent bellek indeksi |
