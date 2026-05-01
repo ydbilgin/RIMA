@@ -1,6 +1,6 @@
 # RIMA — Dungeon Oda Tasarım Felsefesi
 > **Referans:** Infamous Keepers'tan mood + yapı, RIMA combat sistemine uyarlanmış.
-> **Ne zaman yükle:** Yeni oda prefabı yaparken, tilemap tasarlarken, Kiro'ya oda görevi verirken.
+> **Ne zaman yükle:** Yeni oda prefabı yaparken, tilemap tasarlarken, rima-codex'e oda gorevi verirken.
 
 ---
 
@@ -154,7 +154,7 @@ Oda tilemap tasarlarken:
   - Kuzey duvar ortasında: 4 tile boşluk (N kapısı için)
   - Doğu duvar yukarısında: 4 tile boşluk (E kapısı için)
   - Batı duvar yukarısında: 4 tile boşluk (W kapısı için)
-  - Bu boşlukları doldurmak YASAK (Kiro'ya geçilecek kural)
+  - Bu boslukları doldurmak YASAK (rima-codex kurali)
 ```
 
 ---
@@ -201,7 +201,7 @@ Oda tilemap tasarlarken:
 
 ---
 
-## Kiro İş Notları
+## rima-codex Is Notlari
 
 Her oda prefabı yapılırken şu kontrol listesi:
 ```

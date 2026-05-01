@@ -177,7 +177,7 @@ Her düşmanın ve karakterin hit aldığında görsel feedback'i:
 - **White flash:** 0.1s süre, SpriteRenderer.color = beyaz → normal
 - **Knockback micro:** 0.05s hafif geri itilme (Rigidbody2D velocity burst)
 
-Bu Kiro'ya verilebilir — `HitFlash.cs` komponenti, Health.OnDamageTaken'e bağlanır.
+Bu rima-codex'e verilebilir — `HitFlash.cs` komponenti, Health.OnDamageTaken'e baglanir.
 
 ---
 

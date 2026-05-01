@@ -135,7 +135,7 @@ Priority 3 (Faz 2):
 
 ---
 
-## 6. Animasyon Kalite Kontrol Checklist (Kiro/QC için)
+## 6. Animasyon Kalite Kontrol Checklist (rima-qc icin)
 
 Üretilen her animasyon bu standartları karşılıyor mu?
 

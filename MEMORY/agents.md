@@ -10,7 +10,7 @@ description: Authority order and routing gates for RIMA agents
 2. Codex (GPT-5.5 high) -- isolated C# implementation, MCP execution, run_tests, bounded tasks
 3. Antigravity (Gemini Pro / Claude Opus) -- asset prompts, analysis, STAGING/ writes
 4. Gemini CLI -- web research only (no MCP, no design, no code)
-5. Ollama -- local log analysis, offline prep only
+5. Gemma (4B/26B) -- local log analysis, offline prep only
 
 ## Core Routing Rules
 - PlayMode/EditMode tests -> Codex (MCP run_tests). Never Gemini.

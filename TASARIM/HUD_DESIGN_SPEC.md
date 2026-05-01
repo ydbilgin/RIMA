@@ -1,6 +1,6 @@
 # RIMA HUD — "Ashen Glyph" Design Spec
 **Tarih:** 2026-04-13  
-**Durum:** ONAY BEKLENİYOR → onaylanınca Unity greybox (Kiro)  
+**Durum:** ONAY BEKLENIYOR -> onaylaninca Unity greybox (rima-codex)  
 **Felsefe:** Kirli kâğıt üstüne mürekkep — HUD dünyadan çıkmaz, dünyayla nefes alır.
 
 ---
@@ -213,7 +213,7 @@ Bone White (text):                     #E8E4D9
 
 ## Uygulama Sırası (Sonraki Session)
 
-1. **Greybox (Kiro)** — Unity'de placeholder renkli objelerle tam layout  
+1. **Greybox (rima-codex)** — Unity'de placeholder renkli objelerle tam layout  
    - HP: 72×4px kırmızı Image  
    - Rage: 48×3px mor Image  
    - Skill slots: 7 adet hexagon-masked Image  

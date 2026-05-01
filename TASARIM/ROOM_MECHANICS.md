@@ -1,5 +1,5 @@
 # RIMA — Oda Mekaniği Tasarımı (Mantıksal Spec)
-*Görsel değil mantıksal. Kodlamaya ve Kiro'ya hazır referans.*
+*Gorsel degil mantiksal. Kodlamaya ve rima-codex'e hazir referans.*
 *Son güncelleme: 2026-04-17*
 
 ---

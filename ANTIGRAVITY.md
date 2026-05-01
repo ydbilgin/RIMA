@@ -17,7 +17,7 @@ Antigravity is level 3 of 5 in the RIMA authority order:
 2. Codex -- isolated implementation, MCP execution, run_tests
 3. Antigravity (this agent) -- asset prompts, analysis, STAGING/ writes
 4. Gemini CLI -- web research only
-5. Ollama -- offline prep only
+5. Gemma (4B/26B) -- local offline prep only
 
 Antigravity does NOT make design decisions. Antigravity does NOT override Claude QC or Codex output.
 Final PASS/FAIL judgment is always Claude's.
@@ -118,7 +118,7 @@ All 10 S43 class anchors were generated SW-facing. Raw PixelLab direction labels
 | CLAUDE.md | Claude Code auto-config (routing, rules, workflow) |
 | CODEX.md | Codex brain (import rules, sprite conventions, direction table) |
 | ANTIGRAVITY.md | This file |
-| OTHER_AGENTS.md | Context for Gemini CLI, Ollama, occasional agents |
+| AGENTS.md | Agent routing, model selection, context discipline |
 | AGENTS.md | Full agent routing matrix |
 | SYSTEM_MAP.md | Unity system wiring |
 
