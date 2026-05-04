@@ -22,7 +22,9 @@ Full skill tree (10 class x 8 skills) definition needed before production moves 
 - Room gen: code-side descriptor prototype first, LDtk/Tiled later (Phase 2-3).
 - Route map: forward branching from prepared pool. Fragments reveal next 1-2 nodes only.
 - Gate sockets: blueprint-defined. Sabit DoorEast/West/North/South = placeholder only.
-- PixelLab floor REVISED: 128px, isometric, 25 deg, thickness 20%, outline ON. Style tile reuse.
+- PixelLab floor REVISED: Create Tiles PRO only supports 16x16/32x32 (top-down/sidescroller).
+  For isometric 64px floor: use Create Image Pro, 64px, 16 variations, isometric prompt.
+  128px tile test still valid as style mining source. Downscale or use as reference.
 - Flat top-surface: LOCKED.
 - Logo: Cyan rift wordmark = PRIMARY. Amber = secondary/thematic only.
 - Thumbnail direction: `dark_primary` (1 character + ghost echoes + cyan rift). Party thumbnail REJECTED.
@@ -61,8 +63,11 @@ Full skill tree (10 class x 8 skills) definition needed before production moves 
 - PixelLab 127px bug (128px outputs 127px) — QC during floor test.
 
 ## Next Priorities
-1. PixelLab floor test (revised: 128px, 25 deg, 20% thickness, outline ON).
-2. ChatGPT UI/logo iteration (prompts ready).
+1. PixelLab floor test: Create Image Pro, 64px, 16 variations, isometric flat stone prompt.
+2. ChatGPT logo redo: FT/RCH integration failed — needs better prompt (see below).
+   Base file: `TASARIM/UI_CONCEPTS/BRANDING/rima_logo_wordmark_stone_rift_source_2026-05-04.png`
+   Problem: ChatGPT placed FT/RCH as separate floating letters, not integrated into crack edges.
+   Next prompt must: embed letters INTO the rift crack edges as carved/etched stone relief, not overlay.
 3. Full skill tree draft (10 class x 8 skills).
 4. Play Mode UI/minimap/gate QA (screenshot-by-screenshot).
 5. Room descriptor prototype (8 rooms in code).
