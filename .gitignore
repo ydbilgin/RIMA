@@ -49,6 +49,9 @@ _STAGING/hero_siege_wiki_sprites/
 *.obj
 *.blend
 
+# Context Mode (MCP output sandbox)
+.context-mode/
+
 # OS
 .DS_Store
 Thumbs.db

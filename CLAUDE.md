@@ -45,6 +45,7 @@ NUnit + Unity Test Runner + MCP `run_tests`. Sonnet: write+run+fix.
 ## Token Saving
 Session start: `CURRENT_STATUS.md` only. Edit: surgical line ranges. Bulk work -> rima-codex.
 **CLAUDE.md and CURRENT_STATUS.md must stay lean. No redundant content — if it lives in another doc, use a pointer.**
+**Commit frequently** — git status loads every message; untracked/modified bloat adds tokens each turn.
 **/lint:** Phase transition · 5+ decisions · Before asset work.
 
 ## Language
@@ -57,6 +58,17 @@ User: Turkish · Internal files (.md, prompts, code): English.
 **As needed:** `TASARIM/STYLE_BIBLE.md`, `GDD.md`, `MASTER_KARAR_BELGESI.md`, `ROOM_MECHANICS.md`, `SINIF_VE_SKILL_KARAR_BELGESI.md`, `COMBAT_ROSTER.md`, `BOSS_DESIGN.md`.
 **Phase scope:** `TASARIM/FAZLAR/FAZ_MASTER.md` -> active phase file.
 **PixelLab ref** (`F:/Antigravity Projeler/Pixellab/`): `PIXELLAB_PIPELINE.md`, `PIXELLAB_API_V2.md`.
+
+## Output Economy
+- **Mechanical work** (code edit, test, commit, refactor): terse output, no explanations, fragments OK.
+- **Design/decision work** (architecture, balance, UI direction): normal nuanced output.
+- Toggle is automatic based on task type. Never compress design judgment.
+- Context Mode MCP is active: large tool outputs are sandboxed. Use `ctx_search` to recall raw data if needed.
+
+## Multi-Account Routing
+- **"AWS'deyim"** -> Bedrock mode. Opus 4.6 for decisions, Sonnet 4.6 for mechanical. $200 credit (non-renewing).
+- **"Asil hesabimdayim"** -> Claude Pro mode. Normal usage.
+- **Opus 4.7 workaround:** User runs a second terminal with `ccs laurethgame` for heavy autonomous tasks. Orchestrator writes task to `STAGING/opus47_task.md`, user runs in separate session manually.
 
 ## Project Specs
 Unity 2D URP · Namespace RIMA · Scene `Assets/Scenes/_IsoGame.unity`.
