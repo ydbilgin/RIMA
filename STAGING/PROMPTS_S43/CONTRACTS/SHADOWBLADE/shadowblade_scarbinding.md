@@ -91,9 +91,9 @@ Note for rima-codex: Scar decal must be gen'd as its own micro-spritesheet (1 ro
 
 | Sign-off | Who | Status |
 |---|---|---|
-| Identity check (Section E) | design lead | [ ] |
-| Frame budget (incl. decal sub-asset) | design lead | [ ] |
-| State indicator ownership clean | design lead | [ ] |
+| Identity check (Section E) | design lead | [x] |
+| Frame budget (incl. decal sub-asset) | design lead | [x] |
+| State indicator ownership clean | design lead | [x] |
 | VFX layer count <= 4 | rima-asset | [ ] |
 | Reference sprite exists | rima-asset | [ ] |
 | Collapse skill (SHADOWBLADE_SCAR_COLLAPSE) paired in same batch | design lead | [ ] (gate-blocker -- Scar without collapse is a dead state) |

@@ -1,0 +1,192 @@
+hi in today's video I will show you how
+you can generate a punching animation
+with our skeleton tool so first let's
+generate a
+character so what could be more fitting
+than uh generating a boxer so I'm going
+to use the generate generate character
+tool and ask for a male boxer in red
+shorts
+all right nice now I want to show you
+what happens if you change like outline
+shading and
+details uh which will uh affect the uh
+style of the character that's
+generated so here you can see a much
+more realistic looking
+character and if you make it even more
+Det until it will be even more uh
+realistic so this is some new settings
+for our new uh generate character and uh
+style
+tool I recommend trying different
+outlines and shadings and stuff just to
+see what works and here I'm just
+generating the rotation for my
+character I'm not super happy with the
+placement of the right hand glove so I'm
+just going to move it over over edit
+edit the image a bit then use it as my
+init
+image the init image will help tell the
+model where the glove should be as it's
+like a starting point for the model now
+that we have our character uh let's uh
+create some animations so first I will
+estimate skeleton which will give me a
+skeleton for my character then I'm just
+going to edit a bit to make sure it's uh
+it fits my character better
+so this is pretty important to do
+because if you're going to insert
+skeleton uh the skeleton that you have
+in your uh in your frame is going to
+affect the uh what the insert a skeleton
+is going to look like because it's based
+on that
+one and yeah don't worry we we will do
+this uh two more times with uh the other
+characters that you saw in the
+beginning so but yeah so this is also me
+learning how to do this as we
+go uh I had I I haven't really done this
+before so it's uh always
+fun so here I'm just removing the uh
+last two frames because I wasn't super
+happy with them and I'm going to Ed this
+edit this frame a little bit so I'm
+going to use this Frame and the first
+frame you generated as like a guidance
+for the model so I'm going to generate
+the last two frames
+again and this helps the model get a
+better understanding of what it's trying
+to
+do because it has more information to go
+from and yeah quite nice this glove
+needs a little bit of editing so I'm
+going to give it some
+love uh first I thought of moving the
+AR but I felt like ah let's just move
+the uh skeleton instead so I'm going in
+here add a
+skeleton and then just moving the bone
+or the point a bit and therefore the
+arm and then remember to go back to the
+first
+frame in the animation and then generate
+all right now let's do the same for our
+more realistic
+boxer so I will quickly
+generate my
+rotation and then I will uh get
+started so first fix my settings then
+estimate skeleton like
+before edit the skeleton so it fits my
+character better
+here the biggest mistake is probably
+like the neck is in the wrong
+place and I'm just going to first edit
+the uh
+arms and
+shoulders and you can see like the small
+UI dialogue there uh What uh bone or
+point is selected so here for example it
+says
+neck and then once you're happy can
+insert
+skeleton in this case I'm not going to
+delete one of the uh one of the
+frames and yeah I just click
+generate so yeah it's kind of lost the
+uh the boxing glove but that's actually
+quite easy to for us to just
+manually uh fix and you could do this
+with init image uh as well and just um
+draw like a red blob or something but I
+think in this case it's probably just
+easier to copy paste the glove
+around and the gloves that I'm copy
+pasting around could also be used used
+as a init image as well so whether you
+use whether you draw it or you just copy
+paste it uh it will give the same
+effect now I wasn't super happy with the
+last frame so similar to last time I'm
+going to edit the skeleton a
+bit uh what's good to know is the last
+point that you touch with the edit tool
+is what's closest to uh like to us so to
+fix the like said index I want to move
+the uh right arm
+last so here still it got a little bit
+confused it probably would have been
+better to move in the left arm even
+further but still this is so easy to fix
+I'm just going to use the erase tool and
+remove that uh St
+or and yeah all
+good and now we have a punching
+animation so now for the last character
+I'm going to take my 64x 64 character
+and use it as a init
+image so this will just help the model
+understand like this size and what my
+character should look like
+pretty good I must say so I'm just going
+to fix up the uh colors a bit if you can
+even call it that maybe I'm just
+actually making it less good by Ed
+now when it's time to generate my
+animation I'm just going to use the
+knowledge that I learned so first
+estimate skeleton then I'm going to edit
+the uh the pose a bit to make it fit my
+character
+better and then I will insert the
+skeleton
+things that should be good to note is
+that
+we like the hand doesn't need doesn't
+need to be at the edge of the hand but a
+bit up but it shouldn't be super
+important and what you will see here is
+because
+my uh skeleton
+is isn't perfect for the uh the template
+that we have for this
+animation I need to uh move the uh bones
+a
+bit so I'm moving it closer to the neck
+just to make the uh the arm uh
+shorter still it's not perfect so at
+this point I'm just going to go in and
+edit it by hand it just it only takes
+like one second so it's it's fine to to
+do the these small details by hand in my
+opinion then here I'm just going to move
+out the arm a bit because as we
+previously noted it's it's a bit too
+short
+and just like
+before I think like okay last frame is
+good first frame is good second frame is
+all right so I'm going to do is I'm just
+going to copy paste over the hand of
+course I could use init image and in
+painting and do this with the model
+instead but in this case I feel like
+it's so easy to just edit it by hand so
+I'm going to do that
+instead and now we have like first
+second and the fourth frame uh
+already created so now we only need to
+generate uh this third
+frame and here I can I can see the small
+changes I need to do to make this
+perfect so I'm just going to edit it by
+hand and yeah it's done I hope you
+enjoyed the video leave a like and uh
+comment if you have any questions and
+feel free to join the Discord if you
+need uh more support

@@ -1,0 +1,1915 @@
+1
+00:00:00,320 --> 00:00:02,510
+
+hi in today's video I will show you how
+
+2
+00:00:02,510 --> 00:00:02,520
+hi in today's video I will show you how
+ 
+
+3
+00:00:02,520 --> 00:00:05,590
+hi in today's video I will show you how
+you can generate a punching animation
+
+4
+00:00:05,590 --> 00:00:05,600
+you can generate a punching animation
+ 
+
+5
+00:00:05,600 --> 00:00:09,589
+you can generate a punching animation
+with our skeleton tool so first let's
+
+6
+00:00:09,589 --> 00:00:09,599
+with our skeleton tool so first let's
+ 
+
+7
+00:00:09,599 --> 00:00:12,110
+with our skeleton tool so first let's
+generate a
+
+8
+00:00:12,110 --> 00:00:12,120
+generate a
+ 
+
+9
+00:00:12,120 --> 00:00:14,629
+generate a
+character so what could be more fitting
+
+10
+00:00:14,629 --> 00:00:14,639
+character so what could be more fitting
+ 
+
+11
+00:00:14,639 --> 00:00:17,750
+character so what could be more fitting
+than uh generating a boxer so I'm going
+
+12
+00:00:17,750 --> 00:00:17,760
+than uh generating a boxer so I'm going
+ 
+
+13
+00:00:17,760 --> 00:00:20,189
+than uh generating a boxer so I'm going
+to use the generate generate character
+
+14
+00:00:20,189 --> 00:00:20,199
+to use the generate generate character
+ 
+
+15
+00:00:20,199 --> 00:00:24,390
+to use the generate generate character
+tool and ask for a male boxer in red
+
+16
+00:00:24,390 --> 00:00:24,400
+tool and ask for a male boxer in red
+ 
+
+17
+00:00:24,400 --> 00:00:33,790
+tool and ask for a male boxer in red
+shorts
+
+18
+00:00:33,790 --> 00:00:33,800
+
+ 
+
+19
+00:00:33,800 --> 00:00:36,910
+
+all right nice now I want to show you
+
+20
+00:00:36,910 --> 00:00:36,920
+all right nice now I want to show you
+ 
+
+21
+00:00:36,920 --> 00:00:39,869
+all right nice now I want to show you
+what happens if you change like outline
+
+22
+00:00:39,869 --> 00:00:39,879
+what happens if you change like outline
+ 
+
+23
+00:00:39,879 --> 00:00:42,029
+what happens if you change like outline
+shading and
+
+24
+00:00:42,029 --> 00:00:42,039
+shading and
+ 
+
+25
+00:00:42,039 --> 00:00:46,029
+shading and
+details uh which will uh affect the uh
+
+26
+00:00:46,029 --> 00:00:46,039
+details uh which will uh affect the uh
+ 
+
+27
+00:00:46,039 --> 00:00:51,510
+details uh which will uh affect the uh
+style of the character that's
+
+28
+00:00:51,510 --> 00:00:51,520
+
+ 
+
+29
+00:00:51,520 --> 00:00:54,270
+
+generated so here you can see a much
+
+30
+00:00:54,270 --> 00:00:54,280
+generated so here you can see a much
+ 
+
+31
+00:00:54,280 --> 00:00:57,310
+generated so here you can see a much
+more realistic looking
+
+32
+00:00:57,310 --> 00:00:57,320
+more realistic looking
+ 
+
+33
+00:00:57,320 --> 00:00:59,630
+more realistic looking
+character and if you make it even more
+
+34
+00:00:59,630 --> 00:00:59,640
+character and if you make it even more
+ 
+
+35
+00:00:59,640 --> 00:01:03,750
+character and if you make it even more
+Det until it will be even more uh
+
+36
+00:01:03,750 --> 00:01:03,760
+Det until it will be even more uh
+ 
+
+37
+00:01:03,760 --> 00:01:06,670
+Det until it will be even more uh
+realistic so this is some new settings
+
+38
+00:01:06,670 --> 00:01:06,680
+realistic so this is some new settings
+ 
+
+39
+00:01:06,680 --> 00:01:10,190
+realistic so this is some new settings
+for our new uh generate character and uh
+
+40
+00:01:10,190 --> 00:01:10,200
+for our new uh generate character and uh
+ 
+
+41
+00:01:10,200 --> 00:01:11,310
+for our new uh generate character and uh
+style
+
+42
+00:01:11,310 --> 00:01:11,320
+style
+ 
+
+43
+00:01:11,320 --> 00:01:14,390
+style
+tool I recommend trying different
+
+44
+00:01:14,390 --> 00:01:14,400
+tool I recommend trying different
+ 
+
+45
+00:01:14,400 --> 00:01:16,429
+tool I recommend trying different
+outlines and shadings and stuff just to
+
+46
+00:01:16,429 --> 00:01:16,439
+outlines and shadings and stuff just to
+ 
+
+47
+00:01:16,439 --> 00:01:19,030
+outlines and shadings and stuff just to
+see what works and here I'm just
+
+48
+00:01:19,030 --> 00:01:19,040
+see what works and here I'm just
+ 
+
+49
+00:01:19,040 --> 00:01:23,190
+see what works and here I'm just
+generating the rotation for my
+
+50
+00:01:23,190 --> 00:01:23,200
+generating the rotation for my
+ 
+
+51
+00:01:23,200 --> 00:01:26,190
+generating the rotation for my
+character I'm not super happy with the
+
+52
+00:01:26,190 --> 00:01:26,200
+character I'm not super happy with the
+ 
+
+53
+00:01:26,200 --> 00:01:29,109
+character I'm not super happy with the
+placement of the right hand glove so I'm
+
+54
+00:01:29,109 --> 00:01:29,119
+placement of the right hand glove so I'm
+ 
+
+55
+00:01:29,119 --> 00:01:31,749
+placement of the right hand glove so I'm
+just going to move it over over edit
+
+56
+00:01:31,749 --> 00:01:31,759
+just going to move it over over edit
+ 
+
+57
+00:01:31,759 --> 00:01:34,069
+just going to move it over over edit
+edit the image a bit then use it as my
+
+58
+00:01:34,069 --> 00:01:34,079
+edit the image a bit then use it as my
+ 
+
+59
+00:01:34,079 --> 00:01:35,749
+edit the image a bit then use it as my
+init
+
+60
+00:01:35,749 --> 00:01:35,759
+init
+ 
+
+61
+00:01:35,759 --> 00:01:38,990
+init
+image the init image will help tell the
+
+62
+00:01:38,990 --> 00:01:39,000
+image the init image will help tell the
+ 
+
+63
+00:01:39,000 --> 00:01:41,109
+image the init image will help tell the
+model where the glove should be as it's
+
+64
+00:01:41,109 --> 00:01:41,119
+model where the glove should be as it's
+ 
+
+65
+00:01:41,119 --> 00:01:43,910
+model where the glove should be as it's
+like a starting point for the model now
+
+66
+00:01:43,910 --> 00:01:43,920
+like a starting point for the model now
+ 
+
+67
+00:01:43,920 --> 00:01:46,429
+like a starting point for the model now
+that we have our character uh let's uh
+
+68
+00:01:46,429 --> 00:01:46,439
+that we have our character uh let's uh
+ 
+
+69
+00:01:46,439 --> 00:01:48,990
+that we have our character uh let's uh
+create some animations so first I will
+
+70
+00:01:48,990 --> 00:01:49,000
+create some animations so first I will
+ 
+
+71
+00:01:49,000 --> 00:01:51,990
+create some animations so first I will
+estimate skeleton which will give me a
+
+72
+00:01:51,990 --> 00:01:52,000
+estimate skeleton which will give me a
+ 
+
+73
+00:01:52,000 --> 00:01:54,630
+estimate skeleton which will give me a
+skeleton for my character then I'm just
+
+74
+00:01:54,630 --> 00:01:54,640
+skeleton for my character then I'm just
+ 
+
+75
+00:01:54,640 --> 00:01:58,749
+skeleton for my character then I'm just
+going to edit a bit to make sure it's uh
+
+76
+00:01:58,749 --> 00:01:58,759
+going to edit a bit to make sure it's uh
+ 
+
+77
+00:01:58,759 --> 00:02:02,510
+going to edit a bit to make sure it's uh
+it fits my character better
+
+78
+00:02:02,510 --> 00:02:02,520
+
+ 
+
+79
+00:02:02,520 --> 00:02:04,950
+
+so this is pretty important to do
+
+80
+00:02:04,950 --> 00:02:04,960
+so this is pretty important to do
+ 
+
+81
+00:02:04,960 --> 00:02:07,630
+so this is pretty important to do
+because if you're going to insert
+
+82
+00:02:07,630 --> 00:02:07,640
+because if you're going to insert
+ 
+
+83
+00:02:07,640 --> 00:02:10,510
+because if you're going to insert
+skeleton uh the skeleton that you have
+
+84
+00:02:10,510 --> 00:02:10,520
+skeleton uh the skeleton that you have
+ 
+
+85
+00:02:10,520 --> 00:02:13,350
+skeleton uh the skeleton that you have
+in your uh in your frame is going to
+
+86
+00:02:13,350 --> 00:02:13,360
+in your uh in your frame is going to
+ 
+
+87
+00:02:13,360 --> 00:02:17,030
+in your uh in your frame is going to
+affect the uh what the insert a skeleton
+
+88
+00:02:17,030 --> 00:02:17,040
+affect the uh what the insert a skeleton
+ 
+
+89
+00:02:17,040 --> 00:02:18,830
+affect the uh what the insert a skeleton
+is going to look like because it's based
+
+90
+00:02:18,830 --> 00:02:18,840
+is going to look like because it's based
+ 
+
+91
+00:02:18,840 --> 00:02:23,150
+is going to look like because it's based
+on that
+
+92
+00:02:23,150 --> 00:02:23,160
+
+ 
+
+93
+00:02:23,160 --> 00:02:26,070
+
+one and yeah don't worry we we will do
+
+94
+00:02:26,070 --> 00:02:26,080
+one and yeah don't worry we we will do
+ 
+
+95
+00:02:26,080 --> 00:02:29,070
+one and yeah don't worry we we will do
+this uh two more times with uh the other
+
+96
+00:02:29,070 --> 00:02:29,080
+this uh two more times with uh the other
+ 
+
+97
+00:02:29,080 --> 00:02:31,390
+this uh two more times with uh the other
+characters that you saw in the
+
+98
+00:02:31,390 --> 00:02:31,400
+characters that you saw in the
+ 
+
+99
+00:02:31,400 --> 00:02:35,229
+characters that you saw in the
+beginning so but yeah so this is also me
+
+100
+00:02:35,229 --> 00:02:35,239
+beginning so but yeah so this is also me
+ 
+
+101
+00:02:35,239 --> 00:02:37,430
+beginning so but yeah so this is also me
+learning how to do this as we
+
+102
+00:02:37,430 --> 00:02:37,440
+learning how to do this as we
+ 
+
+103
+00:02:37,440 --> 00:02:40,910
+learning how to do this as we
+go uh I had I I haven't really done this
+
+104
+00:02:40,910 --> 00:02:40,920
+go uh I had I I haven't really done this
+ 
+
+105
+00:02:40,920 --> 00:02:44,390
+go uh I had I I haven't really done this
+before so it's uh always
+
+106
+00:02:44,390 --> 00:02:44,400
+before so it's uh always
+ 
+
+107
+00:02:44,400 --> 00:02:47,710
+before so it's uh always
+fun so here I'm just removing the uh
+
+108
+00:02:47,710 --> 00:02:47,720
+fun so here I'm just removing the uh
+ 
+
+109
+00:02:47,720 --> 00:02:49,550
+fun so here I'm just removing the uh
+last two frames because I wasn't super
+
+110
+00:02:49,550 --> 00:02:49,560
+last two frames because I wasn't super
+ 
+
+111
+00:02:49,560 --> 00:02:52,309
+last two frames because I wasn't super
+happy with them and I'm going to Ed this
+
+112
+00:02:52,309 --> 00:02:52,319
+happy with them and I'm going to Ed this
+ 
+
+113
+00:02:52,319 --> 00:02:54,070
+happy with them and I'm going to Ed this
+edit this frame a little bit so I'm
+
+114
+00:02:54,070 --> 00:02:54,080
+edit this frame a little bit so I'm
+ 
+
+115
+00:02:54,080 --> 00:02:56,390
+edit this frame a little bit so I'm
+going to use this Frame and the first
+
+116
+00:02:56,390 --> 00:02:56,400
+going to use this Frame and the first
+ 
+
+117
+00:02:56,400 --> 00:03:00,350
+going to use this Frame and the first
+frame you generated as like a guidance
+
+118
+00:03:00,350 --> 00:03:00,360
+frame you generated as like a guidance
+ 
+
+119
+00:03:00,360 --> 00:03:02,630
+frame you generated as like a guidance
+for the model so I'm going to generate
+
+120
+00:03:02,630 --> 00:03:02,640
+for the model so I'm going to generate
+ 
+
+121
+00:03:02,640 --> 00:03:07,350
+for the model so I'm going to generate
+the last two frames
+
+122
+00:03:07,350 --> 00:03:07,360
+
+ 
+
+123
+00:03:07,360 --> 00:03:10,470
+
+again and this helps the model get a
+
+124
+00:03:10,470 --> 00:03:10,480
+again and this helps the model get a
+ 
+
+125
+00:03:10,480 --> 00:03:12,350
+again and this helps the model get a
+better understanding of what it's trying
+
+126
+00:03:12,350 --> 00:03:12,360
+better understanding of what it's trying
+ 
+
+127
+00:03:12,360 --> 00:03:13,030
+better understanding of what it's trying
+to
+
+128
+00:03:13,030 --> 00:03:13,040
+to
+ 
+
+129
+00:03:13,040 --> 00:03:17,149
+to
+do because it has more information to go
+
+130
+00:03:17,149 --> 00:03:17,159
+do because it has more information to go
+ 
+
+131
+00:03:17,159 --> 00:03:21,149
+do because it has more information to go
+from and yeah quite nice this glove
+
+132
+00:03:21,149 --> 00:03:21,159
+from and yeah quite nice this glove
+ 
+
+133
+00:03:21,159 --> 00:03:23,350
+from and yeah quite nice this glove
+needs a little bit of editing so I'm
+
+134
+00:03:23,350 --> 00:03:23,360
+needs a little bit of editing so I'm
+ 
+
+135
+00:03:23,360 --> 00:03:25,550
+needs a little bit of editing so I'm
+going to give it some
+
+136
+00:03:25,550 --> 00:03:25,560
+going to give it some
+ 
+
+137
+00:03:25,560 --> 00:03:30,350
+going to give it some
+love uh first I thought of moving the
+
+138
+00:03:30,350 --> 00:03:30,360
+love uh first I thought of moving the
+ 
+
+139
+00:03:30,360 --> 00:03:34,670
+love uh first I thought of moving the
+AR but I felt like ah let's just move
+
+140
+00:03:34,670 --> 00:03:34,680
+AR but I felt like ah let's just move
+ 
+
+141
+00:03:34,680 --> 00:03:37,509
+AR but I felt like ah let's just move
+the uh skeleton instead so I'm going in
+
+142
+00:03:37,509 --> 00:03:37,519
+the uh skeleton instead so I'm going in
+ 
+
+143
+00:03:37,519 --> 00:03:40,030
+the uh skeleton instead so I'm going in
+here add a
+
+144
+00:03:40,030 --> 00:03:40,040
+here add a
+ 
+
+145
+00:03:40,040 --> 00:03:42,750
+here add a
+skeleton and then just moving the bone
+
+146
+00:03:42,750 --> 00:03:42,760
+skeleton and then just moving the bone
+ 
+
+147
+00:03:42,760 --> 00:03:46,949
+skeleton and then just moving the bone
+or the point a bit and therefore the
+
+148
+00:03:46,949 --> 00:03:46,959
+or the point a bit and therefore the
+ 
+
+149
+00:03:46,959 --> 00:03:49,710
+or the point a bit and therefore the
+arm and then remember to go back to the
+
+150
+00:03:49,710 --> 00:03:49,720
+arm and then remember to go back to the
+ 
+
+151
+00:03:49,720 --> 00:03:50,670
+arm and then remember to go back to the
+first
+
+152
+00:03:50,670 --> 00:03:50,680
+first
+ 
+
+153
+00:03:50,680 --> 00:04:02,910
+first
+frame in the animation and then generate
+
+154
+00:04:02,910 --> 00:04:02,920
+
+ 
+
+155
+00:04:02,920 --> 00:04:06,350
+
+all right now let's do the same for our
+
+156
+00:04:06,350 --> 00:04:06,360
+all right now let's do the same for our
+ 
+
+157
+00:04:06,360 --> 00:04:08,789
+all right now let's do the same for our
+more realistic
+
+158
+00:04:08,789 --> 00:04:08,799
+more realistic
+ 
+
+159
+00:04:08,799 --> 00:04:11,710
+more realistic
+boxer so I will quickly
+
+160
+00:04:11,710 --> 00:04:11,720
+boxer so I will quickly
+ 
+
+161
+00:04:11,720 --> 00:04:13,470
+boxer so I will quickly
+generate my
+
+162
+00:04:13,470 --> 00:04:13,480
+generate my
+ 
+
+163
+00:04:13,480 --> 00:04:17,949
+generate my
+rotation and then I will uh get
+
+164
+00:04:17,949 --> 00:04:17,959
+rotation and then I will uh get
+ 
+
+165
+00:04:17,959 --> 00:04:21,150
+rotation and then I will uh get
+started so first fix my settings then
+
+166
+00:04:21,150 --> 00:04:21,160
+started so first fix my settings then
+ 
+
+167
+00:04:21,160 --> 00:04:25,070
+started so first fix my settings then
+estimate skeleton like
+
+168
+00:04:25,070 --> 00:04:25,080
+
+ 
+
+169
+00:04:25,080 --> 00:04:28,830
+
+before edit the skeleton so it fits my
+
+170
+00:04:28,830 --> 00:04:28,840
+before edit the skeleton so it fits my
+ 
+
+171
+00:04:28,840 --> 00:04:31,110
+before edit the skeleton so it fits my
+character better
+
+172
+00:04:31,110 --> 00:04:31,120
+character better
+ 
+
+173
+00:04:31,120 --> 00:04:33,950
+character better
+here the biggest mistake is probably
+
+174
+00:04:33,950 --> 00:04:33,960
+here the biggest mistake is probably
+ 
+
+175
+00:04:33,960 --> 00:04:36,510
+here the biggest mistake is probably
+like the neck is in the wrong
+
+176
+00:04:36,510 --> 00:04:36,520
+like the neck is in the wrong
+ 
+
+177
+00:04:36,520 --> 00:04:39,189
+like the neck is in the wrong
+place and I'm just going to first edit
+
+178
+00:04:39,189 --> 00:04:39,199
+place and I'm just going to first edit
+ 
+
+179
+00:04:39,199 --> 00:04:42,189
+place and I'm just going to first edit
+the uh
+
+180
+00:04:42,189 --> 00:04:42,199
+
+ 
+
+181
+00:04:42,199 --> 00:04:44,990
+
+arms and
+
+182
+00:04:44,990 --> 00:04:45,000
+arms and
+ 
+
+183
+00:04:45,000 --> 00:04:47,749
+arms and
+shoulders and you can see like the small
+
+184
+00:04:47,749 --> 00:04:47,759
+shoulders and you can see like the small
+ 
+
+185
+00:04:47,759 --> 00:04:52,029
+shoulders and you can see like the small
+UI dialogue there uh What uh bone or
+
+186
+00:04:52,029 --> 00:04:52,039
+UI dialogue there uh What uh bone or
+ 
+
+187
+00:04:52,039 --> 00:04:54,909
+UI dialogue there uh What uh bone or
+point is selected so here for example it
+
+188
+00:04:54,909 --> 00:04:54,919
+point is selected so here for example it
+ 
+
+189
+00:04:54,919 --> 00:04:56,710
+point is selected so here for example it
+says
+
+190
+00:04:56,710 --> 00:04:56,720
+says
+ 
+
+191
+00:04:56,720 --> 00:04:59,990
+says
+neck and then once you're happy can
+
+192
+00:04:59,990 --> 00:05:00,000
+neck and then once you're happy can
+ 
+
+193
+00:05:00,000 --> 00:05:02,430
+neck and then once you're happy can
+insert
+
+194
+00:05:02,430 --> 00:05:02,440
+insert
+ 
+
+195
+00:05:02,440 --> 00:05:05,029
+insert
+skeleton in this case I'm not going to
+
+196
+00:05:05,029 --> 00:05:05,039
+skeleton in this case I'm not going to
+ 
+
+197
+00:05:05,039 --> 00:05:10,029
+skeleton in this case I'm not going to
+delete one of the uh one of the
+
+198
+00:05:10,029 --> 00:05:10,039
+delete one of the uh one of the
+ 
+
+199
+00:05:10,039 --> 00:05:27,029
+delete one of the uh one of the
+frames and yeah I just click
+
+200
+00:05:27,029 --> 00:05:27,039
+
+ 
+
+201
+00:05:27,039 --> 00:05:31,189
+
+generate so yeah it's kind of lost the
+
+202
+00:05:31,189 --> 00:05:31,199
+generate so yeah it's kind of lost the
+ 
+
+203
+00:05:31,199 --> 00:05:34,189
+generate so yeah it's kind of lost the
+uh the boxing glove but that's actually
+
+204
+00:05:34,189 --> 00:05:34,199
+uh the boxing glove but that's actually
+ 
+
+205
+00:05:34,199 --> 00:05:36,710
+uh the boxing glove but that's actually
+quite easy to for us to just
+
+206
+00:05:36,710 --> 00:05:36,720
+quite easy to for us to just
+ 
+
+207
+00:05:36,720 --> 00:05:41,150
+quite easy to for us to just
+manually uh fix and you could do this
+
+208
+00:05:41,150 --> 00:05:41,160
+manually uh fix and you could do this
+ 
+
+209
+00:05:41,160 --> 00:05:44,950
+manually uh fix and you could do this
+with init image uh as well and just um
+
+210
+00:05:44,950 --> 00:05:44,960
+with init image uh as well and just um
+ 
+
+211
+00:05:44,960 --> 00:05:47,309
+with init image uh as well and just um
+draw like a red blob or something but I
+
+212
+00:05:47,309 --> 00:05:47,319
+draw like a red blob or something but I
+ 
+
+213
+00:05:47,319 --> 00:05:49,469
+draw like a red blob or something but I
+think in this case it's probably just
+
+214
+00:05:49,469 --> 00:05:49,479
+think in this case it's probably just
+ 
+
+215
+00:05:49,479 --> 00:05:55,590
+think in this case it's probably just
+easier to copy paste the glove
+
+216
+00:05:55,590 --> 00:05:55,600
+
+ 
+
+217
+00:05:55,600 --> 00:05:57,909
+
+around and the gloves that I'm copy
+
+218
+00:05:57,909 --> 00:05:57,919
+around and the gloves that I'm copy
+ 
+
+219
+00:05:57,919 --> 00:05:59,909
+around and the gloves that I'm copy
+pasting around could also be used used
+
+220
+00:05:59,909 --> 00:05:59,919
+pasting around could also be used used
+ 
+
+221
+00:05:59,919 --> 00:06:03,670
+pasting around could also be used used
+as a init image as well so whether you
+
+222
+00:06:03,670 --> 00:06:03,680
+as a init image as well so whether you
+ 
+
+223
+00:06:03,680 --> 00:06:06,510
+as a init image as well so whether you
+use whether you draw it or you just copy
+
+224
+00:06:06,510 --> 00:06:06,520
+use whether you draw it or you just copy
+ 
+
+225
+00:06:06,520 --> 00:06:14,670
+use whether you draw it or you just copy
+paste it uh it will give the same
+
+226
+00:06:14,670 --> 00:06:14,680
+
+ 
+
+227
+00:06:14,680 --> 00:06:17,629
+
+effect now I wasn't super happy with the
+
+228
+00:06:17,629 --> 00:06:17,639
+effect now I wasn't super happy with the
+ 
+
+229
+00:06:17,639 --> 00:06:20,350
+effect now I wasn't super happy with the
+last frame so similar to last time I'm
+
+230
+00:06:20,350 --> 00:06:20,360
+last frame so similar to last time I'm
+ 
+
+231
+00:06:20,360 --> 00:06:23,589
+last frame so similar to last time I'm
+going to edit the skeleton a
+
+232
+00:06:23,589 --> 00:06:23,599
+going to edit the skeleton a
+ 
+
+233
+00:06:23,599 --> 00:06:27,110
+going to edit the skeleton a
+bit uh what's good to know is the last
+
+234
+00:06:27,110 --> 00:06:27,120
+bit uh what's good to know is the last
+ 
+
+235
+00:06:27,120 --> 00:06:30,110
+bit uh what's good to know is the last
+point that you touch with the edit tool
+
+236
+00:06:30,110 --> 00:06:30,120
+point that you touch with the edit tool
+ 
+
+237
+00:06:30,120 --> 00:06:35,070
+point that you touch with the edit tool
+is what's closest to uh like to us so to
+
+238
+00:06:35,070 --> 00:06:35,080
+is what's closest to uh like to us so to
+ 
+
+239
+00:06:35,080 --> 00:06:37,830
+is what's closest to uh like to us so to
+fix the like said index I want to move
+
+240
+00:06:37,830 --> 00:06:37,840
+fix the like said index I want to move
+ 
+
+241
+00:06:37,840 --> 00:06:42,710
+fix the like said index I want to move
+the uh right arm
+
+242
+00:06:42,710 --> 00:06:42,720
+
+ 
+
+243
+00:06:42,720 --> 00:06:45,550
+
+last so here still it got a little bit
+
+244
+00:06:45,550 --> 00:06:45,560
+last so here still it got a little bit
+ 
+
+245
+00:06:45,560 --> 00:06:47,710
+last so here still it got a little bit
+confused it probably would have been
+
+246
+00:06:47,710 --> 00:06:47,720
+confused it probably would have been
+ 
+
+247
+00:06:47,720 --> 00:06:51,870
+confused it probably would have been
+better to move in the left arm even
+
+248
+00:06:51,870 --> 00:06:51,880
+better to move in the left arm even
+ 
+
+249
+00:06:51,880 --> 00:06:54,909
+better to move in the left arm even
+further but still this is so easy to fix
+
+250
+00:06:54,909 --> 00:06:54,919
+further but still this is so easy to fix
+ 
+
+251
+00:06:54,919 --> 00:06:57,869
+further but still this is so easy to fix
+I'm just going to use the erase tool and
+
+252
+00:06:57,869 --> 00:06:57,879
+I'm just going to use the erase tool and
+ 
+
+253
+00:06:57,879 --> 00:07:00,510
+I'm just going to use the erase tool and
+remove that uh St
+
+254
+00:07:00,510 --> 00:07:00,520
+remove that uh St
+ 
+
+255
+00:07:00,520 --> 00:07:05,029
+remove that uh St
+or and yeah all
+
+256
+00:07:05,029 --> 00:07:05,039
+
+ 
+
+257
+00:07:05,039 --> 00:07:10,589
+
+good and now we have a punching
+
+258
+00:07:10,589 --> 00:07:10,599
+good and now we have a punching
+ 
+
+259
+00:07:10,599 --> 00:07:13,469
+good and now we have a punching
+animation so now for the last character
+
+260
+00:07:13,469 --> 00:07:13,479
+animation so now for the last character
+ 
+
+261
+00:07:13,479 --> 00:07:17,869
+animation so now for the last character
+I'm going to take my 64x 64 character
+
+262
+00:07:17,869 --> 00:07:17,879
+I'm going to take my 64x 64 character
+ 
+
+263
+00:07:17,879 --> 00:07:20,110
+I'm going to take my 64x 64 character
+and use it as a init
+
+264
+00:07:20,110 --> 00:07:20,120
+and use it as a init
+ 
+
+265
+00:07:20,120 --> 00:07:23,070
+and use it as a init
+image so this will just help the model
+
+266
+00:07:23,070 --> 00:07:23,080
+image so this will just help the model
+ 
+
+267
+00:07:23,080 --> 00:07:26,469
+image so this will just help the model
+understand like this size and what my
+
+268
+00:07:26,469 --> 00:07:26,479
+understand like this size and what my
+ 
+
+269
+00:07:26,479 --> 00:07:46,029
+understand like this size and what my
+character should look like
+
+270
+00:07:46,029 --> 00:07:46,039
+
+ 
+
+271
+00:07:46,039 --> 00:07:48,629
+
+pretty good I must say so I'm just going
+
+272
+00:07:48,629 --> 00:07:48,639
+pretty good I must say so I'm just going
+ 
+
+273
+00:07:48,639 --> 00:07:53,909
+pretty good I must say so I'm just going
+to fix up the uh colors a bit if you can
+
+274
+00:07:53,909 --> 00:07:53,919
+to fix up the uh colors a bit if you can
+ 
+
+275
+00:07:53,919 --> 00:07:56,749
+to fix up the uh colors a bit if you can
+even call it that maybe I'm just
+
+276
+00:07:56,749 --> 00:07:56,759
+even call it that maybe I'm just
+ 
+
+277
+00:07:56,759 --> 00:08:04,110
+even call it that maybe I'm just
+actually making it less good by Ed
+
+278
+00:08:04,110 --> 00:08:04,120
+
+ 
+
+279
+00:08:04,120 --> 00:08:06,149
+
+now when it's time to generate my
+
+280
+00:08:06,149 --> 00:08:06,159
+now when it's time to generate my
+ 
+
+281
+00:08:06,159 --> 00:08:07,749
+now when it's time to generate my
+animation I'm just going to use the
+
+282
+00:08:07,749 --> 00:08:07,759
+animation I'm just going to use the
+ 
+
+283
+00:08:07,759 --> 00:08:09,550
+animation I'm just going to use the
+knowledge that I learned so first
+
+284
+00:08:09,550 --> 00:08:09,560
+knowledge that I learned so first
+ 
+
+285
+00:08:09,560 --> 00:08:12,550
+knowledge that I learned so first
+estimate skeleton then I'm going to edit
+
+286
+00:08:12,550 --> 00:08:12,560
+estimate skeleton then I'm going to edit
+ 
+
+287
+00:08:12,560 --> 00:08:16,990
+estimate skeleton then I'm going to edit
+the uh the pose a bit to make it fit my
+
+288
+00:08:16,990 --> 00:08:17,000
+the uh the pose a bit to make it fit my
+ 
+
+289
+00:08:17,000 --> 00:08:18,510
+the uh the pose a bit to make it fit my
+character
+
+290
+00:08:18,510 --> 00:08:18,520
+character
+ 
+
+291
+00:08:18,520 --> 00:08:21,749
+character
+better and then I will insert the
+
+292
+00:08:21,749 --> 00:08:21,759
+better and then I will insert the
+ 
+
+293
+00:08:21,759 --> 00:08:31,189
+better and then I will insert the
+skeleton
+
+294
+00:08:31,189 --> 00:08:31,199
+
+ 
+
+295
+00:08:31,199 --> 00:08:33,829
+
+things that should be good to note is
+
+296
+00:08:33,829 --> 00:08:33,839
+things that should be good to note is
+ 
+
+297
+00:08:33,839 --> 00:08:36,190
+things that should be good to note is
+that
+
+298
+00:08:36,190 --> 00:08:36,200
+that
+ 
+
+299
+00:08:36,200 --> 00:08:39,070
+that
+we like the hand doesn't need doesn't
+
+300
+00:08:39,070 --> 00:08:39,080
+we like the hand doesn't need doesn't
+ 
+
+301
+00:08:39,080 --> 00:08:41,829
+we like the hand doesn't need doesn't
+need to be at the edge of the hand but a
+
+302
+00:08:41,829 --> 00:08:41,839
+need to be at the edge of the hand but a
+ 
+
+303
+00:08:41,839 --> 00:08:45,470
+need to be at the edge of the hand but a
+bit up but it shouldn't be super
+
+304
+00:08:45,470 --> 00:08:45,480
+bit up but it shouldn't be super
+ 
+
+305
+00:08:45,480 --> 00:08:49,110
+bit up but it shouldn't be super
+important and what you will see here is
+
+306
+00:08:49,110 --> 00:08:49,120
+important and what you will see here is
+ 
+
+307
+00:08:49,120 --> 00:08:50,430
+important and what you will see here is
+because
+
+308
+00:08:50,430 --> 00:08:50,440
+because
+ 
+
+309
+00:08:50,440 --> 00:08:54,110
+because
+my uh skeleton
+
+310
+00:08:54,110 --> 00:08:54,120
+my uh skeleton
+ 
+
+311
+00:08:54,120 --> 00:08:58,990
+my uh skeleton
+is isn't perfect for the uh the template
+
+312
+00:08:58,990 --> 00:08:59,000
+is isn't perfect for the uh the template
+ 
+
+313
+00:08:59,000 --> 00:09:00,949
+is isn't perfect for the uh the template
+that we have for this
+
+314
+00:09:00,949 --> 00:09:00,959
+that we have for this
+ 
+
+315
+00:09:00,959 --> 00:09:05,150
+that we have for this
+animation I need to uh move the uh bones
+
+316
+00:09:05,150 --> 00:09:05,160
+animation I need to uh move the uh bones
+ 
+
+317
+00:09:05,160 --> 00:09:06,350
+animation I need to uh move the uh bones
+a
+
+318
+00:09:06,350 --> 00:09:06,360
+a
+ 
+
+319
+00:09:06,360 --> 00:09:10,030
+a
+bit so I'm moving it closer to the neck
+
+320
+00:09:10,030 --> 00:09:10,040
+bit so I'm moving it closer to the neck
+ 
+
+321
+00:09:10,040 --> 00:09:16,550
+bit so I'm moving it closer to the neck
+just to make the uh the arm uh
+
+322
+00:09:16,550 --> 00:09:16,560
+
+ 
+
+323
+00:09:16,560 --> 00:09:19,389
+
+shorter still it's not perfect so at
+
+324
+00:09:19,389 --> 00:09:19,399
+shorter still it's not perfect so at
+ 
+
+325
+00:09:19,399 --> 00:09:22,310
+shorter still it's not perfect so at
+this point I'm just going to go in and
+
+326
+00:09:22,310 --> 00:09:22,320
+this point I'm just going to go in and
+ 
+
+327
+00:09:22,320 --> 00:09:25,269
+this point I'm just going to go in and
+edit it by hand it just it only takes
+
+328
+00:09:25,269 --> 00:09:25,279
+edit it by hand it just it only takes
+ 
+
+329
+00:09:25,279 --> 00:09:29,030
+edit it by hand it just it only takes
+like one second so it's it's fine to to
+
+330
+00:09:29,030 --> 00:09:29,040
+like one second so it's it's fine to to
+ 
+
+331
+00:09:29,040 --> 00:09:34,509
+like one second so it's it's fine to to
+do the these small details by hand in my
+
+332
+00:09:34,509 --> 00:09:34,519
+do the these small details by hand in my
+ 
+
+333
+00:09:34,519 --> 00:09:37,350
+do the these small details by hand in my
+opinion then here I'm just going to move
+
+334
+00:09:37,350 --> 00:09:37,360
+opinion then here I'm just going to move
+ 
+
+335
+00:09:37,360 --> 00:09:40,110
+opinion then here I'm just going to move
+out the arm a bit because as we
+
+336
+00:09:40,110 --> 00:09:40,120
+out the arm a bit because as we
+ 
+
+337
+00:09:40,120 --> 00:09:43,190
+out the arm a bit because as we
+previously noted it's it's a bit too
+
+338
+00:09:43,190 --> 00:09:43,200
+previously noted it's it's a bit too
+ 
+
+339
+00:09:43,200 --> 00:10:08,870
+previously noted it's it's a bit too
+short
+
+340
+00:10:08,870 --> 00:10:08,880
+
+ 
+
+341
+00:10:08,880 --> 00:10:10,630
+
+and just like
+
+342
+00:10:10,630 --> 00:10:10,640
+and just like
+ 
+
+343
+00:10:10,640 --> 00:10:13,670
+and just like
+before I think like okay last frame is
+
+344
+00:10:13,670 --> 00:10:13,680
+before I think like okay last frame is
+ 
+
+345
+00:10:13,680 --> 00:10:16,590
+before I think like okay last frame is
+good first frame is good second frame is
+
+346
+00:10:16,590 --> 00:10:16,600
+good first frame is good second frame is
+ 
+
+347
+00:10:16,600 --> 00:10:18,110
+good first frame is good second frame is
+all right so I'm going to do is I'm just
+
+348
+00:10:18,110 --> 00:10:18,120
+all right so I'm going to do is I'm just
+ 
+
+349
+00:10:18,120 --> 00:10:20,910
+all right so I'm going to do is I'm just
+going to copy paste over the hand of
+
+350
+00:10:20,910 --> 00:10:20,920
+going to copy paste over the hand of
+ 
+
+351
+00:10:20,920 --> 00:10:22,750
+going to copy paste over the hand of
+course I could use init image and in
+
+352
+00:10:22,750 --> 00:10:22,760
+course I could use init image and in
+ 
+
+353
+00:10:22,760 --> 00:10:26,150
+course I could use init image and in
+painting and do this with the model
+
+354
+00:10:26,150 --> 00:10:26,160
+painting and do this with the model
+ 
+
+355
+00:10:26,160 --> 00:10:28,389
+painting and do this with the model
+instead but in this case I feel like
+
+356
+00:10:28,389 --> 00:10:28,399
+instead but in this case I feel like
+ 
+
+357
+00:10:28,399 --> 00:10:31,710
+instead but in this case I feel like
+it's so easy to just edit it by hand so
+
+358
+00:10:31,710 --> 00:10:31,720
+it's so easy to just edit it by hand so
+ 
+
+359
+00:10:31,720 --> 00:10:33,710
+it's so easy to just edit it by hand so
+I'm going to do that
+
+360
+00:10:33,710 --> 00:10:33,720
+I'm going to do that
+ 
+
+361
+00:10:33,720 --> 00:10:36,269
+I'm going to do that
+instead and now we have like first
+
+362
+00:10:36,269 --> 00:10:36,279
+instead and now we have like first
+ 
+
+363
+00:10:36,279 --> 00:10:40,190
+instead and now we have like first
+second and the fourth frame uh
+
+364
+00:10:40,190 --> 00:10:40,200
+second and the fourth frame uh
+ 
+
+365
+00:10:40,200 --> 00:10:42,949
+second and the fourth frame uh
+already created so now we only need to
+
+366
+00:10:42,949 --> 00:10:42,959
+already created so now we only need to
+ 
+
+367
+00:10:42,959 --> 00:10:45,350
+already created so now we only need to
+generate uh this third
+
+368
+00:10:45,350 --> 00:10:45,360
+generate uh this third
+ 
+
+369
+00:10:45,360 --> 00:10:49,710
+generate uh this third
+frame and here I can I can see the small
+
+370
+00:10:49,710 --> 00:10:49,720
+frame and here I can I can see the small
+ 
+
+371
+00:10:49,720 --> 00:10:51,670
+frame and here I can I can see the small
+changes I need to do to make this
+
+372
+00:10:51,670 --> 00:10:51,680
+changes I need to do to make this
+ 
+
+373
+00:10:51,680 --> 00:10:54,550
+changes I need to do to make this
+perfect so I'm just going to edit it by
+
+374
+00:10:54,550 --> 00:10:54,560
+perfect so I'm just going to edit it by
+ 
+
+375
+00:10:54,560 --> 00:10:58,750
+perfect so I'm just going to edit it by
+hand and yeah it's done I hope you
+
+376
+00:10:58,750 --> 00:10:58,760
+hand and yeah it's done I hope you
+ 
+
+377
+00:10:58,760 --> 00:11:02,269
+hand and yeah it's done I hope you
+enjoyed the video leave a like and uh
+
+378
+00:11:02,269 --> 00:11:02,279
+enjoyed the video leave a like and uh
+ 
+
+379
+00:11:02,279 --> 00:11:04,629
+enjoyed the video leave a like and uh
+comment if you have any questions and
+
+380
+00:11:04,629 --> 00:11:04,639
+comment if you have any questions and
+ 
+
+381
+00:11:04,639 --> 00:11:06,710
+comment if you have any questions and
+feel free to join the Discord if you
+
+382
+00:11:06,710 --> 00:11:06,720
+feel free to join the Discord if you
+ 
+
+383
+00:11:06,720 --> 00:11:11,160
+feel free to join the Discord if you
+need uh more support
+

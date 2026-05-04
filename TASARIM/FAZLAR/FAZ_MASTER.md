@@ -41,6 +41,29 @@
 
 ---
 
+## RIMA / RIFT MARCH NARRATIVE LAYER (Candidate - 2026-05-04)
+
+> Not locked. This is a phase-level story split only; no mechanical scope is added here.
+> Detailed pointer: `../../MEMORY/project_story_lore.md`
+
+| | Faz 1 | Faz 2 | Faz 3 | Faz 4 | Faz 5 |
+|---|---|---|---|---|---|
+| **RIMA read** | Game/place/symbol | Full Act 1 symbol | Seal/mechanism hint | Lock/warden system | Full truth |
+| **Rift March read** | Visual hint only | Lore fragments | Named/foreshadowed | Threat reframed | Final reveal |
+| **Boss meaning** | Enemy ruler | First seal stress | Echo/duality clue | Bosses as locks/echoes | Final boss as last lock or Architect |
+| **Player knowledge** | "RIMA is where I fight" | "RIMA has old rift history" | "RIMA repeats/records runs" | "Victory may weaken containment" | "Killing final boss changes the march" |
+| **Ending hook** | None | None | Seed only | Strong foreshadow | Choice/post-game/sequel hook |
+
+Narrative direction:
+- Keep the logo clean as `RIMA`; do not force `RIft MArch` hidden letters into production logo.
+- Use `Rift March` as lore: rifts open and outside forces begin marching into reality.
+- Use `RIMA` as the seal, place, machine, ritual, or command system that delays/contains the
+  march.
+- Candidate final reveal: the final boss may be the last lock/warden, so killing it can trigger
+  a final choice or post-game state instead of a simple "evil defeated" ending.
+
+---
+
 ## MOB DAĞILIM HARİTASI (Tüm Aktlar)
 
 ### Set A — Mevcut Prefablar (MEKANIK_KARARLARI)

@@ -91,9 +91,9 @@ Frame total: 10 (base). Warblade combo variant: 12 frames (2 extra aerial hits).
 
 | Sign-off | Who | Status |
 |---|---|---|
-| Identity check (Section E) | design lead | [ ] |
-| Frame budget within class quota | design lead | [ ] |
-| State indicator ownership clean | design lead | [ ] |
+| Identity check (Section E) | design lead | [x] |
+| Frame budget within class quota | design lead | [x] |
+| State indicator ownership clean | design lead | [x] |
 | VFX layer count <= 4 | rima-asset | [ ] |
 | Reference sprite exists | rima-asset | [ ] |
 | Skill dependencies paired in batch (if any) | design lead | [ ] (Warblade Earthsplitter contract must be in same batch if 5-hit variant is generated) |

@@ -4,7 +4,7 @@ namespace RIMA
 {
     /// <summary>
     /// Warblade — Death Blow (Master)
-    /// Sadece HP &lt;%30 düşmana kullanılabilir: %400 hasar, Rage boşaltır.
+    /// Sundered/Broken veya HP &lt;%30 düşmana kullanılabilir: %400 hasar, Rage boşaltır.
     /// Chain: Crippling Blow aktifken → %600 hasar.
     /// </summary>
     public class DeathBlow : SkillBase
@@ -58,7 +58,11 @@ namespace RIMA
                 if (h.gameObject == player.gameObject) continue;
                 var hp = h.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
-                if ((float)hp.CurrentHP / hp.MaxHP > hpThreshold) continue; // sadece < %30
+                var state = SkillRuntime.State(hp);
+                bool markedForExecution = state != null &&
+                    (state.Has(SkillStateTracker.Sundered) || state.Has(SkillStateTracker.Broken));
+                bool lowHp = (float)hp.CurrentHP / hp.MaxHP <= hpThreshold;
+                if (!markedForExecution && !lowHp) continue;
 
                 float d = Vector2.Distance(transform.position, h.transform.position);
                 if (d < best) { best = d; bestHp = hp; }

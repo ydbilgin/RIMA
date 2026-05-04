@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace RIMA
 {
@@ -21,6 +22,7 @@ namespace RIMA
         private bool charging;
         private float chargeTimer;
         private Vector2 chargeDir;
+        private readonly HashSet<Health> hitTargets = new();
 
         protected override void Awake()
         {
@@ -36,6 +38,7 @@ namespace RIMA
             chargeDir = player.FacingDirection;
             charging = true;
             chargeTimer = chargeDuration;
+            hitTargets.Clear();
         }
 
         private void FixedUpdate()
@@ -56,10 +59,12 @@ namespace RIMA
                 if (hit.collider.gameObject == rb.gameObject) continue;
                 var hp = hit.collider.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
+                if (!hitTargets.Add(hp)) continue;
 
-                hp.TakeDamage(damage);
+                SkillRuntime.DealDamage(hp, damage);
                 rage?.OnHitEnemy();
                 rage?.AddRage(ragePerHit);
+                hp.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Stunned, 1.5f);
 
                 var enemyRb = hit.collider.GetComponent<Rigidbody2D>();
                 if (enemyRb != null)
@@ -67,7 +72,10 @@ namespace RIMA
             }
 
             if (chargeTimer <= 0f)
+            {
                 charging = false;
+                hitTargets.Clear();
+            }
         }
     }
 }

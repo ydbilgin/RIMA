@@ -45,9 +45,9 @@ namespace RIMA
                "Yakındaki düşmana ezici darbe: 3s yavaşlatır ve sersemletir. Death Blow ile zincirlenince %600 execute hasarı.",
                SkillTier.Common, 9f, typeof(CripplingBlow));
 
-            WB("War Stomp",
-               "Yere indir: 3m alanda tüm düşmanları geri fırlat ve 2s sersemlet. Anlık Rage +25.",
-               SkillTier.Rare, 10f, typeof(WarStomp));
+            WB("Earthsplitter",
+               "Öne 3 dalga ground crack gönderir; hedefleri Broken yapar, stun verir ve Rage +25 üretir.",
+               SkillTier.Rare, 10f, typeof(Earthsplitter));
 
             WB("Blade Rush",
                "Yüz yönüne 20 birim/s hücum, yoldaki düşmanlara 48 hasar ver ve geri fırlat. Her isabet Rage +15.",
@@ -101,8 +101,16 @@ namespace RIMA
                SkillTier.Common, 5f, typeof(Fireball));
 
             EL("Chain Lightning",
-               "İlk düşmandan 3 hedefe atlar, her atlayışta hasar azalır. Mana 25.",
-               SkillTier.Rare, 9f, typeof(ChainLightning));
+               "İlk düşmandan 5 hedefe atlar, Shocked uygular; Chill'li hedefte zincir 7 sekmeye çıkar. Mana 25.",
+               SkillTier.Rare, 7f, typeof(ChainLightning));
+
+            EL("Glacial Spike",
+               "6m buz hattı: yavaşlatır, hasar verir, Frost State +2 ve Fire State 1 tüketir.",
+               SkillTier.Common, 5f, typeof(GlacialSpike));
+
+            EL("Living Bomb",
+               "En yakın hedefe 5s fitil koyar; patlayınca alana hasar verir ve kill ile komşulara kopyalanır.",
+               SkillTier.Common, 8f, typeof(LivingBomb));
 
             EL("Blink",
                "İmleç konumuna anında ışınlan — hasar almadan escape. Mana 20.",
@@ -112,12 +120,52 @@ namespace RIMA
                "Çevredeki tüm düşmanlara 50 arkan hasarı ver, kısa süre geri fırlat. Mana 30.",
                SkillTier.Epic, 14f, typeof(ArcaneBlast));
 
+            EL("Frozen Orb",
+               "Yavaş hareket eden frost orb; temas ettiği düşmanlara Chill uygular.",
+               SkillTier.Rare, 9f, typeof(FrozenOrb));
+
+            EL("Prism Beam",
+               "Düz hatta piercing radiant beam; Light stack harcarsa hasar ve uç patlaması artar.",
+               SkillTier.Rare, 7f, typeof(PrismBeam));
+
+            EL("Meteor",
+               "Kısa wind-up sonrası büyük AoE hasar ve knockdown; chilled/frozen hedefe bonus.",
+               SkillTier.Rare, 14f, typeof(Meteor));
+
+            EL("Frost Wall",
+               "Öne ışık-buz duvarı yerleştirir; temas edenleri yavaşlatır ve hasar verir.",
+               SkillTier.Rare, 10f, typeof(FrostWall));
+
+            EL("Solar Flare",
+               "Cursor yönünde cone radiant burst; Light State aktifse ekstra pulse gücü alır.",
+               SkillTier.Epic, 12f, typeof(SolarFlare));
+
+            EL("Blizzard",
+               "Bölge bağımsız slow + tick alanı; Meteor öncesi kontrol setup'ı.",
+               SkillTier.Epic, 30f, typeof(Blizzard));
+
             // ─────────────────────────────────────────────────────
             // SHADOWBLADE (cross-class havuz)
             // ─────────────────────────────────────────────────────
             SH("Backstab",
                "Düşmanın arkasındaysan 3x hasar ver. Yoksa normal 1x.",
                SkillTier.Common, 6f, typeof(Backstab));
+
+            SH("Phase Step",
+               "Kısa phase dash; çizgideki hedeflere hasar ve Rift Scar bırakır.",
+               SkillTier.Common, 5f, typeof(PhaseStep));
+
+            SH("Backstab Mark",
+               "Yakın hedefe mark + scar koyar; stealth'ten çıkarsa yüksek hasar verir.",
+               SkillTier.Common, 4f, typeof(BackstabMark));
+
+            SH("Death Mark",
+               "Hedefe gecikmeli patlama mark'ı koyar; 4s sonra alana hasar verir.",
+               SkillTier.Rare, 9f, typeof(DeathMark));
+
+            SH("Shadow Clone",
+               "Kısa süreli decoy phantom; çevresine pulse hasar ve Rift Scar uygular.",
+               SkillTier.Rare, 14f, typeof(ShadowClone));
 
             SH("Shadow Step",
                "Hedef düşmanın arkasına anında geç. Enerji 30.",
@@ -127,12 +175,52 @@ namespace RIMA
                "360° bıçak yağmuru: etraftaki tüm düşmanlara kanama uygular.",
                SkillTier.Rare, 10f, typeof(FanOfKnives));
 
+            SH("Veil Burst",
+               "Etraftaki hedeflere ardışık phase teleport-strike yapar ve scar bırakır.",
+               SkillTier.Rare, 11f, typeof(VeilBurst));
+
+            SH("Severance",
+               "Rift Scar taşıyan hedeflerdeki scar'ları collapse eder; her scar Sever üretir.",
+               SkillTier.Rare, 8f, typeof(Severance));
+
+            SH("Smoke Veil",
+               "Kendi çevresinde smoke state açar, stealth verir ve yakındaki düşmanları yavaşlatır.",
+               SkillTier.Rare, 13f, typeof(SmokeVeil));
+
+            SH("Chain Cull",
+               "Marked/scar taşıyan hedeflerden hedefe 3 hop zıplayan execute zinciri.",
+               SkillTier.Epic, 10f, typeof(ChainCull));
+
+            SH("Shadow Pin",
+               "Dagger projectile; isabette root/stun ve Rift Scar uygular.",
+               SkillTier.Common, 6f, typeof(ShadowPin));
+
+            SH("Night Aperture",
+               "6s aperture state; sonraki phase giriş/çıkışları mirrored scar ritmine hazırlanır.",
+               SkillTier.Epic, 18f, typeof(NightAperture));
+
             // ─────────────────────────────────────────────────────
             // RANGER (cross-class havuz)
             // ─────────────────────────────────────────────────────
             RG("Aimed Shot",
                "Nişan alarak yüksek hasar. Dolu Focus'ta 2x kritik şansı. Focus 20.",
                SkillTier.Common, 6f, typeof(AimedShot));
+
+            RG("Pinning Shot",
+               "Rift arrow projectile; isabette root, trap state ve mark uygular.",
+               SkillTier.Common, 5f, typeof(PinningShot));
+
+            RG("Marked Detonate",
+               "Marked hedefleri patlatır; mark stack sayısına göre hasar verir ve mark'ı tüketir.",
+               SkillTier.Common, 7f, typeof(MarkedDetonate));
+
+            RG("Hunter's Step",
+               "Kısa reposition dash; sonraki saldırı için crit penceresi ve Focus üretir.",
+               SkillTier.Common, 6f, typeof(HuntersStep));
+
+            RG("Bone Trap",
+               "Öne trap zone kurar; alandaki hedefleri root/trap yapar ve mark'lar.",
+               SkillTier.Common, 9f, typeof(BoneTrap));
 
             RG("Disengage",
                "Geriye doğru atla, kısa süre yavaşlatma bırak. Focus 15.",
@@ -141,6 +229,22 @@ namespace RIMA
             RG("Multi Shot",
                "Yelpaze şeklinde 5 ok ateşle. CC'li hedefe +%30 hasar. Focus 25.",
                SkillTier.Rare, 10f, typeof(MultiShot));
+
+            RG("Sweep Volley",
+               "Ön cone içinde volley hasarı verir ve hedefleri mark'lar.",
+               SkillTier.Rare, 8f, typeof(SweepVolley));
+
+            RG("Predator's Mark",
+               "4m AoE içindeki hedefleri mark'lar; Focus 75+ iken hedef sayısı artar.",
+               SkillTier.Rare, 11f, typeof(PredatorsMark));
+
+            RG("Final Strike",
+               "Marked + Trapped hedefe büyük execute hasarı verir; iki koşul yoksa boşa harcanmaz.",
+               SkillTier.Epic, 12f, typeof(FinalStrike));
+
+            RG("Wireline Trap",
+               "Ön hatta tensioned trap kurar; geçenleri snare/trap/mark yapar.",
+               SkillTier.Epic, 13f, typeof(WirelineTrap));
 
             // ─────────────────────────────────────────────────────
             // NEUTRAL PAsifleri (ClassType.None — herkese açık)
@@ -237,12 +341,28 @@ namespace RIMA
             var pool = new List<SkillData>();
             foreach (var s in db)
             {
+                if (IsRetiredOfferSkill(s.skillName)) continue;
                 if (s.classType == ClassType.None ||
                     s.classType == primary ||
                     (secondary != ClassType.None && s.classType == secondary))
                     pool.Add(s);
             }
             return pool;
+        }
+
+        private static bool IsRetiredOfferSkill(string name)
+        {
+            return name is
+                "Cleave" or
+                "Blade Rush" or
+                "Chain Lightning" or
+                "Arcane Blast" or
+                "Backstab" or
+                "Shadow Step" or
+                "Fan of Knives" or
+                "Aimed Shot" or
+                "Disengage" or
+                "Multi Shot";
         }
     }
 }

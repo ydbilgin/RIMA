@@ -34,8 +34,9 @@ namespace RIMA
             }
             if (target == null) return;
 
-            target.TakeDamage(hitDamage);
-            rage?.AddRage(20);
+            SkillRuntime.DealDamage(target, hitDamage);
+            target.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Bleed, bleedDuration);
+            rage?.AddRage(35);
             StartCoroutine(BleedTick(target, bleedDuration));
         }
 

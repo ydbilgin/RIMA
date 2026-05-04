@@ -15,6 +15,7 @@ namespace RIMA
         [SerializeField] private float impactRadius = 3f;
         [SerializeField] private int   damage       = 90;
         [SerializeField] private float knockdownTime = 1.5f;
+        private Elementalist_SkillController ctrl;
 
         protected override void Awake()
         {
@@ -22,6 +23,7 @@ namespace RIMA
             skillName = "Meteor";
             cooldown = 14f;
             resourceCost = 60;
+            ctrl = GetComponentInParent<Elementalist_SkillController>();
         }
 
         protected override void Execute() => StartCoroutine(MeteorRoutine());
@@ -30,6 +32,7 @@ namespace RIMA
         {
             // Kanal — animasyon trigger burada çekilebilir
             yield return new WaitForSeconds(channelTime);
+            ctrl?.RegisterElementCast(ElementalistElement.Fire, 1);
 
             Vector2 target = player != null
                 ? (Vector2)player.transform.position + player.FacingDirection * 4f

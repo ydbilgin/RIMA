@@ -1,0 +1,81 @@
+Let's be honest, for a lot of us
+developers, UI is the part of the
+project we dread the most. You spend
+weeks coding a great combat system or
+designing a beautiful map, and then you
+slap a gray rectangle on top of it,
+because making custom buttons, health
+bars, and inventory screens that
+actually match your game style is
+surprisingly hard. That's why we just
+added a dedicated generate UI tool to
+Pixel Lab. This isn't just about
+generating a random image of a menu.
+This tool is built to create modular
+game ready assets. Today, we're going to
+put it to the test. I'm going to try to
+build an entire UI asset pack for a cozy
+fantasy RPG from scratch in under 10
+minutes. Let's dive in. First, let's
+look at the new setup. Inside the create
+image category, you'll now see generate
+UI new. There are a few key fields here
+that make this different from standard
+generation. Description, obviously where
+we say what we want. Concept image. If
+you have a sketch or a reference vibe,
+you can drop it here to steer the style.
+Color palette. This is crucial for UI.
+If your game uses a color list, paste it
+here so your buttons match your
+background. Remove background. Always
+keep this checked for UI assets. It
+saves you hours of deleting white
+backgrounds later. Okay, let's start
+with the foundation, the main menu and
+panels. I'm making a cozy RPG, so I want
+something wood, gold, and maybe some
+magical accents. Okay, check this out.
+It didn't just give us a generic box. It
+gave us a whole vibe. We got the wood
+texture, the gold accents, and these
+cool purple crystals. It even gave us a
+mascot dog. And the best part, because
+we checked transparent background, these
+aren't baked into a white square. These
+are floating. I can drop this into
+Unity, GDAU, or any engine. And I have
+my main menu done in literally one
+click. But a menu isn't a game. We need
+a HUD. We need health bars and manag
+globes. If I just ask for a red health
+bar now, I might get a sci-fi style or a
+different shade of wood. I'm taking the
+menu we just made and using it as the
+concept image. Now, Pixel Lab knows, use
+this exact wood grain. Use this exact
+gold pallet for the prompt. I keep it
+simple. Health bar. Now, let's see what
+we got. That's pretty nice. Now, let's
+try blue man globe. The concept image
+handles the style. Look at that. It
+didn't invent a new style. It expanded
+the one we already have. I need a map.
+I'm not describing wood or gold. I just
+type round mini map frame. Pixel Lab
+sees the menu style and fills in the
+blanks. It knows round frame means
+wooden round frame with gold trim. Now
+for the boss, I just type boss health
+bar skull detail. It nailed the skull,
+but it kept the cozy pallet. It looks
+like a boss from this specific game. We
+need a place for the story. Dialogue
+box, portrait frame. Done. All matching
+the same visual language. Stardust
+Chronicles is ready to ship. We let the
+concept image do the heavy lifting so we
+could focus on the features. The
+generate UI tool is live in Pixel Lab
+right now. Go make some games. Tag us on
+Discord when you do.

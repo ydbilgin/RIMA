@@ -58,7 +58,7 @@ namespace RIMA
                 hp.TakeDamage(dmg);
             }
 
-            ctrl?.AddFrostState(2);
+            ctrl?.RegisterElementCast(ElementalistElement.Frost, 2);
             ctrl?.ConsumeFireState(1);
         }
     }

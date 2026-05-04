@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using RIMA.Environment;
 
 namespace RIMA
 {
@@ -36,6 +37,9 @@ namespace RIMA
 
             rb.gravityScale  = 0f;
             rb.freezeRotation = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.useFullKinematicContacts = true;
+            GroundBlobShadow.Ensure(transform, new Vector2(0.58f, 0.20f), 0.24f);
 
             health.OnDeath.AddListener(OnDeath);
         }

@@ -16,11 +16,22 @@ namespace RIMA
 
         public event Action OnClassSelectionRequested;
         public event Action<ClassType> OnSecondaryClassSelected;
+        public event Action<ClassType> OnPrimaryClassSet;
 
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+        }
+
+        /// <summary> CharacterSelectScreen calls this at game start to set the primary class. </summary>
+        public void SetPrimaryClass(ClassType type)
+        {
+            if (type == ClassType.None) return;
+            PrimaryClass = type;
+            ApplyPrimaryClassToPlayer(type);
+            OnPrimaryClassSet?.Invoke(type);
+            Debug.Log($"[PlayerClassManager] Primary class set: {type}");
         }
 
         /// <summary> Boss AI veya test butonu çağırır — class seçim ekranını açar. </summary>
@@ -55,18 +66,73 @@ namespace RIMA
             switch (type)
             {
                 case ClassType.Elementalist:
-                    AddIfMissing<Elementalist_SkillController>(player, secondary: true);
                     AddIfMissing<ManaSystem>(player);
+                    AddIfMissing<Elementalist_SkillController>(player, secondary: true);
                     break;
                 case ClassType.Shadowblade:
-                    AddIfMissing<Shadowblade_SkillController>(player, secondary: true);
                     AddIfMissing<EnergySystem>(player);
+                    AddIfMissing<Shadowblade_SkillController>(player, secondary: true);
                     break;
                 case ClassType.Ranger:
-                    AddIfMissing<Ranger_SkillController>(player, secondary: true);
                     AddIfMissing<FocusSystem>(player);
+                    AddIfMissing<Ranger_SkillController>(player, secondary: true);
                     break;
             }
+        }
+
+        private void ApplyPrimaryClassToPlayer(ClassType type)
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+
+            var warblade = player.GetComponent<Warblade_SkillController>();
+            var elementalist = player.GetComponent<Elementalist_SkillController>();
+            var shadowblade = player.GetComponent<Shadowblade_SkillController>();
+            var ranger = player.GetComponent<Ranger_SkillController>();
+
+            if (warblade != null) warblade.enabled = type == ClassType.Warblade;
+            if (elementalist != null) elementalist.enabled = type == ClassType.Elementalist;
+            if (shadowblade != null) shadowblade.enabled = type == ClassType.Shadowblade;
+            if (ranger != null) ranger.enabled = type == ClassType.Ranger;
+
+            switch (type)
+            {
+                case ClassType.Warblade:
+                    AddIfMissing<RageSystem>(player);
+                    AddIfMissing<Warblade_SkillController>(player).enabled = true;
+                    break;
+                case ClassType.Elementalist:
+                    AddIfMissing<ManaSystem>(player);
+                    AddIfMissing<Elementalist_SkillController>(player).enabled = true;
+                    break;
+                case ClassType.Shadowblade:
+                    AddIfMissing<EnergySystem>(player);
+                    AddIfMissing<Shadowblade_SkillController>(player).enabled = true;
+                    break;
+                case ClassType.Ranger:
+                    AddIfMissing<FocusSystem>(player);
+                    AddIfMissing<Ranger_SkillController>(player).enabled = true;
+                    break;
+            }
+
+            ApplyPrimaryClassVisual(player, type);
+        }
+
+        private static void ApplyPrimaryClassVisual(GameObject player, ClassType type)
+        {
+            var anim = player.GetComponentInChildren<Animator>();
+            if (anim == null) return;
+
+            var ctrl = Resources.Load<RuntimeAnimatorController>($"Characters/{type}/{type}");
+            if (ctrl == null)
+            {
+                Debug.LogWarning($"[PlayerClassManager] Animator controller not found for {type}");
+                return;
+            }
+
+            anim.runtimeAnimatorController = ctrl;
+            anim.Rebind();
+            anim.Update(0f);
         }
 
         private void AddCrossClassPassive(GameObject player, ClassType type)
@@ -111,10 +177,11 @@ namespace RIMA
             if (c != null) Destroy(c);
         }
 
-        private static void AddIfMissing<T>(GameObject go, bool secondary = false) where T : Component
+        private static T AddIfMissing<T>(GameObject go, bool secondary = false) where T : Component
         {
-            if (go.GetComponent<T>() != null) return;
-            go.AddComponent<T>();
+            var existing = go.GetComponent<T>();
+            if (existing != null) return existing;
+            return go.AddComponent<T>();
         }
     }
 }

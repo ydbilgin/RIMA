@@ -1,0 +1,712 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:01.780 align:start position:0%
+ 
+foreign
+
+00:00:01.780 --> 00:00:01.790 align:start position:0%
+foreign
+ 
+
+00:00:01.790 --> 00:00:12.430 align:start position:0%
+foreign
+[Music]
+
+00:00:12.430 --> 00:00:12.440 align:start position:0%
+ 
+ 
+
+00:00:12.440 --> 00:00:15.470 align:start position:0%
+ 
+hi<00:00:13.440><c> in</c><00:00:13.740><c> this</c><00:00:13.860><c> video</c><00:00:14.040><c> I</c><00:00:14.639><c> will</c><00:00:14.759><c> explain</c><00:00:14.940><c> how</c><00:00:15.360><c> I</c>
+
+00:00:15.470 --> 00:00:15.480 align:start position:0%
+hi in this video I will explain how I
+ 
+
+00:00:15.480 --> 00:00:17.450 align:start position:0%
+hi in this video I will explain how I
+create<00:00:15.660><c> animations</c><00:00:16.199><c> and</c><00:00:16.560><c> map</c><00:00:16.680><c> tiles</c><00:00:17.220><c> with</c>
+
+00:00:17.450 --> 00:00:17.460 align:start position:0%
+create animations and map tiles with
+ 
+
+00:00:17.460 --> 00:00:20.330 align:start position:0%
+create animations and map tiles with
+pixel<00:00:17.880><c> lab</c><00:00:18.000><c> to</c><00:00:18.660><c> give</c><00:00:18.779><c> some</c><00:00:18.960><c> background</c><00:00:19.380><c> pixel</c>
+
+00:00:20.330 --> 00:00:20.340 align:start position:0%
+pixel lab to give some background pixel
+ 
+
+00:00:20.340 --> 00:00:22.490 align:start position:0%
+pixel lab to give some background pixel
+lab<00:00:20.520><c> is</c><00:00:20.760><c> a</c><00:00:21.000><c> plug-in</c><00:00:21.240><c> for</c><00:00:21.539><c> acepright</c><00:00:22.199><c> that</c><00:00:22.380><c> I</c>
+
+00:00:22.490 --> 00:00:22.500 align:start position:0%
+lab is a plug-in for acepright that I
+ 
+
+00:00:22.500 --> 00:00:26.650 align:start position:0%
+lab is a plug-in for acepright that I
+and<00:00:22.740><c> my</c><00:00:22.859><c> brother</c><00:00:22.980><c> is</c><00:00:23.279><c> developing</c>
+
+00:00:26.650 --> 00:00:26.660 align:start position:0%
+ 
+ 
+
+00:00:26.660 --> 00:00:29.210 align:start position:0%
+ 
+I<00:00:27.660><c> start</c><00:00:27.779><c> off</c><00:00:27.960><c> by</c><00:00:28.199><c> using</c><00:00:28.500><c> the</c><00:00:28.680><c> start</c><00:00:28.800><c> image</c>
+
+00:00:29.210 --> 00:00:29.220 align:start position:0%
+I start off by using the start image
+ 
+
+00:00:29.220 --> 00:00:31.730 align:start position:0%
+I start off by using the start image
+tool<00:00:29.580><c> I</c><00:00:30.000><c> pick</c><00:00:30.180><c> the</c><00:00:30.420><c> size</c><00:00:30.599><c> I</c><00:00:30.900><c> want</c><00:00:31.019><c> my</c><00:00:31.260><c> dragon</c><00:00:31.439><c> to</c>
+
+00:00:31.730 --> 00:00:31.740 align:start position:0%
+tool I pick the size I want my dragon to
+ 
+
+00:00:31.740 --> 00:00:39.660 align:start position:0%
+tool I pick the size I want my dragon to
+be<00:00:31.859><c> and</c><00:00:32.099><c> use</c><00:00:32.279><c> the</c><00:00:32.460><c> description</c><00:00:32.759><c> cute</c><00:00:33.120><c> dragon</c>
+
+00:00:39.660 --> 00:00:39.670 align:start position:0%
+ 
+ 
+
+00:00:39.670 --> 00:00:47.450 align:start position:0%
+ 
+[Music]
+
+00:00:47.450 --> 00:00:47.460 align:start position:0%
+ 
+ 
+
+00:00:47.460 --> 00:00:50.450 align:start position:0%
+ 
+I<00:00:48.000><c> am</c><00:00:48.180><c> pretty</c><00:00:48.360><c> happy</c><00:00:48.600><c> with</c><00:00:48.960><c> the</c><00:00:49.140><c> result</c><00:00:49.320><c> but</c><00:00:50.219><c> my</c>
+
+00:00:50.450 --> 00:00:50.460 align:start position:0%
+I am pretty happy with the result but my
+ 
+
+00:00:50.460 --> 00:00:52.850 align:start position:0%
+I am pretty happy with the result but my
+dragon<00:00:50.640><c> has</c><00:00:51.059><c> no</c><00:00:51.300><c> wings</c><00:00:51.600><c> so</c><00:00:52.140><c> I</c><00:00:52.320><c> add</c><00:00:52.440><c> the</c><00:00:52.620><c> shape</c>
+
+00:00:52.850 --> 00:00:52.860 align:start position:0%
+dragon has no wings so I add the shape
+ 
+
+00:00:52.860 --> 00:00:55.610 align:start position:0%
+dragon has no wings so I add the shape
+of<00:00:53.039><c> wings</c><00:00:53.219><c> and</c><00:00:53.700><c> use</c><00:00:53.879><c> it</c><00:00:54.059><c> as</c><00:00:54.239><c> an</c><00:00:54.420><c> init</c><00:00:54.719><c> image</c>
+
+00:00:55.610 --> 00:00:55.620 align:start position:0%
+of wings and use it as an init image
+ 
+
+00:00:55.620 --> 00:00:57.950 align:start position:0%
+of wings and use it as an init image
+this<00:00:56.160><c> fixes</c><00:00:56.640><c> the</c><00:00:56.879><c> wings</c><00:00:57.000><c> and</c><00:00:57.360><c> adds</c><00:00:57.719><c> more</c>
+
+00:00:57.950 --> 00:00:57.960 align:start position:0%
+this fixes the wings and adds more
+ 
+
+00:00:57.960 --> 00:01:00.290 align:start position:0%
+this fixes the wings and adds more
+detail<00:00:58.379><c> to</c><00:00:58.620><c> the</c><00:00:58.800><c> dragon</c><00:00:58.980><c> I</c><00:00:59.820><c> will</c><00:00:59.940><c> do</c><00:01:00.120><c> this</c>
+
+00:01:00.290 --> 00:01:00.300 align:start position:0%
+detail to the dragon I will do this
+ 
+
+00:01:00.300 --> 00:01:02.689 align:start position:0%
+detail to the dragon I will do this
+again<00:01:00.559><c> changing</c><00:01:01.559><c> the</c><00:01:01.739><c> init</c><00:01:02.039><c> strength</c><00:01:02.399><c> a</c><00:01:02.520><c> bit</c>
+
+00:01:02.689 --> 00:01:02.699 align:start position:0%
+again changing the init strength a bit
+ 
+
+00:01:02.699 --> 00:01:05.030 align:start position:0%
+again changing the init strength a bit
+to<00:01:03.059><c> make</c><00:01:03.120><c> the</c><00:01:03.359><c> dragon</c><00:01:03.539><c> look</c><00:01:03.899><c> even</c><00:01:04.140><c> better</c><00:01:04.379><c> when</c>
+
+00:01:05.030 --> 00:01:05.040 align:start position:0%
+to make the dragon look even better when
+ 
+
+00:01:05.040 --> 00:01:07.370 align:start position:0%
+to make the dragon look even better when
+I'm<00:01:05.220><c> happy</c><00:01:05.460><c> with</c><00:01:05.760><c> the</c><00:01:05.939><c> result</c><00:01:06.119><c> I</c><00:01:06.780><c> then</c><00:01:06.960><c> use</c><00:01:07.140><c> the</c>
+
+00:01:07.370 --> 00:01:07.380 align:start position:0%
+I'm happy with the result I then use the
+ 
+
+00:01:07.380 --> 00:01:10.060 align:start position:0%
+I'm happy with the result I then use the
+rotation<00:01:07.740><c> tool</c><00:01:08.159><c> to</c><00:01:08.340><c> rotate</c><00:01:08.640><c> my</c><00:01:08.939><c> dragon</c>
+
+00:01:10.060 --> 00:01:10.070 align:start position:0%
+rotation tool to rotate my dragon
+ 
+
+00:01:10.070 --> 00:01:11.890 align:start position:0%
+rotation tool to rotate my dragon
+[Music]
+
+00:01:11.890 --> 00:01:11.900 align:start position:0%
+[Music]
+ 
+
+00:01:11.900 --> 00:01:13.760 align:start position:0%
+[Music]
+foreign
+
+00:01:13.760 --> 00:01:13.770 align:start position:0%
+foreign
+ 
+
+00:01:13.770 --> 00:01:17.050 align:start position:0%
+foreign
+[Music]
+
+00:01:17.050 --> 00:01:17.060 align:start position:0%
+[Music]
+ 
+
+00:01:17.060 --> 00:01:19.310 align:start position:0%
+[Music]
+I<00:01:18.060><c> edit</c><00:01:18.360><c> the</c><00:01:18.479><c> rotation</c><00:01:18.780><c> a</c><00:01:18.960><c> bit</c><00:01:19.080><c> before</c>
+
+00:01:19.310 --> 00:01:19.320 align:start position:0%
+I edit the rotation a bit before
+ 
+
+00:01:19.320 --> 00:01:21.760 align:start position:0%
+I edit the rotation a bit before
+starting<00:01:19.619><c> to</c><00:01:19.920><c> create</c><00:01:20.040><c> the</c><00:01:20.400><c> animation</c>
+
+00:01:21.760 --> 00:01:21.770 align:start position:0%
+starting to create the animation
+ 
+
+00:01:21.770 --> 00:01:35.210 align:start position:0%
+starting to create the animation
+[Music]
+
+00:01:35.210 --> 00:01:35.220 align:start position:0%
+ 
+ 
+
+00:01:35.220 --> 00:01:37.249 align:start position:0%
+ 
+I<00:01:35.579><c> want</c><00:01:35.700><c> to</c><00:01:35.820><c> make</c><00:01:35.880><c> a</c><00:01:36.060><c> flying</c><00:01:36.360><c> animation</c><00:01:36.780><c> for</c><00:01:37.079><c> my</c>
+
+00:01:37.249 --> 00:01:37.259 align:start position:0%
+I want to make a flying animation for my
+ 
+
+00:01:37.259 --> 00:01:39.890 align:start position:0%
+I want to make a flying animation for my
+dragon<00:01:37.500><c> so</c><00:01:37.979><c> I</c><00:01:38.280><c> start</c><00:01:38.400><c> off</c><00:01:38.640><c> by</c><00:01:38.880><c> adding</c><00:01:39.240><c> fly</c><00:01:39.540><c> as</c>
+
+00:01:39.890 --> 00:01:39.900 align:start position:0%
+dragon so I start off by adding fly as
+ 
+
+00:01:39.900 --> 00:01:43.130 align:start position:0%
+dragon so I start off by adding fly as
+action<00:01:40.340><c> when</c><00:01:41.340><c> creating</c><00:01:41.759><c> an</c><00:01:42.000><c> animation</c><00:01:42.420><c> I</c>
+
+00:01:43.130 --> 00:01:43.140 align:start position:0%
+action when creating an animation I
+ 
+
+00:01:43.140 --> 00:01:44.690 align:start position:0%
+action when creating an animation I
+recommend<00:01:43.439><c> it</c><00:01:43.680><c> first</c><00:01:43.860><c> just</c><00:01:44.220><c> trying</c><00:01:44.460><c> to</c>
+
+00:01:44.690 --> 00:01:44.700 align:start position:0%
+recommend it first just trying to
+ 
+
+00:01:44.700 --> 00:01:46.969 align:start position:0%
+recommend it first just trying to
+generate<00:01:45.119><c> and</c><00:01:45.360><c> see</c><00:01:45.540><c> what</c><00:01:45.840><c> happens</c><00:01:46.020><c> if</c><00:01:46.860><c> you</c>
+
+00:01:46.969 --> 00:01:46.979 align:start position:0%
+generate and see what happens if you
+ 
+
+00:01:46.979 --> 00:01:48.830 align:start position:0%
+generate and see what happens if you
+notice<00:01:47.280><c> the</c><00:01:47.460><c> model</c><00:01:47.640><c> is</c><00:01:47.880><c> struggling</c><00:01:48.299><c> I</c>
+
+00:01:48.830 --> 00:01:48.840 align:start position:0%
+notice the model is struggling I
+ 
+
+00:01:48.840 --> 00:01:51.410 align:start position:0%
+notice the model is struggling I
+recommend<00:01:49.140><c> using</c><00:01:49.619><c> init</c><00:01:49.979><c> images</c><00:01:50.240><c> what</c><00:01:51.240><c> I</c>
+
+00:01:51.410 --> 00:01:51.420 align:start position:0%
+recommend using init images what I
+ 
+
+00:01:51.420 --> 00:01:53.210 align:start position:0%
+recommend using init images what I
+usually<00:01:51.659><c> do</c><00:01:51.899><c> when</c><00:01:52.200><c> creating</c><00:01:52.560><c> the</c><00:01:52.799><c> init</c><00:01:53.040><c> images</c>
+
+00:01:53.210 --> 00:01:53.220 align:start position:0%
+usually do when creating the init images
+ 
+
+00:01:53.220 --> 00:01:55.910 align:start position:0%
+usually do when creating the init images
+is<00:01:53.939><c> take</c><00:01:54.180><c> the</c><00:01:54.479><c> generations</c><00:01:54.899><c> that</c><00:01:55.320><c> I</c><00:01:55.560><c> kinda</c>
+
+00:01:55.910 --> 00:01:55.920 align:start position:0%
+is take the generations that I kinda
+ 
+
+00:01:55.920 --> 00:01:58.670 align:start position:0%
+is take the generations that I kinda
+like<00:01:56.100><c> and</c><00:01:57.000><c> edit</c><00:01:57.360><c> them</c><00:01:57.540><c> into</c><00:01:57.960><c> the</c><00:01:58.259><c> shape</c><00:01:58.439><c> of</c>
+
+00:01:58.670 --> 00:01:58.680 align:start position:0%
+like and edit them into the shape of
+ 
+
+00:01:58.680 --> 00:02:00.710 align:start position:0%
+like and edit them into the shape of
+what<00:01:58.860><c> I</c><00:01:58.979><c> want</c><00:01:59.159><c> them</c><00:01:59.340><c> to</c><00:01:59.520><c> look</c><00:01:59.700><c> like</c><00:01:59.880><c> then</c>
+
+00:02:00.710 --> 00:02:00.720 align:start position:0%
+what I want them to look like then
+ 
+
+00:02:00.720 --> 00:02:03.170 align:start position:0%
+what I want them to look like then
+generate<00:02:01.259><c> again</c><00:02:01.560><c> using</c><00:02:02.040><c> the</c><00:02:02.220><c> init</c><00:02:02.460><c> images</c><00:02:02.700><c> I</c>
+
+00:02:03.170 --> 00:02:03.180 align:start position:0%
+generate again using the init images I
+ 
+
+00:02:03.180 --> 00:02:05.510 align:start position:0%
+generate again using the init images I
+made<00:02:03.360><c> depending</c><00:02:04.320><c> on</c><00:02:04.500><c> how</c><00:02:04.799><c> much</c><00:02:04.920><c> you</c><00:02:05.159><c> want</c><00:02:05.280><c> the</c>
+
+00:02:05.510 --> 00:02:05.520 align:start position:0%
+made depending on how much you want the
+ 
+
+00:02:05.520 --> 00:02:07.330 align:start position:0%
+made depending on how much you want the
+generation<00:02:05.880><c> to</c><00:02:06.119><c> look</c><00:02:06.299><c> like</c><00:02:06.479><c> your</c><00:02:06.659><c> init</c><00:02:07.020><c> images</c>
+
+00:02:07.330 --> 00:02:07.340 align:start position:0%
+generation to look like your init images
+ 
+
+00:02:07.340 --> 00:02:11.630 align:start position:0%
+generation to look like your init images
+change<00:02:08.340><c> the</c><00:02:08.640><c> in</c><00:02:08.819><c> its</c><00:02:09.179><c> strength</c><00:02:09.479><c> accordingly</c>
+
+00:02:11.630 --> 00:02:11.640 align:start position:0%
+change the in its strength accordingly
+ 
+
+00:02:11.640 --> 00:02:13.430 align:start position:0%
+change the in its strength accordingly
+a<00:02:12.180><c> good</c><00:02:12.300><c> thing</c><00:02:12.480><c> to</c><00:02:12.660><c> note</c><00:02:12.720><c> is</c><00:02:12.959><c> that</c><00:02:13.200><c> the</c>
+
+00:02:13.430 --> 00:02:13.440 align:start position:0%
+a good thing to note is that the
+ 
+
+00:02:13.440 --> 00:02:15.589 align:start position:0%
+a good thing to note is that the
+movement<00:02:13.739><c> model</c><00:02:14.040><c> can</c><00:02:14.459><c> be</c><00:02:14.640><c> used</c><00:02:14.819><c> to</c><00:02:15.180><c> extend</c>
+
+00:02:15.589 --> 00:02:15.599 align:start position:0%
+movement model can be used to extend
+ 
+
+00:02:15.599 --> 00:02:17.930 align:start position:0%
+movement model can be used to extend
+animations<00:02:16.260><c> as</c><00:02:16.980><c> it</c><00:02:17.160><c> will</c><00:02:17.280><c> attempt</c><00:02:17.640><c> to</c>
+
+00:02:17.930 --> 00:02:17.940 align:start position:0%
+animations as it will attempt to
+ 
+
+00:02:17.940 --> 00:02:19.850 align:start position:0%
+animations as it will attempt to
+generate<00:02:18.360><c> the</c><00:02:18.599><c> next</c><00:02:18.780><c> frames</c><00:02:19.319><c> in</c><00:02:19.680><c> the</c>
+
+00:02:19.850 --> 00:02:19.860 align:start position:0%
+generate the next frames in the
+ 
+
+00:02:19.860 --> 00:02:20.869 align:start position:0%
+generate the next frames in the
+animation
+
+00:02:20.869 --> 00:02:20.879 align:start position:0%
+animation
+ 
+
+00:02:20.879 --> 00:02:23.330 align:start position:0%
+animation
+you<00:02:21.360><c> can</c><00:02:21.420><c> use</c><00:02:21.660><c> reference</c><00:02:22.200><c> images</c><00:02:22.500><c> to</c><00:02:22.980><c> give</c><00:02:23.099><c> the</c>
+
+00:02:23.330 --> 00:02:23.340 align:start position:0%
+you can use reference images to give the
+ 
+
+00:02:23.340 --> 00:02:25.850 align:start position:0%
+you can use reference images to give the
+model<00:02:23.520><c> two</c><00:02:24.000><c> previous</c><00:02:24.360><c> frames</c><00:02:25.080><c> which</c><00:02:25.620><c> will</c>
+
+00:02:25.850 --> 00:02:25.860 align:start position:0%
+model two previous frames which will
+ 
+
+00:02:25.860 --> 00:02:29.510 align:start position:0%
+model two previous frames which will
+usually<00:02:26.220><c> help</c><00:02:26.700><c> improve</c><00:02:27.360><c> the</c><00:02:27.599><c> results</c>
+
+00:02:29.510 --> 00:02:29.520 align:start position:0%
+usually help improve the results
+ 
+
+00:02:29.520 --> 00:02:37.760 align:start position:0%
+usually help improve the results
+foreign
+
+00:02:37.760 --> 00:02:37.770 align:start position:0%
+ 
+ 
+
+00:02:37.770 --> 00:02:55.770 align:start position:0%
+ 
+[Music]
+
+00:02:55.770 --> 00:02:55.780 align:start position:0%
+[Music]
+ 
+
+00:02:55.780 --> 00:02:56.450 align:start position:0%
+[Music]
+[Laughter]
+
+00:02:56.450 --> 00:02:56.460 align:start position:0%
+[Laughter]
+ 
+
+00:02:56.460 --> 00:03:18.070 align:start position:0%
+[Laughter]
+[Music]
+
+00:03:18.070 --> 00:03:18.080 align:start position:0%
+ 
+ 
+
+00:03:18.080 --> 00:03:20.570 align:start position:0%
+ 
+when<00:03:19.080><c> I</c><00:03:19.200><c> am</c><00:03:19.319><c> almost</c><00:03:19.500><c> done</c><00:03:19.800><c> with</c><00:03:19.980><c> the</c><00:03:20.159><c> animation</c>
+
+00:03:20.570 --> 00:03:20.580 align:start position:0%
+when I am almost done with the animation
+ 
+
+00:03:20.580 --> 00:03:23.149 align:start position:0%
+when I am almost done with the animation
+I<00:03:21.120><c> will</c><00:03:21.300><c> use</c><00:03:21.480><c> reshape</c><00:03:22.080><c> to</c><00:03:22.379><c> do</c><00:03:22.500><c> some</c><00:03:22.739><c> finishing</c>
+
+00:03:23.149 --> 00:03:23.159 align:start position:0%
+I will use reshape to do some finishing
+ 
+
+00:03:23.159 --> 00:03:25.250 align:start position:0%
+I will use reshape to do some finishing
+touches<00:03:23.580><c> this</c><00:03:24.300><c> can</c><00:03:24.420><c> be</c><00:03:24.540><c> done</c><00:03:24.720><c> using</c><00:03:25.080><c> the</c>
+
+00:03:25.250 --> 00:03:25.260 align:start position:0%
+touches this can be done using the
+ 
+
+00:03:25.260 --> 00:03:27.170 align:start position:0%
+touches this can be done using the
+movement<00:03:25.560><c> model</c><00:03:25.800><c> as</c><00:03:26.159><c> well</c><00:03:26.340><c> but</c><00:03:26.580><c> I</c><00:03:26.760><c> find</c><00:03:26.940><c> the</c>
+
+00:03:27.170 --> 00:03:27.180 align:start position:0%
+movement model as well but I find the
+ 
+
+00:03:27.180 --> 00:03:29.449 align:start position:0%
+movement model as well but I find the
+reshape<00:03:27.599><c> tool</c><00:03:27.959><c> to</c><00:03:28.080><c> be</c><00:03:28.260><c> very</c><00:03:28.500><c> good</c><00:03:28.680><c> at</c><00:03:29.040><c> smaller</c>
+
+00:03:29.449 --> 00:03:29.459 align:start position:0%
+reshape tool to be very good at smaller
+ 
+
+00:03:29.459 --> 00:03:32.930 align:start position:0%
+reshape tool to be very good at smaller
+changes<00:03:29.940><c> like</c><00:03:30.420><c> moving</c><00:03:30.840><c> the</c><00:03:31.080><c> tail</c><00:03:31.319><c> arms</c><00:03:32.220><c> Wings</c>
+
+00:03:32.930 --> 00:03:32.940 align:start position:0%
+changes like moving the tail arms Wings
+ 
+
+00:03:32.940 --> 00:03:35.449 align:start position:0%
+changes like moving the tail arms Wings
+Etc<00:03:33.120><c> when</c><00:03:33.900><c> using</c><00:03:34.200><c> the</c><00:03:34.379><c> reshape</c><00:03:34.739><c> tool</c><00:03:35.159><c> you</c><00:03:35.340><c> want</c>
+
+00:03:35.449 --> 00:03:35.459 align:start position:0%
+Etc when using the reshape tool you want
+ 
+
+00:03:35.459 --> 00:03:37.250 align:start position:0%
+Etc when using the reshape tool you want
+to<00:03:35.580><c> draw</c><00:03:35.760><c> the</c><00:03:36.000><c> new</c><00:03:36.120><c> shape</c><00:03:36.480><c> in</c><00:03:36.659><c> Black</c><00:03:36.900><c> in</c><00:03:37.140><c> the</c>
+
+00:03:37.250 --> 00:03:37.260 align:start position:0%
+to draw the new shape in Black in the
+ 
+
+00:03:37.260 --> 00:03:39.009 align:start position:0%
+to draw the new shape in Black in the
+reshape<00:03:37.680><c> layer</c>
+
+00:03:39.009 --> 00:03:39.019 align:start position:0%
+reshape layer
+ 
+
+00:03:39.019 --> 00:03:41.360 align:start position:0%
+reshape layer
+I<00:03:40.019><c> won't</c><00:03:40.379><c> break</c>
+
+00:03:41.360 --> 00:03:41.370 align:start position:0%
+I won't break
+ 
+
+00:03:41.370 --> 00:04:07.190 align:start position:0%
+I won't break
+[Music]
+
+00:04:07.190 --> 00:04:07.200 align:start position:0%
+[Music]
+ 
+
+00:04:07.200 --> 00:04:09.729 align:start position:0%
+[Music]
+foreign
+
+00:04:09.729 --> 00:04:09.739 align:start position:0%
+foreign
+ 
+
+00:04:09.739 --> 00:04:12.649 align:start position:0%
+foreign
+attack<00:04:10.739><c> animations</c><00:04:11.280><c> I</c><00:04:11.939><c> recommend</c><00:04:12.239><c> moving</c>
+
+00:04:12.649 --> 00:04:12.659 align:start position:0%
+attack animations I recommend moving
+ 
+
+00:04:12.659 --> 00:04:14.809 align:start position:0%
+attack animations I recommend moving
+your<00:04:12.840><c> character</c><00:04:13.080><c> a</c><00:04:13.379><c> bit</c><00:04:13.500><c> to</c><00:04:13.680><c> the</c><00:04:13.860><c> side</c><00:04:14.040><c> so</c><00:04:14.640><c> the</c>
+
+00:04:14.809 --> 00:04:14.819 align:start position:0%
+your character a bit to the side so the
+ 
+
+00:04:14.819 --> 00:04:16.490 align:start position:0%
+your character a bit to the side so the
+model<00:04:14.939><c> has</c><00:04:15.239><c> more</c><00:04:15.480><c> room</c><00:04:15.720><c> to</c><00:04:15.959><c> generate</c><00:04:16.260><c> the</c>
+
+00:04:16.490 --> 00:04:16.500 align:start position:0%
+model has more room to generate the
+ 
+
+00:04:16.500 --> 00:04:19.189 align:start position:0%
+model has more room to generate the
+effects<00:04:16.919><c> in</c><00:04:17.760><c> this</c><00:04:17.880><c> instance</c><00:04:18.180><c> I</c><00:04:18.720><c> tried</c><00:04:18.959><c> just</c>
+
+00:04:19.189 --> 00:04:19.199 align:start position:0%
+effects in this instance I tried just
+ 
+
+00:04:19.199 --> 00:04:21.229 align:start position:0%
+effects in this instance I tried just
+generating<00:04:19.680><c> attack</c><00:04:19.979><c> animations</c><00:04:20.519><c> but</c><00:04:21.000><c> wasn't</c>
+
+00:04:21.229 --> 00:04:21.239 align:start position:0%
+generating attack animations but wasn't
+ 
+
+00:04:21.239 --> 00:04:23.390 align:start position:0%
+generating attack animations but wasn't
+super<00:04:21.600><c> happy</c><00:04:21.840><c> with</c><00:04:22.139><c> the</c><00:04:22.320><c> results</c><00:04:22.500><c> so</c><00:04:23.220><c> I</c>
+
+00:04:23.390 --> 00:04:23.400 align:start position:0%
+super happy with the results so I
+ 
+
+00:04:23.400 --> 00:04:25.550 align:start position:0%
+super happy with the results so I
+decided<00:04:23.699><c> to</c><00:04:23.880><c> use</c><00:04:24.060><c> init</c><00:04:24.419><c> images</c><00:04:24.660><c> to</c><00:04:25.139><c> help</c><00:04:25.259><c> guide</c>
+
+00:04:25.550 --> 00:04:25.560 align:start position:0%
+decided to use init images to help guide
+ 
+
+00:04:25.560 --> 00:04:26.920 align:start position:0%
+decided to use init images to help guide
+the<00:04:25.860><c> model</c>
+
+00:04:26.920 --> 00:04:26.930 align:start position:0%
+the model
+ 
+
+00:04:26.930 --> 00:04:33.670 align:start position:0%
+the model
+[Music]
+
+00:04:33.670 --> 00:04:33.680 align:start position:0%
+ 
+ 
+
+00:04:33.680 --> 00:04:36.469 align:start position:0%
+ 
+now<00:04:34.680><c> I</c><00:04:34.979><c> will</c><00:04:35.100><c> be</c><00:04:35.220><c> creating</c><00:04:35.520><c> a</c><00:04:35.820><c> map</c><00:04:36.000><c> for</c><00:04:36.300><c> my</c>
+
+00:04:36.469 --> 00:04:36.479 align:start position:0%
+now I will be creating a map for my
+ 
+
+00:04:36.479 --> 00:04:39.110 align:start position:0%
+now I will be creating a map for my
+dragon<00:04:36.740><c> here</c><00:04:37.740><c> I</c><00:04:37.919><c> have</c><00:04:38.100><c> an</c><00:04:38.340><c> idea</c><00:04:38.580><c> of</c><00:04:38.820><c> what</c><00:04:39.000><c> I</c>
+
+00:04:39.110 --> 00:04:39.120 align:start position:0%
+dragon here I have an idea of what I
+ 
+
+00:04:39.120 --> 00:04:41.510 align:start position:0%
+dragon here I have an idea of what I
+want<00:04:39.300><c> my</c><00:04:39.479><c> map</c><00:04:39.660><c> to</c><00:04:39.900><c> look</c><00:04:40.020><c> like</c><00:04:40.199><c> so</c><00:04:40.800><c> I</c><00:04:40.979><c> draw</c><00:04:41.220><c> an</c>
+
+00:04:41.510 --> 00:04:41.520 align:start position:0%
+want my map to look like so I draw an
+ 
+
+00:04:41.520 --> 00:04:43.430 align:start position:0%
+want my map to look like so I draw an
+init<00:04:41.820><c> image</c><00:04:42.180><c> and</c><00:04:42.419><c> use</c><00:04:42.600><c> it</c><00:04:42.720><c> to</c><00:04:42.900><c> give</c><00:04:43.020><c> the</c><00:04:43.320><c> model</c>
+
+00:04:43.430 --> 00:04:43.440 align:start position:0%
+init image and use it to give the model
+ 
+
+00:04:43.440 --> 00:04:46.310 align:start position:0%
+init image and use it to give the model
+an<00:04:43.860><c> idea</c><00:04:44.100><c> of</c><00:04:44.340><c> what</c><00:04:44.520><c> I</c><00:04:44.639><c> want</c><00:04:44.820><c> I</c><00:04:45.720><c> make</c><00:04:45.900><c> a</c><00:04:46.020><c> mistake</c>
+
+00:04:46.310 --> 00:04:46.320 align:start position:0%
+an idea of what I want I make a mistake
+ 
+
+00:04:46.320 --> 00:04:47.870 align:start position:0%
+an idea of what I want I make a mistake
+here<00:04:46.440><c> and</c><00:04:46.680><c> forget</c><00:04:46.800><c> to</c><00:04:47.040><c> impaint</c><00:04:47.520><c> the</c><00:04:47.699><c> water</c>
+
+00:04:47.870 --> 00:04:47.880 align:start position:0%
+here and forget to impaint the water
+ 
+
+00:04:47.880 --> 00:04:52.850 align:start position:0%
+here and forget to impaint the water
+ending<00:04:48.540><c> up</c><00:04:48.660><c> not</c><00:04:48.900><c> changing</c><00:04:49.259><c> the</c><00:04:49.500><c> water</c>
+
+00:04:52.850 --> 00:04:52.860 align:start position:0%
+ 
+ 
+
+00:04:52.860 --> 00:04:55.550 align:start position:0%
+ 
+to<00:04:53.759><c> get</c><00:04:53.880><c> consistent</c><00:04:54.360><c> Style</c><00:04:54.720><c> on</c><00:04:55.020><c> the</c><00:04:55.139><c> map</c><00:04:55.259><c> you</c>
+
+00:04:55.550 --> 00:04:55.560 align:start position:0%
+to get consistent Style on the map you
+ 
+
+00:04:55.560 --> 00:04:57.530 align:start position:0%
+to get consistent Style on the map you
+want<00:04:55.680><c> to</c><00:04:55.860><c> select</c><00:04:56.100><c> areas</c><00:04:56.580><c> so</c><00:04:57.060><c> that</c><00:04:57.180><c> the</c><00:04:57.419><c> model</c>
+
+00:04:57.530 --> 00:04:57.540 align:start position:0%
+want to select areas so that the model
+ 
+
+00:04:57.540 --> 00:04:59.870 align:start position:0%
+want to select areas so that the model
+always<00:04:57.900><c> gets</c><00:04:58.380><c> to</c><00:04:58.440><c> see</c><00:04:58.680><c> some</c><00:04:58.979><c> of</c><00:04:59.100><c> the</c><00:04:59.220><c> map</c><00:04:59.400><c> tiles</c>
+
+00:04:59.870 --> 00:04:59.880 align:start position:0%
+always gets to see some of the map tiles
+ 
+
+00:04:59.880 --> 00:05:02.030 align:start position:0%
+always gets to see some of the map tiles
+it<00:05:00.600><c> is</c><00:05:00.720><c> important</c><00:05:01.020><c> to</c><00:05:01.259><c> note</c><00:05:01.380><c> that</c><00:05:01.740><c> the</c><00:05:01.919><c> in</c>
+
+00:05:02.030 --> 00:05:02.040 align:start position:0%
+it is important to note that the in
+ 
+
+00:05:02.040 --> 00:05:04.249 align:start position:0%
+it is important to note that the in
+painting<00:05:02.460><c> decides</c><00:05:02.940><c> what</c><00:05:03.240><c> the</c><00:05:03.360><c> model</c><00:05:03.479><c> sees</c><00:05:03.960><c> and</c>
+
+00:05:04.249 --> 00:05:04.259 align:start position:0%
+painting decides what the model sees and
+ 
+
+00:05:04.259 --> 00:05:06.170 align:start position:0%
+painting decides what the model sees and
+where<00:05:04.440><c> it</c><00:05:04.620><c> can</c><00:05:04.740><c> paint</c>
+
+00:05:06.170 --> 00:05:06.180 align:start position:0%
+where it can paint
+ 
+
+00:05:06.180 --> 00:05:54.650 align:start position:0%
+where it can paint
+[Music]
+
+00:05:54.650 --> 00:05:54.660 align:start position:0%
+ 
+ 
+
+00:05:54.660 --> 00:05:57.660 align:start position:0%
+ 
+foreign
+

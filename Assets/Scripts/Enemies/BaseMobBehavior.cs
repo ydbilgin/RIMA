@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using RIMA.Environment;
 
 namespace RIMA
 {
@@ -68,6 +69,9 @@ namespace RIMA
 
             Rb.gravityScale  = 0f;
             Rb.freezeRotation = true;
+            Rb.bodyType = RigidbodyType2D.Kinematic;
+            Rb.useFullKinematicContacts = true;
+            GroundBlobShadow.Ensure(transform, new Vector2(0.9f, 0.30f), 0.28f);
 
             // Spawn anında renk sıfırla — önceki ölüm fade'i prefab'a yazılmışsa temizle
             if (SR != null) SR.color = Color.white;

@@ -13,6 +13,7 @@ namespace RIMA
         [SerializeField] private GameObject orbPrefab;
         [SerializeField] private float orbSpeed    = 2.5f;
         [SerializeField] private float orbLifetime = 5f;
+        private Elementalist_SkillController ctrl;
 
         protected override void Awake()
         {
@@ -20,15 +21,41 @@ namespace RIMA
             skillName = "Frozen Orb";
             cooldown = 9f;
             resourceCost = 35;
+            ctrl = GetComponentInParent<Elementalist_SkillController>();
         }
 
         protected override void Execute()
         {
-            if (orbPrefab == null) return;
             Vector2 dir = player != null ? player.FacingDirection : Vector2.right;
-            var go = Instantiate(orbPrefab, transform.position, Quaternion.identity);
+            var go = orbPrefab != null
+                ? Instantiate(orbPrefab, transform.position, Quaternion.identity)
+                : CreateRuntimeOrb();
             var orb = go.GetComponent<FrozenOrbObject>();
             if (orb != null) orb.Init(dir * orbSpeed, orbLifetime);
+            ctrl?.RegisterElementCast(ElementalistElement.Frost, 1);
+        }
+
+        private GameObject CreateRuntimeOrb()
+        {
+            var go = new GameObject("FrozenOrb_Runtime");
+            go.transform.position = transform.position;
+            go.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+
+            var rb = go.AddComponent<Rigidbody2D>();
+            rb.gravityScale = 0f;
+
+            var col = go.AddComponent<CircleCollider2D>();
+            col.radius = 0.45f;
+            col.isTrigger = true;
+
+            var renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sprite = ElementalistRuntimeVisuals.GetCircleSprite();
+            renderer.color = new Color(0.55f, 0.88f, 1f, 0.82f);
+            renderer.sortingLayerName = "VFX";
+            renderer.sortingOrder = 20;
+
+            go.AddComponent<FrozenOrbObject>();
+            return go;
         }
     }
 

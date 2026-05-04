@@ -92,9 +92,9 @@ Dependency: Bone Trap and Wireline Trap world-object sprites share bone/sinew vi
 
 | Sign-off | Who | Status |
 |---|---|---|
-| Identity check (Section E) | design lead | [ ] |
-| Frame budget within class quota | design lead | [ ] |
-| State indicator ownership clean | design lead | [ ] |
+| Identity check (Section E) | design lead | [x] |
+| Frame budget within class quota | design lead | [x] |
+| State indicator ownership clean | design lead | [x] |
 | VFX layer count <= 4 | rima-asset | [ ] |
 | Reference sprite exists | rima-asset | [ ] |
 | Skill dependencies paired in batch (if any) | design lead | [ ] (Bone Trap world-object sprite must be in same batch; Marked Detonate chain VFX must be confirmed before wire chain state is signed off) |

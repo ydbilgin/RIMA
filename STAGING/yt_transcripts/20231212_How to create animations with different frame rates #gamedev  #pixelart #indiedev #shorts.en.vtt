@@ -1,0 +1,144 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.560 --> 00:00:03.070 align:start position:0%
+ 
+hi<00:00:01.079><c> in</c><00:00:01.319><c> this</c><00:00:01.520><c> video</c><00:00:01.880><c> I</c><00:00:01.959><c> will</c><00:00:02.120><c> show</c><00:00:02.320><c> you</c><00:00:02.520><c> one</c><00:00:02.800><c> way</c>
+
+00:00:03.070 --> 00:00:03.080 align:start position:0%
+hi in this video I will show you one way
+ 
+
+00:00:03.080 --> 00:00:04.950 align:start position:0%
+hi in this video I will show you one way
+you<00:00:03.240><c> can</c><00:00:03.480><c> generate</c><00:00:04.040><c> animations</c><00:00:04.759><c> with</c>
+
+00:00:04.950 --> 00:00:04.960 align:start position:0%
+you can generate animations with
+ 
+
+00:00:04.960 --> 00:00:07.070 align:start position:0%
+you can generate animations with
+different<00:00:05.279><c> frame</c><00:00:05.640><c> rates</c><00:00:06.000><c> in</c>
+
+00:00:07.070 --> 00:00:07.080 align:start position:0%
+different frame rates in
+ 
+
+00:00:07.080 --> 00:00:10.150 align:start position:0%
+different frame rates in
+pixelab<00:00:08.080><c> what</c><00:00:08.200><c> I</c><00:00:08.360><c> like</c><00:00:08.519><c> to</c><00:00:08.679><c> do</c><00:00:09.080><c> is</c><00:00:09.400><c> start</c><00:00:09.719><c> off</c>
+
+00:00:10.150 --> 00:00:10.160 align:start position:0%
+pixelab what I like to do is start off
+ 
+
+00:00:10.160 --> 00:00:13.470 align:start position:0%
+pixelab what I like to do is start off
+by<00:00:10.559><c> first</c><00:00:10.960><c> generating</c><00:00:11.639><c> with</c><00:00:11.880><c> four</c><00:00:12.240><c> frames</c><00:00:13.240><c> to</c>
+
+00:00:13.470 --> 00:00:13.480 align:start position:0%
+by first generating with four frames to
+ 
+
+00:00:13.480 --> 00:00:17.109 align:start position:0%
+by first generating with four frames to
+get<00:00:13.719><c> the</c><00:00:14.080><c> extremes</c><00:00:15.000><c> of</c><00:00:15.280><c> the</c><00:00:15.920><c> animation</c><00:00:16.920><c> and</c>
+
+00:00:17.109 --> 00:00:17.119 align:start position:0%
+get the extremes of the animation and
+ 
+
+00:00:17.119 --> 00:00:20.550 align:start position:0%
+get the extremes of the animation and
+then<00:00:17.520><c> I</c><00:00:17.640><c> use</c><00:00:17.920><c> the</c><00:00:18.080><c> tool</c><00:00:18.439><c> to</c><00:00:19.560><c> interpolate</c>
+
+00:00:20.550 --> 00:00:20.560 align:start position:0%
+then I use the tool to interpolate
+ 
+
+00:00:20.560 --> 00:00:23.269 align:start position:0%
+then I use the tool to interpolate
+between<00:00:20.960><c> these</c><00:00:21.160><c> frames</c><00:00:21.600><c> to</c><00:00:21.920><c> create</c><00:00:22.920><c> uh</c><00:00:23.039><c> more</c>
+
+00:00:23.269 --> 00:00:23.279 align:start position:0%
+between these frames to create uh more
+ 
+
+00:00:23.279 --> 00:00:26.589 align:start position:0%
+between these frames to create uh more
+frames<00:00:23.599><c> in</c><00:00:23.760><c> your</c><00:00:24.080><c> animation</c><00:00:25.080><c> I</c><00:00:25.199><c> do</c><00:00:25.519><c> this</c><00:00:25.840><c> by</c>
+
+00:00:26.589 --> 00:00:26.599 align:start position:0%
+frames in your animation I do this by
+ 
+
+00:00:26.599 --> 00:00:29.310 align:start position:0%
+frames in your animation I do this by
+changing<00:00:27.599><c> the</c><00:00:27.800><c> frame</c><00:00:28.160><c> rate</c><00:00:28.560><c> and</c><00:00:28.880><c> starting</c>
+
+00:00:29.310 --> 00:00:29.320 align:start position:0%
+changing the frame rate and starting
+ 
+
+00:00:29.320 --> 00:00:32.670 align:start position:0%
+changing the frame rate and starting
+frame<00:00:30.119><c> and</c><00:00:30.279><c> then</c><00:00:30.480><c> having</c><00:00:30.720><c> an</c><00:00:31.000><c> empty</c><00:00:32.000><c> image</c><00:00:32.480><c> in</c>
+
+00:00:32.670 --> 00:00:32.680 align:start position:0%
+frame and then having an empty image in
+ 
+
+00:00:32.680 --> 00:00:35.030 align:start position:0%
+frame and then having an empty image in
+between<00:00:33.079><c> the</c><00:00:33.239><c> frames</c><00:00:34.160><c> which</c><00:00:34.360><c> the</c><00:00:34.520><c> model</c><00:00:34.840><c> will</c>
+
+00:00:35.030 --> 00:00:35.040 align:start position:0%
+between the frames which the model will
+ 
+
+00:00:35.040 --> 00:00:37.470 align:start position:0%
+between the frames which the model will
+then<00:00:35.239><c> fill</c>
+
+00:00:37.470 --> 00:00:37.480 align:start position:0%
+then fill
+ 
+
+00:00:37.480 --> 00:00:40.190 align:start position:0%
+then fill
+in<00:00:38.480><c> and</c><00:00:38.680><c> that's</c><00:00:38.920><c> how</c><00:00:39.160><c> simple</c><00:00:39.520><c> it</c><00:00:39.640><c> is</c><00:00:39.960><c> to</c>
+
+00:00:40.190 --> 00:00:40.200 align:start position:0%
+in and that's how simple it is to
+ 
+
+00:00:40.200 --> 00:00:42.029 align:start position:0%
+in and that's how simple it is to
+animate<00:00:40.680><c> with</c><00:00:40.840><c> pixel</c><00:00:41.200><c> lab</c><00:00:41.440><c> and</c><00:00:41.600><c> increasing</c>
+
+00:00:42.029 --> 00:00:42.039 align:start position:0%
+animate with pixel lab and increasing
+ 
+
+00:00:42.039 --> 00:00:44.389 align:start position:0%
+animate with pixel lab and increasing
+the<00:00:42.200><c> frame</c><00:00:42.480><c> rate</c><00:00:43.399><c> I</c><00:00:43.520><c> hope</c><00:00:43.719><c> you</c><00:00:43.879><c> enjoyed</c><00:00:44.239><c> the</c>
+
+00:00:44.389 --> 00:00:44.399 align:start position:0%
+the frame rate I hope you enjoyed the
+ 
+
+00:00:44.399 --> 00:00:46.990 align:start position:0%
+the frame rate I hope you enjoyed the
+video<00:00:44.840><c> and</c><00:00:45.000><c> I'll</c><00:00:45.200><c> see</c><00:00:45.360><c> you</c><00:00:45.520><c> next</c>
+
+00:00:46.990 --> 00:00:47.000 align:start position:0%
+video and I'll see you next
+ 
+
+00:00:47.000 --> 00:00:50.000 align:start position:0%
+video and I'll see you next
+time
+

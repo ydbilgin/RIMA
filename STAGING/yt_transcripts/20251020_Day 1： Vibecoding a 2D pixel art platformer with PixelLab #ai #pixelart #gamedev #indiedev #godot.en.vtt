@@ -1,0 +1,224 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.160 --> 00:00:03.510 align:start position:0%
+ 
+I'm<00:00:00.640><c> making</c><00:00:01.040><c> a</c><00:00:01.360><c> Street</c><00:00:01.760><c> Fighter</c><00:00:02.240><c> style</c><00:00:02.639><c> game</c>
+
+00:00:03.510 --> 00:00:03.520 align:start position:0%
+I'm making a Street Fighter style game
+ 
+
+00:00:03.520 --> 00:00:06.230 align:start position:0%
+I'm making a Street Fighter style game
+completely<00:00:04.160><c> with</c><00:00:04.400><c> AI</c><00:00:04.880><c> tools.</c><00:00:05.680><c> It's</c><00:00:05.920><c> called</c>
+
+00:00:06.230 --> 00:00:06.240 align:start position:0%
+completely with AI tools. It's called
+ 
+
+00:00:06.240 --> 00:00:08.710 align:start position:0%
+completely with AI tools. It's called
+Pixel<00:00:06.720><c> Brawl,</c><00:00:07.520><c> a</c><00:00:07.759><c> single</c><00:00:08.000><c> player</c><00:00:08.320><c> fighter</c>
+
+00:00:08.710 --> 00:00:08.720 align:start position:0%
+Pixel Brawl, a single player fighter
+ 
+
+00:00:08.720 --> 00:00:10.790 align:start position:0%
+Pixel Brawl, a single player fighter
+where<00:00:08.960><c> I</c><00:00:09.120><c> build</c><00:00:09.440><c> everything</c><00:00:09.840><c> with</c><00:00:10.080><c> Pixel</c><00:00:10.559><c> Lab</c>
+
+00:00:10.790 --> 00:00:10.800 align:start position:0%
+where I build everything with Pixel Lab
+ 
+
+00:00:10.800 --> 00:00:13.749 align:start position:0%
+where I build everything with Pixel Lab
+for<00:00:10.960><c> the</c><00:00:11.200><c> art,</c><00:00:12.000><c> Claude</c><00:00:12.400><c> for</c><00:00:12.559><c> the</c><00:00:12.719><c> code,</c><00:00:13.440><c> and</c>
+
+00:00:13.749 --> 00:00:13.759 align:start position:0%
+for the art, Claude for the code, and
+ 
+
+00:00:13.759 --> 00:00:16.310 align:start position:0%
+for the art, Claude for the code, and
+Ray<00:00:14.400><c> to</c><00:00:14.559><c> bring</c><00:00:14.719><c> it</c><00:00:14.880><c> to</c><00:00:15.120><c> life.</c><00:00:15.679><c> I</c><00:00:15.920><c> started</c><00:00:16.160><c> with</c>
+
+00:00:16.310 --> 00:00:16.320 align:start position:0%
+Ray to bring it to life. I started with
+ 
+
+00:00:16.320 --> 00:00:18.870 align:start position:0%
+Ray to bring it to life. I started with
+an<00:00:16.560><c> empty</c><00:00:16.800><c> folder,</c><00:00:17.680><c> told</c><00:00:18.000><c> Claude</c><00:00:18.400><c> to</c><00:00:18.560><c> install</c>
+
+00:00:18.870 --> 00:00:18.880 align:start position:0%
+an empty folder, told Claude to install
+ 
+
+00:00:18.880 --> 00:00:21.510 align:start position:0%
+an empty folder, told Claude to install
+RayB,<00:00:19.520><c> and</c><00:00:19.680><c> set</c><00:00:19.840><c> up</c><00:00:20.000><c> a</c><00:00:20.160><c> new</c><00:00:20.400><c> C</c><00:00:20.640><c> project.</c><00:00:21.119><c> Then</c><00:00:21.359><c> I</c>
+
+00:00:21.510 --> 00:00:21.520 align:start position:0%
+RayB, and set up a new C project. Then I
+ 
+
+00:00:21.520 --> 00:00:23.029 align:start position:0%
+RayB, and set up a new C project. Then I
+jumped<00:00:21.680><c> into</c><00:00:21.920><c> Pixel</c><00:00:22.320><c> Lab's</c><00:00:22.640><c> character</c>
+
+00:00:23.029 --> 00:00:23.039 align:start position:0%
+jumped into Pixel Lab's character
+ 
+
+00:00:23.039 --> 00:00:25.109 align:start position:0%
+jumped into Pixel Lab's character
+creator<00:00:23.439><c> and</c><00:00:23.680><c> made</c><00:00:23.920><c> our</c><00:00:24.160><c> first</c><00:00:24.400><c> fighter,</c><00:00:24.880><c> a</c>
+
+00:00:25.109 --> 00:00:25.119 align:start position:0%
+creator and made our first fighter, a
+ 
+
+00:00:25.119 --> 00:00:28.470 align:start position:0%
+creator and made our first fighter, a
+shirtless<00:00:25.519><c> guy</c><00:00:25.760><c> in</c><00:00:26.000><c> purple</c><00:00:26.240><c> shorts,</c><00:00:27.119><c> 64x</c><00:00:28.000><c> 64</c>
+
+00:00:28.470 --> 00:00:28.480 align:start position:0%
+shirtless guy in purple shorts, 64x 64
+ 
+
+00:00:28.480 --> 00:00:30.710 align:start position:0%
+shirtless guy in purple shorts, 64x 64
+pixels.<00:00:29.119><c> Then</c><00:00:29.279><c> I</c><00:00:29.519><c> animated</c><00:00:30.000><c> everything</c><00:00:30.400><c> right</c>
+
+00:00:30.710 --> 00:00:30.720 align:start position:0%
+pixels. Then I animated everything right
+ 
+
+00:00:30.720 --> 00:00:33.030 align:start position:0%
+pixels. Then I animated everything right
+there.<00:00:31.039><c> I</c><00:00:31.279><c> just</c><00:00:31.519><c> hit</c><00:00:31.760><c> the</c><00:00:32.079><c> add</c><00:00:32.399><c> animation</c>
+
+00:00:33.030 --> 00:00:33.040 align:start position:0%
+there. I just hit the add animation
+ 
+
+00:00:33.040 --> 00:00:36.150 align:start position:0%
+there. I just hit the add animation
+button,<00:00:33.920><c> picked</c><00:00:34.160><c> the</c><00:00:34.399><c> animation</c><00:00:35.040><c> type,</c><00:00:35.840><c> chose</c>
+
+00:00:36.150 --> 00:00:36.160 align:start position:0%
+button, picked the animation type, chose
+ 
+
+00:00:36.160 --> 00:00:39.590 align:start position:0%
+button, picked the animation type, chose
+the<00:00:36.399><c> direction,</c><00:00:37.440><c> and</c><00:00:37.760><c> did</c><00:00:37.920><c> that</c><00:00:38.160><c> for</c><00:00:38.719><c> idle,</c>
+
+00:00:39.590 --> 00:00:39.600 align:start position:0%
+the direction, and did that for idle,
+ 
+
+00:00:39.600 --> 00:00:43.990 align:start position:0%
+the direction, and did that for idle,
+walk,<00:00:40.559><c> run,</c><00:00:41.040><c> and</c><00:00:41.360><c> jump.</c><00:00:42.399><c> Super</c><00:00:42.800><c> quick,</c><00:00:43.600><c> super</c>
+
+00:00:43.990 --> 00:00:44.000 align:start position:0%
+walk, run, and jump. Super quick, super
+ 
+
+00:00:44.000 --> 00:00:46.150 align:start position:0%
+walk, run, and jump. Super quick, super
+clean.<00:00:44.719><c> After</c><00:00:44.960><c> that,</c><00:00:45.200><c> I</c><00:00:45.440><c> told</c><00:00:45.600><c> Claude</c><00:00:46.000><c> to</c>
+
+00:00:46.150 --> 00:00:46.160 align:start position:0%
+clean. After that, I told Claude to
+ 
+
+00:00:46.160 --> 00:00:47.670 align:start position:0%
+clean. After that, I told Claude to
+bring<00:00:46.239><c> the</c><00:00:46.480><c> character</c><00:00:46.800><c> straight</c><00:00:47.039><c> from</c><00:00:47.200><c> Pixel</c>
+
+00:00:47.670 --> 00:00:47.680 align:start position:0%
+bring the character straight from Pixel
+ 
+
+00:00:47.680 --> 00:00:50.389 align:start position:0%
+bring the character straight from Pixel
+Lab<00:00:47.920><c> using</c><00:00:48.079><c> the</c><00:00:48.320><c> MCP.</c><00:00:49.440><c> It</c><00:00:49.680><c> added</c><00:00:49.920><c> the</c><00:00:50.079><c> sprite</c>
+
+00:00:50.389 --> 00:00:50.399 align:start position:0%
+Lab using the MCP. It added the sprite
+ 
+
+00:00:50.399 --> 00:00:52.229 align:start position:0%
+Lab using the MCP. It added the sprite
+sheet<00:00:50.640><c> right</c><00:00:50.800><c> into</c><00:00:51.039><c> my</c><00:00:51.280><c> project,</c><00:00:51.680><c> and</c><00:00:51.920><c> it</c>
+
+00:00:52.229 --> 00:00:52.239 align:start position:0%
+sheet right into my project, and it
+ 
+
+00:00:52.239 --> 00:00:53.910 align:start position:0%
+sheet right into my project, and it
+already<00:00:52.480><c> started</c><00:00:52.879><c> implementing</c><00:00:53.440><c> the</c><00:00:53.600><c> player</c>
+
+00:00:53.910 --> 00:00:53.920 align:start position:0%
+already started implementing the player
+ 
+
+00:00:53.920 --> 00:00:55.830 align:start position:0%
+already started implementing the player
+without<00:00:54.239><c> me</c><00:00:54.399><c> even</c><00:00:54.719><c> telling</c><00:00:54.960><c> it.</c><00:00:55.360><c> To</c><00:00:55.600><c> make</c>
+
+00:00:55.830 --> 00:00:55.840 align:start position:0%
+without me even telling it. To make
+ 
+
+00:00:55.840 --> 00:00:57.990 align:start position:0%
+without me even telling it. To make
+testing<00:00:56.320><c> easier,</c><00:00:56.800><c> I</c><00:00:57.039><c> asked</c><00:00:57.280><c> Claude</c><00:00:57.600><c> to</c><00:00:57.760><c> create</c>
+
+00:00:57.990 --> 00:00:58.000 align:start position:0%
+testing easier, I asked Claude to create
+ 
+
+00:00:58.000 --> 00:01:01.189 align:start position:0%
+testing easier, I asked Claude to create
+a<00:00:58.640><c> command</c><00:00:59.199><c> file</c><00:01:00.000><c> so</c><00:01:00.160><c> I</c><00:01:00.399><c> can</c><00:01:00.480><c> just</c><00:01:00.719><c> doubleclick</c>
+
+00:01:01.189 --> 00:01:01.199 align:start position:0%
+a command file so I can just doubleclick
+ 
+
+00:01:01.199 --> 00:01:03.910 align:start position:0%
+a command file so I can just doubleclick
+to<00:01:01.440><c> run</c><00:01:01.600><c> the</c><00:01:01.840><c> game</c><00:01:02.320><c> anytime</c><00:01:02.719><c> I</c><00:01:02.960><c> want</c><00:01:03.039><c> to</c><00:01:03.199><c> test.</c>
+
+00:01:03.910 --> 00:01:03.920 align:start position:0%
+to run the game anytime I want to test.
+ 
+
+00:01:03.920 --> 00:01:07.109 align:start position:0%
+to run the game anytime I want to test.
+Day<00:01:04.239><c> one</c><00:01:04.559><c> done.</c><00:01:05.360><c> Our</c><00:01:05.760><c> purple</c><00:01:06.159><c> short</c><00:01:06.479><c> legend</c><00:01:06.880><c> is</c>
+
+00:01:07.109 --> 00:01:07.119 align:start position:0%
+Day one done. Our purple short legend is
+ 
+
+00:01:07.119 --> 00:01:09.910 align:start position:0%
+Day one done. Our purple short legend is
+officially<00:01:07.760><c> alive.</c><00:01:08.960><c> Tomorrow</c><00:01:09.360><c> we're</c><00:01:09.600><c> adding</c>
+
+00:01:09.910 --> 00:01:09.920 align:start position:0%
+officially alive. Tomorrow we're adding
+ 
+
+00:01:09.920 --> 00:01:14.159 align:start position:0%
+officially alive. Tomorrow we're adding
+punches.<00:01:10.880><c> Come</c><00:01:11.119><c> back</c><00:01:11.280><c> for</c><00:01:11.439><c> day</c><00:01:11.680><c> two.</c>
+

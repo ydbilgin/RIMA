@@ -1,0 +1,536 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:04.330 --> 00:00:11.190 align:start position:0%
+ 
+[Music]
+
+00:00:11.190 --> 00:00:11.200 align:start position:0%
+ 
+ 
+
+00:00:11.200 --> 00:00:12.629 align:start position:0%
+ 
+Today<00:00:11.519><c> we're</c><00:00:11.679><c> going</c><00:00:11.759><c> to</c><00:00:11.920><c> run</c><00:00:12.080><c> through</c><00:00:12.320><c> the</c>
+
+00:00:12.629 --> 00:00:12.639 align:start position:0%
+Today we're going to run through the
+ 
+
+00:00:12.639 --> 00:00:16.230 align:start position:0%
+Today we're going to run through the
+animate<00:00:13.200><c> to</c><00:00:13.599><c> animation</c><00:00:14.320><c> feature.</c>
+
+00:00:16.230 --> 00:00:16.240 align:start position:0%
+animate to animation feature.
+ 
+
+00:00:16.240 --> 00:00:18.230 align:start position:0%
+animate to animation feature.
+Let's<00:00:16.560><c> get</c><00:00:16.720><c> started</c><00:00:17.039><c> by</c><00:00:17.279><c> opening</c><00:00:17.600><c> the</c><00:00:17.760><c> animate</c>
+
+00:00:18.230 --> 00:00:18.240 align:start position:0%
+Let's get started by opening the animate
+ 
+
+00:00:18.240 --> 00:00:21.590 align:start position:0%
+Let's get started by opening the animate
+to<00:00:18.480><c> animation</c><00:00:19.119><c> window.</c><00:00:20.320><c> First</c><00:00:20.720><c> at</c><00:00:20.960><c> the</c><00:00:21.119><c> top</c><00:00:21.359><c> we</c>
+
+00:00:21.590 --> 00:00:21.600 align:start position:0%
+to animation window. First at the top we
+ 
+
+00:00:21.600 --> 00:00:24.710 align:start position:0%
+to animation window. First at the top we
+have<00:00:21.760><c> the</c><00:00:22.000><c> number</c><00:00:22.320><c> of</c><00:00:22.800><c> images</c><00:00:23.279><c> slider.</c><00:00:24.480><c> This</c>
+
+00:00:24.710 --> 00:00:24.720 align:start position:0%
+have the number of images slider. This
+ 
+
+00:00:24.720 --> 00:00:26.390 align:start position:0%
+have the number of images slider. This
+is<00:00:24.880><c> where</c><00:00:25.039><c> you</c><00:00:25.199><c> enter</c><00:00:25.439><c> the</c><00:00:25.600><c> total</c><00:00:25.920><c> number</c><00:00:26.160><c> of</c>
+
+00:00:26.390 --> 00:00:26.400 align:start position:0%
+is where you enter the total number of
+ 
+
+00:00:26.400 --> 00:00:28.710 align:start position:0%
+is where you enter the total number of
+frames<00:00:26.720><c> you</c><00:00:26.960><c> want</c><00:00:27.119><c> to</c><00:00:27.279><c> do</c><00:00:27.439><c> for</c><00:00:27.599><c> your</c><00:00:27.760><c> animation</c>
+
+00:00:28.710 --> 00:00:28.720 align:start position:0%
+frames you want to do for your animation
+ 
+
+00:00:28.720 --> 00:00:30.950 align:start position:0%
+frames you want to do for your animation
+per<00:00:29.039><c> generation.</c>
+
+00:00:30.950 --> 00:00:30.960 align:start position:0%
+per generation.
+ 
+
+00:00:30.960 --> 00:00:33.110 align:start position:0%
+per generation.
+Note<00:00:31.439><c> the</c><00:00:31.679><c> maximum</c><00:00:32.160><c> number</c><00:00:32.559><c> can</c><00:00:32.800><c> vary</c>
+
+00:00:33.110 --> 00:00:33.120 align:start position:0%
+Note the maximum number can vary
+ 
+
+00:00:33.120 --> 00:00:36.310 align:start position:0%
+Note the maximum number can vary
+depending<00:00:33.600><c> on</c><00:00:33.760><c> your</c><00:00:34.079><c> canvas</c><00:00:34.559><c> size.</c><00:00:35.760><c> Next,</c><00:00:36.160><c> in</c>
+
+00:00:36.310 --> 00:00:36.320 align:start position:0%
+depending on your canvas size. Next, in
+ 
+
+00:00:36.320 --> 00:00:39.190 align:start position:0%
+depending on your canvas size. Next, in
+the<00:00:36.480><c> animation</c><00:00:37.120><c> reference</c><00:00:37.680><c> section,</c><00:00:38.800><c> you</c><00:00:39.040><c> can</c>
+
+00:00:39.190 --> 00:00:39.200 align:start position:0%
+the animation reference section, you can
+ 
+
+00:00:39.200 --> 00:00:41.670 align:start position:0%
+the animation reference section, you can
+choose<00:00:39.440><c> to</c><00:00:39.680><c> use</c><00:00:39.920><c> a</c><00:00:40.160><c> reference</c><00:00:40.640><c> image</c><00:00:41.120><c> or</c><00:00:41.440><c> an</c>
+
+00:00:41.670 --> 00:00:41.680 align:start position:0%
+choose to use a reference image or an
+ 
+
+00:00:41.680 --> 00:00:43.750 align:start position:0%
+choose to use a reference image or an
+init<00:00:42.079><c> image</c><00:00:42.559><c> if</c><00:00:42.800><c> you</c><00:00:42.960><c> have</c><00:00:43.120><c> a</c><00:00:43.360><c> specific</c>
+
+00:00:43.750 --> 00:00:43.760 align:start position:0%
+init image if you have a specific
+ 
+
+00:00:43.760 --> 00:00:46.470 align:start position:0%
+init image if you have a specific
+starting<00:00:44.160><c> point</c><00:00:44.399><c> for</c><00:00:44.640><c> your</c><00:00:44.879><c> animation.</c>
+
+00:00:46.470 --> 00:00:46.480 align:start position:0%
+starting point for your animation.
+ 
+
+00:00:46.480 --> 00:00:49.510 align:start position:0%
+starting point for your animation.
+We'll<00:00:46.800><c> cover</c><00:00:46.960><c> this</c><00:00:47.120><c> a</c><00:00:47.360><c> bit</c><00:00:47.440><c> more</c><00:00:47.680><c> later.</c>
+
+00:00:49.510 --> 00:00:49.520 align:start position:0%
+We'll cover this a bit more later.
+ 
+
+00:00:49.520 --> 00:00:52.630 align:start position:0%
+We'll cover this a bit more later.
+Next<00:00:49.840><c> is</c><00:00:50.160><c> the</c><00:00:50.399><c> description</c><00:00:50.879><c> area.</c><00:00:52.239><c> This</c><00:00:52.480><c> is</c>
+
+00:00:52.630 --> 00:00:52.640 align:start position:0%
+Next is the description area. This is
+ 
+
+00:00:52.640 --> 00:00:54.470 align:start position:0%
+Next is the description area. This is
+where<00:00:52.800><c> you</c><00:00:53.039><c> describe</c><00:00:53.360><c> the</c><00:00:53.600><c> character</c><00:00:53.920><c> or</c><00:00:54.239><c> art</c>
+
+00:00:54.470 --> 00:00:54.480 align:start position:0%
+where you describe the character or art
+ 
+
+00:00:54.480 --> 00:00:57.110 align:start position:0%
+where you describe the character or art
+you<00:00:54.719><c> want</c><00:00:54.879><c> to</c><00:00:55.039><c> animate.</c><00:00:56.320><c> Once</c><00:00:56.559><c> you've</c><00:00:56.879><c> entered</c>
+
+00:00:57.110 --> 00:00:57.120 align:start position:0%
+you want to animate. Once you've entered
+ 
+
+00:00:57.120 --> 00:00:58.869 align:start position:0%
+you want to animate. Once you've entered
+that,<00:00:57.600><c> move</c><00:00:57.840><c> down</c><00:00:58.000><c> to</c><00:00:58.239><c> the</c><00:00:58.399><c> action</c>
+
+00:00:58.869 --> 00:00:58.879 align:start position:0%
+that, move down to the action
+ 
+
+00:00:58.879 --> 00:01:01.590 align:start position:0%
+that, move down to the action
+description<00:00:59.520><c> field.</c><00:01:00.719><c> Provide</c><00:01:01.120><c> a</c><00:01:01.280><c> brief</c>
+
+00:01:01.590 --> 00:01:01.600 align:start position:0%
+description field. Provide a brief
+ 
+
+00:01:01.600 --> 00:01:03.110 align:start position:0%
+description field. Provide a brief
+description<00:01:02.079><c> of</c><00:01:02.239><c> the</c><00:01:02.399><c> action</c><00:01:02.800><c> being</c>
+
+00:01:03.110 --> 00:01:03.120 align:start position:0%
+description of the action being
+ 
+
+00:01:03.120 --> 00:01:05.509 align:start position:0%
+description of the action being
+performed<00:01:03.520><c> in</c><00:01:03.760><c> the</c><00:01:03.920><c> animation.</c>
+
+00:01:05.509 --> 00:01:05.519 align:start position:0%
+performed in the animation.
+ 
+
+00:01:05.519 --> 00:01:07.750 align:start position:0%
+performed in the animation.
+After<00:01:05.840><c> that,</c><00:01:06.240><c> select</c><00:01:06.560><c> the</c><00:01:06.799><c> camera</c><00:01:07.119><c> view</c><00:01:07.439><c> and</c>
+
+00:01:07.750 --> 00:01:07.760 align:start position:0%
+After that, select the camera view and
+ 
+
+00:01:07.760 --> 00:01:09.590 align:start position:0%
+After that, select the camera view and
+direction<00:01:08.159><c> for</c><00:01:08.400><c> the</c><00:01:08.640><c> animation</c><00:01:09.200><c> from</c><00:01:09.360><c> the</c>
+
+00:01:09.590 --> 00:01:09.600 align:start position:0%
+direction for the animation from the
+ 
+
+00:01:09.600 --> 00:01:11.670 align:start position:0%
+direction for the animation from the
+available<00:01:10.080><c> options.</c>
+
+00:01:11.670 --> 00:01:11.680 align:start position:0%
+available options.
+ 
+
+00:01:11.680 --> 00:01:13.429 align:start position:0%
+available options.
+You<00:01:11.840><c> can</c><00:01:12.000><c> adjust</c><00:01:12.240><c> the</c><00:01:12.400><c> outline</c><00:01:12.880><c> shading</c>
+
+00:01:13.429 --> 00:01:13.439 align:start position:0%
+You can adjust the outline shading
+ 
+
+00:01:13.439 --> 00:01:15.190 align:start position:0%
+You can adjust the outline shading
+details<00:01:13.840><c> for</c><00:01:14.080><c> the</c><00:01:14.240><c> animation</c><00:01:14.720><c> to</c><00:01:15.040><c> your</c>
+
+00:01:15.190 --> 00:01:15.200 align:start position:0%
+details for the animation to your
+ 
+
+00:01:15.200 --> 00:01:17.910 align:start position:0%
+details for the animation to your
+liking.<00:01:16.400><c> Just</c><00:01:16.720><c> mess</c><00:01:16.960><c> around</c><00:01:17.119><c> with</c><00:01:17.360><c> it</c><00:01:17.520><c> and</c><00:01:17.759><c> see</c>
+
+00:01:17.910 --> 00:01:17.920 align:start position:0%
+liking. Just mess around with it and see
+ 
+
+00:01:17.920 --> 00:01:20.710 align:start position:0%
+liking. Just mess around with it and see
+what<00:01:18.159><c> works</c><00:01:18.400><c> best</c><00:01:18.720><c> for</c><00:01:18.960><c> your</c><00:01:19.200><c> style.</c><00:01:20.320><c> You</c><00:01:20.560><c> can</c>
+
+00:01:20.710 --> 00:01:20.720 align:start position:0%
+what works best for your style. You can
+ 
+
+00:01:20.720 --> 00:01:22.230 align:start position:0%
+what works best for your style. You can
+choose<00:01:20.960><c> the</c><00:01:21.200><c> target</c><00:01:21.520><c> palette</c><00:01:21.920><c> for</c><00:01:22.080><c> your</c>
+
+00:01:22.230 --> 00:01:22.240 align:start position:0%
+choose the target palette for your
+ 
+
+00:01:22.240 --> 00:01:24.550 align:start position:0%
+choose the target palette for your
+animation<00:01:22.799><c> or</c><00:01:23.119><c> just</c><00:01:23.280><c> leave</c><00:01:23.520><c> it</c><00:01:23.600><c> on</c><00:01:23.840><c> no</c><00:01:24.159><c> and</c><00:01:24.400><c> the</c>
+
+00:01:24.550 --> 00:01:24.560 align:start position:0%
+animation or just leave it on no and the
+ 
+
+00:01:24.560 --> 00:01:27.350 align:start position:0%
+animation or just leave it on no and the
+tool<00:01:24.799><c> will</c><00:01:25.040><c> pick</c><00:01:25.200><c> its</c><00:01:25.439><c> own</c><00:01:25.600><c> colors.</c><00:01:26.880><c> Finally,</c>
+
+00:01:27.350 --> 00:01:27.360 align:start position:0%
+tool will pick its own colors. Finally,
+ 
+
+00:01:27.360 --> 00:01:30.070 align:start position:0%
+tool will pick its own colors. Finally,
+under<00:01:27.600><c> the</c><00:01:27.840><c> advanced</c><00:01:28.320><c> options,</c><00:01:29.759><c> you</c><00:01:30.000><c> can</c>
+
+00:01:30.070 --> 00:01:30.080 align:start position:0%
+under the advanced options, you can
+ 
+
+00:01:30.080 --> 00:01:32.710 align:start position:0%
+under the advanced options, you can
+adjust<00:01:30.400><c> the</c><00:01:30.640><c> AI</c><00:01:31.040><c> freedom</c><00:01:32.000><c> robust</c><00:01:32.479><c> and</c>
+
+00:01:32.710 --> 00:01:32.720 align:start position:0%
+adjust the AI freedom robust and
+ 
+
+00:01:32.720 --> 00:01:35.830 align:start position:0%
+adjust the AI freedom robust and
+guidance<00:01:33.200><c> weight</c><00:01:33.600><c> sliders.</c><00:01:35.040><c> These</c><00:01:35.360><c> basically</c>
+
+00:01:35.830 --> 00:01:35.840 align:start position:0%
+guidance weight sliders. These basically
+ 
+
+00:01:35.840 --> 00:01:38.230 align:start position:0%
+guidance weight sliders. These basically
+control<00:01:36.240><c> how</c><00:01:36.560><c> closely</c><00:01:36.960><c> the</c><00:01:37.200><c> tool</c><00:01:37.520><c> adheres</c><00:01:38.000><c> to</c>
+
+00:01:38.230 --> 00:01:38.240 align:start position:0%
+control how closely the tool adheres to
+ 
+
+00:01:38.240 --> 00:01:40.950 align:start position:0%
+control how closely the tool adheres to
+your<00:01:38.479><c> reference/</c><00:01:39.360><c> description</c><00:01:40.320><c> versus</c><00:01:40.720><c> how</c>
+
+00:01:40.950 --> 00:01:40.960 align:start position:0%
+your reference/ description versus how
+ 
+
+00:01:40.960 --> 00:01:43.670 align:start position:0%
+your reference/ description versus how
+much<00:01:41.119><c> creative</c><00:01:41.520><c> freedom</c><00:01:41.920><c> it</c><00:01:42.159><c> takes.</c><00:01:43.119><c> After</c>
+
+00:01:43.670 --> 00:01:43.680 align:start position:0%
+much creative freedom it takes. After
+ 
+
+00:01:43.680 --> 00:01:45.670 align:start position:0%
+much creative freedom it takes. After
+configuring<00:01:44.320><c> all</c><00:01:44.560><c> these</c><00:01:44.880><c> settings,</c><00:01:45.439><c> click</c>
+
+00:01:45.670 --> 00:01:45.680 align:start position:0%
+configuring all these settings, click
+ 
+
+00:01:45.680 --> 00:01:47.510 align:start position:0%
+configuring all these settings, click
+the<00:01:45.840><c> generate</c><00:01:46.240><c> button</c><00:01:46.720><c> to</c><00:01:47.040><c> create</c><00:01:47.280><c> your</c>
+
+00:01:47.510 --> 00:01:47.520 align:start position:0%
+the generate button to create your
+ 
+
+00:01:47.520 --> 00:01:49.109 align:start position:0%
+the generate button to create your
+animation.
+
+00:01:49.109 --> 00:01:49.119 align:start position:0%
+animation.
+ 
+
+00:01:49.119 --> 00:01:51.510 align:start position:0%
+animation.
+Let's<00:01:49.360><c> go</c><00:01:49.520><c> ahead</c><00:01:49.759><c> and</c><00:01:49.920><c> do</c><00:01:50.079><c> that.</c><00:01:51.119><c> For</c><00:01:51.360><c> this</c>
+
+00:01:51.510 --> 00:01:51.520 align:start position:0%
+Let's go ahead and do that. For this
+ 
+
+00:01:51.520 --> 00:01:53.350 align:start position:0%
+Let's go ahead and do that. For this
+example,<00:01:52.000><c> we're</c><00:01:52.159><c> going</c><00:01:52.240><c> to</c><00:01:52.399><c> do</c><00:01:52.560><c> a</c><00:01:52.880><c> armored</c>
+
+00:01:53.350 --> 00:01:53.360 align:start position:0%
+example, we're going to do a armored
+ 
+
+00:01:53.360 --> 00:01:55.830 align:start position:0%
+example, we're going to do a armored
+knight.<00:01:54.320><c> We'll</c><00:01:54.640><c> do</c><00:01:54.720><c> the</c><00:01:54.880><c> max</c><00:01:55.200><c> it</c><00:01:55.439><c> will</c><00:01:55.600><c> allow</c>
+
+00:01:55.830 --> 00:01:55.840 align:start position:0%
+knight. We'll do the max it will allow
+ 
+
+00:01:55.840 --> 00:02:01.290 align:start position:0%
+knight. We'll do the max it will allow
+for<00:01:56.079><c> our</c><00:01:56.320><c> canvas</c><00:01:56.799><c> size.</c>
+
+00:02:01.290 --> 00:02:01.300 align:start position:0%
+ 
+ 
+
+00:02:01.300 --> 00:02:19.270 align:start position:0%
+ 
+[Music]
+
+00:02:19.270 --> 00:02:19.280 align:start position:0%
+ 
+ 
+
+00:02:19.280 --> 00:02:21.110 align:start position:0%
+ 
+Once<00:02:19.599><c> you're</c><00:02:19.920><c> happy</c><00:02:20.160><c> with</c><00:02:20.400><c> the</c><00:02:20.640><c> generation</c>
+
+00:02:21.110 --> 00:02:21.120 align:start position:0%
+Once you're happy with the generation
+ 
+
+00:02:21.120 --> 00:02:23.589 align:start position:0%
+Once you're happy with the generation
+you<00:02:21.360><c> get,</c><00:02:22.080><c> you</c><00:02:22.319><c> can</c><00:02:22.400><c> then</c><00:02:22.640><c> set</c><00:02:22.879><c> it</c><00:02:23.120><c> as</c><00:02:23.360><c> your</c>
+
+00:02:23.589 --> 00:02:23.599 align:start position:0%
+you get, you can then set it as your
+ 
+
+00:02:23.599 --> 00:02:25.990 align:start position:0%
+you get, you can then set it as your
+reference<00:02:24.160><c> image</c><00:02:24.640><c> to</c><00:02:24.879><c> help</c><00:02:25.120><c> keep</c><00:02:25.440><c> subsequent</c>
+
+00:02:25.990 --> 00:02:26.000 align:start position:0%
+reference image to help keep subsequent
+ 
+
+00:02:26.000 --> 00:02:28.390 align:start position:0%
+reference image to help keep subsequent
+generations<00:02:26.800><c> consistent</c><00:02:27.680><c> throughout</c><00:02:28.160><c> your</c>
+
+00:02:28.390 --> 00:02:28.400 align:start position:0%
+generations consistent throughout your
+ 
+
+00:02:28.400 --> 00:02:30.710 align:start position:0%
+generations consistent throughout your
+animation<00:02:29.120><c> sequence.</c>
+
+00:02:30.710 --> 00:02:30.720 align:start position:0%
+animation sequence.
+ 
+
+00:02:30.720 --> 00:02:32.550 align:start position:0%
+animation sequence.
+Now<00:02:30.879><c> that</c><00:02:31.120><c> we</c><00:02:31.280><c> have</c><00:02:31.440><c> our</c><00:02:31.680><c> reference</c><00:02:32.160><c> image</c>
+
+00:02:32.550 --> 00:02:32.560 align:start position:0%
+Now that we have our reference image
+ 
+
+00:02:32.560 --> 00:02:34.949 align:start position:0%
+Now that we have our reference image
+set,<00:02:33.360><c> we</c><00:02:33.599><c> can</c><00:02:33.760><c> continue</c><00:02:34.080><c> to</c><00:02:34.319><c> generate</c><00:02:34.720><c> our</c>
+
+00:02:34.949 --> 00:02:34.959 align:start position:0%
+set, we can continue to generate our
+ 
+
+00:02:34.959 --> 00:02:51.710 align:start position:0%
+set, we can continue to generate our
+other<00:02:35.200><c> frames.</c>
+
+00:02:51.710 --> 00:02:51.720 align:start position:0%
+ 
+ 
+
+00:02:51.720 --> 00:03:15.400 align:start position:0%
+ 
+[Music]
+
+00:03:15.400 --> 00:03:15.410 align:start position:0%
+ 
+ 
+
+00:03:15.410 --> 00:03:21.570 align:start position:0%
+ 
+[Music]
+
+00:03:21.570 --> 00:03:21.580 align:start position:0%
+ 
+ 
+
+00:03:21.580 --> 00:03:36.320 align:start position:0%
+ 
+[Music]
+
+00:03:36.320 --> 00:03:36.330 align:start position:0%
+ 
+ 
+
+00:03:36.330 --> 00:03:42.310 align:start position:0%
+ 
+[Music]
+
+00:03:42.310 --> 00:03:42.320 align:start position:0%
+ 
+ 
+
+00:03:42.320 --> 00:03:57.490 align:start position:0%
+ 
+[Music]
+
+00:03:57.490 --> 00:03:57.500 align:start position:0%
+ 
+ 
+
+00:03:57.500 --> 00:04:06.320 align:start position:0%
+ 
+[Music]
+
+00:04:06.320 --> 00:04:06.330 align:start position:0%
+ 
+ 
+
+00:04:06.330 --> 00:04:09.589 align:start position:0%
+ 
+[Music]
+
+00:04:09.589 --> 00:04:09.599 align:start position:0%
+[Music]
+ 
+
+00:04:09.599 --> 00:04:11.589 align:start position:0%
+[Music]
+There<00:04:09.840><c> will</c><00:04:10.000><c> be</c><00:04:10.159><c> some</c><00:04:10.400><c> manual</c><00:04:10.799><c> cleanup</c><00:04:11.200><c> to</c><00:04:11.439><c> be</c>
+
+00:04:11.589 --> 00:04:11.599 align:start position:0%
+There will be some manual cleanup to be
+ 
+
+00:04:11.599 --> 00:04:14.309 align:start position:0%
+There will be some manual cleanup to be
+expected.<00:04:12.959><c> However,</c><00:04:13.360><c> the</c><00:04:13.519><c> tool</c><00:04:13.840><c> will</c><00:04:14.000><c> get</c><00:04:14.159><c> us</c>
+
+00:04:14.309 --> 00:04:14.319 align:start position:0%
+expected. However, the tool will get us
+ 
+
+00:04:14.319 --> 00:04:17.430 align:start position:0%
+expected. However, the tool will get us
+about<00:04:14.560><c> 90%</c><00:04:15.120><c> of</c><00:04:15.200><c> the</c><00:04:15.360><c> way</c><00:04:15.519><c> there.</c><00:04:16.799><c> I</c><00:04:17.040><c> think</c><00:04:17.199><c> that</c>
+
+00:04:17.430 --> 00:04:17.440 align:start position:0%
+about 90% of the way there. I think that
+ 
+
+00:04:17.440 --> 00:04:20.469 align:start position:0%
+about 90% of the way there. I think that
+about<00:04:17.919><c> covers</c><00:04:18.320><c> this</c><00:04:18.560><c> tutorial.</c><00:04:19.919><c> Thanks</c><00:04:20.239><c> for</c>
+
+00:04:20.469 --> 00:04:20.479 align:start position:0%
+about covers this tutorial. Thanks for
+ 
+
+00:04:20.479 --> 00:04:25.520 align:start position:0%
+about covers this tutorial. Thanks for
+watching.<00:04:21.759><c> See</c><00:04:22.000><c> you</c><00:04:22.160><c> in</c><00:04:22.320><c> the</c><00:04:22.479><c> next</c><00:04:22.720><c> video.</c>
+

@@ -28,7 +28,7 @@ namespace RIMA
         {
             player      = GetComponentInParent<PlayerController>();
             rage        = GetComponentInParent<RageSystem>();
-            resource    = GetComponentInParent<PlayerResourceBase>();
+            resource    = ResolvePreferredResource();
             flowTracker = GetComponentInParent<SkillFlowTracker>();
         }
 
@@ -41,8 +41,13 @@ namespace RIMA
         public bool TryActivate()
         {
             if (!IsReady) return false;
+            if (player == null) player = GetComponentInParent<PlayerController>();
+            if (rage == null) rage = GetComponentInParent<RageSystem>();
+            resource = ResolvePreferredResource();
+            if (flowTracker == null) flowTracker = GetComponentInParent<SkillFlowTracker>();
             if (rageCost > 0 && (rage == null || !rage.TrySpend(rageCost))) return false;
             if (resourceCost > 0 && (resource == null || !resource.TrySpend(resourceCost))) return false;
+            player?.FaceCombatTarget();
             Execute();
             cooldownTimer = cooldown;
             flowTracker?.NotifySkillUsed(this);
@@ -52,5 +57,17 @@ namespace RIMA
         public void ForceReady() => cooldownTimer = 0f;
 
         protected abstract void Execute();
+
+        private PlayerResourceBase ResolvePreferredResource()
+        {
+            if (GetComponentInParent<Elementalist_SkillController>() != null)
+                return GetComponentInParent<ManaSystem>();
+            if (GetComponentInParent<Shadowblade_SkillController>() != null)
+                return GetComponentInParent<EnergySystem>();
+            if (GetComponentInParent<Ranger_SkillController>() != null)
+                return GetComponentInParent<FocusSystem>();
+
+            return GetComponentInParent<PlayerResourceBase>();
+        }
     }
 }

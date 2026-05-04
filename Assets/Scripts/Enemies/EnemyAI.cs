@@ -1,4 +1,5 @@
 using UnityEngine;
+using RIMA.Environment;
 
 namespace RIMA
 {
@@ -30,6 +31,9 @@ namespace RIMA
             rb = GetComponent<Rigidbody2D>();
             rb.gravityScale = 0f;
             rb.freezeRotation = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.useFullKinematicContacts = true;
+            GroundBlobShadow.Ensure(transform, new Vector2(0.9f, 0.30f), 0.28f);
             health = GetComponent<Health>();
             sr = GetComponentInChildren<SpriteRenderer>();
 

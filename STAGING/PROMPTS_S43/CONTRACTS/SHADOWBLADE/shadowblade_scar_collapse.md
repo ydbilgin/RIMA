@@ -93,9 +93,9 @@ Note for rima-codex: Scar implosion uses the same decal asset as Scarbinding (pu
 
 | Sign-off | Who | Status |
 |---|---|---|
-| Identity check (Section E) | design lead | [ ] |
-| Frame budget within class quota | design lead | [ ] |
-| State indicator ownership clean | design lead | [ ] |
+| Identity check (Section E) | design lead | [x] |
+| Frame budget within class quota | design lead | [x] |
+| State indicator ownership clean | design lead | [x] |
 | VFX layer count <= 4 | rima-asset | [ ] |
 | Reference sprite exists | rima-asset | [ ] |
 | Placement skill (SHADOWBLADE_SCARBINDING) paired in same batch | design lead | [ ] (gate-blocker -- collapse without placement contract is incomplete) |

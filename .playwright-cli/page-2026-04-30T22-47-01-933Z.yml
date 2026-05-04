@@ -1,0 +1,237 @@
+- generic [ref=e3]:
+  - generic:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]: Olup bitenleri kaçırma
+        - generic [ref=e10]: Haberleri önce X'teki kişiler alır.
+      - generic [ref=e13]:
+        - link "Giriş yap" [ref=e15] [cursor=pointer]:
+          - /url: /login
+          - generic [ref=e18]: Giriş yap
+        - link "Kaydol" [ref=e20] [cursor=pointer]:
+          - /url: /i/flow/signup
+          - generic [ref=e23]: Kaydol
+    - generic:
+      - generic:
+        - generic:
+          - dialog:
+            - group [ref=e391]:
+              - generic [ref=e394]:
+                - button "Kapat" [ref=e400] [cursor=pointer]:
+                  - img [ref=e402]
+                - generic [ref=e407]:
+                  - img [ref=e409]
+                  - generic [ref=e412]:
+                    - generic [ref=e413]:
+                      - generic [ref=e414]: Herkesin ne hakkında konuştuğunu öğren.
+                      - generic [ref=e415]: Bu gönderiye verilen yanıtları okumak için hemen X'e katıl.
+                    - generic [ref=e416]:
+                      - link "Giriş yap" [active] [ref=e417] [cursor=pointer]:
+                        - /url: /i/flow/login
+                        - generic [ref=e420]: Giriş yap
+                      - link "Kaydol" [ref=e421] [cursor=pointer]:
+                        - /url: /i/flow/signup
+                        - generic [ref=e424]: Kaydol
+  - button "Anasayfa zaman akışına geç" [ref=e24] [cursor=pointer]
+  - button "Gündemdekilere geç" [ref=e26] [cursor=pointer]
+  - banner [ref=e28]:
+    - generic [ref=e31]:
+      - heading "X" [level=1] [ref=e33] [cursor=pointer]:
+        - link "X" [ref=e34]:
+          - /url: /
+          - img [ref=e36]
+      - generic:
+        - navigation "Birincil"
+  - main [ref=e39]:
+    - generic [ref=e42]:
+      - generic "Anasayfa zaman akışı" [ref=e44]:
+        - generic [ref=e45]:
+          - generic [ref=e51] [cursor=pointer]:
+            - button "Geri" [ref=e53]:
+              - img [ref=e55]
+            - heading "Gönderi" [level=2] [ref=e60]
+          - generic:
+            - generic:
+              - status:
+                - button:
+                  - generic:
+                    - img
+                    - generic: Yeni gönderileri gör
+        - region "Sohbet" [ref=e62]:
+          - heading "Sohbet" [level=1] [ref=e63]
+          - 'generic "Zaman Akışı: Sohbet" [ref=e64]':
+            - article "Matcha 🍵 Onaylanmış hesap @eztehvibes Parodi hesabı Is anyone faster in completing this challenge? Yerleştirilmiş video 0:21 / 1:01 Oynat 0:22 / 1:02 Sesi aç Yüzde 100 Video Ayarları Resim İçinde Resim Tam ekran 63 yanıt, 196 yeniden gönderi, 2897 beğeni, 999 yer işareti, 1960657 görüntülenme" [ref=e425]:
+              - generic [ref=e71]:
+                - generic [ref=e75]:
+                  - link [ref=e87] [cursor=pointer]:
+                    - /url: /eztehvibes
+                  - generic [ref=e91]:
+                    - generic [ref=e92]:
+                      - generic [ref=e95]:
+                        - link "Matcha 🍵 Onaylanmış hesap" [ref=e98] [cursor=pointer]:
+                          - /url: /eztehvibes
+                          - generic [ref=e99]:
+                            - generic [ref=e101]:
+                              - text: Matcha
+                              - img "🍵" [ref=e102]
+                            - img "Onaylanmış hesap" [ref=e105]
+                        - link "@eztehvibes" [ref=e111] [cursor=pointer]:
+                          - /url: /eztehvibes
+                          - generic [ref=e112]: "@eztehvibes"
+                      - button "Daha fazla" [ref=e118] [cursor=pointer]:
+                        - img [ref=e122]
+                    - link "Parodi hesabı" [ref=e127] [cursor=pointer]:
+                      - /url: https://help.x.com/rules-and-policies/authenticity
+                      - generic [ref=e134]: Parodi hesabı
+                - generic [ref=e135]:
+                  - generic [ref=e136]:
+                    - generic [ref=e137]:
+                      - img [ref=e138]
+                      - button "Çeviriyi göster" [ref=e141] [cursor=pointer]:
+                        - generic [ref=e144]: Çeviriyi göster
+                    - generic [ref=e145]: Is anyone faster in completing this challenge?
+                  - generic [ref=e162]:
+                    - generic "Yerleştirilmiş video" [ref=e165]
+                    - generic [ref=e428]:
+                      - slider "Arama kaydırıcısı" [ref=e434] [cursor=pointer]
+                      - generic [ref=e435]:
+                        - button "Oynat" [ref=e437] [cursor=pointer]:
+                          - img [ref=e439]
+                        - generic [ref=e442]:
+                          - generic [ref=e443]: 0:22 / 1:02
+                          - generic [ref=e444]:
+                            - button "Sesi aç" [ref=e445] [cursor=pointer]:
+                              - img [ref=e447]
+                            - slider "Ses kaydırıcısı" [ref=e451] [cursor=pointer]
+                          - button "Video Ayarları" [ref=e455] [cursor=pointer]:
+                            - img [ref=e457]
+                          - button "Resim İçinde Resim" [ref=e461] [cursor=pointer]:
+                            - img [ref=e463]
+                          - button "Tam ekran" [ref=e467] [cursor=pointer]:
+                            - img [ref=e469]
+                  - generic [ref=e175]:
+                    - link "ÖÖ 9:06 · 30 Nis 2026" [ref=e177] [cursor=pointer]:
+                      - /url: /eztehvibes/status/2049732145858683130
+                      - time [ref=e178]: ÖÖ 9:06 · 30 Nis 2026
+                    - generic [ref=e179]: ·
+                    - link "1,9 Mn Görüntüleme" [ref=e180] [cursor=pointer]:
+                      - /url: /eztehvibes/status/2049732145858683130/analytics
+                      - generic [ref=e183]: 1,9 Mn
+                      - generic [ref=e184]: Görüntüleme
+                  - group "63 yanıt, 196 yeniden gönderi, 2897 beğeni, 999 yer işareti, 1960657 görüntülenme" [ref=e187]:
+                    - button "63 Yanıt. Yanıt" [ref=e189] [cursor=pointer]:
+                      - generic [ref=e190]:
+                        - img [ref=e193]
+                        - generic [ref=e198]: "63"
+                    - button "196 yeniden gönderi. Yeniden gönderi" [ref=e200] [cursor=pointer]:
+                      - generic [ref=e201]:
+                        - img [ref=e204]
+                        - generic [ref=e209]: "196"
+                    - button "2897 Beğeni. Beğeni" [ref=e211] [cursor=pointer]:
+                      - generic [ref=e212]:
+                        - img [ref=e215]
+                        - generic [ref=e220]: 2 B
+                    - button "999 Yer İşareti. Yer İşareti" [ref=e222] [cursor=pointer]:
+                      - generic [ref=e223]:
+                        - img [ref=e226]
+                        - generic [ref=e231]: "999"
+                    - button "Gönderiyi paylaş" [ref=e234] [cursor=pointer]:
+                      - img [ref=e238]
+                  - button "63 yanıtı oku" [ref=e241] [cursor=pointer]:
+                    - generic [ref=e242]:
+                      - img [ref=e243]
+                      - generic [ref=e247]: 63 yanıtı oku
+      - generic "Gündemdekiler" [ref=e255]:
+        - generic [ref=e256]:
+          - region "Kaydol" [ref=e258]:
+            - heading "X'te yeni misin?" [level=2] [ref=e260]:
+              - generic [ref=e261]: X'te yeni misin?
+            - generic [ref=e262]: Kişiselleştirilmiş zaman akışını almak için hemen kaydol!
+            - generic [ref=e263]:
+              - iframe [ref=e390]:
+                - button "Google ile kaydolun. Yeni sekmede açılır" [ref=f5e3] [cursor=pointer]:
+                  - generic [ref=f5e5]:
+                    - img [ref=f5e7]
+                    - generic [ref=f5e14]: Google ile kaydolun
+              - button "Apple ile kaydol" [ref=e279] [cursor=pointer]:
+                - generic [ref=e280]:
+                  - img [ref=e281]
+                  - generic [ref=e285]: Apple ile kaydol
+              - link "Hesap oluştur" [ref=e286] [cursor=pointer]:
+                - /url: /i/flow/signup
+                - generic [ref=e289]: Hesap oluştur
+            - generic [ref=e290]:
+              - text: By signing up, you agree to the
+              - link "Terms of Service" [ref=e291] [cursor=pointer]:
+                - /url: https://x.com/tos
+              - text: and
+              - link "Privacy Policy" [ref=e292] [cursor=pointer]:
+                - /url: https://x.com/privacy
+              - text: ", including"
+              - link "Cookie Use." [ref=e293] [cursor=pointer]:
+                - /url: https://help.x.com/rules-and-policies/twitter-cookies
+          - complementary "Alakalı kişiler" [ref=e295]:
+            - heading "Alakalı kişiler" [level=2] [ref=e297]:
+              - generic [ref=e298]: Alakalı kişiler
+            - list [ref=e299]:
+              - listitem [ref=e300] [cursor=pointer]:
+                - generic [ref=e301]:
+                  - link [ref=e311]:
+                    - /url: /eztehvibes
+                  - generic [ref=e314]:
+                    - generic [ref=e315]:
+                      - generic [ref=e317]:
+                        - link "Matcha 🍵 Onaylanmış hesap" [ref=e319]:
+                          - /url: /eztehvibes
+                          - generic [ref=e320]:
+                            - generic [ref=e322]:
+                              - text: Matcha
+                              - img "🍵" [ref=e323]
+                            - img "Onaylanmış hesap" [ref=e326]
+                        - link "@eztehvibes" [ref=e331]:
+                          - /url: /eztehvibes
+                          - generic [ref=e333]: "@eztehvibes"
+                      - button "Takip et @eztehvibes" [ref=e335]:
+                        - generic [ref=e338]: Takip et
+                    - link "Parodi hesabı" [ref=e340]:
+                      - /url: https://help.x.com/rules-and-policies/authenticity
+                      - generic [ref=e347]: Parodi hesabı
+                    - generic [ref=e348]:
+                      - text: Just a girl who finds magic in small things
+                      - img "🌸" [ref=e349]
+          - generic [ref=e351]:
+            - generic [ref=e352]: Bir sorun oluştu. Yeniden yüklemeyi dene.
+            - button "Yeniden dene" [ref=e353] [cursor=pointer]:
+              - generic [ref=e354]:
+                - img [ref=e355]
+                - generic [ref=e359]: Yeniden dene
+          - navigation "Altbilgi" [ref=e361]:
+            - generic [ref=e362]:
+              - link "Hizmet Şartları" [ref=e363] [cursor=pointer]:
+                - /url: https://x.com/tos
+              - generic [ref=e364]: "|"
+            - generic [ref=e365]:
+              - link "Gizlilik Politikası" [ref=e366] [cursor=pointer]:
+                - /url: https://x.com/privacy
+              - generic [ref=e367]: "|"
+            - generic [ref=e368]:
+              - link "Çerez Politikası" [ref=e369] [cursor=pointer]:
+                - /url: https://support.x.com/articles/20170514
+              - generic [ref=e370]: "|"
+            - generic [ref=e371]:
+              - link "Imprint" [ref=e372] [cursor=pointer]:
+                - /url: https://legal.x.com/imprint.html
+              - generic [ref=e373]: "|"
+            - generic [ref=e374]:
+              - link "Erişilebilirlik" [ref=e375] [cursor=pointer]:
+                - /url: https://help.x.com/resources/accessibility
+              - generic [ref=e376]: "|"
+            - generic [ref=e377]:
+              - link "Reklam bilgisi" [ref=e378] [cursor=pointer]:
+                - /url: https://business.x.com/en/help/troubleshooting/how-twitter-ads-work.html?ref=web-twc-ao-gbl-adsinfo&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=adsinfo
+              - generic [ref=e379]: "|"
+            - button "Daha fazla" [ref=e380] [cursor=pointer]:
+              - generic [ref=e381]:
+                - text: Daha fazla
+                - img [ref=e382]
+            - generic [ref=e385]: © 2026 X Corp.

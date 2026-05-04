@@ -1,0 +1,895 @@
+1
+00:00:00,160 --> 00:00:03,190
+
+Hey everyone, Nicola here. So, usually
+
+2
+00:00:03,190 --> 00:00:03,200
+Hey everyone, Nicola here. So, usually
+ 
+
+3
+00:00:03,200 --> 00:00:05,349
+Hey everyone, Nicola here. So, usually
+when we talk about animation in Pixel
+
+4
+00:00:05,349 --> 00:00:05,359
+when we talk about animation in Pixel
+ 
+
+5
+00:00:05,359 --> 00:00:07,190
+when we talk about animation in Pixel
+Lab, we're looking at the character
+
+6
+00:00:07,190 --> 00:00:07,200
+Lab, we're looking at the character
+ 
+
+7
+00:00:07,200 --> 00:00:09,910
+Lab, we're looking at the character
+creator. [music] And honestly, for about
+
+8
+00:00:09,910 --> 00:00:09,920
+creator. [music] And honestly, for about
+ 
+
+9
+00:00:09,920 --> 00:00:12,390
+creator. [music] And honestly, for about
+90% of your game, this is what you
+
+10
+00:00:12,390 --> 00:00:12,400
+90% of your game, this is what you
+ 
+
+11
+00:00:12,400 --> 00:00:14,950
+90% of your game, this is what you
+should be using. We've even added more
+
+12
+00:00:14,950 --> 00:00:14,960
+should be using. We've even added more
+ 
+
+13
+00:00:14,960 --> 00:00:17,430
+should be using. We've even added more
+complex stuff recently, like drinking,
+
+14
+00:00:17,430 --> 00:00:17,440
+complex stuff recently, like drinking,
+ 
+
+15
+00:00:17,440 --> 00:00:19,990
+complex stuff recently, like drinking,
+pushing objects, and throwing. It's
+
+16
+00:00:19,990 --> 00:00:20,000
+pushing objects, and throwing. It's
+ 
+
+17
+00:00:20,000 --> 00:00:23,429
+pushing objects, and throwing. It's
+reliable. It's cheap, but it's still a
+
+18
+00:00:23,429 --> 00:00:23,439
+reliable. It's cheap, but it's still a
+ 
+
+19
+00:00:23,439 --> 00:00:25,830
+reliable. It's cheap, but it's still a
+list of presets. [music] What happens
+
+20
+00:00:25,830 --> 00:00:25,840
+list of presets. [music] What happens
+ 
+
+21
+00:00:25,840 --> 00:00:27,429
+list of presets. [music] What happens
+when you need something that simply
+
+22
+00:00:27,429 --> 00:00:27,439
+when you need something that simply
+ 
+
+23
+00:00:27,439 --> 00:00:29,990
+when you need something that simply
+isn't on this list? What if you need
+
+24
+00:00:29,990 --> 00:00:30,000
+isn't on this list? What if you need
+ 
+
+25
+00:00:30,000 --> 00:00:32,229
+isn't on this list? What if you need
+your character to play a guitar [music]
+
+26
+00:00:32,229 --> 00:00:32,239
+your character to play a guitar [music]
+ 
+
+27
+00:00:32,239 --> 00:00:35,190
+your character to play a guitar [music]
+or unfold a giant map? Maybe you need a
+
+28
+00:00:35,190 --> 00:00:35,200
+or unfold a giant map? Maybe you need a
+ 
+
+29
+00:00:35,200 --> 00:00:38,389
+or unfold a giant map? Maybe you need a
+campfire that loops or a gate opening?
+
+30
+00:00:38,389 --> 00:00:38,399
+campfire that loops or a gate opening?
+ 
+
+31
+00:00:38,399 --> 00:00:40,389
+campfire that loops or a gate opening?
+That's why we just released this tool
+
+32
+00:00:40,389 --> 00:00:40,399
+That's why we just released this tool
+ 
+
+33
+00:00:40,399 --> 00:00:43,510
+That's why we just released this tool
+right here, animate with text. [music]
+
+34
+00:00:43,510 --> 00:00:43,520
+right here, animate with text. [music]
+ 
+
+35
+00:00:43,520 --> 00:00:45,590
+right here, animate with text. [music]
+Today, I'm going to walk you through how
+
+36
+00:00:45,590 --> 00:00:45,600
+Today, I'm going to walk you through how
+ 
+
+37
+00:00:45,600 --> 00:00:47,910
+Today, I'm going to walk you through how
+to use it. We're going to look at the
+
+38
+00:00:47,910 --> 00:00:47,920
+to use it. We're going to look at the
+ 
+
+39
+00:00:47,920 --> 00:00:50,389
+to use it. We're going to look at the
+frame limits, how to cherrypick the best
+
+40
+00:00:50,389 --> 00:00:50,399
+frame limits, how to cherrypick the best
+ 
+
+41
+00:00:50,399 --> 00:00:52,229
+frame limits, how to cherrypick the best
+results, [music] and a really useful
+
+42
+00:00:52,229 --> 00:00:52,239
+results, [music] and a really useful
+ 
+
+43
+00:00:52,239 --> 00:00:54,150
+results, [music] and a really useful
+trick to extend your animations
+
+44
+00:00:54,150 --> 00:00:54,160
+trick to extend your animations
+ 
+
+45
+00:00:54,160 --> 00:00:56,709
+trick to extend your animations
+infinitely. All right, here's the
+
+46
+00:00:56,709 --> 00:00:56,719
+infinitely. All right, here's the
+ 
+
+47
+00:00:56,719 --> 00:00:59,750
+infinitely. All right, here's the
+interface. It's pretty simple. Reference
+
+48
+00:00:59,750 --> 00:00:59,760
+interface. It's pretty simple. Reference
+ 
+
+49
+00:00:59,760 --> 00:01:02,215
+interface. It's pretty simple. Reference
+image, action description, output
+
+50
+00:01:02,215 --> 00:01:02,225
+image, action description, output
+ 
+
+51
+00:01:02,225 --> 00:01:04,710
+image, action description, output
+[music] method. Quick heads up before we
+
+52
+00:01:04,710 --> 00:01:04,720
+[music] method. Quick heads up before we
+ 
+
+53
+00:01:04,720 --> 00:01:07,910
+[music] method. Quick heads up before we
+start. Notice this text down here. This
+
+54
+00:01:07,910 --> 00:01:07,920
+start. Notice this text down here. This
+ 
+
+55
+00:01:07,920 --> 00:01:10,730
+start. Notice this text down here. This
+tool costs 40 generations per run.
+
+56
+00:01:10,730 --> 00:01:10,740
+tool costs 40 generations per run.
+ 
+
+57
+00:01:10,740 --> 00:01:13,030
+tool costs 40 generations per run.
+[music] So unlike the standard tools,
+
+58
+00:01:13,030 --> 00:01:13,040
+[music] So unlike the standard tools,
+ 
+
+59
+00:01:13,040 --> 00:01:14,710
+[music] So unlike the standard tools,
+you want to be a bit more intentional
+
+60
+00:01:14,710 --> 00:01:14,720
+you want to be a bit more intentional
+ 
+
+61
+00:01:14,720 --> 00:01:17,030
+you want to be a bit more intentional
+with your prompts here. The other thing
+
+62
+00:01:17,030 --> 00:01:17,040
+with your prompts here. The other thing
+ 
+
+63
+00:01:17,040 --> 00:01:19,190
+with your prompts here. The other thing
+you really need to understand is the
+
+64
+00:01:19,190 --> 00:01:19,200
+you really need to understand is the
+ 
+
+65
+00:01:19,200 --> 00:01:22,070
+you really need to understand is the
+resolution versus frames trade-off. The
+
+66
+00:01:22,070 --> 00:01:22,080
+resolution versus frames trade-off. The
+ 
+
+67
+00:01:22,080 --> 00:01:25,030
+resolution versus frames trade-off. The
+model balances detail with motion. If
+
+68
+00:01:25,030 --> 00:01:25,040
+model balances detail with motion. If
+ 
+
+69
+00:01:25,040 --> 00:01:29,670
+model balances detail with motion. If
+you use 64x 64, 32x32,
+
+70
+00:01:29,670 --> 00:01:29,680
+you use 64x 64, 32x32,
+ 
+
+71
+00:01:29,680 --> 00:01:35,190
+you use 64x 64, 32x32,
+or 16x6 icons or VFX, you get 16 frames.
+
+72
+00:01:35,190 --> 00:01:35,200
+or 16x6 icons or VFX, you get 16 frames.
+ 
+
+73
+00:01:35,200 --> 00:01:39,030
+or 16x6 icons or VFX, you get 16 frames.
+And if you go big, like 128x 128, you
+
+74
+00:01:39,030 --> 00:01:39,040
+And if you go big, like 128x 128, you
+ 
+
+75
+00:01:39,040 --> 00:01:42,069
+And if you go big, like 128x 128, you
+only get four frames.
+
+76
+00:01:42,069 --> 00:01:42,079
+only get four frames.
+ 
+
+77
+00:01:42,079 --> 00:01:44,630
+only get four frames.
+Let's start with a standard 64x [music]
+
+78
+00:01:44,630 --> 00:01:44,640
+Let's start with a standard 64x [music]
+ 
+
+79
+00:01:44,640 --> 00:01:48,550
+Let's start with a standard 64x [music]
+64 character. That gives us 16 frames.
+
+80
+00:01:48,550 --> 00:01:48,560
+64 character. That gives us 16 frames.
+ 
+
+81
+00:01:48,560 --> 00:01:50,950
+64 character. That gives us 16 frames.
+Let's make him read a map. I'm being
+
+82
+00:01:50,950 --> 00:01:50,960
+Let's make him read a map. I'm being
+ 
+
+83
+00:01:50,960 --> 00:01:52,870
+Let's make him read a map. I'm being
+very descriptive about the object
+
+84
+00:01:52,870 --> 00:01:52,880
+very descriptive about the object
+ 
+
+85
+00:01:52,880 --> 00:01:55,670
+very descriptive about the object
+appearing here. unfolding a large paper
+
+86
+00:01:55,670 --> 00:01:55,680
+appearing here. unfolding a large paper
+ 
+
+87
+00:01:55,680 --> 00:01:58,870
+appearing here. unfolding a large paper
+map. Remember, the AI has to invent
+
+88
+00:01:58,870 --> 00:01:58,880
+map. Remember, the AI has to invent
+ 
+
+89
+00:01:58,880 --> 00:02:02,069
+map. Remember, the AI has to invent
+those map pixels from thin air. Okay,
+
+90
+00:02:02,069 --> 00:02:02,079
+those map pixels from thin air. Okay,
+ 
+
+91
+00:02:02,079 --> 00:02:05,190
+those map pixels from thin air. Okay,
+let's see. Pro tip. Even though you get
+
+92
+00:02:05,190 --> 00:02:05,200
+let's see. Pro tip. Even though you get
+ 
+
+93
+00:02:05,200 --> 00:02:07,510
+let's see. Pro tip. Even though you get
+16 frames, [music] you don't have to use
+
+94
+00:02:07,510 --> 00:02:07,520
+16 frames, [music] you don't have to use
+ 
+
+95
+00:02:07,520 --> 00:02:11,350
+16 frames, [music] you don't have to use
+all of them in pixel art. Less is more.
+
+96
+00:02:11,350 --> 00:02:11,360
+all of them in pixel art. Less is more.
+ 
+
+97
+00:02:11,360 --> 00:02:13,270
+all of them in pixel art. Less is more.
+You'll get a much snappier animation
+
+98
+00:02:13,270 --> 00:02:13,280
+You'll get a much snappier animation
+ 
+
+99
+00:02:13,280 --> 00:02:16,390
+You'll get a much snappier animation
+that looks handmade. Let's try one more.
+
+100
+00:02:16,390 --> 00:02:16,400
+that looks handmade. Let's try one more.
+ 
+
+101
+00:02:16,400 --> 00:02:18,949
+that looks handmade. Let's try one more.
+Playing a guitar.
+
+102
+00:02:18,949 --> 00:02:18,959
+Playing a guitar.
+ 
+
+103
+00:02:18,959 --> 00:02:22,150
+Playing a guitar.
+There we go. The head bobb is perfect.
+
+104
+00:02:22,150 --> 00:02:22,160
+There we go. The head bobb is perfect.
+ 
+
+105
+00:02:22,160 --> 00:02:24,550
+There we go. The head bobb is perfect.
+All right, let's move on to VFX. I've
+
+106
+00:02:24,550 --> 00:02:24,560
+All right, let's move on to VFX. I've
+ 
+
+107
+00:02:24,560 --> 00:02:26,790
+All right, let's move on to VFX. I've
+got this little 32x32
+
+108
+00:02:26,790 --> 00:02:26,800
+got this little 32x32
+ 
+
+109
+00:02:26,800 --> 00:02:29,910
+got this little 32x32
+blue flame sprite here. We get 16
+
+110
+00:02:29,910 --> 00:02:29,920
+blue flame sprite here. We get 16
+ 
+
+111
+00:02:29,920 --> 00:02:32,869
+blue flame sprite here. We get 16
+frames. Plenty for a loop. I'm keeping
+
+112
+00:02:32,869 --> 00:02:32,879
+frames. Plenty for a loop. I'm keeping
+ 
+
+113
+00:02:32,879 --> 00:02:35,509
+frames. Plenty for a loop. I'm keeping
+it simple. Blue fire burning, swirling
+
+114
+00:02:35,509 --> 00:02:35,519
+it simple. Blue fire burning, swirling
+ 
+
+115
+00:02:35,519 --> 00:02:38,949
+it simple. Blue fire burning, swirling
+flames, magic energy. Okay, look at that
+
+116
+00:02:38,949 --> 00:02:38,959
+flames, magic energy. Okay, look at that
+ 
+
+117
+00:02:38,959 --> 00:02:42,070
+flames, magic energy. Okay, look at that
+flow. It feels like liquid. [snorts]
+
+118
+00:02:42,070 --> 00:02:42,080
+flow. It feels like liquid. [snorts]
+ 
+
+119
+00:02:42,080 --> 00:02:44,470
+flow. It feels like liquid. [snorts]
+Again, for a retro game, I'd probably
+
+120
+00:02:44,470 --> 00:02:44,480
+Again, for a retro game, I'd probably
+ 
+
+121
+00:02:44,480 --> 00:02:46,869
+Again, for a retro game, I'd probably
+down sample this. Take our favorite
+
+122
+00:02:46,869 --> 00:02:46,879
+down sample this. Take our favorite
+ 
+
+123
+00:02:46,879 --> 00:02:49,830
+down sample this. Take our favorite
+frames and boom. Now, let's do something
+
+124
+00:02:49,830 --> 00:02:49,840
+frames and boom. Now, let's do something
+ 
+
+125
+00:02:49,840 --> 00:02:53,270
+frames and boom. Now, let's do something
+cooler. a void portal. I want the inside
+
+126
+00:02:53,270 --> 00:02:53,280
+cooler. a void portal. I want the inside
+ 
+
+127
+00:02:53,280 --> 00:02:56,229
+cooler. a void portal. I want the inside
+of the portal to actually churn.
+
+128
+00:02:56,229 --> 00:02:56,239
+of the portal to actually churn.
+ 
+
+129
+00:02:56,239 --> 00:02:59,030
+of the portal to actually churn.
+Swirling vortex, imploding energy,
+
+130
+00:02:59,030 --> 00:02:59,040
+Swirling vortex, imploding energy,
+ 
+
+131
+00:02:59,040 --> 00:03:00,309
+Swirling vortex, imploding energy,
+purple magic, [music]
+
+132
+00:03:00,309 --> 00:03:00,319
+purple magic, [music]
+ 
+
+133
+00:03:00,319 --> 00:03:04,229
+purple magic, [music]
+stars moving inside. Boom. Look at it.
+
+134
+00:03:04,229 --> 00:03:04,239
+stars moving inside. Boom. Look at it.
+ 
+
+135
+00:03:04,239 --> 00:03:06,710
+stars moving inside. Boom. Look at it.
+Beautiful. [music] All right, final
+
+136
+00:03:06,710 --> 00:03:06,720
+Beautiful. [music] All right, final
+ 
+
+137
+00:03:06,720 --> 00:03:11,110
+Beautiful. [music] All right, final
+test. The big stuff. 128x 128 stone
+
+138
+00:03:11,110 --> 00:03:11,120
+test. The big stuff. 128x 128 stone
+ 
+
+139
+00:03:11,120 --> 00:03:14,630
+test. The big stuff. 128x 128 stone
+gate. This is where the limit hits hard.
+
+140
+00:03:14,630 --> 00:03:14,640
+gate. This is where the limit hits hard.
+ 
+
+141
+00:03:14,640 --> 00:03:17,910
+gate. This is where the limit hits hard.
+We drop down to four frames here. I want
+
+142
+00:03:17,910 --> 00:03:17,920
+We drop down to four frames here. I want
+ 
+
+143
+00:03:17,920 --> 00:03:20,390
+We drop down to four frames here. I want
+to animate the opening state.
+
+144
+00:03:20,390 --> 00:03:20,400
+to animate the opening state.
+ 
+
+145
+00:03:20,400 --> 00:03:23,270
+to animate the opening state.
+Stone gate rumbling, sliding upwards,
+
+146
+00:03:23,270 --> 00:03:23,280
+Stone gate rumbling, sliding upwards,
+ 
+
+147
+00:03:23,280 --> 00:03:26,229
+Stone gate rumbling, sliding upwards,
+opening, dust falling. Now, [music] you
+
+148
+00:03:26,229 --> 00:03:26,239
+opening, dust falling. Now, [music] you
+ 
+
+149
+00:03:26,239 --> 00:03:28,070
+opening, dust falling. Now, [music] you
+might think you're stuck, but here's a
+
+150
+00:03:28,070 --> 00:03:28,080
+might think you're stuck, but here's a
+ 
+
+151
+00:03:28,080 --> 00:03:29,830
+might think you're stuck, but here's a
+little trick I found to get around the
+
+152
+00:03:29,830 --> 00:03:29,840
+little trick I found to get around the
+ 
+
+153
+00:03:29,840 --> 00:03:31,910
+little trick I found to get around the
+four-frame limit. I'm going to take the
+
+154
+00:03:31,910 --> 00:03:31,920
+four-frame limit. I'm going to take the
+ 
+
+155
+00:03:31,920 --> 00:03:34,470
+four-frame limit. I'm going to take the
+last frame of this generation right back
+
+156
+00:03:34,470 --> 00:03:34,480
+last frame of this generation right back
+ 
+
+157
+00:03:34,480 --> 00:03:37,190
+last frame of this generation right back
+into the reference image slot. I'm
+
+158
+00:03:37,190 --> 00:03:37,200
+into the reference image slot. I'm
+ 
+
+159
+00:03:37,200 --> 00:03:39,509
+into the reference image slot. I'm
+basically telling the AI, start from
+
+160
+00:03:39,509 --> 00:03:39,519
+basically telling the AI, start from
+ 
+
+161
+00:03:39,519 --> 00:03:42,309
+basically telling the AI, start from
+here. I'll prompt the monster coming out
+
+162
+00:03:42,309 --> 00:03:42,319
+here. I'll prompt the monster coming out
+ 
+
+163
+00:03:42,319 --> 00:03:44,657
+here. I'll prompt the monster coming out
+of the gate. And let's see what we get.
+
+164
+00:03:44,657 --> 00:03:44,667
+of the gate. And let's see what we get.
+ 
+
+165
+00:03:44,667 --> 00:03:47,270
+of the gate. And let's see what we get.
+[music] Boom. And you can chain this as
+
+166
+00:03:47,270 --> 00:03:47,280
+[music] Boom. And you can chain this as
+ 
+
+167
+00:03:47,280 --> 00:03:49,589
+[music] Boom. And you can chain this as
+many times as you want to make longer,
+
+168
+00:03:49,589 --> 00:03:49,599
+many times as you want to make longer,
+ 
+
+169
+00:03:49,599 --> 00:03:53,190
+many times as you want to make longer,
+more complex animations for big objects.
+
+170
+00:03:53,190 --> 00:03:53,200
+more complex animations for big objects.
+ 
+
+171
+00:03:53,200 --> 00:03:55,750
+more complex animations for big objects.
+So that's animate with text. Go give it
+
+172
+00:03:55,750 --> 00:03:55,760
+So that's animate with text. Go give it
+ 
+
+173
+00:03:55,760 --> 00:03:57,750
+So that's animate with text. Go give it
+a shot. I want to see if you can make
+
+174
+00:03:57,750 --> 00:03:57,760
+a shot. I want to see if you can make
+ 
+
+175
+00:03:57,760 --> 00:04:00,630
+a shot. I want to see if you can make
+some crazy portals. Let me know in the
+
+176
+00:04:00,630 --> 00:04:00,640
+some crazy portals. Let me know in the
+ 
+
+177
+00:04:00,640 --> 00:04:02,470
+some crazy portals. Let me know in the
+comments what you create and I'll see
+
+178
+00:04:02,470 --> 00:04:02,480
+comments what you create and I'll see
+ 
+
+179
+00:04:02,480 --> 00:04:05,840
+comments what you create and I'll see
+you in the next one.
+

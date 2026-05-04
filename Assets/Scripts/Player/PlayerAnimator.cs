@@ -5,9 +5,9 @@ namespace RIMA
     /// <summary>
     /// Tüm animator parametrelerini tek yerden yönetir.
     ///
-    /// 8-yön tam clip sistemi (east-flip kaldırıldı — gerçek east sprite'lar mevcut).
-    /// SW attack flip korundu: SW attack sprite'ları SE gibi üretildiği için
-    /// SW saldırısında SE clip + flipX kullanılıyor (TODO: sprite düzeltilince kaldır).
+    /// 4-way diagonal visual-direction system for isometric combat.
+    /// Movement input is snapped to one of the camera-relative diagonals and the
+    /// last snapped direction is preserved when movement stops.
     ///
     /// Animator'da gereken parametreler:
     ///   float  Speed       — 0=idle, 1=run
@@ -39,14 +39,16 @@ namespace RIMA
         [Header("Movement Feel")]
         [SerializeField] private float moveAnimSpeed = 1.5f;
 
-        private Vector2 lastDir = Vector2.down;
+        [Header("Turn Feel")]
+        [SerializeField] private float adjacentTurnDelay = 0.05f;
+        [SerializeField] private float oppositeTurnDelay = 0.10f;
 
-        // SW attack: Kiro SW sprite'larını SE gibi ürettiği için
-        // SW saldırısında SE clip + flipX kullanıyoruz.
-        // TODO: Kiro doğru SW sprite üretince bu flag'i kaldır.
-        private bool   _swAttackFlip    = false;
-        private float  _swAttackEndTime = 0f;
-        private const float SwAttackDuration = 0.8f;
+        private Vector2 lastDir    = new(1f, -1f);
+        private Vector2 lastFacing = new(1f, -1f);
+        private Vector2 movementFacingBeforeCombat = new(1f, -1f);
+        private Vector2 pendingFacing;
+        private float pendingFacingStartedAt = -1f;
+        private bool wasCombatFacingOverride;
 
         // ─── Init ────────────────────────────────────────────────────────────
 
@@ -64,11 +66,13 @@ namespace RIMA
         private void OnEnable()
         {
             if (attack != null) attack.OnComboStep += HandleComboStep;
+            if (controller != null) controller.CombatFacingChanged += HandleCombatFacingChanged;
         }
 
         private void OnDisable()
         {
             if (attack != null) attack.OnComboStep -= HandleComboStep;
+            if (controller != null) controller.CombatFacingChanged -= HandleCombatFacingChanged;
         }
 
         // ─── Update ──────────────────────────────────────────────────────────
@@ -77,43 +81,37 @@ namespace RIMA
         {
             if (anim == null || anim.runtimeAnimatorController == null) return;
 
+            bool combatOverrideActive = controller.HasCombatFacingOverride;
+            bool combatOverrideJustEnded = wasCombatFacingOverride && !combatOverrideActive;
+
             Vector2 dir = controller.FacingDirection;
             if (dir.sqrMagnitude > 0.01f)
-                lastDir = dir.normalized;
-
-            // SW attack flip süresi doldu mu?
-            if (Time.time > _swAttackEndTime) _swAttackFlip = false;
-
-            bool facingSW = lastDir.x < -0.1f && lastDir.y < -0.1f;
-            bool movingDiagDown = controller.IsMoving && lastDir.y < -0.1f && Mathf.Abs(lastDir.x) > 0.1f;
-
-            // Temporary run-direction fix:
-            // Only E/S/SE run clips exist right now. For down-left movement (SW),
-            // sample SE motion and mirror it. Down-right (SE) uses SE directly.
-            float animDirX = lastDir.x;
-            bool shouldFlip = false;
-            if (movingDiagDown)
             {
-                animDirX = Mathf.Abs(lastDir.x); // always sample SE slot for diagonal-down run
-                shouldFlip = lastDir.x < 0f;     // down-left input (SW) mirrors SE->SW
+                lastDir    = dir.normalized;
+                Vector2 targetFacing = combatOverrideJustEnded && controller.IsMoving
+                    ? SnapToFourDiagonal(controller.MovementFacingDirection, movementFacingBeforeCombat)
+                    : SnapToFourDiagonal(lastDir, lastFacing);
+
+                if (!combatOverrideActive && controller.IsMoving)
+                    movementFacingBeforeCombat = targetFacing;
+
+                lastFacing = combatOverrideActive || !controller.IsMoving || combatOverrideJustEnded
+                    ? ApplyFacingImmediately(targetFacing)
+                    : ResolveMovementFacing(targetFacing);
             }
 
-            // Attack override: SW attack still uses SE+flip fallback behavior.
-            if (facingSW && _swAttackFlip)
-            {
-                animDirX = Mathf.Abs(lastDir.x);
-                shouldFlip = true;
-            }
+            if (sr != null) sr.flipX = false;
 
-            if (sr != null) sr.flipX = shouldFlip;
+            bool showMovement = controller.IsMoving && !combatOverrideActive;
 
-            // Hareket halinde animasyon hızını artır — koşma hissi
-            anim.speed = controller.IsMoving ? moveAnimSpeed : 1f;
+            anim.speed = showMovement ? moveAnimSpeed : 1f;
 
-            anim.SetFloat(SpeedHash,  controller.IsMoving ? 1f : 0f);
-            anim.SetFloat(DirXHash,   animDirX);
-            anim.SetFloat(DirYHash,   lastDir.y);
+            anim.SetFloat(SpeedHash,  showMovement ? 1f : 0f);
+            anim.SetFloat(DirXHash,   lastFacing.x);
+            anim.SetFloat(DirYHash,   lastFacing.y);
             anim.SetBool(IsDashHash,  controller.IsDashing);
+
+            wasCombatFacingOverride = combatOverrideActive;
         }
 
         // ─── Combo ───────────────────────────────────────────────────────────
@@ -121,15 +119,16 @@ namespace RIMA
         private void HandleComboStep(int step)
         {
             if (anim == null || anim.runtimeAnimatorController == null) return;
+            ApplyCombatFacingImmediately();
             anim.SetInteger(ComboStepHash, step % 3);
             anim.SetTrigger(AttackHash);
+        }
 
-            // SW saldırısında flip başlat
-            if (lastDir.x < -0.1f && lastDir.y < -0.1f)
-            {
-                _swAttackFlip    = true;
-                _swAttackEndTime = Time.time + SwAttackDuration;
-            }
+        private void HandleCombatFacingChanged()
+        {
+            if (controller != null && !controller.HasCombatFacingOverride && controller.IsMoving)
+                movementFacingBeforeCombat = SnapToFourDiagonal(controller.MovementFacingDirection, lastFacing);
+            ApplyCombatFacingImmediately();
         }
 
         // ─── Death ───────────────────────────────────────────────────────────
@@ -138,6 +137,84 @@ namespace RIMA
         public void TriggerDeath()
         {
             if (anim != null) anim.SetTrigger(IsDeadHash);
+        }
+
+        // Returns one of the 4 isometric diagonal facings: NE, NW, SW, SE.
+        private static Vector2 SnapToFourDiagonal(Vector2 dir, Vector2 previousFacing)
+        {
+            if (dir.sqrMagnitude <= 0.0001f) return previousFacing;
+
+            const float axisEpsilon = 0.001f;
+            float x = Mathf.Abs(dir.x) > axisEpsilon
+                ? Mathf.Sign(dir.x)
+                : DiagonalAxisOrDefault(previousFacing.x, 1f);
+            float y = Mathf.Abs(dir.y) > axisEpsilon
+                ? Mathf.Sign(dir.y)
+                : DiagonalAxisOrDefault(previousFacing.y, -1f);
+
+            return new Vector2(x, y);
+        }
+
+        private static float DiagonalAxisOrDefault(float value, float fallback)
+        {
+            return Mathf.Abs(value) > 0.001f ? Mathf.Sign(value) : fallback;
+        }
+
+        private Vector2 ResolveMovementFacing(Vector2 targetFacing)
+        {
+            if (SameFacing(lastFacing, targetFacing))
+            {
+                ClearPendingFacing();
+                return lastFacing;
+            }
+
+            if (!SameFacing(pendingFacing, targetFacing))
+            {
+                pendingFacing = targetFacing;
+                pendingFacingStartedAt = Time.time;
+                return lastFacing;
+            }
+
+            float delay = IsOppositeFacing(lastFacing, targetFacing) ? oppositeTurnDelay : adjacentTurnDelay;
+            if (Time.time - pendingFacingStartedAt < delay) return lastFacing;
+
+            return ApplyFacingImmediately(targetFacing);
+        }
+
+        private Vector2 ApplyFacingImmediately(Vector2 facing)
+        {
+            ClearPendingFacing();
+            return facing;
+        }
+
+        private void ApplyCombatFacingImmediately()
+        {
+            if (controller == null) return;
+            Vector2 dir = controller.FacingDirection;
+            if (dir.sqrMagnitude <= 0.0001f) return;
+
+            lastDir = dir.normalized;
+            lastFacing = ApplyFacingImmediately(SnapToFourDiagonal(lastDir, lastFacing));
+
+            if (anim == null || anim.runtimeAnimatorController == null) return;
+            anim.SetFloat(DirXHash, lastFacing.x);
+            anim.SetFloat(DirYHash, lastFacing.y);
+        }
+
+        private void ClearPendingFacing()
+        {
+            pendingFacing = Vector2.zero;
+            pendingFacingStartedAt = -1f;
+        }
+
+        private static bool SameFacing(Vector2 a, Vector2 b)
+        {
+            return (a - b).sqrMagnitude < 0.001f;
+        }
+
+        private static bool IsOppositeFacing(Vector2 a, Vector2 b)
+        {
+            return Mathf.Sign(a.x) != Mathf.Sign(b.x) && Mathf.Sign(a.y) != Mathf.Sign(b.y);
         }
     }
 }

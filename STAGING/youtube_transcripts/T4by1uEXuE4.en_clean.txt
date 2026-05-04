@@ -1,0 +1,180 @@
+Hey guys, welcome back to the channel.
+So, I've been working on an isometric
+zoo game prototype, and today I'll show
+you how I'm creating the animals using
+Pixel Lab, of course, from start to
+finish.
+So, before we start, you'll notice I
+already have a few bears in the game.
+These were the first animals I made for
+the prototype and they're what I used
+just to test the systems. So, what I'm
+going to do in this video is break down
+how I made the bears step by step. I'll
+start by creating one bear from scratch,
+just a single example, and walk through
+the full process inside Pixel Lab. So,
+at this point, I needed a new bear
+design since I already had most of the
+basic bear types done. So, I decided to
+make something a bit different, a
+stripeback bear. For this, I went into
+the create character tool and I switched
+to pro mode. Keep in mind, it costs more
+generations. So, I set the camera to
+height top down, chose my canvas size,
+and then I just hit generate.
+Once the character finished generating,
+I clicked edit in Pixelorama so I could
+just handle the rotations. Before doing
+anything else, I used the reduce colors
+tool to clean things up just to make the
+sprite more readable before animating. I
+also saved the color palette from the
+cleaned up bear. So that way I can reuse
+the same palette when I reduce colors on
+the animations later. After that, I
+saved it back to the character creator
+and moved on to animations. So I clicked
+add animation. And as you can see,
+there's a lot of templates here. I'm
+starting with walking though, just using
+the six frame walk cycle. Since this is
+an isometric game, I'm only animating
+the diagonal directions, so I don't
+really need the full set. There's this
+generation I liked. So, I opened that
+one in Pixelama and reduce the colors
+using the palette I saved earlier. I did
+have to clean it up a bit by hand. just
+a few random pixels I didn't like. But
+this is important. Always clean up your
+generations manually. Don't just leave
+them exactly how they come out of the
+prompt. Make the adjustments that feel
+right. I repeated the same process with
+another animation I liked, but this time
+I reduced the colors a little too much
+and it ended up a little bit flat.
+So instead, I cleaned it up manually
+first and then I used edit animation and
+I prompted it to add a bit more shading,
+which honestly it kind of did the trick.
+So after that, again, I reduced the
+colors one more time, saved to character
+creator, and put the bear in the game.
+And look at that. Pretty nice. All
+right, so let's try a different animal
+now. a bison. I went back to the
+character creator, still using the pro
+mode.
+And for the base, I'm actually picking
+the bear template since it's the closest
+match. But honestly, with pro mode, the
+template doesn't really matter. So, same
+exact settings as the bear. And there we
+go. From here, again is the same
+process. I edit in Pixelorama for the
+rotations, reduce the colors, and move
+straight into animation. Once again, I'm
+only animating the diagonal directions
+using the six frame walk cycle. You can
+see that in some of these generations,
+the legs start to struggle a bit. When
+that happens, you can always hit retry
+and see if you get a better result,
+which a lot of times you actually do.
+But in this case, I really like the
+Southwest one. So, I took that into
+Pixarama and cleaned it up manually as
+best as I could. Remember, I'm not a
+pixel artist, so this is really just
+about making it readable. For the
+Northwest animation, the legs weren't
+really working at all. So, I went into
+edit animation. I temporarily reduced
+the canvas size to 64x 64 just so I can
+work with more frames and then I
+prompted it with something like fix the
+walking legs. Simple as that. And as you
+can see, it's not perfect at all, but
+for a prototype, it works. And you can
+clearly see all the four legs. After
+that, I set the canvas size back to 92
+by 92 and saved it back to Character
+Creator and exported the bison. Next up,
+I made a sheep. This time, I actually
+forgot to reduce the colors at first, so
+I just animated it and did that part
+afterwards.
+But, as you can see with the sheep, the
+walking animations worked a lot better
+right away. So, it really depends on the
+animal. That's just something to keep in
+mind. Of course, I still did a few
+manual cleanups. I wanted it to look a
+bit nicer and you don't always have to
+regenerate everything. Sometimes it's
+literally just copy pasting parts of a
+frame you like and fixing things by
+hand. And here you can see the bison and
+the sheep in the game, which is pretty
+nice. Next up, I made a horse. At this
+point, I'm skipping the character
+creation part since we've done it a few
+times already. So here I'm just jumping
+straight into the animations. Once
+again, the legs were kind of struggling
+in the walk cycle. So I did the same
+thing as before. I edited it in
+Pixelorama, reduced the canvas size to
+64x 64, added all the frames, and
+prompted fix the walking legs. And as
+you can see, I got a decent result. It's
+not perfect, but good enough for what I
+need right now. And from there, I just
+fixed the face manually across the other
+frames. I just copy and pasted it where
+I need it and saved it back to Character
+Creator. And here you can see the result
+of the same process with the southeast
+animation as well. And there we go. We
+have a horse in the game. So before we
+wrap up, I just want to show one last
+workflow that I use a lot. Instead of
+creating a new animal from scratch, you
+can take one you already have like this
+horse and use it as a reference to make
+new variations.
+So for this, I opened the horse in a
+sprite, but you could also do it in
+Pixarama.
+And I changed the canvas size to 64x 64
+again because of the frame count. And
+then I went to edit animation.
+So I selected the two animation
+directions we have and then I selected
+all the frames from those animations.
+From here it's just prompting. I used
+something simple like make the horse
+have no saddle and be lighter skinned
+with brown hair and just hit generate
+and bam, there's a new horse. This works
+especially well when you already have a
+good base. So, it's specific to this
+setup, but the idea itself can be used
+in a lot of different ways. So, let's
+make a couple more before we're done.
+Here's one with spots and white hair.
+Really cool.
+And one more. Let's try a black horse
+with brown hair. And there we go. And as
+you can see, it kept the saddle here
+since we didn't really prompt for it to
+be removed. So, that's just another
+thing to keep in mind. just prompts
+wisely. And here's all of them walking
+in the game. All right, so that's it for
+today. If this was helpful, feel free to
+subscribe or leave a comment. And I'll
+see you in the next one.

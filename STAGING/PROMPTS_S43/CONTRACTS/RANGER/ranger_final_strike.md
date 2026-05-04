@@ -91,9 +91,9 @@ Note: dual-consume VFX (Mark implosion + Trap burst) are world-space effects dis
 
 | Sign-off | Who | Status |
 |---|---|---|
-| Identity check (Section E) | design lead | [ ] |
-| Frame budget within class quota | design lead | [ ] |
-| State indicator ownership clean | design lead | [ ] |
+| Identity check (Section E) | design lead | [x] |
+| Frame budget within class quota | design lead | [x] |
+| State indicator ownership clean | design lead | [x] |
 | VFX layer count <= 4 | rima-asset | [ ] |
 | Reference sprite exists | rima-asset | [ ] |
 | Skill dependencies paired in batch (if any) | design lead | [ ] (Marked Detonate and Bone Trap contracts must be signed before Final Strike dispatch -- dual-consume VFX references both; all three must ship in same batch) |

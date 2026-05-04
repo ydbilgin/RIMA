@@ -1,0 +1,805 @@
+1
+00:00:00,680 --> 00:00:02,950
+
+hi I would like to show you our latest
+
+2
+00:00:02,950 --> 00:00:02,960
+hi I would like to show you our latest
+ 
+
+3
+00:00:02,960 --> 00:00:06,670
+hi I would like to show you our latest
+tool create character onot it allows you
+
+4
+00:00:06,670 --> 00:00:06,680
+tool create character onot it allows you
+ 
+
+5
+00:00:06,680 --> 00:00:08,509
+tool create character onot it allows you
+to both generate a character with
+
+6
+00:00:08,509 --> 00:00:08,519
+to both generate a character with
+ 
+
+7
+00:00:08,519 --> 00:00:11,150
+to both generate a character with
+rotations animations from scratch but
+
+8
+00:00:11,150 --> 00:00:11,160
+rotations animations from scratch but
+ 
+
+9
+00:00:11,160 --> 00:00:13,549
+rotations animations from scratch but
+also generate rotations and animations
+
+10
+00:00:13,549 --> 00:00:13,559
+also generate rotations and animations
+ 
+
+11
+00:00:13,559 --> 00:00:15,269
+also generate rotations and animations
+for your existing
+
+12
+00:00:15,269 --> 00:00:15,279
+for your existing
+ 
+
+13
+00:00:15,279 --> 00:00:17,310
+for your existing
+characters if you want to generate a
+
+14
+00:00:17,310 --> 00:00:17,320
+characters if you want to generate a
+ 
+
+15
+00:00:17,320 --> 00:00:19,109
+characters if you want to generate a
+character from sketch you can leave the
+
+16
+00:00:19,109 --> 00:00:19,119
+character from sketch you can leave the
+ 
+
+17
+00:00:19,119 --> 00:00:22,590
+character from sketch you can leave the
+south east and north image empty if you
+
+18
+00:00:22,590 --> 00:00:22,600
+south east and north image empty if you
+ 
+
+19
+00:00:22,600 --> 00:00:24,589
+south east and north image empty if you
+want to generate based on your existing
+
+20
+00:00:24,589 --> 00:00:24,599
+want to generate based on your existing
+ 
+
+21
+00:00:24,599 --> 00:00:27,750
+want to generate based on your existing
+characters set your character to the
+
+22
+00:00:27,750 --> 00:00:27,760
+characters set your character to the
+ 
+
+23
+00:00:27,760 --> 00:00:30,070
+characters set your character to the
+corresponding image
+
+24
+00:00:30,070 --> 00:00:30,080
+corresponding image
+ 
+
+25
+00:00:30,080 --> 00:00:33,110
+corresponding image
+uh currently there are two animations a
+
+26
+00:00:33,110 --> 00:00:33,120
+uh currently there are two animations a
+ 
+
+27
+00:00:33,120 --> 00:00:35,510
+uh currently there are two animations a
+walking animation and a attacking
+
+28
+00:00:35,510 --> 00:00:35,520
+walking animation and a attacking
+ 
+
+29
+00:00:35,520 --> 00:00:38,630
+walking animation and a attacking
+animation in the future I will be adding
+
+30
+00:00:38,630 --> 00:00:38,640
+animation in the future I will be adding
+ 
+
+31
+00:00:38,640 --> 00:00:41,310
+animation in the future I will be adding
+more currently I'm thinking maybe a
+
+32
+00:00:41,310 --> 00:00:41,320
+more currently I'm thinking maybe a
+ 
+
+33
+00:00:41,320 --> 00:00:44,350
+more currently I'm thinking maybe a
+spellcasting animation and some special
+
+34
+00:00:44,350 --> 00:00:44,360
+spellcasting animation and some special
+ 
+
+35
+00:00:44,360 --> 00:00:47,790
+spellcasting animation and some special
+effects like a fireball and also running
+
+36
+00:00:47,790 --> 00:00:47,800
+effects like a fireball and also running
+ 
+
+37
+00:00:47,800 --> 00:00:50,630
+effects like a fireball and also running
+animation but of course join the Discord
+
+38
+00:00:50,630 --> 00:00:50,640
+animation but of course join the Discord
+ 
+
+39
+00:00:50,640 --> 00:00:54,790
+animation but of course join the Discord
+and uh uh give suggestions maybe some
+
+40
+00:00:54,790 --> 00:00:54,800
+and uh uh give suggestions maybe some
+ 
+
+41
+00:00:54,800 --> 00:00:57,229
+and uh uh give suggestions maybe some
+like mining animations could be
+
+42
+00:00:57,229 --> 00:00:57,239
+like mining animations could be
+ 
+
+43
+00:00:57,239 --> 00:01:00,750
+like mining animations could be
+fun uh
+
+44
+00:01:00,750 --> 00:01:00,760
+fun uh
+ 
+
+45
+00:01:00,760 --> 00:01:03,389
+fun uh
+other things I will be uh looking to
+
+46
+00:01:03,389 --> 00:01:03,399
+other things I will be uh looking to
+ 
+
+47
+00:01:03,399 --> 00:01:06,590
+other things I will be uh looking to
+implement after a bit of testing is 128
+
+48
+00:01:06,590 --> 00:01:06,600
+implement after a bit of testing is 128
+ 
+
+49
+00:01:06,600 --> 00:01:11,630
+implement after a bit of testing is 128
+by 128 image size support and also all
+
+50
+00:01:11,630 --> 00:01:11,640
+by 128 image size support and also all
+ 
+
+51
+00:01:11,640 --> 00:01:15,190
+by 128 image size support and also all
+eight uh directions like Southeast
+
+52
+00:01:15,190 --> 00:01:15,200
+eight uh directions like Southeast
+ 
+
+53
+00:01:15,200 --> 00:01:17,390
+eight uh directions like Southeast
+Northeast and
+
+54
+00:01:17,390 --> 00:01:17,400
+Northeast and
+ 
+
+55
+00:01:17,400 --> 00:01:20,830
+Northeast and
+Etc something that is good to knowe is
+
+56
+00:01:20,830 --> 00:01:20,840
+Etc something that is good to knowe is
+ 
+
+57
+00:01:20,840 --> 00:01:22,910
+Etc something that is good to knowe is
+that when you're generating quadrupedal
+
+58
+00:01:22,910 --> 00:01:22,920
+that when you're generating quadrupedal
+ 
+
+59
+00:01:22,920 --> 00:01:26,390
+that when you're generating quadrupedal
+at the moment uh sometimes the start
+
+60
+00:01:26,390 --> 00:01:26,400
+at the moment uh sometimes the start
+ 
+
+61
+00:01:26,400 --> 00:01:29,630
+at the moment uh sometimes the start
+image is a bit yeah it doesn't perfectly
+
+62
+00:01:29,630 --> 00:01:29,640
+image is a bit yeah it doesn't perfectly
+ 
+
+63
+00:01:29,640 --> 00:01:31,749
+image is a bit yeah it doesn't perfectly
+follow follow that the direction so you
+
+64
+00:01:31,749 --> 00:01:31,759
+follow follow that the direction so you
+ 
+
+65
+00:01:31,759 --> 00:01:34,749
+follow follow that the direction so you
+can just uh click try again until it's
+
+66
+00:01:34,749 --> 00:01:34,759
+can just uh click try again until it's
+ 
+
+67
+00:01:34,759 --> 00:01:37,310
+can just uh click try again until it's
+like Facing East uh for the first image
+
+68
+00:01:37,310 --> 00:01:37,320
+like Facing East uh for the first image
+ 
+
+69
+00:01:37,320 --> 00:01:39,310
+like Facing East uh for the first image
+and then just double check that the next
+
+70
+00:01:39,310 --> 00:01:39,320
+and then just double check that the next
+ 
+
+71
+00:01:39,320 --> 00:01:41,910
+and then just double check that the next
+image is facing south and the last one
+
+72
+00:01:41,910 --> 00:01:41,920
+image is facing south and the last one
+ 
+
+73
+00:01:41,920 --> 00:01:44,670
+image is facing south and the last one
+is facing north if it doesn't work just
+
+74
+00:01:44,670 --> 00:01:44,680
+is facing north if it doesn't work just
+ 
+
+75
+00:01:44,680 --> 00:01:47,749
+is facing north if it doesn't work just
+click try again and hopefully after like
+
+76
+00:01:47,749 --> 00:01:47,759
+click try again and hopefully after like
+ 
+
+77
+00:01:47,759 --> 00:01:52,109
+click try again and hopefully after like
+two tries it will uh do it
+
+78
+00:01:52,109 --> 00:01:52,119
+two tries it will uh do it
+ 
+
+79
+00:01:52,119 --> 00:01:54,910
+two tries it will uh do it
+correctly but yeah don't forget there's
+
+80
+00:01:54,910 --> 00:01:54,920
+correctly but yeah don't forget there's
+ 
+
+81
+00:01:54,920 --> 00:01:57,270
+correctly but yeah don't forget there's
+also the animate with text and animate
+
+82
+00:01:57,270 --> 00:01:57,280
+also the animate with text and animate
+ 
+
+83
+00:01:57,280 --> 00:02:00,429
+also the animate with text and animate
+with skeleton which you can use to
+
+84
+00:02:00,429 --> 00:02:00,439
+with skeleton which you can use to
+ 
+
+85
+00:02:00,439 --> 00:02:03,230
+with skeleton which you can use to
+create your own things as well uh to
+
+86
+00:02:03,230 --> 00:02:03,240
+create your own things as well uh to
+ 
+
+87
+00:02:03,240 --> 00:02:07,230
+create your own things as well uh to
+create the yeah your own animations and
+
+88
+00:02:07,230 --> 00:02:07,240
+create the yeah your own animations and
+ 
+
+89
+00:02:07,240 --> 00:02:09,990
+create the yeah your own animations and
+your own touch you can also use animate
+
+90
+00:02:09,990 --> 00:02:10,000
+your own touch you can also use animate
+ 
+
+91
+00:02:10,000 --> 00:02:13,270
+your own touch you can also use animate
+with skeleton to edit the generations
+
+92
+00:02:13,270 --> 00:02:13,280
+with skeleton to edit the generations
+ 
+
+93
+00:02:13,280 --> 00:02:15,509
+with skeleton to edit the generations
+you see here so if you think like the
+
+94
+00:02:15,509 --> 00:02:15,519
+you see here so if you think like the
+ 
+
+95
+00:02:15,519 --> 00:02:17,110
+you see here so if you think like the
+arm should move a bit more forward you
+
+96
+00:02:17,110 --> 00:02:17,120
+arm should move a bit more forward you
+ 
+
+97
+00:02:17,120 --> 00:02:19,750
+arm should move a bit more forward you
+can estimate skeleton move it a bit and
+
+98
+00:02:19,750 --> 00:02:19,760
+can estimate skeleton move it a bit and
+ 
+
+99
+00:02:19,760 --> 00:02:23,430
+can estimate skeleton move it a bit and
+then just generate a improved version on
+
+100
+00:02:23,430 --> 00:02:23,440
+then just generate a improved version on
+ 
+
+101
+00:02:23,440 --> 00:02:27,550
+then just generate a improved version on
+your own
+
+102
+00:02:27,550 --> 00:02:27,560
+
+ 
+
+103
+00:02:27,560 --> 00:02:44,450
+
+[Music]
+
+104
+00:02:44,450 --> 00:02:44,460
+
+ 
+
+105
+00:02:44,460 --> 00:02:58,910
+
+[Music]
+
+106
+00:02:58,910 --> 00:02:58,920
+
+ 
+
+107
+00:02:58,920 --> 00:03:04,320
+
+no a
+
+108
+00:03:04,320 --> 00:03:04,330
+
+ 
+
+109
+00:03:04,330 --> 00:03:12,320
+
+[Music]
+
+110
+00:03:12,320 --> 00:03:12,330
+
+ 
+
+111
+00:03:12,330 --> 00:03:32,330
+
+[Music]
+
+112
+00:03:32,330 --> 00:03:32,340
+
+ 
+
+113
+00:03:32,340 --> 00:03:40,630
+
+[Music]
+
+114
+00:03:40,630 --> 00:03:40,640
+
+ 
+
+115
+00:03:40,640 --> 00:03:43,470
+
+all right let's go through how to use
+
+116
+00:03:43,470 --> 00:03:43,480
+all right let's go through how to use
+ 
+
+117
+00:03:43,480 --> 00:03:47,390
+all right let's go through how to use
+your character as a reference so set the
+
+118
+00:03:47,390 --> 00:03:47,400
+your character as a reference so set the
+ 
+
+119
+00:03:47,400 --> 00:03:49,949
+your character as a reference so set the
+corresponding image for the that
+
+120
+00:03:49,949 --> 00:03:49,959
+corresponding image for the that
+ 
+
+121
+00:03:49,959 --> 00:03:52,229
+corresponding image for the that
+direction and you can check the UI to
+
+122
+00:03:52,229 --> 00:03:52,239
+direction and you can check the UI to
+ 
+
+123
+00:03:52,239 --> 00:03:54,589
+direction and you can check the UI to
+make sure that it's correct and once
+
+124
+00:03:54,589 --> 00:03:54,599
+make sure that it's correct and once
+ 
+
+125
+00:03:54,599 --> 00:03:56,550
+make sure that it's correct and once
+you're happy just double check the
+
+126
+00:03:56,550 --> 00:03:56,560
+you're happy just double check the
+ 
+
+127
+00:03:56,560 --> 00:04:00,390
+you're happy just double check the
+camera view and you can click generate
+
+128
+00:04:00,390 --> 00:04:00,400
+camera view and you can click generate
+ 
+
+129
+00:04:00,400 --> 00:04:05,960
+camera view and you can click generate
+and off you go
+
+130
+00:04:05,960 --> 00:04:05,970
+
+ 
+
+131
+00:04:05,970 --> 00:04:22,860
+
+[Music]
+
+132
+00:04:22,860 --> 00:04:22,870
+
+ 
+
+133
+00:04:22,870 --> 00:04:50,670
+
+[Music]
+
+134
+00:04:50,670 --> 00:04:50,680
+
+ 
+
+135
+00:04:50,680 --> 00:04:54,920
+
+n
+
+136
+00:04:54,920 --> 00:04:54,930
+
+ 
+
+137
+00:04:54,930 --> 00:05:07,230
+
+[Music]
+
+138
+00:05:07,230 --> 00:05:07,240
+[Music]
+ 
+
+139
+00:05:07,240 --> 00:05:08,370
+[Music]
+n
+
+140
+00:05:08,370 --> 00:05:08,380
+n
+ 
+
+141
+00:05:08,380 --> 00:05:26,870
+n
+[Music]
+
+142
+00:05:26,870 --> 00:05:26,880
+
+ 
+
+143
+00:05:26,880 --> 00:05:58,990
+
+[Music]
+
+144
+00:05:58,990 --> 00:05:59,000
+
+ 
+
+145
+00:05:59,000 --> 00:06:00,510
+
+uh yeah thank thank you for watching I
+
+146
+00:06:00,510 --> 00:06:00,520
+uh yeah thank thank you for watching I
+ 
+
+147
+00:06:00,520 --> 00:06:03,870
+uh yeah thank thank you for watching I
+hope you have fun trying out the Tool uh
+
+148
+00:06:03,870 --> 00:06:03,880
+hope you have fun trying out the Tool uh
+ 
+
+149
+00:06:03,880 --> 00:06:05,749
+hope you have fun trying out the Tool uh
+if you have any suggestions or like
+
+150
+00:06:05,749 --> 00:06:05,759
+if you have any suggestions or like
+ 
+
+151
+00:06:05,759 --> 00:06:07,589
+if you have any suggestions or like
+improvements or things you would like to
+
+152
+00:06:07,589 --> 00:06:07,599
+improvements or things you would like to
+ 
+
+153
+00:06:07,599 --> 00:06:09,950
+improvements or things you would like to
+see feel free to leave a comment here in
+
+154
+00:06:09,950 --> 00:06:09,960
+see feel free to leave a comment here in
+ 
+
+155
+00:06:09,960 --> 00:06:12,430
+see feel free to leave a comment here in
+the YouTube channel or joining the
+
+156
+00:06:12,430 --> 00:06:12,440
+the YouTube channel or joining the
+ 
+
+157
+00:06:12,440 --> 00:06:15,909
+the YouTube channel or joining the
+Discord and uh give suggestions in the
+
+158
+00:06:15,909 --> 00:06:15,919
+Discord and uh give suggestions in the
+ 
+
+159
+00:06:15,919 --> 00:06:19,110
+Discord and uh give suggestions in the
+feedback uh Channel and yeah I will see
+
+160
+00:06:19,110 --> 00:06:19,120
+feedback uh Channel and yeah I will see
+ 
+
+161
+00:06:19,120 --> 00:06:23,360
+feedback uh Channel and yeah I will see
+you in the next video
+

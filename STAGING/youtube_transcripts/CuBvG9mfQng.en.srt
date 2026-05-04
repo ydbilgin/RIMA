@@ -1,0 +1,975 @@
+1
+00:00:00,400 --> 00:00:03,030
+
+Hi guys, welcome to today's tutorial. In
+
+2
+00:00:03,030 --> 00:00:03,040
+Hi guys, welcome to today's tutorial. In
+ 
+
+3
+00:00:03,040 --> 00:00:05,510
+Hi guys, welcome to today's tutorial. In
+this video, we're going to cover how to
+
+4
+00:00:05,510 --> 00:00:05,520
+this video, we're going to cover how to
+ 
+
+5
+00:00:05,520 --> 00:00:10,230
+this video, we're going to cover how to
+use create isometric tile. Up top, we
+
+6
+00:00:10,230 --> 00:00:10,240
+use create isometric tile. Up top, we
+ 
+
+7
+00:00:10,240 --> 00:00:13,270
+use create isometric tile. Up top, we
+have tile shape. You can use the dropown
+
+8
+00:00:13,270 --> 00:00:13,280
+have tile shape. You can use the dropown
+ 
+
+9
+00:00:13,280 --> 00:00:16,230
+have tile shape. You can use the dropown
+to select the type of tile you'd like.
+
+10
+00:00:16,230 --> 00:00:16,240
+to select the type of tile you'd like.
+ 
+
+11
+00:00:16,240 --> 00:00:18,790
+to select the type of tile you'd like.
+There are a couple of options, thick,
+
+12
+00:00:18,790 --> 00:00:18,800
+There are a couple of options, thick,
+ 
+
+13
+00:00:18,800 --> 00:00:22,790
+There are a couple of options, thick,
+thin, block, and reference. There's also
+
+14
+00:00:22,790 --> 00:00:22,800
+thin, block, and reference. There's also
+ 
+
+15
+00:00:22,800 --> 00:00:24,390
+thin, block, and reference. There's also
+none.
+
+16
+00:00:24,390 --> 00:00:24,400
+none.
+ 
+
+17
+00:00:24,400 --> 00:00:28,390
+none.
+when you select them, the top area here
+
+18
+00:00:28,390 --> 00:00:28,400
+when you select them, the top area here
+ 
+
+19
+00:00:28,400 --> 00:00:29,790
+when you select them, the top area here
+uh changes.
+
+20
+00:00:29,790 --> 00:00:29,800
+uh changes.
+ 
+
+21
+00:00:29,800 --> 00:00:32,069
+uh changes.
+[Music]
+
+22
+00:00:32,069 --> 00:00:32,079
+[Music]
+ 
+
+23
+00:00:32,079 --> 00:00:33,670
+[Music]
+For this tutorial, we'll be using
+
+24
+00:00:33,670 --> 00:00:33,680
+For this tutorial, we'll be using
+ 
+
+25
+00:00:33,680 --> 00:00:36,549
+For this tutorial, we'll be using
+reference shape, and you can set and
+
+26
+00:00:36,549 --> 00:00:36,559
+reference shape, and you can set and
+ 
+
+27
+00:00:36,559 --> 00:00:39,830
+reference shape, and you can set and
+clear the reference. What the reference
+
+28
+00:00:39,830 --> 00:00:39,840
+clear the reference. What the reference
+ 
+
+29
+00:00:39,840 --> 00:00:43,990
+clear the reference. What the reference
+image does is tell the model what shape
+
+30
+00:00:43,990 --> 00:00:44,000
+image does is tell the model what shape
+ 
+
+31
+00:00:44,000 --> 00:00:46,389
+image does is tell the model what shape
+the tile should be and also some
+
+32
+00:00:46,389 --> 00:00:46,399
+the tile should be and also some
+ 
+
+33
+00:00:46,399 --> 00:00:49,430
+the tile should be and also some
+information on u shading and stuff like
+
+34
+00:00:49,430 --> 00:00:49,440
+information on u shading and stuff like
+ 
+
+35
+00:00:49,440 --> 00:00:51,029
+information on u shading and stuff like
+that.
+
+36
+00:00:51,029 --> 00:00:51,039
+that.
+ 
+
+37
+00:00:51,039 --> 00:00:54,790
+that.
+And underneath we have the description.
+
+38
+00:00:54,790 --> 00:00:54,800
+And underneath we have the description.
+ 
+
+39
+00:00:54,800 --> 00:00:57,750
+And underneath we have the description.
+This is where you tell the model what
+
+40
+00:00:57,750 --> 00:00:57,760
+This is where you tell the model what
+ 
+
+41
+00:00:57,760 --> 00:01:02,229
+This is where you tell the model what
+the tile should look like.
+
+42
+00:01:02,229 --> 00:01:02,239
+
+ 
+
+43
+00:01:02,239 --> 00:01:04,469
+
+It doesn't need to be a simple
+
+44
+00:01:04,469 --> 00:01:04,479
+It doesn't need to be a simple
+ 
+
+45
+00:01:04,479 --> 00:01:05,990
+It doesn't need to be a simple
+description.
+
+46
+00:01:05,990 --> 00:01:06,000
+description.
+ 
+
+47
+00:01:06,000 --> 00:01:11,350
+description.
+You can add more detail if you like.
+
+48
+00:01:11,350 --> 00:01:11,360
+
+ 
+
+49
+00:01:11,360 --> 00:01:13,670
+
+And just make sure it's uh something
+
+50
+00:01:13,670 --> 00:01:13,680
+And just make sure it's uh something
+ 
+
+51
+00:01:13,680 --> 00:01:16,870
+And just make sure it's uh something
+that you want your tile to look like and
+
+52
+00:01:16,870 --> 00:01:16,880
+that you want your tile to look like and
+ 
+
+53
+00:01:16,880 --> 00:01:19,910
+that you want your tile to look like and
+get creative.
+
+54
+00:01:19,910 --> 00:01:19,920
+get creative.
+ 
+
+55
+00:01:19,920 --> 00:01:23,990
+get creative.
+Then we have outline, shading, and
+
+56
+00:01:23,990 --> 00:01:24,000
+Then we have outline, shading, and
+ 
+
+57
+00:01:24,000 --> 00:01:26,310
+Then we have outline, shading, and
+details. You can select the options you
+
+58
+00:01:26,310 --> 00:01:26,320
+details. You can select the options you
+ 
+
+59
+00:01:26,320 --> 00:01:29,749
+details. You can select the options you
+want. Feel free to try them out and
+
+60
+00:01:29,749 --> 00:01:29,759
+want. Feel free to try them out and
+ 
+
+61
+00:01:29,759 --> 00:01:32,069
+want. Feel free to try them out and
+figure out which settings works best for
+
+62
+00:01:32,069 --> 00:01:32,079
+figure out which settings works best for
+ 
+
+63
+00:01:32,079 --> 00:01:35,429
+figure out which settings works best for
+your project. Tile size, there is 32x
+
+64
+00:01:35,429 --> 00:01:35,439
+your project. Tile size, there is 32x
+ 
+
+65
+00:01:35,439 --> 00:01:38,789
+your project. Tile size, there is 32x
+32, 16x 16 and other. So depending on
+
+66
+00:01:38,789 --> 00:01:38,799
+32, 16x 16 and other. So depending on
+ 
+
+67
+00:01:38,799 --> 00:01:41,030
+32, 16x 16 and other. So depending on
+your canvas size, select the one that
+
+68
+00:01:41,030 --> 00:01:41,040
+your canvas size, select the one that
+ 
+
+69
+00:01:41,040 --> 00:01:43,109
+your canvas size, select the one that
+fits you best.
+
+70
+00:01:43,109 --> 00:01:43,119
+fits you best.
+ 
+
+71
+00:01:43,119 --> 00:01:45,670
+fits you best.
+Then we have init image, which helps
+
+72
+00:01:45,670 --> 00:01:45,680
+Then we have init image, which helps
+ 
+
+73
+00:01:45,680 --> 00:01:48,310
+Then we have init image, which helps
+define shape and appearance. If you have
+
+74
+00:01:48,310 --> 00:01:48,320
+define shape and appearance. If you have
+ 
+
+75
+00:01:48,320 --> 00:01:50,469
+define shape and appearance. If you have
+it higher, it will look more like your
+
+76
+00:01:50,469 --> 00:01:50,479
+it higher, it will look more like your
+ 
+
+77
+00:01:50,479 --> 00:01:53,350
+it higher, it will look more like your
+init image. And if it's lower, uh, it
+
+78
+00:01:53,350 --> 00:01:53,360
+init image. And if it's lower, uh, it
+ 
+
+79
+00:01:53,360 --> 00:01:55,270
+init image. And if it's lower, uh, it
+will look less like it. And you can play
+
+80
+00:01:55,270 --> 00:01:55,280
+will look less like it. And you can play
+ 
+
+81
+00:01:55,280 --> 00:01:57,910
+will look less like it. And you can play
+around and see what works best in your
+
+82
+00:01:57,910 --> 00:01:57,920
+around and see what works best in your
+ 
+
+83
+00:01:57,920 --> 00:02:00,149
+around and see what works best in your
+case.
+
+84
+00:02:00,149 --> 00:02:00,159
+case.
+ 
+
+85
+00:02:00,159 --> 00:02:03,030
+case.
+Just make sure it looks uh more like
+
+86
+00:02:03,030 --> 00:02:03,040
+Just make sure it looks uh more like
+ 
+
+87
+00:02:03,040 --> 00:02:06,310
+Just make sure it looks uh more like
+your end result cuz that's what it will
+
+88
+00:02:06,310 --> 00:02:06,320
+your end result cuz that's what it will
+ 
+
+89
+00:02:06,320 --> 00:02:12,229
+your end result cuz that's what it will
+uh push the model towards.
+
+90
+00:02:12,229 --> 00:02:12,239
+
+ 
+
+91
+00:02:12,239 --> 00:02:14,229
+
+Then in advanced options we have
+
+92
+00:02:14,229 --> 00:02:14,239
+Then in advanced options we have
+ 
+
+93
+00:02:14,239 --> 00:02:17,990
+Then in advanced options we have
+guidance weight which will push the
+
+94
+00:02:17,990 --> 00:02:18,000
+guidance weight which will push the
+ 
+
+95
+00:02:18,000 --> 00:02:21,110
+guidance weight which will push the
+model to make the generated image look
+
+96
+00:02:21,110 --> 00:02:21,120
+model to make the generated image look
+ 
+
+97
+00:02:21,120 --> 00:02:23,990
+model to make the generated image look
+more or less like your text description.
+
+98
+00:02:23,990 --> 00:02:24,000
+more or less like your text description.
+ 
+
+99
+00:02:24,000 --> 00:02:26,630
+more or less like your text description.
+It also impacts outline shading and
+
+100
+00:02:26,630 --> 00:02:26,640
+It also impacts outline shading and
+ 
+
+101
+00:02:26,640 --> 00:02:31,030
+It also impacts outline shading and
+details and like how uh much color there
+
+102
+00:02:31,030 --> 00:02:31,040
+details and like how uh much color there
+ 
+
+103
+00:02:31,040 --> 00:02:32,949
+details and like how uh much color there
+is.
+
+104
+00:02:32,949 --> 00:02:32,959
+is.
+ 
+
+105
+00:02:32,959 --> 00:02:35,030
+is.
+And down here we have load previous
+
+106
+00:02:35,030 --> 00:02:35,040
+And down here we have load previous
+ 
+
+107
+00:02:35,040 --> 00:02:37,670
+And down here we have load previous
+settings where you can find your
+
+108
+00:02:37,670 --> 00:02:37,680
+settings where you can find your
+ 
+
+109
+00:02:37,680 --> 00:02:43,910
+settings where you can find your
+previous seeds for old generations.
+
+110
+00:02:43,910 --> 00:02:43,920
+
+ 
+
+111
+00:02:43,920 --> 00:02:47,670
+
+And yeah, that's uh pretty much it. So
+
+112
+00:02:47,670 --> 00:02:47,680
+And yeah, that's uh pretty much it. So
+ 
+
+113
+00:02:47,680 --> 00:02:52,630
+And yeah, that's uh pretty much it. So
+let's go ahead and generate our first
+
+114
+00:02:52,630 --> 00:02:52,640
+let's go ahead and generate our first
+ 
+
+115
+00:02:52,640 --> 00:02:57,110
+let's go ahead and generate our first
+isometric tile.
+
+116
+00:02:57,110 --> 00:02:57,120
+
+ 
+
+117
+00:02:57,120 --> 00:02:59,350
+
+I'm just going to
+
+118
+00:02:59,350 --> 00:02:59,360
+I'm just going to
+ 
+
+119
+00:02:59,360 --> 00:03:01,750
+I'm just going to
+put back the default settings and click
+
+120
+00:03:01,750 --> 00:03:01,760
+put back the default settings and click
+ 
+
+121
+00:03:01,760 --> 00:03:07,830
+put back the default settings and click
+generate.
+
+122
+00:03:07,830 --> 00:03:07,840
+
+ 
+
+123
+00:03:07,840 --> 00:03:11,270
+
+And here we have it, our first tile. I'm
+
+124
+00:03:11,270 --> 00:03:11,280
+And here we have it, our first tile. I'm
+ 
+
+125
+00:03:11,280 --> 00:03:13,190
+And here we have it, our first tile. I'm
+just going to make some quick fixes to
+
+126
+00:03:13,190 --> 00:03:13,200
+just going to make some quick fixes to
+ 
+
+127
+00:03:13,200 --> 00:03:17,910
+just going to make some quick fixes to
+it.
+
+128
+00:03:17,910 --> 00:03:17,920
+
+ 
+
+129
+00:03:17,920 --> 00:03:20,309
+
+And here I'm just reducing the number of
+
+130
+00:03:20,309 --> 00:03:20,319
+And here I'm just reducing the number of
+ 
+
+131
+00:03:20,319 --> 00:03:22,830
+And here I'm just reducing the number of
+colors in the uh image.
+
+132
+00:03:22,830 --> 00:03:22,840
+colors in the uh image.
+ 
+
+133
+00:03:22,840 --> 00:03:28,710
+colors in the uh image.
+[Music]
+
+134
+00:03:28,710 --> 00:03:28,720
+
+ 
+
+135
+00:03:28,720 --> 00:03:32,390
+
+Same way as before. I'm just creating a
+
+136
+00:03:32,390 --> 00:03:32,400
+Same way as before. I'm just creating a
+ 
+
+137
+00:03:32,400 --> 00:03:37,990
+Same way as before. I'm just creating a
+water on top of dirt.
+
+138
+00:03:37,990 --> 00:03:38,000
+
+ 
+
+139
+00:03:38,000 --> 00:03:40,390
+
+Just going to fix it up a bit. Then we
+
+140
+00:03:40,390 --> 00:03:40,400
+Just going to fix it up a bit. Then we
+ 
+
+141
+00:03:40,400 --> 00:03:44,320
+Just going to fix it up a bit. Then we
+will start creating the map.
+
+142
+00:03:44,320 --> 00:03:44,330
+will start creating the map.
+ 
+
+143
+00:03:44,330 --> 00:03:48,949
+will start creating the map.
+[Music]
+
+144
+00:03:48,949 --> 00:03:48,959
+
+ 
+
+145
+00:03:48,959 --> 00:03:52,949
+
+So when creating a uh tile map with
+
+146
+00:03:52,949 --> 00:03:52,959
+So when creating a uh tile map with
+ 
+
+147
+00:03:52,959 --> 00:03:55,670
+So when creating a uh tile map with
+isometric tiles, you want to stack them
+
+148
+00:03:55,670 --> 00:03:55,680
+isometric tiles, you want to stack them
+ 
+
+149
+00:03:55,680 --> 00:03:57,990
+isometric tiles, you want to stack them
+together like this. Then you can copy
+
+150
+00:03:57,990 --> 00:03:58,000
+together like this. Then you can copy
+ 
+
+151
+00:03:58,000 --> 00:04:01,110
+together like this. Then you can copy
+paste to make it faster once you have
+
+152
+00:04:01,110 --> 00:04:01,120
+paste to make it faster once you have
+ 
+
+153
+00:04:01,120 --> 00:04:05,190
+paste to make it faster once you have
+some tiles already in place. For those
+
+154
+00:04:05,190 --> 00:04:05,200
+some tiles already in place. For those
+ 
+
+155
+00:04:05,200 --> 00:04:07,190
+some tiles already in place. For those
+of you who are making a video game, this
+
+156
+00:04:07,190 --> 00:04:07,200
+of you who are making a video game, this
+ 
+
+157
+00:04:07,200 --> 00:04:09,830
+of you who are making a video game, this
+is usually done programmatically. But
+
+158
+00:04:09,830 --> 00:04:09,840
+is usually done programmatically. But
+ 
+
+159
+00:04:09,840 --> 00:04:12,149
+is usually done programmatically. But
+since this is just a quick tutorial, I'm
+
+160
+00:04:12,149 --> 00:04:12,159
+since this is just a quick tutorial, I'm
+ 
+
+161
+00:04:12,159 --> 00:04:16,470
+since this is just a quick tutorial, I'm
+just doing it by hand instead.
+
+162
+00:04:16,470 --> 00:04:16,480
+
+ 
+
+163
+00:04:16,480 --> 00:04:19,990
+
+[Music]
+
+164
+00:04:19,990 --> 00:04:20,000
+[Music]
+ 
+
+165
+00:04:20,000 --> 00:04:23,749
+[Music]
+And now to make it a bit prettier, let's
+
+166
+00:04:23,749 --> 00:04:23,759
+And now to make it a bit prettier, let's
+ 
+
+167
+00:04:23,759 --> 00:04:28,150
+And now to make it a bit prettier, let's
+uh create some trees and stuff to have
+
+168
+00:04:28,150 --> 00:04:28,160
+uh create some trees and stuff to have
+ 
+
+169
+00:04:28,160 --> 00:04:33,749
+uh create some trees and stuff to have
+in our map. So in this case I'm using
+
+170
+00:04:33,749 --> 00:04:33,759
+in our map. So in this case I'm using
+ 
+
+171
+00:04:33,759 --> 00:04:38,790
+in our map. So in this case I'm using
+the pixlux model to generate the tree
+
+172
+00:04:38,790 --> 00:04:38,800
+the pixlux model to generate the tree
+ 
+
+173
+00:04:38,800 --> 00:04:42,550
+the pixlux model to generate the tree
+but you can also use extend map on the
+
+174
+00:04:42,550 --> 00:04:42,560
+but you can also use extend map on the
+ 
+
+175
+00:04:42,560 --> 00:04:44,310
+but you can also use extend map on the
+map that you have like I did in the
+
+176
+00:04:44,310 --> 00:04:44,320
+map that you have like I did in the
+ 
+
+177
+00:04:44,320 --> 00:05:14,940
+map that you have like I did in the
+previous tutorials.
+
+178
+00:05:14,940 --> 00:05:14,950
+
+ 
+
+179
+00:05:14,950 --> 00:05:23,830
+
+[Music]
+
+180
+00:05:23,830 --> 00:05:23,840
+
+ 
+
+181
+00:05:23,840 --> 00:05:25,670
+
+If you have any questions, Feel free to
+
+182
+00:05:25,670 --> 00:05:25,680
+If you have any questions, Feel free to
+ 
+
+183
+00:05:25,680 --> 00:05:29,189
+If you have any questions, Feel free to
+leave a comment or join the Discord
+
+184
+00:05:29,189 --> 00:05:29,199
+leave a comment or join the Discord
+ 
+
+185
+00:05:29,199 --> 00:05:32,390
+leave a comment or join the Discord
+channel and ask us there.
+
+186
+00:05:32,390 --> 00:05:32,400
+channel and ask us there.
+ 
+
+187
+00:05:32,400 --> 00:05:37,029
+channel and ask us there.
+We usually respond within minutes, maybe
+
+188
+00:05:37,029 --> 00:05:37,039
+We usually respond within minutes, maybe
+ 
+
+189
+00:05:37,039 --> 00:05:39,029
+We usually respond within minutes, maybe
+an hour or so, so it's a lot more
+
+190
+00:05:39,029 --> 00:05:39,039
+an hour or so, so it's a lot more
+ 
+
+191
+00:05:39,039 --> 00:05:41,990
+an hour or so, so it's a lot more
+efficient than YouTube comments. Thank
+
+192
+00:05:41,990 --> 00:05:42,000
+efficient than YouTube comments. Thank
+ 
+
+193
+00:05:42,000 --> 00:05:44,310
+efficient than YouTube comments. Thank
+you for watching and I will see you next
+
+194
+00:05:44,310 --> 00:05:44,320
+you for watching and I will see you next
+ 
+
+195
+00:05:44,320 --> 00:05:47,320
+you for watching and I will see you next
+time.
+

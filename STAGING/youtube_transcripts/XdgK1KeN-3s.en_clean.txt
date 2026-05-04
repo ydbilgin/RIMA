@@ -1,0 +1,90 @@
+Hey everyone, Nicola here. So, usually
+when we talk about animation in Pixel
+Lab, we're looking at the character
+creator. [music] And honestly, for about
+90% of your game, this is what you
+should be using. We've even added more
+complex stuff recently, like drinking,
+pushing objects, and throwing. It's
+reliable. It's cheap, but it's still a
+list of presets. [music] What happens
+when you need something that simply
+isn't on this list? What if you need
+your character to play a guitar [music]
+or unfold a giant map? Maybe you need a
+campfire that loops or a gate opening?
+That's why we just released this tool
+right here, animate with text. [music]
+Today, I'm going to walk you through how
+to use it. We're going to look at the
+frame limits, how to cherrypick the best
+results, [music] and a really useful
+trick to extend your animations
+infinitely. All right, here's the
+interface. It's pretty simple. Reference
+image, action description, output
+[music] method. Quick heads up before we
+start. Notice this text down here. This
+tool costs 40 generations per run.
+[music] So unlike the standard tools,
+you want to be a bit more intentional
+with your prompts here. The other thing
+you really need to understand is the
+resolution versus frames trade-off. The
+model balances detail with motion. If
+you use 64x 64, 32x32,
+or 16x6 icons or VFX, you get 16 frames.
+And if you go big, like 128x 128, you
+only get four frames.
+Let's start with a standard 64x [music]
+64 character. That gives us 16 frames.
+Let's make him read a map. I'm being
+very descriptive about the object
+appearing here. unfolding a large paper
+map. Remember, the AI has to invent
+those map pixels from thin air. Okay,
+let's see. Pro tip. Even though you get
+16 frames, [music] you don't have to use
+all of them in pixel art. Less is more.
+You'll get a much snappier animation
+that looks handmade. Let's try one more.
+Playing a guitar.
+There we go. The head bobb is perfect.
+All right, let's move on to VFX. I've
+got this little 32x32
+blue flame sprite here. We get 16
+frames. Plenty for a loop. I'm keeping
+it simple. Blue fire burning, swirling
+flames, magic energy. Okay, look at that
+flow. It feels like liquid. [snorts]
+Again, for a retro game, I'd probably
+down sample this. Take our favorite
+frames and boom. Now, let's do something
+cooler. a void portal. I want the inside
+of the portal to actually churn.
+Swirling vortex, imploding energy,
+purple magic, [music]
+stars moving inside. Boom. Look at it.
+Beautiful. [music] All right, final
+test. The big stuff. 128x 128 stone
+gate. This is where the limit hits hard.
+We drop down to four frames here. I want
+to animate the opening state.
+Stone gate rumbling, sliding upwards,
+opening, dust falling. Now, [music] you
+might think you're stuck, but here's a
+little trick I found to get around the
+four-frame limit. I'm going to take the
+last frame of this generation right back
+into the reference image slot. I'm
+basically telling the AI, start from
+here. I'll prompt the monster coming out
+of the gate. And let's see what we get.
+[music] Boom. And you can chain this as
+many times as you want to make longer,
+more complex animations for big objects.
+So that's animate with text. Go give it
+a shot. I want to see if you can make
+some crazy portals. Let me know in the
+comments what you create and I'll see
+you in the next one.

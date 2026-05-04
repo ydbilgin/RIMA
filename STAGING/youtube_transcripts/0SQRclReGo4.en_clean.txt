@@ -1,0 +1,328 @@
+In game devs, destruction is a luxury.
+Most indie devs just delete the object
+and play a sound effect. But today,
+we're going to fix that. I'm going to
+show you two ways to break your art in
+Pixel Lab. The obvious way and the smart
+way. So, here we are in a sprite and we
+have a vase. Pretty nice vase.
+And the first thing you would think to
+destroy it like or to damage it would be
+to go to edit image, right? And we got a
+couple options. We got the normal edit
+image and the pro version. The pro
+version is more expensive. It uses 40
+generations per edit and the normal one
+uses one generation per edit of course.
+So let's try the normal one. So here we
+have the instruction which is basically
+you tell the model what you want to
+happen to the image. Here I'm just going
+to prompt something like make the vase
+look damaged with cracks. Then we have
+the guidance weight which is how much
+you want the model to basically listen
+to your prompt. And then we have the
+target palette which for this example I
+will use current image because we
+already have a small palette of the
+vase, right? But you can use a color
+palette or you can use none and just
+have the AI do its thing. And then we
+have the output method which of course
+you can put it in a new frame, new
+layer, etc. Here we have other options
+like use selection tool to select
+painting area. So that would be if the
+image is too big like there if your
+resolution is too big, you can just
+select an area with the limitations of
+the size that the model can handle. And
+then we of course have the removed
+background which we'll use since we
+don't have a background. And there you
+go. We got a damaged base, right? It's
+pretty nice. And then you can basically
+just go back and I don't know do it
+again like generate it again just to
+have another another frame of the
+damaged face. But then you're not
+getting all the consistency of it
+getting damaged, right? You're just
+getting randomly damaged bases with
+different cracks, different damage. And
+here I'm going to prompt it more cracked
+and pieces. Right. And there we can
+already see a small limitation.
+It won't give you exactly what you asked
+for, right? It'll do its best to do like
+I asked it I asked for it to be in
+pieces, but it didn't really break it
+apart, right? It just kept giving it
+more cracks and whatnot. So now let's
+switch to this wooden barrel, right?
+Let's go back to the edit image tool,
+the normal one, not the pro one. And now
+I'm just going to prompt something like
+make the barrel make the barrel be open.
+Right? And that as you can see it does
+the job. It literally does it like it
+opened it up. It made made a hole in it.
+Like we can see everything. But then if
+you ask for more complex things like
+make the barrel be damaged, visual
+damage, cracks and whatnot. And we try
+that. And now you see it just added a
+bit of damage.
+It didn't really do exactly what we
+really wanted, right? And then I can
+even add more prompting like in pieces
+and you'll see it doesn't do it like
+it's it's just hard. Look, it just it
+just made another barrel basically. So
+the edit tool, the edit image tool is
+recommended for some stuff, but when it
+starts getting hard for it, you know,
+you got to switch. So let's try the edit
+image pro. So in this one we have to set
+the image. It doesn't take it
+automatically. So you just got to click
+set image. And then I'll just prompt it.
+Make the barrel look more damaged. And
+there we go. I'll just click generate.
+And you can see it is damaged. You know,
+it already did the job much better than
+the normal edit image tool. But here you
+can see like some of the details are not
+are not exactly right. Like this little
+metal part, it was raised like there was
+no gap between it. Here again, let's try
+the normal edit image tool with our
+statue. I'll prompt something like make
+the statue have cracks and visual damage
+on the clothing. And I'll just click
+generate. And here, look, it got kind of
+confused because it saw something that
+resembled cracks, I guess, and it didn't
+really do it. So, let's try the edit
+image pro. I'll prompt the same thing.
+Click generate. And there we have
+something. Now, it's cracked, you know.
+So, the edit image pro tool is much
+stronger. Like, it it takes care of your
+prompts much better if it's something
+complex like something being broken, you
+know. Now I'll do make it more damaged
+and crumbling. Let's try that. And there
+you have it. You know, that's pretty
+cool. So you have like two stages of
+destruction, right? But like I said, the
+edit image pro tool, it's more expensive
+than the normal one. The tool, as you
+can see over there, it says this tool
+costs 40 generations and edits a single
+image. Right? And I'll try one more. I
+I'll put cut in half just so we can see
+how much more we can destroy. You see,
+that's pretty cool. Like, it does a
+really nice job, that's for sure. But it
+does cost 40 generations.
+So, how would I go about this if I want
+to have more frames and yet destroy the
+whole thing? So, that would be animate
+with text. You would think animate with
+text would only be used just for
+animation, right? I mean, yes, but we
+can do the following. We can animate it
+being broken and destroy it. And then we
+can just pick the frames that we like
+and have a damaged state, another damage
+state, and then maybe even an animation
+of it crumbling down or exploding or
+whatever. Right? So that's the goal with
+this. So here we go to animate, animate
+with text pro. And now we have to set
+the reference image, right? So we have
+this reference image and then we have
+the action description which is
+basically what you want the animation to
+be. I'll prompt the base damages with
+cracks and breaks into pieces. And I'll
+click generate. And let's see here. We
+have cracks. Boom. Boom. Boom. Oh, more
+cracks. More damage. More damage. and
+crumbled. And there we have 16 different
+frames we can choose from. So you can
+delete frames, you can keep any frame
+you like, you can edit the frames, you
+know, you don't have to keep them all.
+You don't have to make it a super long
+animation. But here, you can just, you
+know, I'll delete one or two. I'll keep
+the ones I like. You can delete the ones
+that look too much alike. And here I'll
+just erase a little bit of the crumbles
+cuz I want these to be still like the
+damaged vase and not the crumbling like
+animation.
+And here when it starts breaking into
+pieces, that's where I want it to
+animate. Right? So that's what I'm going
+to do. I'm going to tag this just so I
+know that's where the animation starts.
+And for this, since we don't really have
+much of the crumbling, right? I'll do
+the following. We'll go out of the
+animate with text tool and we'll try the
+interpolate pro tool. So, we can give it
+a start image and we can give it an
+ending image. I'll prompt the same
+thing. The vase damages with cracks and
+breaks into pieces. And I'll just click
+generate. And there you can see how it's
+actually just falling apart into pieces,
+which is perfect. I can of course delete
+some frames, you know, cuz there's a lot
+of things that are just like super super
+detailed and sometimes in pixel art, you
+want things to be snappy and quick, you
+know. So, I'll just delete what I don't
+want. I'll keep, of course, what I want.
+As you can see, there's like three
+frames that are the same basically. So,
+yeah, I'll just clean it up. I'll see if
+it looks good. And here you can see like
+there's some floating pieces.
+So I'm just going to move them around
+like manually. We don't really have to
+go back to prompting, you know, like
+these are just some details that are
+much more worth it to do manually than
+trying to get the AI model to do it for
+you. All right, so now let's move on to
+a really important part which is color
+palettes. So, we have this really cool
+tool which is called reduce colors. So,
+before I talk about the tool, what I'm
+going to do is I'm going to make a small
+palette with the colors that I have in
+this vase. And then after I'm done with
+that, I'm going to go to reduce colors.
+I'm going to click use palette. I'm
+going to enable process all frames. I'm
+going to do it in the current layer. And
+I'm going to hit quantize. And now what
+that's going to do is it's gonna keep
+all the sprites, all of the frames in
+our single color palette. Now it looks
+super clean. Look at that. Beautiful.
+The last thing I'm going to do is I'm
+going to just duplicate that last frame.
+I'm going to remove all the dust and I'm
+going to make that last frame just be
+static like that, you know. And here you
+go. We have our damaged base with all
+the hits. Damage, damage, damage,
+damage. animation. So, let's do the same
+thing with our wooden barrel. We go to
+animate, animate with text, set the
+reference image, describe what you want
+to happen.
+So, the barrel gets damaged with cracks
+and then breaks and turns into crumbles.
+Oh, and yeah, I didn't mention this, but
+you can choose a camera view and the
+direction, but I'll just choose a camera
+view here. I'll do low top down. But the
+model is pretty smart, so it doesn't
+really matter that much unless you're
+doing something really specific, of
+course. And let's see. There we have
+damage. We have a damage barrel and it
+breaking or crumbling. Yeah, that's
+pretty cool. So, let's try reduce
+colors.
+I'll do specify colors this time. So,
+that means you can just reduce from all
+the colors that are in all of those
+sprites. You can reduce it to a certain
+amount and it'll keep like the main idea
+with less details, right? So, I'll lower
+it to something like nine. I'll do
+current layer. And let's see. And here,
+well, it did a pretty nice job. It kept
+it clean. So, I'm just going to fix a
+couple of the details because I think I
+might have reduced too much in some some
+spots. As you can see, it kind of gave a
+little bit of the wood color to the
+highlights. So, I'm just going to fix
+that. And again, this is a reminder to
+not fully rely on the AI model, but to
+do and do some manual fixes yourself.
+I'm just going to delete some of the
+crumble here just so I can leave it for
+later, right? For the more advanced
+frames here, I'm just going to delete
+this part cuz it didn't really make much
+sense to me. And there, I I'll just
+tagged the animation again. And here we
+have a fully destructible barrel. And of
+course, we don't really have to use all
+the frames that we get cuz again, we get
+16 frames and we're like, "Oh, that's
+cool." But in all honesty, in a lot of
+pixel art games, we use much less,
+right? It's more of a matter of if
+you're getting the message across with
+as least frames as possible, right? So
+here I'm just going to use three damage
+frames, right? Boom, boom, boom. And
+then it crumbles, right? Same thing with
+the vase. Like here we have a lot of
+damaged stakes, right? So we can reduce
+that for sure, right? And here you see
+it makes more sense cuz it's a vase to
+have less hits, right? It it can also
+depend on how how heavy your your asset
+is, right? Or how heavy it intends to be
+or how strong it it's supposed to be.
+But yeah, let's move on to the last guy,
+which is the statue, which is the bigger
+sprite, right? With bigger sprites,
+animate with text does less frames. So,
+we were doing 64x 64 and 32x 32. Those
+sizes, any size below 64x 64, it gives
+you 16 frames output. But if we go to
+128x 128, we end up with a limitation.
+We get four frames per animation. So
+that means we can only get four frames
+and then we can extend the animation
+again by setting the reference image to
+our last frame, right? But yeah, let's
+try our statue. I'm going to prompt
+something like the statue gets damaged
+and cracks up. And um no, yeah, that's
+I'm going to leave it at that cuz we
+only get four frames. So this one is
+kind of high top down. And let's click
+generate. And look, there we have a
+pretty nice consistent amage statue.
+Right. So now we can go ahead and select
+our last frame as the reference image.
+And now we can change the prompt to
+something like the damaged statue starts
+crumbling into pieces.
+So I'll click generate and let's see.
+There we have it. You see that's a
+pretty nice crumbling animation. So
+let's see if we hit it. Boom. Boom.
+Boom. Then it crumbles. And yeah,
+remember it doesn't really have to be
+only crumbling. It can be explosions. It
+can be all types of stuff. So, be
+creative and let us know what you're
+creating in our Discord channel or down
+in the comments. I hope you like this
+video. So, I hope you found it useful
+and I'll see you in the next

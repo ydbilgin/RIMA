@@ -9,6 +9,9 @@ namespace RIMA
     /// Dash modu: Toggle (checkbox)
     ///   ✓ işaretli   → imlecin olduğu yöne dash (TowardsMouse)
     ///   işaretsiz    → karakterin baktığı yöne dash (FacingDirection)
+    /// Attack/skill aim modu: Toggle (checkbox)
+    ///   ✓ işaretli   → imlecin olduğu yöne saldırı/skill
+    ///   işaretsiz    → karakterin son baktığı yöne saldırı/skill
     /// </summary>
     public class SettingsMenu : MonoBehaviour
     {
@@ -17,6 +20,9 @@ namespace RIMA
 
         [Header("Dash Mode Toggle")]
         [SerializeField] private Toggle dashToMouseToggle;
+
+        [Header("Attack Aim Toggle")]
+        [SerializeField] private Toggle attackAimToMouseToggle;
 
         private PlayerController player;
         private InputAction escAction;
@@ -33,6 +39,12 @@ namespace RIMA
                 var go = GameObject.Find("Toggle_DashToMouse");
                 if (go != null) dashToMouseToggle = go.GetComponent<Toggle>();
             }
+
+            if (attackAimToMouseToggle == null)
+            {
+                var go = GameObject.Find("Toggle_AttackAimToMouse");
+                if (go != null) attackAimToMouseToggle = go.GetComponent<Toggle>();
+            }
         }
 
         private void Start()
@@ -44,6 +56,12 @@ namespace RIMA
             {
                 dashToMouseToggle.onValueChanged.AddListener(OnToggleChanged);
                 dashToMouseToggle.SetIsOnWithoutNotify(player != null && player.DashMode == DashMode.TowardsMouse);
+            }
+
+            if (attackAimToMouseToggle != null)
+            {
+                attackAimToMouseToggle.onValueChanged.AddListener(OnAttackAimToggleChanged);
+                attackAimToMouseToggle.SetIsOnWithoutNotify(player != null && player.AttackAimMode == CombatAimMode.TowardsMouse);
             }
 
             if (panel != null) panel.SetActive(false);
@@ -70,12 +88,26 @@ namespace RIMA
             // Panel açılınca toggle'ı güncel değerle senkronize et
             if (isOpen && dashToMouseToggle != null && player != null)
                 dashToMouseToggle.SetIsOnWithoutNotify(player.DashMode == DashMode.TowardsMouse);
+            if (isOpen && attackAimToMouseToggle != null && player != null)
+                attackAimToMouseToggle.SetIsOnWithoutNotify(player.AttackAimMode == CombatAimMode.TowardsMouse);
         }
 
         private void OnToggleChanged(bool isOn)
         {
             if (player != null)
+            {
                 player.DashMode = isOn ? DashMode.TowardsMouse : DashMode.FacingDirection;
+                PlayerPrefs.Save();
+            }
+        }
+
+        private void OnAttackAimToggleChanged(bool isOn)
+        {
+            if (player != null)
+            {
+                player.AttackAimMode = isOn ? CombatAimMode.TowardsMouse : CombatAimMode.CharacterFacing;
+                PlayerPrefs.Save();
+            }
         }
 
         private void OnDestroy()

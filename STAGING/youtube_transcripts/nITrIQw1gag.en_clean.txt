@@ -1,0 +1,78 @@
+All right. So, let me show you one of
+the most powerful tools in Pixelab right
+now.
+>> Create image from style reference.
+>> This tool is all about consistency.
+If you've ever generated assets that
+look cool but don't look like they
+belong in the same game, well, this
+fixes that. Instead of prompting style
+every time, you teach Pixel App a visual
+style using reference images and then
+generate new assets [music] that match
+it.
+So, first things first, when you open
+the tool, Pixel Lab asks you for a
+canvas size [music] unless you already
+have a open canvas. This part is
+extremely important because the canvas
+size directly controls how many frames
+you get. So, if you choose 32x 32 or 16x
+16, you get up to 64 frames.
+>> [music]
+>> That means you can upload up to 64
+reference images and Pixel Lab [music]
+will generate 64 new assets. Now, you
+don't need all 64. [music] Honestly,
+with 5 to 10 good images, the results
+are already really solid. If you choose
+64x 64, the frame limit drops to 16. So,
+that's 16 reference images max [music]
+and 16 outputs. With 128x 128, you get
+four frames [music] total. And at 256 x
+256, you're generating a single image
+with just one reference [music] image.
+So the rule is simple. Smaller
+resolution equals more style learning
+and bigger resolution equals more
+precision. Now, let's talk about the
+most important part, [music] style
+images. So up here you'll see style
+images. 0 out of 64. This is where you
+upload your references. These can be
+characters, weapons, icons, props,
+anything [music] you want to match
+stylistically. The key thing here is
+consistency. You want [music] similar
+pixel density, similar outlines, similar
+shading, [music] and similar
+proportions. Basically, you're showing
+Pixel app. This is the visual language
+that I want. [music] And again, you
+don't need a ton. Five to 10 references
+work better than 60 random ones. Next is
+the description field. This is not where
+you [music] describe the style because
+the style already comes from the images.
+So here you describe what you want to
+generate. For example, medieval weapons,
+small slime enemies, [music]
+fantasy character faces, or I don't
+know, magic potions and items. Think of
+it like giving instructions to a pixel
+[music] artist and not really writing a
+prompt. Under output settings, I usually
+keep it simple. Set the output method to
+new layer. Turn remove background on so
+everything stays transparent and you
+should be good to go. Now, when you hit
+generate, [music] Pixel Lab creates
+multiple frames. What you're getting
+here is basically an instant asset pack.
+You design the style once and then just
+scale it. And that's really the magic of
+this tool. If you want to try it
+yourself, go check it [music] out at
+pixelab.ai.
+Make sure to leave a like, comment, and
+subscribe.

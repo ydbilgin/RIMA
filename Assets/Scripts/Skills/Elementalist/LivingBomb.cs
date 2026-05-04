@@ -14,6 +14,7 @@ namespace RIMA
         [SerializeField] private float fuseTime   = 5f;
         [SerializeField] private float baseRadius = 2.5f;
         [SerializeField] private int   damage     = 60;
+        private Elementalist_SkillController ctrl;
 
         protected override void Awake()
         {
@@ -21,12 +22,14 @@ namespace RIMA
             skillName = "Living Bomb";
             cooldown = 8f;
             resourceCost = 20;
+            ctrl = GetComponentInParent<Elementalist_SkillController>();
         }
 
         protected override void Execute()
         {
             var target = FindNearestEnemy();
             if (target == null) return;
+            ctrl?.RegisterElementCast(ElementalistElement.Fire, 1);
             StartCoroutine(BombRoutine(target));
         }
 

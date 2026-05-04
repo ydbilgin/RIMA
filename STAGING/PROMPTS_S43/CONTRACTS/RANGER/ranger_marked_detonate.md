@@ -91,9 +91,9 @@ Note: explosion VFX at target position is a separate particle asset dispatched a
 
 | Sign-off | Who | Status |
 |---|---|---|
-| Identity check (Section E) | design lead | [ ] |
-| Frame budget within class quota | design lead | [ ] |
-| State indicator ownership clean | design lead | [ ] |
+| Identity check (Section E) | design lead | [x] |
+| Frame budget within class quota | design lead | [x] |
+| State indicator ownership clean | design lead | [x] |
 | VFX layer count <= 4 | rima-asset | [ ] |
 | Reference sprite exists | rima-asset | [ ] |
 | Skill dependencies paired in batch (if any) | design lead | [ ] (Mark-applying skills must ship in same batch so the consume animation has a reference Mark visual to collapse) |

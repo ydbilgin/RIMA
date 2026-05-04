@@ -237,7 +237,35 @@ Rule: every active skill must produce or consume a defined state. Pure damage sk
 
 ---
 
+## 11. Run Offer / Active Slot Routing (2026-05-03 Lock)
+
+RIMA run progression uses Hades-style room reward offers, not a visible skill tree UI.
+
+Canonical detail: `TASARIM/SKILL_OFFER_SYSTEM_DECISION_2026-05-03.md`.
+
+### Offer Categories
+
+- New active skill
+- Owned-skill upgrade
+- Passive/echo rule
+- Tag synergy
+- Resource mod
+- Risk offer
+
+### Active Slot Gate
+
+An active skill must create a button-worthy combat event. It must apply or consume a readable state, create a positional/zone question, move the player in a class-owned way, answer a specific encounter problem, or create visible resource-risk.
+
+Pure damage, pure self-buff, pure future-cast improvement, and passive economy rules should route to passive/echo/upgrade offers unless redesigned to satisfy the 6-line rule.
+
+### Production Gate
+
+PixelLab concept sheets are mood/reference only. Production skill work must split caster animation, VFX/projectile, ground decal, impact, and state overlays. Per-skill bespoke enemy animation, grapple/struggle/ragdoll animation, boss-specific reaction animation, and baked character+enemy+VFX panels are forbidden.
+
+---
+
 ## Versioning
 - v0.1 (2026-04-30): R4 lock. Counter / movement / execute / zone / ulti / pixel constraint patterns locked.
+- v0.1.1 (2026-05-03): Added Hades-style run offer / active slot routing lock.
 - v0.2 (target after Phase 1 playtest): tune i-frame windows, zone count caps, ulti relock UI feedback.
 - Future: as new classes enter Phase 2/Later, revisit forbidden patterns for new conflict cases.

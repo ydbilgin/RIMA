@@ -1,0 +1,2096 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:03.319 --> 00:00:06.670 align:start position:0%
+ 
+hi<00:00:04.319><c> today</c><00:00:04.720><c> I</c><00:00:04.799><c> will</c><00:00:04.920><c> be</c><00:00:05.080><c> showing</c><00:00:06.040><c> one</c><00:00:06.279><c> way</c><00:00:06.520><c> of</c>
+
+00:00:06.670 --> 00:00:06.680 align:start position:0%
+hi today I will be showing one way of
+ 
+
+00:00:06.680 --> 00:00:08.910 align:start position:0%
+hi today I will be showing one way of
+using<00:00:07.000><c> the</c><00:00:07.160><c> map</c><00:00:07.439><c> Tile</c>
+
+00:00:08.910 --> 00:00:08.920 align:start position:0%
+using the map Tile
+ 
+
+00:00:08.920 --> 00:00:11.870 align:start position:0%
+using the map Tile
+tool<00:00:09.920><c> so</c><00:00:10.200><c> we</c><00:00:10.280><c> will</c><00:00:10.519><c> start</c><00:00:10.840><c> off</c>
+
+00:00:11.870 --> 00:00:11.880 align:start position:0%
+tool so we will start off
+ 
+
+00:00:11.880 --> 00:00:14.749 align:start position:0%
+tool so we will start off
+by<00:00:12.880><c> creating</c><00:00:13.360><c> some</c>
+
+00:00:14.749 --> 00:00:14.759 align:start position:0%
+by creating some
+ 
+
+00:00:14.759 --> 00:00:18.710 align:start position:0%
+by creating some
+graphs<00:00:15.759><c> you</c><00:00:16.000><c> can</c><00:00:16.440><c> uh</c><00:00:17.320><c> create</c><00:00:17.760><c> anything</c><00:00:18.199><c> really</c>
+
+00:00:18.710 --> 00:00:18.720 align:start position:0%
+graphs you can uh create anything really
+ 
+
+00:00:18.720 --> 00:00:22.910 align:start position:0%
+graphs you can uh create anything really
+but<00:00:19.279><c> the</c><00:00:19.480><c> idea</c><00:00:19.880><c> is</c><00:00:20.119><c> to</c><00:00:21.119><c> create</c><00:00:21.519><c> some</c><00:00:22.080><c> uh</c><00:00:22.279><c> tiles</c>
+
+00:00:22.910 --> 00:00:22.920 align:start position:0%
+but the idea is to create some uh tiles
+ 
+
+00:00:22.920 --> 00:00:25.189 align:start position:0%
+but the idea is to create some uh tiles
+that<00:00:23.080><c> we</c><00:00:23.199><c> can</c><00:00:23.480><c> then</c><00:00:23.760><c> generate</c><00:00:24.320><c> more</c><00:00:24.599><c> tiles</c>
+
+00:00:25.189 --> 00:00:25.199 align:start position:0%
+that we can then generate more tiles
+ 
+
+00:00:25.199 --> 00:00:28.470 align:start position:0%
+that we can then generate more tiles
+from<00:00:26.199><c> so</c><00:00:26.400><c> that</c><00:00:26.599><c> the</c><00:00:26.880><c> model</c><00:00:27.400><c> can</c><00:00:27.679><c> use</c><00:00:28.039><c> the</c><00:00:28.199><c> other</c>
+
+00:00:28.470 --> 00:00:28.480 align:start position:0%
+from so that the model can use the other
+ 
+
+00:00:28.480 --> 00:00:32.670 align:start position:0%
+from so that the model can use the other
+tiles<00:00:29.000><c> as</c><00:00:29.560><c> uh</c>
+
+00:00:32.670 --> 00:00:32.680 align:start position:0%
+ 
+ 
+
+00:00:32.680 --> 00:00:35.310 align:start position:0%
+ 
+inspiration<00:00:33.680><c> so</c><00:00:33.960><c> for</c><00:00:34.200><c> this</c><00:00:34.440><c> first</c><00:00:34.760><c> generation</c>
+
+00:00:35.310 --> 00:00:35.320 align:start position:0%
+inspiration so for this first generation
+ 
+
+00:00:35.320 --> 00:00:39.470 align:start position:0%
+inspiration so for this first generation
+I<00:00:35.440><c> want</c><00:00:35.760><c> a</c><00:00:36.040><c> quite</c><00:00:36.480><c> low</c><00:00:37.480><c> in</c><00:00:37.680><c> it</c><00:00:37.840><c> image</c><00:00:38.480><c> strength</c>
+
+00:00:39.470 --> 00:00:39.480 align:start position:0%
+I want a quite low in it image strength
+ 
+
+00:00:39.480 --> 00:00:42.709 align:start position:0%
+I want a quite low in it image strength
+when<00:00:39.680><c> it's</c><00:00:39.960><c> just</c><00:00:40.399><c> for</c><00:00:40.600><c> example</c><00:00:41.079><c> grass</c><00:00:41.960><c> or</c><00:00:42.200><c> road</c>
+
+00:00:42.709 --> 00:00:42.719 align:start position:0%
+when it's just for example grass or road
+ 
+
+00:00:42.719 --> 00:00:46.389 align:start position:0%
+when it's just for example grass or road
+or<00:00:43.440><c> Beach</c><00:00:44.440><c> you</c><00:00:44.559><c> don't</c><00:00:44.879><c> really</c><00:00:45.239><c> need</c><00:00:45.600><c> any</c><00:00:46.120><c> uh</c><00:00:46.239><c> in</c>
+
+00:00:46.389 --> 00:00:46.399 align:start position:0%
+or Beach you don't really need any uh in
+ 
+
+00:00:46.399 --> 00:00:50.549 align:start position:0%
+or Beach you don't really need any uh in
+it<00:00:46.600><c> image</c><00:00:47.680><c> but</c><00:00:48.680><c> I</c><00:00:48.800><c> think</c><00:00:49.000><c> it</c><00:00:49.680><c> sometimes</c><00:00:50.039><c> helps</c>
+
+00:00:50.549 --> 00:00:50.559 align:start position:0%
+it image but I think it sometimes helps
+ 
+
+00:00:50.559 --> 00:00:56.310 align:start position:0%
+it image but I think it sometimes helps
+so<00:00:51.000><c> I'm</c><00:00:51.120><c> going</c><00:00:51.239><c> to</c><00:00:51.440><c> use</c>
+
+00:00:56.310 --> 00:00:56.320 align:start position:0%
+ 
+ 
+
+00:00:56.320 --> 00:01:00.869 align:start position:0%
+ 
+it<00:00:57.320><c> it's</c><00:00:57.480><c> important</c><00:00:57.840><c> you</c><00:00:58.000><c> get</c><00:00:58.239><c> your</c><00:00:59.239><c> starting</c>
+
+00:01:00.869 --> 00:01:00.879 align:start position:0%
+it it's important you get your starting
+ 
+
+00:01:00.879 --> 00:01:04.469 align:start position:0%
+it it's important you get your starting
+um<00:01:01.440><c> tiles</c><00:01:02.039><c> pretty</c><00:01:02.320><c> good</c><00:01:03.239><c> so</c><00:01:03.559><c> that</c><00:01:03.800><c> the</c><00:01:04.000><c> model</c>
+
+00:01:04.469 --> 00:01:04.479 align:start position:0%
+um tiles pretty good so that the model
+ 
+
+00:01:04.479 --> 00:01:07.710 align:start position:0%
+um tiles pretty good so that the model
+will<00:01:04.920><c> continue</c><00:01:05.439><c> doing</c><00:01:06.439><c> good</c><00:01:06.680><c> stuff</c><00:01:07.119><c> that's</c>
+
+00:01:07.710 --> 00:01:07.720 align:start position:0%
+will continue doing good stuff that's
+ 
+
+00:01:07.720 --> 00:01:11.230 align:start position:0%
+will continue doing good stuff that's
+why<00:01:08.720><c> I</c><00:01:08.920><c> highly</c><00:01:09.280><c> recommend</c><00:01:09.799><c> if</c><00:01:09.920><c> you</c><00:01:10.240><c> have</c>
+
+00:01:11.230 --> 00:01:11.240 align:start position:0%
+why I highly recommend if you have
+ 
+
+00:01:11.240 --> 00:01:14.390 align:start position:0%
+why I highly recommend if you have
+already<00:01:11.600><c> have</c><00:01:12.040><c> some</c><00:01:13.040><c> uh</c><00:01:13.200><c> tiles</c><00:01:13.640><c> that</c><00:01:13.759><c> you</c><00:01:13.960><c> like</c>
+
+00:01:14.390 --> 00:01:14.400 align:start position:0%
+already have some uh tiles that you like
+ 
+
+00:01:14.400 --> 00:01:16.950 align:start position:0%
+already have some uh tiles that you like
+that<00:01:14.560><c> you</c><00:01:14.880><c> use</c><00:01:15.240><c> them</c><00:01:15.640><c> as</c><00:01:15.960><c> inspiration</c><00:01:16.600><c> so</c><00:01:16.759><c> you</c>
+
+00:01:16.950 --> 00:01:16.960 align:start position:0%
+that you use them as inspiration so you
+ 
+
+00:01:16.960 --> 00:01:19.870 align:start position:0%
+that you use them as inspiration so you
+get<00:01:17.159><c> better</c><00:01:17.680><c> results</c>
+
+00:01:19.870 --> 00:01:19.880 align:start position:0%
+get better results
+ 
+
+00:01:19.880 --> 00:01:22.510 align:start position:0%
+get better results
+later<00:01:20.880><c> so</c><00:01:21.040><c> now</c><00:01:21.159><c> we</c><00:01:21.280><c> have</c><00:01:21.400><c> created</c><00:01:21.680><c> some</c><00:01:21.880><c> grass</c>
+
+00:01:22.510 --> 00:01:22.520 align:start position:0%
+later so now we have created some grass
+ 
+
+00:01:22.520 --> 00:01:26.749 align:start position:0%
+later so now we have created some grass
+Let's<00:01:23.200><c> uh</c><00:01:24.200><c> create</c><00:01:24.479><c> some</c><00:01:25.079><c> sand</c><00:01:25.439><c> or</c><00:01:25.680><c> Beach</c><00:01:26.560><c> and</c>
+
+00:01:26.749 --> 00:01:26.759 align:start position:0%
+Let's uh create some sand or Beach and
+ 
+
+00:01:26.759 --> 00:01:28.830 align:start position:0%
+Let's uh create some sand or Beach and
+then<00:01:27.040><c> we</c><00:01:27.240><c> can</c>
+
+00:01:28.830 --> 00:01:28.840 align:start position:0%
+then we can
+ 
+
+00:01:28.840 --> 00:01:33.389 align:start position:0%
+then we can
+um<00:01:30.119><c> create</c><00:01:30.439><c> a</c><00:01:30.759><c> transition</c><00:01:31.520><c> from</c><00:01:31.840><c> grass</c><00:01:32.759><c> uh</c><00:01:32.880><c> to</c>
+
+00:01:33.389 --> 00:01:33.399 align:start position:0%
+um create a transition from grass uh to
+ 
+
+00:01:33.399 --> 00:01:37.190 align:start position:0%
+um create a transition from grass uh to
+uh<00:01:33.600><c> to</c><00:01:33.759><c> the</c>
+
+00:01:37.190 --> 00:01:37.200 align:start position:0%
+ 
+ 
+
+00:01:37.200 --> 00:01:40.950 align:start position:0%
+ 
+beach<00:01:38.200><c> so</c><00:01:38.439><c> I</c><00:01:38.560><c> want</c><00:01:38.759><c> to</c><00:01:39.240><c> select</c><00:01:40.200><c> the</c><00:01:40.399><c> area</c><00:01:40.759><c> in</c>
+
+00:01:40.950 --> 00:01:40.960 align:start position:0%
+beach so I want to select the area in
+ 
+
+00:01:40.960 --> 00:01:43.870 align:start position:0%
+beach so I want to select the area in
+between<00:01:41.920><c> so</c><00:01:42.079><c> we</c><00:01:42.240><c> get</c><00:01:42.320><c> a</c><00:01:42.479><c> nice</c><00:01:42.720><c> transition</c><00:01:43.479><c> and</c>
+
+00:01:43.870 --> 00:01:43.880 align:start position:0%
+between so we get a nice transition and
+ 
+
+00:01:43.880 --> 00:01:45.749 align:start position:0%
+between so we get a nice transition and
+all<00:01:44.040><c> of</c><00:01:44.320><c> the</c>
+
+00:01:45.749 --> 00:01:45.759 align:start position:0%
+all of the
+ 
+
+00:01:45.759 --> 00:01:51.830 align:start position:0%
+all of the
+sound<00:01:46.759><c> so</c><00:01:47.000><c> let's</c><00:01:47.280><c> say</c><00:01:47.799><c> grass</c>
+
+00:01:51.830 --> 00:01:51.840 align:start position:0%
+ 
+ 
+
+00:01:51.840 --> 00:01:58.830 align:start position:0%
+ 
+to<00:01:52.840><c> to</c><00:01:53.119><c> start</c>
+
+00:01:58.830 --> 00:01:58.840 align:start position:0%
+ 
+ 
+
+00:01:58.840 --> 00:02:02.310 align:start position:0%
+ 
+off<00:02:00.159><c> once</c><00:02:00.399><c> we</c><00:02:00.600><c> get</c><00:02:00.799><c> something</c><00:02:01.200><c> that</c><00:02:01.360><c> we</c>
+
+00:02:02.310 --> 00:02:02.320 align:start position:0%
+off once we get something that we
+ 
+
+00:02:02.320 --> 00:02:06.469 align:start position:0%
+off once we get something that we
+like<00:02:03.320><c> we</c><00:02:03.600><c> can</c><00:02:04.600><c> keep</c><00:02:04.920><c> it</c><00:02:05.560><c> by</c><00:02:05.759><c> removing</c><00:02:06.159><c> the</c><00:02:06.280><c> in</c>
+
+00:02:06.469 --> 00:02:06.479 align:start position:0%
+like we can keep it by removing the in
+ 
+
+00:02:06.479 --> 00:02:09.029 align:start position:0%
+like we can keep it by removing the in
+pinning<00:02:06.840><c> from</c><00:02:07.080><c> it</c><00:02:08.080><c> and</c>
+
+00:02:09.029 --> 00:02:09.039 align:start position:0%
+pinning from it and
+ 
+
+00:02:09.039 --> 00:02:12.949 align:start position:0%
+pinning from it and
+then<00:02:10.039><c> we</c><00:02:10.239><c> can</c><00:02:10.599><c> remove</c><00:02:10.959><c> what</c><00:02:11.160><c> it</c><00:02:11.319><c> is</c><00:02:11.760><c> like</c><00:02:12.760><c> fill</c>
+
+00:02:12.949 --> 00:02:12.959 align:start position:0%
+then we can remove what it is like fill
+ 
+
+00:02:12.959 --> 00:02:14.790 align:start position:0%
+then we can remove what it is like fill
+it<00:02:13.200><c> back</c><00:02:13.400><c> in</c><00:02:13.599><c> and</c><00:02:13.720><c> then</c><00:02:13.840><c> we</c><00:02:14.000><c> generate</c><00:02:14.440><c> on</c><00:02:14.640><c> top</c>
+
+00:02:14.790 --> 00:02:14.800 align:start position:0%
+it back in and then we generate on top
+ 
+
+00:02:14.800 --> 00:02:17.990 align:start position:0%
+it back in and then we generate on top
+of<00:02:15.040><c> this</c><00:02:15.959><c> so</c><00:02:16.200><c> here</c><00:02:16.360><c> we</c><00:02:16.480><c> could</c><00:02:16.760><c> say</c>
+
+00:02:17.990 --> 00:02:18.000 align:start position:0%
+of this so here we could say
+ 
+
+00:02:18.000 --> 00:02:21.710 align:start position:0%
+of this so here we could say
+um<00:02:19.000><c> be</c><00:02:19.720><c> sand</c>
+
+00:02:21.710 --> 00:02:21.720 align:start position:0%
+um be sand
+ 
+
+00:02:21.720 --> 00:02:28.270 align:start position:0%
+um be sand
+with<00:02:22.720><c> some</c><00:02:23.000><c> rocks</c>
+
+00:02:28.270 --> 00:02:28.280 align:start position:0%
+ 
+ 
+
+00:02:28.280 --> 00:02:30.990 align:start position:0%
+ 
+maybe<00:02:29.280><c> and</c><00:02:29.440><c> if</c><00:02:29.519><c> it</c><00:02:29.959><c> someone</c><00:02:30.239><c> to</c><00:02:30.400><c> do</c><00:02:30.640><c> what</c><00:02:30.760><c> you</c>
+
+00:02:30.990 --> 00:02:31.000 align:start position:0%
+maybe and if it someone to do what you
+ 
+
+00:02:31.000 --> 00:02:35.710 align:start position:0%
+maybe and if it someone to do what you
+want<00:02:31.360><c> it</c><00:02:31.560><c> to</c><00:02:31.800><c> do</c><00:02:32.319><c> we</c><00:02:32.480><c> can</c><00:02:32.840><c> add</c><00:02:33.120><c> in</c><00:02:33.560><c> some</c><00:02:34.319><c> uh</c><00:02:35.319><c> some</c>
+
+00:02:35.710 --> 00:02:35.720 align:start position:0%
+want it to do we can add in some uh some
+ 
+
+00:02:35.720 --> 00:02:49.190 align:start position:0%
+want it to do we can add in some uh some
+help<00:02:36.720><c> some</c><00:02:37.000><c> init</c><00:02:37.400><c> image</c><00:02:37.720><c> help</c><00:02:38.400><c> and</c><00:02:38.640><c> then</c><00:02:39.120><c> uh</c>
+
+00:02:49.190 --> 00:02:49.200 align:start position:0%
+ 
+ 
+
+00:02:49.200 --> 00:02:52.229 align:start position:0%
+ 
+generate<00:02:50.200><c> it</c><00:02:50.360><c> might</c>
+
+00:02:52.229 --> 00:02:52.239 align:start position:0%
+generate it might
+ 
+
+00:02:52.239 --> 00:02:58.229 align:start position:0%
+generate it might
+be<00:02:53.239><c> interesting</c><00:02:53.879><c> to</c><00:02:54.080><c> see</c><00:02:55.159><c> U</c><00:02:56.159><c> like</c><00:02:56.440><c> beach</c><00:02:56.840><c> to</c>
+
+00:02:58.229 --> 00:02:58.239 align:start position:0%
+be interesting to see U like beach to
+ 
+
+00:02:58.239 --> 00:03:03.070 align:start position:0%
+be interesting to see U like beach to
+water<00:02:59.239><c> so</c><00:02:59.480><c> what</c><00:02:59.560><c> we</c><00:02:59.879><c> could</c><00:03:00.200><c> do</c><00:03:01.200><c> might</c><00:03:01.400><c> be</c>
+
+00:03:03.070 --> 00:03:03.080 align:start position:0%
+water so what we could do might be
+ 
+
+00:03:03.080 --> 00:03:07.430 align:start position:0%
+water so what we could do might be
+more<00:03:04.080><c> cooler</c><00:03:04.560><c> to</c><00:03:04.760><c> do</c><00:03:05.159><c> something</c>
+
+00:03:07.430 --> 00:03:07.440 align:start position:0%
+more cooler to do something
+ 
+
+00:03:07.440 --> 00:03:10.710 align:start position:0%
+more cooler to do something
+like<00:03:08.440><c> uh</c><00:03:08.920><c> this</c><00:03:09.159><c> to</c><00:03:09.560><c> this</c><00:03:09.959><c> and</c><00:03:10.120><c> let's</c><00:03:10.400><c> make</c>
+
+00:03:10.710 --> 00:03:10.720 align:start position:0%
+like uh this to this and let's make
+ 
+
+00:03:10.720 --> 00:03:17.309 align:start position:0%
+like uh this to this and let's make
+water<00:03:11.080><c> up</c><00:03:11.480><c> here</c><00:03:12.480><c> so</c><00:03:12.640><c> you</c><00:03:12.720><c> can</c><00:03:12.840><c> get</c><00:03:13.000><c> some</c><00:03:13.200><c> nice</c>
+
+00:03:17.309 --> 00:03:17.319 align:start position:0%
+ 
+ 
+
+00:03:17.319 --> 00:03:19.750 align:start position:0%
+ 
+Corners<00:03:18.319><c> something</c><00:03:18.640><c> I</c><00:03:18.720><c> want</c><00:03:18.879><c> to</c><00:03:19.040><c> note</c><00:03:19.360><c> is</c><00:03:19.560><c> that</c>
+
+00:03:19.750 --> 00:03:19.760 align:start position:0%
+Corners something I want to note is that
+ 
+
+00:03:19.760 --> 00:03:23.710 align:start position:0%
+Corners something I want to note is that
+you<00:03:19.959><c> can</c><00:03:20.360><c> use</c><00:03:21.400><c> customize</c><00:03:22.400><c> Uh</c><00:03:22.599><c> custom</c><00:03:23.080><c> size</c>
+
+00:03:23.710 --> 00:03:23.720 align:start position:0%
+you can use customize Uh custom size
+ 
+
+00:03:23.720 --> 00:03:27.589 align:start position:0%
+you can use customize Uh custom size
+which<00:03:23.879><c> allows</c><00:03:24.159><c> you</c><00:03:24.519><c> to</c><00:03:25.519><c> uh</c><00:03:25.640><c> generate</c><00:03:26.120><c> on</c><00:03:26.720><c> 160</c>
+
+00:03:27.589 --> 00:03:27.599 align:start position:0%
+which allows you to uh generate on 160
+ 
+
+00:03:27.599 --> 00:03:30.990 align:start position:0%
+which allows you to uh generate on 160
+Time<00:03:28.599><c> by</c><00:03:29.120><c> 160</c><00:03:30.000><c> the</c><00:03:30.120><c> issue</c><00:03:30.400><c> with</c><00:03:30.560><c> that</c><00:03:30.720><c> is</c><00:03:30.879><c> the</c>
+
+00:03:30.990 --> 00:03:31.000 align:start position:0%
+Time by 160 the issue with that is the
+ 
+
+00:03:31.000 --> 00:03:32.229 align:start position:0%
+Time by 160 the issue with that is the
+model<00:03:31.400><c> is</c>
+
+00:03:32.229 --> 00:03:32.239 align:start position:0%
+model is
+ 
+
+00:03:32.239 --> 00:03:35.789 align:start position:0%
+model is
+better<00:03:33.239><c> uh</c><00:03:33.400><c> when</c><00:03:33.560><c> you're</c><00:03:33.799><c> doing</c><00:03:34.120><c> it</c><00:03:34.360><c> on</c><00:03:34.959><c> a</c>
+
+00:03:35.789 --> 00:03:35.799 align:start position:0%
+better uh when you're doing it on a
+ 
+
+00:03:35.799 --> 00:03:41.949 align:start position:0%
+better uh when you're doing it on a
+smaller<00:03:36.799><c> small</c><00:03:37.360><c> smaller</c>
+
+00:03:41.949 --> 00:03:41.959 align:start position:0%
+ 
+ 
+
+00:03:41.959 --> 00:03:46.390 align:start position:0%
+ 
+size<00:03:42.959><c> so</c><00:03:43.280><c> in</c><00:03:43.519><c> this</c><00:03:44.040><c> case</c><00:03:45.040><c> I'm</c>
+
+00:03:46.390 --> 00:03:46.400 align:start position:0%
+size so in this case I'm
+ 
+
+00:03:46.400 --> 00:03:49.309 align:start position:0%
+size so in this case I'm
+thinking<00:03:47.400><c> I</c><00:03:47.599><c> kind</c><00:03:47.760><c> of</c><00:03:47.920><c> want</c><00:03:48.200><c> to</c><00:03:48.680><c> uh</c><00:03:48.799><c> allow</c><00:03:49.159><c> the</c>
+
+00:03:49.309 --> 00:03:49.319 align:start position:0%
+thinking I kind of want to uh allow the
+ 
+
+00:03:49.319 --> 00:03:50.990 align:start position:0%
+thinking I kind of want to uh allow the
+model<00:03:49.680><c> to</c><00:03:49.840><c> see</c><00:03:50.080><c> the</c>
+
+00:03:50.990 --> 00:03:51.000 align:start position:0%
+model to see the
+ 
+
+00:03:51.000 --> 00:03:54.190 align:start position:0%
+model to see the
+grass<00:03:52.000><c> to</c><00:03:52.400><c> uh</c><00:03:52.519><c> help</c><00:03:52.760><c> it</c><00:03:53.319><c> understand</c><00:03:53.760><c> like</c><00:03:54.000><c> the</c>
+
+00:03:54.190 --> 00:03:54.200 align:start position:0%
+grass to uh help it understand like the
+ 
+
+00:03:54.200 --> 00:03:55.589 align:start position:0%
+grass to uh help it understand like the
+style<00:03:54.560><c> that</c><00:03:54.680><c> I'm</c>
+
+00:03:55.589 --> 00:03:55.599 align:start position:0%
+style that I'm
+ 
+
+00:03:55.599 --> 00:03:58.710 align:start position:0%
+style that I'm
+using<00:03:56.599><c> so</c><00:03:56.840><c> this</c><00:03:57.040><c> might</c><00:03:57.480><c> actually</c><00:03:57.799><c> be</c><00:03:57.959><c> a</c><00:03:58.239><c> Cas</c><00:03:58.560><c> so</c>
+
+00:03:58.710 --> 00:03:58.720 align:start position:0%
+using so this might actually be a Cas so
+ 
+
+00:03:58.720 --> 00:04:01.190 align:start position:0%
+using so this might actually be a Cas so
+I'm<00:03:58.879><c> going</c><00:03:58.959><c> to</c>
+
+00:04:01.190 --> 00:04:01.200 align:start position:0%
+I'm going to
+ 
+
+00:04:01.200 --> 00:04:04.030 align:start position:0%
+I'm going to
+allow<00:04:01.560><c> to</c><00:04:01.640><c> be</c><00:04:01.760><c> a</c><00:04:01.879><c> bit</c><00:04:02.439><c> larger</c><00:04:03.439><c> just</c><00:04:03.560><c> so</c><00:04:03.760><c> I</c><00:04:03.879><c> can</c>
+
+00:04:04.030 --> 00:04:04.040 align:start position:0%
+allow to be a bit larger just so I can
+ 
+
+00:04:04.040 --> 00:04:08.350 align:start position:0%
+allow to be a bit larger just so I can
+let<00:04:04.239><c> it</c><00:04:04.439><c> the</c><00:04:04.560><c> models</c><00:04:05.000><c> see</c><00:04:05.840><c> um</c><00:04:06.840><c> see</c><00:04:07.360><c> everything</c>
+
+00:04:08.350 --> 00:04:08.360 align:start position:0%
+let it the models see um see everything
+ 
+
+00:04:08.360 --> 00:04:09.589 align:start position:0%
+let it the models see um see everything
+let's<00:04:08.640><c> try</c>
+
+00:04:09.589 --> 00:04:09.599 align:start position:0%
+let's try
+ 
+
+00:04:09.599 --> 00:04:18.749 align:start position:0%
+let's try
+that<00:04:10.599><c> so</c><00:04:10.920><c> let's</c><00:04:12.040><c> uh</c><00:04:13.040><c> take</c><00:04:13.400><c> this</c><00:04:13.560><c> whole</c><00:04:14.439><c> uh</c>
+
+00:04:18.749 --> 00:04:18.759 align:start position:0%
+ 
+ 
+
+00:04:18.759 --> 00:04:21.950 align:start position:0%
+ 
+area<00:04:19.759><c> let's</c><00:04:20.000><c> use</c><00:04:20.280><c> imp</c>
+
+00:04:21.950 --> 00:04:21.960 align:start position:0%
+area let's use imp
+ 
+
+00:04:21.960 --> 00:04:25.710 align:start position:0%
+area let's use imp
+painting<00:04:22.960><c> and</c><00:04:23.160><c> let's</c><00:04:23.560><c> we</c><00:04:23.720><c> want</c><00:04:23.919><c> some</c><00:04:24.720><c> nice</c>
+
+00:04:25.710 --> 00:04:25.720 align:start position:0%
+painting and let's we want some nice
+ 
+
+00:04:25.720 --> 00:04:28.590 align:start position:0%
+painting and let's we want some nice
+sand<00:04:26.280><c> to</c><00:04:26.639><c> water</c><00:04:27.000><c> transition</c>
+
+00:04:28.590 --> 00:04:28.600 align:start position:0%
+sand to water transition
+ 
+
+00:04:28.600 --> 00:04:31.870 align:start position:0%
+sand to water transition
+here
+
+00:04:31.870 --> 00:04:31.880 align:start position:0%
+ 
+ 
+
+00:04:31.880 --> 00:04:34.029 align:start position:0%
+ 
+can<00:04:32.120><c> do</c><00:04:32.440><c> all</c><00:04:32.560><c> of</c><00:04:32.759><c> it</c>
+
+00:04:34.029 --> 00:04:34.039 align:start position:0%
+can do all of it
+ 
+
+00:04:34.039 --> 00:04:40.350 align:start position:0%
+can do all of it
+let's<00:04:35.039><c> let's</c><00:04:35.280><c> have</c><00:04:35.720><c> a</c><00:04:36.720><c> pretty</c><00:04:37.800><c> decent</c><00:04:38.800><c> image</c>
+
+00:04:40.350 --> 00:04:40.360 align:start position:0%
+let's let's have a pretty decent image
+ 
+
+00:04:40.360 --> 00:04:47.189 align:start position:0%
+let's let's have a pretty decent image
+string<00:04:41.360><c> and</c><00:04:41.560><c> we</c><00:04:41.840><c> do</c>
+
+00:04:47.189 --> 00:04:47.199 align:start position:0%
+ 
+ 
+
+00:04:47.199 --> 00:04:49.590 align:start position:0%
+ 
+um<00:04:48.199><c> and</c><00:04:48.479><c> also</c><00:04:48.759><c> something</c><00:04:49.080><c> that's</c><00:04:49.320><c> good</c><00:04:49.440><c> to</c>
+
+00:04:49.590 --> 00:04:49.600 align:start position:0%
+um and also something that's good to
+ 
+
+00:04:49.600 --> 00:04:53.110 align:start position:0%
+um and also something that's good to
+note<00:04:49.880><c> is</c><00:04:50.039><c> that</c><00:04:50.199><c> model</c><00:04:50.520><c> is</c><00:04:50.840><c> actually</c><00:04:51.520><c> um</c><00:04:52.240><c> best</c>
+
+00:04:53.110 --> 00:04:53.120 align:start position:0%
+note is that model is actually um best
+ 
+
+00:04:53.120 --> 00:04:55.270 align:start position:0%
+note is that model is actually um best
+at<00:04:53.840><c> editing</c><00:04:54.280><c> what's</c><00:04:54.440><c> in</c><00:04:54.560><c> the</c><00:04:54.680><c> middle</c><00:04:54.960><c> of</c><00:04:55.120><c> the</c>
+
+00:04:55.270 --> 00:04:55.280 align:start position:0%
+at editing what's in the middle of the
+ 
+
+00:04:55.280 --> 00:05:16.189 align:start position:0%
+at editing what's in the middle of the
+image<00:04:56.280><c> so</c><00:04:56.479><c> let's</c><00:04:56.639><c> see</c><00:04:56.840><c> what</c><00:04:57.199><c> happens</c><00:04:58.560><c> um</c>
+
+00:05:16.189 --> 00:05:16.199 align:start position:0%
+ 
+ 
+
+00:05:16.199 --> 00:05:20.070 align:start position:0%
+ 
+quite<00:05:16.479><c> nice</c><00:05:16.919><c> we</c><00:05:17.080><c> can</c><00:05:17.520><c> retry</c><00:05:18.120><c> again</c><00:05:18.520><c> see</c><00:05:18.720><c> if</c><00:05:19.080><c> it</c>
+
+00:05:20.070 --> 00:05:20.080 align:start position:0%
+quite nice we can retry again see if it
+ 
+
+00:05:20.080 --> 00:05:28.469 align:start position:0%
+quite nice we can retry again see if it
+comes<00:05:20.360><c> up</c><00:05:20.639><c> with</c><00:05:20.840><c> something</c><00:05:21.240><c> even</c>
+
+00:05:28.469 --> 00:05:28.479 align:start position:0%
+ 
+ 
+
+00:05:28.479 --> 00:05:32.870 align:start position:0%
+ 
+cooler
+
+00:05:32.870 --> 00:05:32.880 align:start position:0%
+ 
+ 
+
+00:05:32.880 --> 00:05:36.390 align:start position:0%
+ 
+okay<00:05:33.880><c> this</c><00:05:34.039><c> isn't</c><00:05:34.639><c> perfect</c><00:05:35.639><c> but</c><00:05:35.800><c> we</c><00:05:36.080><c> kind</c><00:05:36.240><c> of</c>
+
+00:05:36.390 --> 00:05:36.400 align:start position:0%
+okay this isn't perfect but we kind of
+ 
+
+00:05:36.400 --> 00:05:39.150 align:start position:0%
+okay this isn't perfect but we kind of
+see<00:05:36.800><c> uh</c><00:05:37.759><c> what</c><00:05:37.960><c> looks</c><00:05:38.240><c> like</c><00:05:38.520><c> in</c><00:05:38.600><c> the</c><00:05:38.759><c> future</c>
+
+00:05:39.150 --> 00:05:39.160 align:start position:0%
+see uh what looks like in the future
+ 
+
+00:05:39.160 --> 00:05:41.430 align:start position:0%
+see uh what looks like in the future
+might<00:05:39.319><c> be</c><00:05:39.440><c> a</c><00:05:39.560><c> good</c><00:05:39.800><c> road</c><00:05:40.800><c> so</c><00:05:41.039><c> we're</c><00:05:41.160><c> going</c><00:05:41.280><c> to</c>
+
+00:05:41.430 --> 00:05:41.440 align:start position:0%
+might be a good road so we're going to
+ 
+
+00:05:41.440 --> 00:05:47.510 align:start position:0%
+might be a good road so we're going to
+do<00:05:41.680><c> here</c><00:05:41.919><c> is</c><00:05:42.199><c> just</c><00:05:43.000><c> remove</c><00:05:43.880><c> what</c><00:05:44.039><c> we</c><00:05:44.160><c> don't</c>
+
+00:05:47.510 --> 00:05:47.520 align:start position:0%
+ 
+ 
+
+00:05:47.520 --> 00:05:49.670 align:start position:0%
+ 
+want<00:05:48.520><c> and</c>
+
+00:05:49.670 --> 00:05:49.680 align:start position:0%
+want and
+ 
+
+00:05:49.680 --> 00:05:52.510 align:start position:0%
+want and
+then<00:05:50.680><c> what</c><00:05:50.919><c> we</c><00:05:51.400><c> can</c>
+
+00:05:52.510 --> 00:05:52.520 align:start position:0%
+then what we can
+ 
+
+00:05:52.520 --> 00:05:56.590 align:start position:0%
+then what we can
+do<00:05:53.520><c> is</c><00:05:53.720><c> go</c><00:05:53.960><c> back</c><00:05:54.160><c> into</c><00:05:54.520><c> the</c><00:05:54.759><c> in</c><00:05:55.000><c> painting</c><00:05:55.600><c> here</c>
+
+00:05:56.590 --> 00:05:56.600 align:start position:0%
+do is go back into the in painting here
+ 
+
+00:05:56.600 --> 00:05:58.309 align:start position:0%
+do is go back into the in painting here
+then<00:05:56.720><c> we're</c><00:05:56.880><c> going</c><00:05:57.000><c> to</c><00:05:57.160><c> show</c><00:05:57.560><c> the</c>
+
+00:05:58.309 --> 00:05:58.319 align:start position:0%
+then we're going to show the
+ 
+
+00:05:58.319 --> 00:06:02.710 align:start position:0%
+then we're going to show the
+model<00:05:59.319><c> uh</c><00:05:59.880><c> the</c><00:06:00.199><c> the</c><00:06:00.360><c> good</c><00:06:00.960><c> road</c><00:06:01.960><c> so</c><00:06:02.160><c> the</c><00:06:02.280><c> model</c>
+
+00:06:02.710 --> 00:06:02.720 align:start position:0%
+model uh the the good road so the model
+ 
+
+00:06:02.720 --> 00:06:05.189 align:start position:0%
+model uh the the good road so the model
+kind<00:06:02.880><c> of</c><00:06:03.400><c> understands</c><00:06:03.880><c> oh</c><00:06:04.240><c> okay</c><00:06:04.759><c> this</c><00:06:04.880><c> is</c><00:06:05.039><c> what</c>
+
+00:06:05.189 --> 00:06:05.199 align:start position:0%
+kind of understands oh okay this is what
+ 
+
+00:06:05.199 --> 00:06:06.430 align:start position:0%
+kind of understands oh okay this is what
+it<00:06:05.319><c> should</c><00:06:05.600><c> look</c>
+
+00:06:06.430 --> 00:06:06.440 align:start position:0%
+it should look
+ 
+
+00:06:06.440 --> 00:06:11.110 align:start position:0%
+it should look
+like<00:06:07.440><c> then</c><00:06:07.720><c> that</c><00:06:07.880><c> will</c><00:06:08.160><c> help</c><00:06:09.120><c> uh</c><00:06:09.360><c> a</c><00:06:09.919><c> lot</c><00:06:10.919><c> then</c>
+
+00:06:11.110 --> 00:06:11.120 align:start position:0%
+like then that will help uh a lot then
+ 
+
+00:06:11.120 --> 00:06:12.510 align:start position:0%
+like then that will help uh a lot then
+we<00:06:11.280><c> can</c>
+
+00:06:12.510 --> 00:06:12.520 align:start position:0%
+we can
+ 
+
+00:06:12.520 --> 00:06:17.189 align:start position:0%
+we can
+uh<00:06:13.520><c> go</c><00:06:13.720><c> in</c><00:06:14.520><c> here</c><00:06:15.520><c> and</c><00:06:15.840><c> just</c><00:06:16.520><c> help</c><00:06:16.759><c> the</c><00:06:16.880><c> model</c>
+
+00:06:17.189 --> 00:06:17.199 align:start position:0%
+uh go in here and just help the model
+ 
+
+00:06:17.199 --> 00:06:20.029 align:start position:0%
+uh go in here and just help the model
+out<00:06:17.400><c> a</c><00:06:17.520><c> little</c><00:06:17.720><c> bit</c><00:06:17.960><c> more</c><00:06:18.720><c> by</c><00:06:19.400><c> filling</c><00:06:19.840><c> that</c>
+
+00:06:20.029 --> 00:06:20.039 align:start position:0%
+out a little bit more by filling that
+ 
+
+00:06:20.039 --> 00:06:21.230 align:start position:0%
+out a little bit more by filling that
+stuff
+
+00:06:21.230 --> 00:06:21.240 align:start position:0%
+stuff
+ 
+
+00:06:21.240 --> 00:06:27.469 align:start position:0%
+stuff
+in<00:06:22.240><c> and</c><00:06:22.440><c> then</c><00:06:22.680><c> we</c><00:06:23.160><c> uh</c>
+
+00:06:27.469 --> 00:06:27.479 align:start position:0%
+ 
+ 
+
+00:06:27.479 --> 00:06:31.990 align:start position:0%
+ 
+generate<00:06:28.479><c> all</c><00:06:28.680><c> right</c><00:06:29.840><c> so</c><00:06:30.120><c> once</c><00:06:30.560><c> this</c><00:06:30.720><c> is</c><00:06:31.000><c> done</c>
+
+00:06:31.990 --> 00:06:32.000 align:start position:0%
+generate all right so once this is done
+ 
+
+00:06:32.000 --> 00:06:34.189 align:start position:0%
+generate all right so once this is done
+in<00:06:32.280><c> this</c><00:06:32.520><c> case</c><00:06:32.840><c> I'll</c>
+
+00:06:34.189 --> 00:06:34.199 align:start position:0%
+in this case I'll
+ 
+
+00:06:34.199 --> 00:06:37.150 align:start position:0%
+in this case I'll
+probably<00:06:35.199><c> go</c><00:06:35.400><c> in</c><00:06:35.720><c> here</c><00:06:36.440><c> maybe</c><00:06:36.680><c> do</c><00:06:36.880><c> something</c>
+
+00:06:37.150 --> 00:06:37.160 align:start position:0%
+probably go in here maybe do something
+ 
+
+00:06:37.160 --> 00:06:41.550 align:start position:0%
+probably go in here maybe do something
+like<00:06:37.680><c> that</c><00:06:38.680><c> and</c><00:06:38.919><c> then</c><00:06:39.840><c> let's</c><00:06:40.080><c> say</c><00:06:40.360><c> we</c><00:06:40.479><c> are</c><00:06:41.400><c> kind</c>
+
+00:06:41.550 --> 00:06:41.560 align:start position:0%
+like that and then let's say we are kind
+ 
+
+00:06:41.560 --> 00:06:44.270 align:start position:0%
+like that and then let's say we are kind
+of<00:06:41.759><c> happy</c><00:06:42.039><c> with</c><00:06:42.240><c> this</c><00:06:42.639><c> part</c><00:06:43.639><c> can</c><00:06:43.800><c> do</c><00:06:43.960><c> something</c>
+
+00:06:44.270 --> 00:06:44.280 align:start position:0%
+of happy with this part can do something
+ 
+
+00:06:44.280 --> 00:06:48.070 align:start position:0%
+of happy with this part can do something
+like<00:06:44.680><c> that</c><00:06:45.680><c> then</c><00:06:45.960><c> just</c><00:06:46.440><c> let's</c><00:06:46.680><c> just</c><00:06:46.880><c> fix</c><00:06:47.240><c> this</c>
+
+00:06:48.070 --> 00:06:48.080 align:start position:0%
+like that then just let's just fix this
+ 
+
+00:06:48.080 --> 00:06:54.270 align:start position:0%
+like that then just let's just fix this
+part<00:06:49.080><c> so</c><00:06:49.400><c> I</c><00:06:49.479><c> don't</c><00:06:49.960><c> really</c><00:06:50.960><c> not</c><00:06:51.199><c> loving</c><00:06:51.680><c> the</c>
+
+00:06:54.270 --> 00:06:54.280 align:start position:0%
+ 
+ 
+
+00:06:54.280 --> 00:06:57.550 align:start position:0%
+ 
+transition<00:06:55.280><c> so</c><00:06:55.520><c> let's</c>
+
+00:06:57.550 --> 00:06:57.560 align:start position:0%
+transition so let's
+ 
+
+00:06:57.560 --> 00:07:02.029 align:start position:0%
+transition so let's
+do<00:06:58.560><c> no</c><00:06:58.840><c> in</c><00:06:59.160><c> Dage</c><00:06:59.400><c> IM</c><00:07:00.080><c> in</c><00:07:00.280><c> this</c>
+
+00:07:02.029 --> 00:07:02.039 align:start position:0%
+do no in Dage IM in this
+ 
+
+00:07:02.039 --> 00:07:05.790 align:start position:0%
+do no in Dage IM in this
+case<00:07:03.039><c> and</c><00:07:03.199><c> then</c><00:07:03.440><c> we</c><00:07:03.599><c> to</c><00:07:03.879><c> go</c><00:07:04.680><c> in</c>
+
+00:07:05.790 --> 00:07:05.800 align:start position:0%
+case and then we to go in
+ 
+
+00:07:05.800 --> 00:07:23.790 align:start position:0%
+case and then we to go in
+here<00:07:06.800><c> and</c><00:07:06.960><c> then</c><00:07:07.120><c> we</c><00:07:07.280><c> make</c><00:07:07.919><c> the</c>
+
+00:07:23.790 --> 00:07:23.800 align:start position:0%
+ 
+ 
+
+00:07:23.800 --> 00:07:26.749 align:start position:0%
+ 
+transition<00:07:24.800><c> all</c>
+
+00:07:26.749 --> 00:07:26.759 align:start position:0%
+transition all
+ 
+
+00:07:26.759 --> 00:07:28.309 align:start position:0%
+transition all
+right
+
+00:07:28.309 --> 00:07:28.319 align:start position:0%
+right
+ 
+
+00:07:28.319 --> 00:07:31.189 align:start position:0%
+right
+nice<00:07:29.639><c> and</c><00:07:30.280><c> let's</c>
+
+00:07:31.189 --> 00:07:31.199 align:start position:0%
+nice and let's
+ 
+
+00:07:31.199 --> 00:07:35.230 align:start position:0%
+nice and let's
+say<00:07:32.199><c> now</c><00:07:32.720><c> we</c><00:07:32.879><c> want</c><00:07:33.240><c> the</c><00:07:33.560><c> uh</c><00:07:33.680><c> road</c><00:07:34.000><c> to</c><00:07:34.400><c> a</c>
+
+00:07:35.230 --> 00:07:35.240 align:start position:0%
+say now we want the uh road to a
+ 
+
+00:07:35.240 --> 00:07:38.990 align:start position:0%
+say now we want the uh road to a
+beach<00:07:36.240><c> so</c><00:07:36.440><c> in</c><00:07:36.599><c> this</c><00:07:36.840><c> case</c><00:07:37.199><c> I'm</c><00:07:37.479><c> just</c><00:07:37.639><c> going</c>
+
+00:07:38.990 --> 00:07:39.000 align:start position:0%
+beach so in this case I'm just going
+ 
+
+00:07:39.000 --> 00:07:41.710 align:start position:0%
+beach so in this case I'm just going
+to<00:07:40.000><c> custom</c><00:07:40.560><c> size</c><00:07:41.000><c> I</c><00:07:41.080><c> think</c><00:07:41.240><c> it</c><00:07:41.319><c> will</c><00:07:41.520><c> work</c>
+
+00:07:41.710 --> 00:07:41.720 align:start position:0%
+to custom size I think it will work
+ 
+
+00:07:41.720 --> 00:07:44.230 align:start position:0%
+to custom size I think it will work
+pretty
+
+00:07:44.230 --> 00:07:44.240 align:start position:0%
+ 
+ 
+
+00:07:44.240 --> 00:07:47.990 align:start position:0%
+ 
+well<00:07:45.240><c> going</c><00:07:45.360><c> to</c><00:07:45.599><c> go</c>
+
+00:07:47.990 --> 00:07:48.000 align:start position:0%
+ 
+ 
+
+00:07:48.000 --> 00:07:49.170 align:start position:0%
+ 
+in
+
+00:07:49.170 --> 00:07:49.180 align:start position:0%
+in
+ 
+
+00:07:49.180 --> 00:07:51.110 align:start position:0%
+in
+[Music]
+
+00:07:51.110 --> 00:07:51.120 align:start position:0%
+[Music]
+ 
+
+00:07:51.120 --> 00:07:56.230 align:start position:0%
+[Music]
+remove<00:07:52.120><c> I</c><00:07:52.360><c> probably</c><00:07:53.120><c> I</c><00:07:53.199><c> don't</c><00:07:53.440><c> want</c>
+
+00:07:56.230 --> 00:07:56.240 align:start position:0%
+ 
+ 
+
+00:07:56.240 --> 00:07:59.110 align:start position:0%
+ 
+this<00:07:57.240><c> I</c><00:07:57.360><c> want</c><00:07:57.599><c> to</c><00:07:58.120><c> I'm</c><00:07:58.280><c> going</c><00:07:58.360><c> to</c><00:07:58.520><c> want</c><00:07:58.680><c> to</c><00:07:58.919><c> in</c>
+
+00:07:59.110 --> 00:07:59.120 align:start position:0%
+this I want to I'm going to want to in
+ 
+
+00:07:59.120 --> 00:08:02.469 align:start position:0%
+this I want to I'm going to want to in
+paint<00:07:59.440><c> paint</c><00:08:00.440><c> transition</c><00:08:00.960><c> in</c>
+
+00:08:02.469 --> 00:08:02.479 align:start position:0%
+paint paint transition in
+ 
+
+00:08:02.479 --> 00:08:04.790 align:start position:0%
+paint paint transition in
+between<00:08:03.479><c> this</c>
+
+00:08:04.790 --> 00:08:04.800 align:start position:0%
+between this
+ 
+
+00:08:04.800 --> 00:08:07.029 align:start position:0%
+between this
+stuff<00:08:05.800><c> going</c><00:08:05.879><c> to</c>
+
+00:08:07.029 --> 00:08:07.039 align:start position:0%
+stuff going to
+ 
+
+00:08:07.039 --> 00:08:09.909 align:start position:0%
+stuff going to
+leave<00:08:08.039><c> the</c><00:08:08.240><c> road</c><00:08:08.599><c> alone</c><00:08:09.159><c> I</c><00:08:09.240><c> want</c><00:08:09.360><c> to</c><00:08:09.479><c> show</c><00:08:09.800><c> as</c>
+
+00:08:09.909 --> 00:08:09.919 align:start position:0%
+leave the road alone I want to show as
+ 
+
+00:08:09.919 --> 00:08:12.230 align:start position:0%
+leave the road alone I want to show as
+much<00:08:10.120><c> as</c><00:08:10.319><c> possible</c><00:08:10.720><c> of</c><00:08:11.039><c> the</c><00:08:11.440><c> the</c><00:08:11.560><c> road</c><00:08:11.919><c> just</c><00:08:12.080><c> to</c>
+
+00:08:12.230 --> 00:08:12.240 align:start position:0%
+much as possible of the the road just to
+ 
+
+00:08:12.240 --> 00:08:14.430 align:start position:0%
+much as possible of the the road just to
+give<00:08:12.360><c> it</c><00:08:12.479><c> an</c><00:08:12.720><c> idea</c><00:08:13.120><c> what</c><00:08:13.240><c> it</c><00:08:13.360><c> should</c><00:08:13.680><c> look</c>
+
+00:08:14.430 --> 00:08:14.440 align:start position:0%
+give it an idea what it should look
+ 
+
+00:08:14.440 --> 00:08:17.550 align:start position:0%
+give it an idea what it should look
+like<00:08:15.440><c> then</c><00:08:15.759><c> here</c><00:08:16.000><c> in</c>
+
+00:08:17.550 --> 00:08:17.560 align:start position:0%
+like then here in
+ 
+
+00:08:17.560 --> 00:08:19.749 align:start position:0%
+like then here in
+between<00:08:18.560><c> I'm</c><00:08:18.720><c> just</c><00:08:18.840><c> going</c>
+
+00:08:19.749 --> 00:08:19.759 align:start position:0%
+between I'm just going
+ 
+
+00:08:19.759 --> 00:08:24.869 align:start position:0%
+between I'm just going
+to<00:08:20.759><c> uh</c><00:08:20.919><c> fill</c><00:08:21.159><c> it</c>
+
+00:08:24.869 --> 00:08:24.879 align:start position:0%
+ 
+ 
+
+00:08:24.879 --> 00:08:28.270 align:start position:0%
+ 
+in<00:08:25.879><c> might</c><00:08:26.120><c> be</c><00:08:26.360><c> good</c><00:08:26.639><c> to</c><00:08:27.159><c> uh</c><00:08:27.440><c> take</c><00:08:27.639><c> a</c><00:08:27.919><c> darker</c>
+
+00:08:28.270 --> 00:08:28.280 align:start position:0%
+in might be good to uh take a darker
+ 
+
+00:08:28.280 --> 00:08:30.430 align:start position:0%
+in might be good to uh take a darker
+color<00:08:28.639><c> just</c><00:08:28.800><c> so</c><00:08:29.120><c> there</c><00:08:29.280><c> there</c><00:08:29.440><c> a</c><00:08:30.000><c> bigger</c>
+
+00:08:30.430 --> 00:08:30.440 align:start position:0%
+color just so there there a bigger
+ 
+
+00:08:30.440 --> 00:08:34.709 align:start position:0%
+color just so there there a bigger
+difference<00:08:30.840><c> between</c><00:08:31.120><c> the</c><00:08:31.280><c> beach</c><00:08:31.720><c> and</c><00:08:32.000><c> the</c>
+
+00:08:34.709 --> 00:08:34.719 align:start position:0%
+ 
+ 
+
+00:08:34.719 --> 00:08:37.149 align:start position:0%
+ 
+road<00:08:35.719><c> all</c>
+
+00:08:37.149 --> 00:08:37.159 align:start position:0%
+road all
+ 
+
+00:08:37.159 --> 00:08:42.070 align:start position:0%
+road all
+right<00:08:38.159><c> then</c><00:08:38.440><c> it's</c><00:08:39.320><c> the</c><00:08:40.320><c> H</c><00:08:40.959><c> to</c>
+
+00:08:42.070 --> 00:08:42.080 align:start position:0%
+right then it's the H to
+ 
+
+00:08:42.080 --> 00:08:46.790 align:start position:0%
+right then it's the H to
+Road<00:08:43.080><c> I'm</c><00:08:43.240><c> going</c><00:08:43.320><c> to</c><00:08:43.479><c> use</c><00:08:43.599><c> a</c><00:08:43.839><c> init</c>
+
+00:08:46.790 --> 00:08:46.800 align:start position:0%
+ 
+ 
+
+00:08:46.800 --> 00:08:55.190 align:start position:0%
+ 
+image<00:08:47.800><c> and</c>
+
+00:08:55.190 --> 00:08:55.200 align:start position:0%
+ 
+ 
+
+00:08:55.200 --> 00:08:58.710 align:start position:0%
+ 
+generate<00:08:56.200><c> all</c><00:08:56.360><c> right</c><00:08:57.320><c> sometimes</c><00:08:58.320><c> you</c><00:08:58.480><c> don't</c>
+
+00:08:58.710 --> 00:08:58.720 align:start position:0%
+generate all right sometimes you don't
+ 
+
+00:08:58.720 --> 00:08:59.829 align:start position:0%
+generate all right sometimes you don't
+get<00:08:58.920><c> EX</c>
+
+00:08:59.829 --> 00:08:59.839 align:start position:0%
+get EX
+ 
+
+00:08:59.839 --> 00:09:02.710 align:start position:0%
+get EX
+exactly<00:09:00.839><c> what</c><00:09:00.959><c> you</c><00:09:01.040><c> were</c><00:09:01.240><c> hoping</c>
+
+00:09:02.710 --> 00:09:02.720 align:start position:0%
+exactly what you were hoping
+ 
+
+00:09:02.720 --> 00:09:06.230 align:start position:0%
+exactly what you were hoping
+for<00:09:03.720><c> let's</c><00:09:03.920><c> just</c><00:09:04.120><c> do</c><00:09:04.399><c> that</c><00:09:04.680><c> for</c>
+
+00:09:06.230 --> 00:09:06.240 align:start position:0%
+for let's just do that for
+ 
+
+00:09:06.240 --> 00:09:10.030 align:start position:0%
+for let's just do that for
+showcase<00:09:07.240><c> let's</c><00:09:07.480><c> go</c><00:09:07.720><c> back</c><00:09:08.040><c> like</c>
+
+00:09:10.030 --> 00:09:10.040 align:start position:0%
+showcase let's go back like
+ 
+
+00:09:10.040 --> 00:09:15.069 align:start position:0%
+showcase let's go back like
+this<00:09:11.040><c> then</c><00:09:11.240><c> we</c><00:09:11.399><c> can</c><00:09:11.959><c> uh</c><00:09:12.680><c> help</c><00:09:13.000><c> the</c><00:09:13.160><c> model</c>
+
+00:09:15.069 --> 00:09:15.079 align:start position:0%
+this then we can uh help the model
+ 
+
+00:09:15.079 --> 00:09:19.230 align:start position:0%
+this then we can uh help the model
+out<00:09:16.079><c> by</c><00:09:16.680><c> removing</c><00:09:17.480><c> some</c><00:09:17.680><c> of</c>
+
+00:09:19.230 --> 00:09:19.240 align:start position:0%
+out by removing some of
+ 
+
+00:09:19.240 --> 00:09:27.430 align:start position:0%
+out by removing some of
+the<00:09:20.240><c> in</c>
+
+00:09:27.430 --> 00:09:27.440 align:start position:0%
+ 
+ 
+
+00:09:27.440 --> 00:09:30.310 align:start position:0%
+ 
+painting<00:09:28.440><c> we</c><00:09:28.640><c> can</c>
+
+00:09:30.310 --> 00:09:30.320 align:start position:0%
+painting we can
+ 
+
+00:09:30.320 --> 00:09:32.630 align:start position:0%
+painting we can
+grab<00:09:30.680><c> this</c><00:09:30.920><c> area</c>
+
+00:09:32.630 --> 00:09:32.640 align:start position:0%
+grab this area
+ 
+
+00:09:32.640 --> 00:09:42.030 align:start position:0%
+grab this area
+here<00:09:33.640><c> so</c><00:09:33.880><c> we</c><00:09:34.000><c> want</c><00:09:34.120><c> to</c><00:09:34.320><c> make</c><00:09:34.399><c> it</c><00:09:34.560><c> look</c><00:09:34.800><c> like</c>
+
+00:09:42.030 --> 00:09:42.040 align:start position:0%
+ 
+ 
+
+00:09:42.040 --> 00:09:45.790 align:start position:0%
+ 
+this<00:09:43.040><c> all</c><00:09:43.240><c> right</c><00:09:43.640><c> let's</c><00:09:44.240><c> extend</c><00:09:44.760><c> this</c><00:09:44.959><c> area</c>
+
+00:09:45.790 --> 00:09:45.800 align:start position:0%
+this all right let's extend this area
+ 
+
+00:09:45.800 --> 00:09:52.430 align:start position:0%
+this all right let's extend this area
+bit<00:09:46.800><c> let's</c>
+
+00:09:52.430 --> 00:09:52.440 align:start position:0%
+ 
+ 
+
+00:09:52.440 --> 00:09:54.949 align:start position:0%
+ 
+say<00:09:53.440><c> let's</c><00:09:53.600><c> say</c><00:09:53.800><c> we</c><00:09:54.000><c> just</c>
+
+00:09:54.949 --> 00:09:54.959 align:start position:0%
+say let's say we just
+ 
+
+00:09:54.959 --> 00:09:59.670 align:start position:0%
+say let's say we just
+want<00:09:55.959><c> more</c><00:09:56.680><c> grass</c><00:09:57.880><c> now</c><00:09:58.880><c> this</c><00:09:59.000><c> is</c><00:09:59.120><c> this</c><00:09:59.240><c> is</c><00:09:59.360><c> when</c>
+
+00:09:59.670 --> 00:09:59.680 align:start position:0%
+want more grass now this is this is when
+ 
+
+00:09:59.680 --> 00:10:02.430 align:start position:0%
+want more grass now this is this is when
+the<00:10:00.040><c> um</c><00:10:00.880><c> large</c><00:10:01.320><c> size</c>
+
+00:10:02.430 --> 00:10:02.440 align:start position:0%
+the um large size
+ 
+
+00:10:02.440 --> 00:10:05.590 align:start position:0%
+the um large size
+model<00:10:03.440><c> is</c><00:10:03.640><c> the</c><00:10:03.839><c> best</c><00:10:04.240><c> it</c><00:10:04.600><c> can</c><00:10:04.760><c> see</c><00:10:05.000><c> some</c><00:10:05.240><c> grass</c>
+
+00:10:05.590 --> 00:10:05.600 align:start position:0%
+model is the best it can see some grass
+ 
+
+00:10:05.600 --> 00:10:15.350 align:start position:0%
+model is the best it can see some grass
+so<00:10:05.760><c> it</c><00:10:05.880><c> will</c><00:10:06.320><c> easily</c><00:10:07.320><c> yes</c><00:10:07.680><c> duplicate</c>
+
+00:10:15.350 --> 00:10:15.360 align:start position:0%
+ 
+ 
+
+00:10:15.360 --> 00:10:21.030 align:start position:0%
+ 
+it<00:10:16.360><c> all</c><00:10:16.600><c> right</c>
+
+00:10:21.030 --> 00:10:21.040 align:start position:0%
+ 
+ 
+
+00:10:21.040 --> 00:10:23.790 align:start position:0%
+ 
+nice<00:10:22.040><c> and</c><00:10:22.320><c> then</c>
+
+00:10:23.790 --> 00:10:23.800 align:start position:0%
+nice and then
+ 
+
+00:10:23.800 --> 00:10:34.389 align:start position:0%
+nice and then
+uh<00:10:24.800><c> we</c><00:10:25.040><c> could</c><00:10:25.839><c> um</c><00:10:26.760><c> let's</c><00:10:27.040><c> say</c><00:10:27.519><c> add</c><00:10:27.720><c> a</c><00:10:28.040><c> tree</c>
+
+00:10:34.389 --> 00:10:34.399 align:start position:0%
+ 
+ 
+
+00:10:34.399 --> 00:10:36.470 align:start position:0%
+ 
+here<00:10:35.399><c> so</c><00:10:35.560><c> I'm</c><00:10:35.680><c> just</c>
+
+00:10:36.470 --> 00:10:36.480 align:start position:0%
+here so I'm just
+ 
+
+00:10:36.480 --> 00:10:40.790 align:start position:0%
+here so I'm just
+gonna<00:10:37.480><c> give</c><00:10:37.639><c> the</c><00:10:37.800><c> model</c><00:10:38.440><c> uh</c><00:10:38.959><c> some</c><00:10:39.560><c> help</c><00:10:40.560><c> then</c>
+
+00:10:40.790 --> 00:10:40.800 align:start position:0%
+gonna give the model uh some help then
+ 
+
+00:10:40.800 --> 00:10:44.110 align:start position:0%
+gonna give the model uh some help then
+go<00:10:41.160><c> back</c><00:10:41.320><c> to</c><00:10:41.519><c> 64</c><00:10:42.200><c> by</c>
+
+00:10:44.110 --> 00:10:44.120 align:start position:0%
+go back to 64 by
+ 
+
+00:10:44.120 --> 00:10:47.949 align:start position:0%
+go back to 64 by
+64<00:10:45.120><c> and</c><00:10:45.360><c> say</c><00:10:46.040><c> tree</c><00:10:46.519><c> and</c><00:10:46.680><c> then</c><00:10:46.959><c> increased</c><00:10:47.639><c> init</c>
+
+00:10:47.949 --> 00:10:47.959 align:start position:0%
+64 and say tree and then increased init
+ 
+
+00:10:47.959 --> 00:10:50.829 align:start position:0%
+64 and say tree and then increased init
+image<00:10:48.320><c> strength</c><00:10:48.720><c> a</c>
+
+00:10:50.829 --> 00:10:50.839 align:start position:0%
+image strength a
+ 
+
+00:10:50.839 --> 00:10:56.389 align:start position:0%
+image strength a
+bit<00:10:52.279><c> be</c><00:10:53.279><c> large</c><00:10:53.720><c> tree</c><00:10:54.240><c> has</c><00:10:54.440><c> to</c><00:10:54.639><c> be</c><00:10:54.920><c> extra</c>
+
+00:10:56.389 --> 00:10:56.399 align:start position:0%
+bit be large tree has to be extra
+ 
+
+00:10:56.399 --> 00:11:00.910 align:start position:0%
+bit be large tree has to be extra
+clear<00:10:57.399><c> oh</c><00:10:57.600><c> yeah</c><00:10:57.880><c> we</c><00:10:58.079><c> have</c><00:10:58.200><c> to</c><00:10:58.600><c> uh</c><00:10:59.040><c> in</c><00:10:59.760><c> paint</c><00:11:00.760><c> the</c>
+
+00:11:00.910 --> 00:11:00.920 align:start position:0%
+clear oh yeah we have to uh in paint the
+ 
+
+00:11:00.920 --> 00:11:05.750 align:start position:0%
+clear oh yeah we have to uh in paint the
+tree<00:11:01.320><c> as</c>
+
+00:11:05.750 --> 00:11:05.760 align:start position:0%
+ 
+ 
+
+00:11:05.760 --> 00:11:14.509 align:start position:0%
+ 
+well<00:11:06.760><c> a</c><00:11:06.920><c> bit</c><00:11:07.160><c> higher</c><00:11:07.440><c> in</c>
+
+00:11:14.509 --> 00:11:14.519 align:start position:0%
+ 
+ 
+
+00:11:14.519 --> 00:11:22.990 align:start position:0%
+ 
+it's<00:11:15.519><c> okay</c>
+
+00:11:22.990 --> 00:11:23.000 align:start position:0%
+ 
+ 
+
+00:11:23.000 --> 00:11:25.190 align:start position:0%
+ 
+nice<00:11:24.000><c> then</c><00:11:24.200><c> we</c>
+
+00:11:25.190 --> 00:11:25.200 align:start position:0%
+nice then we
+ 
+
+00:11:25.200 --> 00:11:27.710 align:start position:0%
+nice then we
+can
+
+00:11:27.710 --> 00:11:27.720 align:start position:0%
+can
+ 
+
+00:11:27.720 --> 00:11:30.949 align:start position:0%
+can
+remove<00:11:28.720><c> this</c><00:11:29.120><c> and</c><00:11:29.279><c> let's</c><00:11:29.560><c> just</c><00:11:29.800><c> fix</c><00:11:30.279><c> the</c><00:11:30.720><c> top</c>
+
+00:11:30.949 --> 00:11:30.959 align:start position:0%
+remove this and let's just fix the top
+ 
+
+00:11:30.959 --> 00:11:33.190 align:start position:0%
+remove this and let's just fix the top
+of<00:11:31.240><c> the</c><00:11:31.959><c> top</c><00:11:32.120><c> of</c><00:11:32.240><c> the</c>
+
+00:11:33.190 --> 00:11:33.200 align:start position:0%
+of the top of the
+ 
+
+00:11:33.200 --> 00:11:42.509 align:start position:0%
+of the top of the
+tree<00:11:34.200><c> something</c><00:11:34.639><c> like</c>
+
+00:11:42.509 --> 00:11:42.519 align:start position:0%
+ 
+ 
+
+00:11:42.519 --> 00:11:49.069 align:start position:0%
+ 
+that<00:11:43.720><c> nice</c><00:11:44.720><c> let's</c><00:11:45.040><c> say</c><00:11:45.519><c> we</c><00:11:45.680><c> want</c><00:11:46.279><c> a</c>
+
+00:11:49.069 --> 00:11:49.079 align:start position:0%
+ 
+ 
+
+00:11:49.079 --> 00:11:52.629 align:start position:0%
+ 
+um<00:11:50.079><c> a</c><00:11:50.360><c> place</c><00:11:50.560><c> to</c><00:11:50.839><c> sit</c><00:11:51.600><c> right</c><00:11:51.880><c> here</c><00:11:52.399><c> what</c><00:11:52.519><c> you</c>
+
+00:11:52.629 --> 00:11:52.639 align:start position:0%
+um a place to sit right here what you
+ 
+
+00:11:52.639 --> 00:11:55.150 align:start position:0%
+um a place to sit right here what you
+can<00:11:52.800><c> do</c><00:11:53.040><c> is</c><00:11:53.320><c> just</c><00:11:54.160><c> similar</c><00:11:54.639><c> it</c><00:11:54.800><c> through</c><00:11:55.000><c> the</c>
+
+00:11:55.150 --> 00:11:55.160 align:start position:0%
+can do is just similar it through the
+ 
+
+00:11:55.160 --> 00:11:57.470 align:start position:0%
+can do is just similar it through the
+tree<00:11:55.600><c> we</c><00:11:55.760><c> just</c><00:11:56.000><c> in</c>
+
+00:11:57.470 --> 00:11:57.480 align:start position:0%
+tree we just in
+ 
+
+00:11:57.480 --> 00:12:00.870 align:start position:0%
+tree we just in
+paint<00:11:58.480><c> and</c><00:11:58.600><c> then</c><00:11:58.720><c> we</c><00:11:59.040><c> can</c>
+
+00:12:00.870 --> 00:12:00.880 align:start position:0%
+paint and then we can
+ 
+
+00:12:00.880 --> 00:12:07.870 align:start position:0%
+paint and then we can
+uh<00:12:01.880><c> say</c><00:12:02.480><c> uh</c><00:12:03.480><c> a</c>
+
+00:12:07.870 --> 00:12:07.880 align:start position:0%
+ 
+ 
+
+00:12:07.880 --> 00:12:17.069 align:start position:0%
+ 
+bench<00:12:08.880><c> and</c><00:12:09.000><c> we</c><00:12:09.079><c> will</c><00:12:09.240><c> get</c><00:12:09.399><c> a</c>
+
+00:12:17.069 --> 00:12:17.079 align:start position:0%
+ 
+ 
+
+00:12:17.079 --> 00:12:19.750 align:start position:0%
+ 
+bench<00:12:18.079><c> b</c><00:12:18.320><c> a</c><00:12:18.519><c> mountain</c>
+
+00:12:19.750 --> 00:12:19.760 align:start position:0%
+bench b a mountain
+ 
+
+00:12:19.760 --> 00:12:22.590 align:start position:0%
+bench b a mountain
+here<00:12:20.760><c> what</c><00:12:20.880><c> we</c><00:12:21.000><c> can</c><00:12:21.240><c> do</c>
+
+00:12:22.590 --> 00:12:22.600 align:start position:0%
+here what we can do
+ 
+
+00:12:22.600 --> 00:12:26.189 align:start position:0%
+here what we can do
+is<00:12:23.600><c> similarly</c><00:12:24.279><c> to</c><00:12:24.600><c> before</c>
+
+00:12:26.189 --> 00:12:26.199 align:start position:0%
+is similarly to before
+ 
+
+00:12:26.199 --> 00:12:35.150 align:start position:0%
+is similarly to before
+just<00:12:27.199><c> Draw</c><00:12:27.600><c> Something</c><00:12:28.040><c> In</c><00:12:28.480><c> Like</c><00:12:28.680><c> This</c>
+
+00:12:35.150 --> 00:12:35.160 align:start position:0%
+ 
+ 
+
+00:12:35.160 --> 00:12:36.470 align:start position:0%
+ 
+that's<00:12:35.399><c> the</c>
+
+00:12:36.470 --> 00:12:36.480 align:start position:0%
+that's the
+ 
+
+00:12:36.480 --> 00:12:40.509 align:start position:0%
+that's the
+mountain<00:12:37.480><c> an</c><00:12:37.639><c> init</c><00:12:38.040><c> image</c><00:12:38.760><c> let's</c><00:12:39.000><c> say</c>
+
+00:12:40.509 --> 00:12:40.519 align:start position:0%
+mountain an init image let's say
+ 
+
+00:12:40.519 --> 00:12:45.870 align:start position:0%
+mountain an init image let's say
+200<00:12:41.519><c> in</c>
+
+00:12:45.870 --> 00:12:45.880 align:start position:0%
+ 
+ 
+
+00:12:45.880 --> 00:12:51.590 align:start position:0%
+ 
+painting<00:12:46.880><c> make</c><00:12:47.000><c> sure</c><00:12:47.160><c> you</c><00:12:47.360><c> cover</c><00:12:47.680><c> the</c>
+
+00:12:51.590 --> 00:12:51.600 align:start position:0%
+ 
+ 
+
+00:12:51.600 --> 00:12:54.350 align:start position:0%
+ 
+transition
+
+00:12:54.350 --> 00:12:54.360 align:start position:0%
+transition
+ 
+
+00:12:54.360 --> 00:12:57.310 align:start position:0%
+transition
+nice<00:12:55.360><c> all</c><00:12:55.519><c> we</c><00:12:55.639><c> can</c><00:12:55.800><c> do</c><00:12:56.040><c> then</c><00:12:56.279><c> is</c>
+
+00:12:57.310 --> 00:12:57.320 align:start position:0%
+nice all we can do then is
+ 
+
+00:12:57.320 --> 00:13:01.629 align:start position:0%
+nice all we can do then is
+just<00:12:58.320><c> extend</c><00:12:59.320><c> that</c><00:13:00.320><c> to</c><00:13:00.560><c> the</c>
+
+00:13:01.629 --> 00:13:01.639 align:start position:0%
+just extend that to the
+ 
+
+00:13:01.639 --> 00:13:04.470 align:start position:0%
+just extend that to the
+rest<00:13:02.639><c> like</c><00:13:02.920><c> that</c><00:13:03.160><c> and</c><00:13:03.399><c> make</c><00:13:03.760><c> then</c><00:13:03.920><c> we</c><00:13:04.040><c> have</c><00:13:04.120><c> to</c>
+
+00:13:04.470 --> 00:13:04.480 align:start position:0%
+rest like that and make then we have to
+ 
+
+00:13:04.480 --> 00:13:06.189 align:start position:0%
+rest like that and make then we have to
+make<00:13:04.600><c> sure</c><00:13:04.880><c> we</c>
+
+00:13:06.189 --> 00:13:06.199 align:start position:0%
+make sure we
+ 
+
+00:13:06.199 --> 00:13:09.790 align:start position:0%
+make sure we
+don't<00:13:07.199><c> remove</c><00:13:07.560><c> the</c><00:13:07.680><c> in</c><00:13:08.440><c> in</c><00:13:08.639><c> pinning</c><00:13:09.040><c> here</c><00:13:09.480><c> so</c>
+
+00:13:09.790 --> 00:13:09.800 align:start position:0%
+don't remove the in in pinning here so
+ 
+
+00:13:09.800 --> 00:13:11.550 align:start position:0%
+don't remove the in in pinning here so
+the<00:13:10.079><c> model</c><00:13:10.399><c> can</c><00:13:10.600><c> copy</c>
+
+00:13:11.550 --> 00:13:11.560 align:start position:0%
+the model can copy
+ 
+
+00:13:11.560 --> 00:13:14.870 align:start position:0%
+the model can copy
+this<00:13:12.560><c> and</c><00:13:12.720><c> then</c><00:13:12.920><c> we</c><00:13:13.079><c> can</c><00:13:13.519><c> draw</c><00:13:14.000><c> black</c><00:13:14.279><c> on</c><00:13:14.600><c> this</c>
+
+00:13:14.870 --> 00:13:14.880 align:start position:0%
+this and then we can draw black on this
+ 
+
+00:13:14.880 --> 00:13:21.150 align:start position:0%
+this and then we can draw black on this
+area
+
+00:13:21.150 --> 00:13:21.160 align:start position:0%
+ 
+ 
+
+00:13:21.160 --> 00:13:23.389 align:start position:0%
+ 
+instead
+
+00:13:23.389 --> 00:13:23.399 align:start position:0%
+instead
+ 
+
+00:13:23.399 --> 00:13:26.870 align:start position:0%
+instead
+nice<00:13:24.399><c> and</c><00:13:24.639><c> then</c><00:13:24.920><c> let's</c>
+
+00:13:26.870 --> 00:13:26.880 align:start position:0%
+nice and then let's
+ 
+
+00:13:26.880 --> 00:13:30.350 align:start position:0%
+nice and then let's
+say<00:13:27.880><c> we</c><00:13:28.120><c> want</c><00:13:28.560><c> a</c><00:13:28.920><c> a</c>
+
+00:13:30.350 --> 00:13:30.360 align:start position:0%
+say we want a a
+ 
+
+00:13:30.360 --> 00:13:34.030 align:start position:0%
+say we want a a
+uh<00:13:31.360><c> Cave</c><00:13:31.800><c> opening</c>
+
+00:13:34.030 --> 00:13:34.040 align:start position:0%
+uh Cave opening
+ 
+
+00:13:34.040 --> 00:13:37.910 align:start position:0%
+uh Cave opening
+here<00:13:35.040><c> we</c><00:13:35.160><c> just</c><00:13:35.440><c> go</c><00:13:35.760><c> back</c><00:13:36.000><c> in</c><00:13:37.000><c> I</c>
+
+00:13:37.910 --> 00:13:37.920 align:start position:0%
+here we just go back in I
+ 
+
+00:13:37.920 --> 00:13:41.389 align:start position:0%
+here we just go back in I
+recommend<00:13:38.920><c> not</c><00:13:39.560><c> using</c><00:13:39.959><c> custom</c><00:13:40.480><c> size</c><00:13:41.000><c> and</c><00:13:41.240><c> make</c>
+
+00:13:41.389 --> 00:13:41.399 align:start position:0%
+recommend not using custom size and make
+ 
+
+00:13:41.399 --> 00:13:45.150 align:start position:0%
+recommend not using custom size and make
+it<00:13:41.600><c> 64</c><00:13:42.600><c> 64</c><00:13:43.600><c> and</c><00:13:43.959><c> here</c><00:13:44.160><c> we</c><00:13:44.279><c> can</c>
+
+00:13:45.150 --> 00:13:45.160 align:start position:0%
+it 64 64 and here we can
+ 
+
+00:13:45.160 --> 00:13:48.670 align:start position:0%
+it 64 64 and here we can
+uh<00:13:46.160><c> do</c><00:13:46.399><c> the</c>
+
+00:13:48.670 --> 00:13:48.680 align:start position:0%
+ 
+ 
+
+00:13:48.680 --> 00:13:52.550 align:start position:0%
+ 
+opening<00:13:49.680><c> and</c><00:13:49.880><c> something</c>
+
+00:13:52.550 --> 00:13:52.560 align:start position:0%
+ 
+ 
+
+00:13:52.560 --> 00:13:56.829 align:start position:0%
+ 
+dark<00:13:53.560><c> then</c><00:13:53.839><c> we</c><00:13:54.600><c> go</c>
+
+00:13:56.829 --> 00:13:56.839 align:start position:0%
+dark then we go
+ 
+
+00:13:56.839 --> 00:14:03.310 align:start position:0%
+dark then we go
+in<00:13:57.839><c> let</c><00:13:58.040><c> say</c><00:13:58.480><c> um</c>
+
+00:14:03.310 --> 00:14:03.320 align:start position:0%
+ 
+ 
+
+00:14:03.320 --> 00:14:06.590 align:start position:0%
+ 
+cave
+
+00:14:06.590 --> 00:14:06.600 align:start position:0%
+ 
+ 
+
+00:14:06.600 --> 00:14:09.069 align:start position:0%
+ 
+entrance<00:14:07.600><c> let</c><00:14:07.839><c> have</c><00:14:07.959><c> a</c><00:14:08.120><c> pretty</c><00:14:08.360><c> low</c><00:14:08.720><c> init</c>
+
+00:14:09.069 --> 00:14:09.079 align:start position:0%
+entrance let have a pretty low init
+ 
+
+00:14:09.079 --> 00:14:11.870 align:start position:0%
+entrance let have a pretty low init
+image<00:14:09.399><c> strength</c><00:14:10.399><c> cuz</c><00:14:10.560><c> the</c><00:14:10.720><c> color</c><00:14:11.000><c> is</c><00:14:11.120><c> so</c><00:14:11.440><c> dark</c>
+
+00:14:11.870 --> 00:14:11.880 align:start position:0%
+image strength cuz the color is so dark
+ 
+
+00:14:11.880 --> 00:14:13.350 align:start position:0%
+image strength cuz the color is so dark
+so<00:14:12.040><c> it</c><00:14:12.160><c> should</c><00:14:12.360><c> be</c>
+
+00:14:13.350 --> 00:14:13.360 align:start position:0%
+so it should be
+ 
+
+00:14:13.360 --> 00:14:24.389 align:start position:0%
+so it should be
+fine
+
+00:14:24.389 --> 00:14:24.399 align:start position:0%
+ 
+ 
+
+00:14:24.399 --> 00:14:27.670 align:start position:0%
+ 
+nice<00:14:25.399><c> all</c><00:14:25.639><c> right</c>
+
+00:14:27.670 --> 00:14:27.680 align:start position:0%
+nice all right
+ 
+
+00:14:27.680 --> 00:14:34.509 align:start position:0%
+nice all right
+nice<00:14:28.839><c> and</c><00:14:29.040><c> we</c><00:14:29.160><c> could</c><00:14:29.600><c> then</c><00:14:30.600><c> continue</c>
+
+00:14:34.509 --> 00:14:34.519 align:start position:0%
+ 
+ 
+
+00:14:34.519 --> 00:14:36.910 align:start position:0%
+ 
+this<00:14:35.519><c> let's</c>
+
+00:14:36.910 --> 00:14:36.920 align:start position:0%
+this let's
+ 
+
+00:14:36.920 --> 00:14:40.310 align:start position:0%
+this let's
+say<00:14:37.920><c> behind</c><00:14:38.720><c> here</c>
+
+00:14:40.310 --> 00:14:40.320 align:start position:0%
+say behind here
+ 
+
+00:14:40.320 --> 00:14:42.470 align:start position:0%
+say behind here
+um<00:14:41.320><c> maybe</c><00:14:41.639><c> we</c>
+
+00:14:42.470 --> 00:14:42.480 align:start position:0%
+um maybe we
+ 
+
+00:14:42.480 --> 00:14:57.670 align:start position:0%
+um maybe we
+want<00:14:43.480><c> a</c><00:14:44.079><c> uh</c><00:14:45.079><c> a</c><00:14:45.279><c> dungeon</c><00:14:45.880><c> or</c>
+
+00:14:57.670 --> 00:14:57.680 align:start position:0%
+ 
+ 
+
+00:14:57.680 --> 00:15:13.829 align:start position:0%
+ 
+something
+
+00:15:13.829 --> 00:15:13.839 align:start position:0%
+ 
+ 
+
+00:15:13.839 --> 00:15:18.509 align:start position:0%
+ 
+nice<00:15:14.839><c> we</c><00:15:14.959><c> can</c><00:15:15.279><c> then</c><00:15:16.160><c> uh</c>
+
+00:15:18.509 --> 00:15:18.519 align:start position:0%
+nice we can then uh
+ 
+
+00:15:18.519 --> 00:15:22.990 align:start position:0%
+nice we can then uh
+remove<00:15:19.800><c> this</c><00:15:20.800><c> you</c><00:15:20.880><c> can</c><00:15:21.160><c> kind</c><00:15:21.279><c> of</c><00:15:21.880><c> imagine</c><00:15:22.880><c> how</c>
+
+00:15:22.990 --> 00:15:23.000 align:start position:0%
+remove this you can kind of imagine how
+ 
+
+00:15:23.000 --> 00:15:25.550 align:start position:0%
+remove this you can kind of imagine how
+you<00:15:23.160><c> can</c><00:15:23.519><c> extend</c><00:15:24.000><c> this</c><00:15:24.199><c> mountain</c><00:15:24.639><c> up</c><00:15:24.839><c> a</c><00:15:25.040><c> bit</c>
+
+00:15:25.550 --> 00:15:25.560 align:start position:0%
+you can extend this mountain up a bit
+ 
+
+00:15:25.560 --> 00:15:29.670 align:start position:0%
+you can extend this mountain up a bit
+and<00:15:26.360><c> uh</c><00:15:27.360><c> create</c><00:15:27.880><c> a</c><00:15:28.279><c> uh</c>
+
+00:15:29.670 --> 00:15:29.680 align:start position:0%
+and uh create a uh
+ 
+
+00:15:29.680 --> 00:15:31.389 align:start position:0%
+and uh create a uh
+dungeon
+
+00:15:31.389 --> 00:15:31.399 align:start position:0%
+dungeon
+ 
+
+00:15:31.399 --> 00:15:36.829 align:start position:0%
+dungeon
+inside<00:15:32.399><c> maybe</c><00:15:32.600><c> we</c><00:15:32.680><c> can</c><00:15:32.839><c> do</c><00:15:33.040><c> something</c><00:15:33.360><c> like</c>
+
+00:15:36.829 --> 00:15:36.839 align:start position:0%
+ 
+ 
+
+00:15:36.839 --> 00:15:41.790 align:start position:0%
+ 
+this<00:15:37.839><c> just</c><00:15:38.000><c> want</c><00:15:38.120><c> to</c><00:15:39.040><c> in</c><00:15:39.399><c> paint</c><00:15:40.160><c> the</c><00:15:40.399><c> corner</c>
+
+00:15:41.790 --> 00:15:41.800 align:start position:0%
+this just want to in paint the corner
+ 
+
+00:15:41.800 --> 00:15:50.269 align:start position:0%
+this just want to in paint the corner
+here<00:15:42.800><c> dungeon</c>
+
+00:15:50.269 --> 00:15:50.279 align:start position:0%
+ 
+ 
+
+00:15:50.279 --> 00:15:56.470 align:start position:0%
+ 
+floor
+
+00:15:56.470 --> 00:15:56.480 align:start position:0%
+ 
+ 
+
+00:15:56.480 --> 00:15:59.150 align:start position:0%
+ 
+nice<00:15:57.480><c> so</c><00:15:57.800><c> maybe</c>
+
+00:15:59.150 --> 00:15:59.160 align:start position:0%
+nice so maybe
+ 
+
+00:15:59.160 --> 00:16:01.829 align:start position:0%
+nice so maybe
+eest<00:15:59.680><c> in</c><00:15:59.880><c> this</c><00:16:00.120><c> position</c><00:16:00.480><c> is</c><00:16:00.759><c> just</c><00:16:01.519><c> do</c>
+
+00:16:01.829 --> 00:16:01.839 align:start position:0%
+eest in this position is just do
+ 
+
+00:16:01.839 --> 00:16:03.069 align:start position:0%
+eest in this position is just do
+something<00:16:02.160><c> like</c>
+
+00:16:03.069 --> 00:16:03.079 align:start position:0%
+something like
+ 
+
+00:16:03.079 --> 00:16:05.990 align:start position:0%
+something like
+that<00:16:04.079><c> and</c><00:16:04.319><c> then</c><00:16:04.600><c> what</c><00:16:04.720><c> you</c><00:16:04.920><c> could</c><00:16:05.160><c> do</c><00:16:05.800><c> if</c><00:16:05.880><c> you</c>
+
+00:16:05.990 --> 00:16:06.000 align:start position:0%
+that and then what you could do if you
+ 
+
+00:16:06.000 --> 00:16:09.629 align:start position:0%
+that and then what you could do if you
+have<00:16:06.120><c> a</c><00:16:06.240><c> dungeon</c><00:16:06.759><c> you</c><00:16:07.319><c> know</c><00:16:08.319><c> and</c><00:16:08.480><c> you</c><00:16:08.639><c> want</c><00:16:09.160><c> a</c>
+
+00:16:09.629 --> 00:16:09.639 align:start position:0%
+have a dungeon you know and you want a
+ 
+
+00:16:09.639 --> 00:16:10.949 align:start position:0%
+have a dungeon you know and you want a
+uh
+
+00:16:10.949 --> 00:16:10.959 align:start position:0%
+uh
+ 
+
+00:16:10.959 --> 00:16:14.350 align:start position:0%
+uh
+treasure<00:16:11.959><c> I</c><00:16:12.240><c> recomend</c><00:16:12.839><c> just</c><00:16:13.120><c> you</c><00:16:13.279><c> can</c><00:16:13.519><c> go</c>
+
+00:16:14.350 --> 00:16:14.360 align:start position:0%
+treasure I recomend just you can go
+ 
+
+00:16:14.360 --> 00:16:16.189 align:start position:0%
+treasure I recomend just you can go
+either<00:16:14.639><c> you</c><00:16:14.759><c> can</c><00:16:14.920><c> make</c><00:16:15.079><c> one</c><00:16:15.319><c> in</c><00:16:15.839><c> one</c><00:16:15.959><c> of</c><00:16:16.079><c> the</c>
+
+00:16:16.189 --> 00:16:16.199 align:start position:0%
+either you can make one in one of the
+ 
+
+00:16:16.199 --> 00:16:18.509 align:start position:0%
+either you can make one in one of the
+other<00:16:16.480><c> models</c><00:16:16.920><c> you</c><00:16:17.160><c> just</c><00:16:17.319><c> go</c><00:16:17.480><c> in</c><00:16:17.680><c> here</c>
+
+00:16:18.509 --> 00:16:18.519 align:start position:0%
+other models you just go in here
+ 
+
+00:16:18.519 --> 00:16:21.870 align:start position:0%
+other models you just go in here
+and<00:16:19.519><c> make</c><00:16:19.639><c> a</c><00:16:19.800><c> treasure</c><00:16:20.240><c> chest</c><00:16:20.759><c> like</c><00:16:21.040><c> this</c><00:16:21.759><c> you</c>
+
+00:16:21.870 --> 00:16:21.880 align:start position:0%
+and make a treasure chest like this you
+ 
+
+00:16:21.880 --> 00:16:26.309 align:start position:0%
+and make a treasure chest like this you
+want<00:16:22.000><c> to</c><00:16:23.000><c> in</c><00:16:23.360><c> paint</c><00:16:23.759><c> where</c><00:16:23.880><c> you</c><00:16:24.000><c> want</c><00:16:24.199><c> your</c>
+
+00:16:26.309 --> 00:16:26.319 align:start position:0%
+want to in paint where you want your
+ 
+
+00:16:26.319 --> 00:16:31.550 align:start position:0%
+want to in paint where you want your
+treasure<00:16:27.519><c> uh</c><00:16:28.959><c> and</c><00:16:29.160><c> then</c><00:16:29.519><c> let's</c><00:16:30.079><c> say</c><00:16:31.079><c> let's</c><00:16:31.360><c> add</c>
+
+00:16:31.550 --> 00:16:31.560 align:start position:0%
+treasure uh and then let's say let's add
+ 
+
+00:16:31.560 --> 00:16:34.470 align:start position:0%
+treasure uh and then let's say let's add
+a<00:16:32.000><c> color</c><00:16:32.600><c> just</c><00:16:32.759><c> to</c><00:16:32.920><c> show</c><00:16:33.199><c> the</c><00:16:33.360><c> model</c><00:16:33.759><c> like</c><00:16:34.000><c> oh</c><00:16:34.399><c> I</c>
+
+00:16:34.470 --> 00:16:34.480 align:start position:0%
+a color just to show the model like oh I
+ 
+
+00:16:34.480 --> 00:16:37.430 align:start position:0%
+a color just to show the model like oh I
+want<00:16:34.680><c> my</c><00:16:34.800><c> treasure</c><00:16:35.639><c> to</c><00:16:35.759><c> be</c><00:16:35.880><c> in</c><00:16:36.079><c> this</c>
+
+00:16:37.430 --> 00:16:37.440 align:start position:0%
+want my treasure to be in this
+ 
+
+00:16:37.440 --> 00:16:40.030 align:start position:0%
+want my treasure to be in this
+area
+
+00:16:40.030 --> 00:16:40.040 align:start position:0%
+area
+ 
+
+00:16:40.040 --> 00:16:42.389 align:start position:0%
+area
+yes<00:16:41.040><c> then</c>
+
+00:16:42.389 --> 00:16:42.399 align:start position:0%
+yes then
+ 
+
+00:16:42.399 --> 00:16:51.790 align:start position:0%
+yes then
+let's<00:16:43.399><c> increase</c><00:16:44.000><c> it</c><00:16:44.199><c> a</c>
+
+00:16:51.790 --> 00:16:51.800 align:start position:0%
+ 
+ 
+
+00:16:51.800 --> 00:16:57.470 align:start position:0%
+ 
+bit<00:16:52.800><c> all</c>
+
+00:16:57.470 --> 00:16:57.480 align:start position:0%
+ 
+ 
+
+00:16:57.480 --> 00:17:02.949 align:start position:0%
+ 
+right
+
+00:17:02.949 --> 00:17:02.959 align:start position:0%
+ 
+ 
+
+00:17:02.959 --> 00:17:06.069 align:start position:0%
+ 
+all<00:17:03.199><c> right</c><00:17:03.759><c> nice</c><00:17:04.720><c> so</c><00:17:05.000><c> yeah</c><00:17:05.280><c> you</c><00:17:05.400><c> can</c><00:17:05.600><c> kind</c><00:17:05.720><c> of</c>
+
+00:17:06.069 --> 00:17:06.079 align:start position:0%
+all right nice so yeah you can kind of
+ 
+
+00:17:06.079 --> 00:17:10.189 align:start position:0%
+all right nice so yeah you can kind of
+imagine<00:17:07.079><c> what</c><00:17:07.240><c> you</c><00:17:07.360><c> can</c><00:17:08.079><c> do</c><00:17:09.079><c> uh</c><00:17:09.679><c> and</c><00:17:09.959><c> how</c><00:17:10.120><c> you</c>
+
+00:17:10.189 --> 00:17:10.199 align:start position:0%
+imagine what you can do uh and how you
+ 
+
+00:17:10.199 --> 00:17:11.789 align:start position:0%
+imagine what you can do uh and how you
+can<00:17:10.360><c> create</c><00:17:10.679><c> stuff</c><00:17:10.959><c> and</c><00:17:11.120><c> as</c><00:17:11.240><c> long</c><00:17:11.360><c> as</c><00:17:11.480><c> you</c><00:17:11.679><c> see</c>
+
+00:17:11.789 --> 00:17:11.799 align:start position:0%
+can create stuff and as long as you see
+ 
+
+00:17:11.799 --> 00:17:15.150 align:start position:0%
+can create stuff and as long as you see
+endit<00:17:12.120><c> images</c><00:17:12.559><c> you</c><00:17:12.720><c> can</c><00:17:13.799><c> control</c><00:17:14.799><c> how</c><00:17:15.000><c> the</c>
+
+00:17:15.150 --> 00:17:15.160 align:start position:0%
+endit images you can control how the
+ 
+
+00:17:15.160 --> 00:17:17.990 align:start position:0%
+endit images you can control how the
+walls<00:17:15.600><c> form</c><00:17:16.120><c> or</c><00:17:16.679><c> how</c><00:17:16.839><c> the</c><00:17:16.959><c> lakes</c><00:17:17.360><c> are</c><00:17:17.559><c> shaped</c>
+
+00:17:17.990 --> 00:17:18.000 align:start position:0%
+walls form or how the lakes are shaped
+ 
+
+00:17:18.000 --> 00:17:21.990 align:start position:0%
+walls form or how the lakes are shaped
+and<00:17:18.199><c> stuff</c><00:17:18.439><c> like</c><00:17:18.880><c> that</c><00:17:19.880><c> uh</c><00:17:20.000><c> at</c><00:17:20.120><c> the</c><00:17:20.280><c> moment</c><00:17:21.000><c> the</c>
+
+00:17:21.990 --> 00:17:22.000 align:start position:0%
+and stuff like that uh at the moment the
+ 
+
+00:17:22.000 --> 00:17:26.230 align:start position:0%
+and stuff like that uh at the moment the
+map<00:17:22.280><c> Tile</c><00:17:22.600><c> tool</c><00:17:22.959><c> is</c><00:17:23.240><c> best</c><00:17:23.480><c> used</c><00:17:23.839><c> for</c><00:17:24.480><c> 16</c><00:17:25.039><c> by</c><00:17:25.319><c> 16</c>
+
+00:17:26.230 --> 00:17:26.240 align:start position:0%
+map Tile tool is best used for 16 by 16
+ 
+
+00:17:26.240 --> 00:17:28.230 align:start position:0%
+map Tile tool is best used for 16 by 16
+but<00:17:26.360><c> you</c><00:17:26.439><c> can</c><00:17:26.600><c> do</c><00:17:26.880><c> pretty</c><00:17:27.120><c> much</c><00:17:27.480><c> most</c><00:17:27.679><c> of</c><00:17:28.000><c> most</c>
+
+00:17:28.230 --> 00:17:28.240 align:start position:0%
+but you can do pretty much most of most
+ 
+
+00:17:28.240 --> 00:17:31.470 align:start position:0%
+but you can do pretty much most of most
+stuff<00:17:28.559><c> with</c><00:17:28.720><c> it</c><00:17:28.880><c> you</c><00:17:28.960><c> can</c><00:17:29.559><c> add</c>
+
+00:17:31.470 --> 00:17:31.480 align:start position:0%
+stuff with it you can add
+ 
+
+00:17:31.480 --> 00:17:34.909 align:start position:0%
+stuff with it you can add
+houses<00:17:32.480><c> uh</c><00:17:32.679><c> different</c><00:17:33.480><c> uh</c><00:17:34.000><c> like</c>
+
+00:17:34.909 --> 00:17:34.919 align:start position:0%
+houses uh different uh like
+ 
+
+00:17:34.919 --> 00:17:39.390 align:start position:0%
+houses uh different uh like
+plants<00:17:35.919><c> water</c><00:17:36.440><c> stuff</c><00:17:37.320><c> dungeon</c><00:17:37.919><c> stuff</c><00:17:38.840><c> and</c>
+
+00:17:39.390 --> 00:17:39.400 align:start position:0%
+plants water stuff dungeon stuff and
+ 
+
+00:17:39.400 --> 00:17:42.470 align:start position:0%
+plants water stuff dungeon stuff and
+yeah<00:17:40.400><c> hope</c><00:17:40.679><c> this</c><00:17:40.799><c> is</c><00:17:41.000><c> helpful</c><00:17:41.679><c> and</c><00:17:42.080><c> uh</c><00:17:42.200><c> you</c><00:17:42.320><c> can</c>
+
+00:17:42.470 --> 00:17:42.480 align:start position:0%
+yeah hope this is helpful and uh you can
+ 
+
+00:17:42.480 --> 00:17:46.110 align:start position:0%
+yeah hope this is helpful and uh you can
+create<00:17:42.720><c> some</c><00:17:43.000><c> awesome</c>
+
+00:17:46.110 --> 00:17:46.120 align:start position:0%
+ 
+ 
+
+00:17:46.120 --> 00:17:49.120 align:start position:0%
+ 
+stuff
+

@@ -38,6 +38,7 @@ namespace RIMA
             int stacks = chained ? 3 : weakenStacks;
 
             status.ApplyEffect(StatusEffectType.Weakened, duration, stacks);
+            SkillRuntime.State(target)?.Apply(SkillStateTracker.Sundered, duration, stacks, 3);
             rage?.AddRage(5);
         }
 

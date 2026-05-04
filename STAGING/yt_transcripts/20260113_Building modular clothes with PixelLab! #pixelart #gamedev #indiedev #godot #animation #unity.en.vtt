@@ -1,0 +1,232 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:02.430 align:start position:0%
+ 
+This<00:00:00.440><c> is</c><00:00:00.640><c> how</c><00:00:00.800><c> you</c><00:00:00.920><c> build</c><00:00:01.240><c> modular</c><00:00:01.840><c> character</c>
+
+00:00:02.430 --> 00:00:02.440 align:start position:0%
+This is how you build modular character
+ 
+
+00:00:02.440 --> 00:00:05.470 align:start position:0%
+This is how you build modular character
+customization<00:00:03.400><c> for</c><00:00:03.560><c> games</c><00:00:04.240><c> fast.</c><00:00:05.040><c> What</c><00:00:05.280><c> if</c><00:00:05.400><c> I</c>
+
+00:00:05.470 --> 00:00:05.480 align:start position:0%
+customization for games fast. What if I
+ 
+
+00:00:05.480 --> 00:00:08.590 align:start position:0%
+customization for games fast. What if I
+told<00:00:05.880><c> you</c><00:00:06.040><c> you</c><00:00:06.200><c> could</c><00:00:06.440><c> make</c><00:00:07.000><c> animated</c><00:00:07.880><c> outfits</c>
+
+00:00:08.590 --> 00:00:08.600 align:start position:0%
+told you you could make animated outfits
+ 
+
+00:00:08.600 --> 00:00:11.230 align:start position:0%
+told you you could make animated outfits
+without<00:00:09.200><c> redrawing</c><00:00:09.800><c> clothes</c><00:00:10.360><c> for</c><00:00:10.720><c> every</c>
+
+00:00:11.230 --> 00:00:11.240 align:start position:0%
+without redrawing clothes for every
+ 
+
+00:00:11.240 --> 00:00:13.070 align:start position:0%
+without redrawing clothes for every
+frame?<00:00:11.790><c> [music]</c><00:00:12.120><c> I'm</c><00:00:12.320><c> starting</c><00:00:12.840><c> with</c><00:00:13.000><c> a</c>
+
+00:00:13.070 --> 00:00:13.080 align:start position:0%
+frame? [music] I'm starting with a
+ 
+
+00:00:13.080 --> 00:00:15.990 align:start position:0%
+frame? [music] I'm starting with a
+completely<00:00:13.880><c> blank</c><00:00:14.480><c> base</c><00:00:14.840><c> character.</c><00:00:15.680><c> No</c>
+
+00:00:15.990 --> 00:00:16.000 align:start position:0%
+completely blank base character. No
+ 
+
+00:00:16.000 --> 00:00:18.510 align:start position:0%
+completely blank base character. No
+hair,<00:00:16.360><c> no</c><00:00:16.600><c> clothes,</c><00:00:17.280><c> just</c><00:00:17.600><c> boxers.</c><00:00:17.685><c> [music]</c>
+
+00:00:18.510 --> 00:00:18.520 align:start position:0%
+hair, no clothes, just boxers. [music]
+ 
+
+00:00:18.520 --> 00:00:20.790 align:start position:0%
+hair, no clothes, just boxers. [music]
+This<00:00:18.680><c> is</c><00:00:18.840><c> a</c><00:00:18.920><c> full</c><00:00:19.480><c> eight-direction</c><00:00:20.440><c> walk</c>
+
+00:00:20.790 --> 00:00:20.800 align:start position:0%
+This is a full eight-direction walk
+ 
+
+00:00:20.800 --> 00:00:23.230 align:start position:0%
+This is a full eight-direction walk
+cycle.<00:00:21.520><c> So</c><00:00:21.680><c> now,</c><00:00:22.160><c> instead</c><00:00:22.520><c> of</c><00:00:22.640><c> manually</c>
+
+00:00:23.230 --> 00:00:23.240 align:start position:0%
+cycle. So now, instead of manually
+ 
+
+00:00:23.240 --> 00:00:25.190 align:start position:0%
+cycle. So now, instead of manually
+animating<00:00:23.580><c> [music]</c><00:00:23.920><c> clothes,</c><00:00:24.680><c> we</c><00:00:24.840><c> let</c>
+
+00:00:25.190 --> 00:00:25.200 align:start position:0%
+animating [music] clothes, we let
+ 
+
+00:00:25.200 --> 00:00:27.630 align:start position:0%
+animating [music] clothes, we let
+Pixelab<00:00:25.880><c> do</c><00:00:26.040><c> the</c><00:00:26.160><c> work.</c><00:00:26.880><c> I'm</c><00:00:27.040><c> using</c><00:00:27.400><c> the</c>
+
+00:00:27.630 --> 00:00:27.640 align:start position:0%
+Pixelab do the work. I'm using the
+ 
+
+00:00:27.640 --> 00:00:30.790 align:start position:0%
+Pixelab do the work. I'm using the
+transfer<00:00:28.360><c> outfit</c><00:00:28.880><c> to</c><00:00:29.040><c> animation</c><00:00:29.800><c> tool</c>
+
+00:00:30.790 --> 00:00:30.800 align:start position:0%
+transfer outfit to animation tool
+ 
+
+00:00:30.800 --> 00:00:33.070 align:start position:0%
+transfer outfit to animation tool
+and<00:00:30.960><c> then</c><00:00:31.160><c> I</c><00:00:31.280><c> give</c><00:00:31.520><c> it</c><00:00:31.640><c> a</c><00:00:31.720><c> reference</c><00:00:32.240><c> outfit,</c>
+
+00:00:33.070 --> 00:00:33.080 align:start position:0%
+and then I give it a reference outfit,
+ 
+
+00:00:33.080 --> 00:00:35.710 align:start position:0%
+and then I give it a reference outfit,
+select<00:00:33.600><c> my</c><00:00:33.800><c> animation</c><00:00:34.440><c> frames,</c><00:00:35.400><c> and</c><00:00:35.600><c> it</c>
+
+00:00:35.710 --> 00:00:35.720 align:start position:0%
+select my animation frames, and it
+ 
+
+00:00:35.720 --> 00:00:39.310 align:start position:0%
+select my animation frames, and it
+applies<00:00:36.160><c> the</c><00:00:36.280><c> clothes</c><00:00:36.720><c> to</c><00:00:37.000><c> every</c><00:00:37.600><c> frame.</c>
+
+00:00:39.310 --> 00:00:39.320 align:start position:0%
+applies the clothes to every frame.
+ 
+
+00:00:39.320 --> 00:00:41.470 align:start position:0%
+applies the clothes to every frame.
+At<00:00:39.560><c> this</c><00:00:39.800><c> point,</c><00:00:40.560><c> the</c><00:00:40.720><c> character</c><00:00:41.265><c> [music]</c><00:00:41.280><c> and</c>
+
+00:00:41.470 --> 00:00:41.480 align:start position:0%
+At this point, the character [music] and
+ 
+
+00:00:41.480 --> 00:00:44.670 align:start position:0%
+At this point, the character [music] and
+the<00:00:41.560><c> clothes</c><00:00:42.160><c> are</c><00:00:42.360><c> merged.</c><00:00:43.600><c> It's</c><00:00:43.880><c> one</c><00:00:44.240><c> full</c>
+
+00:00:44.670 --> 00:00:44.680 align:start position:0%
+the clothes are merged. It's one full
+ 
+
+00:00:44.680 --> 00:00:48.460 align:start position:0%
+the clothes are merged. It's one full
+animated<00:00:45.240><c> sprite.</c><00:00:46.240><c> So</c><00:00:46.480><c> next</c><00:00:46.920><c> up,</c><00:00:47.520><c> I</c><00:00:47.680><c> open</c>
+
+00:00:48.460 --> 00:00:48.470 align:start position:0%
+animated sprite. So next up, I open
+ 
+
+00:00:48.470 --> 00:00:48.670 align:start position:0%
+animated sprite. So next up, I open
+&gt;&gt; [music]
+
+00:00:48.670 --> 00:00:48.680 align:start position:0%
+&gt;&gt; [music]
+ 
+
+00:00:48.680 --> 00:00:52.590 align:start position:0%
+&gt;&gt; [music]
+&gt;&gt; edit<00:00:49.160><c> animation</c><00:00:50.480><c> and</c><00:00:50.680><c> I</c><00:00:50.800><c> prompt</c><00:00:51.360><c> it</c><00:00:51.800><c> to</c><00:00:52.040><c> remove</c>
+
+00:00:52.590 --> 00:00:52.600 align:start position:0%
+&gt;&gt; edit animation and I prompt it to remove
+ 
+
+00:00:52.600 --> 00:00:54.710 align:start position:0%
+&gt;&gt; edit animation and I prompt it to remove
+the<00:00:52.720><c> character,</c><00:00:53.680><c> leaving</c><00:00:54.160><c> only</c><00:00:54.600><c> the</c>
+
+00:00:54.710 --> 00:00:54.720 align:start position:0%
+the character, leaving only the
+ 
+
+00:00:54.720 --> 00:00:56.550 align:start position:0%
+the character, leaving only the
+clothing.<00:00:55.760><c> I'll</c><00:00:55.960><c> leave</c><00:00:56.080><c> the</c><00:00:56.160><c> prompt</c><00:00:56.440><c> in</c><00:00:56.520><c> the</c>
+
+00:00:56.550 --> 00:00:56.560 align:start position:0%
+clothing. I'll leave the prompt in the
+ 
+
+00:00:56.560 --> 00:00:59.430 align:start position:0%
+clothing. I'll leave the prompt in the
+description.<00:00:57.360><c> Now,</c><00:00:58.360><c> I</c><00:00:58.440><c> have</c><00:00:58.680><c> a</c><00:00:58.760><c> fully</c>
+
+00:00:59.430 --> 00:00:59.440 align:start position:0%
+description. Now, I have a fully
+ 
+
+00:00:59.440 --> 00:01:01.950 align:start position:0%
+description. Now, I have a fully
+animated<00:01:00.160><c> outfit</c><00:01:00.760><c> perfectly</c><00:01:01.400><c> synced</c><00:01:01.760><c> to</c><00:01:01.840><c> the</c>
+
+00:01:01.950 --> 00:01:01.960 align:start position:0%
+animated outfit perfectly synced to the
+ 
+
+00:01:01.960 --> 00:01:04.835 align:start position:0%
+animated outfit perfectly synced to the
+walk<00:01:02.200><c> cycle.</c><00:01:03.080><c> Same</c><00:01:03.560><c> animation,</c>
+
+00:01:04.835 --> 00:01:04.845 align:start position:0%
+walk cycle. Same animation,
+ 
+
+00:01:04.845 --> 00:01:04.950 align:start position:0%
+walk cycle. Same animation,
+&gt;&gt; [music]
+
+00:01:04.950 --> 00:01:04.960 align:start position:0%
+&gt;&gt; [music]
+ 
+
+00:01:04.960 --> 00:01:08.150 align:start position:0%
+&gt;&gt; [music]
+&gt;&gt; different<00:01:05.440><c> outfits,</c><00:01:06.520><c> all</c><00:01:06.920><c> with</c><00:01:07.200><c> only</c><00:01:07.560><c> two</c>
+
+00:01:08.150 --> 00:01:08.160 align:start position:0%
+&gt;&gt; different outfits, all with only two
+ 
+
+00:01:08.160 --> 00:01:10.790 align:start position:0%
+&gt;&gt; different outfits, all with only two
+tools.<00:01:09.200><c> So</c><00:01:09.520><c> make</c><00:01:09.800><c> sure</c><00:01:10.160><c> to</c><00:01:10.360><c> check</c><00:01:10.640><c> it</c><00:01:10.740><c> [music]</c>
+
+00:01:10.790 --> 00:01:10.800 align:start position:0%
+tools. So make sure to check it [music]
+ 
+
+00:01:10.800 --> 00:01:14.200 align:start position:0%
+tools. So make sure to check it [music]
+out<00:01:11.000><c> at</c><00:01:11.200><c> pixelab.ai.</c>
+

@@ -38,6 +38,33 @@
 
 ---
 
+## S44 RUN OFFER ROUTING LOCK (2026-05-03)
+
+Canonical detail: `TASARIM/SKILL_OFFER_SYSTEM_DECISION_2026-05-03.md`.
+
+RIMA kosu ici gelisim modeli gorunur skill tree ekrani degildir. Oda sonrasi 3 secimli Hades-style teklif sistemi kullanilir: yeni aktif skill, mevcut aktif skill upgrade'i, pasif/echo, tag sinerjisi, resource mod veya risk offer.
+
+Aktif slot kurali: skill yalnizca hasar, yalnizca buff veya yalnizca "sonraki cast daha guclu" etkisi veriyorsa aktif slot yerine pasif/echo/upgrade havuzuna cekilir. Aktif kalacak skill okunur bir state uretmeli/tuketmeli, pozisyon/zone sorusu yaratmali, sinif-owned hareket uretmeli veya encounter cevabi vermelidir.
+
+Ilk pasif/upgrade routing adaylari:
+
+| Class | Passive / Upgrade Route Candidates |
+|---|---|
+| Warblade | Iron Crush, Ironclad Momentum, Battle Surge |
+| Elementalist | Radiant Pillar, Element Charge |
+| Shadowblade | Night Aperture, Shadow Clone |
+| Ranger | Hunter's Step only if movement cap fails |
+| Ravager | Death Wish |
+| Ronin | Iai Pressure |
+| Gunslinger | Hot Lead |
+| Brawler | Unstoppable Force |
+| Summoner | Dark Pact, Lich Form |
+| Hexer | Whisper Mark stays passive; Bleed Tax is borderline active/passive |
+
+PixelLab rule: `RIMA_skill_sheets/*.png` concept/moodboard referansidir, production sprite canon degildir. Karakter animasyonu, VFX/projectile, ground decal, impact ve state overlay ayri uretilir. Bespoke enemy reaction, grapple/struggle/ragdoll, boss-specific reaction ve sheet panel crop yasaktir.
+
+---
+
 ## S41 SKILL REVİZYON ÖZETİ
 
 > Ayrıntı: `STAGING/SKILL_REVIZYON_PLANI.md`. Aşağıda class başlıklarında revize edilen skill'ler `[S41]` etiketi ile işaretlendi.

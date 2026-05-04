@@ -19,7 +19,7 @@ def count_lines(file_path):
 def run_audit(memory_dir, repo_dir, output_file):
     memory_path = Path(memory_dir)
     repo_path = Path(repo_dir)
-    staging_path = repo_path / "_STAGING"
+    staging_path = repo_path / "STAGING"
     archive_path = repo_path / "_ARCHIVE"
     
     memory_index_file = memory_path / "MEMORY.md"
@@ -115,7 +115,7 @@ def run_audit(memory_dir, repo_dir, output_file):
         report.append("")
     summary['mem_total'] = total_mem
 
-    # Pass 5: _STAGING Orphans
+    # Pass 5: STAGING Orphans
     staging_orphans = []
     if staging_path.exists():
         for item in staging_path.iterdir():
@@ -208,7 +208,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--memory-dir", default=r"C:\Users\ydbil\.claude\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory")
     parser.add_argument("--repo-dir", default=".")
-    parser.add_argument("--output", default=r"_STAGING\_AUDIT_REPORT.md")
+    parser.add_argument("--output", default=r"STAGING\_AUDIT_REPORT.md")
     args = parser.parse_args()
     
     run_audit(args.memory_dir, args.repo_dir, args.output)

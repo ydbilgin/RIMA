@@ -94,9 +94,9 @@ Note: Scar spawn events (entry + exit) are world-space decal instantiations, not
 
 | Sign-off | Who | Status |
 |---|---|---|
-| Identity check (Section E) | design lead | [ ] |
-| Frame budget within class quota | design lead | [ ] |
-| State indicator ownership clean | design lead | [ ] |
+| Identity check (Section E) | design lead | [x] |
+| Frame budget within class quota | design lead | [x] |
+| State indicator ownership clean | design lead | [x] |
 | VFX layer count <= 4 | rima-asset | [ ] |
 | Reference sprite exists | rima-asset | [ ] |
 | Scar decal reuse confirmed (SHADOWBLADE_SCARBINDING asset, no new gen) | rima-codex | [ ] |

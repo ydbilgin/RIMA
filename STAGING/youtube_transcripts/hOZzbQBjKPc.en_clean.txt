@@ -1,0 +1,254 @@
+hi in this video I will show you our
+plugin in the free pixel art editor
+pixel Rama which can be run in the
+browser in this video I will go through
+how to generate a character how to
+rotate your character how to create
+animations and how to use in painting to
+add equipment I will timestamp the
+different parts so if there's anything
+in particular you're interested in you
+can skip ahead to that part so to start
+off let's create a character so here I
+have chosen create medium to extra large
+image which is our flux
+model so if you hover over a certain um
+setting you can see there is a hint
+which is something that is visible in
+pix but not in a Sprite so that's a good
+thing to know
+so I'm thinking let's create a female
+Merchant in
+a brown
+dress and we want to uh remove the
+background and once we're happy with the
+settings we uh click generate
+all right we have our character so I'm
+just going to select the pette
+instead and now I want to show you
+reduce
+colors so here I have automatic but you
+can also select um how many colors you
+want and uh you can also select your
+palette instead and it just
+basically uh removes any artifacts where
+it's like lots of different colors which
+is quite
+nice and I'm just going to clean up the
+Sprite real quick and then we will move
+on to uh the rotation tool
+so sometimes when you generate you might
+not get the uh direction that you
+wanted so to fix that uh you can use the
+rotate tool to uh yeah fix the direction
+or the view if you're unhappy with that
+it doesn't it's not always an issue but
+if it is it's uh good thing to know that
+you can always do it afterwards so here
+I'll go from Southwest to South which I
+believe is like the position my
+character is standing in and then
+remember to set your from image and yeah
+just click
+generate now you have a couple of
+options either you could manually which
+I'm doing right here uh fix up any
+things that you think should be
+different or you could use this
+uh uh new character as a init image and
+just let the model uh generate a new
+character but based on the correct uh
+Direction and view
+now I want to uh generate my characters
+are looking to the
+West instead so all I do is the same
+thing but now I want my two direction to
+be West
+instead and yeah that's all you need to
+do to rotate your
+character I will just quickly clean up
+my image a bit and then we will move on
+to the next thing which is how you can
+generate
+animations some shortcuts I recommend
+learning are P for pencil tool M to move
+around or the uh scroll
+button e for erase and O to pick colors
+when you're happy with your character
+and you think it's time to uh create
+some animations you can go over to
+animate with skeleton the first thing
+you want to do is to uh create a
+skeleton
+template so here I am setting my
+character as the
+reference and what's nice with the pixel
+Rama is that there's this tool on the
+right side which is the same as edit
+skeleton which just allows you to uh
+move the
+points and the shortcut is
+G uh for edit
+skeleton and here I just want to make
+sure that the uh the skeleton
+is as good as possible so once we uh
+insert the template it will be at the
+like highest quality you might still
+want to go through the template and uh
+move some points if you feel like it's
+necessary
+it's not like incredibly important that
+the points are perfect but the better
+you make them like the better the
+quality of your uh generation will be uh
+so I'm
+thinking we can do
+um walk uh four frames just to quickly
+show you how it's done uh remember to uh
+change the template
+Direction so it faces the same direction
+as your
+character and
+uh yeah here I
+insert without uh forcing the
+head like the head points which has a
+tendency to um negatively impact the uh
+the quality of the face of your
+character so here I'm just going to
+force it instead and now you can see
+like the uh the head the points of the
+head is like stays the
+same and similar to um my previous
+tutorial I will start off by freeze one
+generate two
+frames I will link that tutorial as well
+but it's in aprite instead done I hope
+that uh everything is basically the same
+but uh there have been a few small
+changes but the the thinking is the
+same all right nice
+since we are since we will be generating
+the future frames based on these frames
+I highly recommend trying to uh clean up
+the images a bit before generating the
+next frame because if these are bad they
+will have a yeah negative impact on
+future
+Generations so the better that you make
+them the better the next frame will be
+so now I will do freeze two and generate
+one frame and I positioned myself on the
+eighth frame so eighth and the ninth
+frames are like reference images which
+will help the model understand what the
+next frame will look
+like but as you can see in this
+uh generated oh yeah I'm just going to
+fix this
+first so here I take the hand that I
+likeed more in
+the other frame and uh add it to this
+Frame as
+well and um yeah just fixing the size a
+bit but yeah as you can see like the uh
+the arm is the same as in the eighth
+frame and it's supposed to be the
+opposite so here I'm just going to be
+using in painting and uh in it image to
+help the model understand which arm
+should behind and in front of
+which which is like a very powerful tool
+to uh yeah make the model do what you
+want uh thankfully it did the legs
+correctly so here I'm just inating so I
+went over to the in painting layer and
+now I am wherever I draw now is where
+the model can
+edit and just for you guys uh e is the
+arrays o is like picking the color and P
+is for like the pencil tool and here you
+can see um I click in use in painting
+and you can see like in the UI it's
+black which means that's where it's
+going to edit
+oh yeah I forgot in it image all
+right if you don't use uh in it image
+the model won't uh be able to see what's
+underneath the in painting so don't
+forget to toggle that
+on all right as you can see we got our
+arm correctly placed there and here I'm
+just copy pasting the
+hair because I kind of liked it that it
+was longer which was why I kept it and
+for the last
+image we don't need in painting we don't
+need a init image we just do like we did
+the previously we position ourselves on
+the ninth frame so the ninth and 10th
+Frame will be like reference so the
+model will have
+more knowledge and understanding when
+generating the 11th
+frame or that's like the fourth frame in
+the animation
+all right we have our frames so now I'm
+just going
+to tag this so that I can show you what
+the animation uh looks
+like so I'm selecting all the four
+frames new
+tag then if you right click and you go
+to uh properties you can change like the
+frame duration so it's it's not like
+super
+fast and then uh on the right here you
+can click uh
+play all right there's some color
+changes which isn't perfect but as the
+tool becomes better I think when this is
+released we will have made another
+update to animate skeleton so hopefully
+it will be even
+better uh but yeah
+now I want to show you the in
+painting so remember to go over to the
+in painting layer and here I forgot to
+make it visible so I can't draw in it
+and just draw where you want to in
+paint and here I am showing
+the like the current in painting tool
+but we also have a the experimental one
+which I will show after so yeah just
+remember to uh inpaint in the in
+painting
+layer and you will see that it shows up
+as like black in the UI where it will
+draw all
+right let's
+uh go over to the experimental one I
+think this also has had an update since
+I did this tutorial Things Are
+always changing you know getting
+better and I can reuse the same in
+painting and I forgot to change it to
+new frame you can use new layer as well
+but I think it's easier for
+demonstration that we create a new frame
+instead for
+I'm not super happy with the results so
+let's uh try again and see if uh it does
+better on a second try
+and yeah I think that looks better so
+remember it's always worth to uh try
+again and see if it does better the
+second time
+so yeah I hope you found this helpful
+and useful if you have any questions
+feel free to ask them here or preferably
+in Discord so you can share an image of
+what you're struggling with and we can
+uh give you some input and tips on how
+to uh get the tools to uh to do what you
+want and yeah I will see you in the next
+video

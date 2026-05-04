@@ -36,7 +36,7 @@ namespace RIMA
             lastCastTime = Time.time;
 
             FireProjectile();
-            ctrl?.AddFireState(1);
+            ctrl?.RegisterElementCast(ElementalistElement.Fire, 1);
 
             if (consecutiveCasts >= 3)
             {
@@ -49,11 +49,35 @@ namespace RIMA
 
         private void FireProjectile()
         {
-            if (projectilePrefab == null) return;
             Vector2 dir = player != null ? player.FacingDirection : Vector2.right;
-            var go = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            var go = projectilePrefab != null
+                ? Instantiate(projectilePrefab, transform.position, Quaternion.identity)
+                : CreateRuntimeFireball();
             var proj = go.GetComponent<PlayerProjectile>();
             if (proj != null) proj.Init(dir * projectileSpeed, damage, applyBurning: true, burnDuration: burnDuration, life: 3f);
+        }
+
+        private GameObject CreateRuntimeFireball()
+        {
+            var go = new GameObject("Fireball_Runtime");
+            go.transform.position = transform.position;
+
+            var rb = go.AddComponent<Rigidbody2D>();
+            rb.gravityScale = 0f;
+
+            var col = go.AddComponent<CircleCollider2D>();
+            col.radius = 0.18f;
+            col.isTrigger = true;
+
+            var renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sprite = ElementalistRuntimeVisuals.GetCircleSprite();
+            renderer.color = new Color(1f, 0.42f, 0.12f, 0.95f);
+            renderer.sortingLayerName = "VFX";
+            renderer.sortingOrder = 20;
+
+            go.transform.localScale = new Vector3(0.45f, 0.45f, 1f);
+            go.AddComponent<PlayerProjectile>();
+            return go;
         }
     }
 }

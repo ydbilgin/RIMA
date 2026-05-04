@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $token = ([IO.File]::ReadAllText((Resolve-Path .\token.txt))).Trim()
 $channelId = "1115580783663521862"
-$testDir = "..\..\_STAGING\discord_pixellab_test"
+$testDir = "..\..\STAGING\discord_pixellab_test"
 
 # Threads klasoru (her thread ayri JSON) + merged final dosya
 $threadsDir = Join-Path $testDir "help-questions-support_threads"

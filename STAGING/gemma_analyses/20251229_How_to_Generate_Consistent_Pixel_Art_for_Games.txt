@@ -1,0 +1,90 @@
+Thinking...
+
+*   User Persona: Game developer making a 2D isometric ARPG with 128px pixe[4D[K
+pixel art characters.
+*   Input: A transcript of a PixelLab AI tutorial ("How to Generate Consist[7D[K
+Consistent Pixel Art for Games").
+*   Goal: Extract specific information across 8 categories.
+*   Constraint: Be concise and specific.
+
+    *   *Topic:* "Create image from style reference" tool.
+    *   *Purpose:* Consistency in assets; uses reference images to teach th[2D[K
+the tool a visual style instead of just prompting.
+    *   *Canvas Size & Frame Limits:*
+        *   Canvas size controls number of frames (reference images/outputs[14D[K
+images/outputs).
+        *   16x16 or 32x32 $\rightarrow$ up to 64 frames/reference images.
+        *   64x64 $\rightarrow$ up to 16 frames/reference images.
+        *   128x128 $\rightarrow$ 4 frames/reference images.
+        *   256x256 $\rightarrow$ 1 single image/reference image.
+    *   *Workflow/Tips:* 5 to 10 good reference images are enough for solid[5D[K
+solid results.
+    *   *Logic/Rule:* Smaller resolution = more style learning/more frames.[7D[K
+frames.
+
+    1.  *What PixelLab feature is demonstrated?* "Create image from style r[1D[K
+reference."
+    2.  *Any tips for isometric tile production (floors, walls)?* Not menti[5D[K
+mentioned in the transcript.
+    3.  *Any object/map object workflow?* Not mentioned specifically, but t[1D[K
+the "style reference" tool is the general workflow for all assets to ensure[6D[K
+ensure consistency.
+    4.  *Any skill icon/item icon tips?* Not mentioned.
+    5.  *Any mob/enemy sprite tips?* Not mentioned.
+    6.  *Any canvas size and frame limit insights?*
+        *   16x16 or 32x32: Up to 64 frames.
+        *   64x64: Up to 16 frames.
+        *   128x128: 4 frames.
+        *   256x256: 1 frame.
+        *   Rule: Smaller resolution allows for more style learning and mor[3D[K
+more frames.
+    7.  *Key parameters or settings shown?* Canvas size (directly affects f[1D[K
+frame count). Use 5-10 good reference images for solid results.
+    8.  *Any new features mentioned?* "Create image from style reference."
+
+    *   *Self-Correction during drafting:* The user is specifically interes[7D[K
+interested in 128px characters. The transcript notes that 128x128 only give[4D[K
+gives 4 frames. This is a crucial takeaway for the developer.
+
+    *   *Refining the points:*
+        1.  **Feature:** "Create image from style reference."
+        2.  **Isometric tiles:** N/A.
+        3.  **Object workflow:** Use reference images to teach the AI a vis[3D[K
+visual style for consistency instead of relying solely on prompts.
+        4.  **Icons:** N/A.
+        5.  **Mobs:** N/A.
+        6.  **Canvas/Frames:** 16x16/32x32 (up to 64 frames); 64x64 (16 fra[3D[K
+frames); 128x128 (4 frames); 256x256 (1 frame). Smaller resolution = more f[1D[K
+frames/style learning.
+        7.  **Parameters/Settings:** 5–10 high-quality reference images are[3D[K
+are sufficient for good results.
+        8.  **New Features:** "Create image from style reference."
+...done thinking.
+
+Based on the transcript provided, here are the extracted insights for your [K
+2D isometric ARPG development:
+
+1.  **PixelLab Feature Demonstrated:** "Create image from style reference."[11D[K
+reference."
+2.  **Tips for Isometric Tile Production:** Not mentioned in thi[3D[K
+this transcript.
+3.  **Object/Map Object Workflow:** Use reference images to "teach" the AI [K
+a specific visual style rather than relying on text prompts. This ensures a[1D[K
+all generated assets belong to the same game aesthetic.
+4.  **Skill/Item Icon Tips:** Not mentioned in this transcript.
+5.  **Mob/Enemy Sprite Tips:** Not mentioned in this transcript.
+6.  **Canvas Size and Frame Limit Insights:** 
+    *   **16x16 or 32x32:** Up to 64 frames (reference images/outputs).
+    *   **64x64:** Up to 16 frames.
+    *   **128x128:** 4 frames total (Note: This applies to your character r[1D[K
+resolution).
+    *   **256x256:** 1 single image/reference image.
+    *   **Core Rule:** Smaller canvas resolutions allow for more "style lea[3D[K
+learning" and more output frames.
+7.  **Key Parameters or Settings:** 
+    *   You do not need the maximum number of frames; **5 to 10 high-qualit[11D[K
+high-quality reference images** are sufficient for solid results.
+    *   Canvas size is the primary setting that controls the frame limit.
+8.  **New Features Mentioned:** "Create image from style reference" tool.
+
+[1G⠙ [K[1G⠹ [K[1G⠸ [K[1G⠼ [K[1G⠴ [K[1G⠦ [K[1G⠧ [K[1G⠇ [K[1G⠏ [K[1G⠋ [K[1G⠙ [K[1G⠹ [K[1G[K[2K[1G

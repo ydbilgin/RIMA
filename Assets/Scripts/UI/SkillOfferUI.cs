@@ -145,7 +145,8 @@ namespace RIMA
             card.AddComponent<LayoutElement>();
 
             var bg = card.AddComponent<Image>();
-            bg.color = CardBg(tc);
+            bg.sprite = RimaUITheme.SmallPanelFrame;
+            bg.color = new Color(1f, 1f, 1f, 0.95f);
 
             // Top tier strip
             MakeAnchored("Strip", card.transform, new Vector2(0f, 0.93f), Vector2.one)
@@ -236,7 +237,9 @@ namespace RIMA
             Color tc = TierColor(skill.tier);
             var card = MakeRect("RepCard_" + skill.skillName, cardContainer);
             card.AddComponent<LayoutElement>();
-            card.AddComponent<Image>().color = CardBg(tc);
+            var cardImage = card.AddComponent<Image>();
+            cardImage.sprite = RimaUITheme.SmallPanelFrame;
+            cardImage.color = new Color(1f, 1f, 1f, 0.95f);
 
             MakeAnchored("Strip", card.transform, new Vector2(0f, 0.93f), Vector2.one)
                 .AddComponent<Image>().color = tc;
@@ -336,7 +339,9 @@ namespace RIMA
             // Right side: 74%–98% x, 10%–90% y
             tooltipPanel = MakeAnchored("TooltipPanel", parent,
                 new Vector2(0.74f, 0.10f), new Vector2(0.98f, 0.90f));
-            tooltipPanel.AddComponent<Image>().color = new Color(0.03f, 0.03f, 0.07f, 0.97f);
+            var tooltipImage = tooltipPanel.AddComponent<Image>();
+            tooltipImage.sprite = RimaUITheme.SmallPanelFrame;
+            tooltipImage.color = new Color(1f, 1f, 1f, 0.92f);
 
             // Top strip
             var stripGo = MakeAnchored("Strip", tooltipPanel.transform,
@@ -423,7 +428,13 @@ namespace RIMA
             var rt = panel.GetComponent<RectTransform>();
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
             rt.offsetMin = rt.offsetMax = Vector2.zero;
-            panel.AddComponent<Image>().color = new Color(0.02f, 0.02f, 0.06f, 0.94f);
+            var bg = panel.AddComponent<Image>();
+            bg.sprite = RimaUITheme.MenuDungeonBackground;
+            bg.color = new Color(0.70f, 0.78f, 0.82f, 0.95f);
+            bg.preserveAspect = true;
+
+            MakeAnchored("Shade", panel.transform, Vector2.zero, Vector2.one)
+                .AddComponent<Image>().color = new Color(0f, 0f, 0f, 0.58f);
         }
 
         private static Transform BuildCardContainer(Transform parent)
@@ -431,8 +442,8 @@ namespace RIMA
             var go = new GameObject("CardContainer", typeof(RectTransform));
             go.transform.SetParent(parent, false);
             var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = new Vector2(0.02f, 0.14f);
-            rt.anchorMax = new Vector2(0.72f, 0.80f);
+            rt.anchorMin = new Vector2(0.12f, 0.22f);
+            rt.anchorMax = new Vector2(0.68f, 0.72f);
             rt.offsetMin = rt.offsetMax = Vector2.zero;
             var hg = go.AddComponent<HorizontalLayoutGroup>();
             hg.spacing               = 16;

@@ -26,10 +26,10 @@ import urllib.request
 from pathlib import Path
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-DEFAULT_TEXT_MODEL = "gemma4:26b"
+DEFAULT_TEXT_MODEL = "qwen2.5:14b"
 DEFAULT_VISION_MODEL = "gemma4:e4b"
-FALLBACK_TEXT_MODEL = "gemma4:e4b"
-FALLBACK_VISION_MODEL = "gemma4:e4b"
+FALLBACK_TEXT_MODEL = "qwen2.5vl:7b"
+FALLBACK_VISION_MODEL = "qwen2.5vl:7b"
 CHUNK_SIZE = 60
 KEYFRAME_INTERVAL = 2  # seconds between extracted frames
 MAX_FRAMES_PER_VIDEO = 8
@@ -334,15 +334,23 @@ def encode_image(path):
         return base64.b64encode(f.read()).decode("ascii")
 
 
-def find_context(msgs, msg_id, window=3):
+def find_context(msgs, msg_id, window=6):
     for i, m in enumerate(msgs):
         if m["id"] == msg_id:
             lo = max(0, i - window)
             hi = min(len(msgs), i + window + 1)
-            return "\n".join(
-                f"[{x['author']}{' AUTHORITY' if x['authority'] else ''}]: {x['text'][:200]}"
-                for x in msgs[lo:hi] if x["text"]
-            )
+            lines = []
+            for x in msgs[lo:hi]:
+                if x["text"]:
+                    body = x["text"][:200]
+                elif x["attachments"]:
+                    names = ", ".join((a.get("fileName") or "?")[:30] for a in x["attachments"][:2])
+                    body = f"(attachment only: {names})"
+                else:
+                    continue
+                auth = " AUTHORITY" if x["authority"] else ""
+                lines.append(f"[{x['author']}{auth}]: {body}")
+            return "\n".join(lines)
     return ""
 
 
@@ -565,7 +573,7 @@ def write_executive_summary(digest_dir, channel_outputs, text_model):
 
 def main():
     ap = argparse.ArgumentParser(description="PixelLab Discord export analyzer")
-    ap.add_argument("--export-dir", default=str(SCRIPT_DIR / ".." / ".." / "_STAGING" / "discord_pixellab"))
+    ap.add_argument("--export-dir", default=str(SCRIPT_DIR / ".." / ".." / "STAGING" / "discord_pixellab"))
     ap.add_argument("--with-images", action="store_true", help="vision phase on images")
     ap.add_argument("--with-videos", action="store_true", help="vision phase on video keyframes (needs ffmpeg)")
     ap.add_argument("--image-limit", type=int, default=None, help="cap images per channel")

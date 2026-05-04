@@ -18,6 +18,7 @@ namespace RIMA
         [SerializeField] private int   tickDamage   = 8;
 
         public bool IsActive { get; private set; }
+        private Elementalist_SkillController ctrl;
 
         protected override void Awake()
         {
@@ -25,6 +26,7 @@ namespace RIMA
             skillName = "Blizzard";
             cooldown = 30f;
             resourceCost = 80;
+            ctrl = GetComponentInParent<Elementalist_SkillController>();
         }
 
         protected override void Execute() => StartCoroutine(BlizzardRoutine());
@@ -34,6 +36,7 @@ namespace RIMA
             yield return new WaitForSeconds(channelTime);
 
             IsActive = true;
+            ctrl?.RegisterElementCast(ElementalistElement.Frost, 1);
             Vector2 target = player != null
                 ? (Vector2)player.transform.position + player.FacingDirection * 3f
                 : (Vector2)transform.position;

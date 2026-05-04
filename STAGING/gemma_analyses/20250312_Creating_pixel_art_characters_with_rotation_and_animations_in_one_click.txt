@@ -1,0 +1,145 @@
+Thinking...
+
+*   Target Audience: A game developer making a 2D isometric ARPG with 128px[5D[K
+128px pixel art characters.
+*   Source Content: Transcript of a PixelLab AI tutorial video titled "2025[5D[K
+"20250312_Creating pixel art characters with rotation and animations in one[3D[K
+one click".
+*   Goal: Extract specific information based on 8 predefined questions.
+*   Constraints: Be concise and specific.
+
+    *   *Feature:* "Create character on[e] tool" that allows generating cha[3D[K
+characters with rotations/animations from scratch OR generating rotations/a[11D[K
+rotations/animations for existing characters.
+    *   *Workflow (Existing Characters):* If using existing characters, set[3D[K
+set the character to the corresponding image (e.'g., SE, N, etc.).
+    *   *Workflow (From Scratch):* If generating from a sketch, leave SE an[2D[K
+and N images empty.
+    *   *Animations available now:* Walking and attacking.
+    *   *Animations planned:* Spellcasting, special effects (fireball), run[3D[K
+running, mining.
+    *   *Upcoming technical support:* 128x128 image size support, 8 directi[7D[K
+directions (SE, NE, etc.).
+    *   *Tips for Quadrupeds:* The start image might not perfectly follow t[1D[K
+the direction; use "try again" until the first image faces East, then check[5D[K
+check that subsequent images face South.
+
+    *   **1) What PixelLab feature is demonstrated?**
+        *   "Create character" tool: Generates characters with rotations an[2D[K
+and animations either from scratch (using sketches) or from existing charac[6D[K
+character images.
+
+    *   **2) Any tips for isometric tile production (floors, walls)?**
+        *   (Scanning transcript...) No mention of tiles, floors, or walls.[6D[K
+walls.
+
+    *   **3) Any object/map object workflow?**
+        *   (Scanning transcript...) Mentions "mining animations" as a futu[4D[K
+future idea, but no specific workflow for objects.
+
+    *   ***Note: I need to be careful here. If the information isn't in the[3D[K
+the transcript, I must state that or skip it. The prompt asks me to "Extrac[7D[K
+"Extract", which implies extracting what is present.*
+
+    *   **4) Any skill icon/item icon tips?**
+        *   (Scanning transcript...) Mentions "special effects like a fireb[5D[K
+fireball" as a planned animation/feature, but no icon tips.
+
+    *   **5) Any mob/enemy sprite tips?**
+        *   Mentions a tip for generating **quadrupedal** (four-legged) cre[3D[K
+creatures: If the start image direction is off, click "try again" until the[3D[K
+the first image faces East, then verify the next images face South.
+
+    *   **6) Canvas size and frame limit insights?**
+        *   Current support is implied to be different, but **128x128** ima[3D[K
+image size support is listed as a feature coming after testing.
+
+    *   **7) Key parameters or settings shown?**
+        *   For generating from sketches: Leave "South East" and "North" im[2D[K
+images empty.
+        *   For generating from existing characters: Set the character to t[1D[K
+the corresponding image.
+
+    *   **8) Any new features mentioned?**
+        *   Support for 128x128 size.
+        *   8-directional support (SE, NE, etc.).
+        *   New animations: Spellcasting, running, and special effects (e.g[4D[K
+(e.g., fireball).
+        *   New animations: Mining.
+
+    *   *Check:* Did I miss anything?
+    *   *Feature:* Character creation tool (scratch or existing).
+    *   *Tiles/Objects/Icons:* No info in transcript.
+    *   *Mob/Enemy:* Quadrupedal direction correction tip.
+    *   *Size:* 128x128 is upcoming.
+    *   *Parameters:* Emptying SE/N for sketches; using existing images for[3D[K
+for rotation generation.
+    *   *New features:* 8 directions, 128x128, new animation types.
+
+    *Self-Correction during drafting:* The user is a developer of a 128px g[1D[K
+game. The transcript explicitly mentions 128x128 is a *future* implementati[12D[K
+implementation being tested. This is a vital piece of info for them.
+
+    1) **Feature:** "Create character" tool (generates rotations/animations[20D[K
+rotations/animations from scratch or existing images).
+    2) **Tiles:** No information provided.
+
+    3) **Objects:** No information provided (mentions mining animations as [K
+a future idea).
+    4) **Icons:** No information provided.
+    5) **Mob/Enemy:** For quadrupedal sprites, use "try again" if the start[5D[K
+start direction is wrong; aim for the first image to face East, then ensure[6D[K
+ensure subsequent images face South.
+    6) **Size/Frames:** 128x128 support is a planned feature currently in t[1D[K
+testing.
+    7) **Parameters:** To generate from a sketch, leave "South East" and "N[2D[K
+"North" images empty; to use existing characters, assign them to correspond[10D[K
+corresponding images.
+    8) **New Features:** 8-direction support (NE, SE, etc.), 128x128 size s[1D[K
+support, and new animations (spellcasting, running, special effects like fi[2D[K
+fireballs, and mining).
+...done thinking.
+
+Based on the transcript provided, here is the extracted information for you[3D[K
+your 2D isometric ARPG development:
+
+**1) What PixelLab feature is demonstrated?**
+The **"Create character" tool**, which can generate characters with rotatio[7D[K
+rotations and animations either from scratch (using a sketch) or by using e[1D[K
+existing character images as a base.
+
+**2) Any tips for isometric tile production (floors, walls)?**
+No information provided in the transcript.
+
+**3) Any object/map object workflow?**
+No specific workflow provided, though the creator mentions adding "mining a[1D[K
+animations" as a future consideration.
+
+**4) Any skill icon/item icon tips?**
+No information provided (only mentions future "special effects" like fireba[6D[K
+fireballs).
+
+**5) Any mob/enemy sprite tips?**
+For **quadrupedal (four-legged) creatures**, the generation might not perfe[5D[K
+perfectly align with the intended direction. The tip is to click "try again[5D[K
+again" until the first image faces **East**, then manually verify that the [K
+subsequent images correctly face **South**.
+
+**6) Canvas size and frame limit insights?**
+Support for **128x128** image sizes is a planned feature currently undergoi[8D[K
+undergoing testing.
+
+**7) Key parameters or settings shown?**
+* **For generating from a sketch:** Leave the "South East" and "North" imag[4D[K
+image slots empty.
+* **For generating from existing characters:** Set the character to the cor[3D[K
+corresponding directional image.
+
+**8) Any new features mentioned?**
+* **Expanded Directions:** Support for 8 directions (e.g., Northeast, South[5D[K
+Southeast, etc.).
+* **New Animations:** Planned additions include spellcasting, running, mini[4D[K
+mining, and special effects (e.g., fireball).
+* **Increased Resolution:** 128x128 pixel support.
+
+[1G⠙ [K[1G⠹ [K[1G⠸ [K[1G⠼ [K[1G⠴ [K[1G⠴ [K[1G⠧ [K[1G⠇ [K[1G⠏ [K[1G⠋ [K[1G⠋ [K[1G[K[2K[1G

@@ -14,6 +14,7 @@ namespace RIMA
         public bool SecondaryUnlocked { get; private set; }
 
         private InputAction[] skillActions;
+        private bool actionsEnabled;
 
         // Combo
         private int lastUsedSlot = -1;
@@ -58,13 +59,37 @@ namespace RIMA
             RebuildBindings();
         }
 
-        private void Awake() => RebuildBindings();
+        private void Awake()
+        {
+            EnsureDefaultLoadout();
+            RebuildBindings();
+        }
+
+        private void EnsureDefaultLoadout()
+        {
+            if (slots == null || slots.Length != 6)
+                slots = new SkillBase[6];
+
+            AssignDefaultSlot<IronCharge>(0);
+            AssignDefaultSlot<GravityCleave>(1);
+            AssignDefaultSlot<SunderMark>(2);
+            AssignDefaultSlot<Earthsplitter>(3);
+        }
+
+        private void AssignDefaultSlot<T>(int index) where T : SkillBase
+        {
+            if (index < 0 || index >= slots.Length || slots[index] is T) return;
+            T skill = GetComponent<T>();
+            if (skill == null) skill = gameObject.AddComponent<T>();
+            slots[index] = skill;
+        }
 
         public void RebuildBindings()
         {
             if (skillActions != null)
                 for (int i = 0; i < skillActions.Length; i++)
                     skillActions[i]?.Disable();
+            actionsEnabled = false;
 
             int total = SecondaryUnlocked ? 6 : 4;
             skillActions = new InputAction[total];
@@ -94,6 +119,7 @@ namespace RIMA
 
         private void EnableActions()
         {
+            if (actionsEnabled) return;
             if (skillActions == null) return;
             for (int i = 0; i < skillActions.Length; i++)
             {
@@ -102,15 +128,17 @@ namespace RIMA
                 skillActions[i].Enable();
                 skillActions[i].performed += _ => TryUse(idx);
             }
+            actionsEnabled = true;
         }
 
         private void DisableActions()
         {
             if (skillActions == null) return;
             foreach (var a in skillActions) a?.Disable();
+            actionsEnabled = false;
         }
 
-        private void Start() => RefreshSlots();
+        private void Start() => EnsureDefaultLoadout();
 
         public void RefreshSlots()
         {

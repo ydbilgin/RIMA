@@ -1,8 +1,8 @@
 ---
 name: PixelLab sprite production workflow
 type: project
-trigger: CFR v3, sprite production, char_id, rotation, skin tone
-description: CFR v3 rotation workflow, char_id tracking, and 128px readability warning
+trigger: CFR v3, sprite production, char_id, rotation, skin tone, hades, direction
+description: CFR v3 rotation workflow, char_id tracking, 128px readability warning, Hades 4-dir system
 ---
 
 ## CFR v3 Workflow (all 10 classes)
@@ -23,20 +23,67 @@ Near-black skin + dark clothing = unreadable silhouette. Confirmed: 3 Brawler RE
 Trigger "Black African" also caused mask/monster face output.
 Fix: let PixelLab choose readable tone. If dark look needed, pair with high-contrast costume element.
 
-## 4-Direction Frame Selection (LOCKED 2026-04-30, Claude+Codex)
-PixelLab Low Top-Down quirk: labeled cardinal directions (S/E/N/W) render as visually diagonal frames; intermediate labels (SE/NE/NW/SW) render as visually frontal/side/back. Camera 30-35 deg ARPG tilt absorbs the offset.
+## 4-Direction System (Hades-Style, UPDATED 2026-05-02)
 
-Mapping for RIMA's 4 cardinal directions:
-- RIMA S -> PixelLab SE frame (visually: front-facing toward camera)
-- RIMA E -> PixelLab NE frame (visually: right side profile)
-- RIMA N -> PixelLab NW frame (visually: back-facing)
-- RIMA W -> PixelLab SW frame (visually: left side profile)
+Anchor files in Characters/anchors/<class>/rotations/ are NOW CORRECTLY named by true visual content (renamed 2026-05-02). Old offset is gone.
 
-Rules:
-- Source filenames stay raw PixelLab labels (south-east.png etc). Never rename.
-- Remap happens at Unity import + animation wiring, not at generation.
-- 4-dir generation jobs must request SE/NE/NW/SW set, NOT raw S/E/N/W.
-- Symmetric classes: W = E flipped. Asymmetric: W generated separately.
+### Anchor -> Game Direction mapping (for generating new sprites)
+| Anchor to use as reference | Game direction slot | Sprite file to save as | Visual content |
+|---|---|---|---|
+| south.png (full front) | EAST (press right) | <class>_idle_east.png | SE equivalent |
+| east.png (right profile) | NORTH (press up) | <class>_idle_north.png | NE equivalent |
+| north.png (full back) | WEST (press left) | <class>_idle_west.png | NW equivalent |
+| west.png (left profile) | SOUTH (press down) | <class>_idle_south.png | SW equivalent |
 
-## Status
-All 10 S43 class anchor folders present with 8 rotations and matching metadata paths.
+### Unity .anim -> sprite mapping (current wave-1 classes)
+- idle_east.anim -> _idle_south.png sprite (front view)
+- idle_north.anim -> _idle_west.png sprite (right profile)
+- idle_west.anim -> _idle_north.png sprite (back view)
+- idle_south.anim -> _idle_east.png sprite (left profile)
+
+### Rules
+- Generate 4 directions using the correct anchor as reference per above table
+- Sprite slot names (_east/_north/_west/_south) are animation slot names, NOT visual content names
+- West direction: generate separately (back view has no mirror relationship to east)
+- See STAGING/PRODUCTION_GUIDE_S43.md for full spec
+
+## PERMANENT RULE (2026-05-02)
+
+**animate_character MCP is FORBIDDEN for all character animations.**
+**char_ids intentionally removed. Do NOT look them up or use them.**
+
+Reason: MCP output quality unacceptable -- 4-frame limit, embedded VFX in sprite frames, running animation poor.
+All character animations are produced manually by the user in the PixelLab UI.
+Claude prepares prompt documents only. Never calls animate_character.
+
+## Claude role for character animations
+- Prepare action description prompts as documents (dispatched via Codex)
+- User executes in PixelLab UI "Animate with Text NEW"
+- Target: 8-16 frames, NO embedded VFX in sprite frames, clean silhouette
+
+## Character Description Prompt Structure (sjalsol template — FULL)
+
+Use for ANY PixelLab character description (create_character, CFR v3, reference-based gen).
+Fill only relevant fields; skip fields that don't apply.
+
+```
+TYPE: [humanoid / creature / etc]
+STYLE: [art style, size, feel]
+HEAD: [head shape, eyes, distinctive features]
+BODY: [body type, stance]
+LIMBS: [arm/leg description]
+EXTRA: [accessories, gear]
+CLOTHING: [outfit details]
+HANDS: [what hands hold / look like]
+SILHOUETTE: [key silhouette identifiers]
+COLOR: [palette, skin, clothing colors, shade steps]
+POSE: [for walk/attack frames -- specific pose description]
+```
+
+For EXISTING char_id animations: do NOT re-describe the character.
+Just provide: action_description + directions + frame_count. That's it.
+
+RULES block (reference-based generation only):
+- Use provided sprite as scale/grid/pixel density reference ONLY
+- Do not redesign or enlarge
+- Clean pixel clusters, no dithering, no noise

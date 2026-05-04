@@ -36,6 +36,9 @@ namespace RIMA
 
         private void Awake()
         {
+            OnHealthChanged ??= new UnityEvent<int, int>();
+            OnDeath ??= new UnityEvent();
+            OnDamageTaken ??= new UnityEvent<int>();
             currentHP = maxHP;
         }
 

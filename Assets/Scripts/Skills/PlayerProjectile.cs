@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace RIMA
@@ -20,6 +21,7 @@ namespace RIMA
         private bool applyPoison;
         private float poisonDuration;
         private int knockbackForce;
+        private Action<Collider2D> onHit;
 
         public void Init(
             Vector2 velocity, int dmg,
@@ -51,6 +53,11 @@ namespace RIMA
             Destroy(gameObject, lifetime);
         }
 
+        public void SetOnHit(Action<Collider2D> callback)
+        {
+            onHit = callback;
+        }
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player")) return;
@@ -59,6 +66,7 @@ namespace RIMA
             if (hp == null || hp.IsDead) return;
 
             hp.TakeDamage(damage);
+            onHit?.Invoke(other);
 
             var status = other.GetComponent<StatusEffectSystem>();
             if (status != null)
