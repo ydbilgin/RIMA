@@ -5,12 +5,13 @@ Load when: routing a task, choosing an agent, delegating work.
 
 ## Authority Order (highest to lowest)
 1. **Claude (orchestrator)** — final decisions, architecture, QC judgment, agent dispatch. Non-delegatable.
-2. **rima-design (Opus 4.7 sub-agent)** — cross-system design judgment when orchestrator escalates.
-3. **rima-codex (Sonnet sub-agent + cx CLI)** — mechanical Codex execution via `cx <profile> exec`.
+2. **rima-design (Opus sub-agent)** — cross-system design judgment when orchestrator escalates.
+3. **Antigravity (Codex / GPT 5.5 High)** — mechanical executor. Reads `ANTIGRAVITY.md`. Commits as `[Codex]`.
 4. **rima-doc / rima-qc / rima-asset / rima-research (Sonnet sub-agents)** — doc writes, validation, asset prompts, web research.
 5. **User-driven Codex CLI** — when the user runs Codex directly and reports back to Claude.
 
-No agent overrides Claude. No agent spawns another agent. Codex (when invoked via rima-codex) does its own internal work; rima-codex only wraps the call.
+No agent overrides Claude. No agent spawns another agent.
+Antigravity (Codex) reads `ANTIGRAVITY.md` for its rules. Claude reviews all Codex commits before proceeding.
 
 ---
 
@@ -80,7 +81,7 @@ The orchestrator (Claude main thread) is the conductor. Agents are dumb workers 
 - If you need a file that was not listed, stop and report missing context. Do not browse, do not glob, do not grep beyond your scope.
 - No file in your prompt -> no file you may open. Period.
 
-**Exception:** rima-codex passes its prompt to Codex CLI, which has its own context discipline (`CODEX.md`). Codex itself may read what it needs within the allowed-files boundary.
+**Exception:** Antigravity (Codex) reads `ANTIGRAVITY.md` and operates within the allowed-files boundary specified in its task prompt.
 
 ---
 

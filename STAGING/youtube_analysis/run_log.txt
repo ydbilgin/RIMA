@@ -1,13 +1,0 @@
-Fetching: https://www.youtube.com/@PixelLab_AI/videos
-Fetching: https://www.youtube.com/@PixelLab_AI/shorts
-
-38 videos to analyze (score >= 4), model: qwen2.5vl:7b
-
-[hOZzbQBjKPc] Tutorial: Learn how to animate, rotate and inpaint your char (1053s, score=10)
-  transcript: not available
-  frames: 62 extracted, analyzing...
-    frame 1/62    frame 2/62    frame 3/62    frame 4/62    frame 5/62    frame 6/62    frame 7/62    frame 8/62    frame 9/62    frame 10/62    frame 11/62    frame 12/62    frame 13/62    frame 14/62    frame 15/62    frame 16/62    frame 17/62    frame 18/62    frame 19/62    frame 20/62    frame 21/62    frame 22/62    frame 23/62    frame 24/62    frame 25/62    frame 26/62    frame 27/62    frame 28/62    frame 29/62    frame 30/62    frame 31/62    frame 32/62    frame 33/62    frame 34/62    frame 35/62    frame 36/62    frame 37/62    frame 38/62    frame 39/62    frame 40/62    frame 41/62    frame 42/62    frame 43/62    frame 44/62    frame 45/62    frame 46/62    frame 47/62    frame 48/62    frame 49/62    frame 50/62    frame 51/62    frame 52/62    frame 53/62    frame 54/62    frame 55/62    frame 56/62    frame 57/62    frame 58/62    frame 59/62    frame 60/62    frame 61/62    frame 62/62
-[8TRHAC3fUpo] How to Make Walking Animations for Pixel Art Characters in P (587s, score=8)
-  transcript: not available
-  frames: 65 extracted, analyzing...
-    frame 1/65    frame 2/65    frame 3/65    frame 4/65    frame 5/65    frame 6/65    frame 7/65    frame 8/65    frame 9/65    frame 10/65    frame 11/65    frame 12/65    frame 13/65    frame 14/65    frame 15/65    frame 16/65    frame 17/65    frame 18/65    frame 19/65    frame 20/65    frame 21/65    frame 22/65    frame 23/65    frame 24/65    frame 25/65    frame 26/65    frame 27/65    frame 28/65    frame 29/65    frame 30/65    frame 31/65    frame 32/65    frame 33/65    frame 34/65    frame 35/65    frame 36/65    frame 37/65    frame 38/65    frame 39/65    frame 40/65    frame 41/65    frame 42/65    frame 43/65

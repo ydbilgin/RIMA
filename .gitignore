@@ -24,13 +24,17 @@ UserSettings/
 # External tools
 Pixellab extension/
 
-# _STAGING: heavy / ephemeral subdirectories
-_STAGING/research/tweets/
-_STAGING/temp_*/
-_STAGING/discord_pixellab/
-_STAGING/discord_pixellab_test/
-_STAGING/chatgpt_pixel_grid_s42/
-_STAGING/hero_siege_wiki_sprites/
+# STAGING: heavy / ephemeral subdirectories
+STAGING/discord_pixellab/
+STAGING/yt_videos/
+STAGING/yt_frames/
+
+# ARCHIVE: research raw data (already committed once as checkpoint)
+ARCHIVE/RESEARCH_RAW/
+
+# Claude internal
+.claude/scheduled_tasks.lock
+.playwright-cli/
 
 # Binary assets — versioned in PixelLab, not git
 *.png

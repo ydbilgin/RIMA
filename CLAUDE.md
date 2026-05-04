@@ -2,76 +2,88 @@
 Working dir: `F:/Antigravity Projeler/2d roguelite/RIMA/`. No `../`.
 
 ## Orchestra Rule (PRIMARY)
-Claude main thread is the orchestra conductor. It dispatches; it does not do mechanical work itself.
+Claude is the orchestra conductor. Dispatches work, does not do mechanical bulk itself.
 
-- You hold the project map in head via `MEMORY/INDEX.md` (pointer index). Do NOT re-read files you already read this session.
-- When you delegate to a sub-agent, hand over: (a) explicit file paths the agent may open, (b) inline excerpts when small, (c) exact output format.
-- Sub-agents do NOT auto-discover context. No "open CURRENT_STATUS.md to figure out what to do." That is the orchestrator's job.
-- Token budget: orchestrator keeps its own context lean by NOT opening files for reference. Agents pay the open-cost in their isolated context.
+- Hold project map via `MEMORY/INDEX.md`. Do NOT re-read files already read this session.
+- Delegate to sub-agents with: (a) explicit file paths, (b) inline excerpts when small, (c) exact output format.
+- Sub-agents do NOT auto-discover context. Orchestrator feeds them.
 
-See `AGENTS.md` for the full routing matrix and Context Discipline section.
+## Agents
+| Agent | Role | Commits As |
+|---|---|---|
+| Claude (you) | Orchestrator, decisions, QC, dispatch | `Co-Authored-By: Claude <noreply@anthropic.com>` |
+| Antigravity (Codex) | Mechanical executor, bounded tasks | `Co-Authored-By: Antigravity (Codex) <noreply@antigravity.dev>` |
+| Sub-agents (rima-*) | Specialized tasks within Claude's context | No direct commits |
+
+**Mutual QC:** Claude reviews Antigravity's commits. If issues found, Antigravity fixes and re-commits. Errors are always revertible via git.
+
+Full routing: `AGENTS.md`.
 
 ## Session Start
-Read `CURRENT_STATUS.md` only. Continue from there. Do not auto-open other files; pull them on demand.
+Read `CURRENT_STATUS.md` only. Continue from there. Pull other files on demand.
 
 ## Memory
-Shared: `MEMORY/INDEX.md` -> open related `*.md` only when its trigger matches the current task.
-All agents (Claude, Codex via rima-codex, Antigravity, others) read from `MEMORY/`.
-Claude writes memory directly via Write tool; other agents must `git commit` after editing.
+Shared: `MEMORY/INDEX.md` -> open related `*.md` only when trigger matches current task.
+All agents read from `MEMORY/`. Claude writes directly; Antigravity must commit after editing.
 
 ## Folders
-`Assets/`, `TASARIM/`, `GUIDES/`, `CONCEPT_ART/`, `ARCHIVE/`, `STAGING/`.
-Root: CLAUDE.md, CURRENT_STATUS.md, AGENTS.md, CODEX.md, README.md, Unity files. New docs -> GUIDES/ or TASARIM/.
+| Folder | Purpose |
+|---|---|
+| `Assets/` | Unity project files |
+| `TASARIM/` | Design docs (Turkish: "design") |
+| `GUIDES/` | Production guides, references |
+| `STAGING/` | Work-in-progress, prompts, temp outputs |
+| `ARCHIVE/` | Completed/historical (RESEARCH_RAW, AKADEMIK, SCREENSHOTS_OLD, etc.) |
+| `MEMORY/` | Shared agent memory |
+| `Tools/` | Python/PS scripts |
+
+Root files: CLAUDE.md, ANTIGRAVITY.md, CURRENT_STATUS.md, AGENTS.md, SYSTEM_MAP.md, README.md.
 
 ## Cleanup
-Completed Codex run reports / one-time docs -> `ARCHIVE/CODEX_TAMAMLANDI/`. Temp -> `ARCHIVE/`.
-**Temp files rule:** When creating a one-time file (QC report, review prompt, eval), note its deletion target in the same message. Delete or archive immediately after use.
-
-Roles, model routing, context discipline: see `AGENTS.md`.
-
-## /clear
-Call after: Review PASS · New phase · 20+ messages · Heavy batch · Topic switch.
-Cache TTL = 5 min. "N uncached" in statusline = N tokens paid full-price this turn. /clear at phase boundaries, not mid-task.
+- Completed one-time docs -> `ARCHIVE/`. Temp -> delete or archive immediately after use.
+- **Commit frequently** — git status loads every message; dirty state = token waste.
 
 ## Test
-NUnit + Unity Test Runner + MCP `run_tests`. Sonnet: write+run+fix.
-- EditMode: No `Awake()` -> explicit init.
-- Seeded: `Random.InitState(42)` in SetUp.
-- DungeonGraph: `Is.InRange` · Coroutine/Singleton -> PlayMode.
+NUnit + Unity Test Runner + MCP `run_tests`.
+- EditMode: No `Awake()` -> explicit init. Seeded: `Random.InitState(42)`.
+- DungeonGraph: `Is.InRange`. Coroutine/Singleton -> PlayMode.
 
 ## Sprite/Asset (S43)
-128px canvas · `create_character` FORBIDDEN. Detail: `STAGING/PROMPTS_S43/PRODUCTION_GUIDE_S43.md`.
+128px canvas, PPU=128, 4 cardinal (S/E/N/W). `create_character` FORBIDDEN.
+Detail: `STAGING/PROMPTS_S43/PRODUCTION_GUIDE_S43.md`.
 
 ## Token Saving
-Session start: `CURRENT_STATUS.md` only. Edit: surgical line ranges. Bulk work -> rima-codex.
-**CLAUDE.md and CURRENT_STATUS.md must stay lean. No redundant content — if it lives in another doc, use a pointer.**
-**Commit frequently** — git status loads every message; untracked/modified bloat adds tokens each turn.
-**/lint:** Phase transition · 5+ decisions · Before asset work.
+- Session start: `CURRENT_STATUS.md` only. Edit: surgical line ranges.
+- Bulk mechanical work -> Antigravity (Codex).
+- CLAUDE.md and CURRENT_STATUS.md must stay lean. Pointers, not content.
+- `/lint` at: phase transitions, 5+ decisions, before asset work.
+
+## /clear
+Call after: Review PASS, new phase, 20+ messages, heavy batch, topic switch.
+Cache TTL = 5 min.
 
 ## Language
-User: Turkish · Internal files (.md, prompts, code): English.
-**Encoding rule:** Internal .md files must use ASCII-only characters. No Turkish diacritics. Reason: Claude/Codex write with different encodings; double-encoding corrupts Turkish chars.
+User: Turkish. Internal files (.md, prompts, code): English.
+**Encoding:** ASCII-only in .md files. No Turkish diacritics (encoding mismatch between agents).
 
 ## File Map
-**Every session:** `CURRENT_STATUS.md` only.
-**On demand:** `SYSTEM_MAP.md`, `AGENTS.md` (open when architecture/routing needed), `CODEX.md` (when dispatching rima-codex needs context).
-**As needed:** `TASARIM/STYLE_BIBLE.md`, `GDD.md`, `MASTER_KARAR_BELGESI.md`, `ROOM_MECHANICS.md`, `SINIF_VE_SKILL_KARAR_BELGESI.md`, `COMBAT_ROSTER.md`, `BOSS_DESIGN.md`.
-**Phase scope:** `TASARIM/FAZLAR/FAZ_MASTER.md` -> active phase file.
-**PixelLab ref** (`F:/Antigravity Projeler/Pixellab/`): `PIXELLAB_PIPELINE.md`, `PIXELLAB_API_V2.md`.
+| Load | Files |
+|---|---|
+| Every session | CURRENT_STATUS.md |
+| On demand | SYSTEM_MAP.md, AGENTS.md, ANTIGRAVITY.md |
+| As needed | TASARIM/STYLE_BIBLE.md, GDD.md, MASTER_KARAR_BELGESI.md, SINIF_VE_SKILL_KARAR_BELGESI.md |
+| Phase scope | TASARIM/FAZLAR/FAZ_MASTER.md -> active phase file |
 
 ## Output Economy
-- **Mechanical work** (code edit, test, commit, refactor): terse output, no explanations, fragments OK.
-- **Design/decision work** (architecture, balance, UI direction): normal nuanced output.
-- Toggle is automatic based on task type. Never compress design judgment.
-- Context Mode MCP is active: large tool outputs are sandboxed. Use `ctx_search` to recall raw data if needed.
+- **Mechanical work** (code, test, commit): terse, fragments OK.
+- **Design/decision work** (architecture, balance): nuanced output.
+- Toggle automatic. Never compress design judgment.
 
 ## Multi-Account Routing
-- **"AWS'deyim"** -> Bedrock mode. Opus 4.6 for decisions, Sonnet 4.6 for mechanical. $200 credit (non-renewing).
-- **"Asil hesabimdayim"** -> Claude Pro mode. Normal usage.
-- **Opus 4.7 workaround:** User runs a second terminal with `ccs laurethgame` for heavy autonomous tasks. Orchestrator writes task to `STAGING/opus47_task.md`, user runs in separate session manually.
+- **"AWS'deyim"** -> Bedrock. Opus 4.6 decisions, Sonnet 4.6 mechanical.
+- **"Asil hesabimdayim"** -> Claude Pro.
 
 ## Project Specs
-Unity 2D URP · Namespace RIMA · Scene `Assets/Scenes/_IsoGame.unity`.
-**S43:** Char 128² · Floor 64×32 · Wall 64×96 · PPU=64.
+Unity 2D URP, namespace `RIMA`, scene `Assets/Scenes/_IsoGame.unity`.
+S43: Char 128px, Floor 64x32, Wall 64x96, PPU=128.
 Tone: Fractured Epic (compact, non-chibi).
-Interaction (G-key) / Inspector -> see `SYSTEM_MAP.md`.
