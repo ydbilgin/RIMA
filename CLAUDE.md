@@ -1,5 +1,8 @@
-# RIMA — Claude Code Instructions
+# RIMA — Project Rules (All Agents)
 Working dir: `F:/Antigravity Projeler/2d roguelite/RIMA/`. No `../`.
+
+**This file is the single source of truth for ALL agents (Claude, Codex, Gemini).**
+Agent stack definition: `ANTIGRAVITY.md`. Routing details: `AGENTS.md`.
 
 ## Orchestra Rule (PRIMARY)
 Claude is the orchestra conductor. Dispatches work, does not do mechanical bulk itself.
@@ -7,24 +10,14 @@ Claude is the orchestra conductor. Dispatches work, does not do mechanical bulk 
 - Hold project map via `MEMORY/INDEX.md`. Do NOT re-read files already read this session.
 - Delegate to sub-agents with: (a) explicit file paths, (b) inline excerpts when small, (c) exact output format.
 - Sub-agents do NOT auto-discover context. Orchestrator feeds them.
-
-## Agents
-| Agent | Role | Commits As |
-|---|---|---|
-| Claude (you) | Orchestrator, decisions, QC, dispatch | `Co-Authored-By: Claude <noreply@anthropic.com>` |
-| Antigravity (Codex) | Mechanical executor, bounded tasks | `Co-Authored-By: Antigravity (Codex) <noreply@antigravity.dev>` |
-| Sub-agents (rima-*) | Specialized tasks within Claude's context | No direct commits |
-
-**Mutual QC:** Claude reviews Antigravity's commits. If issues found, Antigravity fixes and re-commits. Errors are always revertible via git.
-
-Full routing: `AGENTS.md`.
+- **Mutual QC:** Claude reviews Codex/Gemini commits. Errors -> fix and re-commit. All revertible via git.
 
 ## Session Start
 Read `CURRENT_STATUS.md` only. Continue from there. Pull other files on demand.
 
 ## Memory
 Shared: `MEMORY/INDEX.md` -> open related `*.md` only when trigger matches current task.
-All agents read from `MEMORY/`. Claude writes directly; Antigravity must commit after editing.
+All agents (Claude, Codex, Gemini) read from `MEMORY/`. All must commit after changes.
 
 ## Folders
 | Folder | Purpose |
@@ -54,7 +47,8 @@ Detail: `STAGING/PROMPTS_S43/PRODUCTION_GUIDE_S43.md`.
 
 ## Token Saving
 - Session start: `CURRENT_STATUS.md` only. Edit: surgical line ranges.
-- Bulk mechanical work -> Antigravity (Codex).
+- Bulk mechanical work -> Codex (GPT 5.5 High).
+- Bulk analysis/audit -> Gemini (2.5 Pro).
 - CLAUDE.md and CURRENT_STATUS.md must stay lean. Pointers, not content.
 - `/lint` at: phase transitions, 5+ decisions, before asset work.
 
