@@ -13,10 +13,16 @@ and how they coordinate. All agents share the same rules (`CLAUDE.md`) and memor
 | Gemini | Gemini 2.5 Pro | Research, file audits, bulk analysis | On-demand (user invokes) |
 
 ## Shared Rules
-**All agents read `CLAUDE.md` as their instruction set.** No separate rule files per agent.
-- CLAUDE.md = project rules, constraints, workflow
-- CURRENT_STATUS.md = active work state
-- MEMORY/INDEX.md = shared knowledge pointer
+Rule files are now split by agent role:
+- `RULES.md` = universal project rules (all agents read this)
+- `CLAUDE.md` = Claude-specific: orchestrator role, slash commands, sub-agents
+- `CODEX.md` = Codex-specific: executor capabilities, workflow, what NOT to do
+- `CURRENT_STATUS.md` = active work state
+- `MEMORY/INDEX.md` = shared knowledge pointer
+
+**Claude reads:** CLAUDE.md (auto-loaded) + RULES.md (on demand).
+**Codex reads:** CODEX.md (session start) + RULES.md (project specs).
+**Gemini reads:** RULES.md (fed by orchestrator).
 
 ## Commit Attribution
 | Agent | Commit Format |

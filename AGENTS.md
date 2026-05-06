@@ -73,6 +73,8 @@ The orchestrator (Claude main thread) is the conductor. Agents are dumb workers 
 
 **For the orchestrator:**
 - You hold the project map in head: `MEMORY/INDEX.md` is your pointer index. You do NOT need to re-open files you have already read this session.
+- **NotebookLM first:** Before reading any TASARIM/ or MEMORY/ file, query NotebookLM. Only open the file if the answer is insufficient.
+  `uvx --from notebooklm-mcp-cli nlm notebook query ed3c8952-417c-4988-84a7-425d25ba3b08 "question"`
 - When dispatching to an agent, hand it: (a) the explicit file paths it may open, (b) any inline excerpts it needs, (c) the exact output format expected.
 - Do not let agents discover context on their own. Discovery in agents = wasted tokens + drift.
 
@@ -99,12 +101,17 @@ User may add or remove profiles via `cx add <name>` / `cx delete <name>`. Re-rea
 
 ---
 
-## Gemini CLI (rima-research only)
+## Gemini CLI
 
-- Non-interactive: `gemini -p "<query>"`
-- Use only for external lookups. No project file access.
-- Returns summary inline; orchestrator decides what to persist.
-- Old "user runs gemini and pastes back" workflow is removed.
+Default model: `gemini-3.1-pro-preview` (set in `~/.gemini/settings.json` — no `-m` flag needed).
+
+**rima-research:** External lookups only. No project file access. Returns summary inline.
+
+**Mechanical file writing (new):** Gemini replaces rima-doc for mechanical doc updates.
+- Use `gemini --yolo` for: CURRENT_STATUS updates, design doc additions, session notes, per-class impl files.
+- Claude token cost = zero. Gemini/Codex token cost = irrelevant.
+- rima-doc stays for judgment-heavy writes only (complex cross-file doc decisions).
+- After Gemini writes: Claude tags for NotebookLM sync at session end (git diff based).
 
 ---
 

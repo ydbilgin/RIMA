@@ -83,7 +83,7 @@ namespace RIMA
 
         // ── Ana çağrılar ─────────────────────────────────────────
 
-        /// <summary> RoomManager veya boss ödülü olarak çağrılır. </summary>
+        /// <summary> Oda temizlendikten veya boss yenildikten sonra çağrılır. </summary>
         public void ShowDraft()
         {
             EnsureDependencies();

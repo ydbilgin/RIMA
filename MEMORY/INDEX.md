@@ -20,6 +20,7 @@ Open a file ONLY when its keywords match the current task.
 - [feedback_canvas_size.md](feedback_canvas_size.md) -- WHEN: canvas size, 128px, frame limit
 - [feedback_ollama_model_management.md](feedback_ollama_model_management.md) -- WHEN: ollama, gemma, GPU memory
 - [feedback_gemma_models.md](feedback_gemma_models.md) -- WHEN: gemma, local model, vision, which model
+- [feedback_basic_attack_combo_identity.md](feedback_basic_attack_combo_identity.md) -- WHEN: basic attack, LMB, RMB, combo, weapon speed, attack animation
 
 ## PixelLab
 - [pixellab_budget.md](pixellab_budget.md) -- WHEN: PixelLab budget, confirm_cost, batch
@@ -38,6 +39,10 @@ Open a file ONLY when its keywords match the current task.
 - [project_room_blueprints.md](project_room_blueprints.md) -- WHEN: room catalogue, Act 1 rooms
 - [project_gate_map_reveal.md](project_gate_map_reveal.md) -- WHEN: gates, door sockets, route reveal
 - [project_ui_state_blueprint.md](project_ui_state_blueprint.md) -- WHEN: HUD, skill bar, reward UI, gate choice
+- [project_dev_tool_rift_makeup.md](project_dev_tool_rift_makeup.md) -- WHEN: dev tool, building designer, rift portal, chaos gate, makeup VFX, buff visuals
+
+## Tooling
+- [notebooklm_workflow.md](notebooklm_workflow.md) -- WHEN: NotebookLM, notebook_query, token savings, source sync
 
 ## Research (Digested)
 - [discord_pipeline.md](discord_pipeline.md) -- WHEN: Discord analysis, PixelLab research
