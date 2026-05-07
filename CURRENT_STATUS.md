@@ -1,10 +1,29 @@
 # CURRENT STATUS
-**2026-05-06 - S43 - Phase 1**
+**2026-05-07 - S43 - Phase 1**
 
 ## Active Block
-UI/minimap/combat-camera visual acceptance still OPEN -- requires Play Mode screenshot QA.
-Full skill tree: LOCKED v0.1 -- TASARIM/SKILL_TREE_10CLASSES_CANONICAL.md
-Skill pool doc: NOT written yet -- Codex dispatch failed repeatedly, retry next session.
+- UI performance fix + visual cleanup DONE (Antigravity 2026-05-07). Play Mode screenshot QA still OPEN.
+- UI full rebuild: given to Antigravity -- Ashen Glyph spec, 3-layer architecture, placeholder art. All existing UI screens rebuilt from scratch.
+
+### Skill Files (RAW — old Q/E/R format, will be revised)
+- 10-class wrongly-generated roster (Ironclad/Arcanist/Riftstalker/Vanguard/Specter): ON HOLD
+- SKILL_TREE_10CLASSES_CANONICAL.md -- wrong roster, reference only
+- SKILL_POOL_ALTERNATIVES_2026-05-06.md -- wrong roster, reference only
+- SKILL_TREE_5CLASS_MISSING_2026-05-06.md -- commit 1bbed80, raw material
+- SKILL_POOL_ALTERNATIVES_5CLASS_MISSING_2026-05-06.md -- commit 1bbed80, raw material
+- PixelLab animation prompts (correct S41 roster): STAGING/PIXELLAB_ANIMATION_PROMPTS_10CLASS_2026-05-06.md
+
+## cx exec Syntax (CONFIRMED 2026-05-06)
+Correct: `$prompt | cx <account> exec -s danger-full-access -m gpt-5.5`
+Wrong:   `cx <account> exec ... $prompt` (hangs -- stdin stays open in background PS, codex waits for EOF)
+Detail: MEMORY (feedback_codex_dispatch_strategy.md)
+
+## NotebookLM (NEW - 2026-05-06)
+- Notebook: RIMA Game Design Knowledge Base (ID: ed3c8952-417c-4988-84a7-425d25ba3b08)
+- 89 sources total (80 bootstrap + 9 updates: RULES/AGENTS/CLAUDE/CODEX + 5 MEMORY updates)
+- Sync tag: nlm-sync-20260506
+- HARD RULE: Claude never reads files except CURRENT_STATUS.md -- all context via NotebookLM query
+- Detail: MEMORY/notebooklm_workflow.md
 
 ## Locked This Session (2026-05-06)
 
@@ -19,67 +38,72 @@ Skill pool doc: NOT written yet -- Codex dispatch failed repeatedly, retry next 
 - Rift Portal Opportunity: `TASARIM/RIFT_PORTAL_OPPORTUNITY.md`
 - Makeup VFX Contract: `TASARIM/MAKEUP_VFX_CONTRACT.md`
 - Dev Tool Plan: `TASARIM/DEV_TOOL_PLAN.md`
+- Skill System Taxonomy: `TASARIM/SKILL_SYSTEM_TAXONOMY_2026-05-06.md` -- 4 aktif tip, 3 pasif tip, upgrade sistemi, Identity Passive, Cross-Family Carrier
+- Skill System Taxonomy (4 tip / 3 pasif / upgrade / Identity Passive): `TASARIM/SKILL_SYSTEM_TAXONOMY_2026-05-06.md`
+- Skill Pools 10-class: `TASARIM/SKILL_POOLS_10CLASS_2026-05-07.md`
+- CLASS_IDENTITY_CONSTRAINTS (OWNS/AVOIDS per class): taxonomy §8
 
 ### Code (DONE this session)
+
+#### Contract Test Suite (Codex -- task addf8a5cda39113d9)
+- 10 new contract test files: TimeScaleContract, BootstrapContract, CombatContract, UIFlowContract + EditMode/PlayMode test classes
+- EditMode: 10/10 PASS
+- PlayMode: 4/5 PASS -- 1 genuine bug caught (TimeScale=0 on boot)
+- Files: Assets/Tests/Contracts/ + Assets/Tests/EditMode/Contracts/ + Assets/Tests/PlayMode/
+
+#### TimeScale Boot Fix (Codex -- commit b343d4c)
+- Root cause: MainMenuScreen.AutoInit() fired in _IsoGame via [RuntimeInitializeOnLoadMethod]
+- Fix: scene guard added -- if (SceneManager.GetActiveScene().name == "_IsoGame") return;
+- Duplicate EventSystem warning also eliminated
+- File: Assets/Scripts/UI/MainMenuScreen.cs
+
+#### HeatGaugeBehavior + MarkPulseBehavior (Antigravity -- commit f8abe30)
+- HeatGaugeBehavior.cs: Gunslinger ranged attack, Heat resource, dual pistol cadence
+- MarkPulseBehavior.cs: Ravager melee, Fury buildup, Blood Pact RMB
+- BasicAttackProfile.cs: factory updated, no more MeleeChain fallback for these two
+- BasicAttack strategy pattern NOW COMPLETE (all 6 behaviors implemented)
+
+#### AreaSkillPlacer (Antigravity -- commit 41818de)
+- 262 lines, AIM_SHOT_BOSS_PLACEMENT_SYSTEMS.md contract fulfilled
+- RMB hold -> indicator -> release -> cast, ESC/LMB cancels, max 6 tile range, red clamp
+- File: Assets/Scripts/Combat/Skills/AreaSkillPlacer.cs
+
+#### GameViewSetup (Codex -- commit 3869efb)
+- Maximize on Play enabled via EditorPrefs on every project open
+- MenuItem: RIMA/Setup Game View (1080p + Maximize)
+- File: Assets/Editor/DevTools/GameViewSetup.cs
+
 - BasicAttackProfile infrastructure: commit 280a637 (laurethayday) -- 4 files created
 - BuildFloorMask rect-first refactor: commit d9f08bd (laurethgame) -- all 16 layouts rewritten, architectural masonry aesthetic
-- PlayerAttack.cs refactor: dispatched earlier, status UNKNOWN -- needs QC
+- PlayerAttack + BasicAttackProfile + SkillSlot QC + FIX: DONE (Antigravity 2026-05-07)
+  - 2 blocker duzeltildi: classType int->enum, God-Object strategy pattern'e cevrildi
+  - 7 warn duzeltildi: OnCommitBeat silindi, duplicate SkillData->ActiveSkillData, silent fallback->LogError, ClassType enum 10 sinifa tamamlandi, SkillSlotIndex Q/E/R->Slot1-4
+  - 6 yeni dosya: IBasicAttackBehavior, BasicAttackBehaviorBase, MeleeChainBehavior, CastRhythmBehavior, ShotCadenceBehavior, VeilStrikeBehavior
+  - BasicAttackProfile: 398 satirdan 94 satir saf data SO'ya indi
+  - commit'e hazir (laurethgame)
+- Unity compile check: CLEAN (Antigravity 2026-05-07) -- 0 error, sadece pre-existing TMP/FindObjectOfType warning'leri
+- BasicAttackProfile .asset dosyalari: DONE -- Assets/Resources/Combat/BasicAttack/
+  - BasicAttackProfile_Warblade.asset (Melee)
+  - BasicAttackProfile_Elementalist.asset (CastRhythm)
+  - BasicAttackProfile_Ranger.asset (ShotCadence)
+  - BasicAttackProfile_Shadowblade.asset (VeilStrike)
+- SkillDraftSystem.cs iskelet: DONE -- Assets/Scripts/Combat/Skills/SkillDraftSystem.cs
+  - Hades-style 3-choice draft, taxonomy soft-guidance weight table, TriggerDraft(roomNumber) + SelectSkill(data) API
 
-### Doc (PENDING)
-- Skill pool alternatives (10 classes): Codex running, not committed yet -- TASARIM/SKILL_POOL_ALTERNATIVES_2026-05-06.md
+#### Performance Deep-Fix Pass (Antigravity 2026-05-07)
+- 11 per-frame Find/Alloc calls eliminated: one-shot cache + interval scan + reusable buffers
+- CPU frame time: 99ms -> 0.11ms (~900x). 8 files changed. PerformanceAntiPatternTests added.
+
+### Doc (DONE)
+- Skill pool alternatives (10 classes): commit 048a14c -- TASARIM/SKILL_POOL_ALTERNATIVES_2026-05-06.md
 
 ## Working Rules
 - Record concrete results and unresolved complaints here.
 - Keep details in linked files; this file stays compact.
-
-## Done This Session (2026-05-05 evening)
-
-### God Object Refactor
-- `LargeDungeonMapPainterBase` extracted from RuntimeRoomManager.cs to own file (1481 lines)
-- RuntimeRoomManager.cs trimmed from 2604 to 1132 lines
-- Deleted 6 legacy/one-time scripts: _Legacy/RoomManager, _Legacy/HUDManager, IsoDummyRenderer, FixTextureImport, FixTilemapMaterials, TestSwitcher
-- _Legacy folder removed entirely
-
-### Graphify Chunk 3 (COMPLETE)
-- Extracted 82 semantic nodes + 138 AST nodes from GUIDES/ + Tools/ + root docs
-- Merged into main graph: 2862 nodes, 4683 edges, 129 communities
-- graph.html + GRAPH_REPORT.md updated
-
-### UI Overlay Decision (LOCKED)
-- 3-layer UI approved: Combat HUD (always) / TAB Quick Overlay (semi-pause) / ESC Full Menu (pause)
-- "Run Codex Build Overlay" concept demoted to reference-only
-- character_menu_concept.png REJECTED (equipment grid violates RIMA rules)
-- Next: Codex wireframe mockup for TAB overlay -> implement piece by piece
-
-### Cleanup & Structure (earlier)
-- Removed 435MB bloat (discord media, youtube video, old screenshots, artifacts)
-- CODEX.md removed -> replaced by ANTIGRAVITY.md (studio agent stack definition)
-- CLAUDE.md = universal rules for ALL agents (Claude, Codex, Gemini)
-- AGENTS.md updated with Antigravity + mutual QC rule
-- MEMORY/INDEX.md rebuilt: categorized, orphan-free
-- .gitignore updated to prevent future bloat
-- Two git checkpoints: `ad8d2c1` (full S43 state) + `c59fbb9` (cleanup)
-
-### Graphify (partial)
-- Ran on 355 files (Scripts + TASARIM + GUIDES + STAGING + MEMORY + Tools)
-- 4/5 semantic chunks complete (chunk 3 = GUIDES + root docs + Tools hit daily token limit)
-- Result: 2780 nodes, 4625 edges, 99 communities
-- Output: `graphify-out/graph.html` (interactive), `graphify-out/GRAPH_REPORT.md`
-- God objects found: `LargeDungeonMapPainterBase` (74 edges), `RuntimeRoomManager` (53 edges)
-
-### Branding
-- Logo transparent PNG: `TASARIM/UI_CONCEPTS/BRANDING/rima_logo_final_transparent_2026-05-05.png`
-- Brand prompts written (title screen, steam capsule, thumbnail, social, loading screen, discord)
-
-### UI Concept
-- Run Codex / character build overlay concept added for Claude review and iteration:
-  `TASARIM/UI_CONCEPTS/rima_run_codex_build_overlay_concept_2026-05-05.png`
-- Intent: visual reference only, not final static UI. Use it to discuss HUD/build overlay composition,
-  reusable panel language, route strip, skill bar, passive/echo rows, and RIMA-specific UI identity.
-- Constraints to preserve: no equipment grid, no backpack-first RPG screen, no full route reveal,
-  no baked final text. Runtime UI/minimap/combat-camera acceptance remains OPEN.
+- Earlier session history (2026-05-05): see git log (commits ad8d2c1, c59fbb9, d9f08bd).
 
 ## LOCKED
+- Map editor approach: Unity Editor Game View + Maximize on Play. NO standalone build for editing. NO separate EditorWindow tool. Runtime overlay (F9) remains for gameplay tools only. Detail: TASARIM/DEV_TOOL_PLAN.md
 - UI: No generic RPG equipment grid. RIMA-run-first.
 - UI: HUD minimal (HP/resource top-left, skills bottom, minimap top-right).
 - UI: In-world gate thresholds, color-coded.
@@ -97,41 +121,30 @@ Skill pool doc: NOT written yet -- Codex dispatch failed repeatedly, retry next 
 - NotebookLM MCP: added via `claude mcp add`, package installed, nlm login done (yasinderyabilgin@gmail.com)
 - cx laurethayday exec syntax confirmed: `Set-Location <dir>; cx laurethayday exec -s danger-full-access -m o4-mini "prompt"`
 
-## Next Priorities (Next Session)
-
-### Immediate
-1. Skill pool doc: Codex failed 3x -- retry with `cx laurethayday exec` directly (syntax now confirmed)
-2. NotebookLM: feed RIMA docs (TASARIM/ + MEMORY/) into a notebook via nlm source add
-3. PlayerAttack.cs: QC whether laurethgame refactor committed (git log check)
-4. Tile generation: 8 undercroft tiles -- prompts ready at STAGING/PIXELLAB_TILESET_UNDERCROFT_2026-05-06.md
-
-### Block 1 — Code
-4. BasicAttackProfile OnCommitBeat event (needed for cross-class proc system)
-5. Area Skill Placement input system
-6. Unity compile check (LargeDungeonMapPainterBase + BuildFloorMask changes)
-
-### Block 2 — Unity
-7. TAB Overlay wireframe (Codex)
-8. HUD implementation (HP bar, skill slots, minimap, buff icons)
-9. Play Mode UI/minimap/gate QA
-
-### Block 3 — Animation Production Prep
-10. Movement sheet prompts: LMB + RMB per class (10 classes, 4 directions, frame spec)
-11. Boss pose sheet spec: canvas, PPU, attack list per boss
+## Next Priorities
+1. BasicAttack .asset'lerini Inspector'da PlayerAttack'e assign et
+2. SkillDraftSystem -> SkillOfferUI: TriggerDraft oda gecisinde bagla
+3. Identity Passive system kodu (BasicAttackProfile OnCommitBeat -> class pasif tetik)
+4. TAB Overlay wireframe (Codex) -- 3-layer UI
+5. Undercroft tile seti -- PixelLab (prompts: STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md)
+6. Movement sheet generation (prompts ready: STAGING/WARBLADE_ANIMATION_PROMPTS_2026-05-07.md)
 
 ## Latest Verification
-- EditMode: 134/134 PASS.
+- EditMode: 144/144 PASS (10 new contract tests added, all pass).
+- PlayMode: 4/5 PASS -- TimeScale=0 boot bug caught and fixed (commit b343d4c).
 - Script validation: HUDController, MiniMap, RuntimeRoomManager, SettingsMenuUI, MainMenuScreen, RoomPreviewPanel all PASS.
-- PlayMode: smoke test may hang due to Time.timeScale=0 in main menu.
+- Performance: CPU frame time 99ms -> 0.11ms after deep-fix pass.
+- BasicAttack strategy pattern: all 6 behaviors implemented and compile-clean.
 
 ## Current Risks
-- PlayMode smoke tests need Time.timeScale-aware waits.
+- BasicAttack .asset'leri Inspector'da PlayerAttack'e henüz assign edilmedi.
+- SkillDraftSystem -> SkillOfferUI hook baglandi, TriggerDraft hala oda gecisinde cagirilmiyor.
+- UI rebuild in progress (Antigravity).
+- Movement sheet prompts now written, generation pending.
 - Graphify chunk 3 missing (not critical, add with --update).
 - God objects (LargeDungeonMapPainterBase, RuntimeRoomManager) -- technical debt, Phase 1 acceptable.
 - PixelLab 127px bug (128px outputs 127px) -- QC during floor test.
-- Basic attack identity gap: only Warblade has full 3-step LMB combo in code; see `MEMORY/feedback_basic_attack_combo_identity.md`.
-- BasicAttackProfile Codex task not yet started; Warblade still has no ScriptableObject boundary.
-- Movement sheet prompts not yet written for any class.
+- Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
 
 ## Key Pointers
 - Graphify: `graphify-out/graph.html` + `graphify-out/GRAPH_REPORT.md`
@@ -145,3 +158,8 @@ Skill pool doc: NOT written yet -- Codex dispatch failed repeatedly, retry next 
 - Dev Tool plan (LOCKED): `TASARIM/DEV_TOOL_PLAN.md`
 - Elementalist matrix: `STAGING/ELEMENTALIST_FIRE_FROST_LIGHTNING_BUILD_MATRIX_2026-05-04.md`
 - Act 1 room catalogue: `TASARIM/ACT1_SHATTERED_KEEP_ROOM_BLUEPRINT_CATALOGUE_2026-05-03.md`
+- Skill taxonomy (LOCKED): `TASARIM/SKILL_SYSTEM_TAXONOMY_2026-05-06.md`
+- Skill pools 10-class (LOCKED): `TASARIM/SKILL_POOLS_10CLASS_2026-05-07.md`
+- Undercroft connected tile prompts: `STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md`
+- Warblade animation prompts: `STAGING/WARBLADE_ANIMATION_PROMPTS_2026-05-07.md`
+- Dungeon asset prompts (tile/wall/objects): `STAGING/PIXELLAB_DUNGEON_ASSETS_PROMPTS_2026-05-07.md`
