@@ -6,6 +6,10 @@ using TMPro;
 
 namespace RIMA
 {
+    /// <summary>
+    /// Main menu — Ashen Glyph spec.
+    /// Dark background, "RIMA" logo with cyan glow, 3 buttons: NEW RUN, SETTINGS, QUIT.
+    /// </summary>
     public class MainMenuScreen : MonoBehaviour
     {
         private static bool _gameStarted = false;
@@ -14,8 +18,6 @@ namespace RIMA
         private static void AutoInit()
         {
             // Never create the main menu when loading the game/test scene directly.
-            // Without this guard, Start() would set Time.timeScale=0 and leave the
-            // game frozen (breaks SceneBootstrapTests.GameScene_TimeScale_IsOne_AfterBoot).
             if (SceneManager.GetActiveScene().name == "_IsoGame") return;
             if (_gameStarted) return;
             if (Object.FindFirstObjectByType<MainMenuScreen>() != null) return;
@@ -36,16 +38,13 @@ namespace RIMA
 
         private void Start()
         {
-            Time.timeScale = 0f;
+            UIManager.Instance?.PauseForMenu();
             BuildUI();
         }
 
         private void OnDestroy()
         {
-            // If this screen is destroyed while time is paused (e.g. scene unload during
-            // a test run), restore timeScale so the incoming scene runs normally.
-            if (Time.timeScale == 0f)
-                Time.timeScale = 1f;
+            UIManager.Instance?.ResumeFromMenu();
         }
 
         private void BuildUI()
@@ -61,78 +60,99 @@ namespace RIMA
             scaler.matchWidthOrHeight  = 0.5f;
             canvasGO.AddComponent<GraphicRaycaster>();
 
+            // Full-screen dark background (#0D0D0F)
             var root = MakeRect("Root", canvasGO.transform, Vector2.zero, Vector2.one);
-            var bg   = root.AddComponent<Image>();
-            bg.sprite = RimaUITheme.MenuDungeonBackground;
-            bg.color = Color.white;
-            bg.preserveAspect = true;
+            var bg = root.AddComponent<Image>();
+            bg.color = RimaUITheme.BackgroundDark;
 
-            var shade = MakeRect("Shade", root.transform, Vector2.zero, Vector2.one);
-            shade.AddComponent<Image>().color = new Color(0f, 0f, 0f, 0.34f);
+            // ── Logo: "RIMA" ─────────────────────────────────────────
+            var logoGo = MakeRect("Logo", root.transform,
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            var logoRt = logoGo.GetComponent<RectTransform>();
+            logoRt.pivot = new Vector2(0.5f, 0.5f);
+            logoRt.anchoredPosition = new Vector2(0f, 120f);
+            logoRt.sizeDelta = new Vector2(400f, 80f);
 
-            var menuPanel = MakeRect("MenuPanel", root.transform,
-                new Vector2(0.075f, 0.18f), new Vector2(0.405f, 0.66f));
-            var panelImage = menuPanel.AddComponent<Image>();
-            panelImage.sprite = RimaUITheme.SmallPanelFrame;
-            panelImage.color = new Color(1f, 1f, 1f, 0.94f);
+            var logoTmp = logoGo.AddComponent<TextMeshProUGUI>();
+            logoTmp.text = "RIMA";
+            logoTmp.fontSize = 48f;
+            logoTmp.fontStyle = FontStyles.Bold;
+            logoTmp.color = Color.white;
+            logoTmp.alignment = TextAlignmentOptions.Center;
+            logoTmp.raycastTarget = false;
 
-            // Title
-            var titleGO = MakeRect("Title", menuPanel.transform,
-                new Vector2(0.10f, 0.54f), new Vector2(0.92f, 0.86f));
-            var title = titleGO.AddComponent<TextMeshProUGUI>();
-            title.text      = "RIMA";
-            title.fontSize  = 74;
-            title.fontStyle = FontStyles.Bold;
-            title.color     = Color.white;
-            title.alignment = TextAlignmentOptions.Left;
-            title.raycastTarget = false;
+            // Subtitle with cyan glow
+            var subGo = MakeRect("Subtitle", root.transform,
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            var subRt = subGo.GetComponent<RectTransform>();
+            subRt.pivot = new Vector2(0.5f, 0.5f);
+            subRt.anchoredPosition = new Vector2(0f, 70f);
+            subRt.sizeDelta = new Vector2(400f, 24f);
 
-            // Subtitle
-            var subGO = MakeRect("Subtitle", menuPanel.transform,
-                new Vector2(0.105f, 0.42f), new Vector2(0.92f, 0.54f));
-            var sub = subGO.AddComponent<TextMeshProUGUI>();
-            sub.text      = "THE SEAL BENEATH THE KEEP";
-            sub.fontSize  = 18;
-            sub.color     = new Color(0.55f, 0.60f, 0.75f, 1f);
-            sub.alignment = TextAlignmentOptions.Left;
-            sub.raycastTarget = false;
+            var subTmp = subGo.AddComponent<TextMeshProUGUI>();
+            subTmp.text = "THE SEAL BENEATH THE KEEP";
+            subTmp.fontSize = 12f;
+            subTmp.color = RimaUITheme.Cyan;
+            subTmp.alignment = TextAlignmentOptions.Center;
+            subTmp.raycastTarget = false;
 
-            // PLAY button
-            var btnGO = MakeRect("PlayBtn", menuPanel.transform,
-                new Vector2(0.10f, 0.16f), new Vector2(0.58f, 0.30f));
-            var btnImg = btnGO.AddComponent<Image>();
-            btnImg.sprite = RimaUITheme.PromptFrame;
-            btnImg.color = RimaUITheme.PanelTint;
-            var btn    = btnGO.AddComponent<Button>();
-            var colors = btn.colors;
-            colors.normalColor      = new Color(0.22f, 0.44f, 1.00f, 1f);
-            colors.highlightedColor = new Color(0.35f, 0.58f, 1.00f, 1f);
-            colors.pressedColor     = new Color(0.12f, 0.28f, 0.80f, 1f);
-            btn.colors              = colors;
-
-            var lblGO = MakeRect("Label", btnGO.transform, Vector2.zero, Vector2.one);
-            var lbl   = lblGO.AddComponent<TextMeshProUGUI>();
-            lbl.text             = "OYNA";
-            lbl.fontSize         = 22;
-            lbl.fontStyle        = FontStyles.Bold;
-            lbl.color            = Color.white;
-            lbl.alignment        = TextAlignmentOptions.Center;
-            lbl.raycastTarget    = false;
+            // ── Buttons ──────────────────────────────────────────────
+            float y = -20f;
+            AddMenuButton(root.transform, "NEW RUN", y, OnNewRun);
+            AddMenuButton(root.transform, "SETTINGS", y - 50f, OnSettings);
+            AddMenuButton(root.transform, "QUIT", y - 100f, OnQuit);
 
             // Version
-            var verGO = MakeRect("Version", menuPanel.transform,
-                new Vector2(0.10f, 0.05f), new Vector2(0.70f, 0.11f));
-            var ver = verGO.AddComponent<TextMeshProUGUI>();
-            ver.text          = "S43 Dev Build";
-            ver.fontSize      = 14;
-            ver.color         = new Color(0.35f, 0.38f, 0.45f, 1f);
-            ver.alignment     = TextAlignmentOptions.BottomLeft;
-            ver.raycastTarget = false;
+            var verGo = MakeRect("Version", root.transform,
+                new Vector2(0f, 0f), new Vector2(0f, 0f));
+            var verRt = verGo.GetComponent<RectTransform>();
+            verRt.pivot = new Vector2(0f, 0f);
+            verRt.anchoredPosition = new Vector2(16f, 12f);
+            verRt.sizeDelta = new Vector2(200f, 20f);
 
-            btn.onClick.AddListener(OnPlayClicked);
+            var verTmp = verGo.AddComponent<TextMeshProUGUI>();
+            verTmp.text = "S43 Dev Build";
+            verTmp.fontSize = 10f;
+            verTmp.color = new Color(0.3f, 0.35f, 0.4f, 0.6f);
+            verTmp.alignment = TextAlignmentOptions.Left;
+            verTmp.raycastTarget = false;
         }
 
-        private void OnPlayClicked()
+        private void AddMenuButton(Transform parent, string text, float yOffset, UnityEngine.Events.UnityAction onClick)
+        {
+            var btnGo = MakeRect($"Btn_{text}", parent,
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            var btnRt = btnGo.GetComponent<RectTransform>();
+            btnRt.pivot = new Vector2(0.5f, 0.5f);
+            btnRt.anchoredPosition = new Vector2(0f, yOffset);
+            btnRt.sizeDelta = new Vector2(220f, 40f);
+
+            var btnImg = btnGo.AddComponent<Image>();
+            btnImg.sprite = RimaUITheme.ResourceFrame;
+            btnImg.color = RimaUITheme.PanelTint;
+
+            var btn = btnGo.AddComponent<Button>();
+            var colors = btn.colors;
+            colors.normalColor      = RimaUITheme.PanelTint;
+            colors.highlightedColor = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.35f);
+            colors.pressedColor     = new Color(RimaUITheme.Cyan.r * 0.7f, RimaUITheme.Cyan.g * 0.7f, RimaUITheme.Cyan.b * 0.7f, 0.5f);
+            btn.colors = colors;
+
+            var lblGo = MakeRect("Label", btnGo.transform, Vector2.zero, Vector2.one);
+            var lbl = lblGo.AddComponent<TextMeshProUGUI>();
+            lbl.text = text;
+            lbl.fontSize = 16f;
+            lbl.fontStyle = FontStyles.Bold;
+            lbl.color = Color.white;
+            lbl.alignment = TextAlignmentOptions.Center;
+            lbl.raycastTarget = false;
+
+            btn.onClick.AddListener(onClick);
+        }
+
+        // ── Actions ──────────────────────────────────────────────────
+
+        private void OnNewRun()
         {
             _gameStarted = true;
             Destroy(gameObject);
@@ -141,11 +161,27 @@ namespace RIMA
             go.AddComponent<CharacterSelectScreen>();
         }
 
+        private void OnSettings()
+        {
+            // Show the settings menu if available
+            var settings = FindAnyObjectByType<SettingsMenuUI>();
+            if (settings != null) settings.Open();
+        }
+
+        private void OnQuit()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
         private static GameObject MakeRect(string name, Transform parent, Vector2 ancMin, Vector2 ancMax)
         {
             var go = new GameObject(name, typeof(RectTransform));
             go.transform.SetParent(parent, false);
-            var rt       = go.GetComponent<RectTransform>();
+            var rt = go.GetComponent<RectTransform>();
             rt.anchorMin = ancMin;
             rt.anchorMax = ancMax;
             rt.offsetMin = rt.offsetMax = Vector2.zero;
