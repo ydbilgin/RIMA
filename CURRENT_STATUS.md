@@ -1,8 +1,15 @@
 # CURRENT STATUS
-**2026-05-07 - S43 - Phase 1**
+**2026-05-07 - S44 - Phase 1**
 
 ## Active Block
-- UI performance fix + visual cleanup DONE (Antigravity 2026-05-07). Play Mode screenshot QA still OPEN.
+- UI QC fix DONE — commit `8e7a5f0` PASS.
+- **F1 tiles imported** — commit `015839b`. 16×64px PNG → Assets/Art/Tiles/Act1/F1/. process_tiles.py pipeline kuruldu.
+- **ClearTilemaps.cs** — commit `4d46ce4`. Unity'de RIMA→Clear All Tilemap Tiles ile tüm tile yerleşimleri temizlenir.
+- **F2/F3/W1/W2 ChatGPT promptları HAZIR** — `STAGING/CHATGPT_PROMPT_FLOOR_TILES.md` (üretim bekliyor)
+- **Duvar köşe parçaları EKSİK** — W1/W2 düz panel; L-corner + end cap ChatGPT ile üretilecek.
+- **ART DIRECTION LOCKED** — `STAGING/ART_DIRECTION_MASTER.md` (2026-05-08). JVerbroucht tarzı.
+- Play Mode screenshot QA still OPEN.
+- cx dispatch syntax CONFIRMED: `Set-Location <proj>; $prompt | cx laurethgame exec -s danger-full-access -m gpt-5.5`
 
 ### Skill Files (RAW — old Q/E/R format, will be revised)
 - 10-class wrongly-generated roster (Ironclad/Arcanist/Riftstalker/Vanguard/Specter): ON HOLD
@@ -123,6 +130,11 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Earlier session history (2026-05-05): see git log (commits ad8d2c1, c59fbb9, d9f08bd).
 
 ## LOCKED
+- Yükseklik sistemi: Hades approach — kamera açısı sabit, yükseklik farkı IsometricZAsY Z-offset + görsel gölge/kenar ile anlatılır. Kamera tilt yok.
+- Tile üretim yaklaşımı: ChatGPT (GPT-4o) > PixelLab isometrik floor için. Prompt şablonu: STAGING/CHATGPT_PROMPT_FLOOR_TILES.md. Unity side face çözümü: pivot top-center + Y-sort.
+- 3-katman dungeon render sistemi: Structural (Rule Tile) + Detail (Random Tile scatter) + Entity (Y-sorted props). AO shadow sprite duvar-zemin birleşiminde.
+
+
 - Map editor approach: Unity Editor Game View + Maximize on Play. NO standalone build for editing. NO separate EditorWindow tool. Runtime overlay (F9) remains for gameplay tools only. Detail: TASARIM/DEV_TOOL_PLAN.md
 - UI: No generic RPG equipment grid. RIMA-run-first.
 - UI: HUD minimal (HP/resource top-left, skills bottom, minimap top-right).
@@ -143,11 +155,11 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ## Next Priorities
 ### Immediate next session:
-1. UI QC fix confirm (Codex in progress -- verify commit)
-2. Dash-Cancel implementation (Sonnet, Antigravity) -- BasicAttackProfile.cancelWindowFraction + PlayerController event
-3. OnDash Proc (Sonnet, Antigravity) -- CrossClassEffectType.OnDash + call site in HandleDash
-4. PixelLab hero tile generation -- begin with F1 base floor (workflow: STAGING/PIXELLAB_DUNGEON_ASSETS_PROMPTS_2026-05-07.md)
-5. Warblade Idle animation generation (STAGING/WARBLADE_ANIMATION_PROMPTS_2026-05-07.md)
+1. **ChatGPT: F2/F3/W1/W2 + W1-corner + W1-endcap üret** — STAGING/CHATGPT_PROMPT_FLOOR_TILES.md + ART_DIRECTION_MASTER.md
+2. **process_tiles.py ile import** — her batch için aynı pipeline
+3. **Old asset pack re-master** — kristal, meşale, moloz, shrine → JVerbroucht pixel art stilinde ChatGPT ile yeniden üret
+4. **Dash-Cancel** (Sonnet, Antigravity) — BasicAttackProfile.cancelWindowFraction + PlayerController event
+5. **OnDash Proc** (Sonnet, Antigravity) — CrossClassEffectType.OnDash + HandleDash call site
 6. Boss Posture system -- after StatusEffectSystem unstaged changes resolved
 
 ### Backlog:
@@ -174,7 +186,8 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - God objects (LargeDungeonMapPainterBase, RuntimeRoomManager) -- technical debt, Phase 1 acceptable.
 - PixelLab 127px bug (128px outputs 127px) -- QC during floor test.
 - Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
-- UI QC fix IN PROGRESS (Codex) -- timeScale violations in SettingsMenuUI:370, CharacterSelectScreen:362, MainMenuScreen:41/47 + RimaUITheme SkillSlotFrame backing field bug
+- F1 tile sheet Unity'de henüz import edilmedi + RuntimeRoomManager'a bağlanmadı (Codex task OPEN).
+- ChestUI.cs:43,50 + ForgeUI.cs:72,93,100 — direct timeScale writes, pre-existing, need UIManager routing (follow-up)
 
 ## Key Pointers
 - UIManager.cs: `Assets/Scripts/UI/UIManager.cs` -- singleton, owns all timeScale + overlay state
@@ -192,6 +205,11 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Skill taxonomy (LOCKED): `TASARIM/SKILL_SYSTEM_TAXONOMY_2026-05-06.md`
 - Skill pools 10-class (LOCKED): `TASARIM/SKILL_POOLS_10CLASS_2026-05-07.md`
 - Undercroft connected tile prompts: `STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md`
-- Warblade animation prompts: `STAGING/WARBLADE_ANIMATION_PROMPTS_2026-05-07.md`
-- Dungeon asset prompts (tile/wall/objects): `STAGING/PIXELLAB_DUNGEON_ASSETS_PROMPTS_2026-05-07.md`
+- ChatGPT floor tile prompt (LOCKED): `STAGING/CHATGPT_PROMPT_FLOOR_TILES.md`
+- DungeonLayerManager.cs (3-katman sistem, Codex): `Assets/Scripts/Systems/Map/DungeonLayerManager.cs`
+- F1 floor tile PixelLab prompt (WORKING): `STAGING/PIXELLAB_PROMPT_F1_FLOOR_TILES.md`
+- F1 tile sheet source: `C:\Users\ydbil\Downloads\pixellab-Seamless-isometric-pixel-art-d-1778183060391.png` → target: `Assets/Art/Tiles/Act1/f1variants.png`
+- Warblade animation guide (step-by-step): `STAGING/PIXELLAB_PRODUCTION_GUIDE_WARBLADE_ANIMATIONS.md`
+- Dungeon asset guide (tile/wall/objects, step-by-step): `STAGING/PIXELLAB_PRODUCTION_GUIDE_DUNGEON_ASSETS.md`
+- PixelLab prompt template ([CHARACTER]/[ACTION]/[CONSTRAINTS]): `STAGING/PIXELLAB_PROMPT_TEMPLATE.md`
 - Combat fluidity decisions: dash-cancel + OnDash + posture (LOCKED this session, see CURRENT_STATUS)
