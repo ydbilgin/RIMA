@@ -56,8 +56,8 @@ namespace RIMA
                 BasicAttackBehaviorType.CastRhythm => new CastRhythmBehavior(),
                 BasicAttackBehaviorType.ShotCadence => new ShotCadenceBehavior(),
                 BasicAttackBehaviorType.VeilStrike => new VeilStrikeBehavior(),
-                // HeatGauge and MarkPulse will get their own behaviors when implemented.
-                // For now they fall back to MeleeChainBehavior.
+                BasicAttackBehaviorType.HeatGauge => new HeatGaugeBehavior(),
+                BasicAttackBehaviorType.MarkPulse => new MarkPulseBehavior(),
                 _ => new MeleeChainBehavior()
             };
         }
