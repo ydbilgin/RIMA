@@ -3,7 +3,6 @@
 
 ## Active Block
 - UI performance fix + visual cleanup DONE (Antigravity 2026-05-07). Play Mode screenshot QA still OPEN.
-- UI full rebuild: given to Antigravity -- Ashen Glyph spec, 3-layer architecture, placeholder art. All existing UI screens rebuilt from scratch.
 
 ### Skill Files (RAW — old Q/E/R format, will be revised)
 - 10-class wrongly-generated roster (Ironclad/Arcanist/Riftstalker/Vanguard/Specter): ON HOLD
@@ -90,6 +89,24 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - SkillDraftSystem.cs iskelet: DONE -- Assets/Scripts/Combat/Skills/SkillDraftSystem.cs
   - Hades-style 3-choice draft, taxonomy soft-guidance weight table, TriggerDraft(roomNumber) + SelectSkill(data) API
 
+#### Full UI Architecture Rebuild (Antigravity session)
+**Phase 1 -- Opus 4.6:**
+- UIManager.cs: Singleton, mutual exclusion for TAB/ESC/SkillOffer overlays, single source of truth for Time.timeScale
+- RimaUITheme.cs: expanded -- procedural 9-slice frames at runtime, all palette constants (no baked PNG panels)
+- HUDController.cs: rewritten -- procedural non-scaling bars, pulse effects, transient room name banners
+- SkillBarUI.cs: rewritten -- 7-slot hexagonal layout (LMB/RMB/1-5), legacy drag-drop removed
+- CharacterSheetUI.cs: rebuilt -- TAB overlay, dark-glass procedural panel via UIManager
+- SettingsMenuUI.cs: rebuilt -- ESC overlay, procedural panel via UIManager
+- MiniMap.cs: rebuilt -- flat-grid node map using DungeonGraph
+- SkillOfferUI.cs: rebuilt -- Hades-style 3-card draft, slide-in animations, tier color coding
+
+**Phase 2 -- Gemini 3.1 Pro:**
+- MainMenuScreen.cs: rewritten -- 100% procedural, RimaUITheme constants, no legacy dungeon background images
+- CharacterSelectScreen.cs: rewritten -- procedural, proper scene transition cleanup
+- MovementDiagnostic.cs: repaired -- old reflection queries removed, re-routed to UIManager.Instance (IsTabOpen/IsSettingsOpen/IsSkillOfferOpen)
+
+**Result:** All old UI prefabs/monolithic update loops deprecated. UI is code-driven, procedural, mutual-exclusion safe, Ashen Glyph spec compliant.
+
 #### Performance Deep-Fix Pass (Antigravity 2026-05-07)
 - 11 per-frame Find/Alloc calls eliminated: one-shot cache + interval scan + reusable buffers
 - CPU frame time: 99ms -> 0.11ms (~900x). 8 files changed. PerformanceAntiPatternTests added.
@@ -139,7 +156,8 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 ## Current Risks
 - BasicAttack .asset'leri Inspector'da PlayerAttack'e henüz assign edilmedi.
 - SkillDraftSystem -> SkillOfferUI hook baglandi, TriggerDraft hala oda gecisinde cagirilmiyor.
-- UI rebuild in progress (Antigravity).
+- UI rebuild needs QC + PlayMode visual verification (no PlayMode screenshot test yet).
+- Compile check on new UI files not yet confirmed.
 - Movement sheet prompts now written, generation pending.
 - Graphify chunk 3 missing (not critical, add with --update).
 - God objects (LargeDungeonMapPainterBase, RuntimeRoomManager) -- technical debt, Phase 1 acceptable.
@@ -147,6 +165,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
 
 ## Key Pointers
+- UIManager.cs: `Assets/Scripts/UI/UIManager.cs` -- singleton, owns all timeScale + overlay state
 - Graphify: `graphify-out/graph.html` + `graphify-out/GRAPH_REPORT.md`
 - Logo: `TASARIM/UI_CONCEPTS/BRANDING/rima_logo_final_transparent_2026-05-05.png`
 - Brand prompts: in conversation (title screen x6 variants)
