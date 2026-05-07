@@ -41,6 +41,9 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Skill System Taxonomy (4 tip / 3 pasif / upgrade / Identity Passive): `TASARIM/SKILL_SYSTEM_TAXONOMY_2026-05-06.md`
 - Skill Pools 10-class: `TASARIM/SKILL_POOLS_10CLASS_2026-05-07.md`
 - CLASS_IDENTITY_CONSTRAINTS (OWNS/AVOIDS per class): taxonomy §8
+- Dash-Cancel on Attack Recovery: per-class cancel windows (Ravager/Shadow 15-25%, Ranger/Gunslinger 35-50%, Warblade/Brawler 60-75%, Casters windup not cancellable). Hook: BasicAttackProfile.cancelWindowFraction + PlayerController.HandleDash
+- OnDash Passive Proc: 4th passive type added to taxonomy. Shadowblade/Ronin primary. CrossClassEffectType.OnDash enum + CrossClassSkillManager.OnDash() method. Complexity S.
+- Boss Posture/Stagger: universal meter, break window 3s +50% dmg. Pairs with Fracture Echoes. StatusEffectSystem coordination required before implementation. Complexity L.
 
 ### Code (DONE this session)
 
@@ -139,12 +142,20 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - cx laurethayday exec syntax confirmed: `Set-Location <dir>; cx laurethayday exec -s danger-full-access -m o4-mini "prompt"`
 
 ## Next Priorities
-1. BasicAttack .asset'lerini Inspector'da PlayerAttack'e assign et
-2. SkillDraftSystem -> SkillOfferUI: TriggerDraft oda gecisinde bagla
-3. Identity Passive system kodu (BasicAttackProfile OnCommitBeat -> class pasif tetik)
-4. TAB Overlay wireframe (Codex) -- 3-layer UI
-5. Undercroft tile seti -- PixelLab (prompts: STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md)
-6. Movement sheet generation (prompts ready: STAGING/WARBLADE_ANIMATION_PROMPTS_2026-05-07.md)
+### Immediate next session:
+1. UI QC fix confirm (Codex in progress -- verify commit)
+2. Dash-Cancel implementation (Sonnet, Antigravity) -- BasicAttackProfile.cancelWindowFraction + PlayerController event
+3. OnDash Proc (Sonnet, Antigravity) -- CrossClassEffectType.OnDash + call site in HandleDash
+4. PixelLab hero tile generation -- begin with F1 base floor (workflow: STAGING/PIXELLAB_DUNGEON_ASSETS_PROMPTS_2026-05-07.md)
+5. Warblade Idle animation generation (STAGING/WARBLADE_ANIMATION_PROMPTS_2026-05-07.md)
+6. Boss Posture system -- after StatusEffectSystem unstaged changes resolved
+
+### Backlog:
+- BasicAttack .asset'lerini Inspector'da PlayerAttack'e assign et
+- SkillDraftSystem -> SkillOfferUI: TriggerDraft oda gecisinde bagla
+- Identity Passive system kodu (BasicAttackProfile OnCommitBeat -> class pasif tetik)
+- TAB Overlay wireframe (Codex) -- 3-layer UI
+- Undercroft tile seti -- PixelLab (prompts: STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md)
 
 ## Latest Verification
 - EditMode: 144/144 PASS (10 new contract tests added, all pass).
@@ -163,6 +174,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - God objects (LargeDungeonMapPainterBase, RuntimeRoomManager) -- technical debt, Phase 1 acceptable.
 - PixelLab 127px bug (128px outputs 127px) -- QC during floor test.
 - Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
+- UI QC fix IN PROGRESS (Codex) -- timeScale violations in SettingsMenuUI:370, CharacterSelectScreen:362, MainMenuScreen:41/47 + RimaUITheme SkillSlotFrame backing field bug
 
 ## Key Pointers
 - UIManager.cs: `Assets/Scripts/UI/UIManager.cs` -- singleton, owns all timeScale + overlay state
@@ -182,3 +194,4 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Undercroft connected tile prompts: `STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md`
 - Warblade animation prompts: `STAGING/WARBLADE_ANIMATION_PROMPTS_2026-05-07.md`
 - Dungeon asset prompts (tile/wall/objects): `STAGING/PIXELLAB_DUNGEON_ASSETS_PROMPTS_2026-05-07.md`
+- Combat fluidity decisions: dash-cancel + OnDash + posture (LOCKED this session, see CURRENT_STATUS)
