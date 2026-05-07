@@ -1,15 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 namespace RIMA
 {
     public class MainMenuScreen : MonoBehaviour
     {
+        private static bool _gameStarted = false;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoInit()
         {
+            // Never create the main menu when loading the game/test scene directly.
+            // Without this guard, Start() would set Time.timeScale=0 and leave the
+            // game frozen (breaks SceneBootstrapTests.GameScene_TimeScale_IsOne_AfterBoot).
+            if (SceneManager.GetActiveScene().name == "_IsoGame") return;
+            if (_gameStarted) return;
             if (Object.FindFirstObjectByType<MainMenuScreen>() != null) return;
             EnsureEventSystem();
             var go = new GameObject("[MainMenuScreen]");
@@ -30,6 +38,14 @@ namespace RIMA
         {
             Time.timeScale = 0f;
             BuildUI();
+        }
+
+        private void OnDestroy()
+        {
+            // If this screen is destroyed while time is paused (e.g. scene unload during
+            // a test run), restore timeScale so the incoming scene runs normally.
+            if (Time.timeScale == 0f)
+                Time.timeScale = 1f;
         }
 
         private void BuildUI()
@@ -118,6 +134,7 @@ namespace RIMA
 
         private void OnPlayClicked()
         {
+            _gameStarted = true;
             Destroy(gameObject);
             var go = new GameObject("[CharacterSelectScreen]");
             DontDestroyOnLoad(go);

@@ -12,7 +12,20 @@ namespace RIMA
         Passive  // passive skill: slot almaz, her zaman aktif
     }
 
-    public enum ClassType { None, Warblade, Elementalist, Shadowblade, Ranger }
+    public enum ClassType
+    {
+        None,
+        Warblade,
+        Elementalist,
+        Shadowblade,
+        Ranger,
+        Ravager,
+        Ronin,
+        Gunslinger,
+        Brawler,
+        Summoner,
+        Hexer
+    }
 
     [CreateAssetMenu(fileName = "SkillData", menuName = "RIMA/Skill Data")]
     public class SkillData : ScriptableObject
