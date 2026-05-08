@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
+using RIMA.Systems.Map;
 
 namespace RIMA
 {
@@ -49,6 +50,7 @@ namespace RIMA
         [SerializeField] private PlayerStartMarker playerStartMarker;
         [SerializeField] private UnityEngine.Tilemaps.TileBase wallTileRef;
         [SerializeField] private LargeDungeonMapPainter largeMapPainter;
+        [SerializeField] private DungeonWorldBuilder worldBuilder;
 
         [Header("Map Fragment")]
         [SerializeField] private GameObject mapFragmentPrefab;
@@ -145,6 +147,8 @@ namespace RIMA
 
             // Auto-find death screen
             deathScreen = FindAnyObjectByType<DeathScreenManager>();
+
+            if (worldBuilder != null) worldBuilder.BuildWorld();
 
             // Start first room
             currentRoomIndex = 0;
@@ -1082,6 +1086,15 @@ namespace RIMA
             return largeMapPainter != null
                 ? largeMapPainter.GetPreviewLayoutName(index)
                 : LargeDungeonMapPainterBase.GetDefaultPreviewLayoutName(index);
+        }
+
+        public BoundsInt GetCurrentRoomBounds()
+        {
+            if (worldBuilder != null)
+                return worldBuilder.GetRoomBounds(currentRoomIndex);
+            if (largeMapPainter != null && largeMapPainter.TryGetPlayableCellBounds(out var b))
+                return b;
+            return default;
         }
 
         public void PreviewRoomByIndex(int index)
