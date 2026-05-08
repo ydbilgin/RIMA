@@ -1,0 +1,45 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+TASK:
+Create Assets/Editor/DevTools/TileSheetImporter.cs -- a Unity Editor script that configures Assets/Art/Tiles/Act1/f1base.png as a Multiple-sprite sprite sheet with 16 individual tiles.
+
+Image specs (already verified):
+- Total size: 259x259 RGBA
+- Layout: 4x4 grid, each tile 64x64, 1px gap between tiles
+- Column X positions: 0, 65, 130, 195
+- Row Y positions (image coords, top-down): 0, 65, 130, 195
+- Unity Y = texture_height - image_y - tile_height (Y is flipped in Unity sprite coords)
+
+The script must:
+1. Create a MenuItem "RIMA/Import F1 Tile Sheet"
+2. When called, configure the TextureImporter for "Assets/Art/Tiles/Act1/f1base.png":
+   - textureType = Sprite
+   - spriteImportMode = Multiple
+   - spritePixelsPerUnit = 64
+   - filterMode = Point (no smoothing)
+   - textureCompression = Uncompressed
+   - alphaIsTransparency = true
+   - maxTextureSize = 512
+3. Build 16 SpriteMetaData entries named f1_00..f1_15 (row-major: f1_00=top-left, f1_03=top-right, f1_15=bottom-right)
+   Each rect: width=64, height=64
+   Unity coords:
+   - Row 0 (image y=0): unity y = 195
+   - Row 1 (image y=65): unity y = 130
+   - Row 2 (image y=130): unity y = 65
+   - Row 3 (image y=195): unity y = 0
+   - Col 0: x=0, Col 1: x=65, Col 2: x=130, Col 3: x=195
+4. Set importer.spritesheet = the 16-entry array
+5. Call SaveAndReimport() and log "F1 tile sheet imported: 16 sprites"
+6. DO NOT use [InitializeOnLoad] -- just the MenuItem is enough
+
+After writing the file, verify Unity compiles clean (no errors). Commit with message "feat: TileSheetImporter editor script -- f1base.png sliced into 16 sprites"
+
+ALLOWED FILES:
+- Assets/Editor/DevTools/TileSheetImporter.cs (CREATE)
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "<phrase>"

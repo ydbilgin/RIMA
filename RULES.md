@@ -43,9 +43,14 @@ User: Turkish. Internal files (.md, prompts, code): English.
 ## Context Economy (Claude token priority)
 **Goal: minimize what Claude reads/writes. Gemini/Codex token cost is irrelevant.**
 
-- Before reading any TASARIM/ or MEMORY/ file: query NotebookLM first.
-  `uvx --from notebooklm-mcp-cli nlm notebook query ed3c8952-417c-4988-84a7-425d25ba3b08 "question"`
-- Only open the file if NotebookLM answer is insufficient.
+### HARD RULE: NO FILE READS (Claude)
+Claude NEVER opens any file directly except `CURRENT_STATUS.md` at session start.
+ALL other context comes from NotebookLM:
+```
+uvx --from notebooklm-mcp-cli nlm notebook query ed3c8952-417c-4988-84a7-425d25ba3b08 "question"
+```
+No exceptions. If NotebookLM is down or answer is insufficient, state it explicitly — do not silently fall back to file reads.
+
 - File writing: delegate to Gemini (--yolo) for mechanical updates. Claude only writes when judgment is required.
 - **Per-class file rule:** When implementing a new class, create a dedicated file (e.g. `TASARIM/WARBLADE_IMPL.md`). Do NOT append to multi-class canonical docs. One file = one class = one concern. Existing LOCKED multi-class docs stay as-is.
 - NotebookLM sync: at session end via `git diff` + source delete/re-add for changed files.

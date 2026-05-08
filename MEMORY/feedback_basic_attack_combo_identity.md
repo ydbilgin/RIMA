@@ -20,23 +20,26 @@ Every playable class must own its LMB and RMB identity.
 - Fluid does not mean long. Prefer small 3-6 frame attack beats with clear windup, hit frame,
   and recovery.
 
-## Current Code Reality (checked 2026-05-06)
+## Current Code Reality (updated 2026-05-07 -- Antigravity QC fix)
 
-`Assets/Scripts/Player/PlayerAttack.cs` is not fully aligned with the lock yet.
+`BasicAttackProfile.cs` strategy pattern uygulanmis durumda:
+- `IBasicAttackBehavior` interface + `BasicAttackBehaviorBase` mevcut
+- `MeleeChainBehavior` -> Warblade (+ diger melee siniflara fallback)
+- `CastRhythmBehavior` -> Elementalist (Rift Bolt + Switch/Lightbreak)
+- `ShotCadenceBehavior` -> Ranger (tap/hold arrow + Tactical Roll)
+- `VeilStrikeBehavior` -> Shadowblade (Veil Strike + Veil Flicker)
+- `HeatGaugeBehavior` (Gunslinger) + `MarkPulseBehavior` henuz implement edilmedi, MeleeChain'e fallback
+- `.asset` dosyalari (BasicAttackProfile_Warblade.asset vb.) henuz olusturulmadi -- Inspector assign gerekiyor
+- `PlayerAttack.Awake()` artik null profile icin LogError + disable veriyor (sessiz fallback kaldirildi)
+- `OnCommitBeat` event kaldirildi (dead code + SO leak riski)
+- `classType` artik `ClassType` enum (eski `int` degil)
+- `ClassType` enum 10 sinifi kapsiyor: Warblade, Elementalist, Shadowblade, Ranger, Ravager, Ronin, Gunslinger, Brawler, Summoner, Hexer
 
-- Warblade has a real 3-step LMB combo through `comboStep`, `comboLength`, `OnComboStep`,
-  per-step damage/range/knockback, and `PlayerAnimator.ComboStep`.
-- Elementalist LMB is class-specific (`RiftBolt`) but resets `comboStep` and has no internal
-  LMB chain yet.
-- Ranger LMB is class-specific (`RiftArrow`, hold/charge) but resets `comboStep` and has no
-  internal LMB chain yet.
-- Shadowblade LMB is class-specific (`VeilStrike`) but currently uses one repeated strike,
-  resets `comboStep`, and does not implement the documented 3-step blade combo.
-- Warblade RMB exists (`RageOutlet`), Elementalist RMB exists (`Switch/Lightbreak`), Ranger RMB
-  exists (`Roll + arrow`), Shadowblade RMB exists (`VeilFlicker`).
-- Other future classes are not implemented as playable primaries yet; do not let them silently
-  inherit Warblade generic LMB/RMB behavior.
-- `LMBEcolSystem` is still a stub; Forge UI choices do not yet modify LMB attack logic.
+Kalan eski sorunlar (kod duzeyinde):
+- Elementalist / Ranger / Shadowblade icin LMB chain ritmi hala tek-vuruslu;
+  `CastRhythmBehavior` / `ShotCadenceBehavior` / `VeilStrikeBehavior` cadence altyapisini kuruyor
+  ama 3-bolt / multi-shot / 3-slash full chain animasyon entegrasyonu yapilmadi.
+- `LMBEcolSystem` stub kalmaya devam ediyor.
 
 ## Implementation Rule
 

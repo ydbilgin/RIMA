@@ -1,0 +1,15 @@
+STATUS: DONE
+
+COMPLETED:
+- Created canonical skill tree doc for Ranger, Ravager, Ronin, Gunslinger, and Brawler.
+- Created matching pool alternatives doc for all 5 classes.
+- Verified `git diff --check` and ASCII-only content.
+- Committed changes: `1bbed80`
+
+ERRORS: NONE
+
+FILES_TOUCHED:
+- `TASARIM/SKILL_TREE_5CLASS_MISSING_2026-05-06.md`
+- `TASARIM/SKILL_POOL_ALTERNATIVES_5CLASS_MISSING_2026-05-06.md`
+
+NEXT_SIGNAL: "/clear, start production clean session"

@@ -13,6 +13,16 @@
 - **Trans F1→F2 ✅ DONE** → `Assets/Art/Tiles/Act1/Trans_F1F2/` 8 tile 64×64 (commit eb037a3). ChatGPT output 1774×887, same auto-resize.
 - **Trans F2→F3 ✅ DONE** → `Assets/Art/Tiles/Act1/Trans_F2F3/` 8 tile 64×64 (commit eb037a3). Same.
 
+### Room Scene Authoring (2026-05-08 — Task A DONE)
+- **Mimari karar**: Prefab-per-room (scene degil). DungeonWorldBuilder -> replace.
+- **RoomLoader event API**: `OnRoomLoaded(RoomConfig, GameObject)` + `OnRoomCleared` static events
+- **RRM**: Simdilik dokunulmadi -- Task B'de `LegacyRuntimeRoomManager` rename + event subscribe
+- **Task A ✅ DONE** (commit 3d64bab): RoomConfig.cs + RoomRegistry.cs + RoomLoader.cs + 3 pilot prefab placeholder (combat_01 / reward_01 / corridor_01)
+- **Task B (pending)**: RRM rename + event subscribe baglantisi
+- **Task C (pending B)**: 3 pilot prefab tile paint (F1 tile kullanimi)
+- **Spec**: `TASARIM/room_authoring.md`
+- **Pilot validation kriteri**: 3 prefab Play mode'da Instantiate -> event fire -> console log
+
 ### Tile Grid Math Kuralı (LOCKED)
 - Floor 64×64: 1024×1024, 4×N grid — N sadece 1/2/4/8 (1024÷N integer olmalı, 3 YASAK)
 - Wall 64×96: 1024×1536, 4×4 grid → 256×384 hücre
@@ -91,6 +101,16 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Palette: #1A1A2E/#2D2D4E/#00FFCC/#C8A96E
 
 ### Code (DONE this session)
+
+#### /nlm ve /nlm-sync skill'leri (2026-05-08)
+- `/query` skill silindi (outdated, TASARIM dosyalarini direkt okuyordu)
+- `/nlm "soru"` -> NotebookLM query (`.claude/commands/nlm.md`)
+- `/nlm-sync path/to/file.md` -> NLM'e kaynak ekle (`.claude/commands/nlm-sync.md`)
+- CLAUDE.md guncellendi: `/query` -> `/nlm`
+- **nlm-sync parallel fix (2026-05-08)**: $1/$2 template bug çözüldü — fonksiyon argümanı yerine inline subshell + NODE_FILTER string + `cut -c4-`. Paralel çalışıyor (22 dosya aynı anda). Global template: `~/.claude/commands/nlm-sync.md` (NLM_NOTEBOOK_ID env var ile proje-özel yapılandır).
+
+#### room_authoring.md spec (2026-05-08)
+- `TASARIM/room_authoring.md` -- Prefab-per-room kontrat, RoomConfig schema, render contract checklist, migration plani
 
 #### batch_tiles.ps1 (commit 9e647c7)
 - `STAGING/batch_tiles.ps1` — batch process W1/W2/OBW/F3/Trans tiles via single command
@@ -219,13 +239,15 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ## Next Priorities
 ### Immediate next session:
-1. **F3/Trans tile QC** — Unity'de görsel kontrol (non-standard input'tan geldi, kalite onayı lazım)
-2. **DungeonWorldBuilder DepthBandTileSet hookup** — wire depth-band tile swap to painter
-4. **DUNGEON_LIGHTING_GENERATION_RESEARCH.md review** → design session → PropSpec implementation
-5. **WallOcclusionFader attach** → Wall Tilemap + Add Component (Unity side)
-6. **Dash-Cancel** (Sonnet, Antigravity) — BasicAttackProfile.cancelWindowFraction + PlayerController event
-7. **OnDash Proc** (Sonnet, Antigravity) — CrossClassEffectType.OnDash + HandleDash call site
-8. Boss Posture system -- after StatusEffectSystem unstaged changes resolved
+0. **F3/Trans tile import** — Unity Editor'da `RIMA/Import Act1 Tiles` menu item çalıştır (Act1TileImporter.cs pre-pass fix commit 75cf298 hazır; sadece execution gerekiyor)
+1. **Pilot room validation** — Play mode: 3 prefabs Instantiate via RoomLoader → event fires → console log
+2. **Task B**: LegacyRuntimeRoomManager rename + event subscribe
+3. **F3/Trans tile QC** — Unity görsel kontrol
+4. **DungeonWorldBuilder DepthBandTileSet hookup** — wire depth-band tile swap to painter
+5. **WallOcclusionFader attach** → Wall Tilemap + Add Component
+6. **Mob production** — PixelLab create_character + animate_character (8-dir, 48-52px); start with Act 1 mob
+7. **Dash-Cancel** — BasicAttackProfile.cancelWindowFraction + PlayerController event
+8. **OnDash Proc** — CrossClassEffectType.OnDash + HandleDash call site
 
 ### Backlog:
 - BasicAttack .asset'lerini Inspector'da PlayerAttack'e assign et
@@ -240,8 +262,10 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Script validation: HUDController, MiniMap, RuntimeRoomManager, SettingsMenuUI, MainMenuScreen, RoomPreviewPanel all PASS.
 - Performance: CPU frame time 99ms -> 0.11ms after deep-fix pass.
 - BasicAttack strategy pattern: all 6 behaviors implemented and compile-clean.
+- **F1 floor tiles VISIBLE in Play mode** (2026-05-08) — 30×30 painted at IsoGrid/Ground. PNG import pipeline was broken (stale DefaultAsset cache); fixed by embedding Sprites as sub-assets in each Tile .asset via Texture2D.LoadImage()+Sprite.Create()+AssetDatabase.AddObjectToAsset(). Player centered, CameraFollow working, Global Light2D intensity=1.0.
 
 ## Current Risks
+- **Act1TileImporter fix hazır (commit 75cf298)** — F3/Trans sprite'ları için Unity'de `RIMA/Import Act1 Tiles` henüz çalıştırılmadı; tile'lar hâlâ null sprite ref içeriyor olabilir.
 - BasicAttack .asset'leri Inspector'da PlayerAttack'e henüz assign edilmedi.
 - SkillDraftSystem -> SkillOfferUI hook baglandi, TriggerDraft hala oda gecisinde cagirilmiyor.
 - UI rebuild needs QC + PlayMode visual verification (no PlayMode screenshot test yet).
@@ -252,6 +276,9 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - PixelLab 127px bug (128px outputs 127px) -- QC during floor test.
 - Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
 - ChestUI.cs:43,50 + ForgeUI.cs:72,93,100 — direct timeScale writes, pre-existing, need UIManager routing (follow-up)
+- **Room authoring Task A DONE** (commit 3d64bab) -- rima-qc review pending
+- **F3/Trans_F1F2/Trans_F2F3 tile sprites NULL** -- same broken PNG import cache; need sub-asset fix (same pattern as F1)
+- **RRM tile painting bagimliliklar** -- Task B'de soküm yapilacak; simdilik paralel calisiyor
 - **DungeonWorldBuilder DepthBandTileSet hookup PENDING** — depth-band tile swap not yet wired to painter; currently uses Inspector tiles
 - **F3/Trans tile QC pending** — sliced from non-standard ChatGPT dimensions (1254×1254, 1774×887); visual QC in Unity needed to confirm quality acceptable
 
@@ -286,3 +313,8 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Dungeon asset guide (tile/wall/objects, step-by-step): `STAGING/PIXELLAB_PRODUCTION_GUIDE_DUNGEON_ASSETS.md`
 - PixelLab prompt template ([CHARACTER]/[ACTION]/[CONSTRAINTS]): `STAGING/PIXELLAB_PROMPT_TEMPLATE.md`
 - Combat fluidity decisions: dash-cancel + OnDash + posture (LOCKED this session, see CURRENT_STATUS)
+- Room authoring spec (LOCKED): `TASARIM/room_authoring.md`
+- RoomLoader (Task A, pending): `Assets/Scripts/Systems/Map/RoomLoader.cs`
+- RoomConfig (Task A, pending): `Assets/Scripts/Systems/Map/RoomConfig.cs`
+- RoomRegistry (Task A, pending): `Assets/Scripts/Systems/Map/RoomRegistry.cs`
+- Pilot prefabs (Task A, pending): `Assets/Prefabs/Rooms/Act1/`

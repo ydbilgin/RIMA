@@ -1,6 +1,6 @@
 # RIMA — Claude Agent Rules
 **Universal project rules: see `RULES.md`.**
-Agent stack definition: `ANTIGRAVITY.md`. Routing details: `AGENTS.md`.
+Routing details: `AGENTS.md`.
 
 ## Role: Orchestra Conductor (PRIMARY)
 Claude dispatches work; does NOT do mechanical bulk itself.
@@ -23,7 +23,7 @@ All agents (Claude, Codex, Gemini) read from `MEMORY/`. All must commit after ch
 | `/plan` | Before any non-trivial implementation -- alignment first |
 | `/lint` | Phase transitions, 5+ decisions, before asset work |
 | `/phase-close` | Before moving to next phase |
-| `/query` | Token-efficient RIMA knowledge lookup |
+| `/nlm` | NotebookLM knowledge query — tüm tasarım kararları |
 | `/graphify` | Codebase knowledge graph (run on demand, not every session) |
 | `/playtest` | Generate Gemini-executed playtest scenarios |
 | `/save-session` | Save session state for future resume |
@@ -43,17 +43,34 @@ All agents (Claude, Codex, Gemini) read from `MEMORY/`. All must commit after ch
 | `Explore` | Fast read-only codebase search |
 | `Plan` | Implementation planning before code |
 
-## NotebookLM (Context Source)
-TASARIM/ ve MEMORY/ dosyalarını direkt okumadan önce NotebookLM'e sorgula:
-```bash
-uvx --from notebooklm-mcp-cli nlm notebook query ed3c8952-417c-4988-84a7-425d25ba3b08 "soru"
-```
-Notebook: `RIMA Game Design Knowledge Base` — 80 kaynak, 2026-05-06 sync.
-Detay: `MEMORY/notebooklm_workflow.md`
+## NotebookLM — HARD RULE (Context Source)
+**Proje dosyalarını direkt okuma. Tüm bağlam NotebookLM MCP üzerinden gelir.**
+
+- **Claude (orkestra şefi)** bağlamı sub-agent'lara besler — sub-agent'lar bağımsız sorgu yapmaz.
+- MCP tool (tercih): `mcp__notebooklm__notebook_query`, notebook_id: `ed3c8952-417c-4988-84a7-425d25ba3b08`
+- CLI fallback: `uvx --from notebooklm-mcp-cli nlm notebook query ed3c8952-417c-4988-84a7-425d25ba3b08 "soru"`
+- Dosya oku: **sadece** NotebookLM yetersiz kalırsa ve sadece ilgili satır aralıklarını.
+- Notebook: `RIMA Game Design Knowledge Base`. Detay: `MEMORY/notebooklm_workflow.md`
+
+**İstisnalar (direkt oku, NLM'e gitme):**
+- `CURRENT_STATUS.md` — session başında sadece bu okunur
+- `CLAUDE.md` — harness otomatik yükler
+- `CODEX_DISPATCH.md` — Codex görevi yazarken claude okur
+- `Assets/Scripts/**` — kod dosyaları NLM'de yok; Explore/Grep kullan
+
+**NLM Sync Policy (dosya değişince):**
+| Dosya | Aksiyon |
+|---|---|
+| `TASARIM/*.md` | Hemen sync et — kullanıcıyı uyar |
+| `MEMORY/*.md` | Hemen sync et — kullanıcıyı uyar |
+| `CURRENT_STATUS.md` | Session sonunda sync — kullanıcıyı uyar |
+| `CLAUDE.md`, `RULES.md` | Büyük değişimde sync — kullanıcıya sor |
+| `Assets/Scripts/**` | Hiçbir zaman sync etme |
+
+Codex dispatch kuralları: `CODEX_DISPATCH.md`
 
 ## Token Saving
 - Session start: `CURRENT_STATUS.md` only. Edit: surgical line ranges.
-- **Bağlam için:** NotebookLM query önce, dosya okuma sonra (sadece NotebookLM yetersiz kalırsa).
 - Bulk mechanical work -> Codex (GPT 5.5 High).
 - Bulk analysis/audit -> Gemini (2.5 Pro).
 - CLAUDE.md and CURRENT_STATUS.md must stay lean. Pointers, not content.
