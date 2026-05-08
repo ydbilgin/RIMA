@@ -88,6 +88,26 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - OnDash Passive Proc: 4th passive type added to taxonomy. Shadowblade/Ronin primary. CrossClassEffectType.OnDash enum + CrossClassSkillManager.OnDash() method. Complexity S.
 - Boss Posture/Stagger: universal meter, break window 3s +50% dmg. Pairs with Fracture Echoes. StatusEffectSystem coordination required before implementation. Complexity L.
 
+### Alabaster Dawn Araştırması + Opus Değerlendirmesi (2026-05-09 — TAMAMLANDI)
+- **Araştırma**: Gemini (rima-research) + Codex GPT-5.5 High + ChatGPT PDF (STAGING/RIMA_Alabaster_Dawn_Expanded_Claude_Review_Pack.pdf)
+- **Opus değerlendirmesi**: 9 öneri değerlendirildi, 10 LOCKED kural ihlali tespit edildi
+- **v1 Sprint Paketi (LOCKED)**:
+  1. ActionCommitProfile 5 alan (windupMs, recoveryMs, dashCancelStartFraction, hitstopMs, cancelOnWhiff) → BasicAttackProfile'a ekle
+  2. 3-katman feedback hiyerarşi (Normal/Commit/Break) — Named outcome glyph v1'de YOK
+  3. Rarity Common/Rare/Epic/Legendary ağırlık tablosu — Wild v3'e ertelendi, Epic korundu
+  4. Sınıf ses imzası 10 sınıf (sadece SES, görsel v2)
+  5. Rift Fracture isimlendirmesi (mevcut Rift Meta-Family üstüne sadece ad)
+  6. Boolean hasInterruptArmor flag — sayısal poise meter v2
+  7. Boss posture kalibrasyon 450/850 (2 boss tipi v1)
+- **Reddedilen / ertelenen**:
+  - Wild rarity → v3 (LOCKED dash-cancel + ICD + upgrade slot ihlali)
+  - 5 Rift Portal türü → v2 (LOCKED %4 spawn ile aritmetik uyumsuz)
+  - 10 named outcome → 4 outcome v2, 6'sı OWNS/AVOIDS çakışması
+  - Tile Room Memory Overlay → v2 (önce DepthBandTileSet hookup + F4 Rift)
+  - Sayısal poise meter → v2 (boolean armor flag v1)
+- **Alabaster Dawn'dan RIMA'ya taşınan prensip**: animation commitment + 3-tier feedback + named outcome + rarity layer. Setting/narrative/2.5D/kit-swap taşınmaz.
+- **STAGING dosyası**: STAGING/RIMA_Alabaster_Dawn_Expanded_Claude_Review_Pack.pdf (ChatGPT'nin 9 önerisi)
+
 ### DungeonWorldBuilder (Architecture LOCKED — Codex in progress, laurethgame)
 - Phase 1: `LayoutKind` public + `PaintTemplateAtOffset` on `LargeDungeonMapPainterBase`
 - Phase 2: New SOs + builder — `DungeonWorldBuilder.cs`, `RoomTemplate.cs`, `DepthBandTileSet.cs`
@@ -129,7 +149,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - **Phase 2** (commit e8f13dd): New SOs — `RoomTemplate.cs`, `DepthBandTileSet.cs`; `DungeonWorldBuilder.cs` (main builder)
 - **Phase 3** (commit 1ab62a3): `RuntimeRoomManager.StartRoom()` → `worldBuilder.GetRoomBounds()` wired (null-guarded)
 - Grid: lane×roomStride.x, depth×roomStride.y; corridorWidth=8; depth bands 0-2→F1, 3-5→F2, 6+→F3
-- **GAP: DepthBandTileSet painter hookup pending** — depth-band tile swap not yet wired to painter
+- **DepthBandTileSet hookup DONE** — SetTilePool(TileBase[] floorTiles, TileBase[] wallTiles) lines 327-334'te mevcut
 
 #### tiles_raw cleanup (commit a86d1c3)
 - Style anchor files renamed for clarity: `style_anchor_W1_wall_PRIMARY.png`, `style_anchor_W2_wall.png`, etc.
@@ -242,11 +262,12 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ## Next Priorities
 ### Immediate next session:
+0. **v1 Combat Feel Sprint** — ActionCommitProfile 5 alan + 3-layer feedback + Rarity tier + Ses imzası (bkz. Alabaster Dawn bölümü)
 0. **F3/Trans tile import** — Unity Editor'da `RIMA/Import Act1 Tiles` menu item çalıştır (Act1TileImporter.cs pre-pass fix commit 75cf298 hazır; sadece execution gerekiyor)
 1. **Pilot room validation** — Play mode: 3 prefabs Instantiate via RoomLoader → event fires → console log
 2. **Task B**: LegacyRuntimeRoomManager rename + event subscribe
 3. **F3/Trans tile QC** — Unity görsel kontrol
-4. **DungeonWorldBuilder DepthBandTileSet hookup** — wire depth-band tile swap to painter
+4. **DungeonWorldBuilder DepthBandTileSet hookup DONE** — SetTilePool lines 327-334
 5. **WallOcclusionFader attach** → Wall Tilemap + Add Component
 6. **Mob production** — PixelLab create_character + animate_character (8-dir, 48-52px); start with Act 1 mob
 7. **Dash-Cancel** — BasicAttackProfile.cancelWindowFraction + PlayerController event
@@ -282,10 +303,10 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - **Room authoring Task A DONE** (commit 3d64bab) -- rima-qc review pending
 - **F3/Trans_F1F2/Trans_F2F3 tile sprites NULL** -- same broken PNG import cache; need sub-asset fix (same pattern as F1)
 - **RRM tile painting bagimliliklar** -- Task B'de soküm yapilacak; simdilik paralel calisiyor
-- **DungeonWorldBuilder DepthBandTileSet hookup PENDING** — depth-band tile swap not yet wired to painter; currently uses Inspector tiles
 - **F3/Trans tile QC pending** — sliced from non-standard ChatGPT dimensions (1254×1254, 1774×887); visual QC in Unity needed to confirm quality acceptable
 
 ## Key Pointers
+- **Alabaster Dawn Opus Eval**: STAGING/RIMA_Alabaster_Dawn_Expanded_Claude_Review_Pack.pdf — 9 öneri, 10 LOCKED çakışma tespiti, v1 sprint paketi
 - UIManager.cs: `Assets/Scripts/UI/UIManager.cs` -- singleton, owns all timeScale + overlay state
 - Graphify: `graphify-out/graph.html` + `graphify-out/GRAPH_REPORT.md`
 - Logo: `TASARIM/UI_CONCEPTS/BRANDING/rima_logo_final_transparent_2026-05-05.png`
