@@ -52,5 +52,7 @@ Open a file ONLY when its keywords match the current task.
 
 - [project_test_automation.md](project_test_automation.md) -- WHEN: test, otomasyon, contract, modular test, QC workflow, behavioral testing
 
+- [project_chatgpt_canvas_fix.md](project_chatgpt_canvas_fix.md) -- WHEN: ChatGPT tile üretimi, boyut sorunu, canvas, process_tiles
+
 ## Add Memory
 Create MEMORY/<topic>.md with frontmatter, then add one line here.

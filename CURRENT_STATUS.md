@@ -9,9 +9,9 @@
 - **W1 ✅ DONE** (ChatGPT, commit 2026-05-08) → `STAGING/tiles_raw/style_anchor_W1_wall_PRIMARY.png`. PRIMARY style anchor for all ChatGPT tiles.
 - **W2 ✅ DONE** (ChatGPT, commit 2026-05-08) → slice via batch_tiles.ps1 → `Assets/Art/Tiles/Act1/W2/`
 - **OBW ✅ DONE** (ChatGPT, commit 2026-05-08) → slice via batch_tiles.ps1 → `Assets/Art/Tiles/Act1/OBW/`
-- **F3 ❌ REGEN PENDING** → Wrong size from ChatGPT (1254×1254, should 1024×1536). Regeneration: `STAGING/CHATGPT_REMAINING_TILES.md` PROMPT 1
-- **Trans F1→F2 ❌ REGEN PENDING** → Wrong size (1774×887). Regeneration: `STAGING/CHATGPT_REMAINING_TILES.md` PROMPT 2
-- **Trans F2→F3 ❌ REGEN PENDING** → Wrong size (1774×887). Regeneration: `STAGING/CHATGPT_REMAINING_TILES.md` PROMPT 3
+- **F3 ✅ DONE** → `Assets/Art/Tiles/Act1/F3/` 16 tile 64×64 (commit eb037a3). ChatGPT output 1254×1254 (non-standard), process_tiles.py cell-resize handled it automatically.
+- **Trans F1→F2 ✅ DONE** → `Assets/Art/Tiles/Act1/Trans_F1F2/` 8 tile 64×64 (commit eb037a3). ChatGPT output 1774×887, same auto-resize.
+- **Trans F2→F3 ✅ DONE** → `Assets/Art/Tiles/Act1/Trans_F2F3/` 8 tile 64×64 (commit eb037a3). Same.
 
 ### Tile Grid Math Kuralı (LOCKED)
 - Floor 64×64: 1024×1024, 4×N grid — N sadece 1/2/4/8 (1024÷N integer olmalı, 3 YASAK)
@@ -19,16 +19,17 @@
 - Tall wall 64×128: 1024×1536, 4×3 grid → 256×512 hücre
 - Codex $imagegen: tile için KULLANMA — smooth 3D render üretiyor. ChatGPT > Codex for pixel art.
 - $imagegen syntax: `$imagegen "prompt"` (Codex task içinde). Pixel art için "pixel clusters min 4px, no gradients" ekle.
+- **ChatGPT canvas boyut fix**: ChatGPT'de canvas açıkken "canvası tam olarak eşit X×Y hücreli grid olarak böl" şeklinde iste → doğru pixel boyutlarını üretebilir. (process_tiles.py arbitrary boyutu handle eder ama non-standard = hafif kalite kaybı)
 
 ### WallOcclusionFader (Hades stili saydamlaşma)
 - `Assets/Scripts/Core/WallOcclusionFader.cs` → KOD HAZIR, değişiklik yok.
 - Unity'de yapılacak: Wall Tilemap → Add Component → WallOcclusionFader. fadeRadius 2.2, minAlpha 0.38, fadeSpeed 10.
 
-### Sıradaki Tile Üretimleri
-1. **W1 ✅** (DONE, `style_anchor_W1_wall_PRIMARY.png`)
-2. **W2 ✅** (DONE, awaiting batch_tiles.ps1)
-3. **OBW ✅** (DONE, awaiting batch_tiles.ps1)
-4. **F3 + Trans tiles ❌** (regen via CHATGPT_REMAINING_TILES.md — size constraints)
+### Sıradaki Tile Üretimleri — ALL DONE (commit eb037a3)
+1. **W1 ✅** (16t 64×96, `Assets/Art/Tiles/Act1/W1/`)
+2. **W2 ✅** (16t 64×96, `Assets/Art/Tiles/Act1/W2/`)
+3. **OBW ✅** (12t 64×128, `Assets/Art/Tiles/Act1/WB/`)
+4. **F3 ✅** (16t 64×64) + **Trans F1→F2 ✅** (8t) + **Trans F2→F3 ✅** (8t) — non-standard ChatGPT input, process_tiles.py auto-handled
 
 ### Act Tile Progression (LOCKED — memory'de tam plan var)
 - 4 act × derinlik bandı tile seti planı → `MEMORY/project_act_tile_progression.md`
@@ -50,7 +51,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 ## NotebookLM (NEW - 2026-05-06)
 - Notebook: RIMA Game Design Knowledge Base (ID: ed3c8952-417c-4988-84a7-425d25ba3b08)
 - 89 sources total (80 bootstrap + 9 updates: RULES/AGENTS/CLAUDE/CODEX + 5 MEMORY updates)
-- Sync tag: nlm-sync-20260506
+- Sync tag: nlm-sync-20260508 (CURRENT_STATUS + project_chatgpt_canvas_fix)
 - HARD RULE: Claude never reads files except CURRENT_STATUS.md -- all context via NotebookLM query
 - Detail: MEMORY/notebooklm_workflow.md
 
@@ -185,6 +186,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 ### Doc (DONE)
 - Skill pool alternatives (10 classes): commit 048a14c -- TASARIM/SKILL_POOL_ALTERNATIVES_2026-05-06.md
 - Dungeon Lighting + Generation Research (commit f457edb): `STAGING/DUNGEON_LIGHTING_GENERATION_RESEARCH.md` — physical lighting + dungeon gen synthesis
+- **Mob Ideas Research (S45)**: `STAGING/MOB_IDEAS_GPT.md` (Codex/GPT-5.5, 10 proposals) + `STAGING/MOB_IDEAS_GEMINI.md` (Gemini web research, 10 proposals + 15 gap analysis). Act 2-3 enemy archetypes, Last Epoch/Dead Cells/Hades/RoR2/PoE kaynaklı. Design session bekliyor.
 
 ## Working Rules
 - Record concrete results and unresolved complaints here.
@@ -217,9 +219,8 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ## Next Priorities
 ### Immediate next session:
-1. **ChatGPT: F3 + Trans F1→F2 + Trans F2→F3 regen** — `STAGING/CHATGPT_REMAINING_TILES.md` (size constraints)
-2. **batch_tiles.ps1 run** — process W1/W2/OBW sheets → `Assets/Art/Tiles/Act1/{W1,W2,OBW}/`
-3. **DungeonWorldBuilder DepthBandTileSet hookup** — wire depth-band tile swap to painter
+1. **F3/Trans tile QC** — Unity'de görsel kontrol (non-standard input'tan geldi, kalite onayı lazım)
+2. **DungeonWorldBuilder DepthBandTileSet hookup** — wire depth-band tile swap to painter
 4. **DUNGEON_LIGHTING_GENERATION_RESEARCH.md review** → design session → PropSpec implementation
 5. **WallOcclusionFader attach** → Wall Tilemap + Add Component (Unity side)
 6. **Dash-Cancel** (Sonnet, Antigravity) — BasicAttackProfile.cancelWindowFraction + PlayerController event
@@ -252,7 +253,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
 - ChestUI.cs:43,50 + ForgeUI.cs:72,93,100 — direct timeScale writes, pre-existing, need UIManager routing (follow-up)
 - **DungeonWorldBuilder DepthBandTileSet hookup PENDING** — depth-band tile swap not yet wired to painter; currently uses Inspector tiles
-- **F3 + 2 transition tiles REGEN PENDING** — ChatGPT gave wrong dimensions; regeneration via CHATGPT_REMAINING_TILES.md
+- **F3/Trans tile QC pending** — sliced from non-standard ChatGPT dimensions (1254×1254, 1774×887); visual QC in Unity needed to confirm quality acceptable
 
 ## Key Pointers
 - UIManager.cs: `Assets/Scripts/UI/UIManager.cs` -- singleton, owns all timeScale + overlay state
@@ -272,8 +273,8 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Undercroft connected tile prompts: `STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md`
 - ChatGPT floor tile prompt (LOCKED): `STAGING/CHATGPT_PROMPT_FLOOR_TILES.md`
 - ChatGPT batch prompts (wall+floor): `STAGING/CHATGPT_BATCH_PROMPTS.md`
-- **ChatGPT remaining tiles (F3 + transitions)**: `STAGING/CHATGPT_REMAINING_TILES.md` — 3 prompts, size constraints
-- **batch_tiles.ps1**: `STAGING/batch_tiles.ps1` — batch slice W1/W2/OBW/F3 sheets
+- **batch_tiles.ps1**: `STAGING/batch_tiles.ps1` — batch slice W1/W2/OBW/F3 sheets (ALL DONE eb037a3)
+- **Mob ideas research**: `STAGING/MOB_IDEAS_GPT.md` (GPT-5.5) + `STAGING/MOB_IDEAS_GEMINI.md` (Gemini web) — Act 2-3 enemy proposals
 - **Dungeon lighting research**: `STAGING/DUNGEON_LIGHTING_GENERATION_RESEARCH.md` — physical lighting + dungeon gen synthesis
 - **W1 style anchor**: `STAGING/tiles_raw/style_anchor_W1_wall_PRIMARY.png`
 - DungeonWorldBuilder (Phase 1-3 DONE, hookup PENDING): `Assets/Scripts/Systems/Map/DungeonWorldBuilder.cs`
