@@ -139,15 +139,9 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - MenuItem: RIMA/Setup Game View (1080p + Maximize)
 - File: Assets/Editor/DevTools/GameViewSetup.cs
 
-#### batch_tiles.ps1 (Codex -- laurethayday, dispatched)
-- `STAGING/batch_tiles.ps1` — process W1/W2/F3/OBW in one shot via `process_tiles.py`
-
 #### HUD sprite cleanup (Codex -- laurethgame, dispatched)
 - Remove last sprite asset ref: `HUDController.cs ~385` `bgImg.sprite = RimaUITheme.PromptFrame`
 - Makes HUD fully procedural (no PNG dependencies)
-
-#### F1TileSetup editor tool (Codex -- laurethgame, dispatched)
-- `F1TileSetup.cs` editor menu item: loads F1 tiles from `Assets/Art/Tiles/Act1/F1/` → `DungeonLayerManager.f1FloorTiles`
 
 - BasicAttackProfile infrastructure: commit 280a637 (laurethayday) -- 4 files created
 - BuildFloorMask rect-first refactor: commit d9f08bd (laurethgame) -- all 16 layouts rewritten, architectural masonry aesthetic
