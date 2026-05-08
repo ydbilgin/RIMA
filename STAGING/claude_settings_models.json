@@ -1,0 +1,44 @@
+{
+  "env": {
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "AWS_REGION": "us-east-1",
+    "AWS_BEARER_TOKEN_BEDROCK": "ABSKQmVkcm9ja0FQSUtleS0yZ3JzLWF0LTYzNjg2ODgzMDY1NTplblloMk5EN2M1YkNyYmZKdWRRd0FSblRHYllQdElNWWlkTHhSYyszWUV3cHB5TzYvV296NHZIVmR0Zz0="
+  },
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+
+
+  "_comment_model": "SADECE BIR TANESINI AKTIF ET - Digerlerini sil veya basina '_disabled_' ekle",
+
+  "model": "us.anthropic.claude-opus-4-7-20250219",
+  "_comment_opus47": "EN GUCLU - Karmasik tasarim kararlari, arastirma, mimari",
+
+  "_disabled_model_opus46": "us.anthropic.claude-opus-4-6-20250514",
+  "_comment_opus46": "GUCLU - Genel amacli, Opus 4.7'den biraz daha hizli",
+
+  "_disabled_model_sonnet46": "us.anthropic.claude-sonnet-4-20250514",
+  "_comment_sonnet46": "HIZLI + AKILLI - Coding, mekanik is, dengeli",
+
+  "_disabled_model_sonnet45": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "_comment_sonnet45": "SU ANKI MODEL - Calisiyor, bilinen stabil",
+
+  "_disabled_model_haiku45": "us.anthropic.claude-haiku-4-5-20241022",
+  "_comment_haiku45": "EN HIZLI - Basit tasklar, token tasarrufu",
+
+
+  "_comment_eu_alternative": "Eger EU region tercih edersen, yukaridaki 'us.' prefiklerini 'eu.' yap",
+  "_example_eu": "eu.anthropic.claude-opus-4-7-20250219",
+
+
+  "statusLine": {
+    "type": "command",
+    "command": "python C:/Users/ydbil/.claude/usage_statusline.py",
+    "refreshInterval": 5
+  },
+  "effortLevel": "high",
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
+}
