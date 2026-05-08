@@ -1,3 +1,7 @@
+# Local state — never commit
+.claude/nlm_sync_state.txt
+.claude/nlm_last_sync.txt
+
 # Unity generated — never commit
 Library/
 Temp/
