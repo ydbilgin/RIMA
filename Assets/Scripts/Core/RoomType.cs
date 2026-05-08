@@ -13,6 +13,7 @@ namespace RIMA
         Merchant,
         Forge,
         Event,
-        Curse
+        Curse,
+        Corridor
     }
 }
