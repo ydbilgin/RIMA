@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d500524c1833554cb306731aaf6716a, type: 3}
+  m_Name: BasicAttackProfile_Warblade
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.BasicAttackProfile
+  classType: 1
+  behaviorType: 0
+  comboLength: 3
+  comboWindow: 1.2
+  commitment: 0.28
+  comboDamage: 190000001e00000028000000
+  hitRange:
+  - 1.2
+  - 1.3
+  - 1.5
+  hitRadius:
+  - 0.75
+  - 0.75
+  - 0.9
+  knockbackForce:
+  - 4
+  - 5
+  - 8
+  knockbackDuration:
+  - 0.1
+  - 0.12
+  - 0.18
+  projectileDamage: 18
+  projectileSpeed: 15
+  projectileCooldown: 0.34
+  chargeThreshold: 1
+  rmbCost: 30
+  rmbDamage: 34
+  rmbRadius: 2.2
+  rmbCooldown: 1.5
