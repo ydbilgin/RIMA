@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "RIMA.Runtime",
-        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "RIMA.Tests.Contracts"
     ],
     "includePlatforms": [
         "Editor"

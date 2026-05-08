@@ -1,548 +1,413 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
+using RIMA.Combat.Skills;
 
 namespace RIMA
 {
     /// <summary>
-    /// Oda sonrası ödül seçim ekranı.
-    ///
-    /// Layout:
-    ///   Sol 72% — 3 yatay kompakt kart (icon + isim + tier badge + AL butonu)
-    ///   Sağ 26% — tooltip panel (hover ile dolar, detay gösterir)
-    ///
-    /// Reward tipleri: Skill (aktif/pasif), Gold, Heal
-    /// Tier renkler: Common/Rare/Epic/Mythic/Legendary
-    /// Replace modu: slot dolu olduğunda mevcut skilllerden birini çıkar.
+    /// Hades-style skill draft — 3 cards, slide-in animation, replace mode.
+    /// TimeScale managed by UIManager (no direct Time.timeScale writes).
     /// </summary>
     public class SkillOfferUI : MonoBehaviour
     {
-        [Header("UI Refs (Inspector'dan bağlanabilir)")]
-        [SerializeField] private GameObject panel;
-        [SerializeField] private Transform  cardContainer;
-
-        [Header("Tier Colors")]
-        [SerializeField] private Color commonColor    = new Color(0.50f, 0.55f, 0.62f);
-        [SerializeField] private Color rareColor      = new Color(0.22f, 0.52f, 0.90f);
-        [SerializeField] private Color epicColor      = new Color(0.52f, 0.25f, 0.88f);
-        [SerializeField] private Color mythicColor    = new Color(0.85f, 0.25f, 0.45f);
-        [SerializeField] private Color legendaryColor = new Color(0.92f, 0.70f, 0.18f);
-        [SerializeField] private Color goldColor      = new Color(0.92f, 0.75f, 0.20f);
-        [SerializeField] private Color healColor      = new Color(0.28f, 0.78f, 0.45f);
-
-        // Callback
+        // ── Callback ─────────────────────────────────────────────────
         private Action<RewardOffer, int> onPick;
 
-        // Card tracking (destroy on hide)
+        // ── Card tracking ────────────────────────────────────────────
         private readonly List<GameObject> cards = new List<GameObject>();
+        private GameObject panel;
+        private Transform cardContainer;
+        private TextMeshProUGUI titleLabel;
+        private TextMeshProUGUI subtitleLabel;
 
-        // Tooltip refs
-        private GameObject      tooltipPanel;
-        private Image           tooltipStrip;
-        private TextMeshProUGUI tooltipName;
-        private TextMeshProUGUI tooltipBadge;
-        private TextMeshProUGUI tooltipDesc;
-        private TextMeshProUGUI tooltipStats;
-
-        // ── Lifecycle ────────────────────────────────────────────
+        // ── Layout constants ─────────────────────────────────────────
+        private const float CardWidth  = 180f;
+        private const float CardHeight = 260f;
+        private const float CardGap    = 20f;
+        private const float SlideInDuration = 0.3f;
+        private const float StaggerDelay    = 0.08f;
 
         private void Awake()
         {
             if (panel != null) panel.SetActive(false);
         }
 
-        // ── Public API ───────────────────────────────────────────
+        // ─── Public API (DraftManager contract) ─────────────────────
 
-        /// <summary>Oda ödülü: 3 kart göster.</summary>
+        /// <summary>Show reward cards (3 offers).</summary>
         public void Show(List<RewardOffer> offers, Action<RewardOffer, int> callback, int roomNumber = 0)
         {
             onPick = callback;
             ClearCards();
 
-            if (panel == null) BuildRuntimePanel();
-            else               panel.SetActive(true);
+            if (panel == null) BuildPanel();
+            else panel.SetActive(true);
 
-            if (cardContainer == null)
-                cardContainer = BuildCardContainer(panel.transform);
+            string title = roomNumber > 0 ? $"ODA {roomNumber}  —  ODUL SEC" : "ODUL SEC";
+            if (titleLabel != null) titleLabel.text = title;
+            if (subtitleLabel != null) subtitleLabel.text = "Birini sec — digerleri kaybolur";
 
-            if (tooltipPanel == null)
-                BuildTooltipPanel(panel.transform);
+            for (int i = 0; i < offers.Count; i++)
+                BuildRewardCard(offers[i], i, offers.Count);
 
-            string title = roomNumber > 0 ? $"ODA {roomNumber}  —  ÖDÜL SEÇ" : "ÖDÜL SEÇ";
-            SetTitle(title);
-            SetSubtitle("Birini seç — diğerleri kaybolur");
-
-            ShowTooltipDefault();
-
-            foreach (var offer in offers)
-                BuildRewardCard(offer);
-
-            Time.timeScale = 0f;
+            // Notify UIManager
+            if (UIManager.Instance != null) UIManager.Instance.OpenSkillOffer();
         }
 
-        /// <summary>Slot dolu replace modu.</summary>
+        /// <summary>Replace mode — current skills shown for swap.</summary>
         public void ShowReplaceMode(List<SkillData> currentActives, SkillData incoming,
                                     Action<SkillData> onReplace, Action onSkip)
         {
             ClearCards();
 
-            if (panel == null) BuildRuntimePanel();
-            else               panel.SetActive(true);
+            if (panel == null) BuildPanel();
+            else panel.SetActive(true);
 
-            if (cardContainer == null)
-                cardContainer = BuildCardContainer(panel.transform);
+            if (titleLabel != null) titleLabel.text = "SLOT DOLU";
+            if (subtitleLabel != null)
+                subtitleLabel.text = $"{incoming.skillName.ToUpperInvariant()} almak icin hangisini birakmak istiyorsun?";
 
-            if (tooltipPanel == null)
-                BuildTooltipPanel(panel.transform);
+            // Build replace cards
+            for (int i = 0; i < currentActives.Count; i++)
+            {
+                var sd = currentActives[i];
+                var card = BuildSkillCard(sd.skillName, sd.tier, sd.description, i, currentActives.Count);
+                var btn = card.GetComponentInChildren<Button>();
+                if (btn != null)
+                {
+                    var captured = sd;
+                    btn.onClick.AddListener(() => onReplace?.Invoke(captured));
+                }
+            }
 
-            SetTitle("SLOT DOLU");
-            SetSubtitle($"{incoming.skillName.ToUpper()} almak için hangisini bırakmak istiyorsun?");
-            ShowTooltipDefault();
+            // Skip button
+            var skipGo = new GameObject("SkipBtn", typeof(RectTransform));
+            skipGo.transform.SetParent(panel.transform, false);
+            var skipRt = skipGo.GetComponent<RectTransform>();
+            skipRt.anchorMin = new Vector2(0.5f, 0f);
+            skipRt.anchorMax = new Vector2(0.5f, 0f);
+            skipRt.pivot = new Vector2(0.5f, 0f);
+            skipRt.anchoredPosition = new Vector2(0f, 20f);
+            skipRt.sizeDelta = new Vector2(200f, 36f);
 
-            foreach (var sd in currentActives)
-                cards.Add(BuildReplaceCard(sd, onReplace));
-
-            // ATLA butonu
-            var skipGo = MakeAnchored("SkipBtn", panel.transform,
-                new Vector2(0.30f, 0.04f), new Vector2(0.60f, 0.13f));
-            var skipBg = skipGo.AddComponent<Image>();
-            skipBg.color = new Color(0.10f, 0.10f, 0.13f, 0.92f);
+            var skipImg = skipGo.AddComponent<Image>();
+            skipImg.color = new Color(0.10f, 0.10f, 0.13f, 0.92f);
             var skipBtn = skipGo.AddComponent<Button>();
-            var sc = skipBtn.colors;
-            sc.normalColor = new Color(0.10f, 0.10f, 0.13f, 0.92f);
-            sc.highlightedColor = new Color(0.20f, 0.20f, 0.24f, 1f);
-            skipBtn.colors = sc;
-            skipBtn.onClick.AddListener(() => { onSkip?.Invoke(); });
-            var skipLbl = MakeAnchored("T", skipGo.transform, Vector2.zero, Vector2.one);
-            var st = skipLbl.AddComponent<TextMeshProUGUI>();
-            st.text = "ATLA — alma";
-            st.fontSize = 12; st.fontStyle = FontStyles.Bold;
-            st.color = new Color(0.48f, 0.48f, 0.55f);
-            st.alignment = TextAlignmentOptions.Center;
-            st.raycastTarget = false;
+            skipBtn.onClick.AddListener(() => onSkip?.Invoke());
+
+            var skipTxt = MakeTMP("Label", skipGo.GetComponent<RectTransform>());
+            var str = skipTxt.GetComponent<RectTransform>();
+            str.anchorMin = Vector2.zero;
+            str.anchorMax = Vector2.one;
+            str.offsetMin = str.offsetMax = Vector2.zero;
+            skipTxt.text = "ATLA — alma";
+            skipTxt.fontSize = 11f;
+            skipTxt.fontStyle = FontStyles.Bold;
+            skipTxt.color = new Color(0.48f, 0.48f, 0.55f);
+            skipTxt.alignment = TextAlignmentOptions.Center;
             cards.Add(skipGo);
 
-            Time.timeScale = 0f;
+            if (UIManager.Instance != null) UIManager.Instance.OpenSkillOffer();
         }
 
         public void Hide()
         {
             ClearCards();
-            if (panel != null)        panel.SetActive(false);
-            if (tooltipPanel != null) tooltipPanel.SetActive(false);
-            Time.timeScale = 1f;
+            if (panel != null) panel.SetActive(false);
+            if (UIManager.Instance != null) UIManager.Instance.CloseSkillOffer();
         }
 
-        // ── Reward card build ────────────────────────────────────
+        // ─── Build Panel ────────────────────────────────────────────
 
-        private void BuildRewardCard(RewardOffer offer)
+        private void BuildPanel()
         {
-            Color tc = TypeColor(offer);
-            var card = MakeRect("Card_" + offer.DisplayName, cardContainer);
-            card.AddComponent<LayoutElement>();
+            var canvasGo = new GameObject("[SkillOfferPanel]", typeof(RectTransform));
+            canvasGo.transform.SetParent(transform, false);
 
-            var bg = card.AddComponent<Image>();
-            bg.sprite = RimaUITheme.SmallPanelFrame;
-            bg.color = new Color(1f, 1f, 1f, 0.95f);
+            // Check for existing canvas on transform.root
+            var rootCanvas = GetComponentInParent<Canvas>();
+            if (rootCanvas == null)
+            {
+                var canvas = canvasGo.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = 1050;
+                canvasGo.AddComponent<CanvasScaler>();
+                canvasGo.AddComponent<GraphicRaycaster>();
+            }
 
-            // Top tier strip
-            MakeAnchored("Strip", card.transform, new Vector2(0f, 0.93f), Vector2.one)
-                .AddComponent<Image>().color = tc;
+            panel = canvasGo;
+            var panelRt = panel.GetComponent<RectTransform>();
+            panelRt.anchorMin = Vector2.zero;
+            panelRt.anchorMax = Vector2.one;
+            panelRt.offsetMin = panelRt.offsetMax = Vector2.zero;
 
-            // Icon area (40–92%)
-            var iconBg = MakeAnchored("IconBg", card.transform,
-                new Vector2(0.10f, 0.40f), new Vector2(0.90f, 0.92f));
-            iconBg.AddComponent<Image>().color = new Color(tc.r * 0.15f, tc.g * 0.15f, tc.b * 0.20f, 1f);
+            // Dark overlay
+            var overlayImg = panel.AddComponent<Image>();
+            overlayImg.color = RimaUITheme.OverlayDark;
+            overlayImg.raycastTarget = true;
+
+            // Title
+            titleLabel = MakeTMP("Title", panelRt);
+            var trt = titleLabel.GetComponent<RectTransform>();
+            trt.anchorMin = new Vector2(0.5f, 1f);
+            trt.anchorMax = new Vector2(0.5f, 1f);
+            trt.pivot = new Vector2(0.5f, 1f);
+            trt.anchoredPosition = new Vector2(0f, -30f);
+            trt.sizeDelta = new Vector2(400f, 30f);
+            titleLabel.fontSize = 18f;
+            titleLabel.fontStyle = FontStyles.Bold;
+            titleLabel.color = RimaUITheme.Gold;
+            titleLabel.alignment = TextAlignmentOptions.Center;
+
+            // Subtitle
+            subtitleLabel = MakeTMP("Subtitle", panelRt);
+            var srt = subtitleLabel.GetComponent<RectTransform>();
+            srt.anchorMin = new Vector2(0.5f, 1f);
+            srt.anchorMax = new Vector2(0.5f, 1f);
+            srt.pivot = new Vector2(0.5f, 1f);
+            srt.anchoredPosition = new Vector2(0f, -58f);
+            srt.sizeDelta = new Vector2(400f, 20f);
+            subtitleLabel.fontSize = 11f;
+            subtitleLabel.color = new Color(0.6f, 0.65f, 0.7f, 0.85f);
+            subtitleLabel.alignment = TextAlignmentOptions.Center;
+
+            // Card container
+            var containerGo = new GameObject("Cards", typeof(RectTransform));
+            containerGo.transform.SetParent(panel.transform, false);
+            cardContainer = containerGo.transform;
+            var crt = containerGo.GetComponent<RectTransform>();
+            crt.anchorMin = new Vector2(0.5f, 0.5f);
+            crt.anchorMax = new Vector2(0.5f, 0.5f);
+            crt.pivot = new Vector2(0.5f, 0.5f);
+            crt.anchoredPosition = new Vector2(0f, -20f);
+            crt.sizeDelta = new Vector2(600f, CardHeight);
+        }
+
+        // ─── Reward Card ────────────────────────────────────────────
+
+        private void BuildRewardCard(RewardOffer offer, int index, int total)
+        {
+            Color tierColor = TierColor(offer);
+            string name, desc;
+            string tierTag = "";
 
             if (offer.type == RewardType.Gold)
             {
-                var amtGo = MakeAnchored("Amt", iconBg.transform, Vector2.zero, Vector2.one);
-                var atmp = amtGo.AddComponent<TextMeshProUGUI>();
-                atmp.text = $"+{offer.goldAmount}"; atmp.fontSize = 26;
-                atmp.fontStyle = FontStyles.Bold; atmp.color = goldColor;
-                atmp.alignment = TextAlignmentOptions.Center; atmp.raycastTarget = false;
+                name = $"+{offer.goldAmount} ALTIN";
+                desc = "Hazinene ekle";
+                tierTag = "GOLD";
+                tierColor = RimaUITheme.Gold;
             }
             else if (offer.type == RewardType.Heal)
             {
-                var amtGo = MakeAnchored("Amt", iconBg.transform, Vector2.zero, Vector2.one);
-                var atmp = amtGo.AddComponent<TextMeshProUGUI>();
-                atmp.text = $"+%{offer.healPercent}"; atmp.fontSize = 22;
-                atmp.fontStyle = FontStyles.Bold; atmp.color = healColor;
-                atmp.alignment = TextAlignmentOptions.Center; atmp.raycastTarget = false;
+                name = $"+%{offer.healPercent} CAN";
+                desc = "Aninda iyiles";
+                tierTag = "HEAL";
+                tierColor = new Color(0.28f, 0.78f, 0.45f);
             }
-            else if (offer.skill?.icon != null)
+            else
             {
-                var iconGo = MakeAnchored("Icon", iconBg.transform, new Vector2(0.05f, 0.05f), new Vector2(0.95f, 0.95f));
-                var ii = iconGo.AddComponent<Image>();
-                ii.sprite = offer.skill.icon; ii.preserveAspect = true; ii.raycastTarget = false;
+                name = offer.skill?.skillName?.ToUpperInvariant() ?? "???";
+                desc = offer.skill?.description ?? "";
+                tierTag = offer.skill?.tier.ToString().ToUpperInvariant() ?? "";
             }
 
-            // Separator
-            MakeAnchored("Sep", card.transform, new Vector2(0.05f, 0.395f), new Vector2(0.95f, 0.405f))
-                .AddComponent<Image>().color = new Color(tc.r, tc.g, tc.b, 0.30f);
+            var card = BuildSkillCard(name, offer.skill?.tier ?? SkillTier.Common, desc, index, total);
 
-            // Name (25–39%)
-            var nameGo = MakeAnchored("Name", card.transform, new Vector2(0.04f, 0.25f), new Vector2(0.96f, 0.39f));
-            var nameTmp = nameGo.AddComponent<TextMeshProUGUI>();
-            nameTmp.text = offer.DisplayName.ToUpper();
-            nameTmp.fontSize = 11; nameTmp.fontStyle = FontStyles.Bold;
-            nameTmp.color = Color.white; nameTmp.alignment = TextAlignmentOptions.Center;
-            nameTmp.enableWordWrapping = true; nameTmp.raycastTarget = false;
-
-            // Type / tier badge (14–24%)
-            var badgeGo = MakeAnchored("Badge", card.transform, new Vector2(0.04f, 0.14f), new Vector2(0.96f, 0.24f));
-            var badgeTmp = badgeGo.AddComponent<TextMeshProUGUI>();
-            badgeTmp.text = BadgeText(offer);
-            badgeTmp.fontSize = 8; badgeTmp.fontStyle = FontStyles.Bold;
-            badgeTmp.color = new Color(tc.r, tc.g, tc.b, 0.88f);
-            badgeTmp.alignment = TextAlignmentOptions.Center;
-            badgeTmp.enableWordWrapping = true; badgeTmp.raycastTarget = false;
-
-            // Pick button (3–12%)
-            var btnGo = MakeAnchored("Btn", card.transform, new Vector2(0.07f, 0.03f), new Vector2(0.93f, 0.12f));
-            var btnBg = btnGo.AddComponent<Image>();
-            btnBg.color = new Color(tc.r * 0.30f, tc.g * 0.30f, tc.b * 0.38f, 1f);
-            var btn = btnGo.AddComponent<Button>();
-            var bc = btn.colors;
-            bc.normalColor      = new Color(tc.r * 0.30f, tc.g * 0.30f, tc.b * 0.38f, 1f);
-            bc.highlightedColor = new Color(tc.r * 0.55f, tc.g * 0.55f, tc.b * 0.65f, 1f);
-            bc.pressedColor     = new Color(tc.r * 0.80f, tc.g * 0.80f, tc.b * 0.88f, 1f);
-            btn.colors = bc;
-            var cap = offer;
-            btn.onClick.AddListener(() => onPick?.Invoke(cap, 0));
-
-            var lblGo = MakeAnchored("Lbl", btnGo.transform, Vector2.zero, Vector2.one);
-            var lblTmp = lblGo.AddComponent<TextMeshProUGUI>();
-            lblTmp.text = PickLabel(offer);
-            lblTmp.color = PickLabelColor(offer);
-            lblTmp.fontSize = 11; lblTmp.fontStyle = FontStyles.Bold;
-            lblTmp.alignment = TextAlignmentOptions.Center; lblTmp.raycastTarget = false;
-
-            // Hover detection
-            var hover = card.AddComponent<CardHover>();
-            hover.Offer   = offer;
-            hover.OnEnter = OnCardHovered;
-            hover.OnExit  = ShowTooltipDefault;
-
-            cards.Add(card);
-        }
-
-        // ── Replace mode card ────────────────────────────────────
-
-        private GameObject BuildReplaceCard(SkillData skill, Action<SkillData> onReplace)
-        {
-            Color tc = TierColor(skill.tier);
-            var card = MakeRect("RepCard_" + skill.skillName, cardContainer);
-            card.AddComponent<LayoutElement>();
-            var cardImage = card.AddComponent<Image>();
-            cardImage.sprite = RimaUITheme.SmallPanelFrame;
-            cardImage.color = new Color(1f, 1f, 1f, 0.95f);
-
-            MakeAnchored("Strip", card.transform, new Vector2(0f, 0.93f), Vector2.one)
-                .AddComponent<Image>().color = tc;
-
-            var nameGo = MakeAnchored("Name", card.transform, new Vector2(0.04f, 0.55f), new Vector2(0.96f, 0.92f));
-            var nTmp = nameGo.AddComponent<TextMeshProUGUI>();
-            nTmp.text = skill.skillName.ToUpper(); nTmp.fontSize = 11;
-            nTmp.fontStyle = FontStyles.Bold; nTmp.color = Color.white;
-            nTmp.alignment = TextAlignmentOptions.Center;
-            nTmp.enableWordWrapping = true; nTmp.raycastTarget = false;
-
-            var descGo = MakeAnchored("Desc", card.transform, new Vector2(0.04f, 0.18f), new Vector2(0.96f, 0.54f));
-            var dTmp = descGo.AddComponent<TextMeshProUGUI>();
-            dTmp.text = skill.description; dTmp.fontSize = 9;
-            dTmp.color = new Color(0.65f, 0.68f, 0.80f);
-            dTmp.alignment = TextAlignmentOptions.Center;
-            dTmp.enableWordWrapping = true; dTmp.raycastTarget = false;
-
-            var btnGo = MakeAnchored("Btn", card.transform, new Vector2(0.06f, 0.03f), new Vector2(0.94f, 0.15f));
-            btnGo.AddComponent<Image>().color = new Color(0.38f, 0.07f, 0.07f, 0.95f);
-            var btn = btnGo.AddComponent<Button>();
-            var bc = btn.colors;
-            bc.normalColor      = new Color(0.38f, 0.07f, 0.07f, 0.95f);
-            bc.highlightedColor = new Color(0.65f, 0.12f, 0.12f, 1f);
-            bc.pressedColor     = new Color(0.85f, 0.18f, 0.18f, 1f);
-            btn.colors = bc;
-            var cap = skill;
-            btn.onClick.AddListener(() => { onReplace?.Invoke(cap); Hide(); });
-
-            var lblGo = MakeAnchored("Lbl", btnGo.transform, Vector2.zero, Vector2.one);
-            var lTmp = lblGo.AddComponent<TextMeshProUGUI>();
-            lTmp.text = "ÇIKAR"; lTmp.fontSize = 11;
-            lTmp.fontStyle = FontStyles.Bold;
-            lTmp.color = new Color(0.95f, 0.62f, 0.62f);
-            lTmp.alignment = TextAlignmentOptions.Center; lTmp.raycastTarget = false;
-
-            // Hover
-            var hover = card.AddComponent<CardHover>();
-            hover.Offer   = RewardOffer.FromSkill(skill);
-            hover.OnEnter = OnCardHovered;
-            hover.OnExit  = ShowTooltipDefault;
-
-            return card;
-        }
-
-        // ── Tooltip ──────────────────────────────────────────────
-
-        private void OnCardHovered(RewardOffer offer)
-        {
-            if (tooltipPanel == null) return;
-            tooltipPanel.SetActive(true);
-
-            Color tc = TypeColor(offer);
-
-            if (tooltipStrip != null)  tooltipStrip.color = tc;
-            if (tooltipName  != null)
+            // Select button
+            var btn = card.GetComponentInChildren<Button>();
+            if (btn != null)
             {
-                tooltipName.text  = offer.DisplayName.ToUpper();
-                tooltipName.color = tc;
-            }
-            if (tooltipBadge != null)
-            {
-                tooltipBadge.text  = BadgeText(offer);
-                tooltipBadge.color = new Color(tc.r, tc.g, tc.b, 0.85f);
-            }
-            if (tooltipDesc != null)
-            {
-                tooltipDesc.text  = offer.Description;
-                tooltipDesc.color = new Color(0.75f, 0.78f, 0.90f);
-            }
-            if (tooltipStats != null)
-            {
-                string stats = "";
-                if (offer.type == RewardType.Skill && offer.skill != null && !offer.skill.isPassive)
+                int idx = index;
+                var captured = offer;
+                btn.onClick.AddListener(() =>
                 {
-                    if (offer.skill.cooldown > 0) stats += $"CD: {offer.skill.cooldown}s";
-                    if (offer.skill.damage   > 0) stats += (stats.Length > 0 ? "   " : "") + $"Hasar: {offer.skill.damage}";
-                }
-                tooltipStats.text = stats;
-                tooltipStats.gameObject.SetActive(stats.Length > 0);
+                    onPick?.Invoke(captured, idx);
+                });
             }
+
+            // Tier chip
+            var chipGo = new GameObject("TierChip", typeof(RectTransform));
+            chipGo.transform.SetParent(card.transform, false);
+            var chipRt = chipGo.GetComponent<RectTransform>();
+            chipRt.anchorMin = new Vector2(0f, 1f);
+            chipRt.anchorMax = new Vector2(0f, 1f);
+            chipRt.pivot = new Vector2(0f, 1f);
+            chipRt.anchoredPosition = new Vector2(8f, -8f);
+            chipRt.sizeDelta = new Vector2(60f, 16f);
+
+            var chipImg = chipGo.AddComponent<Image>();
+            chipImg.color = tierColor;
+
+            var chipTxt = MakeTMP("ChipTxt", chipRt);
+            var ctr = chipTxt.GetComponent<RectTransform>();
+            ctr.anchorMin = Vector2.zero;
+            ctr.anchorMax = Vector2.one;
+            ctr.offsetMin = ctr.offsetMax = Vector2.zero;
+            chipTxt.text = tierTag;
+            chipTxt.fontSize = 7f;
+            chipTxt.fontStyle = FontStyles.Bold;
+            chipTxt.color = Color.white;
+            chipTxt.alignment = TextAlignmentOptions.Center;
         }
 
-        private void ShowTooltipDefault()
+        // ─── Shared Card Builder ────────────────────────────────────
+
+        private GameObject BuildSkillCard(string skillName, SkillTier tier, string description, int index, int total)
         {
-            if (tooltipPanel == null) return;
-            tooltipPanel.SetActive(true);
-            if (tooltipStrip  != null) tooltipStrip.color  = new Color(0.20f, 0.20f, 0.26f);
-            if (tooltipName   != null) { tooltipName.text  = "ÖDÜL DETAYI"; tooltipName.color = new Color(0.48f, 0.50f, 0.62f); }
-            if (tooltipBadge  != null)   tooltipBadge.text  = "";
-            if (tooltipDesc   != null) { tooltipDesc.text   = "Bir kartın üstüne gel — detaylar burada görünür."; tooltipDesc.color = new Color(0.38f, 0.40f, 0.50f); }
-            if (tooltipStats  != null) { tooltipStats.text  = ""; tooltipStats.gameObject.SetActive(false); }
+            var cardGo = new GameObject($"Card_{index}", typeof(RectTransform));
+            cardGo.transform.SetParent(cardContainer, false);
+            var rt = cardGo.GetComponent<RectTransform>();
+
+            // Position cards centered horizontally
+            float totalW = total * CardWidth + (total - 1) * CardGap;
+            float startX = -totalW / 2f + CardWidth / 2f;
+            float x = startX + index * (CardWidth + CardGap);
+
+            rt.anchoredPosition = new Vector2(x, -CardHeight); // start below (for slide-in)
+            rt.sizeDelta = new Vector2(CardWidth, CardHeight);
+
+            // Card background (dark stone)
+            var bgImg = cardGo.AddComponent<Image>();
+            bgImg.sprite = RimaUITheme.SmallPanelFrame;
+            bgImg.color = RimaUITheme.PanelTint;
+
+            // Icon placeholder (64x64 centered)
+            var iconGo = new GameObject("Icon", typeof(RectTransform));
+            iconGo.transform.SetParent(cardGo.transform, false);
+            var iconRt = iconGo.GetComponent<RectTransform>();
+            iconRt.anchorMin = new Vector2(0.5f, 1f);
+            iconRt.anchorMax = new Vector2(0.5f, 1f);
+            iconRt.pivot = new Vector2(0.5f, 1f);
+            iconRt.anchoredPosition = new Vector2(0f, -30f);
+            iconRt.sizeDelta = new Vector2(64f, 64f);
+
+            var iconImg = iconGo.AddComponent<Image>();
+            iconImg.color = new Color(0.15f, 0.15f, 0.2f, 0.8f); // placeholder
+            iconImg.raycastTarget = false;
+
+            // Skill name
+            var nameTmp = MakeTMP("Name", rt);
+            var nrt = nameTmp.GetComponent<RectTransform>();
+            nrt.anchorMin = new Vector2(0f, 1f);
+            nrt.anchorMax = new Vector2(1f, 1f);
+            nrt.pivot = new Vector2(0.5f, 1f);
+            nrt.anchoredPosition = new Vector2(0f, -100f);
+            nrt.sizeDelta = new Vector2(0f, 22f);
+            nameTmp.text = skillName?.ToUpperInvariant() ?? "???";
+            nameTmp.fontSize = 14f;
+            nameTmp.fontStyle = FontStyles.Bold;
+            nameTmp.color = Color.white;
+            nameTmp.alignment = TextAlignmentOptions.Center;
+
+            // Description
+            var descTmp = MakeTMP("Desc", rt);
+            var drt = descTmp.GetComponent<RectTransform>();
+            drt.anchorMin = new Vector2(0f, 1f);
+            drt.anchorMax = new Vector2(1f, 1f);
+            drt.pivot = new Vector2(0.5f, 1f);
+            drt.anchoredPosition = new Vector2(0f, -126f);
+            drt.sizeDelta = new Vector2(-16f, 60f);
+            descTmp.text = description ?? "";
+            descTmp.fontSize = 9f;
+            descTmp.color = new Color(0.7f, 0.75f, 0.8f, 0.9f);
+            descTmp.alignment = TextAlignmentOptions.Center;
+            descTmp.enableWordWrapping = true;
+
+            // Select button
+            var btnGo = new GameObject("SelectBtn", typeof(RectTransform));
+            btnGo.transform.SetParent(cardGo.transform, false);
+            var btnRt = btnGo.GetComponent<RectTransform>();
+            btnRt.anchorMin = new Vector2(0.5f, 0f);
+            btnRt.anchorMax = new Vector2(0.5f, 0f);
+            btnRt.pivot = new Vector2(0.5f, 0f);
+            btnRt.anchoredPosition = new Vector2(0f, 12f);
+            btnRt.sizeDelta = new Vector2(120f, 28f);
+
+            var btnImg = btnGo.AddComponent<Image>();
+            btnImg.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.3f);
+            btnGo.AddComponent<Button>();
+
+            var btnTxt = MakeTMP("BtnLabel", btnRt);
+            var btr = btnTxt.GetComponent<RectTransform>();
+            btr.anchorMin = Vector2.zero;
+            btr.anchorMax = Vector2.one;
+            btr.offsetMin = btr.offsetMax = Vector2.zero;
+            btnTxt.text = "SEC";
+            btnTxt.fontSize = 11f;
+            btnTxt.fontStyle = FontStyles.Bold;
+            btnTxt.color = Color.white;
+            btnTxt.alignment = TextAlignmentOptions.Center;
+
+            cards.Add(cardGo);
+
+            // Slide-in animation
+            StartCoroutine(SlideIn(rt, new Vector2(x, 0f), index));
+
+            return cardGo;
         }
 
-        private void BuildTooltipPanel(Transform parent)
+        // ─── Animations ─────────────────────────────────────────────
+
+        private IEnumerator SlideIn(RectTransform rt, Vector2 target, int index)
         {
-            // Right side: 74%–98% x, 10%–90% y
-            tooltipPanel = MakeAnchored("TooltipPanel", parent,
-                new Vector2(0.74f, 0.10f), new Vector2(0.98f, 0.90f));
-            var tooltipImage = tooltipPanel.AddComponent<Image>();
-            tooltipImage.sprite = RimaUITheme.SmallPanelFrame;
-            tooltipImage.color = new Color(1f, 1f, 1f, 0.92f);
+            // Stagger delay
+            float delay = index * StaggerDelay;
+            float elapsed = 0f;
+            while (elapsed < delay)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
 
-            // Top strip
-            var stripGo = MakeAnchored("Strip", tooltipPanel.transform,
-                new Vector2(0f, 0.96f), Vector2.one);
-            tooltipStrip = stripGo.AddComponent<Image>();
-            tooltipStrip.color = new Color(0.20f, 0.20f, 0.26f);
-
-            // Name (big)
-            var nameGo = MakeAnchored("Name", tooltipPanel.transform,
-                new Vector2(0.06f, 0.82f), new Vector2(0.94f, 0.95f));
-            tooltipName = nameGo.AddComponent<TextMeshProUGUI>();
-            tooltipName.fontSize = 16; tooltipName.fontStyle = FontStyles.Bold;
-            tooltipName.color = new Color(0.48f, 0.50f, 0.62f);
-            tooltipName.alignment = TextAlignmentOptions.Left;
-            tooltipName.enableWordWrapping = true; tooltipName.raycastTarget = false;
-
-            // Badge row
-            var badgeGo = MakeAnchored("Badge", tooltipPanel.transform,
-                new Vector2(0.06f, 0.75f), new Vector2(0.94f, 0.82f));
-            tooltipBadge = badgeGo.AddComponent<TextMeshProUGUI>();
-            tooltipBadge.fontSize = 9; tooltipBadge.fontStyle = FontStyles.Bold;
-            tooltipBadge.color = new Color(0.45f, 0.48f, 0.60f);
-            tooltipBadge.alignment = TextAlignmentOptions.Left;
-            tooltipBadge.raycastTarget = false;
-
-            // Separator
-            MakeAnchored("Sep", tooltipPanel.transform, new Vector2(0.04f, 0.742f), new Vector2(0.96f, 0.750f))
-                .AddComponent<Image>().color = new Color(0.28f, 0.28f, 0.34f, 0.80f);
-
-            // Description (20–74%)
-            var descGo = MakeAnchored("Desc", tooltipPanel.transform,
-                new Vector2(0.06f, 0.20f), new Vector2(0.94f, 0.74f));
-            tooltipDesc = descGo.AddComponent<TextMeshProUGUI>();
-            tooltipDesc.text = "Bir kartın üstüne gel — detaylar burada görünür.";
-            tooltipDesc.fontSize = 11;
-            tooltipDesc.color = new Color(0.38f, 0.40f, 0.50f);
-            tooltipDesc.alignment = TextAlignmentOptions.TopLeft;
-            tooltipDesc.enableWordWrapping = true; tooltipDesc.raycastTarget = false;
-
-            // Stats (bottom)
-            var statsGo = MakeAnchored("Stats", tooltipPanel.transform,
-                new Vector2(0.06f, 0.04f), new Vector2(0.94f, 0.19f));
-            tooltipStats = statsGo.AddComponent<TextMeshProUGUI>();
-            tooltipStats.fontSize = 10; tooltipStats.fontStyle = FontStyles.Bold;
-            tooltipStats.color = new Color(0.72f, 0.76f, 0.88f);
-            tooltipStats.alignment = TextAlignmentOptions.BottomLeft;
-            tooltipStats.raycastTarget = false;
+            Vector2 start = rt.anchoredPosition;
+            float t = 0f;
+            while (t < SlideInDuration)
+            {
+                t += Time.unscaledDeltaTime;
+                float ease = 1f - Mathf.Pow(1f - Mathf.Clamp01(t / SlideInDuration), 3f); // ease-out cubic
+                rt.anchoredPosition = Vector2.Lerp(start, target, ease);
+                yield return null;
+            }
+            rt.anchoredPosition = target;
         }
 
-        // ── Panel / container helpers ────────────────────────────
-
-        private void SetTitle(string text)
-        {
-            var ex = panel?.transform.Find("Title");
-            if (ex != null) { ex.GetComponent<TextMeshProUGUI>().text = text; return; }
-
-            var go = MakeAnchored("Title", panel.transform, new Vector2(0.02f, 0.87f), new Vector2(0.72f, 0.97f));
-            var tmp = go.AddComponent<TextMeshProUGUI>();
-            tmp.text = text; tmp.fontSize = 21; tmp.fontStyle = FontStyles.Bold;
-            tmp.color = new Color(0.90f, 0.92f, 1f);
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.enableWordWrapping = true; tmp.raycastTarget = false;
-        }
-
-        private void SetSubtitle(string text)
-        {
-            var ex = panel?.transform.Find("Subtitle");
-            if (ex != null) { ex.GetComponent<TextMeshProUGUI>().text = text; return; }
-
-            var go = MakeAnchored("Subtitle", panel.transform, new Vector2(0.02f, 0.81f), new Vector2(0.72f, 0.88f));
-            var tmp = go.AddComponent<TextMeshProUGUI>();
-            tmp.text = text; tmp.fontSize = 10;
-            tmp.color = new Color(0.42f, 0.44f, 0.56f);
-            tmp.alignment = TextAlignmentOptions.Center; tmp.raycastTarget = false;
-        }
-
-        private void BuildRuntimePanel()
-        {
-            var canvas = GetComponentInParent<Canvas>() ?? FindObjectOfType<Canvas>();
-            if (canvas == null) return;
-
-            panel = new GameObject("RewardPanel", typeof(RectTransform));
-            panel.transform.SetParent(canvas.transform, false);
-            var rt = panel.GetComponent<RectTransform>();
-            rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
-            rt.offsetMin = rt.offsetMax = Vector2.zero;
-            var bg = panel.AddComponent<Image>();
-            bg.sprite = RimaUITheme.MenuDungeonBackground;
-            bg.color = new Color(0.70f, 0.78f, 0.82f, 0.95f);
-            bg.preserveAspect = true;
-
-            MakeAnchored("Shade", panel.transform, Vector2.zero, Vector2.one)
-                .AddComponent<Image>().color = new Color(0f, 0f, 0f, 0.58f);
-        }
-
-        private static Transform BuildCardContainer(Transform parent)
-        {
-            var go = new GameObject("CardContainer", typeof(RectTransform));
-            go.transform.SetParent(parent, false);
-            var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = new Vector2(0.12f, 0.22f);
-            rt.anchorMax = new Vector2(0.68f, 0.72f);
-            rt.offsetMin = rt.offsetMax = Vector2.zero;
-            var hg = go.AddComponent<HorizontalLayoutGroup>();
-            hg.spacing               = 16;
-            hg.childAlignment        = TextAnchor.MiddleCenter;
-            hg.childForceExpandWidth = true;
-            hg.childForceExpandHeight = true;
-            hg.padding = new RectOffset(6, 6, 0, 0);
-            return go.transform;
-        }
+        // ─── Helpers ────────────────────────────────────────────────
 
         private void ClearCards()
         {
-            foreach (var c in cards) if (c) Destroy(c);
+            foreach (var c in cards)
+                if (c != null) Destroy(c);
             cards.Clear();
-            if (cardContainer != null)
-                foreach (Transform ch in cardContainer) Destroy(ch.gameObject);
         }
 
-        // ── UI Utility ───────────────────────────────────────────
+        private Color TierColor(RewardOffer offer)
+        {
+            if (offer.type == RewardType.Gold) return RimaUITheme.Gold;
+            if (offer.type == RewardType.Heal) return new Color(0.28f, 0.78f, 0.45f);
+            if (offer.skill == null) return RimaUITheme.TierCommon;
 
-        private static GameObject MakeRect(string name, Transform parent)
+            return offer.skill.tier switch
+            {
+                SkillTier.Common    => RimaUITheme.TierCommon,
+                SkillTier.Rare      => RimaUITheme.TierRare,
+                SkillTier.Epic      => RimaUITheme.TierEpic,
+                SkillTier.Legendary => RimaUITheme.TierLegendary,
+                _                   => RimaUITheme.TierCommon
+            };
+        }
+
+        private static TextMeshProUGUI MakeTMP(string name, RectTransform parent)
         {
             var go = new GameObject(name, typeof(RectTransform));
             go.transform.SetParent(parent, false);
-            return go;
-        }
-
-        private static GameObject MakeAnchored(string name, Transform parent,
-                                                Vector2 ancMin, Vector2 ancMax)
-        {
-            var go = new GameObject(name, typeof(RectTransform));
-            go.transform.SetParent(parent, false);
-            var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = ancMin; rt.anchorMax = ancMax;
-            rt.offsetMin = rt.offsetMax = Vector2.zero;
-            return go;
-        }
-
-        // ── Color helpers ────────────────────────────────────────
-
-        private Color TypeColor(RewardOffer offer) => offer.type switch
-        {
-            RewardType.Gold => goldColor,
-            RewardType.Heal => healColor,
-            _               => TierColor(offer.Tier)
-        };
-
-        private Color TierColor(SkillTier t) => t switch
-        {
-            SkillTier.Rare      => rareColor,
-            SkillTier.Epic      => epicColor,
-            SkillTier.Mythic    => mythicColor,
-            SkillTier.Legendary => legendaryColor,
-            _                   => commonColor,
-        };
-
-        private static Color CardBg(Color tc) =>
-            new Color(tc.r * 0.09f, tc.g * 0.09f, tc.b * 0.13f, 0.98f);
-
-        // ── Label helpers ────────────────────────────────────────
-
-        private static string BadgeText(RewardOffer offer)
-        {
-            if (offer.type == RewardType.Gold) return "PARA ÖDÜLÜ";
-            if (offer.type == RewardType.Heal) return "İYİLEŞME";
-
-            string passive = offer.IsPassive ? "PASİF  ·  " : "AKTİF  ·  ";
-            string tier    = offer.Tier.ToString().ToUpper();
-            string cls     = offer.ClassType != ClassType.None
-                ? "  ·  " + offer.ClassType.ToString().ToUpper()
-                : "  ·  NEUTRAL";
-            return passive + tier + cls;
-        }
-
-        private static string PickLabel(RewardOffer offer)
-        {
-            if (offer.type != RewardType.Skill) return "AL";
-            if (!offer.IsPassive) return "AL";
-            int lvl = DraftManager.GetPassiveLevel(offer.skill.skillName);
-            return lvl > 0 ? $"YÜKSELT ({lvl}/{PassiveBase.MaxLevel})" : "AL";
-        }
-
-        private static Color PickLabelColor(RewardOffer offer)
-        {
-            if (offer.type != RewardType.Skill || !offer.IsPassive) return Color.white;
-            int lvl = DraftManager.GetPassiveLevel(offer.skill.skillName);
-            return lvl > 0 ? new Color(0.95f, 0.80f, 0.25f) : Color.white;
-        }
-
-        // ── CardHover nested component ───────────────────────────
-
-        private class CardHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
-        {
-            public RewardOffer     Offer;
-            public Action<RewardOffer> OnEnter;
-            public Action          OnExit;
-
-            public void OnPointerEnter(PointerEventData e) => OnEnter?.Invoke(Offer);
-            public void OnPointerExit(PointerEventData e)  => OnExit?.Invoke();
+            var tmp = go.AddComponent<TextMeshProUGUI>();
+            tmp.raycastTarget = false;
+            return tmp;
         }
     }
 }

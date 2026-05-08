@@ -396,7 +396,7 @@ namespace RIMA
             float elapsed = 0f;
             while (elapsed < chainExplosionDelay)
             {
-                Debug.DrawRay(worldPos, Vector2.up * 0.5f, Color.magenta);
+                // Debug.DrawRay(worldPos, Vector2.up * 0.5f, Color.magenta); // removed: visible in play mode
                 elapsed += Time.deltaTime;
                 yield return null;
             }

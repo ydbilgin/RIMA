@@ -1,301 +1,312 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using TMPro;
 
 namespace RIMA
 {
     /// <summary>
-    /// C overlay — oyun durmaz, sol taraftan açılır.
+    /// TAB overlay — build overview panel.
+    /// Opened/closed exclusively by UIManager.
+    /// Full-screen dark overlay with class identity, active kit, expanded minimap, passives.
     /// </summary>
     public class CharacterSheetUI : MonoBehaviour
     {
         public static CharacterSheetUI Instance { get; private set; }
 
-        private GameObject panel;
-        private bool visible;
+        private CanvasGroup canvasGroup;
+        private bool isVisible;
 
-        // Content refs
-        private TextMeshProUGUI statsText;
-        private TextMeshProUGUI activeText;
-        private TextMeshProUGUI passiveText;
-        private TextMeshProUGUI ekolText;
-        private TextMeshProUGUI traitText;
+        // ── UI elements ──────────────────────────────────────────────
+        private GameObject panel;
+        private TextMeshProUGUI classNameLabel;
+        private TextMeshProUGUI classTaglineLabel;
+        private readonly List<TextMeshProUGUI> kitLabels = new List<TextMeshProUGUI>();
+        private readonly List<Image> synergyChips = new List<Image>();
+        private readonly List<TextMeshProUGUI> passiveLabels = new List<TextMeshProUGUI>();
+        private Image expandedMapBg;
+
+        // ── Layout constants ─────────────────────────────────────────
+        private const float ExpandedMapSize = 200f;
 
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
+
+            BuildOverlay();
+            Hide();
         }
 
-        private void Start() => BuildPanel();
-
-        private void Update()
+        private void OnDestroy()
         {
-            if (Keyboard.current != null &&
-                Keyboard.current.cKey.wasPressedThisFrame)
-                Toggle();
-
-            // Real-time CD update
-            if (visible && activeText != null)
-                RefreshActives();
+            if (Instance == this) Instance = null;
         }
 
-        public void Toggle()
+        // ─── Public API (called by UIManager) ───────────────────────
+
+        public void Show()
         {
-            visible = !visible;
-            if (panel != null) panel.SetActive(visible);
-            if (visible) Refresh();
+            isVisible = true;
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+            RefreshContent();
         }
 
-        // ── Build ────────────────────────────────────────────────
-
-        private void BuildPanel()
+        public void Hide()
         {
-            var canvas = FindObjectOfType<Canvas>();
-            if (canvas == null) return;
-
-            panel = MakeAnchored("CharSheet", canvas.transform,
-                new Vector2(0.015f, 0.08f), new Vector2(0.39f, 0.92f));
-            var panelImage = panel.AddComponent<Image>();
-            panelImage.sprite = RimaUITheme.SmallPanelFrame;
-            panelImage.color = new Color(1f, 1f, 1f, 0.95f);
-
-            // Header
-            var hdr = MakeAnchored("Header", panel.transform, new Vector2(0f, 0.94f), Vector2.one);
-            hdr.AddComponent<Image>().color = new Color(0.08f, 0.08f, 0.14f, 1f);
-            var hTmp = MakeAnchored("T", hdr.transform, Vector2.zero, Vector2.one).AddComponent<TextMeshProUGUI>();
-            hTmp.text = "BUILD CODEX  [C]"; hTmp.fontSize = 14; hTmp.fontStyle = FontStyles.Bold;
-            hTmp.color = RimaUITheme.TextPrimary; hTmp.alignment = TextAlignmentOptions.Center;
-            hTmp.raycastTarget = false;
-
-            // Layout: 2 columns, left narrower for stats+ekol, right wider for skills+passives+traits
-            // Left column (30%): Stats (top 60%) + Ekol (bottom 38%)
-            statsText = MakeColumn("STATE", new Vector2(0.035f, 0.68f), new Vector2(0.965f, 0.925f));
-            ekolText  = MakeColumn("PRIMARY / SECONDARY", new Vector2(0.035f, 0.49f), new Vector2(0.965f, 0.665f));
-
-            activeText  = MakeColumn("ACTIVE SKILLS", new Vector2(0.035f, 0.25f), new Vector2(0.965f, 0.475f));
-            passiveText = MakeColumn("PASSIVES / ECHOES", new Vector2(0.035f, 0.105f), new Vector2(0.965f, 0.235f));
-            traitText   = MakeColumn("ROUTE CONTEXT", new Vector2(0.035f, 0.02f), new Vector2(0.965f, 0.09f));
-
-            panel.SetActive(false);
+            isVisible = false;
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.interactable = false;
         }
 
-        private TextMeshProUGUI MakeColumn(string label, Vector2 min, Vector2 max)
+        // ─── Build ──────────────────────────────────────────────────
+
+        private void BuildOverlay()
         {
-            var col = MakeAnchored(label, panel.transform, min, max);
-            var colImage = col.AddComponent<Image>();
-            colImage.sprite = RimaUITheme.PromptFrame;
-            colImage.color = new Color(1f, 1f, 1f, 0.72f);
+            var root = GetComponent<RectTransform>();
+            // Full screen
+            root.anchorMin = Vector2.zero;
+            root.anchorMax = Vector2.one;
+            root.offsetMin = root.offsetMax = Vector2.zero;
 
-            // Column header
-            var hdr = MakeAnchored("Hdr", col.transform, new Vector2(0f, 0.90f), Vector2.one);
-            hdr.AddComponent<Image>().color = new Color(0.10f, 0.10f, 0.18f, 1f);
-            var ht = MakeAnchored("T", hdr.transform, Vector2.zero, Vector2.one).AddComponent<TextMeshProUGUI>();
-            ht.text = label; ht.fontSize = 9; ht.fontStyle = FontStyles.Bold;
-            ht.color = RimaUITheme.Cyan; ht.alignment = TextAlignmentOptions.Center;
-            ht.raycastTarget = false;
+            // Dark overlay bg
+            var bgImg = gameObject.GetComponent<Image>();
+            if (bgImg == null) bgImg = gameObject.AddComponent<Image>();
+            bgImg.color = RimaUITheme.OverlayDark;
+            bgImg.raycastTarget = true;
 
-            // Content text
-            var ct = MakeAnchored("Content", col.transform, new Vector2(0.04f, 0.02f), new Vector2(0.96f, 0.89f));
-            var tmp = ct.AddComponent<TextMeshProUGUI>();
-            tmp.fontSize = 10; tmp.color = RimaUITheme.TextPrimary;
-            tmp.alignment = TextAlignmentOptions.TopLeft; tmp.enableWordWrapping = true;
-            tmp.raycastTarget = false;
-            return tmp;
-        }
+            // ── Left panel: class identity + kit ─────────────────────
+            var leftPanel = MakeRect("LeftPanel", root);
+            leftPanel.anchorMin = new Vector2(0f, 0f);
+            leftPanel.anchorMax = new Vector2(0.45f, 1f);
+            leftPanel.offsetMin = new Vector2(40f, 40f);
+            leftPanel.offsetMax = new Vector2(0f, -40f);
 
-        // ── Refresh ──────────────────────────────────────────────
+            // Class name
+            classNameLabel = MakeTMP("ClassName", leftPanel);
+            var cnRt = classNameLabel.GetComponent<RectTransform>();
+            cnRt.anchorMin = new Vector2(0f, 1f);
+            cnRt.anchorMax = new Vector2(1f, 1f);
+            cnRt.pivot = new Vector2(0f, 1f);
+            cnRt.anchoredPosition = Vector2.zero;
+            cnRt.sizeDelta = new Vector2(0f, 32f);
+            classNameLabel.fontSize = 22f;
+            classNameLabel.fontStyle = FontStyles.Bold;
+            classNameLabel.color = RimaUITheme.Cyan;
 
-        private void Refresh()
-        {
-            RefreshStats();
-            RefreshActives();
-            RefreshPassives();
-            RefreshEkol();
-            RefreshTraits();
-        }
+            // Class tagline
+            classTaglineLabel = MakeTMP("ClassTagline", leftPanel);
+            var ctRt = classTaglineLabel.GetComponent<RectTransform>();
+            ctRt.anchorMin = new Vector2(0f, 1f);
+            ctRt.anchorMax = new Vector2(1f, 1f);
+            ctRt.pivot = new Vector2(0f, 1f);
+            ctRt.anchoredPosition = new Vector2(0f, -36f);
+            ctRt.sizeDelta = new Vector2(0f, 20f);
+            classTaglineLabel.fontSize = 11f;
+            classTaglineLabel.fontStyle = FontStyles.Italic;
+            classTaglineLabel.color = new Color(0.6f, 0.7f, 0.75f, 0.85f);
 
-        private void RefreshStats()
-        {
-            if (statsText == null) return;
-            var player = GameObject.FindGameObjectWithTag("Player");
-            if (player == null) { statsText.text = "—"; return; }
+            // Kit section header
+            var kitHeader = MakeTMP("KitHeader", leftPanel);
+            var khRt = kitHeader.GetComponent<RectTransform>();
+            khRt.anchorMin = new Vector2(0f, 1f);
+            khRt.anchorMax = new Vector2(1f, 1f);
+            khRt.pivot = new Vector2(0f, 1f);
+            khRt.anchoredPosition = new Vector2(0f, -70f);
+            khRt.sizeDelta = new Vector2(0f, 18f);
+            kitHeader.text = "ACTIVE KIT";
+            kitHeader.fontSize = 10f;
+            kitHeader.fontStyle = FontStyles.Bold;
+            kitHeader.color = RimaUITheme.Gold;
 
-            var hp   = player.GetComponent<Health>();
-            var rage = player.GetComponent<PlayerResourceBase>();
-            var pc   = player.GetComponent<PlayerController>();
-            var pa   = player.GetComponent<PlayerAttack>();
-
-            var sb = new System.Text.StringBuilder();
-
-            // HP & Rage
-            if (hp != null)
-                sb.AppendLine($"<color=#FF6B6B>HP:</color> {hp.CurrentHP} / {hp.MaxHP}");
-            if (rage != null)
-                sb.AppendLine($"<color=#FF9F43>Resource:</color> {rage.Current} / {rage.Max}");
-
-            sb.AppendLine();
-
-            // Bonuslar
-            if (pa != null)
+            // Kit slots (LMB, RMB, 1-5)
+            for (int i = 0; i < 7; i++)
             {
-                float dmgBonus = (pa.outgoingDamageMultiplier - 1f) * 100f;
-                sb.AppendLine($"<color=#FFA07A>Hasar:</color> +{dmgBonus:F0}%");
+                string label = i switch { 0 => "LMB", 1 => "RMB", _ => (i - 1).ToString() };
+                var kitTmp = MakeTMP($"Kit_{label}", leftPanel);
+                var kRt = kitTmp.GetComponent<RectTransform>();
+                kRt.anchorMin = new Vector2(0f, 1f);
+                kRt.anchorMax = new Vector2(1f, 1f);
+                kRt.pivot = new Vector2(0f, 1f);
+                kRt.anchoredPosition = new Vector2(0f, -92f - i * 18f);
+                kRt.sizeDelta = new Vector2(0f, 16f);
+                kitTmp.fontSize = 10f;
+                kitTmp.color = new Color(0.8f, 0.85f, 0.9f, 0.9f);
+                kitTmp.text = $"[{label}] —";
+                kitLabels.Add(kitTmp);
             }
 
-            sb.AppendLine($"<color=#87CEEB>CD Azalma:</color> 0%");
-            sb.AppendLine($"<color=#98D8C8>CC Direnci:</color> 0%");
+            // Synergy chips section
+            var synHeader = MakeTMP("SynergyHeader", leftPanel);
+            var shRt = synHeader.GetComponent<RectTransform>();
+            shRt.anchorMin = new Vector2(0f, 1f);
+            shRt.anchorMax = new Vector2(1f, 1f);
+            shRt.pivot = new Vector2(0f, 1f);
+            shRt.anchoredPosition = new Vector2(0f, -230f);
+            shRt.sizeDelta = new Vector2(0f, 18f);
+            synHeader.text = "SYNERGIES";
+            synHeader.fontSize = 10f;
+            synHeader.fontStyle = FontStyles.Bold;
+            synHeader.color = RimaUITheme.Gold;
 
-            if (pc != null)
-                sb.AppendLine($"<color=#F7DC6F>Hız:</color> {pc.MoveSpeed:F1}");
+            // ── Right panel: expanded minimap + recent rewards ───────
+            var rightPanel = MakeRect("RightPanel", root);
+            rightPanel.anchorMin = new Vector2(0.55f, 0f);
+            rightPanel.anchorMax = new Vector2(1f, 1f);
+            rightPanel.offsetMin = new Vector2(0f, 40f);
+            rightPanel.offsetMax = new Vector2(-40f, -40f);
 
-            sb.AppendLine();
-            ClassType primary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.Warblade;
-            ClassType secondary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.SecondaryClass : ClassType.None;
-            sb.AppendLine($"<color=#E74C3C>Class:</color> {primary}");
-            sb.AppendLine($"<color=#95A5A6>Secondary:</color> {secondary}");
+            // Expanded map background
+            var mapGo = new GameObject("ExpandedMap", typeof(RectTransform));
+            mapGo.transform.SetParent(rightPanel, false);
+            var mapRt = mapGo.GetComponent<RectTransform>();
+            mapRt.anchorMin = new Vector2(0.5f, 1f);
+            mapRt.anchorMax = new Vector2(0.5f, 1f);
+            mapRt.pivot = new Vector2(0.5f, 1f);
+            mapRt.anchoredPosition = Vector2.zero;
+            mapRt.sizeDelta = new Vector2(ExpandedMapSize, ExpandedMapSize);
 
-            statsText.text = sb.ToString();
+            expandedMapBg = mapGo.AddComponent<Image>();
+            expandedMapBg.color = RimaUITheme.MapFrame;
+            expandedMapBg.raycastTarget = false;
+
+            // Route label
+            var routeLabel = MakeTMP("RouteLabel", rightPanel);
+            var rlRt = routeLabel.GetComponent<RectTransform>();
+            rlRt.anchorMin = new Vector2(0f, 1f);
+            rlRt.anchorMax = new Vector2(1f, 1f);
+            rlRt.pivot = new Vector2(0.5f, 1f);
+            rlRt.anchoredPosition = new Vector2(0f, -ExpandedMapSize - 8f);
+            rlRt.sizeDelta = new Vector2(0f, 18f);
+            routeLabel.text = "DUNGEON ROUTE";
+            routeLabel.fontSize = 10f;
+            routeLabel.fontStyle = FontStyles.Bold;
+            routeLabel.color = RimaUITheme.Gold;
+            routeLabel.alignment = TextAlignmentOptions.Center;
+
+            // ── Bottom panel: active passives/echoes ─────────────────
+            var bottomPanel = MakeRect("BottomPanel", root);
+            bottomPanel.anchorMin = new Vector2(0f, 0f);
+            bottomPanel.anchorMax = new Vector2(1f, 0f);
+            bottomPanel.pivot = new Vector2(0.5f, 0f);
+            bottomPanel.anchoredPosition = Vector2.zero;
+            bottomPanel.sizeDelta = new Vector2(0f, 60f);
+            bottomPanel.offsetMin = new Vector2(40f, 10f);
+            bottomPanel.offsetMax = new Vector2(-40f, 0f);
+
+            var passHeader = MakeTMP("PassiveHeader", bottomPanel);
+            var phRt = passHeader.GetComponent<RectTransform>();
+            phRt.anchorMin = new Vector2(0f, 1f);
+            phRt.anchorMax = new Vector2(1f, 1f);
+            phRt.pivot = new Vector2(0f, 1f);
+            phRt.anchoredPosition = Vector2.zero;
+            phRt.sizeDelta = new Vector2(0f, 16f);
+            passHeader.text = "ACTIVE ECHOES";
+            passHeader.fontSize = 10f;
+            passHeader.fontStyle = FontStyles.Bold;
+            passHeader.color = RimaUITheme.Gold;
         }
 
-        private void RefreshActives()
+        // ─── Refresh ────────────────────────────────────────────────
+
+        private void RefreshContent()
         {
-            if (activeText == null) return;
-            var player = GameObject.FindGameObjectWithTag("Player");
-            string[] keys = { "Q", "E", "R", "F", "Z", "X" };
-            var sb = new System.Text.StringBuilder();
+            var pcm = PlayerClassManager.Instance;
+            ClassType primary = pcm != null ? pcm.PrimaryClass : ClassType.None;
 
-            for (int i = 0; i < 6; i++)
+            // Class name + tagline
+            if (classNameLabel != null)
             {
-                var skill = GetPlayerSlot(player, i, out int slotCount);
+                classNameLabel.text = primary != ClassType.None
+                    ? primary.ToString().ToUpperInvariant()
+                    : "NO CLASS";
+                classNameLabel.color = RimaUITheme.ClassAccent(primary);
+            }
 
-                if (i >= slotCount)
+            if (classTaglineLabel != null)
+            {
+                classTaglineLabel.text = primary switch
                 {
-                    sb.AppendLine($"<color=#555>[{keys[i]}]</color> <color=#777>KILITLI</color>");
-                }
-                else if (skill != null)
+                    ClassType.Warblade     => "Melee berserker — iron and fury",
+                    ClassType.Elementalist => "Elemental caster — fire, frost, lightning",
+                    ClassType.Ranger       => "Precision marksman — traps and volleys",
+                    ClassType.Shadowblade  => "Shadow assassin — stealth and burst",
+                    _ => ""
+                };
+            }
+
+            // Kit labels
+            RefreshKitLabels(primary);
+        }
+
+        private void RefreshKitLabels(ClassType primary)
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+
+            // Try to get active skills from controller
+            int count = 0;
+            System.Func<int, SkillBase> getter = null;
+
+            switch (primary)
+            {
+                case ClassType.Warblade:
+                    var wb = player.GetComponent<Warblade_SkillController>();
+                    if (wb != null) { count = wb.SlotCount; getter = wb.GetSlot; }
+                    break;
+                case ClassType.Elementalist:
+                    var el = player.GetComponent<Elementalist_SkillController>();
+                    if (el != null) { count = el.SlotCount; getter = el.GetSlot; }
+                    break;
+                case ClassType.Ranger:
+                    var rn = player.GetComponent<Ranger_SkillController>();
+                    if (rn != null) { count = rn.SlotCount; getter = rn.GetSlot; }
+                    break;
+                case ClassType.Shadowblade:
+                    var sb = player.GetComponent<Shadowblade_SkillController>();
+                    if (sb != null) { count = sb.SlotCount; getter = sb.GetSlot; }
+                    break;
+            }
+
+            string[] labels = { "LMB", "RMB", "1", "2", "3", "4", "5" };
+            for (int i = 0; i < kitLabels.Count; i++)
+            {
+                if (i < count && getter != null)
                 {
-                    string name = string.IsNullOrWhiteSpace(skill.skillName) ? skill.GetType().Name : skill.skillName;
-                    float cd = skill.RemainingCooldown;
-                    string cdText = cd > 0.1f ? $"<color=#FF6B6B>{cd:F1}s</color>" : "<color=#5FD35F>HAZIR</color>";
-                    sb.AppendLine($"<color=#FFF>[{keys[i]}]</color> {name}  {cdText}");
+                    var skill = getter(i);
+                    kitLabels[i].text = skill != null
+                        ? $"[{labels[i]}] {skill.skillName}"
+                        : $"[{labels[i]}] —";
                 }
                 else
                 {
-                    sb.AppendLine($"<color=#888>[{keys[i]}]</color> <color=#666>(boş)</color>");
+                    kitLabels[i].text = $"[{labels[i]}] —";
                 }
             }
-
-            activeText.text = sb.ToString();
         }
 
-        private void RefreshPassives()
-        {
-            if (passiveText == null) return;
-            if (DraftManager.Instance == null) { passiveText.text = "—"; return; }
+        // ─── Util ───────────────────────────────────────────────────
 
-            var db = SkillDatabase.Instance;
-            if (db == null) { passiveText.text = "—"; return; }
-
-            var sb = new System.Text.StringBuilder();
-            bool hasAny = false;
-
-            foreach (var s in db.GetAll())
-            {
-                if (!s.isPassive) continue;
-                int lvl = DraftManager.GetPassiveLevel(s.skillName);
-                if (lvl <= 0) continue;
-
-                hasAny = true;
-
-                // Seviye göstergesi: ● dolu, ○ boş
-                string dots = "";
-                for (int i = 1; i <= 3; i++)
-                    dots += i <= lvl ? "<color=#FFA07A>●</color> " : "<color=#444>○</color> ";
-
-                string maxTag = lvl == 3 ? " <color=#5FD35F>MAX</color>" : $" Lv{lvl}";
-                sb.AppendLine($"{s.skillName}  {dots}{maxTag}");
-            }
-
-            passiveText.text = hasAny ? sb.ToString() : "<color=#666>(pasif yok)</color>";
-        }
-
-        private void RefreshEkol()
-        {
-            if (ekolText == null) return;
-
-            ClassType primary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.Warblade;
-            var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"<color=#E74C3C>LMB:</color> {GetPrimaryVerb(primary)}");
-            sb.AppendLine($"<color=#3498DB>RMB:</color> {GetSecondaryVerb(primary)}");
-
-            ekolText.text = sb.ToString();
-        }
-
-        private void RefreshTraits()
-        {
-            if (traitText == null) return;
-
-            int room = RuntimeRoomManager.Instance != null ? RuntimeRoomManager.Instance.CurrentRoom : 0;
-            traitText.text = room > 0 ? $"ROOM {room} | near route only" : "route unknown";
-        }
-
-        private static SkillBase GetPlayerSlot(GameObject player, int index, out int slotCount)
-        {
-            slotCount = 4;
-            if (player == null) return null;
-            ClassType primary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.Warblade;
-            if (primary == ClassType.Elementalist)
-            {
-                var c = player.GetComponent<Elementalist_SkillController>();
-                slotCount = c != null ? c.SlotCount : 4;
-                return c != null ? c.GetSlot(index) : null;
-            }
-            if (primary == ClassType.Ranger)
-            {
-                var c = player.GetComponent<Ranger_SkillController>();
-                slotCount = c != null ? c.SlotCount : 4;
-                return c != null ? c.GetSlot(index) : null;
-            }
-            if (primary == ClassType.Shadowblade)
-            {
-                var c = player.GetComponent<Shadowblade_SkillController>();
-                slotCount = c != null ? c.SlotCount : 4;
-                return c != null ? c.GetSlot(index) : null;
-            }
-
-            var w = player.GetComponent<Warblade_SkillController>();
-            slotCount = w != null ? w.SlotCount : 4;
-            return w != null ? w.GetSlot(index) : null;
-        }
-
-        private static string GetPrimaryVerb(ClassType type) => type switch
-        {
-            ClassType.Elementalist => "Rift Bolt / elemental builder",
-            ClassType.Ranger => "Rift Arrow / precision line",
-            ClassType.Shadowblade => "Veil Strike / close burst",
-            _ => "Iron Combo / melee pressure",
-        };
-
-        private static string GetSecondaryVerb(ClassType type) => type switch
-        {
-            ClassType.Elementalist => "Switch element / Lightbreak setup",
-            ClassType.Ranger => "Roll / mark timing",
-            ClassType.Shadowblade => "Veil Flicker / reposition",
-            _ => "Rage outlet / guard break",
-        };
-
-        // ── Utility ──────────────────────────────────────────────
-
-        private static GameObject MakeAnchored(string name, Transform parent, Vector2 min, Vector2 max)
+        private static RectTransform MakeRect(string name, RectTransform parent)
         {
             var go = new GameObject(name, typeof(RectTransform));
             go.transform.SetParent(parent, false);
-            var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = min; rt.anchorMax = max;
-            rt.offsetMin = rt.offsetMax = Vector2.zero;
-            return go;
+            return go.GetComponent<RectTransform>();
+        }
+
+        private static TextMeshProUGUI MakeTMP(string name, RectTransform parent)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            var tmp = go.AddComponent<TextMeshProUGUI>();
+            tmp.raycastTarget = false;
+            return tmp;
         }
     }
 }
