@@ -36,6 +36,29 @@ namespace RIMA
 
         public bool IsCommitted => CommitTimer > 0f;
 
+        /// <summary>
+        /// Returns true if a dash is allowed. If within the cancel window, interrupts the commitment.
+        /// Returns false if mid-commit and past the cancel window (dash blocked).
+        /// </summary>
+        public bool TryCancelForDash()
+        {
+            if (!IsCommitted) return true;
+            if (basicAttackProfile == null) return true;
+
+            float totalCommit = basicAttackProfile.commitment;
+            if (totalCommit <= 0f) return true;
+
+            float progress = (totalCommit - CommitTimer) / totalCommit; // 0→1 during commit
+            float cancelWindow = basicAttackProfile.GetCancelWindow();
+
+            if (progress < cancelWindow)
+            {
+                CommitTimer = 0f;
+                return true;
+            }
+            return false;
+        }
+
         internal PlayerController Controller => controller;
 
         internal RageSystem Rage

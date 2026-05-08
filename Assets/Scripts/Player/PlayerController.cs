@@ -132,6 +132,9 @@ namespace RIMA
         {
             if (isDashing || dashCooldownTimer > 0f) return;
 
+            // Blocked if mid-commit and past the dash-cancel window
+            if (attack != null && !attack.TryCancelForDash()) return;
+
             if (DashMode == DashMode.TowardsMouse && mainCam != null)
             {
                 Vector2 mouseWorld = mainCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -146,6 +149,9 @@ namespace RIMA
             isDashing = true;
             dashTimer = dashDuration;
             dashCooldownTimer = dashCooldown;
+
+            // OnDash passive proc
+            CrossClassSkillManager.Instance?.OnDash();
 
             // NarrowPassage geçiş: dash sırasında Obstacle layer ile çakışmayı kapat
             if (activeNarrowPassages.Count > 0)

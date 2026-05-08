@@ -46,6 +46,23 @@ namespace RIMA
         public float rmbRadius = 2.2f;
         public float rmbCooldown = 1.5f;
 
+        [Header("Dash-Cancel")]
+        [Tooltip("-1 = use class default. 0 = not cancellable. 0-1 = cancel window fraction of commit duration.")]
+        public float cancelWindowFraction = -1f;
+
+        /// <summary>Returns the effective dash-cancel window (0-1). 0 = blocked during commitment.</summary>
+        public float GetCancelWindow()
+        {
+            if (cancelWindowFraction >= 0f) return cancelWindowFraction;
+            return classType switch
+            {
+                ClassType.Warblade or ClassType.Brawler    => 0.67f,
+                ClassType.Ranger or ClassType.Gunslinger   => 0.42f,
+                ClassType.Ravager or ClassType.Shadowblade => 0.20f,
+                _                                          => 0f,
+            };
+        }
+
         /// <summary>
         /// Factory: creates the correct behavior instance based on behaviorType.
         /// </summary>
