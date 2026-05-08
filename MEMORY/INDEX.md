@@ -23,6 +23,7 @@ Open a file ONLY when its keywords match the current task.
 - [feedback_basic_attack_combo_identity.md](feedback_basic_attack_combo_identity.md) -- WHEN: basic attack, LMB, RMB, combo, weapon speed, attack animation
 
 ## PixelLab
+- [feedback_pixellab_prompt_structure.md](feedback_pixellab_prompt_structure.md) -- WHEN: PixelLab prompt yazarken, animasyon, CHARACTER blok, SIZE LOCK
 - [pixellab_budget.md](pixellab_budget.md) -- WHEN: PixelLab budget, confirm_cost, batch
 - [pixellab_prompt_rules.md](pixellab_prompt_rules.md) -- WHEN: PixelLab prompt, boilerplate
 - [pixellab_sprites.md](pixellab_sprites.md) -- WHEN: sprite production, char_id, rotation
@@ -48,6 +49,8 @@ Open a file ONLY when its keywords match the current task.
 - [discord_pipeline.md](discord_pipeline.md) -- WHEN: Discord analysis, PixelLab research
 - [discord_monitoring_channels.md](discord_monitoring_channels.md) -- WHEN: Discord channel monitor
 - [discord_automation_risk.md](discord_automation_risk.md) -- WHEN: Discord automation, bot detection
+
+- [project_test_automation.md](project_test_automation.md) -- WHEN: test, otomasyon, contract, modular test, QC workflow, behavioral testing
 
 ## Add Memory
 Create MEMORY/<topic>.md with frontmatter, then add one line here.

@@ -1,15 +1,38 @@
 # CURRENT STATUS
-**2026-05-07 - S44 - Phase 1**
+**2026-05-08 - S45 - Phase 1 (Tile Pipeline + DungeonWorldBuilder)**
 
 ## Active Block
-- UI QC fix DONE — commit `8e7a5f0` PASS.
-- **F1 tiles imported** — commit `015839b`. 16×64px PNG → Assets/Art/Tiles/Act1/F1/. process_tiles.py pipeline kuruldu.
-- **ClearTilemaps.cs** — commit `4d46ce4`. Unity'de RIMA→Clear All Tilemap Tiles ile tüm tile yerleşimleri temizlenir.
-- **F2/F3/W1/W2 ChatGPT promptları HAZIR** — `STAGING/CHATGPT_PROMPT_FLOOR_TILES.md` (üretim bekliyor)
-- **Duvar köşe parçaları EKSİK** — W1/W2 düz panel; L-corner + end cap ChatGPT ile üretilecek.
-- **ART DIRECTION LOCKED** — `STAGING/ART_DIRECTION_MASTER.md` (2026-05-08). JVerbroucht tarzı.
-- Play Mode screenshot QA still OPEN.
-- cx dispatch syntax CONFIRMED: `Set-Location <proj>; $prompt | cx laurethgame exec -s danger-full-access -m gpt-5.5`
+
+### Tile Pipeline (2026-05-08)
+- **F2 sliced** → `Assets/Art/Tiles/Act1/F2/` (16 tile, 64×64). F2 tile 13-16 → prop/overlay kullan, Random Tile pool'a koyma.
+- **F3 sliced** → `Assets/Art/Tiles/Act1/F3/` (12 tile, 64×64). Zone isolation zorunlu — F1/F2 ile aynı pool'a girmesin.
+- **W1 ✅ DONE** (ChatGPT, commit 2026-05-08) → `STAGING/tiles_raw/style_anchor_W1_wall_PRIMARY.png`. PRIMARY style anchor for all ChatGPT tiles.
+- **W2 ✅ DONE** (ChatGPT, commit 2026-05-08) → slice via batch_tiles.ps1 → `Assets/Art/Tiles/Act1/W2/`
+- **OBW ✅ DONE** (ChatGPT, commit 2026-05-08) → slice via batch_tiles.ps1 → `Assets/Art/Tiles/Act1/OBW/`
+- **F3 ❌ REGEN PENDING** → Wrong size from ChatGPT (1254×1254, should 1024×1536). Regeneration: `STAGING/CHATGPT_REMAINING_TILES.md` PROMPT 1
+- **Trans F1→F2 ❌ REGEN PENDING** → Wrong size (1774×887). Regeneration: `STAGING/CHATGPT_REMAINING_TILES.md` PROMPT 2
+- **Trans F2→F3 ❌ REGEN PENDING** → Wrong size (1774×887). Regeneration: `STAGING/CHATGPT_REMAINING_TILES.md` PROMPT 3
+
+### Tile Grid Math Kuralı (LOCKED)
+- Floor 64×64: 1024×1024, 4×N grid — N sadece 1/2/4/8 (1024÷N integer olmalı, 3 YASAK)
+- Wall 64×96: 1024×1536, 4×4 grid → 256×384 hücre
+- Tall wall 64×128: 1024×1536, 4×3 grid → 256×512 hücre
+- Codex $imagegen: tile için KULLANMA — smooth 3D render üretiyor. ChatGPT > Codex for pixel art.
+- $imagegen syntax: `$imagegen "prompt"` (Codex task içinde). Pixel art için "pixel clusters min 4px, no gradients" ekle.
+
+### WallOcclusionFader (Hades stili saydamlaşma)
+- `Assets/Scripts/Core/WallOcclusionFader.cs` → KOD HAZIR, değişiklik yok.
+- Unity'de yapılacak: Wall Tilemap → Add Component → WallOcclusionFader. fadeRadius 2.2, minAlpha 0.38, fadeSpeed 10.
+
+### Sıradaki Tile Üretimleri
+1. **W1 ✅** (DONE, `style_anchor_W1_wall_PRIMARY.png`)
+2. **W2 ✅** (DONE, awaiting batch_tiles.ps1)
+3. **OBW ✅** (DONE, awaiting batch_tiles.ps1)
+4. **F3 + Trans tiles ❌** (regen via CHATGPT_REMAINING_TILES.md — size constraints)
+
+### Act Tile Progression (LOCKED — memory'de tam plan var)
+- 4 act × derinlik bandı tile seti planı → `MEMORY/project_act_tile_progression.md`
+- Act 1: F1(temiz)→F2(çatlak)→F3(yosun)→F4-rift(yapılmadı), zona göre ayrı Random Tile pool
 
 ### Skill Files (RAW — old Q/E/R format, will be revised)
 - 10-class wrongly-generated roster (Ironclad/Arcanist/Riftstalker/Vanguard/Specter): ON HOLD
@@ -52,7 +75,41 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - OnDash Passive Proc: 4th passive type added to taxonomy. Shadowblade/Ronin primary. CrossClassEffectType.OnDash enum + CrossClassSkillManager.OnDash() method. Complexity S.
 - Boss Posture/Stagger: universal meter, break window 3s +50% dmg. Pairs with Fracture Echoes. StatusEffectSystem coordination required before implementation. Complexity L.
 
+### DungeonWorldBuilder (Architecture LOCKED — Codex in progress, laurethgame)
+- Phase 1: `LayoutKind` public + `PaintTemplateAtOffset` on `LargeDungeonMapPainterBase`
+- Phase 2: New SOs + builder — `DungeonWorldBuilder.cs`, `RoomTemplate.cs`, `DepthBandTileSet.cs`
+- Phase 3: `RuntimeRoomManager.StartRoom` rewired → `worldBuilder.GetRoomBounds`
+- Grid: lane×roomStride.x, depth×roomStride.y; corridorWidth=8; depth bands 0-2→F1, 3-5→F2, 6+→F3
+- All 13 DungeonGraph nodes painted once at build time; `LargeDungeonMapPainterBase` = single-room renderer wrapped by builder
+- New files: `Assets/Scripts/Systems/Map/DungeonWorldBuilder.cs`, `RoomTemplate.cs`, `DepthBandTileSet.cs`
+
+### HUD Pixel Art Assets (ChatGPT — planned, after tile batch)
+- Skill slot frames: LMB/RMB 72×72, Q-4/5 56×56, stone-carved, cyan rift glyph inlay
+- HP bar frame: 220×32px gothic stone arch; Resource bar: same style, class-agnostic crystal icon
+- Minimap border: 128×128px stone/parchment; Room name banner: 320×36px stone tablet
+- Palette: #1A1A2E/#2D2D4E/#00FFCC/#C8A96E
+
 ### Code (DONE this session)
+
+#### batch_tiles.ps1 (commit 9e647c7)
+- `STAGING/batch_tiles.ps1` — batch process W1/W2/OBW/F3/Trans tiles via single command
+- Slices generated sheets (1024×1536 or 1024×1024) into per-tile 64×64 or 64×96 via `process_tiles.py`
+- Output: `Assets/Art/Tiles/Act1/{W1,W2,OBW,F3,Trans_*}/`
+
+#### F1TileSetup editor tool (commit ac426bd)
+- `Assets/Editor/DevTools/F1TileSetup.cs` — RIMA/Setup F1 Tiles menu item
+- Loads 16×64px F1 floor tiles from `Assets/Art/Tiles/Act1/F1/` → `DungeonLayerManager.f1FloorTiles` TileBase[]
+
+#### DungeonWorldBuilder — Phase 1-3 Complete (commits 670fce3, e8f13dd, 1ab62a3)
+- **Phase 1** (commit 670fce3): `LargeDungeonMapPainterBase.LayoutKind` public, `PaintTemplateAtOffset(LayoutKind, Vector3Int)` added
+- **Phase 2** (commit e8f13dd): New SOs — `RoomTemplate.cs`, `DepthBandTileSet.cs`; `DungeonWorldBuilder.cs` (main builder)
+- **Phase 3** (commit 1ab62a3): `RuntimeRoomManager.StartRoom()` → `worldBuilder.GetRoomBounds()` wired (null-guarded)
+- Grid: lane×roomStride.x, depth×roomStride.y; corridorWidth=8; depth bands 0-2→F1, 3-5→F2, 6+→F3
+- **GAP: DepthBandTileSet painter hookup pending** — depth-band tile swap not yet wired to painter
+
+#### tiles_raw cleanup (commit a86d1c3)
+- Style anchor files renamed for clarity: `style_anchor_W1_wall_PRIMARY.png`, `style_anchor_W2_wall.png`, etc.
+- Old ARCHIVE/ files removed from staging area
 
 #### Contract Test Suite (Codex -- task addf8a5cda39113d9)
 - 10 new contract test files: TimeScaleContract, BootstrapContract, CombatContract, UIFlowContract + EditMode/PlayMode test classes
@@ -81,6 +138,16 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Maximize on Play enabled via EditorPrefs on every project open
 - MenuItem: RIMA/Setup Game View (1080p + Maximize)
 - File: Assets/Editor/DevTools/GameViewSetup.cs
+
+#### batch_tiles.ps1 (Codex -- laurethayday, dispatched)
+- `STAGING/batch_tiles.ps1` — process W1/W2/F3/OBW in one shot via `process_tiles.py`
+
+#### HUD sprite cleanup (Codex -- laurethgame, dispatched)
+- Remove last sprite asset ref: `HUDController.cs ~385` `bgImg.sprite = RimaUITheme.PromptFrame`
+- Makes HUD fully procedural (no PNG dependencies)
+
+#### F1TileSetup editor tool (Codex -- laurethgame, dispatched)
+- `F1TileSetup.cs` editor menu item: loads F1 tiles from `Assets/Art/Tiles/Act1/F1/` → `DungeonLayerManager.f1FloorTiles`
 
 - BasicAttackProfile infrastructure: commit 280a637 (laurethayday) -- 4 files created
 - BuildFloorMask rect-first refactor: commit d9f08bd (laurethgame) -- all 16 layouts rewritten, architectural masonry aesthetic
@@ -123,6 +190,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ### Doc (DONE)
 - Skill pool alternatives (10 classes): commit 048a14c -- TASARIM/SKILL_POOL_ALTERNATIVES_2026-05-06.md
+- Dungeon Lighting + Generation Research (commit f457edb): `STAGING/DUNGEON_LIGHTING_GENERATION_RESEARCH.md` — physical lighting + dungeon gen synthesis
 
 ## Working Rules
 - Record concrete results and unresolved complaints here.
@@ -155,12 +223,14 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ## Next Priorities
 ### Immediate next session:
-1. **ChatGPT: F2/F3/W1/W2 + W1-corner + W1-endcap üret** — STAGING/CHATGPT_PROMPT_FLOOR_TILES.md + ART_DIRECTION_MASTER.md
-2. **process_tiles.py ile import** — her batch için aynı pipeline
-3. **Old asset pack re-master** — kristal, meşale, moloz, shrine → JVerbroucht pixel art stilinde ChatGPT ile yeniden üret
-4. **Dash-Cancel** (Sonnet, Antigravity) — BasicAttackProfile.cancelWindowFraction + PlayerController event
-5. **OnDash Proc** (Sonnet, Antigravity) — CrossClassEffectType.OnDash + HandleDash call site
-6. Boss Posture system -- after StatusEffectSystem unstaged changes resolved
+1. **ChatGPT: F3 + Trans F1→F2 + Trans F2→F3 regen** — `STAGING/CHATGPT_REMAINING_TILES.md` (size constraints)
+2. **batch_tiles.ps1 run** — process W1/W2/OBW sheets → `Assets/Art/Tiles/Act1/{W1,W2,OBW}/`
+3. **DungeonWorldBuilder DepthBandTileSet hookup** — wire depth-band tile swap to painter
+4. **DUNGEON_LIGHTING_GENERATION_RESEARCH.md review** → design session → PropSpec implementation
+5. **WallOcclusionFader attach** → Wall Tilemap + Add Component (Unity side)
+6. **Dash-Cancel** (Sonnet, Antigravity) — BasicAttackProfile.cancelWindowFraction + PlayerController event
+7. **OnDash Proc** (Sonnet, Antigravity) — CrossClassEffectType.OnDash + HandleDash call site
+8. Boss Posture system -- after StatusEffectSystem unstaged changes resolved
 
 ### Backlog:
 - BasicAttack .asset'lerini Inspector'da PlayerAttack'e assign et
@@ -186,8 +256,9 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - God objects (LargeDungeonMapPainterBase, RuntimeRoomManager) -- technical debt, Phase 1 acceptable.
 - PixelLab 127px bug (128px outputs 127px) -- QC during floor test.
 - Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
-- F1 tile sheet Unity'de henüz import edilmedi + RuntimeRoomManager'a bağlanmadı (Codex task OPEN).
 - ChestUI.cs:43,50 + ForgeUI.cs:72,93,100 — direct timeScale writes, pre-existing, need UIManager routing (follow-up)
+- **DungeonWorldBuilder DepthBandTileSet hookup PENDING** — depth-band tile swap not yet wired to painter; currently uses Inspector tiles
+- **F3 + 2 transition tiles REGEN PENDING** — ChatGPT gave wrong dimensions; regeneration via CHATGPT_REMAINING_TILES.md
 
 ## Key Pointers
 - UIManager.cs: `Assets/Scripts/UI/UIManager.cs` -- singleton, owns all timeScale + overlay state
@@ -206,7 +277,14 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Skill pools 10-class (LOCKED): `TASARIM/SKILL_POOLS_10CLASS_2026-05-07.md`
 - Undercroft connected tile prompts: `STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md`
 - ChatGPT floor tile prompt (LOCKED): `STAGING/CHATGPT_PROMPT_FLOOR_TILES.md`
-- DungeonLayerManager.cs (3-katman sistem, Codex): `Assets/Scripts/Systems/Map/DungeonLayerManager.cs`
+- ChatGPT batch prompts (wall+floor): `STAGING/CHATGPT_BATCH_PROMPTS.md`
+- **ChatGPT remaining tiles (F3 + transitions)**: `STAGING/CHATGPT_REMAINING_TILES.md` — 3 prompts, size constraints
+- **batch_tiles.ps1**: `STAGING/batch_tiles.ps1` — batch slice W1/W2/OBW/F3 sheets
+- **Dungeon lighting research**: `STAGING/DUNGEON_LIGHTING_GENERATION_RESEARCH.md` — physical lighting + dungeon gen synthesis
+- **W1 style anchor**: `STAGING/tiles_raw/style_anchor_W1_wall_PRIMARY.png`
+- DungeonWorldBuilder (Phase 1-3 DONE, hookup PENDING): `Assets/Scripts/Systems/Map/DungeonWorldBuilder.cs`
+- DungeonLayerManager.cs (3-katman sistem): `Assets/Scripts/Systems/Map/DungeonLayerManager.cs`
+- F1TileSetup editor tool (DONE): `Assets/Editor/DevTools/F1TileSetup.cs`
 - F1 floor tile PixelLab prompt (WORKING): `STAGING/PIXELLAB_PROMPT_F1_FLOOR_TILES.md`
 - F1 tile sheet source: `C:\Users\ydbil\Downloads\pixellab-Seamless-isometric-pixel-art-d-1778183060391.png` → target: `Assets/Art/Tiles/Act1/f1variants.png`
 - Warblade animation guide (step-by-step): `STAGING/PIXELLAB_PRODUCTION_GUIDE_WARBLADE_ANIMATIONS.md`
