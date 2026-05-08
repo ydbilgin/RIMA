@@ -60,8 +60,10 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ## NotebookLM (NEW - 2026-05-06)
 - Notebook: RIMA Game Design Knowledge Base (ID: ed3c8952-417c-4988-84a7-425d25ba3b08)
-- 89 sources total (80 bootstrap + 9 updates: RULES/AGENTS/CLAUDE/CODEX + 5 MEMORY updates)
-- Sync tag: nlm-sync-20260508 (CURRENT_STATUS + project_chatgpt_canvas_fix)
+- 111 sources total (80 bootstrap + 31 updates: S45 full batch sync 2026-05-08 23:40)
+- Sync tag: nlm-sync-20260508-S45 (22 files: TASARIM/MEMORY/STAGING/CLAUDE/RULES/CURRENT_STATUS)
+- Last sync: 2026-05-08 23:40 | Last commit: 9838a25 (2026-05-08)
+- Sync currency: commit date = content age; sync date = NLM age. Stop hook shows both.
 - HARD RULE: Claude never reads files except CURRENT_STATUS.md -- all context via NotebookLM query
 - Detail: MEMORY/notebooklm_workflow.md
 
@@ -102,12 +104,13 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ### Code (DONE this session)
 
-#### /nlm ve /nlm-sync skill'leri (2026-05-08)
-- `/query` skill silindi (outdated, TASARIM dosyalarini direkt okuyordu)
+#### /nlm, /nlm-sync, /commit skill'leri (2026-05-08)
+- `/query` skill silindi (outdated)
 - `/nlm "soru"` -> NotebookLM query (`.claude/commands/nlm.md`)
-- `/nlm-sync path/to/file.md` -> NLM'e kaynak ekle (`.claude/commands/nlm-sync.md`)
-- CLAUDE.md guncellendi: `/query` -> `/nlm`
-- **nlm-sync parallel fix (2026-05-08)**: $1/$2 template bug çözüldü — fonksiyon argümanı yerine inline subshell + NODE_FILTER string + `cut -c4-`. Paralel çalışıyor (22 dosya aynı anda). Global template: `~/.claude/commands/nlm-sync.md` (NLM_NOTEBOOK_ID env var ile proje-özel yapılandır).
+- `/nlm-sync` -> NLM batch/single sync (`.claude/commands/nlm-sync.md`). Global template rename: `~/.claude/commands/nlm-sync-template.md` (artık çakışma yok)
+- `/commit` -> uncommitted dosyaları gruplara ayırıp commit et (`.claude/commands/commit.md`). `/commit` preview, `/commit --yes` direkt commit.
+- **NLM sync state tracking**: `.claude/nlm_sync_state.txt` — her sync sonrası content hash kaydedilir. Stop hook hash karşılaştırır, sadece gerçekten sync edilmemiş dosyaları gösterir.
+- **Stop hook timestamp**: her session sonunda `[NLM] sync:MM/DD HH:MM | commit:MM/DD HH:MM` gösterir. Commit = içerik güncelliği, sync = NLM güncelliği.
 
 #### room_authoring.md spec (2026-05-08)
 - `TASARIM/room_authoring.md` -- Prefab-per-room kontrat, RoomConfig schema, render contract checklist, migration plani
