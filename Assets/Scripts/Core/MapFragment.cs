@@ -14,7 +14,7 @@ namespace RIMA
     ///   - SpriteRenderer ekle (placeholder veya gerçek sprite)
     ///   - CircleCollider2D (isTrigger = true)   ← proximity detect
     ///   - Bu script
-    ///   - Prefab olarak kaydet → RuntimeRoomManager.mapFragmentPrefab'a ata
+    ///   - Prefab olarak kaydet → LegacyRuntimeRoomManager.mapFragmentPrefab'a ata
     /// </summary>
     [RequireComponent(typeof(CircleCollider2D))]
     public class MapFragment : MonoBehaviour
@@ -25,7 +25,7 @@ namespace RIMA
         [SerializeField] private float bobSpeed       = 2.5f;
         [SerializeField] private float glowPulseSpeed = 3f;
 
-        /// <summary>RuntimeRoomManager tarafından set edilir: 1 = 1 adım, 2 = 2 adım.</summary>
+        /// <summary>LegacyRuntimeRoomManager tarafından set edilir: 1 = 1 adım, 2 = 2 adım.</summary>
         [HideInInspector] public int revealSteps = 1;
 
         public static event System.Action OnFragmentCollected;
@@ -36,6 +36,7 @@ namespace RIMA
         private Color baseColor;
         private Transform playerTransform;
         private GameObject promptGO;
+        private bool playerSearchDone;
 
         private void Awake()
         {
@@ -50,8 +51,8 @@ namespace RIMA
             startPos = transform.position;
             baseColor = sr != null ? sr.color : Color.white;
             playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+            playerSearchDone = playerTransform != null;
             BuildPromptLabel();
-            Debug.Log($"[MapFragment] Start pos={startPos}, player={playerTransform?.position}");
         }
 
         private void Update()
@@ -68,7 +69,9 @@ namespace RIMA
 
             if (playerTransform == null)
             {
+                if (playerSearchDone) return; // already tried, give up
                 playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+                playerSearchDone = true;
                 if (playerTransform == null) return;
             }
 
@@ -87,8 +90,7 @@ namespace RIMA
                     HUDController.Instance.HideInteractionPrompt();
             }
 
-            if (Time.frameCount % 120 == 0)
-                Debug.Log($"[MapFragment] dist={dist:F2}, inRange={inRange}, pos={transform.position}, player={playerTransform.position}");
+
 
             if (inRange && Keyboard.current != null && Keyboard.current[InteractKey].wasPressedThisFrame)
             {
@@ -99,7 +101,7 @@ namespace RIMA
 
         private static bool IsRoomClearInteractionAllowed()
         {
-            return RuntimeRoomManager.Instance == null || RuntimeRoomManager.Instance.IsRoomCleared;
+            return LegacyRuntimeRoomManager.Instance == null || LegacyRuntimeRoomManager.Instance.IsRoomCleared;
         }
 
         private void Collect()

@@ -9,7 +9,7 @@ namespace RIMA.Tests
         [TestCase(1)]
         public void DropChance_IsGuaranteed_WhenCurrentRouteIsAtRevealFrontier(int revealedStepsAhead)
         {
-            float chance = RuntimeRoomManager.GetMapFragmentDropChance(revealedStepsAhead, 0.35f);
+            float chance = LegacyRuntimeRoomManager.GetMapFragmentDropChance(revealedStepsAhead, 0.35f);
 
             Assert.AreEqual(1f, chance);
         }
@@ -17,7 +17,7 @@ namespace RIMA.Tests
         [Test]
         public void DropChance_UsesConfiguredChance_WhenFutureRouteAlreadyVisible()
         {
-            float chance = RuntimeRoomManager.GetMapFragmentDropChance(2, 0.35f);
+            float chance = LegacyRuntimeRoomManager.GetMapFragmentDropChance(2, 0.35f);
 
             Assert.AreEqual(0.35f, chance);
         }
@@ -25,8 +25,8 @@ namespace RIMA.Tests
         [Test]
         public void DropChance_ClampsConfiguredChance()
         {
-            Assert.AreEqual(1f, RuntimeRoomManager.GetMapFragmentDropChance(2, 2f));
-            Assert.AreEqual(0f, RuntimeRoomManager.GetMapFragmentDropChance(2, -1f));
+            Assert.AreEqual(1f, LegacyRuntimeRoomManager.GetMapFragmentDropChance(2, 2f));
+            Assert.AreEqual(0f, LegacyRuntimeRoomManager.GetMapFragmentDropChance(2, -1f));
         }
     }
 }

@@ -134,8 +134,8 @@ namespace RIMA
                 deathPanel.SetActive(true);
 
                 // Stats
-                int roomNum = RuntimeRoomManager.Instance != null
-                    ? RuntimeRoomManager.Instance.CurrentRoom
+                int roomNum = LegacyRuntimeRoomManager.Instance != null
+                    ? LegacyRuntimeRoomManager.Instance.CurrentRoom
                     : 0;
 
                 if (deathTitle != null)

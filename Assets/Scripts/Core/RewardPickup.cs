@@ -25,6 +25,7 @@ namespace RIMA
         private bool       interacted;
         private Vector3    startPos;
         private Color      baseColor;
+        private bool       playerSearchDone;
 
         /// <summary>RoomClearedSequence reminder'ı için: oyuncu ödülünü aldı mı?</summary>
         public bool WasCollected => interacted;
@@ -35,6 +36,7 @@ namespace RIMA
             sr              = GetComponent<SpriteRenderer>();
             baseColor       = sr != null ? sr.color : Color.white;
             playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+            playerSearchDone = playerTransform != null;
             BuildPromptLabel();
         }
 
@@ -52,7 +54,9 @@ namespace RIMA
 
             if (playerTransform == null)
             {
+                if (playerSearchDone) return; // already tried, give up
                 playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+                playerSearchDone = true;
                 if (playerTransform == null) return;
             }
 
@@ -72,9 +76,7 @@ namespace RIMA
                     HUDController.Instance.HideInteractionPrompt();
             }
 
-            // Debug: her 2 saniyede bir mesafe log'u
-            if (Time.frameCount % 120 == 0)
-                Debug.Log($"[RewardPickup] dist={dist:F2}, inRange={inRange}, pos={transform.position}, player={playerTransform.position}");
+
 
             if (inRange && Keyboard.current != null && Keyboard.current[InteractKey].wasPressedThisFrame)
             {
@@ -85,7 +87,7 @@ namespace RIMA
 
         private static bool IsRoomClearInteractionAllowed()
         {
-            return RuntimeRoomManager.Instance == null || RuntimeRoomManager.Instance.IsRoomCleared;
+            return LegacyRuntimeRoomManager.Instance == null || LegacyRuntimeRoomManager.Instance.IsRoomCleared;
         }
 
         private IEnumerator DoInteract()
@@ -97,8 +99,8 @@ namespace RIMA
             if (DraftManager.Instance == null)
             {
                 // Draft yok — kapıları aç ve yok ol
-                if (RuntimeRoomManager.Instance != null)
-                    RuntimeRoomManager.Instance.OpenDoorsAfterReward();
+                if (LegacyRuntimeRoomManager.Instance != null)
+                    LegacyRuntimeRoomManager.Instance.OpenDoorsAfterReward();
                 Destroy(gameObject);
                 yield break;
             }
@@ -108,8 +110,8 @@ namespace RIMA
                 DraftManager.Instance == null || !DraftManager.Instance.IsDraftActive);
 
             // Draft bitti — kapıları aç
-            if (RuntimeRoomManager.Instance != null)
-                RuntimeRoomManager.Instance.OpenDoorsAfterReward();
+            if (LegacyRuntimeRoomManager.Instance != null)
+                LegacyRuntimeRoomManager.Instance.OpenDoorsAfterReward();
 
             Destroy(gameObject);
         }

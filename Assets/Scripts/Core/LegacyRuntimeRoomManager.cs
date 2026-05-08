@@ -21,9 +21,9 @@ namespace RIMA
     /// Works with the existing tile-based RoomBuilder output.
     /// </summary>
     [DefaultExecutionOrder(-100)]
-    public class RuntimeRoomManager : MonoBehaviour
+    public class LegacyRuntimeRoomManager : MonoBehaviour
     {
-        public static RuntimeRoomManager Instance { get; private set; }
+        public static LegacyRuntimeRoomManager Instance { get; private set; }
 
         [Header("Room Settings")]
         [SerializeField] private int roomWidth = 32;
@@ -153,6 +153,9 @@ namespace RIMA
             // Start first room
             currentRoomIndex = 0;
             StartRoom();
+
+            RoomLoader.OnRoomLoaded += HandleRoomLoaded;
+            RoomLoader.OnRoomCleared += HandleRoomCleared;
         }
 
         // ─── Room Lifecycle ──────────────────────────────────
@@ -1086,6 +1089,22 @@ namespace RIMA
             return largeMapPainter != null
                 ? largeMapPainter.GetPreviewLayoutName(index)
                 : LargeDungeonMapPainterBase.GetDefaultPreviewLayoutName(index);
+        }
+
+        private void OnDestroy()
+        {
+            RoomLoader.OnRoomLoaded -= HandleRoomLoaded;
+            RoomLoader.OnRoomCleared -= HandleRoomCleared;
+        }
+
+        private void HandleRoomLoaded(RIMA.Systems.Map.RoomConfig cfg, GameObject roomGO)
+        {
+            Debug.Log($"[LegacyRRM] RoomLoader loaded: {cfg.roomType} depth={cfg.depthBandMin} go={roomGO.name}");
+        }
+
+        private void HandleRoomCleared()
+        {
+            Debug.Log("[LegacyRRM] RoomLoader cleared room.");
         }
 
         public BoundsInt GetCurrentRoomBounds()

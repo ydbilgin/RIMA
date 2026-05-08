@@ -67,7 +67,7 @@ namespace RIMA.Editor
         {
             if (Application.isPlaying)
             {
-                RuntimeRoomManager.Instance?.PreviewRoomByIndex(index);
+                LegacyRuntimeRoomManager.Instance?.PreviewRoomByIndex(index);
                 FrameCurrentRoom();
                 return;
             }

@@ -7,7 +7,7 @@ namespace RIMA
 
     /// <summary>
     /// Invisible trigger collider placed at each door gap.
-    /// When player enters → tells RuntimeRoomManager to transition.
+    /// When player enters → tells LegacyRuntimeRoomManager to transition.
     /// Disabled by default; enabled only after room is cleared.
     ///
     /// Setup: Create 4 empty GameObjects at door positions, each with:
@@ -57,8 +57,8 @@ namespace RIMA
             col.enabled = false;
             ClearPlayerRange();
 
-            if (RuntimeRoomManager.Instance != null)
-                RuntimeRoomManager.Instance.OnPlayerEnteredDoor(direction);
+            if (LegacyRuntimeRoomManager.Instance != null)
+                LegacyRuntimeRoomManager.Instance.OnPlayerEnteredDoor(direction);
         }
 
         private void OnTriggerEnter2D(Collider2D other)

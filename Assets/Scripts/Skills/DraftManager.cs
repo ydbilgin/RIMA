@@ -96,7 +96,7 @@ namespace RIMA
 
             IsDraftActive = true;
 
-            int room = RuntimeRoomManager.Instance?.CurrentRoom ?? 1;
+            int room = LegacyRuntimeRoomManager.Instance?.CurrentRoom ?? 1;
 
             // ── Forge milestone: Forge UI kendi akışını yönetir ───
             if (room == ForgeRoom1)

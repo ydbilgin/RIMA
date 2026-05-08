@@ -8,9 +8,9 @@ namespace RIMA
     /// <summary>
     /// RIMA → 4. Dungeon Wiring — tek menü komutuyla Hades-style dungeon sistemi kurulumu:
     ///   1. Oda yoksa RoomBuilder.Build(42) ile inşa eder
-    ///   2. Systems GO oluşturur + RuntimeRoomManager ekler
+    ///   2. Systems GO oluşturur + LegacyRuntimeRoomManager ekler
     ///   3. 4 DoorTrigger GameObject oluşturur (NSEW)
-    ///   4. RuntimeRoomManager'a tüm referansları atar (tilemap, door triggers, enemy prefabs)
+    ///   4. LegacyRuntimeRoomManager'a tüm referansları atar (tilemap, door triggers, enemy prefabs)
     ///
     /// Idempotent — defalarca çalıştırılabilir, mevcut nesneleri korur.
     /// </summary>
@@ -55,11 +55,11 @@ namespace RIMA
             changes += EnsureComponent<HitStop>(systemsGO);
             changes += EnsureComponent<CameraShake>(systemsGO);
 
-            var rrm = systemsGO.GetComponent<RuntimeRoomManager>();
+            var rrm = systemsGO.GetComponent<LegacyRuntimeRoomManager>();
             if (rrm == null)
             {
-                rrm = systemsGO.AddComponent<RuntimeRoomManager>();
-                Debug.Log("[DungeonSetup] RuntimeRoomManager eklendi.");
+                rrm = systemsGO.AddComponent<LegacyRuntimeRoomManager>();
+                Debug.Log("[DungeonSetup] LegacyRuntimeRoomManager eklendi.");
                 changes++;
             }
 
@@ -76,7 +76,7 @@ namespace RIMA
                 floorTilemap, new Vector3Int(WallT, DoorYStart, 0));
             changes += 4;
 
-            // ── 4. RuntimeRoomManager referanslarını ata ──────────────────────
+            // ── 4. LegacyRuntimeRoomManager referanslarını ata ──────────────────────
             var so = new SerializedObject(rrm);
             SetRef(so, "wallTilemap",  wallTilemap);
             SetRef(so, "floorTilemap", floorTilemap);
@@ -104,7 +104,7 @@ namespace RIMA
                         var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
                         prop.GetArrayElementAtIndex(i).objectReferenceValue = prefab;
                     }
-                    Debug.Log($"[DungeonSetup] {guids.Length} düşman prefabı RuntimeRoomManager'a atandı.");
+                    Debug.Log($"[DungeonSetup] {guids.Length} düşman prefabı LegacyRuntimeRoomManager'a atandı.");
                     changes++;
                 }
             }
