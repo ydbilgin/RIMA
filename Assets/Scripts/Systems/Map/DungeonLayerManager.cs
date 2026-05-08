@@ -21,6 +21,23 @@ namespace RIMA.Systems.Map
         {
             Instance = this;
 
+            // Auto-find tilemaps from parent Grid if not assigned
+            if (floorTilemap == null)
+            {
+                var t = transform.parent?.Find("Ground");
+                if (t != null) floorTilemap = t.GetComponent<Tilemap>();
+            }
+            if (detailTilemap == null)
+            {
+                var t = transform.parent?.Find("Detail");
+                if (t != null) detailTilemap = t.GetComponent<Tilemap>();
+            }
+            if (aoTilemap == null)
+            {
+                var t = transform.parent?.Find("AO");
+                if (t != null) aoTilemap = t.GetComponent<Tilemap>();
+            }
+
             if (_propParent == null)
             {
                 _propParent = new GameObject("Props").transform;
