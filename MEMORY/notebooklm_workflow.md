@@ -4,14 +4,18 @@ description: NotebookLM MCP kullanım stratejisi — Claude dosya okumak yerine 
 type: project
 ---
 
-## Strateji
+## HARD RULE (2026-05-07)
 
-Claude, TASARIM/ ve MEMORY/ dosyalarını direkt okumak yerine NotebookLM'e `notebook_query` ile soru sorar.
-Bu yaklaşım dosya okuma token maliyetini sıfırlar.
+**Claude hiçbir dosyayı direkt Read ile açamaz — tek istisna: CURRENT_STATUS.md (session start).**
 
-**Why:** TASARIM/ + MEMORY/ toplamı büyük. Her session'da re-read yerine NotebookLM indeksli bağlam daha ucuz.
+Bütün dosya okuma işlemleri NotebookLM MCP üzerinden yapılır:
+1. `notebook_query` ile sor
+2. Dosya notebook'ta yoksa veya stale ise → önce `source_add` ile push et, sonra query
+3. Auth expire olduysa → `PowerShell: nlm login` çalıştır (Chrome otomatik açılıp kapanır, ~30s). Başarısız olursa `! nlm login` öner.
 
-**How to apply:** Bir TASARIM/ veya MEMORY/ dosyasının içeriğine ihtiyaç duyulduğunda önce `notebook_query` dene. Dosya yoksa / stale ise direkt Read.
+**Why:** TASARIM/ + MEMORY/ toplamı büyük, her session re-read token maliyetini patlatır. NotebookLM bağlam daha ucuz ve indexed.
+
+**How to apply:** Her dosya ihtiyacında önce NotebookLM. "Yoksa direkt Read" artık geçerli değil — önce push, sonra query.
 
 ## MCP Tool'ları (notebooklm MCP — jacob-bd/notebooklm-mcp-cli)
 
@@ -38,13 +42,26 @@ uvx --from notebooklm-mcp-cli nlm notebook query ed3c8952-417c-4988-84a7-425d25b
 
 ## Bootstrap Tamamlandı ✓
 
+## Session Başı Auth Kontrol Sırası (ZORUNLU)
+
+1. `mcp__notebooklm__refresh_auth` — disk cache'den token yükle
+2. Küçük bir test: herhangi bir `source_add` veya `source_delete` dene
+3. Başarısız → `PowerShell: nlm login` (timeout 120s, Chrome açar/kapatır)
+4. Tekrar `refresh_auth` → devam
+
+**NOT:** `notebook_query` auth expire olsa bile çalışabilir (read token ayrı). Source işlemleri write token gerektirir — her zaman session başında kontrol et.
+
 ## Güncelleme Stratejisi (Session Sonu)
 
+**DOĞRU DÖNGÜ — sadece add yapma, duplicate birikir:**
 ```
-git diff --name-only <last_sync> HEAD -- TASARIM/ MEMORY/
-→ değişen dosyalar için: source_delete(eski) + source_add(yeni)
-→ checkpoint: git tag nlm-sync-YYYYMMDD
+1. nlm source list <notebook_id>           → eski source ID'yi title ile bul
+2. source_delete(source_id=..., confirm=True) → eski kaynağı sil
+3. source_add(source_type="text", title="CURRENT_STATUS.md — nlm-sync-YYYYMMDD", ...)
 ```
+
+Source title formatı: `"<dosya_adı> — nlm-sync-YYYYMMDD"`
+Sync tag CURRENT_STATUS.md'ye de yazılır.
 
 Judgment gerekmez — pure mekanik, Claude direkt MCP üzerinden halleder.
 
