@@ -324,6 +324,15 @@ namespace RIMA
             PaintLayout(PreviewLayouts[clamped], clamped + 1, previewType);
         }
 
+        /// <summary>Override tile pool for the next paint call. Used by DungeonWorldBuilder for depth-band swaps.</summary>
+        public void SetTilePool(TileBase[] floor, TileBase[] wall)
+        {
+            floorTiles = floor;
+            wallTiles = wall;
+            cachedFloorTiles.Clear();
+            cachedWallTiles.Clear();
+        }
+
         private void PaintLayout(LayoutKind layout, int roomIndex, RoomType roomType)
         {
             ResolveTilemaps();

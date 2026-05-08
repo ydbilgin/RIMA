@@ -43,6 +43,10 @@ namespace RIMA.Systems.Map
                     ? template.layout
                     : LargeDungeonMapPainterBase.LayoutKind.BrokenEntryHall;
 
+                var band = GetBand(node.depth);
+                if (band != null && band.floorTiles != null && band.floorTiles.Length > 0)
+                    painter.SetTilePool(band.floorTiles, band.wallTiles);
+
                 painter.PaintTemplateAtOffset(layout, offset);
             }
         }
