@@ -52,6 +52,7 @@ if [ -z "$FILE" ]; then
       fi
     done <<< "$CHANGED"
     wait "${PIDS[@]}"
+    date '+%Y-%m-%d %H:%M' > "$REPO/.claude/nlm_last_sync.txt"
     echo "=== Done ==="
   fi
 else
