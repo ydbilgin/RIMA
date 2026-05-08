@@ -8,7 +8,7 @@ namespace RIMA
     [DefaultExecutionOrder(-200)]
     public class LargeDungeonMapPainterBase : MonoBehaviour
     {
-        private enum LayoutKind
+        public enum LayoutKind
         {
             BrokenEntryHall,
             ChainGallery,
@@ -152,6 +152,7 @@ namespace RIMA
         private bool[,] lastPlayableFloorMask;
         private int roomWidth;
         private int roomHeight;
+        private Vector3Int paintCellOffset = Vector3Int.zero;
 
         public int RoomWidth => roomWidth;
         public int RoomHeight => roomHeight;
@@ -292,24 +293,26 @@ namespace RIMA
             roomHeight = size.y;
 
             Random.InitState(seed + roomIndex * 97 + (int)roomType * 13);
-            floorTilemap.ClearAllTiles();
-            wallTilemap.ClearAllTiles();
+            PaintPreparedLayout(layout, Vector3Int.zero, clearTilemaps: true, paintRoomObjects: true);
+        }
 
-            bool[,] floorMask = BuildFloorMask(layout);
-            lastPlayableFloorMask = floorMask;
-            bool[,] visualFloorMask = BuildVisualFloorMask(floorMask);
+        public void PaintTemplateAtOffset(LayoutKind layout, Vector3Int offset)
+        {
+            ResolveTilemaps();
+            CacheTiles();
+            if (floorTilemap == null || wallTilemap == null || cachedFloorTiles.Count == 0 || cachedWallTiles.Count == 0)
+            {
+                Debug.LogWarning("[LargeDungeonMapPainter] Missing tilemaps or tiles; keeping existing room.");
+                return;
+            }
 
-            PaintFloor(visualFloorMask);
-            PaintCameraSafetyFloor();
-            PaintBoundaryWalls(floorMask);
-            PaintShelterCellPartitions(floorMask);
-            PaintLayoutFeatures(layout, floorMask);
-            PaintCombatViewKeepAnchors(floorMask);
-            PaintRoomLighting(layout, floorMask);
-            PaintNarrativeDecor(layout, floorMask);
+            RoomType roomType = layout == LayoutKind.BossAntechamber ? RoomType.Boss : RoomType.Combat;
+            Vector2Int size = GetLayoutSize(layout, roomType);
+            roomWidth = size.x;
+            roomHeight = size.y;
 
-            floorTilemap.CompressBounds();
-            wallTilemap.CompressBounds();
+            Random.InitState(seed + (int)layout * 97);
+            PaintPreparedLayout(layout, offset, clearTilemaps: false, paintRoomObjects: false);
         }
 
         public void PaintPreviewLayout(int index)
@@ -336,21 +339,43 @@ namespace RIMA
             roomHeight = size.y;
 
             Random.InitState(seed + roomIndex * 97 + (int)roomType * 13);
-            floorTilemap.ClearAllTiles();
-            wallTilemap.ClearAllTiles();
+            PaintPreparedLayout(layout, Vector3Int.zero, clearTilemaps: true, paintRoomObjects: true);
+        }
 
-            bool[,] floorMask = BuildFloorMask(layout);
-            lastPlayableFloorMask = floorMask;
-            bool[,] visualFloorMask = BuildVisualFloorMask(floorMask);
+        private void PaintPreparedLayout(LayoutKind layout, Vector3Int offset, bool clearTilemaps, bool paintRoomObjects)
+        {
+            if (clearTilemaps)
+            {
+                floorTilemap.ClearAllTiles();
+                wallTilemap.ClearAllTiles();
+            }
 
-            PaintFloor(visualFloorMask);
-            PaintCameraSafetyFloor();
-            PaintBoundaryWalls(floorMask);
-            PaintShelterCellPartitions(floorMask);
-            PaintLayoutFeatures(layout, floorMask);
-            PaintCombatViewKeepAnchors(floorMask);
-            PaintRoomLighting(layout, floorMask);
-            PaintNarrativeDecor(layout, floorMask);
+            Vector3Int previousOffset = paintCellOffset;
+            paintCellOffset = offset;
+
+            try
+            {
+                bool[,] floorMask = BuildFloorMask(layout);
+                lastPlayableFloorMask = floorMask;
+                bool[,] visualFloorMask = BuildVisualFloorMask(floorMask);
+
+                PaintFloor(visualFloorMask);
+                PaintCameraSafetyFloor();
+                PaintBoundaryWalls(floorMask);
+                PaintShelterCellPartitions(floorMask);
+                PaintLayoutFeatures(layout, floorMask);
+                PaintCombatViewKeepAnchors(floorMask);
+
+                if (paintRoomObjects)
+                {
+                    PaintRoomLighting(layout, floorMask);
+                    PaintNarrativeDecor(layout, floorMask);
+                }
+            }
+            finally
+            {
+                paintCellOffset = previousOffset;
+            }
 
             floorTilemap.CompressBounds();
             wallTilemap.CompressBounds();
@@ -629,6 +654,11 @@ namespace RIMA
             return visualMask;
         }
 
+        private Vector3Int OffsetCell(int x, int y)
+        {
+            return new Vector3Int(x + paintCellOffset.x, y + paintCellOffset.y, paintCellOffset.z);
+        }
+
         private void PaintFloor(bool[,] floorMask)
         {
             for (int x = 0; x < roomWidth; x++)
@@ -637,7 +667,7 @@ namespace RIMA
                 {
                     if (floorMask[x, y])
                     {
-                        floorTilemap.SetTile(new Vector3Int(x, y, 0), PickFloorTile(x, y));
+                        floorTilemap.SetTile(OffsetCell(x, y), PickFloorTile(x, y));
                     }
                 }
             }
@@ -653,7 +683,7 @@ namespace RIMA
                 for (int y = -padding; y < roomHeight + padding; y++)
                 {
                     if (x >= 0 && y >= 0 && x < roomWidth && y < roomHeight) continue;
-                    floorTilemap.SetTile(new Vector3Int(x, y, 0), PickFloorTile(x, y));
+                    floorTilemap.SetTile(OffsetCell(x, y), PickFloorTile(x, y));
                 }
             }
         }
@@ -667,7 +697,7 @@ namespace RIMA
                     if (floorMask[x, y]) continue;
                     if (TouchesFloorWithin(floorMask, x, y, wallThickness))
                     {
-                        wallTilemap.SetTile(new Vector3Int(x, y, 0), PickWallTile(x, y));
+                        wallTilemap.SetTile(OffsetCell(x, y), PickWallTile(x, y));
                     }
                 }
             }
@@ -754,7 +784,7 @@ namespace RIMA
                 for (int py = y; py < y + height; py++)
                 {
                     if (!IsFloor(floorMask, px, py)) continue;
-                    wallTilemap.SetTile(new Vector3Int(px, py, 0), PickWallTile(px, py));
+                    wallTilemap.SetTile(OffsetCell(px, py), PickWallTile(px, py));
                 }
             }
         }
@@ -955,7 +985,7 @@ namespace RIMA
                 {
                     if (!IsFloor(floorMask, px, py)) continue;
                     if (IsProtectedTraversalCell(px, py)) continue;
-                    wallTilemap.SetTile(new Vector3Int(px, py, 0), PickWallTile(px, py));
+                    wallTilemap.SetTile(OffsetCell(px, py), PickWallTile(px, py));
                 }
             }
         }
@@ -991,7 +1021,7 @@ namespace RIMA
                 if (!TryFindNearestFloorCell(floorMask, preferred, 24, out Vector2Int cell))
                     continue;
 
-                Vector3 world = floorTilemap.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0));
+                Vector3 world = floorTilemap.GetCellCenterWorld(OffsetCell(cell.x, cell.y));
                 var go = new GameObject("Room Decor - " + sprite.name);
                 go.transform.SetParent(root, false);
                 go.transform.position = new Vector3(world.x, world.y, -0.08f);
@@ -1130,7 +1160,7 @@ namespace RIMA
                 if (!TryFindNearestFloorCell(floorMask, preferred, 18, out Vector2Int cell))
                     continue;
 
-                Vector3 world = floorTilemap.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0));
+                Vector3 world = floorTilemap.GetCellCenterWorld(OffsetCell(cell.x, cell.y));
                 var lightObject = new GameObject("Room Light");
                 lightObject.transform.SetParent(root, false);
                 lightObject.transform.position = new Vector3(world.x, world.y, -1f);
