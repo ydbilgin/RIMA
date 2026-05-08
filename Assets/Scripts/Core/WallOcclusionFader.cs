@@ -92,12 +92,16 @@ namespace RIMA
             currentAlpha.Clear();
         }
 
+        private bool targetSearchDone;
+
         private void ResolveTarget()
         {
             if (target != null) return;
+            if (targetSearchDone) return; // one-shot — don't retry every frame
 
             var go = GameObject.FindGameObjectWithTag(targetTag);
             if (go != null) target = go.transform;
+            targetSearchDone = true;
         }
 
         private void SetCellAlpha(Vector3Int cell, float alpha)

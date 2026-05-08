@@ -46,6 +46,8 @@ namespace RIMA
             = new Dictionary<StatusEffectType, StatusEffectInstance>();
         private readonly Dictionary<StatusEffectType, float> dotRemainders
             = new Dictionary<StatusEffectType, float>();
+        // Reusable buffer — avoids per-frame GC allocation
+        private readonly List<StatusEffectType> removeBuffer = new List<StatusEffectType>(8);
 
         /// <summary>1.0 = normal speed. Chill/Frozen reduces this.</summary>
         [HideInInspector] public float moveSpeedMultiplier = 1f;
@@ -143,14 +145,14 @@ namespace RIMA
             if (active.Count == 0) return;
             if (health == null) health = GetComponent<Health>();
 
-            var toRemove = new List<StatusEffectType>(4);
+            removeBuffer.Clear();
 
             foreach (var kvp in active)
             {
                 kvp.Value.duration -= deltaTime;
                 if (kvp.Value.duration <= 0f)
                 {
-                    toRemove.Add(kvp.Key);
+                    removeBuffer.Add(kvp.Key);
                     continue;
                 }
 
@@ -173,7 +175,8 @@ namespace RIMA
                 }
             }
 
-            foreach (var t in toRemove) RemoveEffect(t);
+            for (int i = 0; i < removeBuffer.Count; i++)
+                RemoveEffect(removeBuffer[i]);
         }
 
         // ─── Internal ────────────────────────────────────────────────────────

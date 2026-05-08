@@ -60,16 +60,28 @@ namespace RIMA
                 OnResourceChanged?.Invoke(Current, maxFocus);
         }
 
+        // Cached enemy list — refreshed every N seconds, NOT per-frame
+        private EnemyAI[] cachedEnemies = System.Array.Empty<EnemyAI>();
+        private float nextEnemyScan;
+        private const float EnemyScanInterval = 0.5f;
+
         private float GetNearestEnemyDistance()
         {
-            var enemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.None);
-            float minDist = float.MaxValue;
-            foreach (var e in enemies)
+            // Refresh cached enemy list periodically (expensive scene search)
+            if (Time.time >= nextEnemyScan)
             {
-                float d = Vector2.Distance(player.position, e.transform.position);
+                nextEnemyScan = Time.time + EnemyScanInterval;
+                cachedEnemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.None);
+            }
+
+            float minDist = float.MaxValue;
+            for (int i = 0; i < cachedEnemies.Length; i++)
+            {
+                if (cachedEnemies[i] == null) continue;
+                float d = Vector2.Distance(player.position, cachedEnemies[i].transform.position);
                 if (d < minDist) minDist = d;
             }
-            return enemies.Length == 0 ? float.MaxValue : minDist;
+            return cachedEnemies.Length == 0 ? float.MaxValue : minDist;
         }
 
         public override bool TrySpend(int amount)
