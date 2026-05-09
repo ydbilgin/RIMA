@@ -41,6 +41,8 @@ Open a file ONLY when its keywords match the current task.
 - [project_gate_map_reveal.md](project_gate_map_reveal.md) -- WHEN: gates, door sockets, route reveal
 - [project_ui_state_blueprint.md](project_ui_state_blueprint.md) -- WHEN: HUD, skill bar, reward UI, gate choice
 - [project_dev_tool_rift_makeup.md](project_dev_tool_rift_makeup.md) -- WHEN: dev tool, building designer, rift portal, chaos gate, makeup VFX, buff visuals
+- TASARIM/dungeon_act1_map.md -- WHEN: Act 1 node layout, oda tipleri, depth band, mob butce, Rift Portal spawn, procedural per-run (LOCKED v1)
+- TASARIM/map_fragment_system.md -- WHEN: map fragment drop, reveal sistemi, build planning UX, MapPanel, MiniMap, StS2-style (LOCKED v1)
 
 ## Tooling
 - [notebooklm_workflow.md](notebooklm_workflow.md) -- WHEN: NotebookLM, notebook_query, token savings, source sync
