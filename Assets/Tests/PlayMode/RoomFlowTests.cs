@@ -83,10 +83,17 @@ namespace RIMA.Tests
         [UnityTest]
         public IEnumerator LegacyRuntimeRoomManager_Room1Starts()
         {
-            yield return null;
+            // Wait for Start() to complete and StartRoom() to be called
+            float timeout = 2f;
+            while ((LegacyRuntimeRoomManager.Instance == null || LegacyRuntimeRoomManager.Instance.CurrentRoom < 1) && timeout > 0f)
+            {
+                timeout -= Time.deltaTime;
+                yield return null;
+            }
+
             Assert.IsNotNull(LegacyRuntimeRoomManager.Instance, "LegacyRuntimeRoomManager.Instance null.");
             Assert.AreEqual(1, LegacyRuntimeRoomManager.Instance.CurrentRoom,
-                "İlk oda CurrentRoom=1 olmalı.");
+                $"İlk oda CurrentRoom=1 olmalı (timeout kaldı: {timeout:F2}s).");
         }
 
         // ── Draft akışı ──────────────────────────────────────────────────
