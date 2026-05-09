@@ -1,5 +1,7 @@
 # CURRENT STATUS
-**2026-05-10 — S47 | Aktif Sprint: Faz 1-2 | PixelLab tile üretimi + 4 ana class anim**
+**2026-05-10 — S47 | Aktif Sprint: Faz 1-2 | PixelLab pipeline kanonik + Infamous Keepers analiz**
+
+> **Son session (2026-05-10):** PixelLab MCP eklendi, 57 dosyalık docs konsolide, NLM sync. PRODUCTION_PLAYBOOK kanonik kararlara revize (252×252 canvas, pixel budget formülü, 8-frame attack, animate_character MCP yasak). Infamous Keepers Steam screenshot karşılaştırması — %92 sistem eşleşme, 16 aksiyon + 4 design decision tetiklendi.
 
 ---
 
@@ -33,7 +35,8 @@
 
 ### 🟡 Orta Öncelik
 
-4. **NLM sync** — `STAGING/PIXELLAB/00_README.md` + `PRODUCTION_PLAYBOOK.md` henüz NLM'de yok
+4. **NLM sync** — `STAGING/PIXELLAB/00_README.md` henüz NLM'de yok
+   - `PRODUCTION_PLAYBOOK.md` ve `PixelLabDocs/index.md` sync edildi (2026-05-10)
    - Mevcut script `STAGING/` root maxdepth=1; alt klasör scope eklenmesi lazım
 
 5. **Animasyonlara başla** (tile üretimi sonrası) — 4 ana class, v1 sprint:
@@ -46,11 +49,32 @@
    - 3-ending cutscene detayı (KAL/KIR/TAŞI)
    - Lore drip death recap pipeline
 
+7. **Infamous Keepers analizinden çıkan kritik aksiyonlar** (Faz 1-2'ye eklendi):
+   - Damage number visual hierarchy spec (Normal/Commit/Break)
+   - Damage number color coding (element/status'a göre renk)
+   - FloatingTextSpawner anti-overlap + tick stacking
+   - Character shadow spec (runtime drop shadow önerisi)
+   - Detay: `STAGING/refs/infamous_keepers/self_review.md` E bölümü
+
+### 🟠 Karar Bekleyen Design Decisions (Infamous Keepers tetikledi)
+
+D1. **Mob faction system / infighting** var mı? (Hollow Knight tarzı)
+D2. **Terrain hazard system** (spike trap, acid pool, crumbling floor)?
+D3. **Adjacent room peek visibility** — kapı arkası rendering?
+D4. **Hub combat sub-area** — Hub'ın yan odası combat olur mu?
+
+### 🔧 Tooling Sorunları
+
+T1. **cx wrapper non-interactive Codex** — uzun prompt'larda takılıyor. Partial fix var (`--prompt-file` flag, `codex_raw.ps1`). Codex CLI'ın kendisi de hang ediyor — terminal debug gerekli (auth/model/TTY hangisi). Detay: `memory/feedback_cx_wrapper_long_prompt.md`
+
 ### 🟢 Düşük Öncelik / Backlog
 
-7. **Map Fragment + DungeonGraph** — spec hazır, Codex dispatch edilebilir
-8. **MAKEUP_BACKLOG 8 eksiklik** — polish phase
-9. **Cinematic Layer A/B/C/D** — Faz 2-5
+8. **Map Fragment + DungeonGraph** — spec hazır, Codex dispatch edilebilir (cx fix sonrası)
+9. **MAKEUP_BACKLOG 8 eksiklik** — polish phase
+10. **Cinematic Layer A/B/C/D** — Faz 2-5
+11. **Wall architectural features** — Production Playbook'a Adım 17 (gargoyle/forge/niche)
+12. **Chokepoint Combat room template** — Room template kataloğuna variant
+13. **Background NPC layer in hub** — 5-8 silüet (yaşam hissi)
 
 ---
 
