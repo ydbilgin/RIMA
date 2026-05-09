@@ -86,6 +86,13 @@ Bu kural Adım 22, 23, 31, 32, 40, 41, 49, 50 için geçerli.
 
 ## 🔑 Genel Kurallar (her üretimde geçerli)
 
+### RIMA Prompt Standartları (ZORUNLU)
+1. **Description: kısa + spesifik.** Destansı/edebi cümle YASAK. Örnek doğru: `"Human mage, blue robe, glowing staff"`. Örnek yanlış: `"A wise wizard with flowing crystalline robes that shimmer in the moonlight..."`
+2. **Negative Description: ZORUNLU.** Standart blok: `blur, 3d render, smooth gradient, ambient occlusion render, anti-aliasing, ugly, deformed, low contrast, soft shading, photo-realistic`. Her üretimde mutlaka.
+3. **Floor (zemin):** Create Tiles (Pro), Tile size **64×64**, View angle **High top-down**.
+4. **Wall (duvar):** Create Tiles (Pro), Tile size **64×128**, View angle **Low top-down** (gerçek açı 45-60°, side face görünür). 90° YASAK.
+5. **MCP/Web App ayrımı:** Karakter animasyonu → Web App ZORUNLU. Floor/obje/static prop/batch base 4-yön → MCP OK.
+
 ### PixelLab Web App ortak ayarlar
 
 | Ayar | Değer |
@@ -115,32 +122,47 @@ Bu kural Adım 22, 23, 31, 32, 40, 41, 49, 50 için geçerli.
 
 # A — WALLS
 
+> **🛠️ RİMA WALL KURALLARI (2026-05-10):**
+> - Tool: **Create tiles (Pro)** with Tile type=Isometric (Map bölümünde)
+> - Tile size: **64×128**, View angle: **Low top-down** (45-60° gerçek açı, side face görünür)
+> - 90° (top-down) YASAK — duvarın yan yüzü görünmez
+> - Description: kısa+spesifik + numbered list (variation count UI'da yok)
+> - Negative Description: ZORUNLU (`blur, 3d render, smooth gradient, ugly, deformed`)
+
 ## ✅ Adım 1: W1 Wall (Ana Duvar)
 
-**🛠️ Tool:** PixelLab → **Create Tile — Isometric** (Map bölümünde)
+**🛠️ Tool:** PixelLab Web App → **Map** bölümü → **Create tiles (Pro)**
 
-**⚙️ Ayarlar:**
-- Boyut: **64x128**
-- Variation: **8** (straight ×2, corner ×2, T-junction, end-cap ×2)
-- Background: **#00FF00**
-- Style Reference: F1 approved floor varsa yükle (yoksa boş bırak)
+**⚙️ UI Ayarları (gerçek tool):**
+| Field | Değer |
+|---|---|
+| Tile type | **Isometric** (dropdown) |
+| Tile size | **64×128** |
+| View angle | **Low top-down** (gerçek açı 45-60°, side face görünür) |
+| Outline mode | **No outline** |
+| Style refs | F1 approved floor varsa yükle (opsiyonel, max 12) |
+| Description | **Aşağıdaki kısa prompt** (1-8 numaralı varyantlar) |
+| Negative description | **Aşağıdaki standart negative** |
 
-**📝 Prompt (kopyala):**
+**Maliyet:** 25 generation (64×128 boyutu için Tier 1+)
+
+**📝 Description (UI'daki Description alanına yapıştır — kısa, spesifik, numaralı):**
 ```
-Isometric pixel art stone wall tile, 64x128 pixels, 2:1 isometric projection. Pure solid green #00FF00 background fills all pixels outside the wall shape.
+Isometric stone wall tile, 64x128, viewed at 45-60° (front face visible). Brick masonry, palette #1A1C20/#2A2D34/#3A3D48/#4E5260/#606575. Background pure #00FF00. Top face 12px, front face 104px, base shadow 12px. Pixel cluster ≥4px. 8 numbered variants:
+1) straight north
+2) straight south
+3) outer corner NE
+4) outer corner NW
+5) inner corner
+6) T-junction
+7) end-cap north
+8) end-cap south
+One weathering accent per tile max (crack, chip, or iron ring).
+```
 
-The tile has three vertical zones:
-TOP FACE (top 12px): wall surface viewed from isometric top — slightly lighter, shows stone top, ambient light catch.
-FRONT FACE (middle 104px): vertical stone brick masonry, staggered courses, each brick 12-16px wide and 7-9px tall. Main surface.
-BASE SHADOW (bottom 12px): ambient occlusion strip where wall meets floor, gradient from #1A1C20 to transparent.
-
-Palette STRICTLY: #1A1C20 (mortar/shadow), #2A2D34 (dark stone face), #3A3D48 (mid stone), #4E5260 (lit face), #606575 (top face highlight). NO other colors.
-
-Flat-shaded pixel art, NO smooth gradient, NO ambient occlusion render, NO 3D software look. Hand-pixeled appearance. Dithered shading only (2x2 checker). Hard pixel edges. No anti-aliasing on tile boundary. Pixel clusters minimum 4px.
-
-Generate 8 connection variants: (1) straight north-facing, (2) straight south-facing, (3) outer corner NE, (4) outer corner NW, (5) inner corner, (6) T-junction, (7) end-cap north, (8) end-cap south. Each shares identical brick pattern and palette — only silhouette and corner geometry differ.
-
-One weathering accent per tile max: hairline crack, chipped brick corner, or iron ring anchor.
+**⛔ Negative Description (Negative description alanına yapıştır):**
+```
+blur, 3d render, smooth gradient, ambient occlusion render, anti-aliasing, ugly, deformed, low contrast, soft shading, photo-realistic
 ```
 
 **💾 Kaydet:**

@@ -57,7 +57,21 @@ Tüm karakter animasyonları için MCP kullanılmaz.
 **Yeni format (zorunlu):** PEAK frame'i windup'ın son + follow'un ilk frame'i olarak paylaş → toplam **8 unique frame**.
 - Alternatif: 2 ayrı Unity clip (Attack_Windup 4-frame + Attack_Follow 4-frame, Animator chain)
 
-### 0.6 Web App vs MCP Karar Matrisi
+### 0.6 RIMA Prompt Standartları (ZORUNLU)
+
+1. **Description: kısa + spesifik.** Destansı/edebi cümle YASAK.
+   - ✅ `"Human mage, blue robe, glowing staff"`
+   - ❌ `"A wise wizard with flowing crystalline robes shimmering..."`
+2. **Negative Description: ZORUNLU her üretimde.** Standart blok:
+   ```
+   blur, 3d render, smooth gradient, ambient occlusion render, anti-aliasing, ugly, deformed, low contrast, soft shading, photo-realistic
+   ```
+3. **Floor (zemin):** Create Tiles (Pro), Tile size **64×64**, View angle **High top-down**
+4. **Wall (duvar):** Create Tiles (Pro), Tile size **64×128**, View angle **Low top-down** (gerçek açı 45-60°, side face görünür). **90° top-down YASAK** (yan yüz görünmez).
+5. **Variation count:** UI'da AYAR DEĞİL — Description'da numaralı liste (`1) ... 2) ... 8) ...`) ile belirt.
+6. **Background color (chromakey #00FF00):** UI'da AYAR DEĞİL — Description'da `"Background pure #00FF00"` olarak belirt.
+
+### 0.7 Web App vs MCP Karar Matrisi
 
 | Görev | Tool | Sebep |
 |---|---|---|
@@ -315,10 +329,14 @@ Her üretim sonrası:
 **🟢 Adım A5: F2↔F3 Transition (8 var)** — PLAYBOOK Adım 8
 
 **🟢 Adım A6: W1 Wall (8 var) — ~30 dk**
-1. PixelLab → **Map** → **Create Tile — Isometric** tool
-2. Boyut: **64×128**, Variation: **8**, Background: **#00FF00**
-3. Prompt: PLAYBOOK Adım 1
-4. Kaydet: `STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_sheet_v1.png`
+1. PixelLab → **Map** → **Create tiles (Pro)** tool
+2. Tile type: **Isometric**, Tile size: **64×128**, View angle: **Low top-down** (45-60° gerçek açı)
+3. Outline mode: **No outline**
+4. Description: numaralı 8 variant + #00FF00 background (Bölüm 0.6 Madde 5-6)
+5. Negative description: standart blok (Bölüm 0.6 Madde 2)
+6. Detaylı prompt: PLAYBOOK Adım 1
+7. Kaydet: `STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_sheet_v1.png`
+8. ⚠️ **90° top-down YASAK** — duvarın yan yüzü görünmez
 
 **🟢 Adım A7: W2 Wall (8 var)** — W1 approved → style ref → PLAYBOOK Adım 2
 
