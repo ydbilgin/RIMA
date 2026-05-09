@@ -122,42 +122,38 @@ Bu kural Adım 22, 23, 31, 32, 40, 41, 49, 50 için geçerli.
 
 # A — WALLS
 
-> **🛠️ RİMA WALL KURALLARI (2026-05-10):**
-> - Tool: **Create tiles (Pro)** with Tile type=Isometric (Map bölümünde)
-> - Tile size: **64×128**, View angle: **Low top-down** (45-60° gerçek açı, side face görünür)
-> - 90° (top-down) YASAK — duvarın yan yüzü görünmez
-> - Description: kısa+spesifik + numbered list (variation count UI'da yok)
+> **🛠️ RİMA WALL KURALLARI (2026-05-10 REVİZE — UI doğrulandı):**
+> - **Map bölümündeki "Create tiles (Pro)" Isometric type → max 32×32** (64×128 yok)
+> - Bu yüzden wall 64×128 için: **Create M-XL Image (Flux)** kullan (Create image bölümünde)
+> - Canvas 256×256: 4×2 grid'te 8 wall varyantı tek üretimde alınır → Aseprite'ta slice
+> - Description'da 45-60° açı + #00FF00 background + 8 numbered variant belirt
 > - Negative Description: ZORUNLU (`blur, 3d render, smooth gradient, ugly, deformed`)
+> - **Alternatif (test edilmedi):** Create Isometric Tile (single 32×32 → 2x upscale → 64) — wall yüksekliği için yetersiz olabilir
 
 ## ✅ Adım 1: W1 Wall (Ana Duvar)
 
-**🛠️ Tool:** PixelLab Web App → **Map** bölümü → **Create tiles (Pro)**
+**🛠️ Tool:** PixelLab Web App → **Create image** bölümü → **Create M-XL Image (Flux)** (yeni)
 
 **⚙️ UI Ayarları (gerçek tool):**
 | Field | Değer |
 |---|---|
-| Tile type | **Isometric** (dropdown) |
-| Tile size | **64×128** |
-| View angle | **Low top-down** (gerçek açı 45-60°, side face görünür) |
-| Outline mode | **No outline** |
-| Style refs | F1 approved floor varsa yükle (opsiyonel, max 12) |
-| Description | **Aşağıdaki kısa prompt** (1-8 numaralı varyantlar) |
+| Canvas size | **256×256** (4 col × 2 row grid, her hücre 64×128) |
+| Camera view | **Low top-down** (45-60° gerçek açı) |
+| Isometric (projection toggle) | **ON** |
+| Outline / Shading / Details | Outline: **No outline**, Shading: **basic**, Details: **medium** |
+| Remove background | **OFF** (chromakey #00FF00 manuel — slicing için gerekli) |
+| Description | **Aşağıdaki kısa prompt** (4×2 grid, 8 variant) |
 | Negative description | **Aşağıdaki standart negative** |
+| Target palette | RIMA wall palette (`#1A1C20 / #2A2D34 / #3A3D48 / #4E5260 / #606575`) |
 
-**Maliyet:** 25 generation (64×128 boyutu için Tier 1+)
+**Maliyet:** Create M-XL Image generation (size'a göre değişir, 256×256 ~5-9 gen)
 
-**📝 Description (UI'daki Description alanına yapıştır — kısa, spesifik, numaralı):**
+**📝 Description (UI'daki Description alanına yapıştır — 4×2 grid, 8 variant tek canvas'ta):**
 ```
-Isometric stone wall tile, 64x128, viewed at 45-60° (front face visible). Brick masonry, palette #1A1C20/#2A2D34/#3A3D48/#4E5260/#606575. Background pure #00FF00. Top face 12px, front face 104px, base shadow 12px. Pixel cluster ≥4px. 8 numbered variants:
-1) straight north
-2) straight south
-3) outer corner NE
-4) outer corner NW
-5) inner corner
-6) T-junction
-7) end-cap north
-8) end-cap south
-One weathering accent per tile max (crack, chip, or iron ring).
+4x2 grid of isometric stone wall tiles, each cell 64x128. Viewed at 45-60° (front face visible). Brick masonry, palette #1A1C20/#2A2D34/#3A3D48/#4E5260/#606575. Background pure #00FF00 (between/around tiles). Each tile: top face 12px, front face 104px, base shadow 12px. Pixel cluster ≥4px. Grid order left-to-right, top-to-bottom:
+Row 1: 1) straight north  2) straight south  3) outer corner NE  4) outer corner NW
+Row 2: 5) inner corner  6) T-junction  7) end-cap north  8) end-cap south
+One weathering accent per tile max (crack, chip, or iron ring). All 8 share identical brick pattern and palette.
 ```
 
 **⛔ Negative Description (Negative description alanına yapıştır):**

@@ -1,7 +1,16 @@
 # CURRENT STATUS
 **2026-05-10 — S47 | Aktif Sprint: Faz 1-2 | PixelLab pipeline kanonik + Infamous Keepers analiz**
 
-> **Son session (2026-05-10):** PixelLab MCP eklendi, 57 dosyalık docs konsolide, NLM sync. PRODUCTION_PLAYBOOK kanonik kararlara revize (252×252 canvas, pixel budget formülü, 8-frame attack, animate_character MCP yasak). Infamous Keepers Steam screenshot karşılaştırması — %92 sistem eşleşme, 16 aksiyon + 4 design decision tetiklendi.
+> **Son session (2026-05-10):** PixelLab MCP eklendi, 57 dosyalık docs konsolide. PRODUCTION_PLAYBOOK + GUIDE v2 kanonik kararlara revize (252×252 canvas, pixel budget formülü, 8-frame attack, animate_character MCP yasak, RIMA prompt standartları, wall tool düzeltmesi). Infamous Keepers Steam karşılaştırması — %92 sistem eşleşme, 16 aksiyon + 4 design decision tetiklendi.
+
+> **⚠️ Son Bulgular (UI doğrulandı):**
+> - **Wall (64×128):** Map'teki Create Tiles Pro Isometric max 32×32 — yetersiz. **Create M-XL Image (Flux)** kullan, 256×256 canvas, 4×2 grid → 8 variant tek üretimde
+> - Adım 1 (W1) yeniden yazıldı bu doğrultuda. Adım 2-3 (W2/OBW) henüz aynı düzeltme yapılmadı
+> - Floor (64×64) Create Tiles Pro ile çalışıyor — değişiklik yok
+> - **Sıradaki session aksiyonları:**
+>   1. NLM sync (PRODUCTION_PLAYBOOK + GUIDE v2 + memory)
+>   2. NLM ile PixelLabDocs/ üzerinden detay çekme
+>   3. Codex'e batch review yaptırma (Adım 2-16 aynı patern düzeltme)
 
 ---
 

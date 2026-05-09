@@ -329,14 +329,19 @@ Her üretim sonrası:
 **🟢 Adım A5: F2↔F3 Transition (8 var)** — PLAYBOOK Adım 8
 
 **🟢 Adım A6: W1 Wall (8 var) — ~30 dk**
-1. PixelLab → **Map** → **Create tiles (Pro)** tool
-2. Tile type: **Isometric**, Tile size: **64×128**, View angle: **Low top-down** (45-60° gerçek açı)
-3. Outline mode: **No outline**
-4. Description: numaralı 8 variant + #00FF00 background (Bölüm 0.6 Madde 5-6)
-5. Negative description: standart blok (Bölüm 0.6 Madde 2)
-6. Detaylı prompt: PLAYBOOK Adım 1
-7. Kaydet: `STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_sheet_v1.png`
-8. ⚠️ **90° top-down YASAK** — duvarın yan yüzü görünmez
+1. PixelLab → **Create image** → **Create M-XL Image (Flux)** tool
+   - ⚠️ **Map'teki Create tiles (Pro) Isometric type max 32×32** — 64×128 wall için yetersiz
+2. Canvas size: **256×256** (4×2 grid'te 8 wall, her hücre 64×128)
+3. Camera view: **Low top-down** (45-60° gerçek açı)
+4. Isometric (projection): **ON**
+5. Outline: **No outline**, Shading: **basic**, Details: **medium**
+6. Description: 4×2 grid + 8 numbered variant + #00FF00 bg (Bölüm 0.6 Madde 5-6)
+7. Negative description: standart blok (Bölüm 0.6 Madde 2)
+8. Target palette: RIMA wall (`#1A1C20 / #2A2D34 / #3A3D48 / #4E5260 / #606575`)
+9. Detaylı prompt: PLAYBOOK Adım 1
+10. Kaydet: `STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_sheet_v1.png`
+11. Aseprite'ta 4×2 grid → 8 ayrı 64×128 tile slice
+12. ⚠️ **90° top-down YASAK** — duvarın yan yüzü görünmez
 
 **🟢 Adım A7: W2 Wall (8 var)** — W1 approved → style ref → PLAYBOOK Adım 2
 
