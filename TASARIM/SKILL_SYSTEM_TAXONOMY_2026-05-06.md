@@ -289,7 +289,7 @@ Karar:
 |---|---|---|---|
 | Warblade | Iron Verdict | 3. LMB hit | Mevcut commit-beat proc ile ayni. (Istisna: sadece Warblade'de Identity Passive = commit-beat proc'un kendisidir. Diger 9 class'ta Identity Passive ayri bir layer'dir, commit-beat proc'tan bagimsiz calisir.) |
 | Elementalist | Element Affinity | RMB cast | %15 ihtimalle mevcut element branded mob'u retetikler. |
-| Shadowblade | Scar Memory | Phase Step + STRIKE | Phase Step sonrasi 2s icinde STRIKE +%25 hasar. |
+| Shadowblade | Scar Memory | Phase Step + STRIKE | Phase Step sonrasi 1.2s icinde STRIKE +%25 hasar. |
 | Ranger | Distance Discipline | Range check | 6+ tile mesafede ZONE/STRIKE +%20 hasar. |
 | Ravager | Carnage Pulse | HP threshold | HP <%50 iken tum Bleed tick'ler +%30. |
 | Ronin | Sheathe Window | Stillness + STRIKE | 0.6s hareketsizlik sonrasi ilk STRIKE Opened state garantili. |

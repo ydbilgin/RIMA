@@ -1,8 +1,10 @@
 # RIMA — FAZ MASTER (Tüm Fazların Özet Haritası)
 
-*Son güncelleme: 2026-04-09 | Kaynak: GDD, SINIF_VE_SKILL, MOB_TASARIMI, BOSS_DESIGN, MEKANIK_KARARLARI*
+*Son güncelleme: 2026-05-09 | S46 | Kaynak: GDD, SINIF_VE_SKILL, MOB_TASARIMI, BOSS_DESIGN, MEKANIK_KARARLARI, MASTER_KARAR_BELGESI.md (Karar #1-71), dungeon_act1_map.md, map_fragment_system.md, MAKEUP_BACKLOG.md, CINEMATIC_LAYER_v1.md, RIMA_MASTER_ART_PIPELINE.md*
 
-> Bu dosya genel haritadır. Claude'a sadece çalışılacak fazın dosyasını ver.
+> Bu dosya **genel haritadır** (high-level: sistem dağılımı, mob, narrative, asset pipeline overview).
+> Hafta-hafta detaylı plan + bütçe + kritik patika için: [`FAZ_DETAILED_SCOPE.md`](FAZ_DETAILED_SCOPE.md)
+> Claude'a sadece çalışılacak fazın dosyasını ver (`FAZ1_CORE_LOOP.md` vb.).
 
 ---
 
@@ -19,6 +21,10 @@
 - **Tempest + Hemomancer:** Post-launch expansion (Faz 5 sonrası)
 - **Faz numaralandırma:** GDD bazlı (daha granüler)
 - **Detaylı kararlar:** `../MASTER_KARAR_BELGESI.md` dosyasında
+- **Act 1 oda revize (Karar #62 LOCKED):** ~~8-9 oda~~ -> **15 node** (1 entry + 6 combat + 2 elite + 2 rest + 1 shop + 1 curse gate + 1 mystery + 1 boss). Detay: `../dungeon_act1_map.md`
+- **Map Fragment + Kirrik Tas Tablet (Karar #63 LOCKED):** Fragment-based reveal sistemi, Boss kapisi 8 fragment. UI: TAB MapPanel + sol-ust MiniMap.
+- **Silah Gorünürlük Single-State (Karar #71 LOCKED):** Silah hep elde, Ronin istisna (sheath/draw kimligi). Pixel art constraint + combat-readability. Detay: `../MAKEUP_BACKLOG.md` + `../CINEMATIC_LAYER_v1.md`
+- **AD v1 Sprint (Karar #64-70):** ActionCommitProfile 5 alan, 3-layer feedback, posture v1 (boolean armor flag), dash-cancel per-class (Ravager/Shadow %15-25, Ranger/GS %30-55, Warblade/Brawler %60-75), OnDash proc, Cross-Class Proc text feedback.
 
 ---
 
@@ -28,23 +34,44 @@
 |---|---|---|---|---|---|
 | **Hedef** | Combat hissi | İlk oynanabilir loop | Dual-class kırılma + 4 yeni class | Demo-ready run | Early Access |
 | **Class** | 1 (Warblade) | 4 (+Elem, Shadow, Ranger) | 8 (+Ravager, **Ronin**, **Gunslinger**, **Brawler**) | 10 (+Summoner, Hexer) | 10 (tam set) |
-| **Act** | Act 1 kısmen (8-9 oda) | Act 1 tam | Act 1 + Act 2 | Act 1-2 tam | Act 1-2-3 + Final |
+| **Act** | Act 1 kismen (~5-7 node — Entry+Combat+Elite slice) | Act 1 tam (15 node, dungeon_act1_map.md) | Act 1 + Act 2 | Act 1-2 tam | Act 1-2-3 + Final |
 | **Boss** | Penitent Sovereign (F1) | Penitent Sovereign (F1+F2) | Echo Twin (F1+F2) | Fracture Sovereign (F1-F3) | The Architect (F1-F4) |
 | **Mob** | 7 (3 grunt + 4 prefab) | 9 (+SeamCrawler, Twice-Born) | 11 (+EchoHound, FractureBorn) | 13 (+SporeHollow, TheWound) | 16 (tam set) |
 | **Oda** | Combat, Elite | +Shop, Unknown | +Spirit Encounter | +Curse Gate, Event | Tam |
 | **Tier** | Common | Common, Rare | +Epic | +Legendary | Tam |
 | **Economy** | Shards | Shards + Echoes basit | Echoes aktif | + meta shop | Tam meta-prog |
-| **Cross-class** | — | — | Pasif (28 kombo: 8×7÷2) | +Ultimate | 45 kombo (10×9÷2) |
+| **Cross-class** | — | — | Pasif (28 kombo: 8x7/2) | +Ultimate | 45 kombo (10x9/2) |
 | **Echo Imprint** | — | Temel (4 class) | +Tag Sinerji | +Cross-class Imprint | Tam |
+| **Map Fragment** | — | spec only | implement | 8-fragment boss kapisi | tam reveal sistemi |
+| **Combat Feel (AD v1)** | ActionCommit + commit windows | 3-layer feedback | posture v1 + dash-cancel | Cross-Class Proc text + OnDash | Resonance 2-tag (v2) |
+| **Cinematic Layer** | — | Katman A (camera) | Katman B (env) + C (UI) | Katman D (boss intro frames) | 3-ending cinematic |
+| **Silah/Asset Pipeline** | Warblade base + 3-segment skill | 3 yeni class (10x4x6 frame) | 4 yeni class + weapon pass | 2 yeni class + makeup #1-3 | tum siniflar makeup #4-8 |
 | **Fracture Echoes** | — | — | — | ✅ (ilk 2 boss) | ✅ (tüm bosslar) |
 | **Dosya** | `FAZ1_CORE_LOOP.md` | `FAZ2_FIRST_PLAYABLE.md` | `FAZ3_SECONDARY_CLASS.md` | `FAZ4_FULL_DEMO.md` | `FAZ5_FULL_GAME.md` |
 
 ---
 
+## ASSET PIPELINE -- Faz Basina Üretim Yol Haritasi
+
+Detayli pipeline: `../../GUIDES/RIMA_MASTER_ART_PIPELINE.md`
+
+| Faz | PixelLab Üretim | ChatGPT Tile | Cinematic Frame | Toplam Kredi |
+|---|---|---|---|---|
+| Faz 1 | Warblade tam (~1000 cred) | F1 floor + W1 wall (DONE) | — | ~1000 |
+| Faz 2 | 3 sinif P0 (~3000 cred) | F2 floor + W2 wall + Trans | — | ~3000-3500 |
+| Faz 3 | 4 sinif P0 + 4 sinif P1 (~5000 cred) | F3 floor + OBW (DONE) | Boss intro v1 (~10 frames) | ~5500 |
+| Faz 4 | 2 sinif P0 + 8 sinif P1 (~6000 cred) | F4 Rift tile set | Boss intro v2 + 3-ending preview | ~6500 |
+| Faz 5 | 10 sinif P2 (Ulti) + makeup polish (~4000 cred) | All Acts complete | 3-ending full + Architect 4-faz | ~5000 |
+
+**Tier 2 abonelik (~2000-3000 cred/ay):** Faz 1-2 tek ay sigar, Faz 3-5 her biri ~2-3 ay.
+**Toplam tahmini kredi:** ~21000-22000 (~7-9 ay solo dev asset production paralel olarak code+design ile).
+
+---
+
 ## RIMA / RIFT MARCH NARRATIVE LAYER (Candidate - 2026-05-04)
 
-> Not locked. This is a phase-level story split only; no mechanical scope is added here.
-> Detailed pointer: `../../MEMORY/project_story_lore.md`
+> Lore audit verified KEEP (lore audit 2026-05-09). This is a phase-level story split only; no mechanical scope is added here.
+> Detailed pointer: `../../MEMORY/MEMORY.md` (index)
 
 | | Faz 1 | Faz 2 | Faz 3 | Faz 4 | Faz 5 |
 |---|---|---|---|---|---|
@@ -117,8 +144,8 @@ Narrative direction:
 
 ## MASTER_KARAR_BELGESI SENKRONU
 
-> FAZ_MASTER son güncelleme: 2026-04-28 (S43 partial). Detaylı kararlar `MASTER_KARAR_BELGESI.md`'de.
-> #17-#52 tam işlenmedi — Faz 2 başında detaylı güncelleme yapılacak.
+> FAZ_MASTER son guncelleme: 2026-05-09 (S46). Detayli kararlar `MASTER_KARAR_BELGESI.md`'de.
+> #1-#71 isaretlendi; #62-71 S46 ile eklendi.
 
 | Karar # | Konu | Faz Etkisi |
 |---------|------|-----------|
@@ -145,8 +172,12 @@ Narrative direction:
 | #57 | Counter arketip ayrimi: Warblade=absorb, Ronin=pre-draw, Brawler=whiff | Faz 1+ |
 | #58 | Movement Option C: Space = kisa dash, no state/damage/resource | Faz 1+ |
 | #59 | Pixel Art Constraint: skill VFX mob-side efektler sinirli | Faz 1+ |
+| #62 | Act 1 node sayisi: 15 node (entry+combat+elite+rest+shop+curse+mystery+boss) | Faz 2+ |
+| #63 | Map Fragment + Kirrik Tas Tablet reveal sistemi, 8 fragment boss kapisi | Faz 2+ |
+| #64-70 | AD v1 Sprint: ActionCommitProfile, 3-layer feedback, posture v1, dash-cancel | Faz 1+ |
+| #71 | Silah Single-State: hep elde, Ronin sheath/draw istisna | Faz 1+ |
 
-**Durum: SYNC GUNCELLENDI 2026-04-30 (#54-#59 eklendi). Faz 2 detayli guncelleme yapilacak.**
+**Durum: SYNC GUNCELLENDI 2026-05-09 S46 (#60-#71 eklendi).**
 
 ---
 

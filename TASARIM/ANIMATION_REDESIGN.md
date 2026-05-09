@@ -1,5 +1,9 @@
 # RIMA — Animasyon Yeniden Tasarımı
-*Karar tarihi: 2026-04-06 | Tüm kararlar Claude'a ait*
+*Karar tarihi: 2026-04-06 | S46 update: 2026-05-09*
+
+> **⚠️ SCOPE NOTU (S46):** Bu dosya artık **MOB animasyon yenilemesi** için canonical kaynak.
+> Player class animasyonları için: [`../GUIDES/RIMA_MASTER_ART_PIPELINE.md`](../GUIDES/RIMA_MASTER_ART_PIPELINE.md) §4 (Karakter Üretim Pipeline).
+> Aşağıdaki **Elementalist / Ranger / Shadowblade** section'ları class anim için STALE — sadece tarihsel kayıt. Class işleri Master Pipeline'a taşındı.
 
 ---
 

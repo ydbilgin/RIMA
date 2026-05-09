@@ -1,7 +1,7 @@
 # GAME DESIGN DOCUMENT — RIMA
 *Son güncelleme: 2026-03-30 | Solo dev — Antigravity | Unity 6.3 LTS, 2D URP | Steam hedefi*
 
-> **[STALE — S43]** Bu belge S41 dönemine aittir. Skill isimleri, PPU değerleri ve yön sistemi güncel değil. Canonical kaynaklar: `MASTER_KARAR_BELGESI.md`, `SINIF_VE_SKILL_KARAR_BELGESI.md`, `SYSTEM_MAP.md`. Sadece lore/elevator pitch için referans al.
+> **[REFERENCE — S43+]** Bu belge Kasim 2025 (S41) lore baseline'ini icerir. Skill isimleri/PPU/yon sistemi gibi mekanik detaylar icin canonical kaynaklar: `MASTER_KARAR_BELGESI.md` (Kararlar #1-70), `SINIF_VE_SKILL_KARAR_BELGESI.md`, `TASARIM/dungeon_act1_map.md`, `TASARIM/map_fragment_system.md`, `SYSTEM_MAP.md`. Lore/elevator pitch/temel pacing icin bu dosya hala gecerli -- Master kararlarla desync olan bolumler icin Master oncelik.
 
 ---
 

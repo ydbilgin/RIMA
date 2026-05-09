@@ -74,7 +74,7 @@ Notlar:
 
 | Class | Identity Passive | Trigger | Etki |
 |---|---|---|---|
-| Shadowblade | Scar Memory | Phase Step + STRIKE | Phase Step sonrasi 2s icinde STRIKE +%25 hasar. |
+| Shadowblade | Scar Memory | Phase Step + STRIKE | Phase Step sonrasi 1.2s icinde STRIKE +%25 hasar. |
 
 ### KEYSTONE Secenekleri (5 adet)
 
