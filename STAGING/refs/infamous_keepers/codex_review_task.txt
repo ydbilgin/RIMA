@@ -1,0 +1,40 @@
+Bağımsız ikinci görüş: Claude'un Infamous Keepers (Steam) screenshotlarını RIMA tasarım kararlarıyla karşılaştırdığı analiz dosyasını gözden geçir. Eksik nokta, hatalı yorum, abartılı çıkarım veya kaçırılan detay var mı?
+
+İncelenecek dosyalar:
+- F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\refs\infamous_keepers\analysis.md — Claude'un analizi (4 screenshot, 8 sistem)
+- F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\refs\infamous_keepers\01_combat_skeletons.jpg — F1 kombat
+- F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\refs\infamous_keepers\02_combat_traps.jpg — F2 kombat, çoklu damage
+- F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\refs\infamous_keepers\03_tavern_hub.jpg — Hub atmosferi
+- F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\refs\infamous_keepers\04_skill_draft.jpg — 3-kart draft UI
+
+Bağlam (RIMA LOCKED kararları):
+- 2D isometric roguelite, Hades-tarzı kapalı arena
+- Camera: 35° high top-down, 2:1 isometric, 4 kardinal yön sprite
+- WallOcclusionFader (minAlpha 0.38, fadeRadius 2.2)
+- Skill Draft: 4 tier (Common Grey/Rare Cyan/Epic Mor/Legendary Altın), 3-seçenek
+- Floating damage numbers default ON, Hit Flash + Hit Stop 2-5 frame
+- F1 amber torches → F3 cyan rift kristalleri lighting transition
+- Connected Generation (decoration scatter YASAK)
+- Hero-focused (squad değil)
+
+Görev:
+1. Claude'un analizini (analysis.md) baştan sona oku
+2. 4 screenshot'a bak (Read tool ile inceleyebilirsen)
+3. Her sistem (1-8) için Claude'un yorumunun doğru/eksik/abartılı/yanlış olduğunu değerlendir
+4. Claude'un kaçırdığı detaylar varsa belirt (ör. UI'da gözden kaçan element, bir sistem ki konuşulmamış)
+5. Claude'un önerdiği 5 aksiyonun her biri için: gerçekten yapmaya değer mi? (kritik/orta/düşük öncelik veya gereksiz)
+6. Senin kendi gözüyle ek aksiyon önerisi varsa ekle
+
+Çıktı formatı: F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\refs\infamous_keepers\codex_review.md
+- Her sistem (1-8) için: Claude'un yorumu + Codex değerlendirmesi (kısa)
+- Aksiyon önceliklendirme tablosu
+- Eklemen gereken aksiyon var mı?
+- Genel yargı (1 paragraf)
+
+Commit: docs(refs): Codex review of Infamous Keepers analysis
+
+Kritik kurallar (CODEX_DISPATCH.md):
+- Model: gpt-5.5
+- KOD YAZMA — sadece review/analysis
+- Yorum satırı yazma
+- Güven döngüsü: değerlendirme bitince commit
