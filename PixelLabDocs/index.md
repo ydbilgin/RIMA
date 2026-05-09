@@ -111,30 +111,55 @@ Bu klasör PixelLab dokümantasyonunun tamamını içerir.
 ---
 
 ## RIMA Kritik Bulgular
+*(2026-05-10 NLM sorgusu + Opus kararı — kanonik)*
 
-### ⚠️ 1. Interpolation — 64×64 SINIRI
-Interpolation tool **sadece 64×64** canvas kabul eder. 128×128 sprite → çalışmaz.
-Production Playbook'taki walk/attack cycle pipeline'ı revize edilmeli.
-**Çözümler:**
-1. 64×64'te üret → 16 frame → Unity'de scale
-2. 128×128 için skeleton animation kullan
-3. 64×64'te çalış → Aseprite'ta 2x nearest-neighbor → 128×128
+### ❌ 1. Eski Interpolation ÖLÜ
+64×64 constraint'li eski Interpolation tool kullanılmaz.
 
-### ⚠️ 2. Animate with Text Pro — Frame Sayısı
-| Input Boyutu | Çıktı | Maliyet |
+**Yerine iki araç:**
+- **Interpolate NEW (v2):** 252×252 destekli. Run cycle ve 3-segment attack dolgusu için standart.
+- **Animation-to-Animation Bridging Mode:** KF1+KF3 girişi → 2 ara frame üretir, 128px+ destekli. Geniş silahlı sınıflarda (Warblade greatsword) kırpma yaşanırsa kullan.
+
+### ⚠️ 2. Animate with Text NEW = v3 Pixflux — ZORUNLU
+Eski v2 araçlar %49 oranında çöküyor. v3 araçlar ("NEW" tag'li) zorunlu.
+
+**Canvas: 252×252** — v3'ün dayatması, RIMA'nın tercihi değil. Warblade gibi geniş silahlarda 128px'de kırpma olur, bu yüzden 252px gerekli.
+
+**Pixel budget formülü:** `width × height × frames ≤ 524,288`
+
+| Canvas | Max Frame | Not |
 |---|---|---|
-| 32×32 veya 64×64 | **16 frame** (4×4 grid) | 20 gen |
-| 65–128px | **4 frame** (2×2 grid) | 20 gen |
-| 129–170px | **4 frame** (2×2 grid) | 25 gen |
-| 171–256px | **4 frame** (2×2 grid) | 40 gen |
+| 252×252 | 8 | Proje standardı |
+| 160×160 | 16 | Silahsız karakterler minimum safe |
+| 128×128 | 16 | Silahlı karakterlerde kırpma riski |
 
-**RIMA Öneri:** 64px'te üret, 16 frame → daha akıcı animasyon, aynı maliyet.
+**Unity import:** 252×252 sprite sheet → Aseprite'ta 128×128 crop → Unity.
 
-### 3. MCP Async Workflow
-MCP araçları anında job_id döndürür, arka planda 2-5 dk işler. `get_*` tool ile sorgula.
-Birden fazla animasyon için: hepsini sıraya ekle, paralel işlenir.
+**⚠️ Attack 9-frame pixel budget:** 252² × 9 = 571,536 → bütçe aşımı. Çözüm: 8 frame'e düş VEYA 2 clip (windup 4 + follow 4).
 
-### 4. MCP Kurulum
+### 🚫 3. animate_character MCP — KALICI YASAK (2026-05-02)
+Tüm karakter animasyonları için MCP kullanılmaz.
+**Neden:** 4-frame limit + VFX sprite frame'lerine gömülüyor + run doğal değil.
+char_id'ler memory'den kasıtlı silindi. Claude prompt dökümanı hazırlar, kullanıcı PixelLab UI'da uygular.
+
+### 4. Web App vs MCP Karar Matrisi
+
+| Görev | Tool |
+|---|---|
+| Karakter animasyon (tüm clip'ler) | **Web App ZORUNLU** |
+| Karakter base 4-yön (prototip) | Web App |
+| Batch 4-yön base (10 sınıf loop) | MCP OK |
+| Tile / obje / static prop | MCP OK |
+| Animasyon polish | Aseprite |
+
+### 5. Brian's Extreme Pose Method — Hâlâ Geçerli
+Run/walk: Extreme Pose A → flip → Pose B → **Interpolate NEW** arası doldur.
+Skeleton animation: sadece complex custom attacks için saklı.
+
+### 6. MCP Async Workflow
+MCP araçları anında job_id döndürür, arka planda 2-5 dk işler. `get_*` tool ile sorgula. Birden fazla işlemi paralel sıraya ekle.
+
+### 7. MCP Kurulum
 ```
 claude mcp add pixellab https://api.pixellab.ai/mcp -t http -H "Authorization: Bearer 037c442d-d3cf-4f38-83a9-707e05dc62b0"
 ```
