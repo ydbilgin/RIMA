@@ -1,5 +1,49 @@
 # CURRENT STATUS
-**2026-05-08 - S45 - Phase 1 (Tile Pipeline + DungeonWorldBuilder)**
+**2026-05-09 - S46 - Regresyon fix'leri + dungeon mimari karar + map fragment spec — verification pending**
+
+## S46 Late Session (2026-05-09 — autonomous, user uyurken)
+- **Dungeon mimari KARAR doğrulandı (KEEP Hades-style ayrık oda)**: combat v1 + AD v2 eklemeleri açık dünya yönüne çekmiyor, tam tersi Hades modelini zorunlu kılıyor. Detay: `TASARIM/dungeon_act1_map.md`.
+- **Act 1 map paketi LOCKED v1**: 15 node (13 ana hat + 2 dal) — Entry / 6 Combat / 2 Elite / 2 Rest (transition) / 1 Shop / 1 Curse Gate dal / 1 Mystery dal / 1 Boss. Procedural per-run (topoloji sabit, içerik random). Detay: `TASARIM/dungeon_act1_map.md`.
+- **Map fragment system spec LOCKED v1**: StS2-style node reveal (current+1 default, +1 daha pickup ile = 2 ileri tip görünür), boss kapısı 8 fragment, hibrit MapPanel(TAB)+MiniMap(sol-üst). Detay: `TASARIM/map_fragment_system.md`.
+- **Q1-Q5 açık soruları kapatıldı (Opus karar)**: Rest fragment YOK / Mystery AUTHORED events / Spirit v1'de YOK / Map UI HİBRİT / Boss kapısı 8 fragment.
+- **Kod fix'leri uygulandı (5 edit)**:
+  - `UIManager.cs` AutoInit reset → B4.2 timeScale=0 PlayMode test order pollution fix
+  - `MainMenuScreen.cs` `OnNewRun` → `OnPlayClicked` rename (button delegate dahil) → B4.1 OnPlayClicked_Exists test
+  - `CharacterSelectTests.cs` 3 yer reflection invoke kaldırıldı (Awake auto-runs) → B4.1 CharSelect NullRef
+  - `RewardPickup.cs` Update lazy-find → Start+Invoke pattern → B4.1 PerformanceAntiPattern direct
+- **Verification PENDING**: B5.1 Reimport All + EditMode tests Unity MCP üzerinden bir verification agent ile koşturuluyor.
+
+## Overnight Run (2026-05-09 ~02:50–04:10) — READ FIRST
+- **Full report:** `STAGING/OVERNIGHT_REPORT.md` (per-task PASS/FAIL/BLOCKED + investigation list + commit plan)
+- **17/21 PASS/PARTIAL** (B1 cleanup ×8, B2 pipeline ×1, B3 wiring ×5 — except Inspector wiring of DungeonWorldBuilder which is deferred), **3 REGRESSION**, **1 BLOCKED**
+- **Sub-agent pattern verified:** 6 Codex (laurethgame+laurethayday) + 8 rima-qc + 1 Gemini audit. Cross-review caught real issues (dead "Rest" branch, redundant SetTileFlags, wrong file path).
+- **NO COMMIT MADE** (visual regression risk — ~141 dosya working tree'de, selectively stage)
+
+### Critical regressions to debug (priority order)
+1. **B5.1 Visual:** Play mode tiles render as Unity "missing sprite" placeholders despite Editor showing 108/108 valid sprite refs. Hypotheses (in order): TilemapRenderer Individual mode mismatch, "Entities" sorting layer absence, YSortBehaviour vs IsoSorter LateUpdate race, asset DB desync.
+2. **B4.2 timeScale=0 boot:** Was fixed in commit b343d4c, re-broken tonight. Suspect: B1.4 ChestUI/ForgeUI PauseForMenu sequence or scene state.
+3. **B4.1 EditMode 142/148:** 6 fails — CharacterSelect×3 NullRef (likely pre-existing), MainMenu_OnPlayClicked test (test/code drift), PerformanceAntiPattern×2 (re-run with verbose to capture report).
+
+### Tonight's clean wins (safe to keep)
+- B1.1 CS0618 migration (4 sites) — Codex+QC PASS
+- B1.3 HUD PromptFrame removal — Codex+QC PASS
+- B1.4 ChestUI/ForgeUI timeScale routing — Codex+QC PASS *(but suspect for B4.2)*
+- B1.5 Obstacle TilemapRenderer pattern added to Setup script
+- B1.6 DepthBandTileSet audit — Gemini found shared-state bug (TODO comment placed)
+- B2.1 process_tiles.py IEND root fix — Codex+QC PASS (BytesIO + explicit format="PNG" + post-write _verify_iend)
+- B3.5 DepthBand SOs — 3 SOs created+populated at `Assets/Resources/Map/DepthBands/`, editor menu `RIMA/Create DepthBand SOs` shipped
+- B3.4 DraftManager → RoomLoader.OnRoomCleared subscription (PARTIAL: dead "Rest" branch, harmless)
+- B3.1 YSortBehaviour added to Player *(but suspect for B5.1)*
+
+### Inventory: not committed yet
+~141 files in working tree. **Do not commit `Assets/Scenes/_IsoGame.unity` or `YSortBehaviour.cs` Player attach until B5.1 root cause identified** — they may be the regression source.
+
+### rima-research model (correction from earlier tonight)
+- Gemini 3.1 Pro Preview IS available (`~/.gemini/settings.json` already pins it as default).
+- Earlier "3.1 unavailable, fallback 2.5 Pro" was WRONG — actual cause was HTTP 429 (rate limit), not unavailability.
+- `.claude/agents/rima-research.md` updated: bare `gemini -p` (no `-m`); on 429 → retry-after-30s, not panic-fallback. Detail: `MEMORY/feedback_rima_research_model.md`.
+
+---
 
 ## Active Block
 
@@ -58,12 +102,12 @@ Correct: `$prompt | cx <account> exec -s danger-full-access -m gpt-5.5`
 Wrong:   `cx <account> exec ... $prompt` (hangs -- stdin stays open in background PS, codex waits for EOF)
 Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
-## NotebookLM (NEW - 2026-05-06)
+## NotebookLM (UPDATED - 2026-05-09)
 - Notebook: RIMA Game Design Knowledge Base (ID: ed3c8952-417c-4988-84a7-425d25ba3b08)
-- 111 sources total (80 bootstrap + 31 updates: S45 full batch sync 2026-05-08 23:40)
-- Sync tag: nlm-sync-20260508-S45 (22 files: TASARIM/MEMORY/STAGING/CLAUDE/RULES/CURRENT_STATUS)
-- Last sync: 2026-05-08 23:40 | Last commit: 9838a25 (2026-05-08)
-- Sync currency: commit date = content age; sync date = NLM age. Stop hook shows both.
+- ~200 sources (full batch sync 2026-05-09: 89 yeni dosya — tüm TASARIM/MEMORY/STAGING)
+- Last sync: 2026-05-09 | Last commit: b058c0a (2026-05-08)
+- Stop hook: find+hash tabanlı — committed dosyaları da yakalar, git status'tan bağımsız
+- /nlm-sync: hash karşılaştırmalı, NLM listesi bir kez çekilir, paralel sync
 - HARD RULE: Claude never reads files except CURRENT_STATUS.md -- all context via NotebookLM query
 - Detail: MEMORY/notebooklm_workflow.md
 
@@ -108,6 +152,30 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - **Alabaster Dawn'dan RIMA'ya taşınan prensip**: animation commitment + 3-tier feedback + named outcome + rarity layer. Setting/narrative/2.5D/kit-swap taşınmaz.
 - **STAGING dosyası**: STAGING/RIMA_Alabaster_Dawn_Expanded_Claude_Review_Pack.pdf (ChatGPT'nin 9 önerisi)
 
+### Alabaster Dawn v2 — Opus Web Araştırması + Çarpışma Analizi (2026-05-09 — KİLİTLENDİ)
+- **Araştırma**: Opus kendi araştırdı (Steam, xmodhub, Game8, RPGFan, Power Up Gaming, wiki) — önceki pas'taki PDF özetinin ötesine geçti
+- **Yeni AD bulgular**: 8-frame (~133ms) parry penceresi, stamina-gate sistemi, blade-weaving (light/heavy alternasyon → defensive multiplier), hidden poise bar, element reaction naming (Magma/Arc/Shatter = 2 element → named outcome), Juno Identity Passive (upgrade edilemez), mid-dungeon rest break
+- **v1 Sprint'e eklendi (LOCKED)**:
+  1. `showPostureMeter` boolean toggle → Game Feel Toggles listesine eklendi (default ON)
+  2. Ranger/Gunslinger dash-cancel fraction genişletildi: %35-50 → %30-55 (playtest kalibrasyonu)
+  3. Cross-Class Proc tetiklenince sigil glyph üstüne 1 satır 12px text ("Tremor!" / "Severance!") + SFX
+  4. Death recap + next-run hint UX layer (opsiyonel, boss yenilgisi sonrası)
+- **v2 Sprint adayları (tasarım onayı gerekir)**:
+  1. Resonance ara kademesi: 2-tag named outcome (10 pair: Tremor/Bloodveil/Severance/Crushblood/Resonant Hold/Lockedge/Splinter/Phantom Pulse/Hammerwound/Hemorrhage). Rift 3-tag kuralı KORUNUR
+  2. DepthBand transition rest room (F1→F2 ve F2→F3 geçişinde 1 combat-yok oda)
+  3. Boss weak-point sprite spawn (posture break 3s penceresinde spatial feedback)
+  4. Reactive adaptation boss design prensip: telegraph ±10-15% timing varyans
+  5. Brawler Identity Passive: LMB/RMB alternation reward (AD blade-weaving, class-spesifik)
+  6. Ronin REACTIVE skill: 8-frame (~133ms) parry penceresi (class-spesifik, global parry yok)
+- **Kesin reddedilen**: Stamina-Gate (hız LOCKED'ı kırar), global parry, companion sistemi, 2-element global reaction
+- **v3'te kalan**: Wild rarity (AD'da karşılığı yok), 5 Rift Portal türü (Resonance v2'den sonra netleşir)
+- **Önceki pas delta**: v1'e 4 yeni ekleme, v2'ye 6 aday, 0 yeni LOCKED ihlal
+
+### Oyunu Kullanıcıya Anlatabilme (2026-05-09 — AKTİF GEREKSİNİM)
+- Her sprint sonucunun teknik kararların yanı sıra "oyuncuya nasıl hissettiriyor" katmanıyla belgelenmesi gerekiyor
+- Hedef: early access / playtester / pazarlama için sade dil özet
+- **Combat sistemi kullanıcı özeti**: Her vuruş bir sözdür (commit). Saldırıya başlayınca belirli bir noktaya kadar devam etmek zorundasın. Zamanla dash ederek daha hızlı zincir kurarsın. Düşmanların gizli bir denge barı var — bu barı kırınca 3 saniyelik avantaj penceresi açılır. 10 sınıfın her birinin farklı vuruş ritmi ve kaynak döngüsü var. Farklı sınıflardan yetenek kullandığında sahada etiketler birikir; 3 farklı etiket aynı hedefte buluşunca büyük Rift patlaması tetiklenir.
+
 ### DungeonWorldBuilder (Architecture LOCKED — Codex in progress, laurethgame)
 - Phase 1: `LayoutKind` public + `PaintTemplateAtOffset` on `LargeDungeonMapPainterBase`
 - Phase 2: New SOs + builder — `DungeonWorldBuilder.cs`, `RoomTemplate.cs`, `DepthBandTileSet.cs`
@@ -121,6 +189,12 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - HP bar frame: 220×32px gothic stone arch; Resource bar: same style, class-agnostic crystal icon
 - Minimap border: 128×128px stone/parchment; Room name banner: 320×36px stone tablet
 - Palette: #1A1A2E/#2D2D4E/#00FFCC/#C8A96E
+
+### Isometric Z-Sort + Tile Sprite Fix (2026-05-09 — KOD HAZIR, Unity execution pending)
+- **IsometricSortSetup.cs** (`Assets/Editor/DevTools/IsometricSortSetup.cs`) — menu: `RIMA/Setup Isometric Sorting`. Camera'ya CustomAxis Y-sort atar, Ground/Wall sorting layer oluşturur, tüm TilemapRenderer'ları Individual moda geçirir.
+- **YSortBehaviour.cs** (`Assets/Scripts/Core/YSortBehaviour.cs`) — runtime Y-sort component. SpriteRenderer veya TilemapRenderer'a ekle; LateUpdate'te `sortingOrder = baseOrder - RoundToInt(y * yMultiplier)` hesaplar.
+- **Act1TileImporter.cs** — `RIMA/Fix Tile Sprites (Sub-Asset Embed)` menu item eklendi. NULL sprite'lı tile'ları düzeltir (sub-asset embed, F1'e uygulanan pattern).
+- **Execution sırası (Unity MCP ile)**: 1) `RIMA/Fix Tile Sprites` → 2) `RIMA/Setup Isometric Sorting` → 3) screenshot QC
 
 ### Code (DONE this session)
 
@@ -254,6 +328,10 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Logo: Cyan rift wordmark = PRIMARY.
 - Thumbnail: `dark_primary` direction (1 char + ghost echoes + cyan rift).
 
+## Tooling Added (2026-05-09)
+- **UnityMCP standardized**: tüm CCS instance'larına (`laurethgame`, `yasinderyabilgin`, `ydbilginn`, `ydbilgin`) `UnityMCP` eklendi / `mcp-unity` renamed. Tool prefix: `mcp__UnityMCP__*`. Node: `C:/Users/ydbil/mcp-unity/Server~/build/index.js`.
+- **Not**: Yeni CCS account eklenince UnityMCP manuel eklenmesi gerekiyor (CCS custom MCP'leri kopyalamıyor).
+
 ## Tooling Added (2026-05-06)
 - `/p` skill: ~/.claude/commands/p.md -- Gemini 2.5 Flash prompt beautifier (Claude prompting best practices baked in)
 - `/ask_gemini` skill: ~/.claude/commands/ask_gemini.md -- inline Gemini query
@@ -262,7 +340,11 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 
 ## Next Priorities
 ### Immediate next session:
-0. **v1 Combat Feel Sprint** — ActionCommitProfile 5 alan + 3-layer feedback + Rarity tier + Ses imzası (bkz. Alabaster Dawn bölümü)
+0. **Verification agent sonuçları kontrol et** — Reimport All + EditMode test sonuçları. Eğer hala fail varsa ek fix (özellikle MainMenuScreen_CreatesCanvasWithGraphicRaycaster ve _CanvasSortOrderIsHigh için neden belirsizdi; rename sonrası geçer mi gör).
+0. **Map fragment + DungeonGraph implementasyonu** — `TASARIM/map_fragment_system.md` ve `TASARIM/dungeon_act1_map.md` spec'lerine göre kod görevleri Codex'e dispatch edilebilir: MapFragment.cs (mevcut?), MapPanel.cs (yeni), DungeonGraph node visibility flags, RoomRegistry pool populate.
+0. **Unity MCP — Tile Fix + Z-Sort** (MCP artık aktif, session restart sonrası): `RIMA/Fix Tile Sprites` → `RIMA/Setup Isometric Sorting` → screenshot QC. YSortBehaviour'ı Player'a ekle.
+0. **v1 Combat Feel Sprint** — ActionCommitProfile 5 alan + 3-layer feedback + Rarity tier + Ses imzası + **AD v2 eklemeleri**: showPostureMeter toggle, Ranger/GS fraction %30-55, proc text feedback, death recap hint (bkz. Alabaster Dawn v2 bölümü)
+0. **v2 Sprint tasarım oturumu** — Resonance 2-tag named outcome listesi onayı (10 pair), DepthBand rest room spec, boss weak-point sprite, Ronin parry penceresi
 0. **F3/Trans tile import** — Unity Editor'da `RIMA/Import Act1 Tiles` menu item çalıştır (Act1TileImporter.cs pre-pass fix commit 75cf298 hazır; sadece execution gerekiyor)
 1. **Pilot room validation** — Play mode: 3 prefabs Instantiate via RoomLoader → event fires → console log
 2. **Task B**: LegacyRuntimeRoomManager rename + event subscribe
