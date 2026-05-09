@@ -1,11 +1,58 @@
 # PixelLab Production Playbook
 *Tek dosya, sırayla. Aç → Adım 1 → bitir → Adım 2.*
-*Son güncelleme: 2026-05-10*
+*Son güncelleme: 2026-05-10 (REVIZE — kanonik pipeline kararları işlendi)*
 
 > **Kullanım:** Bu dosyanın sırasını takip et. Her adım için **tool**, **ayarlar**, **prompt** (kopyala-yapıştır), **kaydet path**'i ve **process komutu** verilmiş. Bittikçe `[ ]` → `[x]` işaretle.
 
 > **REPO_ROOT:** `F:/Antigravity Projeler/2d roguelite/RIMA`
 > Tüm path'ler bu kökten relative.
+
+---
+
+## 📌 REVIZE NOTU — Kanonik Pipeline Kuralları (2026-05-10)
+
+NLM çapraz kontrolü + Opus kararı sonucu aşağıdaki kurallar tüm dosyaya geçerlidir. Adım metinleri eski tool isimleri/format kullanıyorsa, bu bölüm KAZANIR.
+
+### A. Tool Versiyonları
+- **"Animate with Text NEW"** = v3 Pixflux engine. Eski v2 araçlar %49 çöküyor — kullanma.
+- **"Interpolate NEW"** = Interpolate NEW v2 (252×252 destekli). Eski 64×64 Interpolation **ÖLÜ**.
+- **"Animation-to-Animation Bridging Mode"** — yeni alternatif. KF1 + KF3 → 2 ara frame. Geniş silahlı sınıflarda (Warblade greatsword) Interpolate NEW kırpma yaparsa bunu kullan.
+
+### B. Canvas Standardı
+- PixelLab v3 araçları **252×252 ZORUNLU** (silah/uzuv'un kanvas dışına taşmasını engeller, RIMA'nın seçimi değil)
+- Unity'ye **128×128 frame** olarak kırpılarak import edilir (PPU=64)
+- Sprite slice: 252×252 üretim → Aseprite'ta merkez 128×128 crop → Unity multiple sprite
+
+### C. Pixel Budget Formülü — ZORUNLU KONTROL
+`width × height × frame_count ≤ 524,288`
+
+| Canvas | Max Frame | RIMA Kullanımı |
+|---|---|---|
+| 252×252 | **8** | Standart (silahlı karakterler) |
+| 160×160 | 16 | Silahsız karakterler için minimum safe |
+| 128×128 | 16 | Silah taşıyan karakterde kırpma riski (kullanma) |
+
+**Bütçe aşımı = generation hatası VEYA kalite düşüşü.** Frame sayısını planla.
+
+### D. animate_character MCP — KALICI YASAK
+2026-05-02 kararı. Karakter animasyonları sadece Web App'te üretilir.
+**MCP OK:** tile, static prop, batch base 4-yön rotation.
+**MCP YASAK:** idle, walk, run, attack, hurt, death, dash.
+
+### E. Attack Animation Budget Uyarısı
+Eski plan: START + PEAK + END = 1 + 4 + 4 = **9 frame** → 252² × 9 = 571,536 → **BÜTÇE AŞIMI**.
+
+**Yeni format (zorunlu) — Seçenek 1:** PEAK frame'i windup'ın son frame'i ve follow'un ilk frame'i olarak paylaş:
+- Windup: 4 frame (son frame = PEAK)
+- Follow: 4 frame (ilk frame = PEAK, paylaşılır)
+- Toplam Aseprite'ta: **8 unique frame**
+
+**Seçenek 2:** İki ayrı Unity clip:
+- `Attack_Windup` (4 frame) + `Attack_Follow` (4 frame) — Animator'da chain
+
+Bu kural Adım 22, 23, 31, 32, 40, 41, 49, 50 için geçerli.
+
+---
 
 ---
 
@@ -49,8 +96,10 @@
 
 ### Karakter anim için (Sınıflar)
 
-- **Web App ZORUNLU** — MCP `animate_character` KULLANMA (4-frame limit + VFX bug)
-- Canvas: PixelLab v3 otomatik 252x252 üretir, Unity'ye 128x128 kırp
+- **Web App ZORUNLU** — MCP `animate_character` KALICI YASAK (Revize Notu D)
+- **Canvas: 252×252** (v3 zorunlu) → Unity import'unda 128×128 frame olarak kırpılır
+- Pixel budget: max **8 frame** @ 252×252 (Revize Notu C)
+- Tool versiyonları: "NEW" tag'li v3 araçlar zorunlu, eski v2 %49 çöküyor (Revize Notu A)
 - Hero anchor: `TASARIM/CLASS_CONCEPTS/rima_style_anchor.png` her gen'de yükle
 
 ### Tile/wall için chromakey
@@ -604,7 +653,8 @@ Walking forward, right leg fully extended in stride, weight shifted to front foo
 Aseprite'ta pose A'yı yatay flip → Pose B kaydet.
 
 **Adım 21c — Interpolate A → B:**
-Tool: **Interpolate NEW**, Input: Pose A + Pose B, Output: 4-6 frame.
+Tool: **Interpolate NEW (v2, 252×252)**, Input: Pose A + Pose B, Output: 4-6 frame.
+> **Alternatif (geniş silah kırpma yaşanırsa):** **Animation-to-Animation Bridging Mode** kullan — KF1 (Pose A) + KF3 (Pose B) ver, 2 ara frame üretir. Warblade greatsword için bu seçenek daha güvenli.
 
 **💾 Kaydet (her yön için 6 frame walk cycle):**
 ```
@@ -634,10 +684,11 @@ Greatsword horizontal slash at full extension, arms parallel to ground, sword ti
 - Input: PEAK + recovery pose (idle benzeri)
 - Output: 4 frame follow-through
 
-**💾 Kaydet (her yön için 9 frame total):**
+**💾 Kaydet (her yön için 8 frame total — PEAK paylaşılır, Revize Notu E):**
 ```
 STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/04_attack_LMB/warblade_lmb_S.png (+E, +N)
 ```
+> 252² × 8 = 508,032 ≤ 524,288 ✓ (9 frame olsaydı bütçe aşardı). PEAK = windup son + follow ilk frame.
 
 ---
 
@@ -650,8 +701,9 @@ STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/04_attack_LMB/warblade_lmb_S.png 
 Greatsword slammed into ground, both hands gripping hilt at chest level, blade vertical with tip at character's feet. Body fully forward, knees bent, weight committed downward. Impact frame — peak commitment.
 ```
 
-**START → PEAK:** 4 frame (sword raised overhead, max windup)
-**PEAK → END:** 4 frame (recovery, pull sword from ground)
+**START → PEAK:** 4 frame (sword raised overhead, max windup) — son frame = PEAK
+**PEAK → END:** 4 frame (recovery, pull sword from ground) — ilk frame = PEAK paylaşılır
+**Toplam: 8 unique frame** (Revize Notu E)
 
 **💾 Kaydet:**
 ```
@@ -788,7 +840,7 @@ STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/03_run_cycle/ranger_walk_S.png (+E,
 
 ## ✅ Adım 31: Ranger Attack_LMB (Bow Shot, 4 yön)
 
-**🛠️ Tool:** Animate with Text NEW + Interpolate NEW (3-segment, 9 frame)
+**🛠️ Tool:** Animate with Text NEW + Interpolate NEW (3-segment, **8 frame** — PEAK paylaşılır, Revize Notu E)
 
 **PEAK prompt:**
 ```
@@ -812,7 +864,7 @@ STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/04_attack_LMB/ranger_lmb_S.png (+E,
 Slow aim — bow at full draw with extra time, breath held, body very still and centered. Arrow tip glows faintly cold blue (#7BA7BC charge). Pose more deliberate than LMB.
 ```
 
-**Pipeline:** 3-segment, 9 frame.
+**Pipeline:** 3-segment, **8 frame** (PEAK paylaşılır — Revize Notu E).
 
 **💾 Kaydet:**
 ```
@@ -938,7 +990,8 @@ STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/03_run_cycle/shadowblade_walk_
 Right blade slash horizontal, arm extended at full slash, body 30° twisted. Left arm pulled back ready for next strike. Violet accent at blade trail (#5A2A8A streak). Body fully committed forward, weight on front foot.
 ```
 
-**3-segment, 9 frame.**
+**3-segment, 8 frame (PEAK paylaşılır — Revize Notu E)**.
+> Eski plan 9 frame'di — 252² × 9 = 571,536 bütçe aşımı. PEAK frame'i windup'ın son frame'i + follow'un ilk frame'i olarak paylaş. Toplam unique: 8.
 
 **💾 Kaydet:**
 ```
@@ -1081,7 +1134,8 @@ Both hands extended forward, palms outward, fingers spread — peak cast moment.
 
 > **DİKKAT:** Karakter sprite'ında element rengi YOK. Sprite element-agnostic, VFX overlay runtime'da Fire/Frost/Lightning/Light farkını ekler.
 
-**3-segment, 9 frame.**
+**3-segment, 8 frame (PEAK paylaşılır — Revize Notu E)**.
+> Eski plan 9 frame'di — 252² × 9 = 571,536 bütçe aşımı. PEAK frame'i windup'ın son frame'i + follow'un ilk frame'i olarak paylaş. Toplam unique: 8.
 
 **💾 Kaydet:**
 ```
@@ -1097,7 +1151,8 @@ STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/04_attack_LMB/elementalist_lm
 One hand thrust forward (right hand), palm out, the other hand pulled back at hip channeling. Body twisted 30° to support thrust. Robe billows from cast force. Blank palm zone for VFX (16x16px on extended hand). NO embedded glow.
 ```
 
-**3-segment, 9 frame.**
+**3-segment, 8 frame (PEAK paylaşılır — Revize Notu E)**.
+> Eski plan 9 frame'di — 252² × 9 = 571,536 bütçe aşımı. PEAK frame'i windup'ın son frame'i + follow'un ilk frame'i olarak paylaş. Toplam unique: 8.
 
 **💾 Kaydet:**
 ```
