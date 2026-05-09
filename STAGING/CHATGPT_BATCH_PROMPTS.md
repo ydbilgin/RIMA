@@ -34,7 +34,7 @@ OUTPUT SIZE: 1024×1536 pixels, portrait orientation (taller than wide). NOT squ
 GRID: 4 columns × 4 rows = 16 tiles, zero gaps, perfectly equal sizing.
 Each cell is exactly 256×384 pixels in the output.
 
-BACKGROUND: Solid magenta #FF00FF outside all wall shapes. Pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) outside all wall shapes. Pure flat green only. No green pixels inside tiles.
 
 PIXEL ART SCALE: Each tile is 64×96 logical pixels. Pixel clusters minimum 4px wide — no sub-pixel detail. Image will be downscaled 4× to 64×96px tiles.
 
@@ -83,7 +83,7 @@ OUTPUT SIZE: 1024×1536 pixels, portrait orientation (taller than wide). NOT squ
 GRID: 4 columns × 4 rows = 16 tiles, zero gaps, perfectly equal sizing.
 Each cell is exactly 256×384 pixels in the output.
 
-BACKGROUND: Solid magenta #FF00FF outside all wall shapes. Pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) outside all wall shapes. Pure flat green only. No green pixels inside tiles.
 
 PIXEL ART SCALE: Each tile is 64×96 logical pixels. Pixel clusters minimum 4px — no sub-pixel detail. This image will be downscaled 4× to 64×96px tiles; design accordingly.
 
@@ -133,7 +133,7 @@ OUTPUT SIZE: 1024×1536 pixels, portrait orientation (taller than wide). NOT squ
 GRID: 4 columns × 3 rows = 12 tiles, zero gaps, perfectly equal sizing.
 Each cell is exactly 256×512 pixels in the output.
 
-BACKGROUND: Solid magenta #FF00FF outside all shapes. Pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) outside all shapes. Pure flat green only. No green pixels inside tiles.
 
 PIXEL ART SCALE: Each tile is 64×128 logical pixels (twice the height of a standard wall). Pixel clusters minimum 4px — no sub-pixel detail.
 
@@ -187,7 +187,7 @@ OUTPUT SIZE: 1024×1024 square image.
 GRID: 4 columns × 4 rows = 16 tiles, zero gaps, perfectly equal sizing.
 Each cell is exactly 256×256 pixels in the output.
 
-BACKGROUND: Solid magenta #FF00FF outside all diamond shapes. Pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) outside all diamond shapes. Pure flat green only. No green pixels inside tiles, no green moss, no vegetation.
 
 PIXEL ART SCALE: Each tile is 64×64 logical pixels. Pixel clusters minimum 4×4px — no sub-pixel detail. Image will be downscaled 4× to 64px tiles.
 
@@ -237,7 +237,7 @@ OUTPUT SIZE: 1024×512 square image.
 GRID: 4 columns × 2 rows = 8 tiles, zero gaps, perfectly equal sizing.
 Each cell is exactly 256×256 pixels in the output.
 
-BACKGROUND: Solid magenta #FF00FF outside all diamond shapes. Pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) outside all diamond shapes. Pure flat green only. No green pixels inside tiles, no green moss, no vegetation.
 
 PIXEL ART SCALE: Each tile is 64×64 logical pixels. Pixel clusters minimum 4×4px — no sub-pixel detail.
 
@@ -278,7 +278,7 @@ OUTPUT SIZE: 1024×512 square image.
 GRID: 4 columns × 2 rows = 8 tiles, zero gaps, perfectly equal sizing.
 Each cell is exactly 256×256 pixels in the output.
 
-BACKGROUND: Solid magenta #FF00FF outside all diamond shapes. Pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) outside all diamond shapes. Pure flat green only. No green pixels inside tiles, no green moss, no vegetation.
 
 PIXEL ART SCALE: Each tile is 64×64 logical pixels. Pixel clusters minimum 4×4px — no sub-pixel detail.
 

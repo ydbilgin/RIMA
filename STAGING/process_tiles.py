@@ -147,10 +147,26 @@ def process(source, output_dir, cols, rows, out_w, out_h, prefix):
 
     img = Image.open(source).convert("RGBA")
     data = np.array(img)
-    # Chromakey: magenta #FF00FF ±30 tolerance
-    r, g, b = data[:, :, 0], data[:, :, 1], data[:, :, 2]
-    mask = (r > 225) & (g < 30) & (b > 225)
+    # Chromakey: Pure green #00FF00 bg — stone tiles never have G>200 (LOCKED 2026-05-09)
+    # Tolerance ±15 on R/B channels covers anti-alias edge bleed from ChatGPT.
+    # Magenta filter (deprecated): (r>140)&(b>120)&(g<55)&((ri+bi)>(gi*3+150))
+    r = data[:, :, 0].astype(np.int32)
+    g = data[:, :, 1].astype(np.int32)
+    b = data[:, :, 2].astype(np.int32)
+    # Pass 1 — hard removal: G dominant over combined R+B (catches #00FF00 + anti-alias bleed)
+    mask = (g > r + b) & (g > 100)
     data[mask] = [0, 0, 0, 0]
+    # Pass 2 — spill suppression: clamp G to max(R,B) for any surviving greenish pixel.
+    # Eliminates the green fringe on isometric diamond edges without touching stone colors.
+    r2 = data[:, :, 0].astype(np.int32)
+    g2 = data[:, :, 1].astype(np.int32)
+    b2 = data[:, :, 2].astype(np.int32)
+    max_rb = np.maximum(r2, b2)
+    spill = (g2 > max_rb) & (data[:, :, 3] > 0)
+    data[:, :, 1] = np.where(spill, max_rb.clip(0, 255).astype(np.uint8), data[:, :, 1])
+    # Pass 3 — binary alpha snap: 0 or 255 only, no partial transparency
+    alpha = data[:, :, 3]
+    data[:, :, 3] = np.where(alpha < 128, 0, 255)
     img = Image.fromarray(data)
 
     W, H = img.size

@@ -19,9 +19,9 @@ import numpy as np
 img = Image.open("chatgpt_tiles.png").convert("RGBA")
 data = np.array(img)
 
-# Magenta pikselleri şeffaf yap
-magenta = (data[:,:,0] > 200) & (data[:,:,1] < 50) & (data[:,:,2] > 200)
-data[magenta] = [0, 0, 0, 0]
+# Pure green #00FF00 chromakey (LOCKED 2026-05-09 — magenta deprecated)
+green_mask = (data[:,:,1] > 200) & (data[:,:,0] < 75) & (data[:,:,2] < 75)
+data[green_mask] = [0, 0, 0, 0]
 
 result = Image.fromarray(data)
 
@@ -48,7 +48,7 @@ Create a pixel art isometric dungeon floor tile sprite sheet.
 
 LAYOUT: [N] tiles in a [COLS] columns × [ROWS] rows grid, zero gaps between tiles, perfectly equal sizing.
 
-BACKGROUND: Solid magenta #FF00FF everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat green only. No green pixels inside tiles, no green moss, no vegetation.
 
 TILE STYLE (apply identically to ALL tiles):
 - Isometric diamond/rhombus shape, 2:1 width-to-height ratio
@@ -74,7 +74,7 @@ Create a pixel art isometric dungeon floor tile sprite sheet.
 
 LAYOUT: 16 tiles in a 4 columns × 4 rows grid, zero gaps between tiles, perfectly equal sizing.
 
-BACKGROUND: Solid magenta #FF00FF everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat green only. No green pixels inside tiles, no green moss, no vegetation.
 
 TILE STYLE (apply identically to ALL 16 tiles):
 - Isometric diamond/rhombus shape, 2:1 width-to-height ratio
@@ -128,7 +128,7 @@ Create a pixel art isometric dungeon floor tile sprite sheet.
 
 LAYOUT: 16 tiles in a 4 columns × 4 rows grid, zero gaps between tiles, perfectly equal sizing.
 
-BACKGROUND: Solid magenta #FF00FF everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat green only. No green pixels inside tiles, no green moss, no vegetation.
 
 TILE STYLE (apply identically to ALL tiles):
 - Isometric diamond/rhombus shape, 2:1 width-to-height ratio
@@ -173,7 +173,7 @@ Create a pixel art isometric dungeon floor tile sprite sheet.
 
 LAYOUT: 12 tiles in a 4 columns × 3 rows grid, zero gaps between tiles, perfectly equal sizing.
 
-BACKGROUND: Solid magenta #FF00FF everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) everywhere outside the diamond shapes. No transparency, no feathering, no anti-aliasing at edges — pure flat green only. No green pixels inside tiles, no green moss, no vegetation.
 
 TILE STYLE (apply identically to ALL tiles):
 - Isometric diamond/rhombus shape, 2:1 width-to-height ratio
@@ -218,7 +218,7 @@ Create a pixel art isometric dungeon wall tile sprite sheet.
 
 LAYOUT: 12 tiles in a 4 columns × 3 rows grid, zero gaps, perfectly equal sizing. Each tile is TALLER than it is wide (portrait rectangle, not diamond).
 
-BACKGROUND: Solid magenta #FF00FF everywhere outside the wall shapes. No transparency, no feathering — pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) everywhere outside the wall shapes. No transparency, no feathering — pure flat green only. No green pixels inside tiles.
 
 WALL SHAPE AND GEOMETRY:
 - Each tile shows the FRONT FACE of an isometric stone wall block
@@ -266,7 +266,7 @@ Create a pixel art isometric dungeon wall tile sprite sheet.
 
 LAYOUT: 8 tiles in a 4 columns × 2 rows grid, zero gaps, perfectly equal sizing. Each tile is portrait rectangle (taller than wide).
 
-BACKGROUND: Solid magenta #FF00FF everywhere outside the wall shapes. No transparency, no feathering — pure flat magenta only.
+BACKGROUND: Solid pure green #00FF00 (RGB 0,255,0) everywhere outside the wall shapes. No transparency, no feathering — pure flat green only. No green pixels inside tiles.
 
 WALL SHAPE: Same isometric wall block as W1 — top strip #3a3c50, front face #1e2030/#262838, left shadow strip #12141a, mortar joints #161620.
 
