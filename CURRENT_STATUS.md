@@ -11,7 +11,11 @@
   - `MainMenuScreen.cs` `OnNewRun` → `OnPlayClicked` rename (button delegate dahil) → B4.1 OnPlayClicked_Exists test
   - `CharacterSelectTests.cs` 3 yer reflection invoke kaldırıldı (Awake auto-runs) → B4.1 CharSelect NullRef
   - `RewardPickup.cs` Update lazy-find → Start+Invoke pattern → B4.1 PerformanceAntiPattern direct
-- **Verification PENDING**: B5.1 Reimport All + EditMode tests Unity MCP üzerinden bir verification agent ile koşturuluyor.
+- **Verification BLOCKED — manuel test gerekli**: Unity MCP 3 dk timeout boyunca yanıt vermedi (5 dosya değişikliği sonrası muhtemelen domain reload sürüyor veya MCP bridge disconnect). Sabah Unity Editor açıldığında:
+  1. Compile bittiğini doğrula (sağ alt spinner yok)
+  2. `Assets → Reimport All` (3-5 dk) — B5.1 visual fix
+  3. `Window → General → Test Runner` → EditMode → Run All — B4.1/B4.2 verify
+  4. Hala fail varsa: en muhtemel kalıntı **MainMenuScreen_CreatesCanvasWithGraphicRaycaster** ve **_CanvasSortOrderIsHigh** (rename sonrası geçer mi belirsiz, RimaUITheme.ResourceFrame null hipotezi var). PerformanceAntiPattern direct artık geçmeli; indirect path için RewardPickup.LateAcquirePlayer Update'ten doğrudan çağrılmıyor (Invoke ile çağrılıyor) → indirect tester yakalamamalı.
 
 ## Overnight Run (2026-05-09 ~02:50–04:10) — READ FIRST
 - **Full report:** `STAGING/OVERNIGHT_REPORT.md` (per-task PASS/FAIL/BLOCKED + investigation list + commit plan)
