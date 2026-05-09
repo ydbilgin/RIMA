@@ -1,9 +1,9 @@
 ---
-description: Dosyaları NotebookLM'e kaynak olarak ekle/güncelle (eski versiyonu siler, yeni ekler). /nlm-sync → tüm unsynced dosyaları batch sync. /nlm-sync --status → sync bekleyenleri göster (sync etmez). /nlm-sync path/to/file.md → tek dosya.
+description: Dosyaları NotebookLM'e kaynak olarak ekle/güncelle (eski versiyonu siler, yeni ekler). /nlm-sync → tüm unsynced dosyaları batch sync. /nlm-sync --status → sync bekleyenleri göster. /nlm-sync --cleanup-dry → orphan'ları listele. /nlm-sync --cleanup → orphan'ları sil. /nlm-sync path/to/file.md → tek dosya.
 allowed-tools: Bash
 ---
 
-# /nlm-sync — NotebookLM Source Sync (hash-based, parallel)
+# /nlm-sync — NotebookLM Source Sync (hash-based, parallel + orphan cleanup)
 
 Run the command below and return its output verbatim. Do not add commentary.
 
@@ -21,6 +21,17 @@ process.stdin.on("end",function(){
   try{var s=JSON.parse(c);var ids=s.filter(function(x){return x.title===t;}).map(function(x){return x.id;});if(ids.length)console.log(ids.join(" "));}catch(e){}
 });'
 
+# === Helper: list orphans (state'te izi olan ama local'de yok olan dosyalar) ===
+list_orphans() {
+  [ -f "$STATE" ] || return 0
+  cut -d'|' -f1 "$STATE" | sort -u | while IFS= read -r rel; do
+    [ -z "$rel" ] && continue
+    full="$REPO/$rel"
+    [ -f "$full" ] || echo "$rel"
+  done
+}
+
+# === Mode: --status ===
 if [ "$FILE" = "--status" ]; then
   LS=$(cat "$REPO/.claude/nlm_last_sync.txt" 2>/dev/null || echo "hiç sync edilmedi")
   UNSYNCED=$(
@@ -37,6 +48,7 @@ if [ "$FILE" = "--status" ]; then
       if [ -z "$sh" ] || [ "$ch" != "$sh" ]; then echo "$rel"; fi
     done
   )
+  ORPHANS=$(list_orphans)
   echo "=== NLM Sync Status ==="
   echo "Son sync: $LS"
   if [ -z "$UNSYNCED" ]; then
@@ -46,9 +58,84 @@ if [ "$FILE" = "--status" ]; then
     echo "$COUNT dosya sync bekliyor:"
     echo "$UNSYNCED" | sed 's/^/  /'
   fi
+  if [ -n "$ORPHANS" ]; then
+    OCOUNT=$(echo "$ORPHANS" | grep -c .)
+    echo ""
+    echo "⚠️  $OCOUNT orphan kaynak NLM'de duruyor (local'de yok):"
+    echo "$ORPHANS" | sed 's/^/  /'
+    echo "→ /nlm-sync --cleanup-dry ile incele, /nlm-sync --cleanup ile sil"
+  fi
   exit 0
 fi
 
+# === Mode: --cleanup-dry ===
+if [ "$FILE" = "--cleanup-dry" ]; then
+  ORPHANS=$(list_orphans)
+  if [ -z "$ORPHANS" ]; then
+    echo "=== Orphan check ==="
+    echo "Orphan yok — state ile local senkron."
+    exit 0
+  fi
+  OCOUNT=$(echo "$ORPHANS" | grep -c .)
+  echo "=== Orphan Cleanup (DRY RUN — silmez) ==="
+  echo "$OCOUNT dosya state'te var ama local'de yok:"
+  echo "$ORPHANS" | while IFS= read -r rel; do
+    base=$(basename "$rel")
+    echo "  $rel  →  NLM title: $base"
+  done
+  echo ""
+  echo "Silmek için: /nlm-sync --cleanup"
+  echo "(Sadece state'te izi olan dosyalar silinir — manuel yüklenmiş kaynaklar dokunulmaz.)"
+  exit 0
+fi
+
+# === Mode: --cleanup ===
+if [ "$FILE" = "--cleanup" ]; then
+  ORPHANS=$(list_orphans)
+  if [ -z "$ORPHANS" ]; then
+    echo "=== Orphan Cleanup ==="
+    echo "Orphan yok — temizlik gerekmez."
+    exit 0
+  fi
+  OCOUNT=$(echo "$ORPHANS" | grep -c .)
+  echo "=== Orphan Cleanup ==="
+  echo "$OCOUNT orphan siliniyor..."
+  echo "NLM kaynak listesi alınıyor..."
+  ALL_SOURCES=$(uvx --from notebooklm-mcp-cli nlm source list $NB 2>/dev/null)
+
+  DELETED=0
+  NOT_FOUND=0
+  echo "$ORPHANS" | while IFS= read -r rel; do
+    [ -z "$rel" ] && continue
+    base=$(basename "$rel")
+    old=$(echo "$ALL_SOURCES" | node -e "$NODE_FILTER" "$base")
+    if [ -n "$old" ]; then
+      uvx --from notebooklm-mcp-cli nlm source delete $old --confirm 2>/dev/null
+      echo "  Deleted NLM source: $base ($rel)"
+    else
+      echo "  NLM'de bulunamadı (zaten silinmiş?): $base ($rel)"
+    fi
+  done
+
+  # State dosyasından orphan satırlarını çıkar
+  if [ -f "$STATE" ]; then
+    TMP=$(mktemp)
+    while IFS= read -r line; do
+      [ -z "$line" ] && continue
+      rel=$(echo "$line" | cut -d'|' -f1)
+      full="$REPO/$rel"
+      if [ -f "$full" ]; then
+        echo "$line" >> "$TMP"
+      fi
+    done < "$STATE"
+    mv "$TMP" "$STATE"
+    echo "  State dosyası temizlendi."
+  fi
+  echo "=== Cleanup tamamlandı ==="
+  exit 0
+fi
+
+# === Mode: batch sync (no args) ===
 if [ -z "$FILE" ]; then
   echo "=== NLM Batch Sync (hash-based, parallel) ==="
 
@@ -99,7 +186,17 @@ if [ -z "$FILE" ]; then
     date '+%Y-%m-%d %H:%M' > "$REPO/.claude/nlm_last_sync.txt"
     echo "=== Done: $COUNT dosya ==="
   fi
+
+  # Batch sonrası otomatik orphan uyarısı (silmez, sadece bildirir)
+  ORPHANS=$(list_orphans)
+  if [ -n "$ORPHANS" ]; then
+    OCOUNT=$(echo "$ORPHANS" | grep -c .)
+    echo ""
+    echo "⚠️  $OCOUNT orphan kaynak tespit edildi (state'te var, local'de yok)."
+    echo "→ /nlm-sync --cleanup-dry ile listele, /nlm-sync --cleanup ile sil"
+  fi
 else
+  # === Mode: single file sync ===
   if [[ "$FILE" = /* ]]; then
     rel="${FILE#$REPO/}"
     full="$FILE"
@@ -125,9 +222,13 @@ fi
 ```
 
 **Usage:**
-- `/nlm-sync --status` → sync bekleyen dosyaları göster (sync etmez, sadece durum)
-- `/nlm-sync` → tüm unsynced dosyaları sync et (git status'tan bağımsız, hash karşılaştırmasıyla)
+- `/nlm-sync --status` → sync bekleyen + orphan dosyaları göster (sync etmez)
+- `/nlm-sync` → unsynced dosyaları sync et + orphan uyarısı (silmez)
+- `/nlm-sync --cleanup-dry` → orphan'ları listele (silmez)
+- `/nlm-sync --cleanup` → orphan'ları NLM'den ve state'ten sil
 - `/nlm-sync CURRENT_STATUS.md` → tek dosya sync
 - `/nlm-sync TASARIM/room_authoring.md` → tek dosya sync
+
+**Güvenlik:** `--cleanup` sadece **`nlm_sync_state.txt`'te izi olan ve artık local'de yok olan** dosyaları siler. NLM'e elle yüklediğin (GUIDES/, PDF, vb.) kaynaklara dokunmaz.
 
 **Not:** NLM kaynak listesi bir kez çekilir, paralel sync yapılır. Rate limit yerse hata çıkar.
