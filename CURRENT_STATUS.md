@@ -1,5 +1,120 @@
 # CURRENT STATUS
-**2026-05-09 - S46 LATE NIGHT - B5.1 FIXED ✅ + PlayMode 4 fail FIXED ✅ + Opus design review DONE**
+**2026-05-10 - S47 DAY - PixelLab production setup (klasör + playbook), NLM orphan cleanup, 4 ana class anim önceliği LOCKED**
+
+## S47 Day Session (2026-05-10)
+
+### PixelLab Klasör Yapısı + Tek-Dosya Playbook
+- **`STAGING/PIXELLAB/` kuruldu** — numaralı üretim klasörleri (üretim sırasına göre):
+  - `00_README.md` — master index, kategori tablosu, klasör akışı
+  - `01_NEXT_walls/` — HOWTO + W1/W2/OBW PROMPT.md + outputs/{w1,w2,obw}
+  - `02_NEXT_floors/` — HOWTO + F1/F2/F3/TRANS PROMPT.md + outputs/{f1,f2,f3,trans}
+  - `03_NEXT_obstacles/` — HOWTO + 8 obje (pillar/rubble/torch/crack/barrel/bone/stump/altar)
+  - `04_NEXT_Warblade_anim/` — Simetrik (3 yön + W flip)
+  - `05_NEXT_Ranger_anim/` — Asimetrik (4 yön)
+  - `06_NEXT_Shadowblade_anim/` — Asimetrik
+  - `07_NEXT_Elementalist_anim/` — Asimetrik, silahsız (07_weapon_pass YOK)
+  - `_DONE/` + `_ARCHIVE/` (12 eski v1/v2 prompt dosyası taşındı)
+- **`STAGING/PIXELLAB/PRODUCTION_PLAYBOOK.md`** — tek dosya, 51 adımlı sıralı playbook. Her adımda: tool, ayarlar, kopyala-yapıştır prompt, output path, process komutu, QC checklist. Açıp checkbox'la ilerleme.
+- Her anim klasöründe `outputs/01_base_4dir → 07_weapon_pass` Master Pipeline 5 adımına göre alt-klasörlü.
+
+### 4 Ana Class Anim Önceliği LOCKED (2026-05-10)
+- **Faz 1-2 ana class:** Warblade, Ranger, Shadowblade, Elementalist (BasicAttackProfile contract'ı bu 4'te tanımlı)
+- Önceki Animation Bible önceliği (Warblade > Ronin > Shadowblade > Ranger > Brawler > GS > Elem > Ravager > Hexer > Summoner) → SUPERSEDED. v1 sprintinde sadece bu 4 sınıfa odaklan.
+- Kalan 6 sınıf (Ronin/Brawler/Gunslinger/Ravager/Hexer/Summoner) → v2 sprint'e ertelendi
+- Memory: `project_v1_anim_4classes.md`
+
+### NLM Orphan Cleanup
+- **Script güncellendi** (`.claude/commands/nlm-sync.md`):
+  - `/nlm-sync --cleanup-dry` → orphan'ları listele (silmez)
+  - `/nlm-sync --cleanup` → orphan'ları NLM'den + state'ten sil
+  - `/nlm-sync` (batch) → sonunda otomatik orphan uyarısı
+  - `/nlm-sync --status` → orphan'ları da gösterir
+- **Güvenlik:** Sadece `nlm_sync_state.txt`'te izi olan + local'de yok olan dosyalar silinir. Manuel yüklenmiş GUIDES/PDF kaynaklara dokunulmaz.
+- **İlk cleanup yapıldı:** 21 orphan NLM kaynağı silindi (hepsi `_ARCHIVE/` veya `ARCHIVE/SUPERSEDED/`'e taşınmış eski PixelLab/animation prompt'ları), state 153→130 satır (2 bozuk satır da temizlendi).
+
+### Acık Isler
+- **PixelLab üretimine başla** — `STAGING/PIXELLAB/PRODUCTION_PLAYBOOK.md` Adım 1 (W1 wall) ile aç
+- **NLM sync** — yeni `STAGING/PIXELLAB/00_README.md` ve PRODUCTION_PLAYBOOK.md'yi NLM'e yüklemek istersen alt klasör scope'u eklemek lazım (mevcut script `STAGING/` root maxdepth=1)
+
+---
+
+**2026-05-09 - S46 NIGHT SESSION - Tile pipeline complete, Alabaster Dawn analysis, Opus design/mob/asset decisions + YENİ TILE SET ÜRETİLDİ (green chromakey, 6 sheet)**
+
+## S46 Night Session (2026-05-09 — night continuation)
+
+### Tile Pipeline — COMPLETE (F1/F2 now clean)
+- **F1 re-processed**: `STAGING/IMAGEGEN_OUTPUTS/f1.png` (1254×1254, proper magenta bg, 4×4). Old green-chromakey F1 fully replaced.
+- **F2 re-processed**: `tiles_raw/style_anchor_F2_floor.png` (canonical magenta source, 1024×1024, 4×4). `IMAGEGEN_OUTPUTS/f2.png` REJECTED (dark purple bg (47,0,45) — unprocessable).
+- **process_tiles.py fix APPLIED**: Broader chromakey `(r>140) & (b>120) & (g<55) & ((ri+bi)>(gi*3+150))` + binary alpha snap `np.where(alpha<128, 0, 255)`. Both fixes live in `STAGING/process_tiles.py`.
+- **WB folder DELETED**: Duplicate of OBW. Removed via AssetDatabase.DeleteAsset.
+- **Trans old tiles DELETED**: 32 stale `tf12_*` / `tf23_*` .asset files removed. New `trans_f1f2_00..07` and `trans_f2f3_00..07` in place.
+- **DoorEast / DoorWest REMOVED from scene**: Dungeon flows North/South only (Hades-style).
+- **DemoRoomPainter.cs CREATED** (`Assets/Editor/DevTools/`): MenuItem `RIMA/Paint Demo Room` — fills 14×10 floor rect with random F1 tiles + W1 walls north/south.
+- **Unity import sequence**: ImportAll (force-reimport PNGs) → FixTileSprites (rebuild sprite refs). alreadyOk=108, Created=12 (OBW).
+
+### Opus Dungeon Design Decisions (LOCKED)
+- **F1** (Entry rooms): Cold gray stone, sparse moss, dim torchlight. Oppressive, uniform.
+- **F2** (Mid): Cracked walls, deeper shadows, faint bioluminescent lichen. Pressure builds.
+- **F3** (Deep): Dark volcanic stone, pulsing energy cracks, corrupted glyphs. Boss territory.
+- **Hybrid tile pipeline** (LOCKED): ChatGPT for structural tiles (floors, walls, door arches, floor decals). PixelLab for decorative props (torches, rubble, crystals, AO shadows) — 16-variation feature valuable for props.
+- **Missing tile sets identified**: Corner tiles, door arches, floor decals, AO shadow tiles.
+
+### Opus Mob/Boss Roster Expansion (LOCKED 2026-05-09)
+- **New mob proposals (M09-M13)**: Resonance blocker, Rage drain, Posture specialist, Wound stacker, Keystone disruptor.
+- **New elite proposals**: E01 Vow-Hammer Confessor (posture-break punisher), E02 The Wound (Wound Field stacker).
+- **M09 Toll Hound + M10 Vow Speaker**: Act 1 rostere EKLENDI (LOCKED).
+- **Remaining open**: Resonance 2-tag named outcomes (v2 sprint), Elite posture at 120?, Wound Field x Mob Armor interaction rule, Sovereign arena conflict, Cross-class secondary unlock timing.
+
+### Opus Asset Pipeline Final Decisions (LOCKED)
+- Canonical F2 source = `tiles_raw/style_anchor_F2_floor.png`.
+- `IMAGEGEN_OUTPUTS/f2.png` and `rima_act1_environment_sheet_alpha/chromakey_2026_05_04.png` → ARCHIVE (pre-style-lock sheets, never use again).
+- 3 production sessions planned to complete Act 1 (corner tiles, door arches, floor decals/AO props).
+- PixelLab prompt specs drafted for torch/rubble/crystal variants.
+
+### Alabaster Dawn `terra/` Analysis
+- **Standard tile format**: 672px width, variable height. Per-tileset JSON metadata (`tilesets.json`, `nyx-tiles.json`).
+- **Chromakey**: Bright yellow (255,255,0) — reliable, no stone color conflicts.
+- **Autotile connectivity**: JSON border/connected rules define which tile types can neighbor each other.
+- **Transferable to RIMA**: JSON metadata schema (`Assets/Data/TileSets.json`), autotile connectivity for F1→W1 transitions, `swapImg` pattern for tile variants, region-clip format `[px, py, pw, ph]`.
+- **Not applicable**: 672px width (RIMA uses 64px base unit), RPG Maker engine specifics.
+
+### Preview Images (for visual QC)
+- `tiles_raw/preview/` — checkerboard-background PNGs for all source sheets + F1 sliced preview (4×4 grid, 4× scale).
+
+---
+
+## S46 Tile Pipeline Session (2026-05-09 — evening/night)
+
+### Tile Pipeline Root Cause Found + Fixed
+- **Root cause**: F1/F2 tiles were never run through `process_tiles.py`. They were manually split (wrong tool/approach), bypassing the chromakey removal step entirely. That's why colored artifacts remained — raw source pixels were present.
+- **Chromakey filter gap**: process_tiles.py's filter `(r>225) & (g<30) & (b>225)` was too narrow for ChatGPT output which produces R≈159-248, G≈0-47, B≈130-247. **Fix pending** — needs HSV-based detection + binary alpha snap (0 or 255 only, from Alabaster Dawn analysis).
+- **HSV overreach incident**: Attempted HSV hue 270-360 filter on existing tiles — destroyed wall art (blue-gray stone tones fell in same range). Reverted via `git checkout HEAD -- "Assets/Art/Tiles/Act1/"`.
+
+### New Source Sheets Processed (all from tiles_raw/ with proper magenta backgrounds)
+- **F3** (16 tiles, 64×64) — `tiles_raw/yeni/ChatGPT Image 9 May 2026 16_44_47.png` (1254×1254, 4×4 mossy stone)
+- **Trans_F1F2** (8 tiles, 64×64) — `tiles_raw/yeni/ChatGPT Image 9 May 2026 16_44_52.png` (1774×887, 4×2)
+- **Trans_F2F3** (8 tiles, 64×64) — `tiles_raw/yeni/ChatGPT Image 9 May 2026 16_44_55.png` (1774×887, 4×2)
+- **W1** (16 tiles, 64×96) — `tiles_raw/w1_sheet_v2.png` (1024×1536, 4×4 dark stone bricks)
+- **W2** (16 tiles, 64×96) — `tiles_raw/w2_sheet_v2.png` (1024×1536, 4×4)
+- **OBW** (12 tiles, 64×128) — `tiles_raw/obw_sheet.png` (1024×1536, 4×3)
+- All processed via `process_tiles.py` (current narrow magenta filter). Binary alpha fix pending.
+
+### Unity Import
+- `RIMA/Import Act1 Tiles` → Created: 12 (OBW new .asset files), Skipped: 108. All tiles valid.
+- `RIMA/Fix Tile Sprites` → alreadyOk=108 (all sprites ≥32px, no stale sub-assets).
+
+### Alabaster Dawn Tile Analysis (Opus)
+- **Binary alpha rule**: Alpha must be 0 or 255 only — partial transparency from ChatGPT causes edge artifacts
+- **Broader magenta tolerance**: R>200, B>200, G<60 minimum (HSV approach safer for stone tiles)
+- **`_alt_N` naming**: use for atmospheric tile variants
+
+### Pending
+- **F1 new source sheet NEEDED**: User will provide clean magenta-background ChatGPT sheet. Run: `python STAGING/process_tiles.py --source <path> --output Assets/Art/Tiles/Act1/F1 --cols 4 --rows 4 --width 64 --height 64 --prefix f1_`
+- **F2 new source sheet NEEDED**: Same — `style_anchor_F2_floor.png` is a reference, not a proper magenta-bg source sheet.
+- **process_tiles.py fix**: Broader magenta detection (R>200, B>200, G<60) + binary alpha snap to 0/255
+- **Commit pending**: All tile PNGs + .meta + .asset files (large commit)
+
+---
 
 ## S46 Evening Session (2026-05-09 — Yasin + Opus orkestra)
 
@@ -67,21 +182,92 @@
 
 ## ⏳ AÇIK İŞLER (Sıradaki Session İçin)
 
+### Siradaki: Animasyon + PixelLab
+- **Opus skill review sonuclarina gore animasyon oncelik sirasini belirle**
+- **PixelLab W1 duvar testi** (Create Tileset Pro, Transition Height 1.0)
+- **Ilk animasyon uretimine basla** (Animation Bible: 7 anim x 10 sinif)
+
+### Siradaki: PixelLab Tile Uretimi
+- **W1 duz duvar tile'lari** (16 variation, 64x96) — `STAGING/PIXELLAB_PROMPT_W1_WALL_v2.md` prompt hazir
+- **F1 floor tile'lari yenile** (PixelLab, 16 variation, 64x64) — `STAGING/PIXELLAB_PROMPT_F1_FLOOR_v2.md` hazir
+- `w1_conn` connector tile'lari random kullanımda duzgun gorunmuyor — duz duvar tile'lari gelince DemoRoomPainter duzeltilecek
+- process_tiles.py komutu: `--cols 4 --rows 4 --width 64 --height 96 --prefix w1_`
+
 ### 🔴 v1 Sprint Öncesi Kritik Design Kararlar (Opus Review 2026-05-09)
-- **KARAR A (ONAY GEREKİR) — Boss Posture Reset Politikası:** Sabit 850 yerine per-phase kademeli önerisi: Faz 1=700, Faz 2=850, Faz 3=1000. Faz 3 yeni mekanik İÇERMEMELİ. Yasin onayı bekliyor.
-- **KARAR B (ONAY GEREKİR) — Summoner Soul Bond 1s i-frame:** i-frame → "Posture Guard (%50 hasar azalt, 1.2s)" önerisi. Identity Passive değişikliği → Yasin onayı.
-- **KARAR C (ONAY GEREKİR) — Hexer Stack Pressure ICD:** Auto-trigger → 4s dahili cooldown veya stack-tüketen versiyona geçiş önerisi. Identity Passive değişikliği → Yasin onayı.
+- **DONE ✅ KARAR A — Boss Posture Reset Politikası:** Faz 1=700, Faz 2=850, Faz 3=1000 (LOCKED). Faz 3 yeni mekanik içermez.
+- **DONE ✅ KARAR B — Summoner Soul Bond:** i-frame → Posture Guard %50 hasar azalt 1.2s (LOCKED). Identity Passive değişti.
+- **DONE ✅ KARAR C — Hexer Stack Pressure ICD:** 4s ICD (LOCKED). Identity Passive değişti.
 - **DONE ✅ — DAMAGE_CALCULATION.md:** `TASARIM/DAMAGE_CALCULATION.md` oluşturuldu (multiplier kategorileri + x3.0 cap).
 - **DONE ✅ — MOB_COMPOSITION_RULES.md:** `TASARIM/MOB_COMPOSITION_RULES.md` oluşturuldu (M06+M04 yasak, M08+M04 yasak, M07 telegraph trainer TODO).
 - **DONE ✅ — Shadowblade Scar Memory:** Pencere 2s → 1.2s (LOCKED kararı değil, rafine).
 
+---
+
+### Opus Mob/Boss Tasarım Review (2026-05-09)
+
+#### Sprite Boyut Hiyerarşisi
+Sprite boyut tablosu mob-spesifik versiyona güncellendi — detay: MEMORY/project_mob_boss_sizes.md
+
+#### Yasin Onayi Bekleyen Kararlar (Yuksek Oncelik)
+1. [x] LOCKED — The Witness mekanigi → gorus-hatti-bazli (oldur degil, sirtini don — buff her saniye katlanir ama sadece gorus hattindayken)
+2. [x] LOCKED — Echo Twin Faz 2 → "Resonance Rift" firsati (iki kimlik carpısınca alan acilir, oyuncu icinde cross-class kullanabilir — zorunlu degil, odulli)
+3. [x] LOCKED — Architect Faz 4 → mekanik gradient 4s/mekanik (hepsi ayni anda degil, 16s'de birikerek)
+4. [x] LOCKED — Adaptive Posture Cap (faz 25s'den hizli bittiyse bir sonraki faz posture'u +%20)
+5. [x] LOCKED — Final boss canavar boyutu: 96px, oyuncudan kucuk (Architect gercek form)
+
+#### Yasin Onayi Bekleyen Kararlar (Orta Oncelik)
+6. [x] LOCKED — M09 Toll Hound (Act 1 kovalayici — rota-takibi, 5s gecikme) Act 1 rostere EKLENDI
+7. [x] LOCKED — M10 Vow Speaker (Act 1 skill yasakci — son 3s kullanilan skill'i 4s ICD ile cezalandirir) Act 1 rostere EKLENDI
+8. [x] LOCKED — M04 aura %50 → %35 (Summoner/Brawler dengesi)
+9. [x] LOCKED — M06 kalkan 3-stack cap (Gunslinger dengesi)
+10. [x] LOCKED — Penitent Faz 1 "Kefaret" imza mekanigi (boss kendi posture'unun %20'sini kirar, pencere 2x uzar)
+
+#### Yasin Onayi Bekleyen Kararlar (Dusuk Oncelik)
+11. [x] LOCKED — M03 gorsel revizyon (yer alti → tile dikis cizgisi hareketi)
+12. [x] LOCKED — M07 slow uzaklik-bazli (%30 yakin / %15 orta / %0 uzak)
+13. [x] LOCKED — Mob posture bari UI'dan kaldir (sadece stagger aninda kirmizi titreme)
+
+#### Act 1 Uygunluk Bulgulari
+- Act 1 EKSIK: hiz/rota-baskisi tehdidi yok — M09/M10 onerileri bu boslugu dolduruyor
+- The Witness mevcut tasarimi behavioral question sormuyor — revizyon KARAR bekliyor (yukarda #1)
+- Carrion Weaver → Diablo Fallen Shaman benzerligi var; diferansiyasyon gerekiyor (backlog)
+
+**2026-05-09 — Tum Opus kararlari Yasin tarafindan onaylandi (LOCKED)**
+Extended fikirler: Opus'un ilerideki tasarim oturumlarinda proaktif oneri getirebilecegi alanlar acik birakildi — kilitlenen kararlari ihlal etmemek sartiyla.
+
+Kilitlenen kararlar ozeti:
+- The Witness → gorus-hatti-bazli buff (oldur degil, sirtini don)
+- Echo Twin Faz 2 → Resonance Rift firsati (zorunlu degil, odulli)
+- Architect Faz 4 → 4s/mekanik gradient (16s'de full)
+- Adaptive Posture Cap → faz 25s altinda bittiyse +%20
+- M09 Toll Hound + M10 Vow Speaker → Act 1 rostere EKLENDI
+- M04 Anti-Heal aura → %50 → %35
+- M06 kalkan → 3-stack cap
+- M07 slow → uzaklik-bazli (%30/%15/%0)
+- Penitent Faz 1 → "Kefaret" imza mekanigi
+- M03 → tile dikis cizgisi gorsel revizyonu
+- Mob posture bari → UI'dan kaldir (boss bari kalir)
+- Carrion Weaver → diferansiyasyon gerekiyor (backlog)
+- Architect gercek form → 96px, oyuncudan kucuk (LOCKED)
+- Echo Twin cross-class trigger → Resonance Rift (iki kimlik carpısınca alan acilir)
+
+---
+
 ### Yüksek Öncelik
-0. **🚨 ChatGPT tile pixel tutarsızlığı (yeni gözlem 2026-05-09 evening)** — Yasin: "ChatGPT ile üretilen duvar/tile'ların pixel tutarlılığı tam değil, smooth 3D-render gibi. PixelLab'a migrate etmek gerekebilir." Master Karar #18 (ChatGPT environment için canonical) sapmaya başladı. **Aksiyon (sıradaki session):**
-   - Unity Game View screenshot al (mevcut F1/F2/F3 + W1/W2/OBW gör)
-   - Pixel quality QC — gerçek pixel art mı yoksa anti-aliased smooth mu?
-   - Eğer tutarsızlık doğrulanırsa: PixelLab tile production prompt v1 hazırla (Master Pipeline §6.1 revize)
-   - 64×32 floor / 64×96 wall için PixelLab MCP `create_isometric_tile` deneme
-   - Karar #18 update'i veya override (Karar #72 olabilir)
+0. **Tile pipeline — YENİ SHEETS ÜRETİLDİ, PROCESS + IMPORT BEKLİYOR (2026-05-09)**
+   - 6 sheet üretildi: f1_sheet, f2_sheet, f3_sheet, w1_connector_set, w2_connector_set, decal_f1_sheet
+   - Lokasyon: `STAGING/tiles_raw/yeni/`
+   - Chromakey: #00FF00 (yeşil) — temiz çalıştı, pipeline onaylandı
+   - QC PASS: F1/F2/F3 progression net, W1/W2 connector set tam (outer×2, inner×2, door arch, 2× endcap, variant), decal ×4 okunabilir
+   - Dikkat: Wall tile'lar smooth 3D render görünümü — mevcut W1/W2 straight tile'larla Unity'de karşılaştır
+   - **Aksiyon (sıradaki session):**
+     - `python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/f1_sheet.png --output Assets/Art/Tiles/Act1/F1 --cols 4 --rows 4 --width 64 --height 64 --prefix f1_`
+     - `python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/f2_sheet.png --output Assets/Art/Tiles/Act1/F2 --cols 4 --rows 4 --width 64 --height 64 --prefix f2_`
+     - `python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/f3_sheet.png --output Assets/Art/Tiles/Act1/F3 --cols 4 --rows 4 --width 64 --height 64 --prefix f3_`
+     - `python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/w1_connector_set.png --output Assets/Art/Tiles/Act1/W1 --cols 4 --rows 2 --width 64 --height 96 --prefix w1_conn_`
+     - `python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/w2_connector_set.png --output Assets/Art/Tiles/Act1/W2 --cols 4 --rows 2 --width 64 --height 96 --prefix w2_conn_`
+     - `python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/decal_f1_sheet.png --output Assets/Art/Tiles/Act1/Decal --cols 2 --rows 2 --width 64 --height 64 --prefix decal_f1_`
+     - Unity reimport → DemoRoomPainter görsel QC → W1 connector style uyumu kontrol
 1. **DONE ✅ PlayMode 4 fail (room/enemy spawn)** — `#if UNITY_EDITOR` stub spawn + 2s timeout fix (Codex commits a5c261f + 78af4a9). LegacyRuntimeRoomManager.SpawnEnemies now creates TestEnemy_Stub gameobjects in editor/test builds.
 2. **Lore REWORK 4 dosya** (lore audit raporu — Game Communication Requirement risk):
    - `TASARIM/STORY_RUN_PROGRESSION.md` (yeni) — 9-run NPC tanışma + lore drip tablosu
@@ -106,6 +292,82 @@
 ---
 
 ## Active Block (önceki içerik korunur)
+
+## S47 Session (2026-05-09 — PixelLab + Animation + Design)
+
+### PixelLab Pipeline — LOCKED (2026-05-09)
+- **Tool haritasi kesinlesti**: Create Tiles Pro (floor), Create Tileset Pro+Transition Height 1.0 (wall), Create Tileset Standard+Upload Image (transitions), Create Image S-XL new (obstacles)
+- **Duvar boyutu duzeltmesi**: 64x96 PixelLab'da yok -> **64x128** (Transition Full 32x64 -> 2x upscale)
+- **Create Tileset Pro Transition Height=1.0**: 32px'den otomatik 23-tile kose+junction ailesi uretir -> 2x = 64x128 duvar tam boyutu
+- **Create Tileset Standard Upload Image**: kendi tile'ini yukle -> Wang 16-tile gecis seti (F1->F2, F2->F3 icin mukemmel)
+- **2x Upscale kurali**: nearest-neighbor, Unity Filter Mode=Point, Compression=None — kalite kaybi yok
+- **Create Image S-XL (new)**: transparent bg ON, Low top-down (3D objeler), High top-down (flat objeler)
+- **Shared palette Act 1 LOCKED**: #1A1C20 / #2A2D34 / #3A3D48 / #4E5260 / #606575
+- **Yeni dosyalar**: `GUIDES/PIXELLAB_PRODUCTION_GUIDE_v1.md` + `STAGING/PIXELLAB_PROMPT_FLOORS_v3.md` + `STAGING/PIXELLAB_PROMPT_WALLS_v3.md` + `STAGING/PIXELLAB_PROMPT_OBSTACLES_v1.md`
+- NLM sync: PIXELLAB_PRODUCTION_GUIDE_v1.md done, ANIMATION_BIBLE.md done
+
+### Animation Bible — LOCKED (2026-05-09, Opus karari)
+- **View**: High top-down (~30-35 deg, Hades match) — tum assetler uniform
+- **Yonler**: 4 yonlu + yatay ayna = 6 unique (N/NE/E/SE/S/SW), W=mirror E
+- **Default facing**: South (kameraya dogru)
+- **Oyuncu v1**: 7 anim (Idle/Walk/Attack_LMB/Attack_RMB/Dash/Hurt/Death) + Summoner Summon_Cast
+- **Mob v1**: 4 anim (Walk/Attack/Hurt/Death), Elite +Telegraph, Boss 8 anim
+- **Toplam v1 butce**: ~179 animasyon
+- **Dosya**: `TASARIM/ANIMATION_BIBLE.md`
+
+### Dungeon vs Open World — FINAL KARAR (LOCKED 2026-05-09, Opus+Codex+NLM)
+- **Mimari KORUNUR**: prefab-per-room, duvar boundary var
+- **Terrain obstacles (pillar/rubble/chasms) -> oda ICI content** olarak eklenir — boundary replacement degil
+- **Genis odalar + ic objeler** = Hades modeli (kapali arena + dolu icerik)
+- Duvar tile art sorunu -> PixelLab ile cozulur, mimari degismez
+- NLM'den 9 kaynak bu karari destekledi
+
+### PixelLab Tool Arastirmasi — Netlesti
+- Create Tileset Standard/Pro max 32px (16x16 "not supported yet")
+- Standard: Wang/dual-grid/3x3 export, Top-down veya Sidescroller, Upload Image terrain
+- Pro: Shape Controls (preset sekil secici, angular dungeon icin), Transition Height 0-1.0+, Gemini kalitesi, 20 gen maliyet
+- Create Image S-XL (new): View dropdown (High/Low top-down), Direction (None for objects), Outline, Detail, 32-768px square, transparent bg
+- Prompt dosyalari: STAGING/PIXELLAB_PROMPT_*.md
+
+### Skill System v2 — LOCKED (2026-05-09, Opus+Codex+Yasin sentezi)
+8 LOCKED karar + Shadow Echo cross-class sistemi + final keybind. Detay: `TASARIM/SKILL_SYSTEM_v2.md`
+- **Karar 1** Warblade Iron Verdict -> **Verdict Ledger** (3 stack -> herhangi skill Sunder, oda cikisi reset)
+- **Karar 2** Ranger Distance Discipline -> **Range Bands** (<5 tile -%15, 5+ tile +%15+crit)
+- **Karar 3** Ravager Carnage Pulse -> **Blood Tide** (hit->stack +%6, max 5, oda min 2 floor, refresh on hit)
+- **Karar 4** Summoner Soul Bond -> **Necrotic Toll** (i-frame KAL + 3s pencerede skill +%30 AoE)
+- **Karar 5** Z/X kaldirildi -> **Shadow Echo sistemi** (3 katman: aura+phantom+UI flash, pozisyon skill tipine gore)
+- **Karar 6** Upgrade slot label-only Shape/Edge/Twist (zorla yok)
+- **Karar 7** Resonance pasifi Altar selection (1/Act, ana guzergah, 3 secenek)
+- **Karar 8** Ult Decay -%10/oda, floor -%40, gorunur HUD bar
+- **Hold mekanik YASAK** v1'de (ActionCommitProfile ihlali)
+- **Final Keybind**: WASD + LMB/RMB + Q/E/R/F + V (ult) + Space (dash) + G/M/C/Esc — toplam 8 combat input (Hades 2 seviyesi)
+- **Shadow Echo havuzu**: 10 sinif x 5 = 50 Echo, ~30 mevcut skill reuse + ~20 yeni shadow-spesifik
+- **Pozisyon kurali**: Melee->hedef, Ranged->player yani, Zone->cursor, Buff->player ustunde
+- **Gorsel spek**: alpha 0.3, cyan #00FFCC tint, 0.4s sure
+- **Animation onceligi**: Warblade -> Ronin -> Shadowblade -> Ranger -> Brawler -> GS -> Elem -> Ravager -> Hexer -> Summoner
+- **Yeni dosyalar**: `TASARIM/SKILL_SYSTEM_v2.md` + `TASARIM/SHADOW_ECHO_MATRIX.md`
+- **Memory**: `project_skill_system_v2_locked.md` + `project_shadow_echo_system.md`
+- **NLM sync**: PENDING bu session sonu
+
+### Open World vs Dungeon — Geri-Kontrol
+Dungeon mimari KORUNUR (Hades-style closed arena + intra-room terrain obstacles). NLM'den 9 kaynak destekledi. Detay: bu sessionin alt boluumlerinde.
+
+### Skill v2 NLM Audit — 6 Cakisma COZULDU (2026-05-09)
+NLM tutarsizlik sorgusu 6 conflict tespit etti, hepsi cozuldu:
+1. **Hold yasak vs Aim Shot:** Aim Shot TAP-MODE'a gecti (2-stage). `AIM_SHOT_BOSS_PLACEMENT_SYSTEMS.md` UPDATED.
+2. **Z/X kaldirilmasi vs Secondary Class:** Z/X **Secondary Class slotu** olarak korundu. Act 1=8 input, Act 2 boss sonrasi=10 input. Shadow Echo ayri sistem (Q/E/R/F evolution).
+3. **Altar vs Map:** Altar = yeni Node 12.5 (pre-boss "Altar of Resonance", ana guzergah, atlanamaz). Map 15->16 node. dungeon_act1_map.md update sonraki sprint.
+4. **Verdict Ledger vs Broken/Sundered:** Parallel paths (klasik Broken stack KORUNUR + Warblade fast lane Verdict Ledger).
+5. **Blood Tide vs Bleed:** Stack'e +%5 Bleed tick eklendi (cross-class Hexer/Brawler bleed sinerji korundu).
+6. **Cyan Shadow vs Violet Shadowblade Echo:** Renk dili (cyan=cross-class, violet=Shadowblade kendi).
+**Sonuc:** 8 LOCKED karar tutarsiz degil — eski dokumanlarla harmonize edildi. Detay: `TASARIM/SKILL_SYSTEM_v2.md` "CONFLICT RESOLUTIONS" bolumu.
+
+### Acik Isler (Siradaki)
+- **Opus skill review sonucu** -> Animation oncelik listesi gelecek
+- **PixelLab'da W1 duvar testi**: Create Tileset Pro -> Transition Height 1.0 -> F1 floor style ref yukle -> 4 var test
+- **Animasyonlara baslama**: Animation Bible'a gore, Opus oncelik sirasina gore
+
+---
 
 ## S46 Late Session (2026-05-09 — autonomous, user uyurken)
 - **Dungeon mimari KARAR doğrulandı (KEEP Hades-style ayrık oda)**: combat v1 + AD v2 eklemeleri açık dünya yönüne çekmiyor, tam tersi Hades modelini zorunlu kılıyor. Detay: `TASARIM/dungeon_act1_map.md`.
@@ -421,6 +683,7 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Earlier session history (2026-05-05): see git log (commits ad8d2c1, c59fbb9, d9f08bd).
 
 ## LOCKED
+- PixelLab üretim limiti: hareketli max 256×256px (confirmed), statik max 512×512px. Tüm moblar mob-spesifik boyutlarla üretilecek, bosslarda Unity scale kullanılacak.
 - Yükseklik sistemi: Hades approach — kamera açısı sabit, yükseklik farkı IsometricZAsY Z-offset + görsel gölge/kenar ile anlatılır. Kamera tilt yok.
 - Tile üretim yaklaşımı: ChatGPT (GPT-4o) > PixelLab isometrik floor için. Prompt şablonu: STAGING/CHATGPT_PROMPT_FLOOR_TILES.md. Unity side face çözümü: pivot top-center + Y-sort.
 - 3-katman dungeon render sistemi: Structural (Rule Tile) + Detail (Random Tile scatter) + Entity (Y-sorted props). AO shadow sprite duvar-zemin birleşiminde.
@@ -473,15 +736,15 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Undercroft tile seti -- PixelLab (prompts: STAGING/PIXELLAB_TILESET_UNDERCROFT_CONNECTED_2026-05-07.md)
 
 ## Latest Verification
-- EditMode: 144/144 PASS (10 new contract tests added, all pass).
-- PlayMode: 4/5 PASS -- TimeScale=0 boot bug caught and fixed (commit b343d4c).
-- Script validation: HUDController, MiniMap, RuntimeRoomManager, SettingsMenuUI, MainMenuScreen, RoomPreviewPanel all PASS.
+- **Tile pipeline CLEAN**: 0 chromakey artigi (G>R+B hard removal + spill suppression — two-pass LOCKED)
+- **Unity IsometricZAsY**: gaps giderildi, player Entities layer'inda, duvarlar Walls layer'inda
+- **Tile envanteri**: F1/F2/F3 (16 each), W1_conn/W2_conn (8 each), Decal (4), OBW (12), Trans (8+8)
+- **PixelLab prompts**: STAGING/PIXELLAB_PROMPT_F1_FLOOR_v2.md + STAGING/PIXELLAB_PROMPT_W1_WALL_v2.md hazir
+- EditMode: 148/148 PASS. PlayMode: 4 fail kaldi (room/enemy spawn — ayri gorev).
 - Performance: CPU frame time 99ms -> 0.11ms after deep-fix pass.
-- BasicAttack strategy pattern: all 6 behaviors implemented and compile-clean.
-- **F1 floor tiles VISIBLE in Play mode** (2026-05-08) — 30×30 painted at IsoGrid/Ground. PNG import pipeline was broken (stale DefaultAsset cache); fixed by embedding Sprites as sub-assets in each Tile .asset via Texture2D.LoadImage()+Sprite.Create()+AssetDatabase.AddObjectToAsset(). Player centered, CameraFollow working, Global Light2D intensity=1.0.
 
 ## Current Risks
-- **Act1TileImporter fix hazır (commit 75cf298)** — F3/Trans sprite'ları için Unity'de `RIMA/Import Act1 Tiles` henüz çalıştırılmadı; tile'lar hâlâ null sprite ref içeriyor olabilir.
+- **Act1TileImporter DONE** — F3/Trans/W1/W2/OBW tüm tile'lar import edildi (alreadyOk=108, Created=12). Tile sprite'ları geçerli.
 - BasicAttack .asset'leri Inspector'da PlayerAttack'e henüz assign edilmedi.
 - SkillDraftSystem -> SkillOfferUI hook baglandi, TriggerDraft hala oda gecisinde cagirilmiyor.
 - UI rebuild needs QC + PlayMode visual verification (no PlayMode screenshot test yet).
@@ -493,9 +756,11 @@ Detail: MEMORY (feedback_codex_dispatch_strategy.md)
 - Imagen tile ciktilari kalite yetersiz -- undercroft tile seti PixelLab'da yeniden uretilecek.
 - ChestUI.cs:43,50 + ForgeUI.cs:72,93,100 — direct timeScale writes, pre-existing, need UIManager routing (follow-up)
 - **Room authoring Task A DONE** (commit 3d64bab) -- rima-qc review pending
-- **F3/Trans_F1F2/Trans_F2F3 tile sprites NULL** -- same broken PNG import cache; need sub-asset fix (same pattern as F1)
+- **Tile pipeline PROCESS+IMPORT PENDING** — 6 yeni sheet STAGING/tiles_raw/yeni/ içinde hazır. process_tiles.py + Unity reimport + DemoRoomPainter QC gerekli.
+- **process_tiles.py binary alpha fix pending** — Current magenta filter too narrow; partial alpha from ChatGPT causes edge artifacts. Fix: R>200, B>200, G<60 + snap alpha to 0/255.
+- **F3/Trans tile QC pending** — sliced from non-standard ChatGPT dimensions (1254×1254, 1774×887); visual QC in Unity needed.
 - **RRM tile painting bagimliliklar** -- Task B'de soküm yapilacak; simdilik paralel calisiyor
-- **F3/Trans tile QC pending** — sliced from non-standard ChatGPT dimensions (1254×1254, 1774×887); visual QC in Unity needed to confirm quality acceptable
+- **Tile commit pending** — F3/Trans/W1/W2/OBW PNGs + .meta + .asset files not yet committed this session.
 
 ## Key Pointers
 - **Alabaster Dawn Opus Eval**: STAGING/RIMA_Alabaster_Dawn_Expanded_Claude_Review_Pack.pdf — 9 öneri, 10 LOCKED çakışma tespiti, v1 sprint paketi
