@@ -1,29 +1,32 @@
 # Aim Shot, Boss Weak Spot, Area Skill Placement
-Status: LOCKED 2026-05-06
+Status: LOCKED 2026-05-06 | UPDATED 2026-05-09 (S47: hold→tap-to-aim mode)
 
 ---
 
 ## 1. Aim Shot System
 
-### Core Rules
+### Core Rules (UPDATED S47)
 - Character body stays 4-cardinal (S/E/N/W). No new sprite directions, ever.
 - Projectile direction is decoupled from body facing. Projectile vector = cursor world position - player world position (normalized).
-- Activation: hold input past 0.25s threshold. Release fires.
-- No time dilation. Game runs at full speed during aim. Risk is real.
-- Character snaps body facing to nearest cardinal of cursor direction on activation.
+- **Activation: TAP skill key → enters aim mode (cursor changes to reticle). TAP/CLICK to fire. TAP key again to cancel mode.**
+- No time dilation. Game runs at full speed during aim mode. Risk is real.
+- Character snaps body facing to nearest cardinal of cursor direction on aim mode entry.
 - Body animation during aim: 2-frame plant loop layered on normal idle. No new cardinal set needed.
 
+### Why TAP-mode (not hold) — S47 Decision
+ActionCommitProfile sistem-wide hold yasak. Aim Shot eski "hold past 0.25s" tasarımı bu yasakla çakışıyordu. Çözüm: 2-stage tap. Birinci tap aim mode açar (cursor reticle olur), ikinci tap ateşler. Hold gerekmez, aynı taktiksel okuma korunur.
+
 ### Aim Indicator (Unity VFX, shared)
+- Cursor sprite **reticle**'a dönüşür (aim mode aktif görsel)
 - Dotted trajectory line from player to cursor
-- Reticle dot at cursor
 - Class-tinted color: green (Ranger), element color (Elementalist), gold (Gunslinger)
 
-### Per-Class Binding
+### Per-Class Binding (UPDATED S47)
 | Class | Binding | Notes |
 |---|---|---|
-| Ranger | LMB hold | Primary identity. Tap = quick cardinal shot. Hold past 0.25s = Aim Shot. Also banks Draw Weight. |
-| Elementalist | Lightbreak skill (hold) | Hold skill key = plant + aim beam. Release = fire beam in cursor direction. |
-| Gunslinger | Hip Shot skill (hold) | Hold skill key = side-step into plant. Release = precise cursor-aimed shot. Auto-crits if 6th/12th chamber. |
+| Ranger | LMB tap-mode | Primary identity. Tap LMB = enter aim mode. Tap LMB again = fire Aim Shot + bank Draw Weight. RMB = quick cardinal shot (no aim, fast escape). |
+| Elementalist | Lightbreak skill tap-mode | Tap skill key = plant + aim beam. Tap again = fire beam in cursor direction. |
+| Gunslinger | Hip Shot skill tap-mode | Tap skill key = side-step into plant + reticle. Tap again = precise cursor-aimed shot. Auto-crits if 6th/12th chamber. |
 
 ### PixelLab Cost
 - Shared plant pose: 2 frames x 4 directions = 8 frames (one-time, shared across all 3 classes)
@@ -69,21 +72,22 @@ Non-aim-shot classes (Warblade, Shadowblade, Ravager, Ronin, Brawler) access via
 
 ## 3. Area Skill Placement System
 
-### Input Flow
-1. Press skill key -> ground indicator (radius preview circle, color-coded per skill) appears at cursor
+### Input Flow (UPDATED S47 — tap-mode)
+1. **TAP** skill key -> ground indicator (radius preview circle, color-coded per skill) appears at cursor, placement mode active
 2. Move mouse/stick to desired position
-3. Release key -> AoE drops at indicator center
+3. **TAP** skill key again (or LMB) -> AoE drops at indicator center
 4. Right-click during placement = cancel (no cooldown spent)
+5. ESC also cancels mode (no cooldown spent)
 
 ### Rules
 - Max placement range: 6 tiles from player center
 - Out of range: indicator turns red, clamps to max range edge in cursor direction. No null-cast.
-- Cast animation: 0.2s wind-up loop while indicator active, 0.35s commit on release
+- Cast animation: 0.2s wind-up loop while indicator active, 0.35s commit on confirm tap
 - Movement locked during placement, facing locks to current cardinal
 - No time dilation. World ticks normally. Enemies advance. Placement is a real risk window.
 
-### Controller
-Hold skill button + right analog stick steers indicator from player-anchored origin. Release fires.
+### Controller (UPDATED S47)
+Press skill button = enter placement mode. Right analog stick steers indicator from player-anchored origin. Press skill button again = fire. B button = cancel.
 
 ### Which Classes Use This
 ALL AoE skills across the full roster route through this system.
