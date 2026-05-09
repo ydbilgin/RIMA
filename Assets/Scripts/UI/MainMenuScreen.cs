@@ -98,7 +98,7 @@ namespace RIMA
 
             // ── Buttons ──────────────────────────────────────────────
             float y = -20f;
-            AddMenuButton(root.transform, "NEW RUN", y, OnNewRun);
+            AddMenuButton(root.transform, "NEW RUN", y, OnPlayClicked);
             AddMenuButton(root.transform, "SETTINGS", y - 50f, OnSettings);
             AddMenuButton(root.transform, "QUIT", y - 100f, OnQuit);
 
@@ -152,7 +152,7 @@ namespace RIMA
 
         // ── Actions ──────────────────────────────────────────────────
 
-        private void OnNewRun()
+        private void OnPlayClicked()
         {
             _gameStarted = true;
             Destroy(gameObject);

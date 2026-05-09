@@ -38,6 +38,14 @@ namespace RIMA
             playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
             playerSearchDone = playerTransform != null;
             BuildPromptLabel();
+            // Player henüz spawn edilmemişse 0.5s sonra bir kerelik retry — Update path'inde Find* yok.
+            if (!playerSearchDone) Invoke(nameof(LateAcquirePlayer), 0.5f);
+        }
+
+        private void LateAcquirePlayer()
+        {
+            playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+            playerSearchDone = true;
         }
 
         private void Update()
@@ -52,13 +60,7 @@ namespace RIMA
                 sr.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
             }
 
-            if (playerTransform == null)
-            {
-                if (playerSearchDone) return; // already tried, give up
-                playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-                playerSearchDone = true;
-                if (playerTransform == null) return;
-            }
+            if (playerTransform == null) return;
 
             float dist = Vector2.Distance(transform.position, playerTransform.position);
             bool inRange = dist <= interactRadius && IsRoomClearInteractionAllowed();

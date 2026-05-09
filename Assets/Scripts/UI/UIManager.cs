@@ -37,10 +37,25 @@ namespace RIMA
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoInit()
         {
-            if (Instance != null) return;
+            if (Instance != null)
+            {
+                // Reset overlay state on scene reload — prevents prior PauseForMenu
+                // from leaking timeScale=0 into the next scene (PlayMode test order pollution).
+                Instance.ResetForSceneLoad();
+                return;
+            }
             var go = new GameObject("[UIManager]");
             DontDestroyOnLoad(go);
             go.AddComponent<UIManager>();
+        }
+
+        public void ResetForSceneLoad()
+        {
+            tabOpen = false;
+            settingsOpen = false;
+            skillOfferOpen = false;
+            _menuPaused = false;
+            Time.timeScale = 1f;
         }
 
         private void Awake()

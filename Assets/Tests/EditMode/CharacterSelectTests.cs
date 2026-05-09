@@ -74,10 +74,8 @@ namespace RIMA.Tests
         {
             var go = new GameObject("CharSelect");
             go.transform.SetParent(root.transform);
-            var screen = go.AddComponent<CharacterSelectScreen>();
-            var start = typeof(CharacterSelectScreen).GetMethod("Start",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            start.Invoke(screen, null);
+            go.AddComponent<CharacterSelectScreen>();
+            // Awake runs automatically on AddComponent in EditMode — Canvas built there.
 
             var canvas = go.GetComponentInChildren<Canvas>();
             Assert.IsNotNull(canvas, "CharacterSelectScreen must create a Canvas");
@@ -92,10 +90,8 @@ namespace RIMA.Tests
         {
             var go = new GameObject("CharSelect");
             go.transform.SetParent(root.transform);
-            var screen = go.AddComponent<CharacterSelectScreen>();
-            var start = typeof(CharacterSelectScreen).GetMethod("Start",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            start.Invoke(screen, null);
+            go.AddComponent<CharacterSelectScreen>();
+            // Awake runs automatically on AddComponent.
 
             var buttons = go.GetComponentsInChildren<Button>();
             // 4 class SELECT buttons + 1 BACK button = 5
@@ -108,10 +104,8 @@ namespace RIMA.Tests
         {
             var go = new GameObject("CharSelect");
             go.transform.SetParent(root.transform);
-            var screen = go.AddComponent<CharacterSelectScreen>();
-            var start = typeof(CharacterSelectScreen).GetMethod("Start",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            start.Invoke(screen, null);
+            go.AddComponent<CharacterSelectScreen>();
+            // Awake runs automatically on AddComponent.
 
             var buttons = go.GetComponentsInChildren<Button>();
             foreach (var btn in buttons)
