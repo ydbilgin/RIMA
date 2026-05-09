@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RIMA
@@ -40,6 +42,11 @@ namespace RIMA
             player = transform;
         }
 
+        private void Start()
+        {
+            StartCoroutine(ScanEnemiesRoutine());
+        }
+
         private void Update()
         {
             float dist = GetNearestEnemyDistance();
@@ -60,28 +67,33 @@ namespace RIMA
                 OnResourceChanged?.Invoke(Current, maxFocus);
         }
 
-        // Cached enemy list — refreshed every N seconds, NOT per-frame
-        private EnemyAI[] cachedEnemies = System.Array.Empty<EnemyAI>();
-        private float nextEnemyScan;
-        private const float EnemyScanInterval = 0.5f;
+        private readonly List<EnemyAI> cachedEnemies = new List<EnemyAI>();
+        private const float EnemyScanInterval = 0.2f;
+
+        private IEnumerator ScanEnemiesRoutine()
+        {
+            var wait = new WaitForSeconds(EnemyScanInterval);
+            while (true)
+            {
+                var enemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.None);
+                cachedEnemies.Clear();
+                cachedEnemies.AddRange(enemies);
+                yield return wait;
+            }
+        }
 
         private float GetNearestEnemyDistance()
         {
-            // Refresh cached enemy list periodically (expensive scene search)
-            if (Time.time >= nextEnemyScan)
-            {
-                nextEnemyScan = Time.time + EnemyScanInterval;
-                cachedEnemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.None);
-            }
-
             float minDist = float.MaxValue;
-            for (int i = 0; i < cachedEnemies.Length; i++)
+            int aliveCount = 0;
+            for (int i = 0; i < cachedEnemies.Count; i++)
             {
                 if (cachedEnemies[i] == null) continue;
+                aliveCount++;
                 float d = Vector2.Distance(player.position, cachedEnemies[i].transform.position);
                 if (d < minDist) minDist = d;
             }
-            return cachedEnemies.Length == 0 ? float.MaxValue : minDist;
+            return aliveCount == 0 ? float.MaxValue : minDist;
         }
 
         public override bool TrySpend(int amount)

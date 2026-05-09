@@ -24,6 +24,12 @@ You are the Gemini CLI research wrapper. The orchestrator hands you a single, sc
    ```
    For longer queries, write the query to stdin via a heredoc rather than embedding huge strings on the command line.
 
+   **Model selection (HARD RULE):**
+   - Default: bare `gemini -p "..."` — `~/.gemini/settings.json` already pins the default to `gemini-3.1-pro-preview`. Do NOT pass `-m` unless explicitly overriding.
+   - On HTTP 429 / "Too Many Requests" / quota error: this is rate limiting, NOT model unavailability. Retry ONCE after a 20–30 second sleep before falling back. Do not panic-fallback to a different model just because of 429 — 3.1 Pro Preview is what we want.
+   - On genuine "model not found" / 404 / "model not supported": fallback chain `-m gemini-2.5-pro` → `-m gemini-2.5-flash`. Report the actual error string in the agent reply.
+   - In your output, always state which model executed and why (default vs forced override vs fallback).
+
 3. Parse Gemini's answer. Extract:
    - Direct answer to the question (1-3 sentences).
    - Key citations / source URLs Gemini referenced.

@@ -8,7 +8,6 @@ namespace RIMA
         public const string ResourceFramePath        = "UI/RIMA/RIMA_UI_ResourceFrame";
         public const string SkillSlotFramePath       = "UI/RIMA/RIMA_UI_SkillSlotFrame";
         public const string MiniMapFramePath         = "UI/RIMA/RIMA_UI_MiniMapFrame";
-        public const string PromptFramePath          = "UI/RIMA/RIMA_UI_PromptFrame";
         public const string RoomBannerFramePath      = "UI/RIMA/RIMA_UI_RoomBannerFrame";
         public const string SmallPanelFramePath      = "UI/RIMA/RIMA_UI_SmallPanelFrame";
         public const string MenuDungeonBackgroundPath = "UI/RIMA/RIMA_MenuDungeonBackground";
@@ -164,8 +163,6 @@ namespace RIMA
             48, 48, 8, new Color(0.04f, 0.05f, 0.08f, 0.90f),
             new Color(0.22f, 0.34f, 0.42f, 0.60f), 1);
 
-        public static Sprite PromptFrame => MiniMapFrame;
-
         /// <summary>Skill slot frame (individual slots).</summary>
         public static Sprite SkillSlotFrame => _skillSlotSprite ??= MakeRoundedRect(
             64, 64, 10, new Color(0.06f, 0.07f, 0.10f, 0.92f),
@@ -194,41 +191,53 @@ namespace RIMA
         private static Sprite MakeRoundedRect(int w, int h, int radius,
             Color fill, Color border, int borderWidth)
         {
-            var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
-            tex.filterMode = FilterMode.Bilinear;
-            tex.wrapMode = TextureWrapMode.Clamp;
-
-            for (int x = 0; x < w; x++)
+            try
             {
-                for (int y = 0; y < h; y++)
+                var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+                if (tex == null) return null;
+
+                tex.filterMode = FilterMode.Bilinear;
+                tex.wrapMode = TextureWrapMode.Clamp;
+
+                for (int x = 0; x < w; x++)
                 {
-                    float dist = RoundedRectSDF(x, y, w, h, radius);
-                    if (dist > 0.5f)
+                    for (int y = 0; y < h; y++)
                     {
-                        tex.SetPixel(x, y, Color.clear);
-                    }
-                    else if (dist > -borderWidth)
-                    {
-                        float t = Mathf.Clamp01((dist + borderWidth) / 1.2f);
-                        Color c = Color.Lerp(border, fill, t);
-                        // Anti-alias the outer edge
-                        if (dist > -0.5f) c.a *= Mathf.Clamp01(0.5f - dist);
-                        tex.SetPixel(x, y, c);
-                    }
-                    else
-                    {
-                        tex.SetPixel(x, y, fill);
+                        float dist = RoundedRectSDF(x, y, w, h, radius);
+                        if (dist > 0.5f)
+                        {
+                            tex.SetPixel(x, y, Color.clear);
+                        }
+                        else if (dist > -borderWidth)
+                        {
+                            float t = Mathf.Clamp01((dist + borderWidth) / 1.2f);
+                            Color c = Color.Lerp(border, fill, t);
+                            // Anti-alias the outer edge
+                            if (dist > -0.5f) c.a *= Mathf.Clamp01(0.5f - dist);
+                            tex.SetPixel(x, y, c);
+                        }
+                        else
+                        {
+                            tex.SetPixel(x, y, fill);
+                        }
                     }
                 }
+
+                tex.Apply(false, true); // makeNoLongerReadable for memory
+
+                int brd = radius; // 9-slice border
+                return Sprite.Create(tex, new Rect(0, 0, w, h),
+                    new Vector2(0.5f, 0.5f), 100f, 0,
+                    SpriteMeshType.FullRect,
+                    new Vector4(brd, brd, brd, brd)); // left, bottom, right, top
             }
-
-            tex.Apply(false, true); // makeNoLongerReadable for memory
-
-            int brd = radius; // 9-slice border
-            return Sprite.Create(tex, new Rect(0, 0, w, h),
-                new Vector2(0.5f, 0.5f), 100f, 0,
-                SpriteMeshType.FullRect,
-                new Vector4(brd, brd, brd, brd)); // left, bottom, right, top
+            catch (System.Exception ex)
+            {
+                // EditMode test context may not have graphics pipeline ready.
+                // Image components tolerate null sprite (renders solid color).
+                Debug.LogWarning($"[RimaUITheme] MakeRoundedRect failed (EditMode?): {ex.Message}");
+                return null;
+            }
         }
 
         private static float RoundedRectSDF(int px, int py, int w, int h, int r)
@@ -240,4 +249,3 @@ namespace RIMA
         }
     }
 }
-

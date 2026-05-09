@@ -30,7 +30,7 @@ namespace RIMA.Editor
 
         static void EnsureHitStop()
         {
-            if (Object.FindObjectOfType<HitStop>() != null) return;
+            if (Object.FindFirstObjectByType<HitStop>() != null) return;
 
             var go = new GameObject("HitStop");
             go.AddComponent<HitStop>();
@@ -54,7 +54,7 @@ namespace RIMA.Editor
         {
             // Sahnedeki tüm Health bileşenlerine sahip düşmanları bul
             // Player haricinde)
-            var allHealth = Object.FindObjectsOfType<Health>();
+            var allHealth = Object.FindObjectsByType<Health>(FindObjectsSortMode.None);
             int count = 0;
 
             foreach (var hp in allHealth)

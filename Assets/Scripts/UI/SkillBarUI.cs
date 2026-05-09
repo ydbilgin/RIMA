@@ -47,6 +47,7 @@ namespace RIMA
         {
             ResolveControllers();
             BuildSlots();
+            ScheduleLateResolveControllers();
 
             if (PlayerClassManager.Instance != null)
             {
@@ -73,6 +74,7 @@ namespace RIMA
             rangerCtrl = null;
             shadowCtrl = null;
             ResolveControllers();
+            ScheduleLateResolveControllers();
         }
 
         private void OnSecondaryPicked(ClassType _)
@@ -80,6 +82,7 @@ namespace RIMA
             // Re-resolve to pick up secondary controller
             controllersResolved = false;
             ResolveControllers();
+            ScheduleLateResolveControllers();
         }
 
         // ─── Build ──────────────────────────────────────────────────
@@ -165,14 +168,6 @@ namespace RIMA
 
         private void Update()
         {
-            if (!controllersResolved)
-            {
-                ResolveControllers();
-                if (warbladeCtrl != null || elemCtrl != null ||
-                    rangerCtrl != null || shadowCtrl != null)
-                    controllersResolved = true;
-            }
-
             int active = GetActiveSlotCount();
             for (int i = 0; i < SlotCount; i++)
             {
@@ -246,6 +241,27 @@ namespace RIMA
             if (elemCtrl == null)     elemCtrl     = cachedPlayer.GetComponent<Elementalist_SkillController>();
             if (rangerCtrl == null)   rangerCtrl   = cachedPlayer.GetComponent<Ranger_SkillController>();
             if (shadowCtrl == null)   shadowCtrl   = cachedPlayer.GetComponent<Shadowblade_SkillController>();
+
+            controllersResolved = warbladeCtrl != null || elemCtrl != null ||
+                                  rangerCtrl != null || shadowCtrl != null;
+        }
+
+        private void ScheduleLateResolveControllers()
+        {
+            if (controllersResolved)
+            {
+                CancelInvoke(nameof(LateResolveControllers));
+                return;
+            }
+
+            if (!IsInvoking(nameof(LateResolveControllers)))
+                Invoke(nameof(LateResolveControllers), 0.5f);
+        }
+
+        private void LateResolveControllers()
+        {
+            ResolveControllers();
+            ScheduleLateResolveControllers();
         }
 
         private bool UseElementalist() =>

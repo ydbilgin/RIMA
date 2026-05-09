@@ -26,9 +26,20 @@ namespace RIMA
             tilemap.CompressBounds();
         }
 
-        private void LateUpdate()
+        private void Start()
         {
             ResolveTarget();
+            if (!targetSearchDone) Invoke(nameof(LateResolveTarget), 0.5f);
+        }
+
+        private void LateResolveTarget()
+        {
+            ResolveTarget();
+            if (!targetSearchDone) Invoke(nameof(LateResolveTarget), 0.5f);
+        }
+
+        private void LateUpdate()
+        {
             if (target == null || tilemap == null) return;
 
             desiredAlpha.Clear();
@@ -96,11 +107,16 @@ namespace RIMA
 
         private void ResolveTarget()
         {
-            if (target != null) return;
-            if (targetSearchDone) return; // one-shot — don't retry every frame
+            if (target != null)
+            {
+                targetSearchDone = true;
+                return;
+            }
 
             var go = GameObject.FindGameObjectWithTag(targetTag);
-            if (go != null) target = go.transform;
+            if (go == null) return;
+
+            target = go.transform;
             targetSearchDone = true;
         }
 

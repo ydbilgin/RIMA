@@ -1,5 +1,111 @@
 # CURRENT STATUS
-**2026-05-09 - S46 - Regresyon fix'leri + dungeon mimari karar + map fragment spec — verification pending**
+**2026-05-09 - S46 LATE NIGHT - B5.1 FIXED ✅ + PlayMode 4 fail FIXED ✅ + Opus design review DONE**
+
+## S46 Evening Session (2026-05-09 — Yasin + Opus orkestra)
+
+### Onaylanan Tasarım Kararları (MASTER #71 + 7 destekleyici, hepsi LOCKED v1)
+- **Karar #71** — Silah hep elde / single-state, Ronin istisna (sheath/draw kimliği). Alabaster Dawn 3-state "puf" rejected — 2D pixel art teleport bug + scope kabul edilemez. Detay: `TASARIM/MAKEUP_BACKLOG.md` + `TASARIM/CINEMATIC_LAYER_v1.md`.
+- **Karar #62-70** — S46 sabah dispatch (Map Fragment + Kırık Taş Tablet + Act 1 15-node + AD v1 sprint) MASTER_KARAR_BELGESI'ne eklendi.
+
+### Yeni Dosyalar (4 yeni, hepsi NLM sync edildi)
+- `TASARIM/MAKEUP_BACKLOG.md` — 8 eksiklik HIGH/MEDIUM/LOW (Hub rest pose, HP düşük yorgun idle, boss intro freeze-frame, run start ritual, death+Mühür sequence, skill draft drama, echo imprint reveal, NPC interaction zoom)
+- `TASARIM/CINEMATIC_LAYER_v1.md` — 4 katman: A camera-driven, B environmental, C diegetic UI, D manuel cinematic frames (~30 frame total). Faz 2-5 dağıtım.
+- `GUIDES/RIMA_MASTER_ART_PIPELINE.md` — Tek canonical art pipeline (Create Character Pro New → Animate with Text NEW v3 → Interpolate NEW → Edit Image Pro). Canvas: **128 native + 252 v3 render canvas** (v3 büyük canvas otomatik, weapon headroom için). Tier 2 abonelik kredi tahmini: ~750-1100 cred/sınıf, 10 sınıf ~4-5 ay.
+- `TASARIM/FAZLAR/FAZ_DETAILED_SCOPE.md` — 8-haftalık Faz 1 detay + Faz 2-5 hafta-bütçe + sistem-faz matrisi + kritik patika (~10-12K kredit total).
+
+### Güncellenenler
+- `MASTER_KARAR_BELGESI.md` — Karar #71 ekleme + #29 override işareti + S46 sprint kararları
+- `GDD.md` — STALE flag yumuşatıldı ("REFERENCE — S43+")
+- `ANIMATION_REDESIGN.md` — "MOB-only" header (class anim Master Pipeline'a yönlendirildi)
+- `TASARIM/FAZLAR/FAZ_MASTER.md` — S46 sprint kararları + 4 yeni satır (Map Fragment / Combat Feel AD v1 / Cinematic Layer / Asset Pipeline) + ASSET PIPELINE INTEGRATION bölümü
+- `memory/` — 4 yeni feedback (user_profile.md, feedback_orchestrator_responsibility.md, feedback_design_originality_principle.md, feedback_nlm_login_automation.md)
+
+### Test Pipeline (EditMode GREEN, PlayMode 4 fail kaldı)
+**B8 fix:** RimaUITheme.MakeRoundedRect try-catch wrapper (EditMode-safe).
+**B9 fix:** CharacterSelectScreen Awake → Start ayrımı + 3 testte reflection invoke.
+**B10 fix (Codex):** EventSystem dup cleanup (FindObjectsByType + sceneLoaded hook), UIManager Time.timeScale=1f zorla, MainMenuScreen `_IsoGame`'de self-destroy, SkillOfferUI button name "Btn" + StopAllCoroutines, SettingsMenu hidden button rename.
+- **EditMode: 148/148 PASS** ✅
+- **PlayMode önceki 2 fail (timeScale=0 + DraftManager hide):** ÇÖZÜLDÜ ✅
+- **PlayMode yeni 4 fail (B10 ile alakasız, room/enemy spawn):**
+  1. `MultiRoom_ClearRoom1_NavigateThenClear` — oda boş (0 düşman)
+  2. `RewardPickup_Interact_MarksCollected` — aynı sebep
+  3. `LegacyRuntimeRoomManager_Room1Starts` — CurrentRoom=0 (1 olmalı)
+  4. `RoomLoop_KillAllEnemies_RoomClears` — ilk oda boş
+  - **Tahmin:** RoomLoader / DungeonWorldBuilder mob spawn flow eksik. CURRENT_STATUS önceki sürümünde "Pilot validation BLOCKED" notu vardı — bu görev hâlâ açık.
+
+### Knowledge Base Temizlik
+- 8 stale PixelLab dosyası → `ARCHIVE/SUPERSEDED/` (PIXELLAB_ENVIRONMENT_MODULE_NOTES, PIXELLAB_MOVEMENT_SHEET_AND_MAP_WORKSHOP_REVIEW, PIXELLAB_MAP_WORKSHOP_ISOMETRIC_USAGE_NOTE, PIXELLAB_RESEARCH_SYNTHESIS, ANIMATION_PRODUCTION_GUIDE, WARBLADE_ANIMATION_PIPELINE, ISOMETRIC_PRODUCTION_GUIDE, PIXELLAB_PROMPT_TEMPLATE)
+- 6 Codex output artifact silindi (codex_b7/b8/b9/b10_*.md/.txt)
+- `__pycache__/` silindi
+- `STAGING/OVERNIGHT_REPORT.md` → `ARCHIVE/SESSION_REPORTS/OVERNIGHT_REPORT_2026-05-09.md`
+
+### Knowledge Graph (graphify TASARIM)
+- **490 nodes / 624 edges / 24 communities**
+- God nodes: GDD (22 edges), Map+Item System (20), Class State Contract (18), Combat Roster (15), MASTER_KARAR (15)
+- Surprising connections: Karar #18 → Map+Item (rationale), Hades 3-choice ↔ Faz 1, Pixel Art Constraint ↔ Animation Redesign
+- Çıktı: `graphify-out/graph.html` + `GRAPH_REPORT.md`
+
+### NLM Sync (8 dosya)
+- Batch (5): MASTER_KARAR, GDD, ANIMATION_REDESIGN, MAKEUP_BACKLOG, CINEMATIC_LAYER_v1
+- Manual subfolder (3): FAZ_MASTER, FAZ_DETAILED_SCOPE, RIMA_MASTER_ART_PIPELINE
+- Stop hook memory dosyalarını otomatik sync edecek
+
+### Lore Audit (rima-design + 8 NLM sorgu) — KEEP verdict
+4 Act yapısı (Keep → Wastes → Core → Nexus) **olağanüstü tutarlı**. Lore-mekanik-boss-map UI 6 eksen kilitli. 3 alternatif (kale-only / element / spatial) hepsi REJECT.
+
+### ⚠️ Güvenlik Bulgusu
+`TASARIM/UI_CONCEPTS/` SVG dosyalarından birinde **prompt injection** tespit edildi (fake MCP Server Instructions). Agent reddetti. Kaynak muhtemelen ChatGPT export — UI_CONCEPTS klasörü manuel review önerilir.
+
+---
+
+## 🎮 Yeni Session Başlangıç Tercihi (LOCKED 2026-05-09)
+
+- **Default model:** Sonnet 4.6 (kullanıcı seçer)
+- **Opus 4.7 1M:** Sadece tasarım kararı / lore sentez / çelişki audit / kritik karar gerektiğinde — orchestra "Opus'a geç" önerir
+- **Codex çıktısı QC zorunlu** — dispatch sonrası mantık check + gerekirse re-dispatch
+- **Save-session pas geç** — sadece bu CURRENT_STATUS güncel tut
+
+## ⏳ AÇIK İŞLER (Sıradaki Session İçin)
+
+### 🔴 v1 Sprint Öncesi Kritik Design Kararlar (Opus Review 2026-05-09)
+- **KARAR A (ONAY GEREKİR) — Boss Posture Reset Politikası:** Sabit 850 yerine per-phase kademeli önerisi: Faz 1=700, Faz 2=850, Faz 3=1000. Faz 3 yeni mekanik İÇERMEMELİ. Yasin onayı bekliyor.
+- **KARAR B (ONAY GEREKİR) — Summoner Soul Bond 1s i-frame:** i-frame → "Posture Guard (%50 hasar azalt, 1.2s)" önerisi. Identity Passive değişikliği → Yasin onayı.
+- **KARAR C (ONAY GEREKİR) — Hexer Stack Pressure ICD:** Auto-trigger → 4s dahili cooldown veya stack-tüketen versiyona geçiş önerisi. Identity Passive değişikliği → Yasin onayı.
+- **DONE ✅ — DAMAGE_CALCULATION.md:** `TASARIM/DAMAGE_CALCULATION.md` oluşturuldu (multiplier kategorileri + x3.0 cap).
+- **DONE ✅ — MOB_COMPOSITION_RULES.md:** `TASARIM/MOB_COMPOSITION_RULES.md` oluşturuldu (M06+M04 yasak, M08+M04 yasak, M07 telegraph trainer TODO).
+- **DONE ✅ — Shadowblade Scar Memory:** Pencere 2s → 1.2s (LOCKED kararı değil, rafine).
+
+### Yüksek Öncelik
+0. **🚨 ChatGPT tile pixel tutarsızlığı (yeni gözlem 2026-05-09 evening)** — Yasin: "ChatGPT ile üretilen duvar/tile'ların pixel tutarlılığı tam değil, smooth 3D-render gibi. PixelLab'a migrate etmek gerekebilir." Master Karar #18 (ChatGPT environment için canonical) sapmaya başladı. **Aksiyon (sıradaki session):**
+   - Unity Game View screenshot al (mevcut F1/F2/F3 + W1/W2/OBW gör)
+   - Pixel quality QC — gerçek pixel art mı yoksa anti-aliased smooth mu?
+   - Eğer tutarsızlık doğrulanırsa: PixelLab tile production prompt v1 hazırla (Master Pipeline §6.1 revize)
+   - 64×32 floor / 64×96 wall için PixelLab MCP `create_isometric_tile` deneme
+   - Karar #18 update'i veya override (Karar #72 olabilir)
+1. **DONE ✅ PlayMode 4 fail (room/enemy spawn)** — `#if UNITY_EDITOR` stub spawn + 2s timeout fix (Codex commits a5c261f + 78af4a9). LegacyRuntimeRoomManager.SpawnEnemies now creates TestEnemy_Stub gameobjects in editor/test builds.
+2. **Lore REWORK 4 dosya** (lore audit raporu — Game Communication Requirement risk):
+   - `TASARIM/STORY_RUN_PROGRESSION.md` (yeni) — 9-run NPC tanışma + lore drip tablosu
+   - `TASARIM/HUB_DESIGN_v1.md` (yeni) — Hub mimari + 4 NPC yerleşimi + palet
+   - 3-ending detay genişlet (KAL/KIR/TAŞI cutscene + NPC silme listesi — KIR için)
+   - Lore drip pipeline (death recap'te run-by-run mini reveal — 9 satır mini-arc)
+3. **Lore REVISE 4 küçük edit:**
+   - Architect Faz 1 dialog netleştir ("İlk engelin bendim" → "Onları buraya ben yerleştirdim")
+   - Sınıf seçim ekranı arketip disclaimer (Gunslinger ≠ kovboy, Ronin ≠ samuray)
+   - Skill Taxonomy lore-bridge paragrafı (KEYSTONE/MODIFIER/RESONANCE = anılar metaforu)
+   - Death recap "MÜHÜR" frame UX label
+
+### Orta Öncelik
+4. **Commit hazırlığı** — ~153 working tree dosyası, mantıklı gruplar (B8/B9/B10 fix, doc updates, archive moves)
+5. **DONE ✅ B5.1 visual regression** — F1 tile sprites were 8×8 (stale sub-assets). Act1TileImporter.FixTileSprites patched to check dimensions (≥32px valid), stale sub-assets purged, 16 F1 tiles reimported as 64×64. Play mode verified: sampled=50 valid=50 bad=0.
+6. **Map Fragment + DungeonGraph implementation** — spec hazır, kod görevleri Codex'e dispatch edilebilir
+
+### Düşük Öncelik / Backlog
+7. **MAKEUP_BACKLOG 8 eksiklik** (Hub rest pose, HP yorgun idle, boss intro, run start, death+Mühür, skill draft drama, echo imprint reveal, NPC zoom) — polish phase
+8. **Cinematic Layer A/B/C/D** — Faz 2-5 dağıtımı
+
+---
+
+## Active Block (önceki içerik korunur)
 
 ## S46 Late Session (2026-05-09 — autonomous, user uyurken)
 - **Dungeon mimari KARAR doğrulandı (KEEP Hades-style ayrık oda)**: combat v1 + AD v2 eklemeleri açık dünya yönüne çekmiyor, tam tersi Hades modelini zorunlu kılıyor. Detay: `TASARIM/dungeon_act1_map.md`.

@@ -53,6 +53,10 @@ namespace RIMA
         private void Awake()
         {
             if (targetCanvas == null) targetCanvas = GetComponentInParent<Canvas>();
+        }
+
+        private void Start()
+        {
             BuildScreen();
             SelectClass(ClassType.Warblade);
         }
@@ -76,6 +80,12 @@ namespace RIMA
                 scaler.matchWidthOrHeight  = 0.5f;
                 canvasGO.AddComponent<GraphicRaycaster>();
                 root = canvasGO.transform as RectTransform;
+            }
+
+            if (root == null)
+            {
+                Debug.LogWarning("[CharacterSelectScreen] BuildScreen: root RectTransform null, aborting build.");
+                return;
             }
 
             // Full-screen dark overlay

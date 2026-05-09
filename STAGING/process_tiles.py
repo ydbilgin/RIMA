@@ -1,3 +1,4 @@
+# Writes PNG slices with explicit IEND chunk and post-write verification -- do not remove.
 #!/usr/bin/env python3
 """Universal tile sheet splitter with chromakey removal for RIMA dungeon tiles.
 
@@ -9,8 +10,26 @@ Examples:
   W1 wall:   python STAGING/process_tiles.py --source "path/to/w1.png" --output Assets/Art/Tiles/Act1/W1 --cols 4 --rows 3 --width 64 --height 96 --prefix w1_
 """
 import argparse, os, sys, uuid
+from io import BytesIO
 from PIL import Image
 import numpy as np
+
+
+def _verify_iend(path):
+    with open(path, "rb") as h:
+        data = h.read()
+    if data[-12:] != b"\x00\x00\x00\x00IEND\xaeB`\x82":
+        raise RuntimeError(f"PNG missing IEND: {path}")
+
+
+def _save_png_slice(image, out_path):
+    buf = BytesIO()
+    image.save(buf, format="PNG", optimize=True)
+    data = buf.getvalue()
+    if data[-12:] != b"\x00\x00\x00\x00IEND\xaeB`\x82":
+        raise RuntimeError(f"PNG buffer missing IEND before write: {out_path}")
+    with open(out_path, "wb") as h:
+        h.write(data)
 
 
 def make_meta(path, tile_w, tile_h):
@@ -143,7 +162,8 @@ def process(source, output_dir, cols, rows, out_w, out_h, prefix):
             if out_w != cw or out_h != ch:
                 cell = cell.resize((out_w, out_h), Image.NEAREST)
             out_path = os.path.join(output_dir, f"{prefix}{count:02d}.png")
-            cell.save(out_path)
+            _save_png_slice(cell, out_path)
+            _verify_iend(out_path)
             make_meta(out_path, out_w, out_h)
             print(f"  {out_path} ({out_w}x{out_h})")
             count += 1

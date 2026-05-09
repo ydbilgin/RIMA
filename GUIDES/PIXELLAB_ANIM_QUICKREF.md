@@ -1,4 +1,6 @@
 # PixelLab Animasyon Quickref
+*Hızlı karar ağacı: PATH A (Animate with Text) vs PATH B (KF + Interpolate). Master Pipeline'a tamamlayıcı.*
+*Master pipeline (kapsamlı): [`RIMA_MASTER_ART_PIPELINE.md`](RIMA_MASTER_ART_PIPELINE.md)*
 
 ---
 

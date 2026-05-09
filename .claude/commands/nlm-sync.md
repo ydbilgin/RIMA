@@ -1,9 +1,9 @@
 ---
-description: Dosyaları NotebookLM'e kaynak olarak ekle/güncelle (eski versiyonu siler, yeni ekler). /nlm-sync → tüm değişenleri batch sync. /nlm-sync path/to/file.md → tek dosya.
+description: Dosyaları NotebookLM'e kaynak olarak ekle/güncelle (eski versiyonu siler, yeni ekler). /nlm-sync → tüm unsynced dosyaları batch sync. /nlm-sync --status → sync bekleyenleri göster (sync etmez). /nlm-sync path/to/file.md → tek dosya.
 allowed-tools: Bash
 ---
 
-# /nlm-sync — NotebookLM Source Sync (deduplicated, parallel)
+# /nlm-sync — NotebookLM Source Sync (hash-based, parallel)
 
 Run the command below and return its output verbatim. Do not add commentary.
 
@@ -21,39 +21,83 @@ process.stdin.on("end",function(){
   try{var s=JSON.parse(c);var ids=s.filter(function(x){return x.title===t;}).map(function(x){return x.id;});if(ids.length)console.log(ids.join(" "));}catch(e){}
 });'
 
-if [ -z "$FILE" ]; then
-  echo "=== NLM Batch Sync (parallel) ==="
-  CHANGED=$(git -C "$REPO" status --short 2>/dev/null \
-    | grep -v "^D " \
-    | cut -c4- \
-    | grep -E "\.(md)$" \
-    | grep -iE "(TASARIM/|MEMORY/|STAGING/|CURRENT_STATUS|CLAUDE\.md|RULES\.md|AGENTS\.md)")
-  if [ -z "$CHANGED" ]; then
-    echo "No relevant changed files found."
+if [ "$FILE" = "--status" ]; then
+  LS=$(cat "$REPO/.claude/nlm_last_sync.txt" 2>/dev/null || echo "hiç sync edilmedi")
+  UNSYNCED=$(
+    {
+      find "$REPO/TASARIM" "$REPO/MEMORY" "$REPO/STAGING" -maxdepth 1 -name "*.md" 2>/dev/null | sed "s|$REPO/||"
+      for f in CURRENT_STATUS.md CLAUDE.md RULES.md AGENTS.md; do
+        [ -f "$REPO/$f" ] && echo "$f"
+      done
+    } | sort -u | while IFS= read -r rel; do
+      full="$REPO/$rel"
+      [ -f "$full" ] || continue
+      ch=$(git -C "$REPO" hash-object "$full" 2>/dev/null)
+      sh=$(grep "^${rel}|" "$STATE" 2>/dev/null | tail -1 | cut -d'|' -f2)
+      if [ -z "$sh" ] || [ "$ch" != "$sh" ]; then echo "$rel"; fi
+    done
+  )
+  echo "=== NLM Sync Status ==="
+  echo "Son sync: $LS"
+  if [ -z "$UNSYNCED" ]; then
+    echo "Tüm dosyalar güncel."
   else
+    COUNT=$(echo "$UNSYNCED" | grep -c .)
+    echo "$COUNT dosya sync bekliyor:"
+    echo "$UNSYNCED" | sed 's/^/  /'
+  fi
+  exit 0
+fi
+
+if [ -z "$FILE" ]; then
+  echo "=== NLM Batch Sync (hash-based, parallel) ==="
+
+  UNSYNCED=$(
+    {
+      find "$REPO/TASARIM" "$REPO/MEMORY" "$REPO/STAGING" -maxdepth 1 -name "*.md" 2>/dev/null | sed "s|$REPO/||"
+      for f in CURRENT_STATUS.md CLAUDE.md RULES.md AGENTS.md; do
+        [ -f "$REPO/$f" ] && echo "$f"
+      done
+    } | sort -u | while IFS= read -r rel; do
+      full="$REPO/$rel"
+      [ -f "$full" ] || continue
+      ch=$(git -C "$REPO" hash-object "$full" 2>/dev/null)
+      sh=$(grep "^${rel}|" "$STATE" 2>/dev/null | tail -1 | cut -d'|' -f2)
+      if [ -z "$sh" ] || [ "$ch" != "$sh" ]; then echo "$rel"; fi
+    done
+  )
+
+  if [ -z "$UNSYNCED" ]; then
+    echo "Tüm dosyalar güncel — sync gerekmez."
+  else
+    COUNT=$(echo "$UNSYNCED" | grep -c .)
+    echo "$COUNT dosya sync edilecek..."
+    echo "NLM kaynak listesi alınıyor..."
+    ALL_SOURCES=$(uvx --from notebooklm-mcp-cli nlm source list $NB 2>/dev/null)
+
     PIDS=()
     while IFS= read -r rel; do
       full="$REPO/$rel"
-      if [ -f "$full" ]; then
-        echo "Queuing: $rel"
-        (
-          base=$(basename "$full")
-          old=$(uvx --from notebooklm-mcp-cli nlm source list $NB 2>/dev/null | node -e "$NODE_FILTER" "$base")
-          if [ -n "$old" ]; then
-            uvx --from notebooklm-mcp-cli nlm source delete $old --confirm 2>/dev/null
-            echo "  Deleted: $base"
-          fi
-          uvx --from notebooklm-mcp-cli nlm source add $NB --file "$full" 2>&1 | grep -E "(Added|Error|added)"
-          echo "  Done: $base"
-          hash=$(git -C "$REPO" hash-object "$full" 2>/dev/null)
-          [ -n "$hash" ] && echo "${rel}|${hash}" >> "$STATE"
-        ) &
-        PIDS+=($!)
-      fi
-    done <<< "$CHANGED"
+      [ -f "$full" ] || continue
+      echo "Queuing: $rel"
+      (
+        base=$(basename "$full")
+        old=$(echo "$ALL_SOURCES" | node -e "$NODE_FILTER" "$base")
+        if [ -n "$old" ]; then
+          uvx --from notebooklm-mcp-cli nlm source delete $old --confirm 2>/dev/null
+          echo "  Deleted: $base"
+        fi
+        result=$(uvx --from notebooklm-mcp-cli nlm source add $NB --file "$full" 2>&1)
+        echo "$result" | grep -E "(Added|Error|added)"
+        echo "  Done: $base"
+        h=$(git -C "$REPO" hash-object "$full" 2>/dev/null)
+        [ -n "$h" ] && echo "${rel}|${h}" >> "$STATE"
+      ) &
+      PIDS+=($!)
+    done <<< "$UNSYNCED"
     wait "${PIDS[@]}"
     date '+%Y-%m-%d %H:%M' > "$REPO/.claude/nlm_last_sync.txt"
-    echo "=== Done ==="
+    echo "=== Done: $COUNT dosya ==="
   fi
 else
   if [[ "$FILE" = /* ]]; then
@@ -63,22 +107,27 @@ else
     rel="$FILE"
     full="$REPO/$FILE"
   fi
+  echo "=== Single file sync: $rel ==="
+  ALL_SOURCES=$(uvx --from notebooklm-mcp-cli nlm source list $NB 2>/dev/null)
   base=$(basename "$full")
-  old=$(uvx --from notebooklm-mcp-cli nlm source list $NB 2>/dev/null | node -e "$NODE_FILTER" "$base")
+  old=$(echo "$ALL_SOURCES" | node -e "$NODE_FILTER" "$base")
   if [ -n "$old" ]; then
     uvx --from notebooklm-mcp-cli nlm source delete $old --confirm 2>/dev/null
     echo "  Deleted: $base"
   fi
-  uvx --from notebooklm-mcp-cli nlm source add $NB --file "$full" 2>&1 | grep -E "(Added|Error|added)"
+  result=$(uvx --from notebooklm-mcp-cli nlm source add $NB --file "$full" 2>&1)
+  echo "$result" | grep -E "(Added|Error|added)"
   echo "  Done: $base"
-  hash=$(git -C "$REPO" hash-object "$full" 2>/dev/null)
-  [ -n "$hash" ] && echo "${rel}|${hash}" >> "$STATE"
+  h=$(git -C "$REPO" hash-object "$full" 2>/dev/null)
+  [ -n "$h" ] && echo "${rel}|${h}" >> "$STATE"
+  date '+%Y-%m-%d %H:%M' > "$REPO/.claude/nlm_last_sync.txt"
 fi
 ```
 
 **Usage:**
-- `/nlm-sync` → batch: git status'taki tüm TASARIM/MEMORY/STAGING/CURRENT_STATUS değişikliklerini paralel sync et
+- `/nlm-sync --status` → sync bekleyen dosyaları göster (sync etmez, sadece durum)
+- `/nlm-sync` → tüm unsynced dosyaları sync et (git status'tan bağımsız, hash karşılaştırmasıyla)
 - `/nlm-sync CURRENT_STATUS.md` → tek dosya sync
 - `/nlm-sync TASARIM/room_authoring.md` → tek dosya sync
 
-**Not:** Paralel çalışır — rate limit yerse hata çıkar, sequential versiyona dön.
+**Not:** NLM kaynak listesi bir kez çekilir, paralel sync yapılır. Rate limit yerse hata çıkar.

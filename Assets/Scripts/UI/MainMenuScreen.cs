@@ -13,23 +13,74 @@ namespace RIMA
     public class MainMenuScreen : MonoBehaviour
     {
         private static bool _gameStarted = false;
+        private static bool _eventSystemHooked = false;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoInit()
         {
+            EnsureEventSystemHook();
+            EnsureEventSystem();
+
             // Never create the main menu when loading the game/test scene directly.
             if (SceneManager.GetActiveScene().name == "_IsoGame") return;
             if (_gameStarted) return;
             if (Object.FindFirstObjectByType<MainMenuScreen>() != null) return;
-            EnsureEventSystem();
             var go = new GameObject("[MainMenuScreen]");
             DontDestroyOnLoad(go);
             go.AddComponent<MainMenuScreen>();
         }
 
+        private static void EnsureEventSystemHook()
+        {
+            if (_eventSystemHooked) return;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            _eventSystemHooked = true;
+        }
+
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            EnsureEventSystem();
+            if (scene.name != "_IsoGame") return;
+
+            foreach (var menu in Object.FindObjectsByType<MainMenuScreen>(
+                         FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (Application.isPlaying) Object.Destroy(menu.gameObject);
+                else Object.DestroyImmediate(menu.gameObject);
+            }
+
+            UIManager.Instance?.ResumeFromMenu();
+            Time.timeScale = 1f;
+        }
+
         private static void EnsureEventSystem()
         {
-            if (Object.FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() != null) return;
+            var systems = Object.FindObjectsByType<UnityEngine.EventSystems.EventSystem>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            if (systems.Length > 1)
+            {
+                var keep = systems[0];
+                for (int i = 0; i < systems.Length; i++)
+                {
+                    if (systems[i].gameObject.activeInHierarchy)
+                    {
+                        keep = systems[i];
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < systems.Length; i++)
+                {
+                    if (systems[i] == keep) continue;
+                    if (Application.isPlaying) Object.Destroy(systems[i].gameObject);
+                    else Object.DestroyImmediate(systems[i].gameObject);
+                }
+                return;
+            }
+
+            if (systems.Length == 1) return;
+
             var es = new GameObject("EventSystem");
             es.AddComponent<UnityEngine.EventSystems.EventSystem>();
             es.AddComponent<InputSystemUIInputModule>();
@@ -38,6 +89,12 @@ namespace RIMA
 
         private void Start()
         {
+            if (SceneManager.GetActiveScene().name == "_IsoGame")
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             UIManager.Instance?.PauseForMenu();
             BuildUI();
         }

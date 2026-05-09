@@ -12,6 +12,7 @@ namespace RIMA
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance { get; private set; }
+        private static bool sceneLoadHooked;
 
         // ── Layer state ──────────────────────────────────────────────────
         private bool tabOpen;
@@ -37,16 +38,36 @@ namespace RIMA
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoInit()
         {
+            EnsureSceneLoadHook();
+
             if (Instance != null)
             {
                 // Reset overlay state on scene reload — prevents prior PauseForMenu
                 // from leaking timeScale=0 into the next scene (PlayMode test order pollution).
                 Instance.ResetForSceneLoad();
+                Time.timeScale = 1f;
                 return;
             }
             var go = new GameObject("[UIManager]");
             DontDestroyOnLoad(go);
-            go.AddComponent<UIManager>();
+            var manager = go.AddComponent<UIManager>();
+            manager.ResetForSceneLoad();
+            Time.timeScale = 1f;
+        }
+
+        private static void EnsureSceneLoadHook()
+        {
+            if (sceneLoadHooked) return;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+            sceneLoadHooked = true;
+        }
+
+        private static void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            if (Instance != null)
+                Instance.ResetForSceneLoad();
+
+            Time.timeScale = 1f;
         }
 
         public void ResetForSceneLoad()

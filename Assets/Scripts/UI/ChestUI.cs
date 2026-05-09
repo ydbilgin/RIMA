@@ -40,14 +40,14 @@ namespace RIMA
             foreach (var offer in offers)
                 BuildCard(offer, onPicked);
 
-            Time.timeScale = 0f;
+            UIManager.Instance.PauseForMenu();
         }
 
         public void Hide()
         {
             ClearCards();
             panel?.SetActive(false);
-            Time.timeScale = 1f;
+            UIManager.Instance.ResumeFromMenu();
         }
 
         // ── Build ────────────────────────────────────────────────

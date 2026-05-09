@@ -319,7 +319,7 @@ namespace RIMA
             descTmp.enableWordWrapping = true;
 
             // Select button
-            var btnGo = new GameObject("SelectBtn", typeof(RectTransform));
+            var btnGo = new GameObject("Btn", typeof(RectTransform));
             btnGo.transform.SetParent(cardGo.transform, false);
             var btnRt = btnGo.GetComponent<RectTransform>();
             btnRt.anchorMin = new Vector2(0.5f, 0f);
@@ -380,6 +380,7 @@ namespace RIMA
 
         private void ClearCards()
         {
+            StopAllCoroutines();
             foreach (var c in cards)
                 if (c != null) Destroy(c);
             cards.Clear();

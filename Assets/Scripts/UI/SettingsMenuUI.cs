@@ -189,7 +189,7 @@ namespace RIMA
 
             // Toggle button
             int val = PlayerPrefs.GetInt(prefKey, defaultVal);
-            var btnGo = new GameObject("Btn", typeof(RectTransform));
+            var btnGo = new GameObject("ToggleBtn", typeof(RectTransform));
             btnGo.transform.SetParent(row, false);
             var btnRt = btnGo.GetComponent<RectTransform>();
             btnRt.anchorMin = new Vector2(0.65f, 0f);

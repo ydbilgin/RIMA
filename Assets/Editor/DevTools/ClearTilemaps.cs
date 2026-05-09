@@ -11,7 +11,7 @@ namespace RIMA.Editor.DevTools
         [MenuItem("RIMA/Clear All Tilemap Tiles")]
         public static void ClearAllTilemapTiles()
         {
-            Tilemap[] tilemaps = Object.FindObjectsOfType<Tilemap>(true);
+            Tilemap[] tilemaps = Object.FindObjectsByType<Tilemap>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             int clearedCount = 0;
             int totalRemoved = 0;
 

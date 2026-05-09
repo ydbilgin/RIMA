@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using RIMA.Systems.Map;
 
 namespace RIMA
 {
@@ -41,9 +42,11 @@ namespace RIMA
         // Milestone tanımları
         private const int ForgeRoom1 = 4;
         private const int ForgeRoom2 = 8;
+        private const float RoomClearDraftDelay = 2f;
 
         private Warblade_SkillController skillController;
         private GameObject               player;
+        private RoomConfig               currentRoomConfig;
 
         // ── Static query (SkillOfferGenerator erişim için) ──────
         public static int GetPassiveLevel(string skillName)
@@ -59,6 +62,18 @@ namespace RIMA
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+        }
+
+        private void OnEnable()
+        {
+            RoomLoader.OnRoomLoaded += HandleRoomLoaded;
+            RoomLoader.OnRoomCleared += HandleRoomCleared;
+        }
+
+        private void OnDisable()
+        {
+            RoomLoader.OnRoomLoaded -= HandleRoomLoaded;
+            RoomLoader.OnRoomCleared -= HandleRoomCleared;
         }
 
         private void Start()
@@ -79,6 +94,30 @@ namespace RIMA
         {
             yield return new WaitForSeconds(delay);
             ShowDraft();
+        }
+
+        private void HandleRoomLoaded(RoomConfig config, GameObject _)
+        {
+            currentRoomConfig = config;
+        }
+
+        private void HandleRoomCleared()
+        {
+            if (IsDraftActive) return;
+
+            int room = LegacyRuntimeRoomManager.Instance?.CurrentRoom ?? 1;
+            if (room == ForgeRoom1 || room == ForgeRoom2) return;
+            if (IsNonDraftRoom(currentRoomConfig)) return;
+
+            StartCoroutine(ShowDraftDelayed(RoomClearDraftDelay));
+        }
+
+        private static bool IsNonDraftRoom(RoomConfig config)
+        {
+            if (config == null) return false;
+
+            string roomType = config.roomType.ToString();
+            return roomType == "Corridor" || roomType == "Rest";
         }
 
         // ── Ana çağrılar ─────────────────────────────────────────

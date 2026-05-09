@@ -50,9 +50,24 @@ namespace RIMA
         {
             startPos = transform.position;
             baseColor = sr != null ? sr.color : Color.white;
-            playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-            playerSearchDone = playerTransform != null;
+            AcquirePlayer();
             BuildPromptLabel();
+            if (!playerSearchDone) Invoke(nameof(LateAcquirePlayer), 0.5f);
+        }
+
+        private void LateAcquirePlayer()
+        {
+            AcquirePlayer();
+            if (!playerSearchDone) Invoke(nameof(LateAcquirePlayer), 0.5f);
+        }
+
+        private void AcquirePlayer()
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+
+            playerTransform = player.transform;
+            playerSearchDone = true;
         }
 
         private void Update()
@@ -69,10 +84,7 @@ namespace RIMA
 
             if (playerTransform == null)
             {
-                if (playerSearchDone) return; // already tried, give up
-                playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-                playerSearchDone = true;
-                if (playerTransform == null) return;
+                return;
             }
 
             float dist = Vector2.Distance(transform.position, playerTransform.position);

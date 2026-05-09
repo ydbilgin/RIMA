@@ -382,7 +382,6 @@ namespace RIMA
             interactionPanel.anchoredPosition = Vector2.zero;
 
             var bgImg = panelGo.AddComponent<Image>();
-            bgImg.sprite = RimaUITheme.PromptFrame;
             bgImg.color = RimaUITheme.PanelTint;
             bgImg.preserveAspect = false;
             bgImg.raycastTarget = false;

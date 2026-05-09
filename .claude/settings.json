@@ -1,19 +1,5 @@
 {
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "shell": "bash",
-            "command": "REPO=\"F:/Antigravity Projeler/2d roguelite/RIMA\"; STATE=\"$REPO/.claude/nlm_sync_state.txt\"; LS=$(cat \"$REPO/.claude/nlm_last_sync.txt\" 2>/dev/null || echo \"never\"); LC=$(git -C \"$REPO\" log -1 --format=\"%cd\" --date=\"format:%m/%d %H:%M\" 2>/dev/null || echo \"?\"); FILES=$(git -C \"$REPO\" status --short 2>/dev/null | grep -v \"^D \" | awk '{print $2}' | grep -E \"\\.md$\" | grep -iE \"(TASARIM/|MEMORY/|STAGING/|CURRENT_STATUS|CLAUDE\\.md|RULES\\.md|AGENTS\\.md)\" | while read f; do [ -f \"$REPO/$f\" ] || continue; ch=$(git -C \"$REPO\" hash-object \"$REPO/$f\" 2>/dev/null); sh=$(grep \"^${f}|\" \"$STATE\" 2>/dev/null | tail -1 | cut -d'|' -f2); if [ -z \"$sh\" ] || [ \"$ch\" != \"$sh\" ]; then echo \"$f\"; fi; done | head -20); HDR=\"[NLM] sync:${LS} | commit:${LC}\"; if [ -n \"$FILES\" ]; then echo \"$FILES\" | NLM_HDR=\"$HDR\" node -e \"let d=''; process.stdin.on('data',c=>d+=c); process.stdin.on('end',()=>{ const lines=d.trim().split('\\n').filter(Boolean); console.log(JSON.stringify({systemMessage:process.env.NLM_HDR+'\\n'+lines.length+' dosya sync edilmedi \\u2192 /nlm-sync:\\n  '+lines.join('\\n  ')})); });\"; else NLM_HDR=\"$HDR | all synced\" node -e \"console.log(JSON.stringify({systemMessage:process.env.NLM_HDR}))\"; fi || true",
-            "timeout": 15
-          }
-        ]
-      }
-    ]
-  },
-  "permissions": {
+"permissions": {
     "allow": [
       "mcp__UnityMCP__get_scene_info",
       "mcp__UnityMCP__get_console_logs",

@@ -69,7 +69,7 @@ namespace RIMA
             SetSubtitle("Seçtiğin ekol Oda 8'de güçlendirilecek.");
             foreach (var (name, desc) in WarbladeLMBEcols)
                 BuildEcolCard(name, desc, forgeNumber: 1);
-            Time.timeScale = 0f;
+            UIManager.Instance.PauseForMenu();
         }
 
         public void ShowForge2(string chosenEcol)
@@ -90,14 +90,14 @@ namespace RIMA
             {
                 SetSubtitle("Henüz ecol seçilmemiş — sistem hata.");
             }
-            Time.timeScale = 0f;
+            UIManager.Instance.PauseForMenu();
         }
 
         public void Hide()
         {
             ClearCards();
             panel?.SetActive(false);
-            Time.timeScale = 1f;
+            UIManager.Instance.ResumeFromMenu();
         }
 
         // ── Internal ─────────────────────────────────────────────
