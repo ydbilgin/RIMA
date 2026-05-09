@@ -38,11 +38,11 @@ public static class DemoRoomPainter
                 Debug.LogWarning($"[DemoRoomPainter] Missing floor tile: {path}");
         }
 
-        // --- Load W1 wall tiles ---
-        var wallTiles = new Tile[16];
-        for (int i = 0; i < 16; i++)
+        // --- Load W1 connector wall tiles ---
+        var wallTiles = new Tile[8];
+        for (int i = 0; i < 8; i++)
         {
-            string path = $"Assets/Art/Tiles/Act1/W1/w1_{i:D2}.asset";
+            string path = $"Assets/Art/Tiles/Act1/W1/w1_conn_{i:D2}.asset";
             wallTiles[i] = AssetDatabase.LoadAssetAtPath<Tile>(path);
             if (wallTiles[i] == null)
                 Debug.LogWarning($"[DemoRoomPainter] Missing wall tile: {path}");
@@ -68,14 +68,14 @@ public static class DemoRoomPainter
         // North wall: y=5, x: -7..6
         for (int x = -7; x <= 6; x++)
         {
-            var t = wallTiles[UnityEngine.Random.Range(0, 16)];
+            var t = wallTiles[UnityEngine.Random.Range(0, 8)];
             if (t != null) { walls.SetTile(new Vector3Int(x, 5, 0), t); wallCount++; }
         }
 
         // South wall: y=-6, x: -7..6
         for (int x = -7; x <= 6; x++)
         {
-            var t = wallTiles[UnityEngine.Random.Range(0, 16)];
+            var t = wallTiles[UnityEngine.Random.Range(0, 8)];
             if (t != null) { walls.SetTile(new Vector3Int(x, -6, 0), t); wallCount++; }
         }
 
