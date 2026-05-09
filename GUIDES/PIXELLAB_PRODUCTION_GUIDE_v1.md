@@ -1,5 +1,10 @@
-# PixelLab Production Guide — RIMA Act 1
+# PixelLab Production Guide — RIMA Act 1 (v1 — DEPRECATED)
 # Tarih: 2026-05-09 | Opus onaylı | v1 LOCKED
+
+> ⚠️ **DEPRECATED 2026-05-10:** Bu dosya v2 ile değiştirildi.
+> Yeni TEK GİRİŞ DOSYASI: `GUIDES/PIXELLAB_PRODUCTION_GUIDE_v2.md`
+> v2'de canvas 252×252, pixel budget formülü, tool versiyon disiplini, animate_character MCP yasağı ve adım adım üretim sırası bölümü var.
+> Bu dosya tarihsel referans için tutuluyor.
 
 Bu guide RIMA'nın tüm PixelLab üretim kararlarını tek yerde toplar.
 Prompt dosyaları: `STAGING/PIXELLAB_PROMPT_*.md`

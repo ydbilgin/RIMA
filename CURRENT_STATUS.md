@@ -9,12 +9,13 @@
 
 ### 🔴 Yüksek Öncelik
 
-1. **PixelLab tile üretimi** — `STAGING/PIXELLAB/PRODUCTION_PLAYBOOK.md` Adım 1 ile başla (W1 wall)
-   - Tool: Create Tile — Isometric, 64×128, 8 var, bg #00FF00
-   - Sonraki: W2 → OBW → F1-F3 → transitions → obstacles
-   - **Playbook revizyon kararı verildi (2026-05-10):** Eski Interpolation ÖLÜ → Interpolate NEW (v2, 252×252) + Animation-to-Animation Bridging Mode. animate_character MCP KALICI YASAK. Etkilenen adımlar: 17/21c/22-23/26/30-32/35/39-41/44/48-50
-   - **MCP kuruldu:** `pixellab` MCP server aktif — tile/static prop için OK; karakter animasyonu için YASAK
-   - Referans: `PixelLabDocs/` (57 dosya, NLM sync edildi)
+1. **PixelLab üretim — TEK GİRİŞ DOSYASI:** `GUIDES/PIXELLAB_PRODUCTION_GUIDE_v2.md`
+   - **Bölüm 0** = kanonik kurallar (252×252 canvas, pixel budget formülü, MCP yasakları)
+   - **Bölüm 11** = adım adım tıklama rehberi (Faz A: tile/obstacle → Faz B: 4 sınıf anim)
+   - Detaylı prompt'lar için → `STAGING/PIXELLAB/PRODUCTION_PLAYBOOK.md` (51 adım)
+   - Tool detayı için → `PixelLabDocs/<tool>.md` (57 dosya)
+   - **MCP kuruldu:** `pixellab` server — tile/static prop için OK; karakter animasyonu YASAK
+   - **Üretim sırası:** F1→F2→F3 → Transitions → W1→W2→OBW → 8 obstacle → 4 sınıf anim sırayla
 
 2. **tiles_raw/yeni/ sheets process + import** — 6 sheet hazır, process edilmedi:
    ```
