@@ -6,20 +6,33 @@
 | Field | Value |
 |---|---|
 | Type | **Asimetrik** (S, E, N, W ayrı üret — el jestleri tek tarafta belirgin) |
-| Weapon | **YOK** (silahsız) — Adım 5 weapon pass ATLA |
+| Weapon | **YOK** (silahsız) — Weapon pass zaten yok -- anchor'da orb/gesture gorunur, Edit Image Pro sadece poz varyanti icin. |
 | Accent Color | **Element bazlı** — varsayılan idle: cool neutral #B8C8D0; skill aktifken Fire/Frost/Lightning/Light spesifik |
 | Yasak | Void energy (Shadowblade'in mor'u), kitap/odiyak (silahsızlığı vurgula — el jestleri ile büyü) |
 | Basic Attack | CastRhythm (cast → channel → release pattern) |
 | RMB | Element-based ranged spell (placement) |
 | Silhouette | Robe + büyücü duruşu, eller ön planda (büyü için) |
 
-## Base Body Prompt (Adım 1, body-only, silahsız)
+## Anchor Referans (Adim 1 -- Baslangic Noktasi)
 
-```
-Pixel art elementalist mage character, body-only, no weapon, NO book, NO staff (hands free for spell gestures), 128x128 sprite on 252x252 canvas. High top-down view 30-35°. Long flowing robe, hood NOT up (face visible — confident mage), short hair. Robe palette: deep blue-grey #2A3848 / #3E4C5E / #525E74 (cool neutral default — element accent only on spell anims). Trim accent: faint cool #B8C8D0. Sash at waist #3A2818 leather. Skin #C9A084. Body pose: slightly forward, hands held at chest level, palms angled outward (ready to cast). Robe hem sways. NO weapon, NO held object. South-facing default. Hard pixel edges, no anti-aliasing.
-```
+Weaponless base body URETME. Bu sinifin standing pose anchor'i zaten hazir:
 
-Yönler: **S, E, N, W** ayrı üret (asimetrik — el pozisyonları farklı).
+  Characters/anchors/elementalist/rotations/south.png
+  Characters/anchors/elementalist/rotations/south-east.png
+  Characters/anchors/elementalist/rotations/east.png
+  Characters/anchors/elementalist/rotations/north-east.png
+  Characters/anchors/elementalist/rotations/north.png
+  Characters/anchors/elementalist/rotations/north-west.png
+  Characters/anchors/elementalist/rotations/west.png
+  Characters/anchors/elementalist/rotations/south-west.png
+
+Bu dosyalar silahini tutan, duran poz karakteri icerir -- temiz arka plan, uretim hazir.
+Tum animasyonlarin start frame kaynagi bu anchor dosyalaridir.
+
+Edit Image Pro kullanim durumlari:
+- Anchor'dan uretilemayan asiri pozlar icin (walk extreme pose A/B, attack windup) use anchor as source image in Edit Image Pro to produce variant
+- Animasyon start frame ve end frame'i yeni uretimden gelecekse: Edit Image Pro + anchor source
+- Weapon zaten anchor'da var; ayri weapon pass GEREKMIYOR
 
 ## Idle (Adım 2)
 
@@ -42,7 +55,7 @@ Knees buckle slowly, 6 frames. Mage falls to knees first (caster's last stand), 
 ## Walk (Adım 3, Extreme Pose)
 
 ```
-Walking forward mage gait, robe trailing behind, smooth deliberate step (not as quick as Ranger, not as heavy as Warblade). Hands held loosely at sides or chest. No weapon. South-facing.
+Walking forward mage gait, robe trailing behind, smooth deliberate step (not as quick as Ranger, not as heavy as Warblade). Hands held loosely at sides or chest. orb hovering near dominant hand, palm slightly extended. South-facing.
 ```
 
 ## Attack_LMB — CastRhythm Spell (Adım 4, 3-segment)
@@ -73,13 +86,14 @@ One hand thrust forward (right hand), palm out, the other hand pulled back at hi
 Mage step / blink, 4 frames. Frame 1: crouch with hand gesture (palm down at side, channeling). Frame 2: body briefly distorts (motion blur with robe streak forward). Frame 3: body re-forms ahead, robe still trailing. Frame 4: landing pose, hands return to chest. NO embedded glow — engine VFX adds element trail per active element.
 ```
 
-## Weapon Pass (Adım 5)
+## Edit Image Pro -- Yeni Frame Uretimi (Adim 5, ihtiyac varsa)
 
-**❌ ATLA — Elementalist silahsız.**
+Anchor standing pose yeterli degilse (attack PEAK, walk extreme) yeni frame uret:
+1. Source image: ilgili yon anchor dosyasi (Characters/anchors/elementalist/rotations/south.png)
+2. Prompt: istenen poz degisikligini describe et, weapon zaten source'da gorunur
+3. Output: direction_variant.png olarak kaydet, eraser pass uygula
 
-Master Pipeline §4.5 kuralı: "Elementalist & Hexer: Silahsız. Adım 5 atlanır."
-
-`outputs/07_weapon_pass/` klasörü boş kalır.
+Weapon ayrica ekleme -- anchor'da zaten var.
 
 ## Notes
 

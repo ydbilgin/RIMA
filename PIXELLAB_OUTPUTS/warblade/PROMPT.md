@@ -13,37 +13,50 @@
 | RMB | Heavy slam (Verdict Ledger stack) |
 | Silhouette | Geniş omuz, ağır zırh, iki elli kılıç |
 
-## Base Body Prompt (Adım 1, body-only, silahsız)
+## Anchor Referans (Adim 1 -- Baslangic Noktasi)
 
-```
-Pixel art warrior character, body-only, no weapon, 128x128 sprite on 252x252 canvas. High top-down view 30-35° elevation. Heavy plate armor, broad shoulders, cold blue cloth accent #7BA7BC at sash and shoulder straps. Palette: armor steel #4A4E5A / #5C6070 / #6E7280, accent blue #7BA7BC, leather #3A2818 / #5A4028, skin #C9A084 / #A07858, hair dark brown. Stoic stance, feet shoulder-width, arms relaxed. Hard pixel edges, no anti-aliasing, pixel cluster min 4px. NO embedded glow, NO VFX, NO weapon. South-facing default (face camera).
-```
+Weaponless base body URETME. Bu sinifin standing pose anchor'i zaten hazir:
 
-Yönler: **S, E, N** üret. **W = Unity flipX** (üretme!)
+  Characters/anchors/warblade/rotations/south.png
+  Characters/anchors/warblade/rotations/south-east.png
+  Characters/anchors/warblade/rotations/east.png
+  Characters/anchors/warblade/rotations/north-east.png
+  Characters/anchors/warblade/rotations/north.png
+  Characters/anchors/warblade/rotations/north-west.png
+  Characters/anchors/warblade/rotations/west.png
+  Characters/anchors/warblade/rotations/south-west.png
+
+Bu dosyalar silahini tutan, duran poz karakteri icerir -- temiz arka plan, uretim hazir.
+Tum animasyonlarin start frame kaynagi bu anchor dosyalaridir.
+
+Edit Image Pro kullanim durumlari:
+- Anchor'dan uretilemayan asiri pozlar icin (walk extreme pose A/B, attack windup) use anchor as source image in Edit Image Pro to produce variant
+- Animasyon start frame ve end frame'i yeni uretimden gelecekse: Edit Image Pro + anchor source
+- Weapon zaten anchor'da var; ayri weapon pass GEREKMIYOR
 
 ## Idle (Adım 2)
 
 ```
-Subtle breathing motion, 6-8 frames. Character chest rises and falls slowly, weight shifts subtly between feet. Same pose as base sprite, no weapon. South-facing.
+Subtle breathing motion, 6-8 frames. Character chest rises and falls slowly, weight shifts subtly between feet. Same pose as base sprite, greatsword held ready on right shoulder. South-facing.
 ```
 
 ## Hurt (Adım 2)
 
 ```
-Flinch backwards, 3 frames. Character's torso jerks back from impact, head tilts away, no weapon. Cold blue accent (#7BA7BC) flickers slightly. Frame 1: idle pose. Frame 2: peak flinch (max backward lean). Frame 3: recovery toward idle.
+Flinch backwards, 3 frames. Character's torso jerks back from impact, head tilts away, greatsword held ready on right shoulder. Cold blue accent (#7BA7BC) flickers slightly. Frame 1: idle pose. Frame 2: peak flinch (max backward lean). Frame 3: recovery toward idle.
 ```
 
 ## Death (Adım 2)
 
 ```
-Collapse to ground, 6 frames. Heavy character falls forward to knees then face-down. No weapon. Frame 1: stagger. Frame 2: knees buckle. Frame 3: kneeling. Frame 4: torso falls forward. Frame 5: arm catches ground. Frame 6: prone, motionless.
+Collapse to ground, 6 frames. Heavy character falls forward to knees then face-down. greatsword held ready on right shoulder. Frame 1: stagger. Frame 2: knees buckle. Frame 3: kneeling. Frame 4: torso falls forward. Frame 5: arm catches ground. Frame 6: prone, motionless.
 ```
 
 ## Walk (Adım 3, Brian's Extreme Pose)
 
 **Extreme Pose A prompt:**
 ```
-Walking forward, right leg fully extended in stride, weight shifted to front foot, arms swing in counter-rhythm, body lean slight forward. Heavy warrior gait, no weapon. South-facing.
+Walking forward, right leg fully extended in stride, weight shifted to front foot, arms swing in counter-rhythm, body lean slight forward. Heavy warrior gait, greatsword held ready on right shoulder. South-facing.
 ```
 
 Pose A → flip → Pose B → Interpolate 4-6 frames arası.
@@ -71,14 +84,17 @@ Greatsword slammed into ground, both hands gripping hilt at chest level, blade v
 ## Dash (Adım 4, 4 frame)
 
 ```
-Quick forward lunge, 4 frames. Frame 1: anticipation crouch (knees bent). Frame 2: explosive forward push, leading leg extended, body horizontal. Frame 3: airborne mid-dash, arms back. Frame 4: landing crouch, recovery. No weapon.
+Quick forward lunge, 4 frames. Frame 1: anticipation crouch (knees bent). Frame 2: explosive forward push, leading leg extended, body horizontal. Frame 3: airborne mid-dash, arms back. Frame 4: landing crouch, recovery. greatsword held ready on right shoulder.
 ```
 
-## Weapon Pass (Adım 5, Edit Image Pro)
+## Edit Image Pro -- Yeni Frame Uretimi (Adim 5, ihtiyac varsa)
 
-```
-Add greatsword on right shoulder, two-handed grip when raised. Sword: 3.5 head-tall blade, steel #6E7280 / #8A8E98 / #A6AAB4, hilt wrapped leather #3A2818, crossguard iron #282830. Cold blue cloth wrap on hilt (#7BA7BC). NO glow, NO embedded VFX. Apply per direction: S, E, N (W = flip E with sword in correct hand — no separate weapon paint).
-```
+Anchor standing pose yeterli degilse (attack PEAK, walk extreme) yeni frame uret:
+1. Source image: ilgili yon anchor dosyasi (Characters/anchors/warblade/rotations/south.png)
+2. Prompt: istenen poz degisikligini describe et, weapon zaten source'da gorunur
+3. Output: direction_variant.png olarak kaydet, eraser pass uygula
+
+Weapon ayrica ekleme -- anchor'da zaten var.
 
 ## Notes
 

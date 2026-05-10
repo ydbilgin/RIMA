@@ -13,18 +13,31 @@
 | RMB | Aim Shot (TAP-MODE, 2-stage placeable) |
 | Silhouette | İnce, çevik, hood + cape, sırt sadağı |
 
-## Base Body Prompt (Adım 1, body-only, silahsız)
+## Anchor Referans (Adim 1 -- Baslangic Noktasi)
 
-```
-Pixel art ranger character, body-only, no weapon, 128x128 sprite on 252x252 canvas. High top-down view 30-35°. Lean agile build, hooded cloak, cold blue undertunic (#7BA7BC), forest green cloak (#3A4A38 / #4E5E48). Quiver visible on back (leather strap). Palette: cloak green #3A4A38 / #4E5E48, leather #3A2818 / #5A4028, accent blue #7BA7BC, skin #C9A084. Light leather armor, flexible stance, feet hip-width. Hood up, partial face shadow. NO weapon held. South-facing default. Hard pixel edges, no anti-aliasing.
-```
+Weaponless base body URETME. Bu sinifin standing pose anchor'i zaten hazir:
 
-Yönler: **S, E, N, W** dördünü ayrı üret (asimetrik — yay tek elde, flip silahı yanlış ele atar).
+  Characters/anchors/ranger/rotations/south.png
+  Characters/anchors/ranger/rotations/south-east.png
+  Characters/anchors/ranger/rotations/east.png
+  Characters/anchors/ranger/rotations/north-east.png
+  Characters/anchors/ranger/rotations/north.png
+  Characters/anchors/ranger/rotations/north-west.png
+  Characters/anchors/ranger/rotations/west.png
+  Characters/anchors/ranger/rotations/south-west.png
+
+Bu dosyalar silahini tutan, duran poz karakteri icerir -- temiz arka plan, uretim hazir.
+Tum animasyonlarin start frame kaynagi bu anchor dosyalaridir.
+
+Edit Image Pro kullanim durumlari:
+- Anchor'dan uretilemayan asiri pozlar icin (walk extreme pose A/B, attack windup) use anchor as source image in Edit Image Pro to produce variant
+- Animasyon start frame ve end frame'i yeni uretimden gelecekse: Edit Image Pro + anchor source
+- Weapon zaten anchor'da var; ayri weapon pass GEREKMIYOR
 
 ## Idle (Adım 2)
 
 ```
-Alert breathing, 6-8 frames. Hood slightly sways, head subtly scans, weight subtly shifts. Tense posture but relaxed shoulders. No weapon.
+Alert breathing, 6-8 frames. Hood slightly sways, head subtly scans, weight subtly shifts. Tense posture but relaxed shoulders. compound bow held in left hand, right hand relaxed at side.
 ```
 
 ## Hurt (Adım 2)
@@ -36,14 +49,14 @@ Flinch sideways, 3 frames. Light agile recoil — body twists rather than falls 
 ## Death (Adım 2)
 
 ```
-Collapse sideways, 6 frames. Light body falls to one side, hood slips off head. No weapon. Frame 1: stagger. Frame 2-3: knees buckle and lean. Frame 4: hand catches ground. Frame 5: lying on side. Frame 6: motionless, hood on ground.
+Collapse sideways, 6 frames. Light body falls to one side, hood slips off head. compound bow held in left hand, right hand relaxed at side. Frame 1: stagger. Frame 2-3: knees buckle and lean. Frame 4: hand catches ground. Frame 5: lying on side. Frame 6: motionless, hood on ground.
 ```
 
 ## Walk (Adım 3, Extreme Pose)
 
 **Extreme Pose A:**
 ```
-Walking forward light-footed, right leg extended in stride, body lean very slight forward, cape sways behind. Quick agile gait. No weapon. South-facing.
+Walking forward light-footed, right leg extended in stride, body lean very slight forward, cape sways behind. Quick agile gait. compound bow held in left hand, right hand relaxed at side. South-facing.
 ```
 
 ## Attack_LMB — Bow Shot (Adım 4, 3-segment)
@@ -69,14 +82,17 @@ Slow aim — bow at full draw with extra time, breath held, body very still and 
 ## Dash (Adım 4, 4 frame)
 
 ```
-Quick agile roll, 4 frames. Frame 1: crouch. Frame 2: forward dive low to ground, body horizontal. Frame 3: tucked roll mid-air. Frame 4: emerge upright with bow ready. No weapon (or bow held in left hand throughout — implementation choice).
+Quick agile roll, 4 frames. Frame 1: crouch. Frame 2: forward dive low to ground, body horizontal. Frame 3: tucked roll mid-air. Frame 4: emerge upright with bow ready. compound bow held in left hand, right hand relaxed at side (bow held in left hand throughout).
 ```
 
-## Weapon Pass (Adım 5, Edit Image Pro)
+## Edit Image Pro -- Yeni Frame Uretimi (Adim 5, ihtiyac varsa)
 
-```
-Add compound bow held in LEFT hand. Bow: vertical orientation when at rest, ~1.2x character height. Wood riser #5A4028 / #7A5838, limbs darker #3A2818, string thin off-white #C8C0A8. Cold blue grip wrap (#7BA7BC). Quiver on back already in base sprite. Apply per direction: S, E, N, W (each painted separately — flip changes weapon hand).
-```
+Anchor standing pose yeterli degilse (attack PEAK, walk extreme) yeni frame uret:
+1. Source image: ilgili yon anchor dosyasi (Characters/anchors/ranger/rotations/south.png)
+2. Prompt: istenen poz degisikligini describe et, weapon zaten source'da gorunur
+3. Output: direction_variant.png olarak kaydet, eraser pass uygula
+
+Weapon ayrica ekleme -- anchor'da zaten var.
 
 ## Notes
 
