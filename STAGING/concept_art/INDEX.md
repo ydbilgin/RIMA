@@ -30,8 +30,14 @@ Generated: 2026-05-10
 |---|---|---|---|
 | scene_26-scene_30 | 04_cinematic/ | NOT GENERATED | Stopped at scene 10 quality gate. |
 
-codex_scene_01_warblade_iron_combo.png  folder=01_combat  status=GENERATED
-codex_scene_02_ranger_volley.png  folder=01_combat  status=GENERATED
-codex_scene_03_shadowblade_veil_strike.png  folder=01_combat  status=GENERATED
-codex_scene_04_elementalist_cast.png  folder=01_combat  status=GENERATED
-codex_scene_05_keep_arena_overview.png  folder=01_combat  status=GENERATED
+codex_scene_01_warblade_iron_combo.png  folder=01_combat  status=DISCARDED v1, see _DISCARDED_codex_v1_20260510T181951Z/
+codex_scene_02_ranger_volley.png  folder=01_combat  status=DISCARDED v1, see _DISCARDED_codex_v1_20260510T181951Z/
+codex_scene_03_shadowblade_veil_strike.png  folder=01_combat  status=DISCARDED v1, see _DISCARDED_codex_v1_20260510T181951Z/
+codex_scene_04_elementalist_cast.png  folder=01_combat  status=DISCARDED v1, see _DISCARDED_codex_v1_20260510T181951Z/
+codex_scene_05_keep_arena_overview.png  folder=01_combat  status=DISCARDED v1, see _DISCARDED_codex_v1_20260510T181951Z/
+
+codex_v2_scene_01_warblade_iron_combo.png  folder=01_combat  resolution=1672x941  status=GENERATED  audit=pending user
+codex_v2_scene_02_ranger_volley.png  folder=01_combat  resolution=1672x941  status=GENERATED  audit=pending user
+codex_v2_scene_03_shadowblade_veil_strike.png  folder=01_combat  resolution=1672x941  status=GENERATED  audit=pending user
+codex_v2_scene_04_elementalist_cast.png  folder=01_combat  resolution=1672x941  status=GENERATED  audit=pending user
+codex_v2_scene_05_keep_arena_overview.png  folder=01_combat  resolution=1672x941  status=GENERATED  audit=pending user
