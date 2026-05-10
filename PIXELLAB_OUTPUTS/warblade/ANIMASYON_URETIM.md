@@ -325,7 +325,7 @@ Characters/anchors/warblade/
   rotations/
     south_clean.png, south-west_clean.png, ... (8 yon)
 
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/
+PIXELLAB_OUTPUTS/warblade/outputs/
   idle/<direction>/frames/
   hurt/<direction>/frames/
   death/<direction>/frames/

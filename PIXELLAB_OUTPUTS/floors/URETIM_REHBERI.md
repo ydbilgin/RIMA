@@ -12,6 +12,7 @@
 - **Uretim sirasi ZORUNLU**: F1 -> F2 -> F3 -> Trans_F1F2 -> Trans_F2F3
 - **Style reference**: her set icin onceki onaylanan tile yukle (F2'den itibaren ZORUNLU)
 - **YASAK**: Create Tileset Standard floor icin | gradient | anti-aliased edge | palette disi renk | belirsiz renk tanimi ("dark grey" yerine hex kullan)
+- **KENAR INVARIANCE (ZORUNLU):** Tum F1/F2/F3 variant'larinda tile kenar piksellerinin 3px icine accent/hero detay GELMEMELi. Kenar bolgesi her zaman saf mortar cizgisi (#1A1C20) olmali. Bu kural, herhangi iki variant yan yana geldiginde gorsel seam olusmamasini garanti eder.
 
 ---
 
@@ -69,22 +70,30 @@ Floor variant secimi **edit-time Perlin noise** ile yapilir -> save aninda RoomB
 2. Designer **Reseed** butonuyla farkli dagilim ceker (preview)
 3. **Save / Bake** -> her hucre `variantIndex` (byte) olarak RoomBlueprint'e yazilir -> artik sabit
 
-**Noise parametreleri:**
-| Param | Deger | Aciklama |
-|-------|-------|----------|
-| frequency | **0.18** | 16x16 odada ~3 blob olusturur |
-| octaves | **2** | Ikinci oktav freq 0.36, amplitude 0.4 |
-| seed | `noiseSeed` per room | RoomBlueprint field, default = roomGuid.GetHashCode() |
+### Iki Katmanli Perlin Sistemi
 
-**Tier esikleri (Perlin sample n ∈ [0,1]):**
-- `n < 0.70` -> base tier
-- `0.70 <= n < 0.92` -> accent tier
-- `n >= 0.92` -> hero tier
+**Katman A -- Zone haritasi (buyuk olcek):**
+| Param | Deger |
+|-------|-------|
+| frequency | **0.06** |
+| Amac | 16x16 odada ~4-5 buyuk zone olusturur |
 
-(F1/F2/F3 profil farkli olsa da esikler sabit; agirlik tier'daki per-variant weight ile ayarlanir)
+Zone esikleri:
+- `n < 0.65` -> base zone (base tier variant'lar)
+- `0.65 <= n < 0.88` -> accent zone (accent tier variant'lar)
+- `n >= 0.88` -> hero zone (hero tier variant'lar)
 
-**Tier ici variant secimi (deterministik):**
-`(x * 73856093 XOR y * 19349663 XOR seed) mod tier_size` -> variant index
+**Katman B -- Variant secimi (ince detay):**
+| Param | Deger |
+|-------|-------|
+| frequency | **0.18**, octaves 2 |
+| Amac | Zone icinde hangi specific variant -> XOR hash deterministik |
+
+Formul: `(x*73856093 XOR y*19349663 XOR seed) mod tier_size` -> variant index
+
+Sonuc: Ayni tier'dan variant'lar buyuk dogal kumeler olusturur (duz granit bolgesi / catlik bolgesi / leke bolgesi). Bolge sinirlari da kenar invariance sayesinde seamless gorunur.
+
+**seed:** `noiseSeed` per room -- RoomBlueprint field, default = roomGuid.GetHashCode()
 
 **Cluster-bust (varsayilan ON):** Save aninda hero tier variant'in 1 hucre radius'unda baska hero varsa accent'e dusurulur.
 
@@ -151,7 +160,7 @@ Hard pixel edges, NO anti-aliasing. Pixel cluster min 4px. Background #00FF00 ch
 ### process_tiles.py Komutu
 
 ```powershell
-python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/f1/f1_sheet_v1.png --output Assets/Art/Tiles/Act1/F1 --cols 4 --rows 4 --width 64 --height 64 --prefix f1_
+python STAGING/process_tiles.py --source PIXELLAB_OUTPUTS/floors/outputs/f1/f1_sheet_v1.png --output Assets/Art/Tiles/Act1/F1 --cols 4 --rows 4 --width 64 --height 64 --prefix f1_
 ```
 
 ### Unity Import Ayarlari
@@ -210,7 +219,7 @@ Darker overall vs F1 -- less lit face (#4E5260) usage. Hard pixel edges, NO anti
 ### process_tiles.py Komutu
 
 ```powershell
-python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/f2/f2_sheet_v1.png --output Assets/Art/Tiles/Act1/F2 --cols 4 --rows 4 --width 64 --height 64 --prefix f2_
+python STAGING/process_tiles.py --source PIXELLAB_OUTPUTS/floors/outputs/f2/f2_sheet_v1.png --output Assets/Art/Tiles/Act1/F2 --cols 4 --rows 4 --width 64 --height 64 --prefix f2_
 ```
 
 ### Unity Import Ayarlari
@@ -269,7 +278,7 @@ Hard pixel edges, NO anti-aliasing. Background #00FF00.
 ### process_tiles.py Komutu
 
 ```powershell
-python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/f3/f3_sheet_v1.png --output Assets/Art/Tiles/Act1/F3 --cols 4 --rows 4 --width 64 --height 64 --prefix f3_
+python STAGING/process_tiles.py --source PIXELLAB_OUTPUTS/floors/outputs/f3/f3_sheet_v1.png --output Assets/Art/Tiles/Act1/F3 --cols 4 --rows 4 --width 64 --height 64 --prefix f3_
 ```
 
 ### Unity Import Ayarlari
@@ -337,7 +346,7 @@ Hard pixel edges. Background #00FF00.
 ### process_tiles.py Komutu
 
 ```powershell
-python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f1f2_v1.png --output Assets/Art/Tiles/Act1/Trans_F1F2 --cols 2 --rows 4 --width 64 --height 64 --prefix trans_f1f2_
+python STAGING/process_tiles.py --source PIXELLAB_OUTPUTS/floors/outputs/trans/trans_f1f2_v1.png --output Assets/Art/Tiles/Act1/Trans_F1F2 --cols 2 --rows 4 --width 64 --height 64 --prefix trans_f1f2_
 ```
 
 ### Unity Import Ayarlari
@@ -404,7 +413,7 @@ NO bright glow. Hard pixel edges. Background #00FF00.
 ### process_tiles.py Komutu
 
 ```powershell
-python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f2f3_v1.png --output Assets/Art/Tiles/Act1/Trans_F2F3 --cols 2 --rows 4 --width 64 --height 64 --prefix trans_f2f3_
+python STAGING/process_tiles.py --source PIXELLAB_OUTPUTS/floors/outputs/trans/trans_f2f3_v1.png --output Assets/Art/Tiles/Act1/Trans_F2F3 --cols 2 --rows 4 --width 64 --height 64 --prefix trans_f2f3_
 ```
 
 ### Unity Import Ayarlari
@@ -461,13 +470,15 @@ python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs
 - [ ] Her variant PNG metadata.json tier_tag iceriyor (base/accent/hero)
 - [ ] F1 base-heavy (8 base var), F2 accent-agirlikli (5 accent var), F3 hero-permissive (3 hero var) -- uretim sirasinda tier dengesi kontrol
 - [ ] Animated tile YOKTUR floor setinde -- animated tiles prop kategorisinde (torch vs.)
+- [ ] Kenar invariance: her variant'ta 3px border bolgesinde accent/hero detay yok, sadece mortar (#1A1C20)
+- [ ] Zone-based boyama test: 16x16 paint -> buyuk kumeler gorunuyor, salt-and-pepper yok
 
 ---
 
 ## KAYIT KLASORU
 
 ```
-STAGING/PIXELLAB/02_NEXT_floors/
+PIXELLAB_OUTPUTS/floors/
   outputs/
     f1/
       f1_sheet_v1.png          (4x4 sprite sheet, 16 var)

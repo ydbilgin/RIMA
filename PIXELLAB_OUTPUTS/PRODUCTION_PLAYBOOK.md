@@ -212,9 +212,9 @@ Pixel art warrior character, body-only, no weapon, character occupies ~50% of ca
 
 **💾 Kaydet (3 dosya):**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/01_base_4dir/warblade_base_S.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/01_base_4dir/warblade_base_E.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/01_base_4dir/warblade_base_N.png
+PIXELLAB_OUTPUTS/warblade/outputs/01_base_4dir/warblade_base_S.png
+PIXELLAB_OUTPUTS/warblade/outputs/01_base_4dir/warblade_base_E.png
+PIXELLAB_OUTPUTS/warblade/outputs/01_base_4dir/warblade_base_N.png
 ```
 
 > W (West) üretme — Unity'de `flipX` ile E'den otomatik üretilir.
@@ -239,9 +239,9 @@ Subtle breathing motion, 6-8 frames. Character chest rises and falls slowly, wei
 
 **💾 Kaydet (3 dosya):**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_idle_S.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_idle_E.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_idle_N.png
+PIXELLAB_OUTPUTS/warblade/outputs/02_idle_hit_death/warblade_idle_S.png
+PIXELLAB_OUTPUTS/warblade/outputs/02_idle_hit_death/warblade_idle_E.png
+PIXELLAB_OUTPUTS/warblade/outputs/02_idle_hit_death/warblade_idle_N.png
 ```
 
 ---
@@ -261,9 +261,9 @@ Flinch backwards, 4 frames. Character's torso jerks back from impact, head tilts
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_hurt_S.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_hurt_E.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_hurt_N.png
+PIXELLAB_OUTPUTS/warblade/outputs/02_idle_hit_death/warblade_hurt_S.png
+PIXELLAB_OUTPUTS/warblade/outputs/02_idle_hit_death/warblade_hurt_E.png
+PIXELLAB_OUTPUTS/warblade/outputs/02_idle_hit_death/warblade_hurt_N.png
 ```
 
 ---
@@ -281,7 +281,7 @@ Collapse to ground, 6 frames. Heavy character falls forward to knees then face-d
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_death_S.png (+E, +N)
+PIXELLAB_OUTPUTS/warblade/outputs/02_idle_hit_death/warblade_death_S.png (+E, +N)
 ```
 
 ---
@@ -305,9 +305,9 @@ Tool: **Interpolate NEW (v2, 252×252)**, Input: Pose A + Pose B, Output: 4-6 fr
 
 **💾 Kaydet (her yön için 6 frame walk cycle):**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/03_run_cycle/warblade_walk_S.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/03_run_cycle/warblade_walk_E.png
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/03_run_cycle/warblade_walk_N.png
+PIXELLAB_OUTPUTS/warblade/outputs/03_run_cycle/warblade_walk_S.png
+PIXELLAB_OUTPUTS/warblade/outputs/03_run_cycle/warblade_walk_E.png
+PIXELLAB_OUTPUTS/warblade/outputs/03_run_cycle/warblade_walk_N.png
 ```
 
 **Adım 21d — Walk Robotik Hissediyorsa: Mid-Stride Recovery (FALLBACK):**
@@ -347,7 +347,7 @@ Greatsword horizontal slash at full extension, arms parallel to ground, sword ti
 
 **💾 Kaydet (her yön için 8 frame total — PEAK paylaşılır, Revize Notu E):**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/04_attack_LMB/warblade_lmb_S.png (+E, +N)
+PIXELLAB_OUTPUTS/warblade/outputs/04_attack_LMB/warblade_lmb_S.png (+E, +N)
 ```
 > 252² × 8 = 508,032 ≤ 524,288 ✓ (9 frame olsaydı bütçe aşardı). PEAK = windup son + follow ilk frame.
 
@@ -368,7 +368,7 @@ Greatsword slammed into ground, both hands gripping hilt at chest level, blade v
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/05_attack_RMB/warblade_rmb_S.png (+E, +N)
+PIXELLAB_OUTPUTS/warblade/outputs/05_attack_RMB/warblade_rmb_S.png (+E, +N)
 ```
 
 ---
@@ -384,7 +384,7 @@ Quick forward lunge, 4 frames. Frame 1: anticipation crouch (knees bent). Frame 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/06_dash/warblade_dash_S.png (+E, +N)
+PIXELLAB_OUTPUTS/warblade/outputs/06_dash/warblade_dash_S.png (+E, +N)
 ```
 
 ---
@@ -408,7 +408,7 @@ Add greatsword on right shoulder, two-handed grip when raised. Sword: 3.5 head-t
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/07_weapon_pass/warblade_weapon_S.png (+E, +N)
+PIXELLAB_OUTPUTS/warblade/outputs/07_weapon_pass/warblade_weapon_S.png (+E, +N)
 ```
 
 > Sonra Aseprite'ta tüm idle/walk/dash/hurt/death frame'lerine bu silah katmanını propagate et (kopyala-yapıştır).
@@ -434,7 +434,7 @@ Pixel art ranger character, body-only, no weapon, character occupies ~50% of can
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/01_base_4dir/ranger_base_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/01_base_4dir/ranger_base_S.png (+E, +N, +W)
 ```
 
 ---
@@ -452,7 +452,7 @@ Alert breathing, 6-8 frames. Hood slightly sways, head subtly scans, weight subt
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/02_idle_hit_death/ranger_idle_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/02_idle_hit_death/ranger_idle_S.png (+E, +N, +W)
 ```
 
 ---
@@ -468,7 +468,7 @@ Flinch sideways, 4 frames. Light agile recoil — body twists rather than falls 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/02_idle_hit_death/ranger_hurt_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/02_idle_hit_death/ranger_hurt_S.png (+E, +N, +W)
 ```
 
 ---
@@ -482,7 +482,7 @@ Collapse sideways, 6 frames. Light body falls to one side, hood slips off head. 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/02_idle_hit_death/ranger_death_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/02_idle_hit_death/ranger_death_S.png (+E, +N, +W)
 ```
 
 ---
@@ -500,7 +500,7 @@ Walking forward light-footed, right leg extended in stride, body lean very sligh
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/03_run_cycle/ranger_walk_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/03_run_cycle/ranger_walk_S.png (+E, +N, +W)
 ```
 
 > **Walk robotik hissederse:** Adım 21d Mid-Stride Recovery prosedürünü uygula. Idle'dan yeniden üretme — mevcut kötü output'un mid-stride frame'ini seed olarak kullan.
@@ -521,7 +521,7 @@ Bow drawn fully, left arm extended forward holding bow, right hand at cheek anch
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/04_attack_LMB/ranger_lmb_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/04_attack_LMB/ranger_lmb_S.png (+E, +N, +W)
 ```
 
 ---
@@ -537,7 +537,7 @@ Slow aim — bow at full draw with extra time, breath held, body very still and 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/05_attack_RMB/ranger_rmb_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/05_attack_RMB/ranger_rmb_S.png (+E, +N, +W)
 ```
 
 ---
@@ -551,7 +551,7 @@ Quick agile roll, 4 frames. Frame 1: crouch. Frame 2: forward dive low to ground
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/06_dash/ranger_dash_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/06_dash/ranger_dash_S.png (+E, +N, +W)
 ```
 
 ---
@@ -565,7 +565,7 @@ Add compound bow held in LEFT hand. Bow: vertical orientation when at rest, ~1.2
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/07_weapon_pass/ranger_weapon_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/ranger/outputs/07_weapon_pass/ranger_weapon_S.png (+E, +N, +W)
 ```
 
 ---
@@ -589,7 +589,7 @@ Pixel art shadowblade assassin character, body-only, no weapon, character occupi
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/01_base_4dir/shadowblade_base_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/01_base_4dir/shadowblade_base_S.png (+E, +N, +W)
 ```
 
 ---
@@ -605,7 +605,7 @@ Predator stillness, 6-8 frames. Very subtle motion — only cloak hem flutters s
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/02_idle_hit_death/shadowblade_idle_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/02_idle_hit_death/shadowblade_idle_S.png (+E, +N, +W)
 ```
 
 ---
@@ -621,7 +621,7 @@ Sharp recoil, 4 frames. Body twists hard from impact, cloak flares dramatically.
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/02_idle_hit_death/shadowblade_hurt_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/02_idle_hit_death/shadowblade_hurt_S.png (+E, +N, +W)
 ```
 
 ---
@@ -635,7 +635,7 @@ Dissolve / sink, 6 frames. Character collapses but with shadowy fade — last 2 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/02_idle_hit_death/shadowblade_death_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/02_idle_hit_death/shadowblade_death_S.png (+E, +N, +W)
 ```
 
 ---
@@ -651,7 +651,7 @@ Walking forward predator-style, low and silent, body crouched, knees bent slight
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/03_run_cycle/shadowblade_walk_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/03_run_cycle/shadowblade_walk_S.png (+E, +N, +W)
 ```
 
 > **Walk robotik hissederse:** Adım 21d Mid-Stride Recovery prosedürünü uygula. Idle'dan yeniden üretme — mevcut kötü output'un mid-stride frame'ini seed olarak kullan.
@@ -670,7 +670,7 @@ Right blade slash horizontal, arm extended at full slash, body 30° twisted. Lef
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/04_attack_LMB/shadowblade_lmb_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/04_attack_LMB/shadowblade_lmb_S.png (+E, +N, +W)
 ```
 
 ---
@@ -687,7 +687,7 @@ Phase-strike — character mid-teleport, body half-dissolved into shadow, blade 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/05_attack_RMB/shadowblade_rmb_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/05_attack_RMB/shadowblade_rmb_S.png (+E, +N, +W)
 ```
 
 ---
@@ -701,7 +701,7 @@ Shadow dash, 4 frames. Frame 1: crouch with violet wisp at feet. Frame 2: body p
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/06_dash/shadowblade_dash_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/06_dash/shadowblade_dash_S.png (+E, +N, +W)
 ```
 
 ---
@@ -715,7 +715,7 @@ Add twin short blades — one per hand. Each blade: ~0.6x character height, narr
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/07_weapon_pass/shadowblade_weapon_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/shadowblade/outputs/07_weapon_pass/shadowblade_weapon_S.png (+E, +N, +W)
 ```
 
 ---
@@ -739,7 +739,7 @@ Pixel art elementalist mage character, body-only, no weapon, NO book, NO staff (
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/01_base_4dir/elementalist_base_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/01_base_4dir/elementalist_base_S.png (+E, +N, +W)
 ```
 
 ---
@@ -755,7 +755,7 @@ Subtle channeling stance, 6-8 frames. Hands hover at chest, fingers slightly cur
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/02_idle_hit_death/elementalist_idle_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/02_idle_hit_death/elementalist_idle_S.png (+E, +N, +W)
 ```
 
 ---
@@ -771,7 +771,7 @@ Stagger backwards, 4 frames. Mage recoils, hands pulled to chest defensively, ro
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/02_idle_hit_death/elementalist_hurt_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/02_idle_hit_death/elementalist_hurt_S.png (+E, +N, +W)
 ```
 
 ---
@@ -785,7 +785,7 @@ Knees buckle slowly, 6 frames. Mage falls to knees first (caster's last stand), 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/02_idle_hit_death/elementalist_death_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/02_idle_hit_death/elementalist_death_S.png (+E, +N, +W)
 ```
 
 ---
@@ -799,7 +799,7 @@ Walking forward mage gait, robe trailing behind, smooth deliberate step (not as 
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/03_run_cycle/elementalist_walk_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/03_run_cycle/elementalist_walk_S.png (+E, +N, +W)
 ```
 
 > **Walk robotik hissederse:** Adım 21d Mid-Stride Recovery prosedürünü uygula. Idle'dan yeniden üretme — mevcut kötü output'un mid-stride frame'ini seed olarak kullan.
@@ -820,7 +820,7 @@ Both hands extended forward, palms outward, fingers spread — peak cast moment.
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/04_attack_LMB/elementalist_lmb_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/04_attack_LMB/elementalist_lmb_S.png (+E, +N, +W)
 ```
 
 ---
@@ -837,7 +837,7 @@ One hand thrust forward (right hand), palm out, the other hand pulled back at hi
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/05_attack_RMB/elementalist_rmb_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/05_attack_RMB/elementalist_rmb_S.png (+E, +N, +W)
 ```
 
 ---
@@ -851,7 +851,7 @@ Mage step / blink, 4 frames. Frame 1: crouch with hand gesture (palm down at sid
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/06_dash/elementalist_dash_S.png (+E, +N, +W)
+PIXELLAB_OUTPUTS/elementalist/outputs/06_dash/elementalist_dash_S.png (+E, +N, +W)
 ```
 
 > **❌ Weapon Pass YOK — Elementalist silahsız.** Adım 25/34/43 muadili Adım'ı YOK. Bu sınıf 51 adımda biter.

@@ -20,7 +20,7 @@
 1. **PixelLab üretim — TEK GİRİŞ DOSYASI:** `GUIDES/PIXELLAB_PRODUCTION_GUIDE_v2.md`
    - **Bölüm 0** = kanonik kurallar (252×252 canvas, pixel budget formülü, MCP yasakları)
    - **Bölüm 11** = adım adım tıklama rehberi (Faz A: tile/obstacle → Faz B: 4 sınıf anim)
-   - Detaylı prompt'lar için → `STAGING/PIXELLAB/PRODUCTION_PLAYBOOK.md` (51 adım)
+   - Detaylı prompt'lar için → `PIXELLAB_OUTPUTS/PRODUCTION_PLAYBOOK.md` (51 adım)
    - Tool detayı için → `PixelLabDocs/<tool>.md` (57 dosya)
    - **MCP kuruldu:** `pixellab` server — tile/static prop için OK; karakter animasyonu YASAK
    - **Üretim sırası:** F1→F2→F3 → Transitions → W1→W2→OBW → 8 obstacle → 4 sınıf anim sırayla
@@ -40,13 +40,13 @@
 
 ### 🟡 Orta Öncelik
 
-4. **NLM sync** — `STAGING/PIXELLAB/00_README.md` henüz NLM'de yok
+4. **NLM sync** — `PIXELLAB_OUTPUTS/README.md` henüz NLM'de yok
    - `PRODUCTION_PLAYBOOK.md` ve `PixelLabDocs/index.md` sync edildi (2026-05-10)
    - Mevcut script `STAGING/` root maxdepth=1; alt klasör scope eklenmesi lazım
 
 5. **Animasyonlara başla** (tile üretimi sonrası) — 4 ana class, v1 sprint:
    - Warblade (simetrik, 3 yön+flip) → Ranger → Shadowblade → Elementalist
-   - Her class için: `STAGING/PIXELLAB/04-07_NEXT_*_anim/` klasörü hazır
+   - Her class için: `PIXELLAB_OUTPUTS/{warblade,ranger,shadowblade,elementalist}/` klasörü hazır
 
 6. **Lore rework** (4 yeni dosya + 4 küçük edit):
    - `TASARIM/STORY_RUN_PROGRESSION.md` — 9-run NPC tanışma + lore drip
@@ -102,7 +102,7 @@ D4. **Hub combat sub-area** — Hub'ın yan odası combat olur mu?
 ## Mimari Referanslar
 
 - Tile pipeline: `STAGING/process_tiles.py`
-- PixelLab playbook: `STAGING/PIXELLAB/PRODUCTION_PLAYBOOK.md`
+- PixelLab playbook: `PIXELLAB_OUTPUTS/PRODUCTION_PLAYBOOK.md`
 - Animation Bible: `TASARIM/ANIMATION_BIBLE.md`
 - Skill System v2: `TASARIM/SKILL_SYSTEM_v2.md`
 - Shadow Echo: `TASARIM/SHADOW_ECHO_MATRIX.md`

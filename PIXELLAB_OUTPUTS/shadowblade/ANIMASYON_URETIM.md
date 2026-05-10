@@ -253,7 +253,7 @@ Characters/anchors/shadowblade/
   rotations/
     south_clean.png, ... (8 yon)
 
-STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/
+PIXELLAB_OUTPUTS/shadowblade/outputs/
   idle/<direction>/frames/
   hurt/<direction>/frames/
   death/<direction>/frames/

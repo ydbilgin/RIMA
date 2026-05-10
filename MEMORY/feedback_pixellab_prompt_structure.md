@@ -16,4 +16,4 @@ Her PixelLab animasyon promptu şu 3 bloktan oluşur:
 
 Kapanış: "2D Fantasy RPG spritesheet layout. Clean pixel clusters, no noise, no anti-aliasing."
 
-Şablon: `STAGING/PIXELLAB_PROMPT_TEMPLATE.md`
+Şablon: `PIXELLAB_OUTPUTS/PROMPT_TEMPLATE.md`

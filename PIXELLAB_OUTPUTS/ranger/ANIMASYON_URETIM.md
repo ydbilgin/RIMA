@@ -258,7 +258,7 @@ Characters/anchors/ranger/
   rotations/
     south_clean.png, ... (8 yon)
 
-STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/
+PIXELLAB_OUTPUTS/ranger/outputs/
   idle/<direction>/frames/
   hurt/<direction>/frames/
   death/<direction>/frames/

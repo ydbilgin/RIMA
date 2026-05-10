@@ -14,6 +14,7 @@
 - **Style reference zorunlu**: W1-straight-H onaylayinca tum diger W1 variantlari icin yukle
 - **Uretim sirasi**: W1 → W2 → OBW (bu siradan sapma)
 - **Chromakey temizligi**: process_tiles.py ile yap (wall objeler icin zorunlu)
+- **KENAR INVARIANCE (ZORUNLU):** Tum W1/W2 variant'larinda connection kenarlarindaki blok mortar cizgileri (#1A1C20, 1-2px) her variant'ta identik pozisyonda olmali. Weathering/accent detaylar blok MERKEZINDE kalmali, kenar 2px'ine gelmemeli. Bu kural, Rule Tile baglantilari nda gorsel seam olusmamasini garanti eder.
 
 ---
 
@@ -149,7 +150,7 @@ Transparent background. Hard pixel edges, NO anti-aliasing.
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_straight_h_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_straight_h_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_straight_h_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_straight_h_
 ```
 
 **Unity Import**
@@ -192,7 +193,7 @@ Transparent background. Hard pixel edges, NO anti-aliasing.
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_straight_v_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_straight_v_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_straight_v_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_straight_v_
 ```
 
 **Unity Import**
@@ -233,7 +234,7 @@ Mortar lines 1-2px #1A1C20. Hard pixel edges, transparent background.
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_corner_nw_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_nw_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_corner_nw_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_nw_
 ```
 
 ### ADIM 3b -- Corner-NE
@@ -261,7 +262,7 @@ Mortar lines 1-2px #1A1C20. Hard pixel edges, transparent background.
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_corner_ne_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_ne_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_corner_ne_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_ne_
 ```
 
 **Unity Import (her ikisi)**
@@ -301,7 +302,7 @@ Mortar lines 1-2px #1A1C20. Hard pixel edges, transparent background.
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_corner_sw_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_sw_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_corner_sw_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_sw_
 ```
 
 ### ADIM 4b -- Corner-SE
@@ -328,7 +329,7 @@ Mortar lines 1-2px #1A1C20. Hard pixel edges, transparent background.
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_corner_se_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_se_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_corner_se_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_corner_se_
 ```
 
 **Unity Import (her ikisi)**
@@ -369,7 +370,7 @@ Mortar lines 1-2px #1A1C20. Transparent background. Hard pixel edges, NO anti-al
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_end_l_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_end_l_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_end_l_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_end_l_
 ```
 
 ### ADIM 5b -- End-R
@@ -397,7 +398,7 @@ Mortar lines 1-2px #1A1C20. Transparent background. Hard pixel edges, NO anti-al
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w1/w1_end_r_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_end_r_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w1/w1_end_r_v1.png" --output Assets/Art/Tiles/Act1/W1 --cols 1 --rows 1 --width 64 --height 128 --prefix w1_end_r_
 ```
 
 **Unity Import (her ikisi)**
@@ -447,7 +448,7 @@ Same 8 connection variants as W1: straight north, straight south, outer corner N
 **process_tiles.py komutu (tam W2 set sheet icin)**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/w2/w2_sheet_v1.png" --output Assets/Art/Tiles/Act1/W2 --cols 4 --rows 2 --width 64 --height 128 --prefix w2_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/w2/w2_sheet_v1.png" --output Assets/Art/Tiles/Act1/W2 --cols 4 --rows 2 --width 64 --height 128 --prefix w2_
 ```
 
 **Unity Import**
@@ -484,7 +485,7 @@ Isometric pixel art tall architectural wall section, 64x128 pixels, 2:1 isometri
 **process_tiles.py komutu**
 
 ```powershell
-python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs/obw/obw_sheet_v1.png" --output Assets/Art/Tiles/Act1/OBW --cols 2 --rows 2 --width 64 --height 128 --prefix obw_
+python STAGING/process_tiles.py --source "PIXELLAB_OUTPUTS/walls/outputs/obw/obw_sheet_v1.png" --output Assets/Art/Tiles/Act1/OBW --cols 2 --rows 2 --width 64 --height 128 --prefix obw_
 ```
 
 **Unity Import**
@@ -539,6 +540,8 @@ python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs
 
 - [ ] Her variant PNG metadata.json connection_type field iceriyor (required for Rule Tile auto-gen)
 - [ ] W1_RuleTile.asset guncellendi (script ile, manuel degil)
+- [ ] Kenar invariance: her variant'in connection kenarinda mortar cizgisi identik (ayni konum, ayni renk)
+- [ ] Accent/weathering detay blok merkezinde, kenar 2px'inden uzakta
 
 ### Unity Import Sonrasi
 
@@ -553,7 +556,7 @@ python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs
 ## KAYIT KLASORU
 
 ```
-STAGING/PIXELLAB/01_NEXT_walls/outputs/
+PIXELLAB_OUTPUTS/walls/outputs/
   w1/
     w1_straight_h_v1.png
     w1_straight_v_v1.png

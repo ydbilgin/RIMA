@@ -263,7 +263,7 @@ Characters/anchors/elementalist/
   rotations/
     south_clean.png, ... (8 yon)
 
-STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/
+PIXELLAB_OUTPUTS/elementalist/outputs/
   idle/<direction>/frames/
   hurt/<direction>/frames/
   death/<direction>/frames/

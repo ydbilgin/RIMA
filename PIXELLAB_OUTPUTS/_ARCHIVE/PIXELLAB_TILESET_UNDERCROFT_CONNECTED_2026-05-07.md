@@ -321,7 +321,7 @@ If PixelLab adds anti-aliasing on tile edges: reject and regenerate with added i
 
 ## CROSS-REFERENCE
 
-Base floor and wall prompts: STAGING/PIXELLAB_TILESET_UNDERCROFT_2026-05-06.md
+Base floor and wall prompts: PIXELLAB_OUTPUTS/TILESET_UNDERCROFT_2026-05-06.md
 Wall torch sconce in base file (Tile 6) superseded by C1 (more detailed, transparent background).
 Masonry-to-rock transition (Tile 7) and floor-to-earth transition (Tile 8) in base file remain valid
 for biome boundary use -- not duplicated here.

@@ -462,7 +462,7 @@ Hard pixel edges, no gradient outside cyan glow. Two-face shading.
 ## KAYIT KLASORU
 
 ```
-STAGING/PIXELLAB/03_NEXT_obstacles/outputs/
+PIXELLAB_OUTPUTS/obstacles/outputs/
   pillar/              pillar_v1_var01..04.png
   rubble/              rubble_v1_var01..16.png
   torch/
