@@ -4,142 +4,341 @@
 ---
 
 ## TEMEL KURALLAR
-- Tool: Custom Animation V3 (karakter sayfasi -> Add Animation -> Custom Animation V3)
-- YASAK: Standalone Animate with Text NEW | animate_character MCP | Preset butonlar
-- Start Frame: HER ZAMAN _clean.png (Eraser Pass sonrasi, PixelLab orijinalini kullanma)
-- Yonler: Simetrik -> S/E/N uret, W = Unity flipX (8 directions sec Create Character'da)
-- Canvas: 252x252 (v3 otomatik)
+
+- **Tool**: PixelLab web app -> karakter sayfasi -> Add Animation -> **Custom Animation V3**
+- **YASAK**: Standalone "Animate with Text NEW" | `animate_character` MCP | Preset butonlar
+- **Start Frame kaynagi**: `Characters/anchors/warblade/rotations/<direction>_clean.png` (Eraser Pass sonrasi)
+- **Canvas**: 252x252 (v3 otomatik)
+- **Yon uretimi**: 8 yon HEPSI ayri uretilir, FLIP YOK.
+  Yonler: `south`, `south-west`, `south-east`, `east`, `north-east`, `north`, `north-west`, `west`
+- **Frame kurallari** (kesinlikle uy):
+  - Idle: 6-8 frame | Keep First: ON
+  - Hurt: 4 frame TAM SAYI (3 gecersiz) | Keep First: ON
+  - Death: 6-8 frame | Keep First: **OFF**
+  - Walk interpolation: 6 frame | Keep First: ON
+  - Attack PEAK: 4 frame | Keep First: **OFF** -> son frame = PEAK
+  - Attack Windup: 4 frame | Keep First: ON | Start=clean, End=PEAK
+  - Attack Follow: 4 frame | Keep First: ON | Start=PEAK, End=clean
+  - Toplam attack unique: 8 frame (PEAK paylasilir)
+  - Dash: 4 frame | Keep First: ON
 
 ---
 
-## ERASER PASS (ZORUNLU -- her base sprite uretiminden sonra)
-1. Pixelorama'da ac: Characters/anchors/warblade/rotations/[direction].png
-2. Eraser tool -> arka plan piksellerini temizle (anti-alias kenarlar dahil)
-3. Kaydet: warblade_[direction]_clean.png
-4. BU DOSYAYI KULLAN -- PixelLab orijinalini ASLA start frame olarak koyma
+## KARAKTER GORSEL OZETI (uymak ZORUNLU)
+
+- **Silah**: SAG elde TEK EL longsword. Blade ~%65 karakter boyu, mavi-teal kristal kenar, blade ucu serbest tutusta asagi.
+- **Kiyafet**: Bare arms (ciplak kollar), deri kilt/etek, deri kemer, **SOL omuzda** round metal pauldron.
+- **Karakter**: Erkek, siyah kisa sac + kisa sakal, guclu yapi.
+- **YOK**: pelerin, gauntlet, plaka zirh, greatsword, two-handed grip.
 
 ---
 
-## ADIM 1 -- 8 Yon Base Sprite
-Simetrik -> S/E/N uret, W = Unity flipX. Create Character'da yine "8 Directions" sec.
+## ERASER PASS (ZORUNLU)
 
-- PixelLab -> Create Character Pro -> "8 Directions" sec
-- Her yon icin Eraser Pass uygula -> _clean.png kaydet
+8 yon icin Pixelorama workflow:
+1. `Characters/anchors/warblade/rotations/<direction>.png` ac.
+2. Magic Wand ile saf yesil background'u sec, sil.
+3. Karakter siluetinin disindaki kalintilari Eraser ile temizle.
+4. **Sword'u silme** -- silah karakter parcasidir.
+5. Kaydet -> `Characters/anchors/warblade/rotations/<direction>_clean.png`
 
-```text
-Pixel art warrior character, body-only, no weapon, character occupies ~50% of canvas height (~128px tall) centered on a 252x252 transparent canvas. Wide transparent padding on all sides for animation headroom — DO NOT fill the canvas. High top-down view 30-35° elevation. Heavy plate armor, broad shoulders, cold blue cloth accent #7BA7BC at sash and shoulder straps. Palette: armor steel #4A4E5A / #5C6070 / #6E7280, accent blue #7BA7BC, leather #3A2818 / #5A4028, skin #C9A084 / #A07858, hair dark brown. Stoic stance, feet shoulder-width, arms relaxed. Hard pixel edges, no anti-aliasing, pixel cluster min 4px. NO embedded glow, NO VFX, NO weapon. [FACING SOUTH | FACING EAST | FACING NORTH] (face camera for south).
+Bu dosyalar tum Custom Animation V3 cagrilarinda Start/End frame olarak kullanilacak.
+
+---
+
+## YON REFERANS TABLOSU (sword arm = sag)
+
+| Yon | Kilic ekranda |
+|---|---|
+| south | Screen-LEFT |
+| south-east | Screen-left, hafif one |
+| east | Far side (kamera uzagi) |
+| north-east | Screen-RIGHT |
+| north | Screen-RIGHT |
+| north-west | Screen-right, merkeze yakin |
+| west | Near camera (one dogru) |
+| south-west | Screen-left |
+
+> Tum animasyonlarda her yon icin **DIRECTION NOTE** silahin hangi tarafta gorundugune gore yorumlanir.
+
+---
+
+## ADIM 1 -- Idle
+
+**Settings**
+- Tool: Custom Animation V3
+- Start Frame: `<direction>_clean.png`
+- End Frame: bos (loop)
+- Frames: 7
+- Keep First: ON
+
+**Prompt** (copy-paste)
+```
+High top-down view, idle breathing loop. Sword arm (right) hangs relaxed,
+blade tip pointing down to the ground, hilt loose in palm. Chest rises
+and falls slowly with breath. Weight shifts subtly between feet. Head
+sweeps 10-15 degrees side to side scanning. Off-hand (left) hangs free,
+fingers slightly curled. Bare arms, leather kilt, left shoulder pauldron
+stays consistent. Black hair and short beard catch micro-motion. No
+weapon swing, no foot lift, only breath and weight shift.
 ```
 
-## ADIM 2 -- Idle
-- Custom Animation V3
-- Start Frame: warblade_[direction]_clean.png | End Frame: bos | Frames: 6-8 | Keep First: ON
+**DIRECTION NOTE (her yonde tekrar et)**
+- Yon referans tablosundan kilic pozisyonunu prompt'a ek bir satirla belirt.
+  Ornek (south): "Sword visible on screen-left side."
+  Ornek (north): "Sword visible on screen-right side."
 
-```text
-Slow controlled breathing -- chest expands and contracts, shoulders rise slightly on inhale.
-Greatsword held at right side, blade tip near ground, grip relaxed but ready.
-Weight shifts subtly from right to left foot over 4-6 frames, body center stays stable.
-Head turns 10-15 degrees left then returns -- scanning. Knees micro-bend on weight shift.
+---
+
+## ADIM 2 -- Hurt
+
+**Settings**
+- Frames: 4 (tam sayi)
+- Keep First: ON
+- Start Frame: `<direction>_clean.png`
+- End Frame: bos
+
+**Prompt**
+```
+High top-down view, 4-frame hit reaction. Frame 1: neutral stance.
+Frame 2: whole body recoils backward, sword arm tightens grip on hilt
+(knuckles clench), knees flex slightly. Frame 3: weight stays back,
+blade rises into a defensive guard between body and threat. Frame 4:
+recovery, posture returning to neutral. No blade swing, recoil only.
+Pauldron and kilt show subtle motion from impact.
 ```
 
-## ADIM 3 -- Hurt
-- Custom Animation V3
-- Start Frame: warblade_[direction]_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
+**DIRECTION NOTE**: Yon tablosuna gore kilic guard'a kalkarken hangi tarafa cikiyor belirt.
 
-```text
-Sharp full-body recoil -- torso snaps backward 15-20 degrees from impact force, head jerks back.
-Both hands reflexively tighten on greatsword hilt, sword swings back with body momentum.
-Knees buckle slightly, weight drops and shifts backward. Recovery: body pushes back upright frames 3-4.
+---
+
+## ADIM 3 -- Death
+
+**Settings**
+- Frames: 7
+- Keep First: **OFF**
+- Start Frame: `<direction>_clean.png`
+- End Frame: bos
+
+**Prompt**
+```
+High top-down view, death sequence. Frame 1: stagger, weight uncertain.
+Frame 2: sword slips from right hand, blade falls to ground beside the
+character. Frame 3-4: knees buckle and drop. Frame 5-6: torso pitches
+forward over collapsed knees. Frame 7: body settles, head down. Heavy,
+weight-driven motion. No dramatic flourish. Pauldron tilts as shoulder
+drops.
 ```
 
-## ADIM 4 -- Death
-- Custom Animation V3
-- Start Frame: warblade_[direction]_clean.png | End Frame: bos | Frames: 6-8 | Keep First: OFF
+**DIRECTION NOTE**: Kilic dustugu yer = yon tablosundaki kilic tarafi (orn. south -> blade lands screen-left).
 
-```text
-Greatsword drops from loosening grip -- right hand releases first, sword falls and clatters.
-Body collapses forward: knees give, torso folds, arms fall limp to sides.
-Head drops last. Full collapse over 6-8 frames, body settling into ground-level heap.
+---
+
+## ADIM 4 -- Walk Cycle (3 alt-adim)
+
+### 4a -- PoseA secimi
+1. PixelLab web app -> Standalone **Animate with Text NEW** ile karakteri yurut.
+2. Anchor rotation'ini start frame ver, "walk" promptu, 12 frame, Keep First ON.
+3. Ciktidan en uc stride pozunu sec (one ayak ileri, arka ayak geride, kalca rotasyonu maksimum).
+4. Sec -> Eraser pass -> `outputs/walk/<direction>/PoseA_clean.png`
+
+### 4b -- PoseB uretimi (stride flip)
+- Aseprite (veya Pixelorama) -> PoseA_clean.png ac -> **Horizontal Flip**.
+- Bu **direction flip DEGIL**, stride phase flip (one ayak <-> arka ayak swap).
+- Kaydet -> `outputs/walk/<direction>/PoseB_clean.png`
+
+> Onemli: Flip sonrasi sword arm karakterin sol elinde gibi gorunse de, bu sadece stride parityidir. Walk cycle 6 frame interpolasyonda tek el longsword tutusu korunmali (asagidaki prompt zorlar).
+
+### 4c -- Walk interpolation
+**Settings**
+- Tool: Custom Animation V3
+- Start Frame: `PoseA_clean.png`
+- End Frame: `PoseB_clean.png`
+- Frames: 6
+- Keep First: ON
+
+**Prompt**
+```
+High top-down view, walking warrior, heavy deliberate steps. Heel strikes
+first, weight rolls forward. Sword arm (right hand) swings naturally but
+the blade stays controlled, tip trailing slightly behind. Off-hand swings
+opposite to stride. Pauldron rocks with shoulder rotation. Kilt sways
+with hip motion. Black hair has subtle bob. Single-handed grip on the
+longsword maintained throughout, never two-handed.
 ```
 
-## ADIM 5 -- Walk Cycle (3-sub-step)
-- 5a: Standalone Animate -> Start Frame: Characters/anchors/warblade/rotations/[direction].png -> 12 frames -> en uc poz sec -> PoseA_clean.png kaydet
-- 5b: Aseprite'de PoseA'yi flipX -> PoseB_clean.png kaydet
-- 5c: Custom Animation V3, Start=PoseA_clean.png, End=PoseB_clean.png, Frames: 6, Keep First: ON
+**DIRECTION NOTE**: Yon tablosuna gore kilic ayni tarafta kalir; trailing arc o tarafta yapilir.
 
-```text
-Heavy warrior walk cycle -- lead foot plants with weight dropping through the heel.
-Greatsword stays held at right side, blade trailing low, both hands keeping loose control.
-Torso stays upright with small shoulder sway. Hips shift over the planted foot, rear foot pushes forward, then body settles into the opposite stride.
+---
+
+## ADIM 5a -- Attack LMB (Quick Slash) -- 3 segment
+
+> Once PEAK uret, sonra Windup ve Follow segmentlerinde PEAK'i ortak kullan.
+
+### 5a.1 -- PEAK
+**Settings**
+- Frames: 4
+- Keep First: **OFF**
+- Start Frame: `<direction>_clean.png`
+- End Frame: bos
+
+**Prompt**
+```
+High top-down view, single-handed horizontal sword sweep, building to
+peak strike on the final frame. Frame 4 (PEAK): sword arm fully extended,
+blade has crossed body silhouette to the opposite side, wrist locked,
+torso twisted 20-30 degrees into the swing, hips rotated, leading foot
+planted. Bare arm muscle tension visible. Pauldron catches motion.
+Off-hand counter-balances away from swing. NO trail VFX, NO motion blur,
+clean pixel silhouette.
 ```
 
-## ADIM 6a -- Attack LMB (3-Segment)
-- 6a-1: PEAK frame -- Custom Animation V3, Start=warblade_[direction]_clean.png, End=bos, Frames=4, Keep First=OFF -> son frame = PEAK_clean.png
-- 6a-2: Windup -- Custom Animation V3, Start=warblade_[direction]_clean.png, End=PEAK_clean.png, Frames=4, Keep First=ON
-- 6a-3: Follow -- Custom Animation V3, Start=PEAK_clean.png, End=warblade_[direction]_clean.png, Frames=4, Keep First=ON
-- Toplam unique frames: 8 (PEAK paylasilir, sayilmaz 2x)
+Son frame'i `outputs/attack_lmb/<direction>/PEAK.png` olarak Eraser pass + kaydet.
 
-```text
-WINDUP: Two-handed greatsword windup -- both hands grip hilt, right hand dominant at top.
-Sword draws back and upward, rotating to position blade at upper-right: tip up at ~2 o'clock angle, arms pull right shoulder back.
-Torso rotates clockwise 30-40 degrees, right shoulder pulls far back, hips pivot right.
-Weight fully shifts to right foot. Frame 4 = maximum coil: blade at upper-right, body loaded.
+### 5a.2 -- Windup
+**Settings**
+- Frames: 4 | Keep First: ON
+- Start: `<direction>_clean.png` | End: `PEAK.png`
 
-FOLLOW-THROUGH: Release from coiled position -- both hands drive the greatsword in a wide horizontal sweep from right to left.
-Blade arc: starts at 2 o'clock upper-right, sweeps through center at 9 o'clock, tip exits left silhouette fully extended.
-Body uncoils counter-clockwise: right shoulder drives forward, left foot becomes anchor, weight transfers left.
-Arms fully extended at mid-swing (frame 2). Deceleration frames 3-4: arms pull back, body settles, sword lowers to ready.
+**Prompt**
+```
+Sword arm draws back from rest into wind-up. Elbow pulls behind torso,
+blade angled away from target line. Shoulder coils. Body weight shifts
+to back foot. Off-hand rises slightly for balance. Single-handed grip.
 ```
 
-## ADIM 6b -- Attack RMB (3-Segment)
-- 6b-1: PEAK frame -- Custom Animation V3, Start=warblade_[direction]_clean.png, End=bos, Frames=4, Keep First=OFF -> son frame = PEAK_clean.png
-- 6b-2: Windup -- Custom Animation V3, Start=warblade_[direction]_clean.png, End=PEAK_clean.png, Frames=4, Keep First=ON
-- 6b-3: Follow -- Custom Animation V3, Start=PEAK_clean.png, End=warblade_[direction]_clean.png, Frames=4, Keep First=ON
-- Toplam unique frames: 8 (PEAK paylasilir, sayilmaz 2x)
+### 5a.3 -- Follow
+**Settings**
+- Frames: 4 | Keep First: ON
+- Start: `PEAK.png` | End: `<direction>_clean.png`
 
-```text
-WINDUP: Overhead slam setup -- both hands bring greatsword directly overhead with both arms extended up.
-Grip: right hand above left, hilt at crown level, blade pointing straight up at 12 o'clock.
-Body rises onto balls of feet, knees extend, torso leans slightly back to accommodate overhead reach.
-Core engages to stabilize maximum overhead extension. Frame 4 = peak: arms fully up, sword vertical.
-
-FOLLOW-THROUGH: From slammed position -- sword tip at feet, both hands at chest level having driven through.
-Begin recovery: arms absorb impact force, elbows bend to bring hilt up toward waist.
-Knees re-bend to absorb body weight momentum. Torso rolls back upright over frames 2-3.
-Frame 4: sword lifts off ground, body returns to upright ready stance.
+**Prompt**
+```
+Follow-through after horizontal slash. Sword arm continues across body
+to opposite side at full extension, then decelerates. Torso untwists,
+hips return to neutral. Sword arm relaxes back to resting position with
+blade tip lowering. Off-hand returns to side.
 ```
 
-## ADIM 6c -- Dash
-- Custom Animation V3
-- Start Frame: warblade_[direction]_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
+**DIRECTION NOTE**: PEAK frame'inde kilic, yon tablosundaki "kilic ekranda" tarafinin **karsi** tarafina gecmis olmali (sweep karsi tarafa biter).
 
-```text
-Explosive forward lunge -- lead foot drives hard into ground, body pitches forward at 30 degree lean.
-Greatsword tucked close to right side, both hands maintain grip, blade trailing horizontal.
-Arms press sword back to reduce air resistance. Body fully horizontal at frame 2-3. Recovery: feet catch, stance widens, sword raises back to ready.
+---
+
+## ADIM 5b -- Attack RMB (Power Slam) -- 3 segment
+
+### 5b.1 -- PEAK
+**Settings**
+- Frames: 4 | Keep First: **OFF**
+- Start: `<direction>_clean.png` | End: bos
+
+**Prompt**
+```
+High top-down view, single-handed overhead vertical slam, peak on final
+frame. Frame 4 (PEAK): sword arm fully extended downward in front of
+character, blade vertical pointing toward ground at the strike line,
+wrist locked. Shoulders square, both feet planted wide for power. Off-hand
+extended back for counterweight. Maximum power pose. NO impact VFX.
 ```
 
-## ADIM 7 -- Weapon Pass
-- Edit Image Pro -> weapon layer uzerinde calis
-- Silahi dogru tutma pozisyonuna getir / detaylandir
-- Her frame icin uygula
+Son frame -> `outputs/attack_rmb/<direction>/PEAK.png` (Eraser pass).
 
-```text
-Add greatsword on right shoulder, two-handed grip when raised. Sword: 3.5 head-tall blade, steel #6E7280 / #8A8E98 / #A6AAB4, hilt wrapped leather #3A2818, crossguard iron #282830. Cold blue cloth wrap on hilt (#7BA7BC). NO glow, NO embedded VFX. Apply per direction: S, E, N (W = flip E with sword in correct hand — no separate weapon paint).
+### 5b.2 -- Windup
+**Settings**: 4 frame | Keep First: ON | Start=clean, End=PEAK
+```
+Sword arm raises overhead. Elbow lifts above head, wrist rotates so
+blade points up and slightly back. Body coils, weight loads onto back
+leg. Pauldron rises with shoulder. Off-hand drops to balance.
 ```
 
-## QC CHECKLIST
-- [ ] Tum animasyonlar warblade_[direction]_clean.png start frame kullandi (anchor: Characters/anchors/warblade/rotations/[direction].png)
-- [ ] Custom Animation V3 disinda tool kullanilmadi
-- [ ] Keep First degerleri dogru (Idle/Hurt/Walk/Attack windup+follow=ON, Death/PEAK=OFF)
-- [ ] Frame sayilari: Idle=6-8, Hurt=4, Death=6-8, Walk=6, Attack segment=4+4+4=8 unique, Dash=4
-- [ ] Accent cold blue #7BA7BC korundu
-- [ ] Greatsword weapon pass uygulandi
-- [ ] S/E/N uretildi, W Unity flipX ile kullanilacak
-- [ ] No embedded glow / VFX
+### 5b.3 -- Follow
+**Settings**: 4 frame | Keep First: ON | Start=PEAK, End=clean
+```
+After overhead slam: blade rests low in front, sword arm decelerates,
+shoulder relaxes. Body straightens from forward weight commit. Sword
+arm returns to neutral resting position with blade tip down.
+```
+
+**DIRECTION NOTE**: Slam ekseni karakterin one yonu boyunca; kilic vertikal merkez hatti uzerinde tamamlanir.
+
+---
+
+## ADIM 6 -- Dash
+
+**Settings**
+- Frames: 4 | Keep First: ON
+- Start: `<direction>_clean.png` | End: bos
+
+**Prompt**
+```
+High top-down view, forward dash. Frame 1: launch, leading foot pushes
+off. Frame 2: peak forward lean (torso ~25 degrees), back foot trailing,
+sword arm pulls blade backward along body line for aerodynamic profile.
+Frame 3: front foot lands. Frame 4: recovery to neutral stance.
+Single-handed sword grip maintained, blade trailing behind. Bare arms,
+kilt streams behind from speed.
+```
+
+**DIRECTION NOTE**: Dash karakterin baktigi yone dogru. Kilic trailing icin yon tablosundaki tarafin tersine cekilebilir (drag arc).
+
+---
+
+## ADIM 7 -- Weapon Pass (Edit Image Pro)
+
+Her yonun her animasyon frame'inde silah tutarliligi icin pass:
+1. PixelLab web app -> Karakter sayfasi -> ilgili animasyon -> **Edit Image Pro**.
+2. Frame'leri tek tek ac, asagidaki prompt'u uygula.
+
+**Prompt**
+```
+Refine the longsword held in the right hand. Single-handed grip only,
+never two-handed. Blade: steel body color #6E7280 with highlight #8A8E98,
+blue-teal crystal cutting edge #7BA7BC. Hilt: leather wrap #3A2818,
+crossguard dark steel #282830. Blade length about 65% of character
+height. Maintain blade silhouette consistent across all frames of this
+direction. Do not add motion trails, sparks, or VFX.
+```
+
+3. Frame -> Eraser pass (residual artifact temizligi) -> kaydet.
+
+---
+
+## QC CHECKLIST (her animasyon sonrasi)
+
+- [ ] Kilic SAG elde mi? (Tum frame'lerde)
+- [ ] Tek el grip mi? (Two-handed grip varsa REJECT)
+- [ ] Blade boyu ~%65 karakter boyu mu?
+- [ ] Blade rengi steel + mavi-teal kristal kenar mi?
+- [ ] Sol omuzda pauldron var mi?
+- [ ] Bare arms gorunur mu? (Gauntlet/sleeve eklenmemis)
+- [ ] Pelerin/hood eklenmemis mi?
+- [ ] Yon tablosundaki kilic pozisyonu dogru mu?
+- [ ] Frame sayisi prompt'taki ile birebir mi?
+- [ ] Eraser pass yapildi mi (background tamamen seffaf)?
+- [ ] Karakter canvas merkezinde mi (kayma yok)?
+
+---
 
 ## KAYIT KLASORU
-```text
-outputs/warblade/
-  idle/ | hurt/ | death/ | walk/ | attack_lmb/ | attack_rmb/ | dash/
-  weapon/
+
 ```
+Characters/anchors/warblade/
+  rotations/
+    south_clean.png, south-west_clean.png, ... (8 yon)
+
+STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/
+  idle/<direction>/frames/
+  hurt/<direction>/frames/
+  death/<direction>/frames/
+  walk/<direction>/PoseA_clean.png
+  walk/<direction>/PoseB_clean.png
+  walk/<direction>/frames/
+  attack_lmb/<direction>/PEAK.png
+  attack_lmb/<direction>/windup/
+  attack_lmb/<direction>/follow/
+  attack_rmb/<direction>/PEAK.png
+  attack_rmb/<direction>/windup/
+  attack_rmb/<direction>/follow/
+  dash/<direction>/frames/
+```
+
+8 yon x 7 animasyon = 56 set. PEAK paylasimli oldugundan attack unique frame = 8 (windup 3 + PEAK 1 + follow 3 + clean 1).

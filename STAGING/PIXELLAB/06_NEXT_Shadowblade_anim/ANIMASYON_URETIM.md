@@ -4,142 +4,269 @@
 ---
 
 ## TEMEL KURALLAR
-- Tool: Custom Animation V3 (karakter sayfasi -> Add Animation -> Custom Animation V3)
-- YASAK: Standalone Animate with Text NEW | animate_character MCP | Preset butonlar
-- Start Frame: HER ZAMAN _clean.png (Eraser Pass sonrasi, PixelLab orijinalini kullanma)
-- Yonler: Asimetrik -> 4 yon (8 directions Create Character)
-- Canvas: 252x252 (v3 otomatik)
+
+- **Tool**: PixelLab web app -> karakter sayfasi -> Add Animation -> **Custom Animation V3**
+- **YASAK**: Standalone "Animate with Text NEW" | `animate_character` MCP | Preset butonlar
+- **Start Frame kaynagi**: `Characters/anchors/shadowblade/rotations/<direction>_clean.png` (Eraser Pass sonrasi)
+- **Canvas**: 252x252 (v3 otomatik)
+- **Yon uretimi**: 8 yon HEPSI ayri uretilir, FLIP YOK.
+  Yonler: `south`, `south-west`, `south-east`, `east`, `north-east`, `north`, `north-west`, `west`
+- **Frame kurallari**:
+  - Idle: 6-8 frame | Keep First: ON
+  - Hurt: 4 frame TAM SAYI | Keep First: ON
+  - Death: 6-8 frame | Keep First: **OFF**
+  - Walk interpolation: 6 frame | Keep First: ON
+  - Attack PEAK: 4 frame | Keep First: **OFF**
+  - Attack Windup: 4 frame | Keep First: ON | Start=clean, End=PEAK
+  - Attack Follow: 4 frame | Keep First: ON | Start=PEAK, End=clean
+  - Toplam attack unique: 8 frame
+  - Dash: 4 frame | Keep First: ON
 
 ---
 
-## ERASER PASS (ZORUNLU -- her base sprite uretiminden sonra)
-1. Pixelorama'da ac: Characters/anchors/shadowblade/rotations/[direction].png
-2. Eraser tool -> arka plan piksellerini temizle (anti-alias kenarlar dahil)
-3. Kaydet: shadowblade_[direction]_clean.png
-4. BU DOSYAYI KULLAN -- PixelLab orijinalini ASLA start frame olarak koyma
+## KARAKTER GORSEL OZETI (uymak ZORUNLU)
+
+- **Silah**: Her iki elde mor/violet **hancer**. Kisa ince bicak (~karakter boyu %35). Hafif one + asagi yonlu tutus.
+- **Kiyafet**: Koyu lacivert / indigo kiyafet (pantolon + ceket, gevsek ama duzgun). Hood/baslik YOK.
+- **Karakter**: Erkek, koyu deri, siyah kisa sac.
+- **DURUS**: **DIK ve hazir**. Karakter dik duruyor, hafif one egim.
+- **YOK**: derin predatory comelme, hood, pelerin, uzun kilic, tek hancer.
 
 ---
 
-## ADIM 1 -- 8 Yon Base Sprite
-Asimetrik -> 4 yon (S/E/N/W) uretilir. Create Character'da "8 Directions" sec.
+## ERASER PASS (ZORUNLU)
 
-- PixelLab -> Create Character Pro -> "8 Directions" sec
-- Her yon icin Eraser Pass uygula -> _clean.png kaydet
+8 yon icin Pixelorama:
+1. `Characters/anchors/shadowblade/rotations/<direction>.png` ac.
+2. Magic Wand ile yesil bg sec, sil.
+3. Disindaki kalintilar -> Eraser.
+4. **Iki hanceri de silme** -- ikisi de karakter parcasi.
+5. Kaydet -> `<direction>_clean.png`.
 
-```text
-Pixel art shadowblade assassin character, body-only, no weapon, character occupies ~50% of canvas height (~128px tall) centered on a 252x252 transparent canvas. Wide transparent padding on all sides for animation headroom — DO NOT fill the canvas. High top-down view 30-35°. Slim agile build, full dark hooded cloak, body almost entirely silhouetted in dark with violet undertones. Palette: cloak black-purple #1A0E2A / #2A1A3A, mid #3A2A4E, accent violet #5A2A8A, skin partial visible #C9A084 (only chin and jawline below hood), leather straps #3A2818. Crouched ready stance, body lean forward, weight on balls of feet. Hood deep — no eyes visible (silhouette only). NO weapon, NO embedded glow. [FACING S | E | N | W]. Hard pixel edges.
+---
+
+## YON REFERANS TABLOSU (cift hancer)
+
+| Yon | Sag hancer | Sol hancer |
+|---|---|---|
+| south | Screen-left | Screen-right |
+| south-east | Screen-left, hafif one | Screen-right |
+| east | One (prominent) | Gizli/arka |
+| north-east | Screen-right | Screen-left |
+| north | Screen-right | Screen-left |
+| north-west | Screen-right | Screen-left, hafif one |
+| west | Gizli/arka | One (prominent) |
+| south-west | Screen-left | Screen-right |
+
+> Diagonaller cardinal'lar arasi interpolasyon — yakin cardinal'a daha yakin yorumla.
+
+---
+
+## ADIM 1 -- Idle
+
+**Settings**: 7 frame | Keep First: ON | Start=clean | End=bos
+```
+High top-down view, idle ready stance. UPRIGHT posture with slight
+forward lean, NOT a deep crouch. Both hands hold violet daggers in a
+ready guard, blades angled slightly forward and down. Weight shifts
+slowly between feet. Head sweeps subtly, eyes hidden in shadow. Dark
+indigo outfit (pants + jacket) breathes with quiet motion. Threatening
+calm — minimal motion, controlled tension. No blade swing, no foot lift.
+```
+**DIRECTION NOTE**: Yon tablosundan hangi hancerin one cikip hangisinin gizlendigini ekle.
+  Ornek (east): "Right dagger forward and prominent on screen, left dagger tucked behind body."
+
+---
+
+## ADIM 2 -- Hurt
+
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=bos
+```
+High top-down view, 4-frame reflex defensive reaction. Frame 1: neutral
+ready. Frame 2: both daggers cross in front of chest in instant defensive
+X-guard, body recoils backward. Frame 3: head bows slightly, weight back,
+guard held high. Frame 4: recovery, daggers lower back to ready stance.
+Sharp reflexive motion, no flailing. Dark indigo fabric shifts with
+recoil.
+```
+**DIRECTION NOTE**: X-guard her yonde govdenin onunde olusur; tablodaki goruntu pozisyonu hicbir zaman karakteri arkadan vurmaz.
+
+---
+
+## ADIM 3 -- Death
+
+**Settings**: 7 frame | Keep First: **OFF** | Start=clean | End=bos
+```
+High top-down view, death sequence. Frame 1: stagger. Frame 2: both
+daggers slip from hands SIMULTANEOUSLY, falling to either side. Frame
+3-4: upright stance fully breaks down, knees buckle. Frame 5-6: torso
+collapses forward, weight surrenders. Frame 7: body settles, head down.
+Quiet weight-driven collapse, NO drama, NO theatrics. The unshakeable
+stance finally breaks.
+```
+**DIRECTION NOTE**: Sag hancer yon tablosundaki sag-tarafa, sol hancer sol-tarafa duser.
+
+---
+
+## ADIM 4 -- Walk Cycle (3 alt-adim)
+
+### 4a -- PoseA secimi
+1. Standalone Animate with Text NEW -> 12 frame walk uret.
+2. En uc stride pozunu sec.
+3. Eraser pass -> `outputs/walk/<direction>/PoseA_clean.png`.
+
+### 4b -- PoseB (stride flip)
+- Aseprite/Pixelorama -> PoseA_clean -> Horizontal Flip.
+- Stride parity flip.
+- Kaydet -> `PoseB_clean.png`.
+
+> Karakter cift hancer tasidigi icin flip silah simetrisini bozmaz; sag/sol etiketler stride parity icindir.
+
+### 4c -- Walk interpolation
+**Settings**: 6 frame | Keep First: ON | Start=PoseA | End=PoseB
+```
+High top-down view, silent controlled walk. Both daggers held in ready
+position close to the body, blades angled forward and down. Foot
+placement quiet, implied minimal noise. Torso STAYS STABLE while legs
+do the work — the upper body barely bobs. Indigo fabric has minimal
+sway. UPRIGHT posture maintained throughout, no slouch, no crouch.
+```
+**DIRECTION NOTE**: Iki hancer tablodaki tarafta kalir; yuruyus sirasinda guard bozulmaz.
+
+---
+
+## ADIM 5a -- Attack LMB (Fast Slash) -- 3 segment
+
+### 5a.1 -- PEAK
+**Settings**: 4 frame | Keep First: **OFF** | Start=clean | End=bos
+```
+High top-down view, fast right-hand horizontal slash, peak on final
+frame. Frame 4 (PEAK): right arm fully extended in horizontal cut,
+violet dagger has crossed body silhouette to the opposite side. Left
+hand stays in guard position with its dagger in front of chest — the
+counter. Body twist 20 degrees into the cut, weight on leading foot.
+Sharp deliberate motion. NO trail VFX, NO blur.
+```
+PEAK -> `outputs/attack_lmb/<direction>/PEAK.png` (Eraser pass).
+
+### 5a.2 -- Windup
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=PEAK
+```
+Right arm coils back, elbow pulls behind body, right dagger angles
+back. Left dagger raises into guard in front of chest. Body weight
+loads onto back foot. Tight compact wind-up.
 ```
 
-## ADIM 2 -- Idle
-- Custom Animation V3
-- Start Frame: shadowblade_[direction]_clean.png | End Frame: bos | Frames: 6-8 | Keep First: ON
+### 5a.3 -- Follow
+**Settings**: 4 frame | Keep First: ON | Start=PEAK | End=clean
+```
+Right arm continues across body to opposite side then snaps back to
+ready guard. Body untwists. Both daggers return to ready position.
+Quick recovery, no drift.
+```
+**DIRECTION NOTE**: PEAK'te sag hancer tablodaki "sag hancer" tarafinin **karsi** tarafina gecmis olur; sol hancer kendi tarafinda guard'da kalir.
 
-```text
-Low predatory stance -- knees bent, weight forward on balls of feet.
-Left blade held low at hip pointing back, right blade raised near right shoulder pointing forward.
-Subtle constant weight shift: rocking heel-to-toe, never fully still. Cloak or clothing ripples.
-Head stays level -- eyes scanning, no large head movement.
+---
+
+## ADIM 5b -- Attack RMB (Thrust) -- 3 segment
+
+### 5b.1 -- PEAK
+**Settings**: 4 frame | Keep First: **OFF** | Start=clean | End=bos
+```
+High top-down view, left-hand straight thrust attack, peak on final
+frame. Frame 4 (PEAK): left arm fully extended forward in linear
+thrust, violet dagger pointing directly at target line. Right arm
+extended forward as feint/decoy with right dagger reaching outward.
+Left hip pushed forward, weight committed left and forward. Body
+forms a piercing arrow shape. NO impact VFX.
+```
+PEAK -> `outputs/attack_rmb/<direction>/PEAK.png`.
+
+### 5b.2 -- Windup
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=PEAK
+```
+Left dagger rotates inward, point lined up with target. Right dagger
+extends slightly forward as decoy. Hips coil left, weight loads onto
+back foot. Compact loading, no telegraphed pull.
 ```
 
-## ADIM 3 -- Hurt
-- Custom Animation V3
-- Start Frame: shadowblade_[direction]_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
-
-```text
-Both blades flinch inward as body recoils -- arms cross defensively in front of torso.
-Body snaps backward, low crouch gets lower. Knees buckle, weight drops and shifts back.
-Head tucks -- chin down, shoulders up in protective curl. Recovery frames 3-4: blades re-extend, crouch re-establishes.
+### 5b.3 -- Follow
+**Settings**: 4 frame | Keep First: ON | Start=PEAK | End=clean
 ```
-
-## ADIM 4 -- Death
-- Custom Animation V3
-- Start Frame: shadowblade_[direction]_clean.png | End Frame: bos | Frames: 6-8 | Keep First: OFF
-
-```text
-Blades fall from both hands simultaneously -- fingers open, blades drop and clatter at feet.
-Body loses its predatory crouch entirely: knees straighten briefly then give out completely.
-Collapse is forward and down -- body pitches toward ground, face-down. Arms spread wide as body falls. 6-8 frames.
+Left arm retracts from thrust back toward chest guard. Right dagger
+returns to ready position. Weight rebalances between feet. Body
+returns to upright ready stance.
 ```
+**DIRECTION NOTE**: Thrust ekseni karakterin one yonu boyunca; sol hancer one cikar, sag hancer feint olarak yon tablosundaki kendi tarafini destekler.
 
-## ADIM 5 -- Walk Cycle (3-sub-step)
-- 5a: Standalone Animate -> Start Frame: Characters/anchors/shadowblade/rotations/[direction].png -> 12 frames -> en uc poz sec -> PoseA_clean.png kaydet
-- 5b: Aseprite'de PoseA'yi flipX -> PoseB_clean.png kaydet
-- 5c: Custom Animation V3, Start=PoseA_clean.png, End=PoseB_clean.png, Frames: 6, Keep First: ON
+---
 
-```text
-Silent predator walk -- body remains low, knees bent, weight on balls of feet.
-Left blade stays low at hip pointing back; right blade hovers near shoulder, tip forward.
-Feet place softly with short stride distance. Cloak trails behind with restrained sway, head level, torso compressed and ready.
+## ADIM 6 -- Dash
+
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=bos
 ```
-
-## ADIM 6a -- Attack LMB (3-Segment)
-- 6a-1: PEAK frame -- Custom Animation V3, Start=shadowblade_[direction]_clean.png, End=bos, Frames=4, Keep First=OFF -> son frame = PEAK_clean.png
-- 6a-2: Windup -- Custom Animation V3, Start=shadowblade_[direction]_clean.png, End=PEAK_clean.png, Frames=4, Keep First=ON
-- 6a-3: Follow -- Custom Animation V3, Start=PEAK_clean.png, End=shadowblade_[direction]_clean.png, Frames=4, Keep First=ON
-- Toplam unique frames: 8 (PEAK paylasilir, sayilmaz 2x)
-
-```text
-WINDUP: Right blade draws back for horizontal slash -- right arm pulls elbow back to hip level, blade pointing backward at 8 o'clock.
-Left blade stays forward and low as guard, left elbow bent at 45 degrees.
-Body coils: right shoulder pulls hard back, hips rotate right, weight loads onto right foot.
-Low aggressive crouch deepens slightly. Frame 4: right blade cocked at maximum reach-back, left guard blade held steady.
-
-FOLLOW-THROUGH: Right blade releases in fast horizontal slash -- sweeps from 8 o'clock low-right across body to 10 o'clock left-center.
-Blade arc is tight and flat -- elbow-driven, not shoulder-driven, keeping strike fast.
-Body uncoils explosively: right shoulder drives forward, right foot pushes off.
-Left blade simultaneously pulls back to hip for follow-up readiness. Frame 3: full extension, right arm across body.
+High top-down view, fast shadow-step dash. Frame 1: launch. Frame 2:
+peak forward lean (~25 degrees), BOTH daggers tucked close to body
+along the forearms (parallel tuck), low silhouette. Frame 3: front
+foot lands. Frame 4: recovery to upright ready stance. Indigo fabric
+streams behind. Daggers stay secured throughout.
 ```
+**DIRECTION NOTE**: Dash karakterin baktigi yone dogru. Hancerler vucuda yapisik tuck pozisyonunda; tablodaki taraf bilgisi tuck sirasinda gecerli degildir.
 
-## ADIM 6b -- Attack RMB (3-Segment)
-- 6b-1: PEAK frame -- Custom Animation V3, Start=shadowblade_[direction]_clean.png, End=bos, Frames=4, Keep First=OFF -> son frame = PEAK_clean.png
-- 6b-2: Windup -- Custom Animation V3, Start=shadowblade_[direction]_clean.png, End=PEAK_clean.png, Frames=4, Keep First=ON
-- 6b-3: Follow -- Custom Animation V3, Start=PEAK_clean.png, End=shadowblade_[direction]_clean.png, Frames=4, Keep First=ON
-- Toplam unique frames: 8 (PEAK paylasilir, sayilmaz 2x)
+---
 
-```text
-WINDUP: Left blade coils for forward thrust -- left shoulder rotates back, left arm bends at elbow, blade points rearward at 4 o'clock.
-Right blade sweeps forward as decoy/guard distraction, arm extended toward target.
-Hips rotate: left hip pulls back loading the thrust, weight transfers to right foot.
-Frame 4 = maximum coil: left blade fully drawn back, right blade extended forward, body in deep rotation.
+## ADIM 7 -- Weapon Pass (Edit Image Pro)
 
-FOLLOW-THROUGH: Left blade drives forward in straight-line thrust -- arm extends from bent elbow directly toward target.
-Blade path: from 4 o'clock rearward to 12 o'clock forward, tip leads the motion throughout.
-Body uncoils: left hip drives forward, left shoulder snaps through, weight shifts hard to left foot.
-Right blade pulls back as counterbalance. Frame 2: full extension, left arm straight, tip at maximum reach.
+**Prompt**
 ```
-
-## ADIM 6c -- Dash
-- Custom Animation V3
-- Start Frame: shadowblade_[direction]_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
-
-```text
-Shadow-step burst -- body vanishes into low sprint crouch, legs drive hard.
-Both blades pulled tight to body: left blade along left forearm pointing back, right blade along right forearm pointing forward.
-No wasted arm motion -- full tuck position to minimize silhouette. Feet barely leave ground. Frame 2: full horizontal body lean.
+Refine the twin daggers, one in each hand. Each dagger: short straight
+blade, length about 35% of character height. Dark steel body #4A4E5A,
+violet glowing edge / crystal #5A2A8A with brighter rim #7A3AB0.
+Hilt: dark leather wrap #1A0E2A. Both daggers identical mirrored
+geometry. Maintain consistent silhouette across all frames of this
+direction. No motion trails, no glow halo, no sparks.
 ```
+Frame -> Eraser pass -> kaydet.
 
-## ADIM 7 -- Weapon Pass
-- Edit Image Pro -> weapon layer uzerinde calis
-- Silahi dogru tutma pozisyonuna getir / detaylandir
-- Her frame icin uygula
-
-```text
-Add twin short blades — one per hand. Each blade: ~0.6x character height, narrow silhouette, dark steel #4A4E5A / #5C6070, hilt wrapped black-violet (#1A0E2A / #5A2A8A). Curved or straight short-sword profile. Apply per direction: S, E, N, W (each painted separately).
-```
+---
 
 ## QC CHECKLIST
-- [ ] Tum animasyonlar shadowblade_[direction]_clean.png start frame kullandi (anchor: Characters/anchors/shadowblade/rotations/[direction].png)
-- [ ] Custom Animation V3 disinda tool kullanilmadi
-- [ ] Keep First degerleri dogru (Idle/Hurt/Walk/Attack windup+follow=ON, Death/PEAK=OFF)
-- [ ] Frame sayilari: Idle=6-8, Hurt=4, Death=6-8, Walk=6, Attack segment=4+4+4=8 unique, Dash=4
-- [ ] Accent void purple #5A2A8A korundu
-- [ ] Twin short blades weapon pass uygulandi
-- [ ] S/E/N/W yonleri ayri uretildi
-- [ ] Embedded glow karakter sprite'inda yok
+
+- [ ] IKI hancer var mi (her elde bir tane)?
+- [ ] Hancer boyu ~karakter boyu %35 mi (uzun kilic REJECT)?
+- [ ] Blade rengi violet/mor mu?
+- [ ] DIK durus mu (deep crouch REJECT)?
+- [ ] Hood/baslik eklenmemis mi?
+- [ ] Indigo/koyu lacivert kiyafet korunmus mu?
+- [ ] Yon tablosundaki hancer pozisyonlari dogru mu?
+- [ ] Idle: hancerler ready guard'da hafif one+asagi mi?
+- [ ] Frame sayisi tam mi?
+- [ ] Eraser pass yapildi mi?
+- [ ] Karakter canvas merkezinde mi?
+
+---
 
 ## KAYIT KLASORU
-```text
-outputs/shadowblade/
-  idle/ | hurt/ | death/ | walk/ | attack_lmb/ | attack_rmb/ | dash/
-  weapon/
+
 ```
+Characters/anchors/shadowblade/
+  rotations/
+    south_clean.png, ... (8 yon)
+
+STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/
+  idle/<direction>/frames/
+  hurt/<direction>/frames/
+  death/<direction>/frames/
+  walk/<direction>/PoseA_clean.png
+  walk/<direction>/PoseB_clean.png
+  walk/<direction>/frames/
+  attack_lmb/<direction>/PEAK.png
+  attack_lmb/<direction>/windup/
+  attack_lmb/<direction>/follow/
+  attack_rmb/<direction>/PEAK.png
+  attack_rmb/<direction>/windup/
+  attack_rmb/<direction>/follow/
+  dash/<direction>/frames/
+```
+
+8 yon x 7 animasyon = 56 set. Attack unique frame = 8.

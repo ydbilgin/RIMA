@@ -4,135 +4,279 @@
 ---
 
 ## TEMEL KURALLAR
-- Tool: Custom Animation V3 (karakter sayfasi -> Add Animation -> Custom Animation V3)
-- YASAK: Standalone Animate with Text NEW | animate_character MCP | Preset butonlar
-- Start Frame: HER ZAMAN _clean.png (Eraser Pass sonrasi, PixelLab orijinalini kullanma)
-- Yonler: Asimetrik -> 4 yon (8 directions Create Character)
-- Canvas: 252x252 (v3 otomatik)
+
+- **Tool**: PixelLab web app -> karakter sayfasi -> Add Animation -> **Custom Animation V3**
+- **YASAK**: Standalone "Animate with Text NEW" | `animate_character` MCP | Preset butonlar
+- **Start Frame kaynagi**: `Characters/anchors/elementalist/rotations/<direction>_clean.png` (Eraser Pass sonrasi)
+- **Canvas**: 252x252 (v3 otomatik)
+- **Yon uretimi**: 8 yon HEPSI ayri uretilir, FLIP YOK.
+  Yonler: `south`, `south-west`, `south-east`, `east`, `north-east`, `north`, `north-west`, `west`
+- **Frame kurallari**:
+  - Idle: 6-8 frame | Keep First: ON
+  - Hurt: 4 frame TAM SAYI | Keep First: ON
+  - Death: 6-8 frame | Keep First: **OFF**
+  - Walk interpolation: 6 frame | Keep First: ON
+  - Attack PEAK: 4 frame | Keep First: **OFF**
+  - Attack Windup: 4 frame | Keep First: ON | Start=clean, End=PEAK
+  - Attack Follow: 4 frame | Keep First: ON | Start=PEAK, End=clean
+  - Toplam attack unique: 8 frame
+  - Dash: 4 frame | Keep First: ON
 
 ---
 
-## ERASER PASS (ZORUNLU -- her base sprite uretiminden sonra)
-1. Pixelorama'da ac: Characters/anchors/elementalist/rotations/[direction].png
-2. Eraser tool -> arka plan piksellerini temizle (anti-alias kenarlar dahil)
-3. Kaydet: elementalist_[direction]_clean.png
-4. BU DOSYAYI KULLAN -- PixelLab orijinalini ASLA start frame olarak koyma
+## KARAKTER GORSEL OZETI (uymak ZORUNLU)
+
+- **Silah/Held**: SAG elde **parlayan orb**. Sicak beyaz / altin renk. Sag kol dirsekten kirik, omuz hizasinda — orb yukarida sabit. Sol el serbest.
+- **Kiyafet**: Sarisin, neat **bun** (topuz). Mavi kolsuz ust, mavi mini etek, kahve deri cizmeler + kahve deri eldiven.
+- **Karakter**: Kadin, zarif yapi.
+- **PALM ZONE**: Sag avuc icinin etrafi (~12 px) sprite'ta BOS birakilir — engine VFX overlay icin alan.
+- **YOK**: pelerin, hood, asa/staff, kitap, sprite icine isaretlenmis glow/spark VFX.
 
 ---
 
-## ADIM 1 -- 8 Yon Base Sprite
-Asimetrik -> 4 yon (S/E/N/W) uretilir. Create Character'da "8 Directions" sec.
+## ERASER PASS (ZORUNLU)
 
-- PixelLab -> Create Character Pro -> "8 Directions" sec
-- Her yon icin Eraser Pass uygula -> _clean.png kaydet
+8 yon icin Pixelorama:
+1. `Characters/anchors/elementalist/rotations/<direction>.png` ac.
+2. Magic Wand ile yesil bg sec, sil.
+3. Disindaki kalintilar -> Eraser.
+4. **Orb'u silme** -- orb karakter parcasi (ama embedded glow/halo varsa onu temizle, sadece orb solid silueti kalsin).
+5. Avuc etrafindaki ~12px alanda sicak isik artiklarini sil (palm zone bos).
+6. Kaydet -> `<direction>_clean.png`.
 
-```text
-Pixel art elementalist mage character, body-only, no weapon, NO book, NO staff (hands free for spell gestures), character occupies ~50% of canvas height (~128px tall) centered on a 252x252 transparent canvas. Wide transparent padding on all sides for animation headroom — DO NOT fill the canvas. High top-down view 30-35°. Long flowing robe, hood NOT up (face visible — confident mage), short hair. Robe palette: deep blue-grey #2A3848 / #3E4C5E / #525E74 (cool neutral default — element accent only on spell anims). Trim accent: faint cool #B8C8D0. Sash at waist #3A2818 leather. Skin #C9A084. Body pose: slightly forward, hands held at chest level, palms angled outward (ready to cast). Robe hem sways. NO weapon, NO held object. [FACING S | E | N | W]. Hard pixel edges, no anti-aliasing.
+---
+
+## YON REFERANS TABLOSU (orb arm = sag)
+
+| Yon | Orb ekranda |
+|---|---|
+| south | Screen-LEFT (sag kol gorunur) |
+| south-east | Screen-left, hafif one |
+| east | Far side (kamera uzagi) |
+| north-east | Screen-RIGHT |
+| north | Screen-RIGHT |
+| north-west | Screen-right, merkeze yakin |
+| west | Near camera (one dogru) |
+| south-west | Screen-left |
+
+> Tum animasyonlarda her yon icin **DIRECTION NOTE** orbun hangi tarafta gorundugune gore yorumlanir. Palm zone **her yonde** bos kalir.
+
+---
+
+## ADIM 1 -- Idle
+
+**Settings**: 7 frame | Keep First: ON | Start=clean | End=bos
+```
+High top-down view, idle breathing loop. Right arm holds a small orb at
+shoulder height, elbow bent, position STABLE (the orb does not move).
+Left arm hangs free with subtle finger curl. Chest rises and falls
+slowly. Weight shifts subtly between feet. Blonde hair in a neat bun
+holds shape; loose strands catch micro-motion. Blue sleeveless top,
+blue mini skirt, brown leather boots, brown leather glove on right
+hand stay consistent. PALM ZONE around the orb stays empty in pixels —
+no embedded glow drawn into the sprite, leave space for engine VFX.
+```
+**DIRECTION NOTE**: Yon tablosundan orb tarafini ekle.
+  Ornek (south): "Orb visible on screen-left side, right arm clearly readable."
+  Ornek (north): "Orb visible on screen-right side."
+
+---
+
+## ADIM 2 -- Hurt
+
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=bos
+```
+High top-down view, 4-frame hit reaction. Frame 1: neutral. Frame 2:
+both hands snap forward and up in instinctive ward gesture, palms
+splayed, fingers spread. Body steps backward. Frame 3: hands lower
+slightly, weight stays back. Frame 4: recovery, right arm returns
+to orb-holding position at shoulder height. Skirt and bun show subtle
+recoil motion. Palm zones stay empty.
+```
+**DIRECTION NOTE**: Ward gesture govdenin onunde olusur; tablodaki orb tarafi geciktirme olmadan resetlenir.
+
+---
+
+## ADIM 3 -- Death
+
+**Settings**: 7 frame | Keep First: **OFF** | Start=clean | End=bos
+```
+High top-down view, death sequence. Frame 1: stagger. Frame 2: orb
+slowly slips from right hand — fingers open, right arm drops. Frame
+3-4: body sways, knees soften. Frame 5-6: forward collapse, weight
+fully surrenders. Frame 7: body settles, hair and skirt fan on ground.
+Slow, weight-driven, almost graceful collapse.
+```
+**DIRECTION NOTE**: Orb yon tablosundaki tarafa duser (sag elden serbest birakilir).
+
+---
+
+## ADIM 4 -- Walk Cycle (3 alt-adim)
+
+### 4a -- PoseA secimi
+1. Standalone Animate with Text NEW -> 12 frame walk uret.
+2. En uc stride pozunu sec.
+3. Eraser pass -> `outputs/walk/<direction>/PoseA_clean.png` (palm zone bos).
+
+### 4b -- PoseB (stride flip)
+- Aseprite/Pixelorama -> PoseA_clean -> Horizontal Flip.
+- Stride parity flip.
+- Kaydet -> `PoseB_clean.png`.
+
+> Flip sonrasi orb sol el gibi gorunse de stride parity icindir; 6-frame interpolasyon prompt'u sag-el orb tutusunu zorlar.
+
+### 4c -- Walk interpolation
+**Settings**: 6 frame | Keep First: ON | Start=PoseA | End=PoseB
+```
+High top-down view, smooth deliberate walk. Right arm keeps the orb at
+shoulder height with MINIMAL bob — the held position stays stable. Left
+arm swings naturally opposite to stride. Skirt sways with hip motion.
+Bun stays neat. Boots step lightly, no heel slam. Orb stays in right
+hand throughout. Palm zone stays empty (engine VFX target).
+```
+**DIRECTION NOTE**: Orb yon tablosundaki tarafta sabit kalir; yuruyusten cok az etkilenir.
+
+---
+
+## ADIM 5a -- Attack LMB (Quick Cast) -- 3 segment
+
+### 5a.1 -- PEAK
+**Settings**: 4 frame | Keep First: **OFF** | Start=clean | End=bos
+```
+High top-down view, quick projectile cast, peak on final frame.
+Frame 4 (PEAK): both arms fully extended forward in push gesture.
+Right arm thrusts the orb forward at chest level (orb projected
+forward). Left palm extends forward as guide/release gesture, fingers
+spread. Body squared toward cast direction, weight on leading foot.
+Sharp release pose. NO projectile drawn, NO VFX (engine handles).
+Palm zones empty.
+```
+PEAK -> `outputs/attack_lmb/<direction>/PEAK.png` (Eraser pass, palm zone temiz).
+
+### 5a.2 -- Windup
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=PEAK
+```
+Right arm draws the orb back briefly toward shoulder, left hand rises
+to meet beside it. Body coils slightly, weight loads onto back foot.
+Both elbows pull in. Quick compact load.
 ```
 
-## ADIM 2 -- Idle
-- Custom Animation V3
-- Start Frame: elementalist_[direction]_clean.png | End Frame: bos | Frames: 6-8 | Keep First: ON
+### 5a.3 -- Follow
+**Settings**: 4 frame | Keep First: ON | Start=PEAK | End=clean
+```
+Both arms hold extended for one frame, then retract. Right arm returns
+to shoulder-height carry position with the orb. Left arm relaxes back
+to side. Body recovers to neutral.
+```
+**DIRECTION NOTE**: Push gesture karakterin baktigi yone dogru; PEAK'te her iki kol one fully extended, orb yon tablosundaki tarafi koruyarak ileride.
 
-```text
-Calm meditative float or stand -- weight centered, spine upright, shoulders relaxed and low.
-Both hands hang at sides with fingers loosely curled, palms face inward toward body.
-Subtle energy shimmer implied in micro finger movements -- fingertips occasionally extend then relax.
-Palm zones (~12x12px each) kept clear for engine VFX overlay. Breathing slow and deep.
+---
+
+## ADIM 5b -- Attack RMB (Charged Cast) -- 3 segment
+
+### 5b.1 -- PEAK
+**Settings**: 4 frame | Keep First: **OFF** | Start=clean | End=bos
+```
+High top-down view, overhead charged cast, peak on final frame.
+Frame 4 (PEAK): right arm fully extended UPWARD overhead, orb held
+high above head, fingers wrapped around it. Left arm extended forward
+at waist height as stabilizing/channeling gesture, palm forward.
+Body in maximum vertical extension, both feet planted wide. Hair
+slightly displaced by upward motion. Power channeling pose. NO VFX,
+palm zones empty.
+```
+PEAK -> `outputs/attack_rmb/<direction>/PEAK.png`.
+
+### 5b.2 -- Windup
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=PEAK
+```
+Right arm raises slowly from shoulder to fully overhead. Left arm
+extends forward and stabilizes at waist. Body straightens, weight
+settles wide between feet. Slow deliberate channeling load.
 ```
 
-## ADIM 3 -- Hurt
-- Custom Animation V3
-- Start Frame: elementalist_[direction]_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
-
-```text
-Both hands snap up reflexively -- defensive ward gesture, palms forward and outward.
-Body steps back one pace hard, torso twists away from impact direction.
-Head ducks slightly. Fingers splay wide in the ward position. Recovery frames 3-4: hands lower, body re-centers.
+### 5b.3 -- Follow
+**Settings**: 4 frame | Keep First: ON | Start=PEAK | End=clean
 ```
-
-## ADIM 4 -- Death
-- Custom Animation V3
-- Start Frame: elementalist_[direction]_clean.png | End Frame: bos | Frames: 6-8 | Keep First: OFF
-
-```text
-Hands lose their energy -- fingers uncurl slowly, palms fall to face downward, arms drop.
-Body sways once then folds: knees give, torso tips forward, arms trail behind.
-No dramatic pose -- pure gravity taking over. Body settles into ground slowly, hands last to fall. 6-8 frames.
+Right arm lowers in controlled arc back to shoulder-height carry
+position. Left arm retracts to side. Hair settles back. Body
+returns to neutral idle posture.
 ```
+**DIRECTION NOTE**: Vertical extension her yonde ayni — orb head'in uzerinde merkez. Tablodaki taraf bilgisi sadece sag kolun gorunur tarafini etkiler.
 
-## ADIM 5 -- Walk Cycle (3-sub-step)
-- 5a: Standalone Animate -> Start Frame: Characters/anchors/elementalist/rotations/[direction].png -> 12 frames -> en uc poz sec -> PoseA_clean.png kaydet
-- 5b: Aseprite'de PoseA'yi flipX -> PoseB_clean.png kaydet
-- 5c: Custom Animation V3, Start=PoseA_clean.png, End=PoseB_clean.png, Frames: 6, Keep First: ON
+---
 
-```text
-Smooth deliberate mage walk -- front foot places first, weight rolls gently through the step.
-Hands remain free at sides with fingers loosely curled, palms inward, palm zones unobstructed.
-Robe trails behind and settles on each foot plant. Spine stays upright, shoulders low, head steady.
+## ADIM 6 -- Dash
+
+**Settings**: 4 frame | Keep First: ON | Start=clean | End=bos
 ```
-
-## ADIM 6a -- Attack LMB (3-Segment)
-- 6a-1: PEAK frame -- Custom Animation V3, Start=elementalist_[direction]_clean.png, End=bos, Frames=4, Keep First=OFF -> son frame = PEAK_clean.png
-- 6a-2: Windup -- Custom Animation V3, Start=elementalist_[direction]_clean.png, End=PEAK_clean.png, Frames=4, Keep First=ON
-- 6a-3: Follow -- Custom Animation V3, Start=PEAK_clean.png, End=elementalist_[direction]_clean.png, Frames=4, Keep First=ON
-- Toplam unique frames: 8 (PEAK paylasilir, sayilmaz 2x)
-
-```text
-WINDUP: Both hands draw back toward chest, palms rotating inward (gathering gesture).
-Fingers curl slightly as if compressing energy between palms and chest center.
-Elbows pull back, shoulders round forward into the gather. Body leans slightly forward in anticipation.
-Frame 4 = peak gather: hands at chest center, palms facing each other ~15cm apart, energy compressed.
-Palm zones (~12x12px each) intentionally left clear for engine VFX overlay throughout.
-
-RELEASE: Both arms extend forward and outward from chest -- palms rotating to face forward (push gesture).
-Elbows straighten, arms reach full extension, fingers spread open wide.
-Body leans into the push: slight forward lean of torso follows arm extension.
-Frame 2: arms fully extended, palms forward at shoulder height. Frames 3-4: body settles back, hands lower to sides.
+High top-down view, forward dash. Frame 1: launch. Frame 2: peak forward
+lean (~22 degrees), right arm tucks the orb close to chest for protection,
+left arm extends slightly back for balance. Frame 3: front foot lands.
+Frame 4: recovery, right arm returns to shoulder-height carry. Skirt
+and loose hair strands stream behind. Orb stays secure throughout.
+Palm zone stays empty.
 ```
+**DIRECTION NOTE**: Dash karakterin baktigi yone dogru. Orb gogse cekildigi icin tablodaki taraf bilgisi tuck sirasinda azalir; recovery frame'inde geri doner.
 
-## ADIM 6b -- Attack RMB (3-Segment)
-- 6b-1: PEAK frame -- Custom Animation V3, Start=elementalist_[direction]_clean.png, End=bos, Frames=4, Keep First=OFF -> son frame = PEAK_clean.png
-- 6b-2: Windup -- Custom Animation V3, Start=elementalist_[direction]_clean.png, End=PEAK_clean.png, Frames=4, Keep First=ON
-- 6b-3: Follow -- Custom Animation V3, Start=PEAK_clean.png, End=elementalist_[direction]_clean.png, Frames=4, Keep First=ON
-- Toplam unique frames: 8 (PEAK paylasilir, sayilmaz 2x)
+---
 
-```text
-WINDUP: Right hand raises overhead, palm up -- slow deliberate raising motion, elbow bends then straightens as arm rises.
-Left hand extends forward at waist height, palm down, acting as anchor/stabilizer.
-Body straightens and rises slightly: weight shifts forward onto front foot, spine extends.
-Frame 6 = peak charge: right arm fully overhead, palm cupped upward, left arm extended forward. Body maximally extended vertically.
-Palm zones clear throughout for engine VFX placement.
+## ADIM 7 -- Weapon Pass (Edit Image Pro)
 
-RELEASE: Right arm drives downward in arc from overhead -- elbow leads the drive, hand follows through.
-Palm flips from facing up to facing forward-down as arm descends.
-Left hand simultaneously pulls back to hip as counterbalance to the release force.
-Frame 2: right arm at waist-level mid-arc. Frames 3-4: arm settles at side, body re-centers.
+**Prompt**
 ```
-
-## ADIM 6c -- Dash
-- Custom Animation V3
-- Start Frame: elementalist_[direction]_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
-
-```text
-Quick stride or glide forward -- body leans 20-25 degrees forward, legs drive.
-Both hands pull back along sides, elbows bent, palms trailing (aerodynamic tuck).
-No spell casting during dash -- hands in neutral closed position, fingers relaxed.
-Frame 2: maximum forward lean. Frame 4: feet plant, body decelerates back to upright.
+Refine the orb held in the right hand. Orb diameter ~16 pixels. Core:
+warm white #FFF4D8. Subtle golden rim shading #E8C870 (one pixel ring).
+Held by fingers wrapped around it, NO embedded glow halo, NO outward
+sparks, NO trail. Maintain orb size and silhouette consistent across
+all frames of this direction. PALM ZONE — the ring of pixels immediately
+surrounding the orb on the open palm side — must remain transparent /
+empty so the engine can render runtime VFX over it. Brown leather glove
+on right hand stays visible.
 ```
+Frame -> Eraser pass (palm zone artigi temizlenir) -> kaydet.
+
+---
 
 ## QC CHECKLIST
-- [ ] Tum animasyonlar elementalist_[direction]_clean.png start frame kullandi (anchor: Characters/anchors/elementalist/rotations/[direction].png)
-- [ ] Custom Animation V3 disinda tool kullanilmadi
-- [ ] Keep First degerleri dogru (Idle/Hurt/Walk/Attack windup+follow=ON, Death/PEAK=OFF)
-- [ ] Frame sayilari: Idle=6-8, Hurt=4, Death=6-8, Walk=6, Attack segment=4+4+4=8 unique, Dash=4
-- [ ] Cool neutral robe palette korundu (#2A3848 / #3E4C5E / #525E74)
-- [ ] Silah, kitap, staff yok; el jestleri kullanildi
-- [ ] Element rengi karakter sprite'ina gomulmedi
-- [ ] S/E/N/W yonleri ayri uretildi
+
+- [ ] Orb SAG elde mi? (Tum frame'lerde)
+- [ ] Orb cap ~16 px mi?
+- [ ] Orb rengi sicak beyaz + altin rim mi?
+- [ ] PALM ZONE (~12px) bos mu? (Embedded glow REJECT)
+- [ ] Sag elde kahve deri eldiven gorunur mu?
+- [ ] Mavi kolsuz ust + mavi mini etek korunmus mu?
+- [ ] Sarisin bun saci dagilmamis mi (idle)?
+- [ ] Hood/pelerin/asa eklenmemis mi?
+- [ ] Sag kol idle'da omuz hizasinda sabit mi?
+- [ ] Yon tablosundaki orb pozisyonu dogru mu?
+- [ ] Frame sayisi tam mi?
+- [ ] Eraser pass yapildi mi?
+- [ ] Karakter canvas merkezinde mi?
+
+---
 
 ## KAYIT KLASORU
-```text
-outputs/elementalist/
-  idle/ | hurt/ | death/ | walk/ | attack_lmb/ | attack_rmb/ | dash/
+
 ```
+Characters/anchors/elementalist/
+  rotations/
+    south_clean.png, ... (8 yon)
+
+STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/
+  idle/<direction>/frames/
+  hurt/<direction>/frames/
+  death/<direction>/frames/
+  walk/<direction>/PoseA_clean.png
+  walk/<direction>/PoseB_clean.png
+  walk/<direction>/frames/
+  attack_lmb/<direction>/PEAK.png
+  attack_lmb/<direction>/windup/
+  attack_lmb/<direction>/follow/
+  attack_rmb/<direction>/PEAK.png
+  attack_rmb/<direction>/windup/
+  attack_rmb/<direction>/follow/
+  dash/<direction>/frames/
+```
+
+8 yon x 7 animasyon = 56 set. Attack unique frame = 8.
