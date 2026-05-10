@@ -93,3 +93,7 @@
     margin: 1px;
     border-radius: 4px;
 }
+
+.rd-brush-toolbar { flex-direction: row; padding: 4px; background-color: #1A1C20; }
+.rd-brush-button { width: 32px; height: 32px; margin: 2px; }
+.rd-brush-button--active { background-color: #7BA7BC; }
