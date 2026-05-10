@@ -14,6 +14,12 @@
 - Pillar onaylananinca diger tum objelerde **Pillar'i style ref olarak yukle**
 - **Output**: Her candidate'i ayri PNG olarak kaydet -- Pro grid sheet Unity'ye suruklenMEZ
 
+### Animated Tile Kategorisi
+Animated tile'lar (lava flow, su, vs.) **prop kategorisinde** kalir -- floor setine KARISMAZ.
+- Floor F1/F2/F3 setleri: statik tile only. WeightedRandomTile / Rule Tile sistemi animated tile'i desteklemez.
+- Torch animasyonu (ADIM 4) bu kuralin ornegi: prop layer'da, Ground tilemap'te degil.
+- F3 hero tier'da animated gorunen "lava vein" istegi varsa -> ayri prop sprite, overlay layer'da.
+
 ---
 
 ## PALETTE
@@ -440,6 +446,10 @@ Hard pixel edges, no gradient outside cyan glow. Two-face shading.
 - [ ] Floor crack: alpha=0 dolgu alan, sadece catlak cizgileri opak
 - [ ] Altar: cyan glow (#00FFCC) max 8px -- diger objelerde cyan YOK
 - [ ] Broken pillar stump: pillar ile ayni base palette (stil tutarliligi)
+
+**Animated prop / tilemap siniri:**
+- [ ] Animated prop sprite'lar Ground tilemap'te degil, Entities layer'da
+- [ ] Floor setlerinde animated tile variant bulunmuyor
 
 **Unity:**
 - [ ] PPU: 64
