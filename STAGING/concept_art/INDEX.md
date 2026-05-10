@@ -1,21 +1,37 @@
-| NN | scene_id | category | file_path | status | timestamp |
-|---|---|---|---|---|---|
-| 01 | scene_01_warblade_slash | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_01_warblade_slash.png | DONE | 2026-05-10T19:03:47 |
-| 02 | scene_02_warblade_deathblow | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_02_warblade_deathblow.png | DONE | 2026-05-10T19:05:25 |
-| 03 | scene_03_ranger_bow_shot | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_03_ranger_bow_shot.png | DONE | 2026-05-10T19:06:31 |
-| 04 | scene_04_ranger_aim_shot | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_04_ranger_aim_shot.png | DONE | 2026-05-10T19:07:49 |
-| 05 | scene_05_shadowblade_chain | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_05_shadowblade_chain.png | DONE | 2026-05-10T19:09:06 |
-| 06 | scene_06_shadowblade_veilstrike | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_06_shadowblade_veilstrike.png | DONE | 2026-05-10T19:10:47 |
-| 07 | scene_07_elementalist_fire | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_07_elementalist_fire.png | DONE | 2026-05-10T19:12:03 |
-| 08 | scene_08_elementalist_frost | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_08_elementalist_frost.png | DONE | 2026-05-10T19:13:18 |
-| 09 | scene_09_mob_swarm | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_09_mob_swarm.png | DONE | 2026-05-10T19:15:51 |
-| 10 | scene_10_dash_through | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_10_dash_through.png | DONE | 2026-05-10T19:19:43 |
-| 11 | scene_11_boss_phase1 | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_11_boss_phase1.png | DONE | 2026-05-10T19:21:21 |
-| 12 | scene_12_boss_phase2 | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_12_boss_phase2.png | DONE | 2026-05-10T19:24:24 |
-| 13 | scene_13_boss_phase3 | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_13_boss_phase3.png | DONE | 2026-05-10T19:25:58 |
-| 14 | scene_14_final_architect | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_14_final_architect.png | DONE | 2026-05-10T19:27:29 |
-| 15 | scene_15_boss_intro | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_15_boss_intro.png | DONE | 2026-05-10T19:29:06 |
-| 16 | scene_16_hub_anchor | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_16_hub_anchor.png | DONE | 2026-05-10T19:32:11 |
-| 17 | scene_17_hub_smith | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_17_hub_smith.png | DONE | 2026-05-10T19:33:28 |
-| 18 | scene_18_hub_mystic | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_18_hub_mystic.png | DONE | 2026-05-10T19:35:17 |
-| 19 | scene_19_keep_entry | _DISCARDED_2026-05-10_painterly | STAGING/concept_art/_DISCARDED_2026-05-10_painterly/scene_19_keep_entry.png | DONE | 2026-05-10T19:39:29 |
+# Concept Art Index -- RIMA
+Generated: 2026-05-10
+
+## 01_combat
+| Scene | File | Status | Notes |
+|---|---|---|---|
+| scene_01 | 01_combat/scene_01_warblade_iron_combo.png | FAIL | PixelLab create_object output is 256x256 square; camera is isometric but player scale is too large for standard combat. |
+| scene_02 | 01_combat/scene_02_warblade_bladestorm_ult.png | FAIL | PixelLab create_object output is 256x256 square; player scale is too large for standard combat. |
+| scene_03 | 01_combat/scene_03_ranger_rift_arrow.png | FAIL | PixelLab create_object output is 256x256 square; player occupies far more than 10% of screen. |
+| scene_04 | 01_combat/scene_04_ranger_spirit_bow_ult.png | FAIL | PixelLab create_object output is 256x256 square; player scale is too large for standard combat. |
+| scene_05 | 01_combat/scene_05_shadowblade_veil_strike.png | FAIL | PixelLab create_object output is 256x256 square; player scale is too large for standard combat. |
+| scene_06 | 01_combat/scene_06_ranger_rain_volley.png | FAIL | PixelLab create_object output is 256x256 square; quality gate blocked continuation. |
+| scene_07 | 01_combat/scene_07_elementalist_nova_burst.png | FAIL | PixelLab create_object output is 256x256 square; player scale is too large for standard combat. |
+| scene_08 | 01_combat/scene_08_shadowblade_flank_kill.png | FAIL | PixelLab create_object output is 256x256 square; quality gate blocked continuation. |
+| scene_09 | 01_combat/scene_09_warblade_shield_bash.png | FAIL | PixelLab create_object output is 256x256 square; quality gate blocked continuation. |
+| scene_10 | 01_combat/scene_10_ranger_kite_corridor.png | FAIL | PixelLab create_object output is 256x256 square; player scale is too large for standard combat. |
+
+## 02_boss
+| Scene | File | Status | Notes |
+|---|---|---|---|
+| scene_11-scene_15 | 02_boss/ | NOT GENERATED | Stopped at scene 10 quality gate. |
+
+## 03_environment
+| Scene | File | Status | Notes |
+|---|---|---|---|
+| scene_16-scene_25 | 03_environment/ | NOT GENERATED | Stopped at scene 10 quality gate. |
+
+## 04_cinematic
+| Scene | File | Status | Notes |
+|---|---|---|---|
+| scene_26-scene_30 | 04_cinematic/ | NOT GENERATED | Stopped at scene 10 quality gate. |
+
+codex_scene_01_warblade_iron_combo.png  folder=01_combat  status=GENERATED
+codex_scene_02_ranger_volley.png  folder=01_combat  status=GENERATED
+codex_scene_03_shadowblade_veil_strike.png  folder=01_combat  status=GENERATED
+codex_scene_04_elementalist_cast.png  folder=01_combat  status=GENERATED
+codex_scene_05_keep_arena_overview.png  folder=01_combat  status=GENERATED
