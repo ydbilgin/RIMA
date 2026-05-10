@@ -30,6 +30,68 @@ Moss accent (F1/F2): `#263530`
 
 ---
 
+## VARIANT TIER SISTEMI (LOCKED 2026-05-11)
+
+Her floor set'in 16 variant'i **3 tier'a** bolunur. PixelLab uretiminde hangi variant hangi tier'a girdigi `metadata.json`'a `tier_tag` olarak yazilir.
+
+| Tier | Variant sayisi | Aciklama | Per-variant weight |
+|------|---------------|----------|--------------------|
+| **base** | 8 | Mikro-detay (ince catlik, hafif leke) -- tekrar tolere edilir | 6 |
+| **accent** | 5 | Orta detay (buyuk catlik, yosun yayilmasi, su lekesi) | 2 |
+| **hero** | 3 | Nadir, dikkat cekici (derin oyuk, rune izi, kan lekesi) | 1 |
+
+### Set-ozgu Agirlik Profili
+
+| Set | Base % | Accent % | Hero % | Tone |
+|-----|--------|----------|--------|------|
+| **F1** (granit) | ~80% | ~15% | ~5% | Temiz, disiplinli |
+| **F2** (asinmis) | ~60% | ~30% | ~10% | Yipranmis, kaotik doku |
+| **F3** (volkanik) | ~70% | ~20% | ~10% | Dramatik, tehlikeli |
+
+### metadata.json Zorunlulugu
+
+Her F1/F2/F3 variant PNG'si `metadata.json`'a su field'i icermek ZORUNDA:
+```json
+{ "tier_tag": "base" }
+```
+Gecerli degerler: `base`, `accent`, `hero`
+
+**WeightedRandomTile SO olusturma scripti** bu field'lari okuyup otomatik weight atayabilir.
+
+---
+
+## PERLIN NOISE PREVIEW SISTEMI (LOCKED 2026-05-11)
+
+Floor variant secimi **edit-time Perlin noise** ile yapilir -> save aninda RoomBlueprint'e fix edilir (runtime random YOK).
+
+**Calisma akisi:**
+1. Room Designer'da floor paint -> Perlin sample -> tier secimi -> tier ici deterministik variant
+2. Designer **Reseed** butonuyla farkli dagilim ceker (preview)
+3. **Save / Bake** -> her hucre `variantIndex` (byte) olarak RoomBlueprint'e yazilir -> artik sabit
+
+**Noise parametreleri:**
+| Param | Deger | Aciklama |
+|-------|-------|----------|
+| frequency | **0.18** | 16x16 odada ~3 blob olusturur |
+| octaves | **2** | Ikinci oktav freq 0.36, amplitude 0.4 |
+| seed | `noiseSeed` per room | RoomBlueprint field, default = roomGuid.GetHashCode() |
+
+**Tier esikleri (Perlin sample n ∈ [0,1]):**
+- `n < 0.70` -> base tier
+- `0.70 <= n < 0.92` -> accent tier
+- `n >= 0.92` -> hero tier
+
+(F1/F2/F3 profil farkli olsa da esikler sabit; agirlik tier'daki per-variant weight ile ayarlanir)
+
+**Tier ici variant secimi (deterministik):**
+`(x * 73856093 XOR y * 19349663 XOR seed) mod tier_size` -> variant index
+
+**Cluster-bust (varsayilan ON):** Save aninda hero tier variant'in 1 hucre radius'unda baska hero varsa accent'e dusurulur.
+
+**YASAK:** Runtime variant randomization. RoomBlueprint `variantIndex[]` save sonrasi degismez.
+
+---
+
 ## ASSET TANIMI
 
 | Set | Tool | Boyut | Varyasyon | Biome / Kullanim | Output Klasoru |
@@ -393,6 +455,12 @@ python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs
 - [ ] Transition ciktilari `outputs/trans/` altinda
 - [ ] process_tiles.py her set icin calistirildi
 - [ ] Assets/Art/Tiles/Act1/ altinda dogru alt klasorlere kopyalandi
+
+### Variant Tier + Noise
+
+- [ ] Her variant PNG metadata.json tier_tag iceriyor (base/accent/hero)
+- [ ] F1 base-heavy (8 base var), F2 accent-agirlikli (5 accent var), F3 hero-permissive (3 hero var) -- uretim sirasinda tier dengesi kontrol
+- [ ] Animated tile YOKTUR floor setinde -- animated tiles prop kategorisinde (torch vs.)
 
 ---
 
