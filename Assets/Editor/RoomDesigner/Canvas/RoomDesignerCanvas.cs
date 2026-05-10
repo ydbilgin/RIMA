@@ -82,15 +82,20 @@ namespace RIMA.Editor.RoomDesigner
         {
             int designerLayer = LayerMask.NameToLayer(LayerName);
             int stageLayer = designerLayer >= 0 ? designerLayer : 0;
-            int cullingMask = designerLayer >= 0 ? 1 << designerLayer : ~0;
+            int cullingMask = designerLayer >= 0 ? 1 << designerLayer : 0;
+            if (designerLayer < 0)
+            {
+                Debug.LogWarning("Add RoomDesigner Unity layer for preview");
+            }
 
             stageRoot = new GameObject(StageName);
             stageRoot.hideFlags = HideFlags.DontSave;
             stageRoot.layer = stageLayer;
 
             grid = stageRoot.AddComponent<Grid>();
-            grid.cellLayout = GridLayout.CellLayout.Rectangle;
+            grid.cellLayout = GridLayout.CellLayout.Isometric;
             grid.cellSwizzle = GridLayout.CellSwizzle.XYZ;
+            grid.cellSize = new Vector3(1f, 0.5f, 0f);
 
             FloorTilemap = CreateTilemap("Floor", stageLayer, 0);
             WallsTilemap = CreateTilemap("Walls", stageLayer, 10);
@@ -121,6 +126,7 @@ namespace RIMA.Editor.RoomDesigner
             tilemapObject.transform.SetParent(stageRoot.transform, false);
 
             var tilemap = tilemapObject.AddComponent<Tilemap>();
+            tilemap.tileAnchor = new Vector3(0.5f, 0f, 0f);
             var renderer = tilemapObject.AddComponent<TilemapRenderer>();
             renderer.sortingOrder = sortingOrder;
             return tilemap;
@@ -218,6 +224,14 @@ namespace RIMA.Editor.RoomDesigner
                     else if (evt.button == 0 || evt.button == 1)
                     {
                         ctx.InvokeBrush(evt.button, ctx.HoveredCell);
+                        evt.Use();
+                        changed = true;
+                    }
+                    break;
+                case EventType.MouseUp:
+                    if ((evt.button == 0 || evt.button == 1) && ctx is RimaRoomDesignerWindow w)
+                    {
+                        w.OnBrushRelease();
                         evt.Use();
                         changed = true;
                     }

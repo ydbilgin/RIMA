@@ -94,6 +94,11 @@
     border-radius: 4px;
 }
 
+.rd-layer-chip--active {
+    background-color: #2A3848;
+    border-color: #7BA7BC;
+}
+
 .rd-brush-toolbar { flex-direction: row; padding: 4px; background-color: #1A1C20; }
 .rd-brush-button { width: 32px; height: 32px; margin: 2px; }
 .rd-brush-button--active { background-color: #7BA7BC; }

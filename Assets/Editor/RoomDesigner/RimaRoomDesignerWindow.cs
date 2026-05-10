@@ -2,6 +2,7 @@ namespace RIMA.Editor.RoomDesigner
 {
     using System;
     using System.IO;
+    using RIMA.Editor.RoomDesigner.Brushes;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Tilemaps;
@@ -20,8 +21,10 @@ namespace RIMA.Editor.RoomDesigner
         private VisualElement canvasHost;
         private Label cellDebugLabel;
         private DropdownField activeLayerDropdown;
+        private BrushController brushController;
         private bool isCanvasHovered;
         private bool isDirty;
+        private bool isStrokeActive;
         private double nextPollTime;
 
         [MenuItem("RIMA/Room Designer")]
@@ -80,7 +83,33 @@ namespace RIMA.Editor.RoomDesigner
 
         public void InvokeBrush(int mouseButton, Vector3Int cell)
         {
+            if (brushController == null)
+            {
+                return;
+            }
+
+            if (!isStrokeActive)
+            {
+                brushController.OnInvoke(this, mouseButton, cell);
+                isStrokeActive = true;
+            }
+            else
+            {
+                brushController.OnDrag(this, cell);
+            }
+
             MarkDirty();
+        }
+
+        public void OnBrushRelease()
+        {
+            if (!isStrokeActive)
+            {
+                return;
+            }
+
+            brushController?.OnRelease(this);
+            isStrokeActive = false;
         }
 
         public void MarkDirty()
@@ -138,6 +167,7 @@ namespace RIMA.Editor.RoomDesigner
             }
 
             UpdateCellLabel();
+            EnsureBrushController();
         }
 
         private void OnEnable()
@@ -154,6 +184,8 @@ namespace RIMA.Editor.RoomDesigner
             EditorApplication.update -= PollMcp;
             canvas?.Dispose();
             canvas = null;
+            brushController = null;
+            isStrokeActive = false;
         }
 
         private void EnsureCanvas()
@@ -161,6 +193,19 @@ namespace RIMA.Editor.RoomDesigner
             if (canvas == null)
             {
                 canvas = new RoomDesignerCanvas(this);
+            }
+        }
+
+        private void EnsureBrushController()
+        {
+            if (brushController == null)
+            {
+                brushController = new BrushController();
+            }
+
+            if (rightPanel != null)
+            {
+                brushController.Initialize(this);
             }
         }
 
@@ -253,8 +298,10 @@ namespace RIMA.Editor.RoomDesigner
                 return;
             }
 
+#if ROOM_DESIGNER_DEBUG_PERF
             int count = Directory.GetFiles(McpResponsePath, "*.json", SearchOption.TopDirectoryOnly).Length;
             Debug.Log($"Room Designer MCP poll: {count} json response file(s)");
+#endif
         }
     }
 }

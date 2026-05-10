@@ -259,7 +259,7 @@ namespace RIMA.Editor.RoomDesigner.Palette
         {
             foreach (KeyValuePair<RoomLayer, Button> pair in layerButtons)
             {
-                pair.Value.EnableInClassList("rd-biome-tab--active", pair.Key == ctx.ActiveLayer);
+                pair.Value.EnableInClassList("rd-layer-chip--active", pair.Key == ctx.ActiveLayer);
             }
         }
 

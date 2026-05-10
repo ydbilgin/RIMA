@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using RIMA.Editor.RoomDesigner;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace RIMA.Editor.RoomDesigner
+namespace RIMA.Editor.RoomDesigner.Brushes
 {
     public class EraserBrush : IBrush
     {

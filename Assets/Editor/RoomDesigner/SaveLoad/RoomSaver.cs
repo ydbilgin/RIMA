@@ -3,6 +3,7 @@ namespace RIMA.Editor.RoomDesigner
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using RIMA.Runtime.Rooms;
     using UnityEditor;
     using UnityEngine;
 
@@ -38,27 +39,22 @@ namespace RIMA.Editor.RoomDesigner
                 made.Add(soPath);
 
                 PrefabUtility.SaveAsPrefabAsset(roomRoot, prefabPath, out bool ok);
+                if (File.Exists(prefabPath))
+                {
+                    made.Add(prefabPath);
+                }
+
                 if (!ok)
                 {
                     throw new InvalidOperationException("Prefab save failed");
                 }
-
-                made.Add(prefabPath);
-
-                AssetDatabase.ImportAsset(soPath);
-                AssetDatabase.ImportAsset(prefabPath);
 
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
                 bp.prefab = prefab;
                 bp.roomId = roomId;
                 bp.biome = biome;
 
-                var link = prefab.GetComponent<RoomPrefabLink>();
-                if (link == null)
-                {
-                    link = prefab.AddComponent<RoomPrefabLink>();
-                }
-
+                var link = prefab.GetComponent<RoomPrefabLink>() ?? prefab.AddComponent<RoomPrefabLink>();
                 link.blueprint = bp;
 
                 EditorUtility.SetDirty(bp);

@@ -1,7 +1,8 @@
+using RIMA.Editor.RoomDesigner;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace RIMA.Editor.RoomDesigner
+namespace RIMA.Editor.RoomDesigner.Brushes
 {
     public interface IBrush
     {

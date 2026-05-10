@@ -3,6 +3,7 @@ namespace RIMA.Tests.Editor
     using System.IO;
     using NUnit.Framework;
     using RIMA.Editor.RoomDesigner;
+    using RIMA.Runtime.Rooms;
     using UnityEditor;
     using UnityEngine;
 

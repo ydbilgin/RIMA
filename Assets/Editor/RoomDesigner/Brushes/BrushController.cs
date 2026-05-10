@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using RIMA.Editor.RoomDesigner;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
-namespace RIMA.Editor.RoomDesigner
+namespace RIMA.Editor.RoomDesigner.Brushes
 {
     public class BrushController
     {

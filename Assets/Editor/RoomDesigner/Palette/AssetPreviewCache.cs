@@ -12,6 +12,8 @@ namespace RIMA.Editor.RoomDesigner.Palette
 
         private readonly Dictionary<int, Texture2D> cache = new Dictionary<int, Texture2D>();
         private readonly Action onAnyLoaded;
+        private const double NotifyDebounceSeconds = 0.1d;
+        private double lastNotifyTime;
         private bool disposed;
 
         public AssetPreviewCache(Action repaintCallback)
@@ -71,10 +73,19 @@ namespace RIMA.Editor.RoomDesigner.Palette
 
         private void Tick()
         {
-            if (AssetPreview.IsLoadingAssetPreviews())
+            if (!AssetPreview.IsLoadingAssetPreviews())
             {
-                onAnyLoaded?.Invoke();
+                return;
             }
+
+            double now = EditorApplication.timeSinceStartup;
+            if (now - lastNotifyTime < NotifyDebounceSeconds)
+            {
+                return;
+            }
+
+            lastNotifyTime = now;
+            onAnyLoaded?.Invoke();
         }
     }
 

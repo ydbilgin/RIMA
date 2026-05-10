@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 using RIMA.Editor.RoomDesigner;
+using RIMA.Editor.RoomDesigner.Brushes;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
@@ -22,7 +23,20 @@ namespace RIMA.Tests.Editor
         private VisualElement _right = new VisualElement();
         public VisualElement LeftPanel => _left;
         public VisualElement RightPanel => _right;
-        public Tilemap GetActiveTilemap() => FloorTilemap;
+        public Tilemap GetActiveTilemap()
+        {
+            switch (ActiveLayer)
+            {
+                case RoomLayer.Walls:
+                    return WallsTilemap;
+                case RoomLayer.Decals:
+                    return DecalsTilemap;
+                case RoomLayer.Floor:
+                default:
+                    return FloorTilemap;
+            }
+        }
+
         public void InvokeBrush(int mouseButton, Vector3Int cell) { }
         public void MarkDirty() { }
     }
@@ -136,6 +150,29 @@ namespace RIMA.Tests.Editor
             Assert.DoesNotThrow(() => ctrl.ApplyStroke(ctx, edits, "TestStroke"));
 
             Object.DestroyImmediate(go1);
+            Object.DestroyImmediate(tile);
+        }
+
+        [Test]
+        public void PickerBrush_PicksTileAndSwitchesToStamp()
+        {
+            var tilemap = MakeTilemap(out var go);
+            var tile = ScriptableObject.CreateInstance<Tile>();
+            tilemap.SetTile(Vector3Int.zero, tile);
+            var ctx = new FakeContext
+            {
+                FloorTilemap = tilemap,
+                ActiveLayer = RoomLayer.Floor,
+                ActiveBrush = BrushMode.Picker
+            };
+            _ = new BrushController();
+
+            new PickerBrush().OnStrokeBegin(ctx, Vector3Int.zero, 0);
+
+            Assert.AreEqual(tile, ctx.ActiveTile);
+            Assert.AreEqual(BrushMode.Stamp, ctx.ActiveBrush);
+
+            Object.DestroyImmediate(go);
             Object.DestroyImmediate(tile);
         }
     }

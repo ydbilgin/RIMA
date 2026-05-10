@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class RoomPrefabLink : MonoBehaviour
+namespace RIMA.Runtime.Rooms
 {
-    public RoomBlueprint blueprint;
+    public class RoomPrefabLink : MonoBehaviour
+    {
+        public RoomBlueprint blueprint;
+    }
 }
