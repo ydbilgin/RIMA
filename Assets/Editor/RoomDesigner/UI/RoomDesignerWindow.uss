@@ -59,3 +59,37 @@
     flex-grow: 1;
     background-color: #101316;
 }
+
+.rd-tile-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 4px;
+}
+
+.rd-tile-card {
+    width: 56px;
+    height: 56px;
+    margin: 2px;
+    border-width: 1px;
+    border-color: #333;
+}
+
+.rd-tile-card--selected {
+    border-color: #7BA7BC;
+    border-width: 2px;
+}
+
+.rd-biome-tab {
+    padding: 4px 8px;
+    margin: 2px;
+}
+
+.rd-biome-tab--active {
+    background-color: #2A3848;
+}
+
+.rd-layer-chip {
+    padding: 2px 6px;
+    margin: 1px;
+    border-radius: 4px;
+}
