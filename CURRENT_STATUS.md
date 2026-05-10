@@ -1,17 +1,15 @@
 # CURRENT STATUS
-**2026-05-10 — S47 (devam) | Aktif Sprint: Faz 1-2**
+**2026-05-10 — S48 | Aktif Sprint: Faz 1-2**
 
-> **S47 bu session özet:**
-> - **PRODUCTION_PLAYBOOK NLM-FIX:** 4 düzeltme (hurt 4 frame, S-L Pro grid mantığı, Tileset Standard, Interpolate v2 252px doğrulandı) + Bölüm F LOCKED (padding %60, Final Boss 256+PPU=32) + Codex NEW/PRO/FLUX directive.
-> - **Lint conflict cleanup:** 5 HIGH (GDD Paladin → 10-class roster, SINIF_VE_SKILL Lancer DLC, STYLE_BIBLE boss 384px, GUIDE_v2 hurt 3 frame, DUNGEON_ASSETS) + 5 stale NLM source silindi.
-> - **rima-codex ÇÖZÜLDÜ:** Agent definition baştan beri `bare cx` (PATH'te yok) + sandbox/stdin pipe sorunları. Tam path + 3 flag + sıkı disiplin → 3-hesap test geçti (codex 0.130.0).
-> - **Reasoning effort kontrolü:** `--config model_reasoning_effort=<low|medium|high|xhigh>` ile görev türüne göre ayarlanır (`-c` short form çakışıyor, long form zorunlu).
+> **S48 bu session özet:**
+> - **PlayMode 4 fail ÇÖZÜLDÜ (commit 88f084d):** Root cause = scene'de class adı yanlış (RuntimeRoomManager→LegacyRuntimeRoomManager) + m_Enabled=0. YAML fix + Codex coroutine lifecycle (roomRunId) commit edildi. QC: PARTIAL PASS — Unity'de verify gerekiyor.
+> - **Statusline dinamik fix:** terminal genişliğine göre adaptif (>=110 full, >=90 medium, <80 compact). Küçük pencerede artık taşmıyor.
 
 > **Sıradaki session:**
-> 1. Wall Adım 2-3 (W2/OBW) Adım 1 paterniyle düzeltme
-> 2. PlayMode 4 fail (mob spawn eksik)
+> 1. Unity'de PlayMode testleri çalıştır (4 fail → 0 verify)
+> 2. tiles_raw/yeni/ 6 sheet process + Unity import (komutlar aşağıda)
 > 3. Asset üretimi başlat — 4 base prompt padding-ready
-> 4. tiles_raw/yeni/ 6 sheet process + Unity import (komutlar aşağıda)
+> 4. Wall Adım 2-3 (W2/OBW) düzeltme
 
 ---
 
@@ -38,11 +36,7 @@
    ```
    Sonra: Unity reimport → DemoRoomPainter görsel QC → w1_conn style uyumu kontrol
 
-3. **PlayMode 4 fail** — RoomLoader/DungeonWorldBuilder mob spawn eksik (S46'dan açık):
-   - MultiRoom_ClearRoom1_NavigateThenClear
-   - RewardPickup_Interact_MarksCollected
-   - LegacyRuntimeRoomManager_Room1Starts
-   - RoomLoop_KillAllEnemies_RoomClears
+3. **PlayMode 4 fail — VERIFY GEREKİYOR** — Root cause fix commit edildi (88f084d). Unity'de `Run Tests > PlayMode` ile doğrula. 4 test: MultiRoom_ClearRoom1, RewardPickup_Interact, LegacyRuntimeRoomManager_Room1Starts, RoomLoop_KillAllEnemies.
 
 ### 🟡 Orta Öncelik
 
@@ -75,8 +69,6 @@ D3. **Adjacent room peek visibility** — kapı arkası rendering?
 D4. **Hub combat sub-area** — Hub'ın yan odası combat olur mu?
 
 ### 🔧 Tooling Sorunları
-
-T1. **cx wrapper non-interactive Codex** — uzun prompt'larda takılıyor. Partial fix var (`--prompt-file` flag, `codex_raw.ps1`). Codex CLI'ın kendisi de hang ediyor — terminal debug gerekli (auth/model/TTY hangisi). Detay: `memory/feedback_cx_wrapper_long_prompt.md`
 
 ### 🟢 Düşük Öncelik / Backlog
 
