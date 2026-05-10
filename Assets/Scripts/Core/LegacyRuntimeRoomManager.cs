@@ -100,6 +100,8 @@ namespace RIMA
         private DeathScreenManager deathScreen;
         private List<GameObject> activeEnemies = new List<GameObject>();
         private List<GameObject> activeRewards  = new List<GameObject>();
+        private Coroutine enemySpawnRoutine;
+        private int roomRunId;
 
         // Kuzey duvarındaki 3 kapı slotu (x başlangıcı), hepsi aynı y'de
         private int DoorYNorth  => roomHeight - wallThickness;      // 22
@@ -162,6 +164,8 @@ namespace RIMA
 
         public void StartRoom()
         {
+            StopEnemySpawnRoutine();
+            roomRunId++;
             currentRoomIndex++;
             roomCleared = false;
             doorsOpen = false;
@@ -250,7 +254,7 @@ namespace RIMA
                     int count = Mathf.Clamp(Mathf.RoundToInt(baseEnemyCount * 0.75f * Mathf.Pow(enemyCountScaling, currentRoomIndex - 1)), 2, 8);
                     hud?.SetRoomStatus($"Room {currentRoomIndex} — ⚠ ELITE ({count} enemies)");
                     Debug.Log($"[RRM] Room {currentRoomIndex}: ELITE — {count} enemies (all elites)");
-                    StartCoroutine(SpawnEnemies(count, forceElite: true));
+                    enemySpawnRoutine = StartCoroutine(SpawnEnemies(count, forceElite: true, roomRunId));
                     yield break;
                 }
 
@@ -259,7 +263,7 @@ namespace RIMA
                     int count = Mathf.Clamp(Mathf.RoundToInt(baseEnemyCount * Mathf.Pow(enemyCountScaling, currentRoomIndex - 1)), 2, 20);
                     hud?.SetRoomStatus($"Room {currentRoomIndex} — Enemies: {count}");
                     Debug.Log($"[RRM] Room {currentRoomIndex} started. {count} enemies spawning.");
-                    StartCoroutine(SpawnEnemies(count));
+                    enemySpawnRoutine = StartCoroutine(SpawnEnemies(count, forceElite: false, roomRunId));
                     yield break;
                 }
             }
@@ -297,11 +301,12 @@ namespace RIMA
             Debug.Log("[RuntimeRoomManager] Boss defeated! Class selection will trigger.");
         }
 
-        private IEnumerator SpawnEnemies(int count, bool forceElite = false)
+        private IEnumerator SpawnEnemies(int count, bool forceElite, int spawnRunId)
         {
             aliveEnemies = 0;
             var reservedSpawnPositions = new List<Vector3>();
             yield return new WaitForSeconds(0.5f); // brief calm before storm
+            if (!IsCurrentEnemySpawn(spawnRunId)) yield break;
 
             // Guard: no prefabs assigned
             if (enemyPrefabs == null || enemyPrefabs.Length == 0)
@@ -311,6 +316,8 @@ namespace RIMA
                 Debug.LogWarning("[RRM] No enemy prefabs assigned — spawning stub enemies for editor/test validation.");
                 for (int s = 0; s < count; s++)
                 {
+                    if (!IsCurrentEnemySpawn(spawnRunId)) yield break;
+
                     var stub = new GameObject($"TestEnemy_Stub_{s}");
                     stub.transform.position = new Vector3(s * 2f, 5f, 0f);
                     var stubHealth = stub.AddComponent<Health>();
@@ -330,6 +337,8 @@ namespace RIMA
 
             for (int i = 0; i < count; i++)
             {
+                if (!IsCurrentEnemySpawn(spawnRunId)) yield break;
+
                 // Pick random enemy prefab
                 var prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
 
@@ -362,6 +371,20 @@ namespace RIMA
                 yield return new WaitForSeconds(spawnDelay);
             }
             Debug.Log($"[RRM] All {count} enemies spawned. aliveEnemies={aliveEnemies}");
+            if (enemySpawnRoutine != null && spawnRunId == roomRunId)
+                enemySpawnRoutine = null;
+        }
+
+        private bool IsCurrentEnemySpawn(int spawnRunId)
+        {
+            return spawnRunId == roomRunId && !roomCleared;
+        }
+
+        private void StopEnemySpawnRoutine()
+        {
+            if (enemySpawnRoutine == null) return;
+            StopCoroutine(enemySpawnRoutine);
+            enemySpawnRoutine = null;
         }
 
         private Vector3 GetRandomSpawnPosition()
@@ -544,6 +567,7 @@ namespace RIMA
 
             if (aliveEnemies <= 0 && !roomCleared)
             {
+                StopEnemySpawnRoutine();
                 roomCleared = true;
                 StartCoroutine(RoomClearedSequence());
             }
@@ -1061,6 +1085,7 @@ namespace RIMA
 
         private void ClearActiveEnemies()
         {
+            StopEnemySpawnRoutine();
             foreach (var e in activeEnemies)
             {
                 if (e != null) Destroy(e);
