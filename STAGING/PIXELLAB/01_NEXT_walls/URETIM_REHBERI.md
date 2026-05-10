@@ -17,6 +17,48 @@
 
 ---
 
+## UNITY RULE TILE SİSTEMİ (LOCKED 2026-05-11)
+
+Wall tile'lari **Unity Rule Tile** kullanir -- designer sadece "wall var/yok" cizer, variant otomatik secilir.
+
+**Mod A -- Auto-connect (default):** Room Designer'da brush hucreye basar -> Rule Tile komsuları degerlendirir -> dogru variant gorünür.
+**Mod B -- Manual override:** Palette'te 8 variant acilir; override koyulan hücre `overrideVariantIndex` ile RoomBlueprint'e yazilir. O hücre Rule Tile degerlendirmesini skip eder ama komsu degerlendirmesinde hala "wall" sayilir.
+
+### Connection Type -> Variant Mapping
+
+| # | N | S | E | W | Variant |
+|---|---|---|---|---|---------|
+| 1 | W | W | . | . | straight-V |
+| 2 | . | . | W | W | straight-H |
+| 3 | . | W | . | W | corner-NW |
+| 4 | . | W | W | . | corner-NE |
+| 5 | W | . | . | W | corner-SW |
+| 6 | W | . | W | . | corner-SE |
+| 7 | . | . | W | . | end-L |
+| 8 | . | . | . | W | end-R |
+| 9 | W | W | W | W | straight-V (T/cross fallback) |
+| 10 | . | . | . | . | straight-V (isolated -- Room Designer warning) |
+
+`W` = wall komsus var, `.` = yok, `*` = don't care. N/S/E/W grid-relative (view-relative degil).
+
+### metadata.json Zorunlulugu
+
+Her W1/W2 variant PNG'si `metadata.json`'a su field'i icermek ZORUNDA:
+
+```json
+{ "connection_type": "straight_V" }
+```
+
+Gecerli degerler: `straight_H`, `straight_V`, `corner_NW`, `corner_NE`, `corner_SW`, `corner_SE`, `end_L`, `end_R`
+
+**Rule Tile asset generation scripti** bu field'lari okuyup `W1_RuleTile.asset`'i otomatik olusturur. Manuel Rule Tile yazma YASAK -- hata riskli.
+
+### Validation
+
+Room Designer'da izole wall (4 komsu yok) detection -> "Isolated wall at (x,y)" warning. T/cross junction -> straight-V fallback, level design hatasi isareti.
+
+---
+
 ## PALETTE (5 LOCKED)
 
 ### W1 / OBW Palette
@@ -492,6 +534,11 @@ python STAGING/process_tiles.py --source "STAGING/PIXELLAB/01_NEXT_walls/outputs
 - [ ] Style reference ADIM aciklamasina gore yuklendi mi
 - [ ] W1-straight-H ile W1 diger variantlar arasinda brick pattern tutarli mi
 - [ ] W1 + W2 Unity yan yana: soguk ton fark gorunuyor mu
+
+### Rule Tile Sistemi Kontrol
+
+- [ ] Her variant PNG metadata.json connection_type field iceriyor (required for Rule Tile auto-gen)
+- [ ] W1_RuleTile.asset guncellendi (script ile, manuel degil)
 
 ### Unity Import Sonrasi
 
