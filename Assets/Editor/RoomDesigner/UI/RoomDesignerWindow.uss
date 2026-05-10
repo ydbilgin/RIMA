@@ -1,0 +1,61 @@
+:root {
+    --rd-bg: #15181c;
+    --rd-panel-bg: #20252b;
+    --rd-accent: #4da3ff;
+}
+
+.rd-root {
+    flex-grow: 1;
+    background-color: var(--rd-bg);
+}
+
+.rd-toolbar {
+    height: 36px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #1b2026;
+    border-bottom-width: 1px;
+    border-bottom-color: #313941;
+}
+
+.rd-toolbar Button {
+    margin-right: 6px;
+}
+
+.rd-toolbar DropdownField {
+    min-width: 170px;
+    margin-left: 4px;
+}
+
+.rd-cell-debug {
+    margin-left: 12px;
+    color: var(--rd-accent);
+    unity-font-style: bold;
+}
+
+.rd-body {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.rd-panel {
+    background-color: var(--rd-panel-bg);
+    border-color: #313941;
+}
+
+.rd-left {
+    width: 280px;
+    border-right-width: 1px;
+}
+
+.rd-right {
+    width: 320px;
+    border-left-width: 1px;
+}
+
+.rd-canvas {
+    flex-grow: 1;
+    background-color: #101316;
+}
