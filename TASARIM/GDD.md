@@ -240,14 +240,18 @@ Run başında 1 class seçilir; Act 1 boss'tan sonra ikinci class eklenir.
 
 | Class | Fantasy | Kaynak | [V] Burst |
 |-------|---------|--------|-----------|
-| **Warblade** | "Yaklaş. Sabitle. Zırh kır. İnfaz et." | Rage — hasar vererek dolar | Bladestorm |
-| **Elementalist** | "Her şeyi yakıyorum. Ama önce ritmi buluyorum." | Mana + Elemental State | Inferno |
-| **Shadowblade** | "Görmüyorsun. Zaten geç." | Energy + Combo Points | Shadow Dance |
-| **Ranger** | "Sana ulaşamazsın. Her saniye kayıp veriyorsun." | Focus — mesafeyle birikir | Rain of Arrows |
-| **Ravager** | "Az canken daha tehlikeliyim. Bu hata değil, strateji." | Fury — hasar alarak dolar | Berserk Mode |
-| **Paladin** | "Hem kesilemiyorum hem öldürüyorum. Bu çelişki değil, tasarım." | Holy Power — builder skill'lerle | Avenging Wrath |
-| **Summoner** | "Ben savaşmıyorum. Feda ediyorum. Ve feda anı en güçlü andır." | Charges — zaman ve ölümle | Army of the Dead |
-| **Hexer** | "Sabır. 10'a gelince sen bitiyorsun." | Hex Stacks — düşman başına 0-10 | Hex Cascade |
+| **Warblade** | "Yaklaş. Sabitle. Zırh kır. İnfaz et." | Rage — hasar vererek dolar (Dominance) | Bladestorm |
+| **Elementalist** | "Her şeyi yakıyorum. Ama önce ritmi buluyorum." | Mana + Elemental State (Convergence) | Trinity Storm |
+| **Shadowblade** | "Görmüyorsun. Zaten geç." | Energy + Combo Points (Predation) | Shadow Dance |
+| **Ranger** | "Sana ulaşamazsın. Her saniye kayıp veriyorsun." | Focus — mesafeyle birikir (Kill Zone) | Rain of Arrows |
+| **Ravager** | "Az canken daha tehlikeliyim. Bu hata değil, strateji." | Fury — hasar alarak dolar (Carnage) | Berserk Mode |
+| **Ronin** | "Çek. Kes. Kın. Bir nefeste." | Tension — iaido draw cycle (Flow Cut) | Final Draw |
+| **Gunslinger** | "Mermin yok. Senin zamanın da yok." | Heat — ateş→soğutma ritmi (Showtime) | Last Round |
+| **Brawler** | "Düşersen kalk. Ama önce yumruğum kalkar." | Charge — kombo darbeleri (Crowd Hype) | Overdrive |
+| **Summoner** | "Ben savaşmıyorum. Feda ediyorum. Ve feda anı en güçlü andır." | Charges — zaman ve ölümle (Grave Chorus) | Army of the Dead |
+| **Hexer** | "Sabır. 10'a gelince sen bitiyorsun." | Hex Stacks — düşman başına 0-10 (Dread) | Hex Cascade |
+
+> 10-class roster LOCKED (MASTER #4 — 2026-04-11). Paladin/Crusader/Lancer eski iterasyonlardan kaldırıldı.
 
 ### Class Unlock Sistemi
 
@@ -384,20 +388,35 @@ Her class = Fracturing'de saçılan bir "yüz." Unlock = o yüzü geri kazanmak.
 
 ## 14. DİĞER SINIFLAR — ÖZET
 
-Bu 4 class Faz 2-5'te açılır. Tam skill tabloları `SINIF_VE_SKILL_KARAR_BELGESI.md` dosyasında.
+Bu 6 class Faz 2-5'te açılır. Tam skill tabloları `SINIF_VE_SKILL_KARAR_BELGESI.md` dosyasında.
 
 ### Ravager 👊
 **Fantasy:** "Az canken daha tehlikeliyim."
 **Kaynak:** Fury — SADECE hasar alarak dolar. HP düştükçe daha hızlı.
 **Ayrım:** Warblade Rage'i vererek doldurur. Ravager alarak. İkisi kombinlenince "ver de al" döngüsü oluşur.
-**[V] Berserk Mode** — 15s defense ignore + %200 hasar + tüm CD sıfır.
+**[V] Berserk Mode** — kan siklozu (2.5 yarıçap pasif AoE + 0.5s single-target darbe), kill +0.8s (max +3s).
 **Eksenler:** Glass Cannon / Fury Engine / Crowd Crusher
 
-### Paladin ⚖️
-**Fantasy:** "Hem kesilemiyorum hem öldürüyorum. Bu çelişki değil, tasarım."
-**Kaynak:** Holy Power — Builder skill'lerle dolar, Spender skill'lerle boşaltılır. 3 mükemmel Builder→Spender zinciri burst açar.
-**[V] Avenging Wrath** — 10s %30 invuln + %50 hasar.
-**Eksenler:** Tank Rhythm / Holy Burst / Sacred Ground
+### Ronin 🗡️
+**Fantasy:** "Çek. Kes. Kın. Bir nefeste."
+**Kaynak:** Tension — iaido draw cycle (sheath/draw kimliği LOCKED).
+**Mekanik:** Pre-draw timing → frame-perfect cut → state apply (Opened).
+**[V] Final Draw** — empowered iaido cast, Perfect Condition trigger.
+**Eksenler:** Frame-Perfect Counter / Draw Pressure / Stillness
+
+### Gunslinger 🔫
+**Fantasy:** "Mermin yok. Senin zamanın da yok."
+**Kaynak:** Heat — ateş→soğutma ritmi. Heat MAX değil ZERO ulti açar (Karar #54).
+**Mekanik:** Run-and-gun, dual-pistol, kinetic okuma.
+**[V] Last Round** — Heat ZERO trigger empowered burst.
+**Eksenler:** Heat Cycle / Charge-Release / Mobile Burst
+
+### Brawler 👊
+**Fantasy:** "Düşersen kalk. Ama önce yumruğum kalkar."
+**Kaynak:** Charge — 5 stack Cracked → Shattered (Brawler-only state).
+**Mekanik:** Mash + timing rotation. Whiff/evade body movement → dodge into whiff (Off-Balance).
+**[V] Overdrive** — Crowd Hype V, Charged State bankalanabilir RMB ile.
+**Eksenler:** Shattered Engine / Counter-Body / Crowd Hype
 
 ### Summoner 💀
 **Fantasy:** "Ben savaşmıyorum. Feda ediyorum. Ve feda anı en güçlü andır."

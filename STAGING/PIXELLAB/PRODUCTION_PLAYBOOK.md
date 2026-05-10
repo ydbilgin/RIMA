@@ -1,6 +1,15 @@
 # PixelLab Production Playbook
 *Tek dosya, sırayla. Aç → Adım 1 → bitir → Adım 2.*
-*Son güncelleme: 2026-05-10 (REVIZE — kanonik pipeline kararları işlendi)*
+*Son güncelleme: 2026-05-10 (NLM çapraz-kontrol — PixelLabDocs/63 dosya ile doğrulandı)*
+
+> **2026-05-10 NLM-FIX changelog:**
+> - **HIGH-1 — Frame parity (4 yer):** Hurt anim'lerinde "3 frame" → **4 frame**. (Adım 19/28/37/46) Sebep: `animate-with-text-new.md` çift sayı zorunlu (4/6/8/10/12/14/16).
+> - **HIGH-3 — Obstacle tool (8 yer + bölüm başı):** Adım 9-16 "Create Image S-XL (new)" → **Create S-L Image (Pro)**. Sebep: S-XL/Pixflux tek görsel verir; grid varyasyon Pro'da. Var sayıları gen×grid mantığına çevrildi.
+> - **MEDIUM-4 — Transition tile (Adım 7-8):** "Create Tiles Pro + style ref" → **Create Tileset Standard** (Top-Down inner+outer). Sebep: `create-tileset.md`'ye göre Wang set / seamless transition standart tool'da.
+> - **HIGH-2 — Interpolation 252px ✅ DOĞRULANDI (2026-05-10):** Kullanıcı UI testiyle Interpolate NEW v2'nin 252×252 (max 256×256) desteklediğini onayladı. PixelLabDocs/`interpolation.md` ESKİ — v1 limiti yazıyor. Playbook'un "v2 252px destekli" ifadesi geçerli.
+> - **Doğrulananlar (değişiklik gerekmedi):** animate_character MCP yasağı, pixel budget formülü (524,288), Edit Image Pro weapon-pass (3-4 frame'lik anim tool'larının limiti yetmediği için manuel propagation doğru).
+> - **F. Padding/Scale kuralı LOCKED (2026-05-10, Gemini önerisi + NLM doğrulaması):** Yeni Bölüm F eklendi. 4 base prompt'a (Adım 17/26/35/44) `~50% of canvas height + DO NOT fill canvas` constraint'i işlendi. PixelLab v3 motoru zaten %60 padding bırakıyor (resmi davranış); prompt-level kısıt çakışmayı önler. "Devasa boss" stratejisi PPU=32 ile (asla 256+ üretim YOK).
+> - **Çelişki düzeltildi:** `TASARIM/AIM_SHOT_BOSS_PLACEMENT_SYSTEMS.md` Final Boss "512px Canvas, PPU=64" satırı `256×256, PPU=32` olarak revize edildi (animate-with-text-new max 256px destekliyor — 512 imkansız).
 
 > **Kullanım:** Bu dosyanın sırasını takip et. Her adım için **tool**, **ayarlar**, **prompt** (kopyala-yapıştır), **kaydet path**'i ve **process komutu** verilmiş. Bittikçe `[ ]` → `[x]` işaretle.
 
@@ -13,10 +22,13 @@
 
 NLM çapraz kontrolü + Opus kararı sonucu aşağıdaki kurallar tüm dosyaya geçerlidir. Adım metinleri eski tool isimleri/format kullanıyorsa, bu bölüm KAZANIR.
 
-### A. Tool Versiyonları
+### A. Tool Versiyonları (Codex/Antigravity directive LOCKED 2026-05-10)
+
+> **HARD RULE — sadece NEW / PRO / FLUX:** RIMA asset üretiminde **legacy tool YASAK**. Tool adında "NEW", "PRO", veya "FLUX" yoksa → kullanma. Memory: `feedback_pixellab_new_pro_flux_mandate.md`.
+
 - **"Animate with Text NEW"** = v3 Pixflux engine. Eski v2 araçlar %49 çöküyor — kullanma.
-- **"Interpolate NEW"** = Interpolate NEW v2 (252×252 destekli). Eski 64×64 Interpolation **ÖLÜ**.
-- **"Animation-to-Animation Bridging Mode"** — yeni alternatif. KF1 + KF3 → 2 ara frame. Geniş silahlı sınıflarda (Warblade greatsword) Interpolate NEW kırpma yaparsa bunu kullan.
+- **"Interpolate NEW"** = Interpolate NEW v2 — **UI'da 252×252 destekleniyor (max 256×256), kullanıcı 2026-05-10 testiyle doğruladı**. ⚠️ **PixelLabDocs/`interpolation.md` ESKİ:** "canvas must be exactly 64×64" diyor ama bu eski v1 limiti; v2 (NEW) 16-256px aralığını destekliyor. Doc'a güvenme, NEW'i kullan.
+- **"Animation-to-Animation Bridging Mode"** — alternatif. KF1 + KF3 → 2 ara frame. Geniş silahlı sınıflarda (Warblade greatsword) Interpolate NEW kırpma yaparsa bunu kullan.
 
 ### B. Canvas Standardı
 - PixelLab v3 araçları **252×252 ZORUNLU** (silah/uzuv'un kanvas dışına taşmasını engeller, RIMA'nın seçimi değil)
@@ -51,6 +63,35 @@ Eski plan: START + PEAK + END = 1 + 4 + 4 = **9 frame** → 252² × 9 = 571,536
 - `Attack_Windup` (4 frame) + `Attack_Follow` (4 frame) — Animator'da chain
 
 Bu kural Adım 22, 23, 31, 32, 40, 41, 49, 50 için geçerli.
+
+### F. Karakter/Boss Scale & Padding Kuralı (LOCKED 2026-05-10)
+
+**Kaynak:** Antigravity Gemini önerisi + NLM doğrulaması (`mcp_docs.md`, `pixellab_api_reliability.md`, `animation.md`).
+
+**1) Canvas tavanı:** Animate with Text NEW max **256×256**. RIMA standardı **252×252** (8 frame için pixel budget içinde). 256+ üzerine çıkmak imkansız — tool çöker.
+
+**2) %60 padding zorunlu:**
+- PixelLab v3 motoru zaten otomatik **karakteri canvas yüksekliğinin ~%60'ında** konumlandırıyor (`mcp_docs.md` resmi davranış: "*Canvas size is total area; character will be ~60% of canvas height*").
+- 256×256 çıktıda gerçek karakter ≈ **168×168 px** (`pixellab_api_reliability.md`). Geri kalan ~%40 transparent padding = silah savurma / VFX / lunge için hayati alan.
+- RIMA pratiği: **128px karakter on 252×252 canvas** = ~%50 oran (Gemini minimumundan daha cömert padding — daha güvenli).
+- **Negatif kısıt (prompt'larda zorunlu):** "*don't fill canvas, leave wide transparent headroom*". Asla "fill canvas" / "occupies entire frame" yazma — modelle kavga edersin, kötü çıktı.
+
+**3) "Devasa boss" stratejisi — PixelLab'i zorlama, Unity'de scale et:**
+
+| Boss tipi | PixelLab üretim | Unity PPU | Unity ekran | Player'a oran |
+|---|---|---|---|---|
+| Player (referans) | 252×252, karakter ≈128px | 64 | ~2.0 unit | 1× |
+| Miniboss | 252×252, karakter ≈128-160px | 128 | ~1.0 unit görsel ama büyük gözükür | 2× hissi |
+| Act Boss | 252×252, karakter ≈160px | 64 | ~2.5 unit | ~3-4× hissi |
+| **Final Boss** | **252×252** (ASLA 512+!) | **32** | ~5 unit | **~6× hissi (devasa)** |
+| Architect canavar form | 256×256 | 32 | ~8 unit | LOCKED (memory) |
+
+**Önemli:** Pixel-perfect physics + collider için PPU=16'nın altına inme; Final Boss PPU=32 sweet spot. Unity Filter Mode = **Point (no filter)**, scale-up bulanıklaşmaz.
+
+**4) Clipping önleme — `animation.md` kuralı:**
+> *"if you want to create large special effects, move your character to the side of the canvas so the model has more space"*
+
+Geniş silah / büyük VFX gerekiyorsa karakteri canvas'ın kenarına yerleştir (asimetrik konum), tam ortaya değil.
 
 ---
 
@@ -323,48 +364,54 @@ python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs
 
 ## ✅ Adım 7: Trans F1→F2
 
-**🛠️ Tool:** Create Tiles Pro
+**🛠️ Tool:** **Create Tileset (Standard)** — Top-Down mode (Wang set / inner+outer)
+
+> **NLM-FIX 2026-05-10:** Önceki "Create Tiles Pro + style reference" yanlıştı. Pro tool tekil tile üretir, iki terrain arası seamless transition (Wang set) **Create Tileset Standard**'da yapılır — `inner description` + `outer description` ile geçiş maskeleri otomatik üretilir. RuleTile için doğru girdi budur.
 
 **⚙️ Ayarlar:**
-- 64x64, **8 var** (sheet: 2 cols × 4 rows)
-- Style Reference: F1 + F2 approved tile
-
-**📝 Prompt:**
-```
-Isometric pixel art floor tile, 64x64 pixels. Pure solid green #00FF00 background. 2:1 isometric diamond. Transition stone: left half of tile is clean F1 grey granite (#2E3038, #424555), right half transitions into cracked F2 style (#2A2C35, #3C3F4E, #263530 lichen). The split is diagonal not vertical, creating a natural rock fault line. Flat baked lighting only. Hard pixel edges. 8 variations, each with slightly different fault line angle and lichen spread.
-```
+- Tile size: 32×32 (→ Aseprite 2× nearest-neighbor → 64×64)
+- Map orientation: **Top-Down (High Top-Down)**
+- **Inner description:** F1 clean grey granite (palette: #2E3038, #424555)
+- **Outer description:** F2 cracked stone with lichen (palette: #2A2C35, #3C3F4E, #263530)
+- Lower terrain Upload Image: **F1 approved tile (Adım 4)**
+- Upper terrain Upload Image: **F2 approved tile (Adım 5)**
+- Transition: **Full (100%)** if duvar yüksekliği gerekiyor (32×64 çıktı)
+- Output format: **Wang 16-tile** veya **dual-grid 15-tile** (RuleTile uyumu için 16-tile öneri)
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f1f2_v1.png
+STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f1f2_wang16_v1.png
 ```
 
 **🐍 Process:**
 ```powershell
-python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f1f2_v1.png --output Assets/Art/Tiles/Act1/Trans_F1F2 --cols 2 --rows 4 --width 64 --height 64 --prefix trans_f1f2_
+# Wang 16-tile çıktıyı 4×4 grid olarak kes (32px input → 64px output upscale dahil)
+python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f1f2_wang16_v1.png --output Assets/Art/Tiles/Act1/Trans_F1F2 --cols 4 --rows 4 --width 64 --height 64 --prefix trans_f1f2_
 ```
 
 ---
 
 ## ✅ Adım 8: Trans F2→F3
 
-**🛠️ Tool:** Create Tiles Pro
+**🛠️ Tool:** **Create Tileset (Standard)** — Top-Down mode
 
-**⚙️ Ayarlar:** 64x64, 8 var, F2 + F3 ref
-
-**📝 Prompt:**
-```
-Isometric pixel art floor tile, 64x64 pixels. Pure solid green #00FF00 background. 2:1 isometric diamond. Transition: F2 cracked stone (#3C3F4E) bleeding into F3 volcanic basalt (#222230, #4A1A1A energy). Diagonal fault line with glowing crack appears at transition. 8 variations, varied crack thickness and glow intensity.
-```
+**⚙️ Ayarlar:**
+- Tile size: 32×32 (→ 2× upscale → 64×64)
+- Map orientation: Top-Down
+- **Inner description:** F2 cracked stone (palette: #3C3F4E, #2A2C35)
+- **Outer description:** F3 volcanic basalt with energy cracks (palette: #222230, #4A1A1A glow max 8px)
+- Lower terrain Upload: F2 approved tile
+- Upper terrain Upload: F3 approved tile
+- Output: Wang 16-tile
 
 **💾 Kaydet:**
 ```
-STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f2f3_v1.png
+STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f2f3_wang16_v1.png
 ```
 
 **🐍 Process:**
 ```powershell
-python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f2f3_v1.png --output Assets/Art/Tiles/Act1/Trans_F2F3 --cols 2 --rows 4 --width 64 --height 64 --prefix trans_f2f3_
+python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs/trans/trans_f2f3_wang16_v1.png --output Assets/Art/Tiles/Act1/Trans_F2F3 --cols 4 --rows 4 --width 64 --height 64 --prefix trans_f2f3_
 ```
 
 > **Unity import:** PPU=64, Pivot=center (0.5, 0.5), Sorting layer=Ground.
@@ -373,18 +420,29 @@ python STAGING/process_tiles.py --source STAGING/PIXELLAB/02_NEXT_floors/outputs
 
 # C — OBSTACLES
 
-> **Önemli:** Bu bölümün TÜMÜ için tool: **Create Image S-XL (new)** (Map'te DEĞİL, ana tool).
+> **Önemli:** Bu bölümün TÜMÜ için tool: **Create S-L Image (Pro)** (Map'te DEĞİL, Create image bölümünde).
 > **Background: Transparent ON** — process_tiles.py GEREKMEZ. PNG'ler direkt Unity'ye drag-drop.
 > Style Reference: W1 approved wall tile yükle (palette tutarlılık).
+>
+> **NLM-FIX 2026-05-10 — Tool seçimi düzeltildi:**
+> Önceki playbook "Create Image S-XL (new)" diyordu — bu **Create M-XL Image (Flux)** = Pixflux engine ve **tek görsel** verir, grid varyasyon yapmaz.
+> Grid-tabanlı varyasyon (tek gen'de N frame) **Create S-L Image (Pro)**'da. Doc limit:
+> - 43-64px → 16 frame/gen (4×4 grid)
+> - 65-85px → 16 frame/gen (4×4 grid)
+> - 86-128px → **4 frame/gen** (2×2 grid)
+> - 129-170px → 4 frame/gen
+> - **171-256px → 1 frame/gen** (256'da grid YOK)
+>
+> Yani 256px canvas + "4 var" istiyorsan **4 ayrı gen** harcaman gerek. 128px + 16 var = 4 gen × 4-grid. Aşağıdaki adımlarda "var" = istenen toplam varyant; "gen" = harcanacak generation sayısı.
 
 ## ✅ Adım 9: Pillar (Taş Sütun)
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **256px**
+- Canvas: **256px** (171-256 band → 1 frame/gen, grid yok)
 - View: **Low top-down**
-- Variation: **4**
+- Hedef: **4 varyant** → **4 ayrı gen** (her gen tek görsel, prompt sabit)
 - Background: **Transparent ON**
 - Outline: Single color
 
@@ -409,11 +467,13 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/pillar_var02.png
 
 ## ✅ Adım 10: Rubble Cluster
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **128px**, View: **High top-down**
-- Variation: **16**, Transparent ON
+- Canvas: **128px** (86-128 band → 4 frame/gen, 2×2 grid)
+- View: **High top-down**
+- Hedef: **16 varyant** → **4 gen × 4-grid** = 16 sprite
+- Transparent ON
 
 **📝 Prompt:**
 ```
@@ -431,10 +491,13 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/rubble_var01..16.png
 
 ## ✅ Adım 11: Wall Torch
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **64px**, View: **Low top-down**, **8 var**, Transparent ON
+- Canvas: **64px** (43-64 band → 16 frame/gen, 4×4 grid)
+- View: **Low top-down**
+- Hedef: **8 varyant** → **1 gen × 4-grid'in 8'i** seçilir (kalan 8 atılır) — **veya** 64×128 canvas yap, 16/2=8 frame al
+- Transparent ON
 
 **📝 Prompt:**
 ```
@@ -452,10 +515,13 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/torch_var01..08.png
 
 ## ✅ Adım 12: Floor Crack Decal
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **128px**, View: **High top-down**, **16 var**, Transparent ON
+- Canvas: **128px** (4 frame/gen, 2×2 grid)
+- View: **High top-down**
+- Hedef: **16 varyant** → **4 gen × 4-grid** = 16
+- Transparent ON
 
 **📝 Prompt:**
 ```
@@ -473,10 +539,13 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/crack_var01..16.png
 
 ## ✅ Adım 13: Barrel / Crate
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **128px**, View: **Low top-down**, **8 var** (4 barrel + 4 crate), Transparent ON
+- Canvas: **128px** (4 frame/gen, 2×2 grid)
+- View: **Low top-down**
+- Hedef: **8 varyant** (4 barrel + 4 crate) → **2 gen × 4-grid** = 8 (1 gen barrel prompt, 1 gen crate prompt)
+- Transparent ON
 
 **📝 Prompt:**
 ```
@@ -495,10 +564,13 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/crate_var01..04.png
 
 ## ✅ Adım 14: Bone Pile
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **128px**, View: **High top-down**, **8 var**, Transparent ON
+- Canvas: **128px** (4 frame/gen, 2×2 grid)
+- View: **High top-down**
+- Hedef: **8 varyant** → **2 gen × 4-grid** = 8
+- Transparent ON
 
 **📝 Prompt:**
 ```
@@ -516,11 +588,14 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/bone_var01..08.png
 
 ## ✅ Adım 15: Broken Pillar Stump
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **128px**, View: **Low top-down**, **8 var**, Transparent ON
+- Canvas: **128px** (4 frame/gen, 2×2 grid)
+- View: **Low top-down**
+- Hedef: **8 varyant** → **2 gen × 4-grid** = 8
 - Style Reference: **Adım 9 Pillar (sağlam) yükle**
+- Transparent ON
 
 **📝 Prompt:**
 ```
@@ -538,10 +613,13 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/stump_var01..08.png
 
 ## ✅ Adım 16: Large Altar (Altar of Resonance)
 
-**🛠️ Tool:** Create Image S-XL (new)
+**🛠️ Tool:** Create S-L Image (Pro)
 
 **⚙️ Ayarlar:**
-- Canvas: **256px**, View: **Low top-down**, **4 var**, Transparent ON
+- Canvas: **256px** (171-256 band → 1 frame/gen, grid YOK)
+- View: **Low top-down**
+- Hedef: **4 varyant** → **4 ayrı gen** (her gen tek görsel)
+- Transparent ON
 
 **📝 Prompt:**
 ```
@@ -582,7 +660,7 @@ STAGING/PIXELLAB/03_NEXT_obstacles/outputs/altar_var01..04.png
 
 **📝 Prompt (her yön için aynı, "facing X" değiştir):**
 ```
-Pixel art warrior character, body-only, no weapon, 128x128 sprite on 252x252 canvas. High top-down view 30-35° elevation. Heavy plate armor, broad shoulders, cold blue cloth accent #7BA7BC at sash and shoulder straps. Palette: armor steel #4A4E5A / #5C6070 / #6E7280, accent blue #7BA7BC, leather #3A2818 / #5A4028, skin #C9A084 / #A07858, hair dark brown. Stoic stance, feet shoulder-width, arms relaxed. Hard pixel edges, no anti-aliasing, pixel cluster min 4px. NO embedded glow, NO VFX, NO weapon. [FACING SOUTH | FACING EAST | FACING NORTH] (face camera for south).
+Pixel art warrior character, body-only, no weapon, character occupies ~50% of canvas height (~128px tall) centered on a 252x252 transparent canvas. Wide transparent padding on all sides for animation headroom — DO NOT fill the canvas. High top-down view 30-35° elevation. Heavy plate armor, broad shoulders, cold blue cloth accent #7BA7BC at sash and shoulder straps. Palette: armor steel #4A4E5A / #5C6070 / #6E7280, accent blue #7BA7BC, leather #3A2818 / #5A4028, skin #C9A084 / #A07858, hair dark brown. Stoic stance, feet shoulder-width, arms relaxed. Hard pixel edges, no anti-aliasing, pixel cluster min 4px. NO embedded glow, NO VFX, NO weapon. [FACING SOUTH | FACING EAST | FACING NORTH] (face camera for south).
 ```
 
 **💾 Kaydet (3 dosya):**
@@ -623,11 +701,13 @@ STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/02_idle_hit_death/warblade_idle_N
 
 **🛠️ Tool:** Animate with Text NEW
 
-**⚙️ Ayarlar:** 3 frame, 3 yön (S/E/N)
+**⚙️ Ayarlar:** **4 frame** (tool çift sayı zorunlu — 4/6/8/10/12/14/16 only), 3 yön (S/E/N)
+
+> **NLM-NOTE 2026-05-10:** Önceki "3 frame" değeri PixelLab API'sinde geçersizdi. Aseprite import'ta gerekirse fazla frame manuel silinir.
 
 **📝 Prompt:**
 ```
-Flinch backwards, 3 frames. Character's torso jerks back from impact, head tilts away, no weapon. Cold blue accent (#7BA7BC) flickers slightly. Frame 1: idle pose. Frame 2: peak flinch (max backward lean). Frame 3: recovery toward idle.
+Flinch backwards, 4 frames. Character's torso jerks back from impact, head tilts away, no weapon. Cold blue accent (#7BA7BC) flickers slightly. Frame 1: idle pose. Frame 2: peak flinch (max backward lean). Frame 3: hold reaction. Frame 4: recovery toward idle.
 ```
 
 **💾 Kaydet:**
@@ -784,7 +864,7 @@ STAGING/PIXELLAB/04_NEXT_Warblade_anim/outputs/07_weapon_pass/warblade_weapon_S.
 
 **📝 Prompt (her yön için):**
 ```
-Pixel art ranger character, body-only, no weapon, 128x128 sprite on 252x252 canvas. High top-down view 30-35°. Lean agile build, hooded cloak, cold blue undertunic (#7BA7BC), forest green cloak (#3A4A38 / #4E5E48). Quiver visible on back (leather strap). Palette: cloak green #3A4A38 / #4E5E48, leather #3A2818 / #5A4028, accent blue #7BA7BC, skin #C9A084. Light leather armor, flexible stance, feet hip-width. Hood up, partial face shadow. NO weapon held. [FACING S | E | N | W]. Hard pixel edges, no anti-aliasing.
+Pixel art ranger character, body-only, no weapon, character occupies ~50% of canvas height (~128px tall) centered on a 252x252 transparent canvas. Wide transparent padding on all sides for animation headroom — DO NOT fill the canvas. High top-down view 30-35°. Lean agile build, hooded cloak, cold blue undertunic (#7BA7BC), forest green cloak (#3A4A38 / #4E5E48). Quiver visible on back (leather strap). Palette: cloak green #3A4A38 / #4E5E48, leather #3A2818 / #5A4028, accent blue #7BA7BC, skin #C9A084. Light leather armor, flexible stance, feet hip-width. Hood up, partial face shadow. NO weapon held. [FACING S | E | N | W]. Hard pixel edges, no anti-aliasing.
 ```
 
 **💾 Kaydet:**
@@ -812,9 +892,11 @@ STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/02_idle_hit_death/ranger_idle_S.png
 
 ## ✅ Adım 28: Ranger Hurt (4 yön)
 
+**⚙️ Ayarlar:** **4 frame** (tool çift zorunlu)
+
 **📝 Prompt:**
 ```
-Flinch sideways, 3 frames. Light agile recoil — body twists rather than falls back. Cape flares from motion. Frame 1: idle. Frame 2: peak twist (45° body turn). Frame 3: recovery.
+Flinch sideways, 4 frames. Light agile recoil — body twists rather than falls back. Cape flares from motion. Frame 1: idle. Frame 2: peak twist (45° body turn). Frame 3: hold turn. Frame 4: recovery.
 ```
 
 **💾 Kaydet:**
@@ -933,7 +1015,7 @@ STAGING/PIXELLAB/05_NEXT_Ranger_anim/outputs/07_weapon_pass/ranger_weapon_S.png 
 
 **📝 Prompt:**
 ```
-Pixel art shadowblade assassin character, body-only, no weapon, 128x128 sprite on 252x252 canvas. High top-down view 30-35°. Slim agile build, full dark hooded cloak, body almost entirely silhouetted in dark with violet undertones. Palette: cloak black-purple #1A0E2A / #2A1A3A, mid #3A2A4E, accent violet #5A2A8A, skin partial visible #C9A084 (only chin and jawline below hood), leather straps #3A2818. Crouched ready stance, body lean forward, weight on balls of feet. Hood deep — no eyes visible (silhouette only). NO weapon, NO embedded glow. [FACING S | E | N | W]. Hard pixel edges.
+Pixel art shadowblade assassin character, body-only, no weapon, character occupies ~50% of canvas height (~128px tall) centered on a 252x252 transparent canvas. Wide transparent padding on all sides for animation headroom — DO NOT fill the canvas. High top-down view 30-35°. Slim agile build, full dark hooded cloak, body almost entirely silhouetted in dark with violet undertones. Palette: cloak black-purple #1A0E2A / #2A1A3A, mid #3A2A4E, accent violet #5A2A8A, skin partial visible #C9A084 (only chin and jawline below hood), leather straps #3A2818. Crouched ready stance, body lean forward, weight on balls of feet. Hood deep — no eyes visible (silhouette only). NO weapon, NO embedded glow. [FACING S | E | N | W]. Hard pixel edges.
 ```
 
 **💾 Kaydet:**
@@ -959,9 +1041,11 @@ STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/02_idle_hit_death/shadowblade_
 
 ## ✅ Adım 37: Shadowblade Hurt (4 yön)
 
+**⚙️ Ayarlar:** **4 frame** (tool çift zorunlu)
+
 **📝 Prompt:**
 ```
-Sharp recoil, 3 frames. Body twists hard from impact, cloak flares dramatically. Violet accent (#5A2A8A) flashes on cloak edge. Frame 1: idle. Frame 2: peak recoil (cloak full flare, body 60° twist). Frame 3: recovery.
+Sharp recoil, 4 frames. Body twists hard from impact, cloak flares dramatically. Violet accent (#5A2A8A) flashes on cloak edge. Frame 1: idle. Frame 2: peak recoil (cloak full flare, body 60° twist). Frame 3: hold recoil. Frame 4: recovery.
 ```
 
 **💾 Kaydet:**
@@ -1077,7 +1161,7 @@ STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/outputs/07_weapon_pass/shadowblade_wea
 
 **📝 Prompt:**
 ```
-Pixel art elementalist mage character, body-only, no weapon, NO book, NO staff (hands free for spell gestures), 128x128 sprite on 252x252 canvas. High top-down view 30-35°. Long flowing robe, hood NOT up (face visible — confident mage), short hair. Robe palette: deep blue-grey #2A3848 / #3E4C5E / #525E74 (cool neutral default — element accent only on spell anims). Trim accent: faint cool #B8C8D0. Sash at waist #3A2818 leather. Skin #C9A084. Body pose: slightly forward, hands held at chest level, palms angled outward (ready to cast). Robe hem sways. NO weapon, NO held object. [FACING S | E | N | W]. Hard pixel edges, no anti-aliasing.
+Pixel art elementalist mage character, body-only, no weapon, NO book, NO staff (hands free for spell gestures), character occupies ~50% of canvas height (~128px tall) centered on a 252x252 transparent canvas. Wide transparent padding on all sides for animation headroom — DO NOT fill the canvas. High top-down view 30-35°. Long flowing robe, hood NOT up (face visible — confident mage), short hair. Robe palette: deep blue-grey #2A3848 / #3E4C5E / #525E74 (cool neutral default — element accent only on spell anims). Trim accent: faint cool #B8C8D0. Sash at waist #3A2818 leather. Skin #C9A084. Body pose: slightly forward, hands held at chest level, palms angled outward (ready to cast). Robe hem sways. NO weapon, NO held object. [FACING S | E | N | W]. Hard pixel edges, no anti-aliasing.
 ```
 
 **💾 Kaydet:**
@@ -1103,9 +1187,11 @@ STAGING/PIXELLAB/07_NEXT_Elementalist_anim/outputs/02_idle_hit_death/elementalis
 
 ## ✅ Adım 46: Elementalist Hurt (4 yön)
 
+**⚙️ Ayarlar:** **4 frame** (tool çift zorunlu)
+
 **📝 Prompt:**
 ```
-Stagger backwards, 3 frames. Mage recoils, hands pulled to chest defensively, robe flares from sudden motion. Frame 1: idle. Frame 2: peak recoil (body bent backward 30°, hands up). Frame 3: recovery stance.
+Stagger backwards, 4 frames. Mage recoils, hands pulled to chest defensively, robe flares from sudden motion. Frame 1: idle. Frame 2: peak recoil (body bent backward 30°, hands up). Frame 3: hold backward. Frame 4: recovery stance.
 ```
 
 **💾 Kaydet:**

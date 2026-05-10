@@ -1,16 +1,17 @@
 # CURRENT STATUS
-**2026-05-10 — S47 | Aktif Sprint: Faz 1-2 | PixelLab pipeline kanonik + Infamous Keepers analiz**
+**2026-05-10 — S47 (devam) | Aktif Sprint: Faz 1-2**
 
-> **Son session (2026-05-10):** PixelLab MCP eklendi, 57 dosyalık docs konsolide. PRODUCTION_PLAYBOOK + GUIDE v2 kanonik kararlara revize (252×252 canvas, pixel budget formülü, 8-frame attack, animate_character MCP yasak, RIMA prompt standartları, wall tool düzeltmesi). Infamous Keepers Steam karşılaştırması — %92 sistem eşleşme, 16 aksiyon + 4 design decision tetiklendi.
+> **S47 bu session özet:**
+> - **PRODUCTION_PLAYBOOK NLM-FIX:** 4 düzeltme (hurt 4 frame, S-L Pro grid mantığı, Tileset Standard, Interpolate v2 252px doğrulandı) + Bölüm F LOCKED (padding %60, Final Boss 256+PPU=32) + Codex NEW/PRO/FLUX directive.
+> - **Lint conflict cleanup:** 5 HIGH (GDD Paladin → 10-class roster, SINIF_VE_SKILL Lancer DLC, STYLE_BIBLE boss 384px, GUIDE_v2 hurt 3 frame, DUNGEON_ASSETS) + 5 stale NLM source silindi.
+> - **rima-codex ÇÖZÜLDÜ:** Agent definition baştan beri `bare cx` (PATH'te yok) + sandbox/stdin pipe sorunları. Tam path + 3 flag + sıkı disiplin → 3-hesap test geçti (codex 0.130.0).
+> - **Reasoning effort kontrolü:** `--config model_reasoning_effort=<low|medium|high|xhigh>` ile görev türüne göre ayarlanır (`-c` short form çakışıyor, long form zorunlu).
 
-> **⚠️ Son Bulgular (UI doğrulandı):**
-> - **Wall (64×128):** Map'teki Create Tiles Pro Isometric max 32×32 — yetersiz. **Create M-XL Image (Flux)** kullan, 256×256 canvas, 4×2 grid → 8 variant tek üretimde
-> - Adım 1 (W1) yeniden yazıldı bu doğrultuda. Adım 2-3 (W2/OBW) henüz aynı düzeltme yapılmadı
-> - Floor (64×64) Create Tiles Pro ile çalışıyor — değişiklik yok
-> - **Sıradaki session aksiyonları:**
->   1. NLM sync (PRODUCTION_PLAYBOOK + GUIDE v2 + memory)
->   2. NLM ile PixelLabDocs/ üzerinden detay çekme
->   3. Codex'e batch review yaptırma (Adım 2-16 aynı patern düzeltme)
+> **Sıradaki session:**
+> 1. Wall Adım 2-3 (W2/OBW) Adım 1 paterniyle düzeltme
+> 2. PlayMode 4 fail (mob spawn eksik)
+> 3. Asset üretimi başlat — 4 base prompt padding-ready
+> 4. tiles_raw/yeni/ 6 sheet process + Unity import (komutlar aşağıda)
 
 ---
 

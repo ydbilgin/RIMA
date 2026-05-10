@@ -110,7 +110,7 @@ Tüm karakter animasyonları için MCP kullanılmaz.
 |---|---|---|---|---|
 | Karakter base 4-yön | 252×252 | 128×128 (crop) | 1 frame × 4 yön | Body-only, silahsız |
 | Idle | 252×252 | 128×128 | 6-8 frame | Subtle breathing |
-| Hit react | 252×252 | 128×128 | 3 frame | Flinch |
+| Hit react (Hurt) | 252×252 | 128×128 | **4 frame** (tool çift sayı zorunlu) | Flinch — NLM-FIX 2026-05-10 |
 | Death | 252×252 | 128×128 | 6 frame | Collapse |
 | Run cycle | 252×252 | 128×128 | 6 frame | Brian's Extreme Pose |
 | Attack (LMB/RMB) | 252×252 | 128×128 | **8 frame (PEAK paylaşılır)** | Bütçe kuralı (0.5) |
@@ -227,7 +227,7 @@ Her obje setinden birini approve et → sonraki objelerde style reference olarak
 ### 7.1 Adım Akışı (her sınıf için)
 1. **Base 4-yön** (Create Character Pro New) — body-only, silahsız, 252×252, 4 yön ayrı (S/E/N/W)
 2. **Idle** (Animate with Text NEW) — 6-8 frame, "subtle breathing motion"
-3. **Hit react** (Animate with Text NEW) — 3 frame, "flinch backwards"
+3. **Hit react** (Animate with Text NEW) — **4 frame** (tool çift sayı zorunlu — 4/6/8/10/12/14/16), "flinch backwards"
 4. **Death** (Animate with Text NEW) — 6 frame, "collapse to ground"
 5. **Run cycle** (Animate with Text NEW + Interpolate NEW)
    - 12 frame al → en uç poz seç (Pose A)
@@ -379,7 +379,7 @@ Her üretim sonrası:
 3. Frame: 6-8, Yön sayısı: 3 (S, E, N) → 3 gen call
 4. Prompt: PLAYBOOK Adım 18
 
-**Adım B1.3: Hurt (3 frame)** — PLAYBOOK Adım 19
+**Adım B1.3: Hurt (4 frame)** — PLAYBOOK Adım 19 (tool çift sayı zorunlu)
 **Adım B1.4: Death (6 frame)** — PLAYBOOK Adım 20
 **Adım B1.5: Walk Cycle (Brian's Extreme Pose)**
 1. **Animate with Text NEW** ile 12 frame walk al → en uç poz seç (Pose A)

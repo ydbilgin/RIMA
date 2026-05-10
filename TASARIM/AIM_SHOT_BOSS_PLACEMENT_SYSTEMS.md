@@ -108,12 +108,20 @@ Primarily relevant for: Elementalist, Ranger (trap placement), Summoner, Hexer.
 - Production: South (1 set) + South-East (1 set, mirrored for SW in Unity)
 - North-facing almost never visible to player in isometric view -> omitted
 
-### Boss Canvas Sizes
-| Boss Type | Canvas | PPU | Game Size |
-|---|---|---|---|
-| Miniboss | 256px | 128 | 2x player |
-| Act Boss | 256px | 64 | 4x player |
-| Final Boss | 512px | 64 | Large/imposing |
+### Boss Canvas Sizes (LOCKED 2026-05-10 — REVIZE)
+
+> **Why revise:** Eski tablo Final Boss için 512px canvas istiyordu. **`animate-with-text-new` max 256×256 destekliyor — 512 hareketli sprite ÜRETİLEMEZ.** Devasa boss hissi PixelLab'de değil **Unity PPU/Transform.Scale** ile verilir (`pixellab_api_reliability.md` + Gemini önerisi + NLM doğrulaması, 2026-05-10).
+>
+> **Kural:** Tüm hareketli boss'lar 252×252 veya 256×256 canvas'ta üretilir, Unity'de PPU düşürülerek büyütülür. PixelLab v3 motoru zaten karakter etrafına ~%40 transparent padding bırakır (`mcp_docs.md`: "*character will be ~60% of canvas height*"). Filter Mode = **Point** (scale-up'ta bulanıklaşmaz).
+
+| Boss Type | PixelLab Canvas | Karakter (gerçek piksel) | Unity PPU | Unity unit | Player'a oran |
+|---|---|---|---|---|---|
+| Miniboss | 252×252 | ~128px | 128 | ~1.0 | 1.5-2× hissi |
+| Act Boss | 252×252 | ~150-160px | 64 | ~2.5 | 3-4× hissi |
+| **Final Boss** | **252×252** (asla 512+) | ~160-168px | **32** | ~5.0 | **6× hissi (devasa)** |
+| Architect canavar form | 256×256 | ~160-168px | 32 | ~5.2 | 6× (memory LOCKED) |
+
+**Pixel-perfect physics için PPU=16 altına inme.** Final Boss PPU=32 sweet spot.
 
 ### Boss Animation Set (per boss)
 - idle (loop, 3-4 frames)

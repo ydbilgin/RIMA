@@ -32,7 +32,8 @@ Unity scale her zaman 1x. Boyut PixelLab'da verilir, Unity'de degistirilmez.
 | **Normal grunt** | **128-144px** | 1.0-1.1x | Standart dusmanlar, player'dan hafif bulky |
 | Agir / Elite | **160-176px** | 1.25-1.4x | Odaya girince fark edilen tehdit (Shard Walker) |
 | **Mini-Boss** | **180-200px** | 1.4-1.5x | Penitent Sovereign Phase 0 |
-| **Boss** | **256-384px** | 2.0-3.0x | Ekrana hakim (Phase 1-2) |
+| **Boss (üretim)** | **252-256px** (max) | — | PixelLab `Animate with Text NEW` max 256, asla 384+ değil |
+| **Boss (Unity ekran)** | (PPU=64 → 256→512px görsel) / (PPU=32 → 256→1024px görsel "devasa") | 2.0-6.0x | Devasa hissi Unity scale ile, PixelLab'i zorlama |
 | Floor tile | **128x64** | — | Isometric diamond |
 | Wall tile | **128x192** | — | Two visible faces |
 

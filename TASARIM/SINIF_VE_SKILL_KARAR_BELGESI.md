@@ -125,20 +125,11 @@ PixelLab rule: `RIMA_skill_sheets/*.png` concept/moodboard referansidir, product
 
 ---
 
-## İSİM TEMATİĞİ — 3 SEÇENEK
+## ~~İSİM TEMATİĞİ — 3 SEÇENEK~~ → ARŞİV (Karar #9 LOCKED 2026-04-11)
 
-Şu an isimler karışık: Warblade (silah ismi), Elementalist (rol ismi), Rogue (D&D generic), Brawler (çok kasual).
+> **Sonuç:** Seçenek C (Hybrid) seçildi + Ronin/Gunslinger/Brawler eklendi. Aşağıdaki 3 seçenek tablosu eski brainstorm — Paladin/Lancer/Crusader artık aktif kadroda yok.
 
-### Seçenek A — "Dark Action" (Koyu/Epik)
-Warblade → **Juggernaut** | Elementalist → **Arcanist** | Rogue → **Shadowblade** | Ranger → **Strider** | Brawler → **Ravager** | Paladin → **Templar** | Summoner → **Necromancer** | Hexer → **Hexer** | Hız → **Tempest** | Kan → **Hemomancer**
-
-### Seçenek B — "MMORPG Classic" (Tanıdık)
-Warblade → **Warrior** | Elementalist → **Mage** | Rogue → **Rogue** | Ranger → **Hunter** | Brawler → **Berserker** | Paladin → **Paladin** | Summoner → **Summoner** | Hexer → **Warlock** | Hız → **Drifter** | Kan → **Bloodmage**
-
-### Seçenek C — "Hybrid" (Şu anki tona yakın)
-Warblade → **Warblade** | Elementalist → **Elementalist** | Rogue → **Shadowblade** | Ranger → **Ranger** | Brawler → **Ravager** | Paladin → **Paladin** | Summoner → **Summoner** | Hexer → **Hexer** | Hız → **Drifter** | Kan → **Hemomancer**
-
-> Aşağıda sınıflar Seçenek C isimleriyle yazıldı — karar sonrası toplu değiştirilebilir.
+**Aktif 10-class roster (LOCKED MASTER #4):** Warblade / Elementalist / Shadowblade / Ranger / Ravager / Ronin / Gunslinger / Brawler / Summoner / Hexer.
 
 ---
 
@@ -558,20 +549,9 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 
 ---
 
-## 🗡️ POST-LAUNCH: LANCER (Mızrak) — KONSEPT
+## ~~POST-LAUNCH: LANCER~~ → İPTAL (2026-05-10)
 
-**Neden post-launch:** Faz 3 zaten 4 class taşıyor. Ama niche tamamen boş: kimse optimal mesafe oynamıyor.
-
-**Core Fantasy:** "Yaklaşma. Uzakta kal. İkisi de ölüm."
-**Kaynak:** Flow (0-100) — 3-5m arası düşman = +15/sn; <2m = −10/sn; >6m = yalnız throw'dan giriyor. Flow 100: sonraki saldırı ×2 hasar + 30 Flow iade
-
-**[V] Burst:** SPEAR STORM — Flow 100: 5s odadaki herkesten hızla geçiş, enerji izi bırakır
-
-**🖱️ Temel:**
-- **LMB — Thrust:** Hızlı mızrak saplaması. 2-4m = tam hasar. <1m = küt pommel (yarı hasar). 3 ardışık → spinning sweep (AoE).
-- **RMB — Throw & Recall:** Mızrağı fırlat (2-6m), isabet = kısa impale. 0.5s sonra geri çağırılır. Throw sırasında LMB = mızrağa dash.
-
-**Placement:** Tempest + Hemomancer + Lancer = 3 post-launch DLC paketi
+> **Why iptal:** MASTER_KARAR_BELGESI #1 ve #2 (2026-04-11) Lancer/Crusader'ı tamamen kaldırdı. MASTER #5 post-launch DLC'leri **Tempest + Hemomancer** olarak kilitledi — Lancer dahil değil. Bu bölüm eski iterasyondan kalmıştı, NLM lint 2026-05-10 yakaladı, silindi.
 
 ---
 
