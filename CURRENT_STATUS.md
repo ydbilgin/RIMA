@@ -1,112 +1,107 @@
-# CURRENT STATUS
-**2026-05-10 — S48 | Aktif Sprint: Faz 1-2**
+**2026-05-11 — S55 sonu | Aktif Sprint: Faz 1-2**
 
-> **S48 bu session özet:**
-> - **PlayMode 4 fail ÇÖZÜLDÜ (commit 88f084d):** Root cause = scene'de class adı yanlış (RuntimeRoomManager→LegacyRuntimeRoomManager) + m_Enabled=0. YAML fix + Codex coroutine lifecycle (roomRunId) commit edildi. QC: PARTIAL PASS — Unity'de verify gerekiyor.
-> - **Statusline dinamik fix:** terminal genişliğine göre adaptif (>=110 full, >=90 medium, <80 compact). Küçük pencerede artık taşmıyor.
+> **S55 bu session ozet:**
+> - **PROMPT.md anchor workflow rewrite DONE:** 4 sinif (warblade/ranger/shadowblade/elementalist) PIXELLAB_OUTPUTS PROMPT.md dosyalari anchor-based workflow'a gecirildi. "Base body only / silahsiz" kaldirildi. Commit e717063.
+> - **Concept art batch 1+2 DONE:** 12 sahne uretildi (4 karakter+mob sahnesi commit 25d9fb8, 8 otonom sahne commit 7b0d291). PIXELLAB_OUTPUTS/concept_art/ altinda.
+> - **D1 LOCKED:** Mob infighting yok. Penitent Bruiser anti-heal aura faction-blind (%50 azaltma, 3m radius).
+> - **D2 LOCKED:** Terrain hazard sistemi var — hikayeye uygun. F1: rift catlaklari, F2: coken zemin, F3: lav/aktif rift yirtigi.
+> - **D3 LOCKED:** Komsu oda peek — sadece harita parcasi edinilmisse VEYA oda daha once temizlenmisse gorunur.
+> - **D4 LOCKED:** Hub practice alani var, Hades'ten farkli tarz. Skill test + dummy.
+> - **Hub design vizyon:** Safe zone, NPC alani, karakter secim odasi (fiziksel dunya "Reclaim" mekanigi — fikir kaydi), skill test ayni alanda. Karakter secimi her run degistirilebilir, heat per-character (STS mantigi).
 
-> **Sıradaki session:**
-> 1. Unity'de PlayMode testleri çalıştır (4 fail → 0 verify)
-> 2. tiles_raw/yeni/ 6 sheet process + Unity import (komutlar aşağıda)
-> 3. Asset üretimi başlat — 4 base prompt padding-ready
-> 4. Wall Adım 2-3 (W2/OBW) düzeltme
-
----
-
-## Açık İşler (Öncelik Sırasına Göre)
-
-### 🔴 Yüksek Öncelik
-
-1. **PixelLab üretim — TEK GİRİŞ DOSYASI:** `GUIDES/PIXELLAB_PRODUCTION_GUIDE_v2.md`
-   - **Bölüm 0** = kanonik kurallar (252×252 canvas, pixel budget formülü, MCP yasakları)
-   - **Bölüm 11** = adım adım tıklama rehberi (Faz A: tile/obstacle → Faz B: 4 sınıf anim)
-   - Detaylı prompt'lar için → `PIXELLAB_OUTPUTS/PRODUCTION_PLAYBOOK.md` (51 adım)
-   - Tool detayı için → `PixelLabDocs/<tool>.md` (57 dosya)
-   - **MCP kuruldu:** `pixellab` server — tile/static prop için OK; karakter animasyonu YASAK
-   - **Üretim sırası:** F1→F2→F3 → Transitions → W1→W2→OBW → 8 obstacle → 4 sınıf anim sırayla
-
-2. **tiles_raw/yeni/ sheets process + import** — 6 sheet hazır, process edilmedi:
-   ```
-   python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/f1_sheet.png --output Assets/Art/Tiles/Act1/F1 --cols 4 --rows 4 --width 64 --height 64 --prefix f1_
-   python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/f2_sheet.png --output Assets/Art/Tiles/Act1/F2 --cols 4 --rows 4 --width 64 --height 64 --prefix f2_
-   python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/f3_sheet.png --output Assets/Art/Tiles/Act1/F3 --cols 4 --rows 4 --width 64 --height 64 --prefix f3_
-   python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/w1_connector_set.png --output Assets/Art/Tiles/Act1/W1 --cols 4 --rows 2 --width 64 --height 96 --prefix w1_conn_
-   python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/w2_connector_set.png --output Assets/Art/Tiles/Act1/W2 --cols 4 --rows 2 --width 64 --height 96 --prefix w2_conn_
-   python STAGING/process_tiles.py --source STAGING/tiles_raw/yeni/decal_f1_sheet.png --output Assets/Art/Tiles/Act1/Decal --cols 2 --rows 2 --width 64 --height 64 --prefix decal_f1_
-   ```
-   Sonra: Unity reimport → DemoRoomPainter görsel QC → w1_conn style uyumu kontrol
-
-3. **PlayMode 4 fail — VERIFY GEREKİYOR** — Root cause fix commit edildi (88f084d). Unity'de `Run Tests > PlayMode` ile doğrula. 4 test: MultiRoom_ClearRoom1, RewardPickup_Interact, LegacyRuntimeRoomManager_Room1Starts, RoomLoop_KillAllEnemies.
-
-### 🟡 Orta Öncelik
-
-4. **NLM sync** — `PIXELLAB_OUTPUTS/README.md` henüz NLM'de yok
-   - `PRODUCTION_PLAYBOOK.md` ve `PixelLabDocs/index.md` sync edildi (2026-05-10)
-   - Mevcut script `STAGING/` root maxdepth=1; alt klasör scope eklenmesi lazım
-
-5. **Animasyonlara başla** (tile üretimi sonrası) — 4 ana class, v1 sprint:
-   - Warblade (simetrik, 3 yön+flip) → Ranger → Shadowblade → Elementalist
-   - Her class için: `PIXELLAB_OUTPUTS/{warblade,ranger,shadowblade,elementalist}/` klasörü hazır
-
-6. **Lore rework** (4 yeni dosya + 4 küçük edit):
-   - `TASARIM/STORY_RUN_PROGRESSION.md` — 9-run NPC tanışma + lore drip
-   - `TASARIM/HUB_DESIGN_v1.md` — Hub mimari + 4 NPC
-   - 3-ending cutscene detayı (KAL/KIR/TAŞI)
-   - Lore drip death recap pipeline
-
-7. **Infamous Keepers analizinden çıkan kritik aksiyonlar** (Faz 1-2'ye eklendi):
-   - Damage number visual hierarchy spec (Normal/Commit/Break)
-   - Damage number color coding (element/status'a göre renk)
-   - FloatingTextSpawner anti-overlap + tick stacking
-   - Character shadow spec (runtime drop shadow önerisi)
-   - Detay: `STAGING/refs/infamous_keepers/self_review.md` E bölümü
-
-### 🟠 Karar Bekleyen Design Decisions (Infamous Keepers tetikledi)
-
-D1. **Mob faction system / infighting** var mı? (Hollow Knight tarzı)
-D2. **Terrain hazard system** (spike trap, acid pool, crumbling floor)?
-D3. **Adjacent room peek visibility** — kapı arkası rendering?
-D4. **Hub combat sub-area** — Hub'ın yan odası combat olur mu?
-
-### 🔧 Tooling Sorunları
-
-### 🟢 Düşük Öncelik / Backlog
-
-8. **Map Fragment + DungeonGraph** — spec hazır, Codex dispatch edilebilir (cx fix sonrası)
-9. **MAKEUP_BACKLOG 8 eksiklik** — polish phase
-10. **Cinematic Layer A/B/C/D** — Faz 2-5
-11. **Wall architectural features** — Production Playbook'a Adım 17 (gargoyle/forge/niche)
-12. **Chokepoint Combat room template** — Room template kataloğuna variant
-13. **Background NPC layer in hub** — 5-8 silüet (yaşam hissi)
+> **Siradaki session (S56):**
+> 1. Room Designer F2 — Batch 1 Codex dispatch (T1 RoomBlueprint + T2 BiomeType + T3 FloorVariantPainter)
+> 2. Hub design detaylandirma (HUB_DESIGN_v1 backlog'dan cikar, netlestir)
+> 3. Terrain hazard spec yazimi (D2 implement icin)
+> 4. /nlm-sync (S55 karar ve dosyalari)
 
 ---
 
-## LOCKED Kararlar Özeti (referans)
+## Acik Isler (Oncelik Sirasina Gore)
+
+### Yuksek Oncelik
+
+1. **Room Designer F2 -- Batch 1** (Codex dispatch hazir)
+   - T1: RoomBlueprint -- noiseSeed, variantIndex byte[], overrideVariantIndex, roomWidth/Height/Origin
+   - T2: BiomeType enum (Keep/Crypt/Volcanic)
+   - T3: FloorVariantPainter -- domain-warped Perlin (warpFreq 0.05, zoneFreq 0.05, detailFreq 0.22), BustClusters
+   - Dispatch order: T1+T2+T3 paralel -> compile -> QC -> Batch 2
+
+2. **Room Designer F2 -- Batch 2** (Batch 1 compile sonrasi)
+   - T4: RoomMetadata panel (roomId, biome, gateCount, noiseSeed, Reseed button)
+   - T5: WallRuleTileBrush + WallOverridePanel (8 variant, auto/manual toggle)
+   - T6: PerlinFloorBrush (tilemap integration, domain-warp bake)
+
+3. **Room Designer F2 -- Batch 3+4** (sonraki session)
+   - T8: Layer panel refresh, T9: Reseed wiring, T10: Object Library, T11: Template Wizard, T12: RoomSaver export
+
+### Orta Oncelik
+
+4. **Warblade anim uretimi** -- ANIMASYON_URETIM.md hazir, PIXELLAB_OUTPUTS/warblade/ referans
+   - Eraser Pass -> Idle -> Hurt -> Death -> Walk -> Attack LMB/RMB -> Dash -> Weapon Pass
+
+5. **Tile uretimi** -- URETIM_REHBERI.md hazir
+   - F1 floor (16 var, Create Tiles Pro) -> F2 -> F3 -> Trans
+   - W1 wall (8 variant, Create Tile Isometric)
+   - Obstacles (Pillar first -> style anchor)
+
+### Dusuk Oncelik / Backlog
+
+- Lore rework (STORY_RUN_PROGRESSION, HUB_DESIGN_v1, 3-ending cutscene)
+- Map Fragment + DungeonGraph -- spec hazir
+- MAKEUP_BACKLOG 8 eksiklik -- polish
+- Cinematic Layer A/B/C/D -- Faz 2-5
+
+---
+
+## LOCKED Kararlar Ozeti (referans)
 
 | Alan | Karar |
 |---|---|
-| Tile chromakey | #00FF00, filter: G>200 AND R<60 AND B<60, binary alpha snap |
-| Duvar boyutu (PixelLab) | 64×128 (32×64 base + 2x nearest-neighbor upscale) |
-| Zemin boyutu | 64×64, 16 var |
-| Anim view | High top-down (~30-35°, Hades match) |
-| Anim yönler | 4 yönlü + yatay mirror = 6 unique |
-| v1 sprint sınıfları | Warblade / Ranger / Shadowblade / Elementalist (kalan 6 → v2) |
+| **Mob infighting** | **Hayir. Penitent Bruiser aura faction-blind (%50 heal azaltma, 3m) — 2026-05-11 LOCKED** |
+| **Terrain hazard** | **Var — F1 rift catlagi / F2 coken zemin / F3 lav+rift — hikayeye uygun — 2026-05-11 LOCKED** |
+| **Room peek** | **Sadece harita parcasiyla VEYA cleared oda — 2026-05-11 LOCKED** |
+| **Hub practice** | **Skill test + dummy, Hades'ten farkli — 2026-05-11 LOCKED** |
+| **Karakter secimi** | **Her run degistirilebilir, heat per-character (STS mantigi) — 2026-05-11 LOCKED** |
+| **Wall tile variety** | **Rule Tile hybrid (auto-connect + manual override) -- 2026-05-11 LOCKED** |
+| **Floor tile variety** | **Domain-warped Perlin 3-katman, edit-time bake, template-fixed -- 2026-05-11 LOCKED** |
+| **Tile kenar invariance** | **3px border = mortar #1A1C20 only, accent merkeze -- 2026-05-11 LOCKED** |
+| **Room Designer vizyon** | **MapForge -- genel arac, isometric P0, topdown/sidescroller template -- 2026-05-11** |
+| **PIXELLAB klasor** | **PIXELLAB_OUTPUTS/ (kalici) -- STAGING/PIXELLAB kaldirildi -- 2026-05-11** |
+| Map editor | Custom Unity EditorWindow (RIMA Room Designer) -- 2026-05-10 LOCKED |
+| Concept art stili | Pixel art ZORUNLU, painterly YASAK -- anchor metadata.json referans |
+| PixelLab MCP yonetimi | Sonnet dogrudan cagri, Codex pre-review + post-QC -- 2026-05-10 |
+| Tile chromakey | #00FF00, filter G>200 AND R<60 AND B<60, binary alpha snap |
+| Duvar boyutu (PixelLab) | 64x128 (32x64 base + 2x nearest-neighbor upscale) |
+| Zemin boyutu | 64x64, 16 var |
+| Anim view | High top-down (~30-35 deg, Hades match) |
+| Anim yonler | 8 yon ayri (flip yok) |
+| v1 sprint siniflari | Warblade / Ranger / Shadowblade / Elementalist (kalan 6 -> v2) |
 | Dungeon mimari | Prefab-per-room, Hades-style closed arena |
 | Skill keybind | LMB/RMB + Q/E/R/F + V(ult) + Space(dash) |
 | Shadow Echo | 3 katman (aura+phantom+UI flash), cyan #00FFCC, 50 havuz |
-| Act 1 map | 15 node procedural (topoloji sabit, içerik random) |
+| Act 1 map | 15 node procedural (topoloji sabit, icerik random) |
 | Boss posture | Faz1=700 / Faz2=850 / Faz3=1000 |
+| Final Boss canavar | 252-256px PixelLab + PPU=32 (Faz 4 = 96px insan formu) |
 
 ---
 
 ## Mimari Referanslar
 
-- Tile pipeline: `STAGING/process_tiles.py`
-- PixelLab playbook: `PIXELLAB_OUTPUTS/PRODUCTION_PLAYBOOK.md`
-- Animation Bible: `TASARIM/ANIMATION_BIBLE.md`
-- Skill System v2: `TASARIM/SKILL_SYSTEM_v2.md`
-- Shadow Echo: `TASARIM/SHADOW_ECHO_MATRIX.md`
-- Act 1 map: `TASARIM/dungeon_act1_map.md`
-- Damage calc: `TASARIM/DAMAGE_CALCULATION.md`
-- Mob rules: `TASARIM/MOB_COMPOSITION_RULES.md`
-- Art pipeline: `GUIDES/RIMA_MASTER_ART_PIPELINE.md`
+- **Room Designer plan:** `MEMORY/project_room_designer_plan.md`
+- **Tile variety sistemi:** `MEMORY/project_tile_variety_system.md`
+- **Domain warp:** `MEMORY/project_domain_warp_tile_system.md`
+- **MapForge vizyon:** `MEMORY/project_map_tool_vision.md`
+- **PixelLab uretim:** `PIXELLAB_OUTPUTS/` (floors/ walls/ obstacles/ warblade/ ranger/ shadowblade/ elementalist/)
+- **Uretim rehberi:** `STAGING/PIXELLAB/URETIM_REHBERI.md`
+- **PixelLab MCP vs Manual:** `MEMORY/project_pixellab_mcp_vs_manual.md`
+- **Visual identity bible:** `MEMORY/project_rima_visual_identity.md`
+- **PixelLab playbook:** `PIXELLAB_OUTPUTS/PRODUCTION_PLAYBOOK.md`
+- **Animation Bible:** `TASARIM/ANIMATION_BIBLE.md`
+- **Skill System v2:** `TASARIM/SKILL_SYSTEM_v2.md`
+- **Shadow Echo:** `TASARIM/SHADOW_ECHO_MATRIX.md`
+- **Act 1 map:** `TASARIM/dungeon_act1_map.md`
+- **Damage calc:** `TASARIM/DAMAGE_CALCULATION.md`
+- **Mob rules:** `TASARIM/MOB_COMPOSITION_RULES.md`
+- **Art pipeline:** `GUIDES/RIMA_MASTER_ART_PIPELINE.md`
+- **Anchor karakterleri:** `Characters/anchors/<class>/metadata.json` (10 sinif)
