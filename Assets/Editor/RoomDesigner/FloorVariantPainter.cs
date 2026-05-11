@@ -38,7 +38,6 @@ namespace RIMA.Editor.RoomDesigner
                     float wx = Mathf.PerlinNoise((x + 5.2f + seedOffset) * WarpFreq, (y + 1.3f + seedOffset) * WarpFreq) * WarpStrength;
                     float wy = Mathf.PerlinNoise((x + 9.2f + seedOffset) * WarpFreq, (y + 2.8f + seedOffset) * WarpFreq) * WarpStrength;
                     float zone = Mathf.PerlinNoise((x + wx) * ZoneFreq, (y + wy) * ZoneFreq);
-                    float detail = Mathf.PerlinNoise((x + wx + seedOffset) * DetailFreq, (y + wy + seedOffset) * DetailFreq);
 
                     int tier;
                     if (zone < AccentThreshold)
@@ -92,7 +91,6 @@ namespace RIMA.Editor.RoomDesigner
                     float wx = Mathf.PerlinNoise((x + 5.2f + seedOffset) * WarpFreq, (y + 1.3f + seedOffset) * WarpFreq) * WarpStrength;
                     float wy = Mathf.PerlinNoise((x + 9.2f + seedOffset) * WarpFreq, (y + 2.8f + seedOffset) * WarpFreq) * WarpStrength;
                     float zone = Mathf.PerlinNoise((x + wx) * ZoneFreq, (y + wy) * ZoneFreq);
-                    float detail = Mathf.PerlinNoise((x + wx + seedOffset) * DetailFreq, (y + wy + seedOffset) * DetailFreq);
 
                     int tier;
                     if (zone < AccentThreshold)
