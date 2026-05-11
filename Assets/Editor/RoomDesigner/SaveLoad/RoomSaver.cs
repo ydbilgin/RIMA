@@ -51,7 +51,6 @@ namespace RIMA.Editor.RoomDesigner
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
                 bp.prefab = prefab;
                 bp.roomId = roomId;
-                bp.biome = biome.ToString();
 
                 var link = prefab.GetComponent<RoomPrefabLink>() ?? prefab.AddComponent<RoomPrefabLink>();
                 link.blueprint = bp;

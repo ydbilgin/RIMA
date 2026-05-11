@@ -11,7 +11,6 @@ namespace RIMA.Editor.RoomDesigner
         private const float WarpFreq = 0.05f;
         private const float WarpStrength = 4.0f;
         private const float ZoneFreq = 0.05f;
-        private const float DetailFreq = 0.22f;
 
         public static bool BakeVariants(Tilemap floorTilemap, RoomBlueprint bp, TileBase[] variantSet)
         {
