@@ -304,7 +304,18 @@ namespace RIMA.Editor.RoomDesigner
 
             try
             {
-                var saved = RoomSaver.Save(canvas.StageRoot, "test_room", BiomeType.Keep);
+                string roomId = "room_001";
+                BiomeType biome = BiomeType.Keep;
+                int noiseSeed = 0;
+                int gateCount = 2;
+
+                var metaPanel = rightPanel?.Q<RoomMetadataPanel>(RoomMetadataPanel.PanelName);
+                if (metaPanel != null)
+                {
+                    (roomId, biome, noiseSeed, gateCount) = metaPanel.GetBlueprintData();
+                }
+
+                var saved = RoomSaver.Save(canvas.StageRoot, roomId, biome, noiseSeed);
                 Debug.Log($"Room Designer saved: {saved.prefabPath}, {saved.blueprintPath}");
             }
             catch (Exception ex)
