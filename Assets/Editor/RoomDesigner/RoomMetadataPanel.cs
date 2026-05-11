@@ -67,6 +67,14 @@ namespace RIMA.Editor.RoomDesigner
             previewToggle.RegisterValueChangedCallback(e => OnPreviewBakeChanged(e.newValue));
             Add(previewToggle);
 
+            var overrideToggle = new Toggle("Wall Override Mode");
+            overrideToggle.RegisterValueChangedCallback(e =>
+            {
+                if (ctx is RIMA.Editor.RoomDesigner.IRoomDesignerContext c)
+                    c.IsWallOverrideMode = e.newValue;
+            });
+            Add(overrideToggle);
+
             var sep = new VisualElement();
             sep.AddToClassList("rd-meta-sep");
             Add(sep);

@@ -44,6 +44,7 @@ namespace RIMA.Editor.RoomDesigner
         public Tilemap WallsTilemap => canvas?.WallsTilemap;
         public Tilemap DecalsTilemap => canvas?.DecalsTilemap;
         public RoomBlueprint ActiveBlueprint => activeBp;
+        public bool IsWallOverrideMode { get; set; }
 
         public RoomLayer ActiveLayer { get; set; } = RoomLayer.Floor;
         public TileBase ActiveTile { get; set; }

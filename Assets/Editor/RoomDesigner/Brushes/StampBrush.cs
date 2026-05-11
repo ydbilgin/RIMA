@@ -35,7 +35,22 @@ namespace RIMA.Editor.RoomDesigner.Brushes
             BrushController.Instance.ApplyStroke(ctx, _buffer, "Stamp");
             if (ctx.ActiveLayer == RoomLayer.Walls && ctx.WallsTilemap != null)
             {
-                WallAutoConnect.RefreshNeighborhood(ctx.WallsTilemap, _strokeCells, null, ctx.ActiveBlueprint);
+                if (ctx.IsWallOverrideMode && ctx.ActiveBlueprint != null)
+                {
+                    var bp = ctx.ActiveBlueprint;
+                    int total = bp.roomWidth * bp.roomHeight;
+                    if (bp.overrideVariantIndex == null || bp.overrideVariantIndex.Length != total)
+                        bp.overrideVariantIndex = new bool[total];
+                    foreach (var cell in _strokeCells)
+                    {
+                        int idx = (cell.y - bp.roomOrigin.y) * bp.roomWidth + (cell.x - bp.roomOrigin.x);
+                        if (idx >= 0 && idx < total) bp.overrideVariantIndex[idx] = true;
+                    }
+                }
+                else
+                {
+                    WallAutoConnect.RefreshNeighborhood(ctx.WallsTilemap, _strokeCells, null, ctx.ActiveBlueprint);
+                }
                 ctx.MarkDirty();
             }
 

@@ -19,6 +19,7 @@ namespace RIMA.Editor.RoomDesigner
         bool IsCanvasHovered { get; }
 
         RIMA.Runtime.Rooms.RoomBlueprint ActiveBlueprint { get; }
+        bool IsWallOverrideMode { get; set; }
 
         void InvokeBrush(int mouseButton, Vector3Int cell);
 
