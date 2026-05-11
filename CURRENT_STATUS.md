@@ -1,15 +1,14 @@
 **2026-05-11 — S56 (overnight otonom) | Aktif Sprint: Faz 1-2**
 
 > **S56 bu session ozet:**
-> - **Room Designer F2 Batch 1-2 DONE:** BiomeType enum, RoomBlueprint F2 alanlari (noiseSeed/width/height/origin/variantIndex), FloorVariantPainter (domain-warp Perlin, bake+preview+restore), WallAutoConnect (4-bit mask, 8 baglanti tipi, 3x3 neighborhood), RoomMetadataPanel (roomId/biome/gateCount/noiseSeed/Reseed/Preview toggle), StampBrush+EraserBrush wall hook -- QC PASS.
-> - **Pre-rendered 2D karari:** Blender/Hades tarzi pre-render degerlendirildi. B/C/D v1 icin REJECTED; (A) PixelLab pixel art LOCKED kalir. Detay: TASARIM/PRERENDERED_2D_DECISION.md
-> - **Commits:** ee365a2 -> 1d2253f (10 commit, tum QC PASS)
+> - **Room Designer F2 TAM BITTI (QC PASS):** BiomeType, RoomBlueprint F2 alanlari, FloorVariantPainter (domain-warp Perlin bake+preview), WallAutoConnect (4-bit mask 8 tip), RoomMetadataPanel (Reseed/Preview/Override toggle), StampBrush+EraserBrush wall hook, ActiveBlueprint live instance, IsWallOverrideMode, SaveCurrentRoom -> MetadataPanel wiring. 15 commit, tum QC PASS.
+> - **Pre-rendered 2D karari LOCKED:** Blender/Hades tarzi REJECTED v1; PixelLab pixel art kalir. TASARIM/PRERENDERED_2D_DECISION.md
+> - **Commits:** ee365a2 -> 65f8a74 (15 commit)
 
 > **Siradaki session (S57):**
-> 1. Room Designer F2 Batch 3 -- T5 override toggle UI (per-cell override brushmode), T8 layer panel refresh
-> 2. Room Designer F3 -- AI panel + MCP bridge (STAGING/mcp_requests/ -> responses/)
-> 3. Warblade anim uretimi (oncelik orta)
-> 4. /nlm-sync (yeni dosyalar)
+> 1. Tile uretimi -- F1 floor x16 + W1 wall x8 (Room Designer'i gercek tile'larla test icin)
+> 2. Room Designer F3 -- AI panel + MCP bridge
+> 3. Warblade anim uretimi
 
 ---
 
@@ -17,10 +16,14 @@
 
 ### Yuksek Oncelik
 
-1. **Room Designer F2 -- Batch 3** (Batch 1-2 DONE, QC PASS)
-   - T5: Per-cell override toggle (Alt+stamp = override mode, overrideVariantIndex write)
-   - T8: Layer panel refresh wiring
-   - Batch 3+4: T10 Object Library, T11 Template Wizard, T12 RoomSaver export
+1. **Tile uretimi** (Room Designer F2 done -- tile'lar olmadan test yapilamiyor)
+   - F1 floor: 16 variant (Create Tiles Pro, URETIM_REHBERI.md)
+   - W1 wall: 8 variant (Create Tile Isometric) -- WallAutoConnect'i calistiracak
+   - Obstacles: Pillar once (style anchor)
+
+2. **Room Designer F3** (F2 DONE -- tile bekliyor)
+   - AI panel + MCP bridge (STAGING/mcp_requests/ -> responses/)
+   - T10 Object Library, T11 Template Wizard, T12 RoomSaver export
 
 ### Orta Oncelik
 
