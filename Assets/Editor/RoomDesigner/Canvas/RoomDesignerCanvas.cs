@@ -15,6 +15,7 @@ namespace RIMA.Editor.RoomDesigner
         private const string LayerName = "RoomDesigner";
         private const float MinZoom = 2f;
         private const float MaxZoom = 64f;
+        private static readonly Color CanvasBackground = new Color(0.06f, 0.07f, 0.08f, 1f);
 
         private readonly RimaRoomDesignerWindow ctx;
         private readonly IMGUIContainer imguiContainer;
@@ -39,6 +40,7 @@ namespace RIMA.Editor.RoomDesigner
                 name = "room-designer-imgui-canvas"
             };
             imguiContainer.style.flexGrow = 1f;
+            imguiContainer.style.backgroundColor = new StyleColor(CanvasBackground);
             imguiContainer.focusable = true;
             CreateSceneObjects();
         }
@@ -111,7 +113,7 @@ namespace RIMA.Editor.RoomDesigner
             previewCam.orthographic = true;
             previewCam.orthographicSize = 8f;
             previewCam.clearFlags = CameraClearFlags.SolidColor;
-            previewCam.backgroundColor = new Color(0.06f, 0.07f, 0.08f, 1f);
+            previewCam.backgroundColor = CanvasBackground;
             previewCam.nearClipPlane = 0.01f;
             previewCam.farClipPlane = 100f;
             previewCam.cullingMask = cullingMask;
@@ -148,10 +150,7 @@ namespace RIMA.Editor.RoomDesigner
                 GUILayout.ExpandWidth(true),
                 GUILayout.ExpandHeight(true));
 
-            float pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
             previewCam.aspect = Mathf.Max(0.01f, rect.width / Mathf.Max(1f, rect.height));
-            previewCam.pixelRect = new Rect(0f, 0f, rect.width * pixelsPerPoint, rect.height * pixelsPerPoint);
-            Handles.SetCamera(rect, previewCam);
 
             bool hovered = rect.Contains(evt.mousePosition);
             ctx.SetCanvasHovered(hovered);
@@ -169,7 +168,8 @@ namespace RIMA.Editor.RoomDesigner
 #if ROOM_DESIGNER_DEBUG_PERF
                 frameWatch.Restart();
 #endif
-                Handles.DrawCamera(rect, previewCam);
+                EditorGUI.DrawRect(rect, CanvasBackground);
+                DrawPreviewCamera(rect);
                 DrawGridOverlay(rect);
 #if ROOM_DESIGNER_DEBUG_PERF
                 frameWatch.Stop();
@@ -187,6 +187,36 @@ namespace RIMA.Editor.RoomDesigner
             if (shouldRepaint)
             {
                 imguiContainer.MarkDirtyRepaint();
+            }
+        }
+
+        private void DrawPreviewCamera(Rect rect)
+        {
+            if (rect.width <= 0f || rect.height <= 0f)
+            {
+                return;
+            }
+
+            float pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
+            int width = Mathf.Max(1, Mathf.CeilToInt(rect.width * pixelsPerPoint));
+            int height = Mathf.Max(1, Mathf.CeilToInt(rect.height * pixelsPerPoint));
+            RenderTexture renderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
+            RenderTexture previousActive = RenderTexture.active;
+            RenderTexture previousTarget = previewCam.targetTexture;
+
+            try
+            {
+                previewCam.targetTexture = renderTexture;
+                previewCam.aspect = width / (float)height;
+                previewCam.Render();
+                RenderTexture.active = previousActive;
+                GUI.DrawTexture(rect, renderTexture, ScaleMode.StretchToFill, false);
+            }
+            finally
+            {
+                previewCam.targetTexture = previousTarget;
+                RenderTexture.active = previousActive;
+                RenderTexture.ReleaseTemporary(renderTexture);
             }
         }
 

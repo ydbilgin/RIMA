@@ -1,5 +1,5 @@
 ---
-description: Dosyaları NotebookLM'e kaynak olarak ekle/güncelle (eski versiyonu siler, yeni ekler). /nlm-sync → tüm unsynced dosyaları batch sync. /nlm-sync --status → sync bekleyenleri göster. /nlm-sync --cleanup-dry → orphan'ları listele. /nlm-sync --cleanup → orphan'ları sil. /nlm-sync path/to/file.md → tek dosya.
+description: Dosyaları NotebookLM'e kaynak olarak ekle/güncelle. RECURSIVE — TASARIM/MEMORY/STAGING tüm alt klasörler taranır (`_*` ve `EXPERIMENTS` hariç). /nlm-sync → batch sync. /nlm-sync --status → bekleyenler. /nlm-sync --cleanup-dry → orphan listele. /nlm-sync --cleanup → orphan sil. /nlm-sync path/to/file.md → tek dosya.
 allowed-tools: Bash
 ---
 
@@ -36,7 +36,7 @@ if [ "$FILE" = "--status" ]; then
   LS=$(cat "$REPO/.claude/nlm_last_sync.txt" 2>/dev/null || echo "hiç sync edilmedi")
   UNSYNCED=$(
     {
-      find "$REPO/TASARIM" "$REPO/MEMORY" "$REPO/STAGING" -maxdepth 1 -name "*.md" 2>/dev/null | sed "s|$REPO/||"
+      find "$REPO/TASARIM" "$REPO/MEMORY" "$REPO/STAGING" -type d \( -name '_*' -o -name 'EXPERIMENTS' -o -name '.git' \) -prune -o -type f -name "*.md" -print 2>/dev/null | sed "s|$REPO/||"
       for f in CURRENT_STATUS.md CLAUDE.md RULES.md AGENTS.md; do
         [ -f "$REPO/$f" ] && echo "$f"
       done
@@ -141,7 +141,7 @@ if [ -z "$FILE" ]; then
 
   UNSYNCED=$(
     {
-      find "$REPO/TASARIM" "$REPO/MEMORY" "$REPO/STAGING" -maxdepth 1 -name "*.md" 2>/dev/null | sed "s|$REPO/||"
+      find "$REPO/TASARIM" "$REPO/MEMORY" "$REPO/STAGING" -type d \( -name '_*' -o -name 'EXPERIMENTS' -o -name '.git' \) -prune -o -type f -name "*.md" -print 2>/dev/null | sed "s|$REPO/||"
       for f in CURRENT_STATUS.md CLAUDE.md RULES.md AGENTS.md; do
         [ -f "$REPO/$f" ] && echo "$f"
       done
