@@ -79,7 +79,7 @@ namespace RIMA.Editor.RoomDesigner
             noiseSeed = UnityEngine.Random.Range(0, 99999);
             if (_seedField != null) _seedField.SetValueWithoutNotify(noiseSeed);
             if (previewBakeEnabled && ctx?.FloorTilemap != null && floorVariantSet != null)
-                FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, MakeTempBlueprint(), floorVariantSet);
+                RunPreview();
         }
 
         private void OnPreviewBakeChanged(bool enabled)
@@ -87,18 +87,19 @@ namespace RIMA.Editor.RoomDesigner
             previewBakeEnabled = enabled;
             if (ctx?.FloorTilemap == null) return;
             if (enabled && floorVariantSet != null)
-                FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, MakeTempBlueprint(), floorVariantSet);
+                RunPreview();
             else if (!enabled && floorVariantSet != null && floorVariantSet.Length > 0)
                 FloorVariantPainter.RestoreDefault(ctx.FloorTilemap, floorVariantSet[0]);
         }
 
-        private RIMA.Runtime.Rooms.RoomBlueprint MakeTempBlueprint()
+        private void RunPreview()
         {
             var bp = UnityEngine.ScriptableObject.CreateInstance<RIMA.Runtime.Rooms.RoomBlueprint>();
             bp.noiseSeed = noiseSeed;
             bp.roomWidth = 20;
             bp.roomHeight = 20;
-            return bp;
+            try { FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, bp, floorVariantSet); }
+            finally { UnityEngine.Object.DestroyImmediate(bp); }
         }
 
         public (string roomId, BiomeType biome, int noiseSeed, int gateCount) GetBlueprintData() =>
