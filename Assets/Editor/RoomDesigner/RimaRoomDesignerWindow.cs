@@ -25,6 +25,7 @@ namespace RIMA.Editor.RoomDesigner
         private Label cellDebugLabel;
         private DropdownField activeLayerDropdown;
         private BrushController brushController;
+        private RoomBlueprint activeBp;
         private bool isCanvasHovered;
         private bool isDirty;
         private bool isStrokeActive;
@@ -42,6 +43,7 @@ namespace RIMA.Editor.RoomDesigner
         public Tilemap FloorTilemap => canvas?.FloorTilemap;
         public Tilemap WallsTilemap => canvas?.WallsTilemap;
         public Tilemap DecalsTilemap => canvas?.DecalsTilemap;
+        public RoomBlueprint ActiveBlueprint => activeBp;
 
         public RoomLayer ActiveLayer { get; set; } = RoomLayer.Floor;
         public TileBase ActiveTile { get; set; }
@@ -179,6 +181,8 @@ namespace RIMA.Editor.RoomDesigner
             ActiveBrush = BrushMode.Stamp;
             ActiveLayer = RoomLayer.Floor;
             HoveredCell = Vector3Int.zero;
+            if (activeBp == null)
+                activeBp = ScriptableObject.CreateInstance<RoomBlueprint>();
             EnsureCanvas();
             EditorApplication.update += PollMcp;
         }
@@ -190,6 +194,11 @@ namespace RIMA.Editor.RoomDesigner
             canvas = null;
             brushController = null;
             isStrokeActive = false;
+            if (activeBp != null)
+            {
+                DestroyImmediate(activeBp);
+                activeBp = null;
+            }
         }
 
         private void EnsureCanvas()
@@ -326,6 +335,9 @@ namespace RIMA.Editor.RoomDesigner
 
         private void NewRoom()
         {
+            if (activeBp != null)
+                DestroyImmediate(activeBp);
+            activeBp = ScriptableObject.CreateInstance<RoomBlueprint>();
             canvas?.ClearTilemaps();
             HoveredCell = Vector3Int.zero;
             MarkDirty();

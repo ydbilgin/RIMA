@@ -35,7 +35,7 @@ namespace RIMA.Editor.RoomDesigner.Brushes
             BrushController.Instance.ApplyStroke(ctx, _buffer, "Stamp");
             if (ctx.ActiveLayer == RoomLayer.Walls && ctx.WallsTilemap != null)
             {
-                WallAutoConnect.RefreshNeighborhood(ctx.WallsTilemap, _strokeCells, null);
+                WallAutoConnect.RefreshNeighborhood(ctx.WallsTilemap, _strokeCells, null, ctx.ActiveBlueprint);
                 ctx.MarkDirty();
             }
 

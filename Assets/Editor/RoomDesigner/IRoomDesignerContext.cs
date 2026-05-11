@@ -18,6 +18,8 @@ namespace RIMA.Editor.RoomDesigner
         Vector3Int HoveredCell { get; set; }
         bool IsCanvasHovered { get; }
 
+        RIMA.Runtime.Rooms.RoomBlueprint ActiveBlueprint { get; }
+
         void InvokeBrush(int mouseButton, Vector3Int cell);
 
         VisualElement LeftPanel { get; }
