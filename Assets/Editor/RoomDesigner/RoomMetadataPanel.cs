@@ -78,30 +78,34 @@ namespace RIMA.Editor.RoomDesigner
         {
             noiseSeed = UnityEngine.Random.Range(0, 99999);
             if (_seedField != null) _seedField.SetValueWithoutNotify(noiseSeed);
-            // FloorVariantPainter not yet implemented
+            if (previewBakeEnabled && ctx?.FloorTilemap != null && floorVariantSet != null)
+                FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, MakeTempBlueprint(), floorVariantSet);
         }
 
         private void OnPreviewBakeChanged(bool enabled)
         {
             previewBakeEnabled = enabled;
-            // FloorVariantPainter not yet implemented
+            if (ctx?.FloorTilemap == null) return;
+            if (enabled && floorVariantSet != null)
+                FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, MakeTempBlueprint(), floorVariantSet);
+            else if (!enabled && floorVariantSet != null && floorVariantSet.Length > 0)
+                FloorVariantPainter.RestoreDefault(ctx.FloorTilemap, floorVariantSet[0]);
         }
 
-        private RoomBlueprint GetMockBlueprint() =>
-            new RoomBlueprint { NoiseSeed = noiseSeed, RoomWidth = 20, RoomHeight = 20 };
+        private RIMA.Runtime.Rooms.RoomBlueprint MakeTempBlueprint()
+        {
+            var bp = UnityEngine.ScriptableObject.CreateInstance<RIMA.Runtime.Rooms.RoomBlueprint>();
+            bp.noiseSeed = noiseSeed;
+            bp.roomWidth = 20;
+            bp.roomHeight = 20;
+            return bp;
+        }
 
         public (string roomId, BiomeType biome, int noiseSeed, int gateCount) GetBlueprintData() =>
             (roomId, biomeType, noiseSeed, gateCount);
 
         internal static bool IsMounted(VisualElement rightPanel) =>
             rightPanel?.Q<RoomMetadataPanel>(PanelName) != null;
-
-        private struct RoomBlueprint
-        {
-            public int NoiseSeed;
-            public int RoomWidth;
-            public int RoomHeight;
-        }
     }
 
     [InitializeOnLoad]
@@ -119,16 +123,15 @@ namespace RIMA.Editor.RoomDesigner
             if (EditorApplication.timeSinceStartup - _lastCheck < 0.25) return;
             _lastCheck = EditorApplication.timeSinceStartup;
 
-            var win = EditorWindow.GetWindow<RimaRoomDesignerWindow>(false, null, false);
-            if (win == null) return;
-
-            var rightPanel = win.rootVisualElement?.Q<VisualElement>("right-panel");
-            if (rightPanel == null) return;
-            if (RoomMetadataPanel.IsMounted(rightPanel)) return;
-
-            IRoomDesignerContext ctx = win;
-            var panel = new RoomMetadataPanel(ctx);
-            rightPanel.Add(panel);
+            var windows = UnityEngine.Resources.FindObjectsOfTypeAll<RimaRoomDesignerWindow>();
+            for (int i = 0; i < windows.Length; i++)
+            {
+                var win = windows[i];
+                var rightPanel = win.RightPanel;
+                if (rightPanel == null || RoomMetadataPanel.IsMounted(rightPanel)) continue;
+                rightPanel.Add(new RoomMetadataPanel(win));
+                win.MarkDirty();
+            }
         }
     }
 }
