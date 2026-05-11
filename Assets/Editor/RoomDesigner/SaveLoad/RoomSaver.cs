@@ -9,7 +9,7 @@ namespace RIMA.Editor.RoomDesigner
 
     public static class RoomSaver
     {
-        public static (string prefabPath, string blueprintPath) Save(GameObject roomRoot, string roomId, string biome)
+        public static (string prefabPath, string blueprintPath) Save(GameObject roomRoot, string roomId, BiomeType biome, int noiseSeed = 0, int roomWidth = 20, int roomHeight = 20)
         {
             if (roomRoot == null)
             {
@@ -21,12 +21,7 @@ namespace RIMA.Editor.RoomDesigner
                 throw new ArgumentException("Room id cannot be empty.", nameof(roomId));
             }
 
-            if (string.IsNullOrWhiteSpace(biome))
-            {
-                throw new ArgumentException("Biome cannot be empty.", nameof(biome));
-            }
-
-            string dir = string.Format("Assets/_Generated/Rooms/{0}", biome);
+            string dir = string.Format("Assets/_Generated/Rooms/{0}", biome.ToString());
             Directory.CreateDirectory(dir);
             string soPath = string.Format("{0}/{1}.asset", dir, roomId);
             string prefabPath = string.Format("{0}/{1}.prefab", dir, roomId);
@@ -37,6 +32,10 @@ namespace RIMA.Editor.RoomDesigner
                 var bp = ScriptableObject.CreateInstance<RoomBlueprint>();
                 AssetDatabase.CreateAsset(bp, soPath);
                 made.Add(soPath);
+                bp.biomeType = biome;
+                bp.noiseSeed = noiseSeed;
+                bp.roomWidth = roomWidth;
+                bp.roomHeight = roomHeight;
 
                 PrefabUtility.SaveAsPrefabAsset(roomRoot, prefabPath, out bool ok);
                 if (File.Exists(prefabPath))
@@ -52,7 +51,7 @@ namespace RIMA.Editor.RoomDesigner
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
                 bp.prefab = prefab;
                 bp.roomId = roomId;
-                bp.biome = biome;
+                bp.biome = biome.ToString();
 
                 var link = prefab.GetComponent<RoomPrefabLink>() ?? prefab.AddComponent<RoomPrefabLink>();
                 link.blueprint = bp;

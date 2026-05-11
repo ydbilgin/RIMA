@@ -3,16 +3,19 @@ namespace RIMA.Editor.RoomDesigner
     using System;
     using System.IO;
     using RIMA.Editor.RoomDesigner.Brushes;
+    using RIMA.Runtime.Rooms;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Tilemaps;
     using UnityEngine.UIElements;
+    using Object = UnityEngine.Object;
 
     public sealed class RimaRoomDesignerWindow : EditorWindow, IRoomDesignerContext
     {
         private const string UxmlPath = "Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uxml";
         private const string UssPath = "Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uss";
         private const string McpResponsePath = "Assets/Editor/RoomDesigner/McpResponses";
+        private const string RoomDesignerLayerName = "RoomDesigner";
         private const double PollIntervalSeconds = 0.5d;
 
         private RoomDesignerCanvas canvas;
@@ -172,6 +175,7 @@ namespace RIMA.Editor.RoomDesigner
 
         private void OnEnable()
         {
+            EnsureRoomDesignerLayer();
             ActiveBrush = BrushMode.Stamp;
             ActiveLayer = RoomLayer.Floor;
             HoveredCell = Vector3Int.zero;
@@ -192,8 +196,50 @@ namespace RIMA.Editor.RoomDesigner
         {
             if (canvas == null)
             {
+                EnsureRoomDesignerLayer();
                 canvas = new RoomDesignerCanvas(this);
             }
+        }
+
+        private static int EnsureRoomDesignerLayer()
+        {
+            int existingLayer = LayerMask.NameToLayer(RoomDesignerLayerName);
+            if (existingLayer >= 0)
+            {
+                return existingLayer;
+            }
+
+            Object[] tagManagerAssets = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset");
+            if (tagManagerAssets == null || tagManagerAssets.Length == 0)
+            {
+                Debug.LogWarning("Room Designer could not load ProjectSettings/TagManager.asset to create preview layer.");
+                return -1;
+            }
+
+            var tagManager = new SerializedObject(tagManagerAssets[0]);
+            SerializedProperty layers = tagManager.FindProperty("layers");
+            if (layers == null || !layers.isArray)
+            {
+                Debug.LogWarning("Room Designer could not find Unity layer settings in TagManager.asset.");
+                return -1;
+            }
+
+            for (int i = 31; i >= 8; i--)
+            {
+                SerializedProperty slot = layers.GetArrayElementAtIndex(i);
+                if (!string.IsNullOrEmpty(slot.stringValue))
+                {
+                    continue;
+                }
+
+                slot.stringValue = RoomDesignerLayerName;
+                tagManager.ApplyModifiedProperties();
+                AssetDatabase.SaveAssets();
+                return i;
+            }
+
+            Debug.LogWarning("Room Designer could not create the RoomDesigner Unity layer: no free user layer slot.");
+            return -1;
         }
 
         private void EnsureBrushController()
@@ -258,7 +304,7 @@ namespace RIMA.Editor.RoomDesigner
 
             try
             {
-                var saved = RoomSaver.Save(canvas.StageRoot, "test_room", "_TEST");
+                var saved = RoomSaver.Save(canvas.StageRoot, "test_room", BiomeType.Keep);
                 Debug.Log($"Room Designer saved: {saved.prefabPath}, {saved.blueprintPath}");
             }
             catch (Exception ex)

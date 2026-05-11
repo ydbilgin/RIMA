@@ -1,0 +1,9 @@
+namespace RIMA.Runtime.Rooms
+{
+    public enum BiomeType
+    {
+        Keep,
+        Crypt,
+        Volcanic
+    }
+}
