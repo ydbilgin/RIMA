@@ -1,19 +1,15 @@
-**2026-05-11 — S55 sonu | Aktif Sprint: Faz 1-2**
+**2026-05-11 — S56 (overnight otonom) | Aktif Sprint: Faz 1-2**
 
-> **S55 bu session ozet:**
-> - **PROMPT.md anchor workflow rewrite DONE:** 4 sinif (warblade/ranger/shadowblade/elementalist) PIXELLAB_OUTPUTS PROMPT.md dosyalari anchor-based workflow'a gecirildi. "Base body only / silahsiz" kaldirildi. Commit e717063.
-> - **Concept art batch 1+2 DONE:** 12 sahne uretildi (4 karakter+mob sahnesi commit 25d9fb8, 8 otonom sahne commit 7b0d291). PIXELLAB_OUTPUTS/concept_art/ altinda.
-> - **D1 LOCKED:** Mob infighting yok. Penitent Bruiser anti-heal aura faction-blind (%50 azaltma, 3m radius).
-> - **D2 LOCKED:** Terrain hazard sistemi var — hikayeye uygun. F1: rift catlaklari, F2: coken zemin, F3: lav/aktif rift yirtigi.
-> - **D3 LOCKED:** Komsu oda peek — sadece harita parcasi edinilmisse VEYA oda daha once temizlenmisse gorunur.
-> - **D4 LOCKED:** Hub practice alani var, Hades'ten farkli tarz. Skill test + dummy.
-> - **Hub design vizyon:** Safe zone, NPC alani, karakter secim odasi (fiziksel dunya "Reclaim" mekanigi — fikir kaydi), skill test ayni alanda. Karakter secimi her run degistirilebilir, heat per-character (STS mantigi).
+> **S56 bu session ozet:**
+> - **Room Designer F2 Batch 1-2 DONE:** BiomeType enum, RoomBlueprint F2 alanlari (noiseSeed/width/height/origin/variantIndex), FloorVariantPainter (domain-warp Perlin, bake+preview+restore), WallAutoConnect (4-bit mask, 8 baglanti tipi, 3x3 neighborhood), RoomMetadataPanel (roomId/biome/gateCount/noiseSeed/Reseed/Preview toggle), StampBrush+EraserBrush wall hook -- QC PASS.
+> - **Pre-rendered 2D karari:** Blender/Hades tarzi pre-render degerlendirildi. B/C/D v1 icin REJECTED; (A) PixelLab pixel art LOCKED kalir. Detay: TASARIM/PRERENDERED_2D_DECISION.md
+> - **Commits:** ee365a2 -> 1d2253f (10 commit, tum QC PASS)
 
-> **Siradaki session (S56):**
-> 1. Room Designer F2 — Batch 1 Codex dispatch (T1 RoomBlueprint + T2 BiomeType + T3 FloorVariantPainter)
-> 2. Hub design detaylandirma (HUB_DESIGN_v1 backlog'dan cikar, netlestir)
-> 3. Terrain hazard spec yazimi (D2 implement icin)
-> 4. /nlm-sync (S55 karar ve dosyalari)
+> **Siradaki session (S57):**
+> 1. Room Designer F2 Batch 3 -- T5 override toggle UI (per-cell override brushmode), T8 layer panel refresh
+> 2. Room Designer F3 -- AI panel + MCP bridge (STAGING/mcp_requests/ -> responses/)
+> 3. Warblade anim uretimi (oncelik orta)
+> 4. /nlm-sync (yeni dosyalar)
 
 ---
 
@@ -21,19 +17,10 @@
 
 ### Yuksek Oncelik
 
-1. **Room Designer F2 -- Batch 1** (Codex dispatch hazir)
-   - T1: RoomBlueprint -- noiseSeed, variantIndex byte[], overrideVariantIndex, roomWidth/Height/Origin
-   - T2: BiomeType enum (Keep/Crypt/Volcanic)
-   - T3: FloorVariantPainter -- domain-warped Perlin (warpFreq 0.05, zoneFreq 0.05, detailFreq 0.22), BustClusters
-   - Dispatch order: T1+T2+T3 paralel -> compile -> QC -> Batch 2
-
-2. **Room Designer F2 -- Batch 2** (Batch 1 compile sonrasi)
-   - T4: RoomMetadata panel (roomId, biome, gateCount, noiseSeed, Reseed button)
-   - T5: WallRuleTileBrush + WallOverridePanel (8 variant, auto/manual toggle)
-   - T6: PerlinFloorBrush (tilemap integration, domain-warp bake)
-
-3. **Room Designer F2 -- Batch 3+4** (sonraki session)
-   - T8: Layer panel refresh, T9: Reseed wiring, T10: Object Library, T11: Template Wizard, T12: RoomSaver export
+1. **Room Designer F2 -- Batch 3** (Batch 1-2 DONE, QC PASS)
+   - T5: Per-cell override toggle (Alt+stamp = override mode, overrideVariantIndex write)
+   - T8: Layer panel refresh wiring
+   - Batch 3+4: T10 Object Library, T11 Template Wizard, T12 RoomSaver export
 
 ### Orta Oncelik
 
@@ -67,6 +54,9 @@
 | **Floor tile variety** | **Domain-warped Perlin 3-katman, edit-time bake, template-fixed -- 2026-05-11 LOCKED** |
 | **Tile kenar invariance** | **3px border = mortar #1A1C20 only, accent merkeze -- 2026-05-11 LOCKED** |
 | **Room Designer vizyon** | **MapForge -- genel arac, isometric P0, topdown/sidescroller template -- 2026-05-11** |
+| **Pre-rendered 2D** | **Blender/pre-render REJECTED v1; PixelLab pixel art LOCKED -- 2026-05-11** |
+| **FloorVariantPainter params** | **warpFreq=0.05, zoneFreq=0.05, warpStrength=4.0; tiers base/accent/hero -- 2026-05-11 LOCKED** |
+| **WallAutoConnect variants** | **8 tip: straight_H/V, corner_NW/NE/SW/SE, end_L/R; 4-bit NSEW mask -- 2026-05-11 LOCKED** |
 | **PIXELLAB klasor** | **PIXELLAB_OUTPUTS/ (kalici) -- STAGING/PIXELLAB kaldirildi -- 2026-05-11** |
 | Map editor | Custom Unity EditorWindow (RIMA Room Designer) -- 2026-05-10 LOCKED |
 | Concept art stili | Pixel art ZORUNLU, painterly YASAK -- anchor metadata.json referans |
