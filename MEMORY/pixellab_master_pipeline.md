@@ -59,6 +59,14 @@ Detay: `MEMORY/project_pure_2d_topdown_pivot_2026-05-12.md`, `MEMORY/project_64p
 
 ---
 
+## ⚠️ ESKI İÇERİK — REVOKED (S59 2026-05-12)
+
+> Bu satırdan sonraki tüm içerik (Bölüm 0–15) S59 pivot ile REVOKED edilmiştir.
+> Aktif pipeline kuralı: yukarıdaki **S60 OVERRIDE** bölümü.
+> Bu bölümler arşiv referansı olarak korunmaktadır — üretim kararlarında KULLANMAYIN.
+
+---
+
 ## 0. HARD RULES — TOOL SECIM ONCELIGI (2026-05-11 LOCKED)
 
 ```

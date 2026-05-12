@@ -177,7 +177,7 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 ### 6 Alan
 
 1. **Silhouette Dominant Shape:** Agir + omuz baskın, Warblade'den daha vahsi -- silah ve govde birlikte kütlesel
-2. **Weapon Size + Grip:** Buyük iki-el silah (balta veya agir warhammer), sprite ~%45-50, iki el
+2. **Weapon Size + Grip:** Dual short axes — her iki elde bir kompakt hatchet (balta), simetrik saldiri duruşu, kollar yana açık
 3. **Pose Archetype:** Berserk ready -- agirlik one, taarruz pozisyonu, hic dinlenmeden
 4. **Color Palette:** main #3A1A0A (koyu kirmizi-kahve) + accent #D43F3F (kan kirmizi) + danger #FF4400 (Berserk Mode kan siklozu VFX)
 5. **Animation Rhythm:** Heavy+ -- Warblade'den daha yavaş ve daha agir, BERSERK MODE'da hizlanma ani
@@ -191,7 +191,7 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 ### PixelLab Prompt Hook
 
-"64x64 chibi top-down male ravager berserker, large two-handed battle axe or warhammer, dark blood-red rough armor, aggressive forward-leaning berserk posture, view 35 degree high top-down, dark red-brown #3A1A0A blood red accent #D43F3F, pixel art PPU 64, 4 directions"
+"64x64 chibi top-down male ravager berserker, dual short compact axes one in each hand arms spread outward, dark blood-red rough armor, aggressive forward-leaning berserk posture, view 35 degree high top-down, dark red-brown #3A1A0A blood red accent #D43F3F, pixel art PPU 64, 4 directions"
 
 ---
 
@@ -330,7 +330,7 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 | Ranger | V1 | K | uzun+compound bow | #7BA7BC | sniping | Compound bow (sol el) |
 | Shadowblade | V1 | E | ince+twin blades | #5A2A8A | fluid | Twin blades (reverse-grip) |
 | Elementalist | V1 | K | robe+el jesti | #FFF000 | fluid cast | YOK (silahsiz) |
-| Ravager | V2 | E | kütlesel+battleaxe | #D43F3F | heavy+ | Battleaxe/warhammer (iki el) |
+| Ravager | V2 | E | kütlesel+dual axe | #D43F3F | heavy+ | Dual short axes (her iki el, kompakt) |
 | Ronin | V2 | E | ince+katana | #C8A87A | timing chain | Katana (sag el) + kin |
 | Gunslinger | V2 | K | trenckoat+dual pistol | #FF4400 | fast | Dual pistol (iki el) |
 | Brawler | V2 | E | kas+yumruk | #FF8C00 | mash+timing | YOK (silahsiz) |
@@ -376,7 +376,7 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 ## Open Questions
 
-1. Ravager silah secimi net degil (battleaxe vs warhammer) -- uretim oncesi bir QC kararı gerekiyor
+1. ~~Ravager silah secimi net degil~~ **LOCKED 2026-05-12: Dual short compact axes (her iki elde bir hatchet, simetrik)**
 2. Summoner staff vs totem acik -- minyon gorünumu ile koordineli olmali, uretim oncesi belirtilmeli
 3. Hexer grimoire vs hancer secimi -- ikisi birden mi (iki elde kitap + belde hancer) veya tek secim mi?
 4. V2 siniflar icin color palette hex degerleri taslak -- Into Samomor mat env ile cakisma testi yapilmadi; uretim baslamadan once QC renk testi onerilir
