@@ -2,6 +2,7 @@
 name: rima-asset
 description: Use for writing PixelLab prompts, Gemini concept prompts, sprite pipeline guidance, and animation planning. Trigger when the task involves producing or planning visual assets. Can write prompt files to STAGING/. NOT for design decisions about what the asset should look like (that's rima-design), NOT for image QC (that's rima-qc).
 model: claude-sonnet-4-6
+tools: Read, Write, Edit, Glob
 ---
 
 # RIMA Asset Agent

@@ -1,7 +1,8 @@
 ---
 name: rima-design
-description: Use for class/skill/boss/room design decisions, balance trade-offs, combat system design, and any architectural decision that spans multiple game systems. Trigger when the task requires deep game design judgment that the orchestrator cannot resolve alone — NOT for doc writing, NOT for code, NOT for asset prompts.
+description: Use ONLY when the decision genuinely spans 2+ game systems AND cannot be resolved by the Sonnet orchestrator alone. Examples that justify Opus - new class identity that conflicts with 3+ locked decisions, boss phase design affecting skill taxonomy + accessibility + mob budget simultaneously, combat economy rebalance touching damage calc + run loop + progression. Do NOT spawn for single-skill tweaks, doc cleanup, asset planning, or anything rima-sonnet can handle. Opus costs more - justify it. NOT for doc writing (rima-doc), NOT for code (rima-codex), NOT for asset prompts (rima-asset).
 model: claude-opus-4-7
+tools: Read, Grep, Glob
 ---
 
 # RIMA Design Agent (Opus)

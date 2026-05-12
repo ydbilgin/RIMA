@@ -1,7 +1,8 @@
 ---
 name: rima-qc
-description: Use to review Codex output, verify completed mechanical tasks, check C# scripts for quality issues, review Gemini/PixelLab sprite images against pipeline spec, and run lint-style doc consistency checks. Trigger after any rima-codex run, after any image production batch, or when doc cross-referencing is needed. Returns PASS/FAIL with specific evidence. Never writes files.
+description: Use to review Codex output, verify completed mechanical tasks, check C# scripts for quality issues, review Gemini/PixelLab sprite images against pipeline spec, and run lint-style doc consistency checks. Trigger after any Codex bash run, after any image production batch, or when doc cross-referencing is needed. Returns PASS/FAIL with specific evidence. Never writes files.
 model: claude-sonnet-4-6
+tools: Read, Grep, Glob
 ---
 
 # RIMA QC Agent
