@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RIMA
@@ -17,6 +19,7 @@ namespace RIMA
         protected PlayerController player;
         protected RageSystem rage;
         protected PlayerResourceBase resource;
+        private readonly List<Coroutine> _trackedCoroutines = new();
 
         public bool IsReady => cooldownTimer <= 0f;
         public float CooldownPercent => Mathf.Clamp01(cooldownTimer / cooldown);
@@ -55,6 +58,20 @@ namespace RIMA
         }
 
         public void ForceReady() => cooldownTimer = 0f;
+
+        protected Coroutine RegisterCoroutine(IEnumerator routine)
+        {
+            var c = StartCoroutine(routine);
+            _trackedCoroutines.Add(c);
+            return c;
+        }
+
+        protected void CancelTrackedCoroutines()
+        {
+            foreach (var c in _trackedCoroutines)
+                if (c != null) StopCoroutine(c);
+            _trackedCoroutines.Clear();
+        }
 
         protected abstract void Execute();
 

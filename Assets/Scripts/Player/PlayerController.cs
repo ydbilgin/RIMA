@@ -31,6 +31,7 @@ namespace RIMA
         private Camera mainCam;
         private StatusEffectSystem statusEffects;
         private PlayerAttack attack;
+        private InputBufferService inputBuffer;
         private Vector2 moveInput;
         private Vector2 lastMoveDir = new(1f, -1f);
         private Vector2 movementFacingDir = new(1f, -1f);
@@ -85,6 +86,7 @@ namespace RIMA
             col = GetComponent<Collider2D>();
             statusEffects = GetComponent<StatusEffectSystem>();
             attack = GetComponent<PlayerAttack>();
+            inputBuffer = GetComponent<InputBufferService>();
             rb.gravityScale = 0f;
             rb.freezeRotation = true;
             mainCam = Camera.main;
@@ -130,10 +132,19 @@ namespace RIMA
 
         private void HandleDash(InputAction.CallbackContext ctx)
         {
-            if (isDashing || dashCooldownTimer > 0f) return;
+            TryDash();
+        }
+
+        public bool TryDash()
+        {
+            if (isDashing || dashCooldownTimer > 0f) return false;
 
             // Blocked if mid-commit and past the dash-cancel window
-            if (attack != null && !attack.TryCancelForDash()) return;
+            if (attack != null && !attack.TryCancelForDash())
+            {
+                inputBuffer?.RequestDash();
+                return false;
+            }
 
             if (DashMode == DashMode.TowardsMouse && mainCam != null)
             {
@@ -156,6 +167,8 @@ namespace RIMA
             // NarrowPassage geçiş: dash sırasında Obstacle layer ile çakışmayı kapat
             if (activeNarrowPassages.Count > 0)
                 gameObject.layer = LayerMask.NameToLayer(DashPassLayer);
+
+            return true;
         }
 
         private void Update()
