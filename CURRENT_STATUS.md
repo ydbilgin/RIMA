@@ -1,19 +1,26 @@
 # CURRENT_STATUS
-**2026-05-12 -- S62 | PixelLab 16-Slot Batch v2 + Asset Uretim + Pipeline Temizligi**
+**2026-05-12 -- S62 | cx Temizlik + CodexAuthManager v0.3.0 + Warblade Pilot Prompt**
 
 ## Active Priorities
-P0: PixelLab batch v2 calistir (`STAGING/pixellab_16slot_v2_prompt_2026-05-12.md`) -- south-facing + canvas fill + Ravager dual axe QC; PASS -> 4-yon batch
-P1: Asset batch -- 14 map obj 32px (8 required once: chest/barrel/lever/shrine/spike/rift + 2 hazard); tile F1 floor 16var + W1 wall 8var + decal 4var (32x32)
+P0: Warblade pilot uret -- PixelLab web app Create Image S-XL New ile 1 Warblade uret; QC (south-facing + canvas fill + sword+shield gorunur); PASS -> bu gorseli style reference olarak Create Image Pro'ya ekle -> kalan 15 karakter uret
+P1: Asset batch -- 14 map obj 32px (8 required: chest/barrel/lever/shrine/spike/rift + 2 hazard); tile F1 floor 16var + W1 wall 8var + decal 4var (32x32)
 P2: Vista Room Template (Karar #85) -- Room Designer F3 vista bolumu, 3 template (cliff/balcony/rift), 9 parallax layer
 P3: Skill Effect SO (Karar #87) -- 5 AngleMode enum, SkillEffectDef SO, Faz 1.0 MVP 12 effect (4 sinif x 3 core)
 P4: TONE_SURFACES EN-first rewrite (Karar #89) -- 7 surface EN canonical + TR localization format
-P5: T2 Mob + Boss Phase 2 -- 3 T2 mob behavior tree + Penitent Sovereign Faz 2 hazard merge (Rift Tear + Rift Bloom + 3-kanal accessibility)
+P5: T2 Mob + Boss Phase 2 -- 3 T2 mob behavior tree + Penitent Sovereign Faz 2 hazard merge
 
 ## Open Questions
 - CLASS_SILHOUETTE_BIBLE 4 kalan open question: Summoner staff vs totem, Hexer grimoire vs hancer, V2 palette, Ronin flipX
 - NLM sync: CLASS_SILHOUETTE_BIBLE Ravager dual axe degisikligi henuz sync edilmedi
 
 ## Session History
+
+### S62 (2026-05-12)
+- Warblade pilot prompt yazildi: Create Image S-XL New -> style reference workflow (STAGING/warblade_pilot_prompt_2026-05-12.md)
+- cx profil temizligi: cop profiller silindi (model_reasoning_effort=low vb 7 profil), laurethayday yeniden login edildi
+- codex_profile.ps1 fix: bilinmeyen profil adina hata ver (profil onceden cx add ile olusturulmali)
+- CodexAuthManager v0.3.0 GitHub release: profile validation + README beginner improvements (npm install, Node.js link, ChatGPT Plus gereksinimleri)
+- CURRENT_STATUS.md lean formata indirildi (~66 satir); sub-agent background launch feedback memory kaydedildi
 
 ### S61 (2026-05-12)
 - PixelLab 16-slot batch v1 uretildi + QC (PARTIAL PASS) -> v2 hazirla: south-facing guclendir, Ravager dual axe, canvas fill zorunlu
