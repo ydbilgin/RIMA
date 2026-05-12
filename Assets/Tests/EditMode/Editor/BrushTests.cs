@@ -19,6 +19,8 @@ namespace RIMA.Tests.Editor
         public BrushMode ActiveBrush { get; set; }
         public Vector3Int HoveredCell { get; set; }
         public bool IsCanvasHovered => true;
+        public RIMA.Runtime.Rooms.RoomBlueprint ActiveBlueprint { get; set; }
+        public bool IsWallOverrideMode { get; set; }
         private VisualElement _left = new VisualElement();
         private VisualElement _right = new VisualElement();
         public VisualElement LeftPanel => _left;

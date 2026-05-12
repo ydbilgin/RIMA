@@ -1,0 +1,269 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+## TASK: RIMA CONCEPT ART -- PIXEL ART BATCH v2 (30 SCENES)
+
+### CONTEXT
+
+Previous batch (15 PNG + scene 16-18) was in wrong style (painterly illustration). They are already moved to _DISCARDED_2026-05-10_painterly/. All target folders are now EMPTY:
+- STAGING/concept_art/01_combat/
+- STAGING/concept_art/02_boss/
+- STAGING/concept_art/03_environment/
+- STAGING/concept_art/04_cinematic/
+
+### STYLE MANDATE -- PIXEL ART (EVERY PROMPT MUST START WITH THIS)
+
+PIXEL ART game asset in the exact style of RIMA character anchors.
+Heavy 1-pixel BLACK OUTLINE on every silhouette edge.
+Detailed pixel shading like Hades 2 / Eastward / Dead Cells (NOT painted, NOT smooth, NOT 3D, NOT illustration).
+~128px tall character on transparent or contextual background.
+35-degree low top-down ARPG view (Diablo 2 / Path of Exile camera).
+Muted dark fantasy palette: stone grey-blue (#1E2030, #262838, #3A3D48), deep purple shadows (#18181E, #1A0E2A).
+Saturated class/effect accent colors only (cold blue #7BA7BC for Warblade/Ranger weapons, void purple #5A2A8A for Shadowblade, golden energy for Elementalist, cyan rift #00FFCC for Architect/Echo VFX).
+Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes.
+Cinematic gameplay screen vibe like Hades or Diablo 2 in-game footage -- NOT concept art book.
+Aspect ratio 16:9.
+
+### ANCHOR CHARACTER DESCRIPTIONS (embed per scene)
+
+Warblade: Male warrior, short dark brown hair, short beard, broad heroic build. Steel-blue pauldrons over brown leather coat + padded chest armor, dark leather pants, heavy boots. Two-handed sword with glowing cold-blue crystalline edge (#7BA7BC). Hairline cold-blue cracks on armor plates. Weathered, battle-worn. NO hand glow, NO purple.
+
+Ranger: Female ranger, white/silver long hair, lean agile build, leather chest binding + dark green-grey skirt with leather straps + brown boots, quiver visible on back. Compound bow held in left hand. Cold blue accent on bowstring/glow (#7BA7BC). Wild athletic posture.
+
+Shadowblade: Male assassin, short dark messy hair, slim agile build, dark navy/black scarf covering nose-down, hooded blue-grey vest, fitted dark trousers + boots. Twin short blades in both hands with VIOLET glowing edges (#5A2A8A). Predator low stance. NO embedded body glow -- only blade glow.
+
+Elementalist: Female mage, short blonde hair, slim build, simple grey-blue tunic + brown belt + boots. UNARMED -- casts via hand gestures. Right hand raised holding a glowing GOLDEN energy orb (element-neutral default). Soft confident posture.
+
+Gunslinger: Female with red hair, dark goggles around neck, leather vest + bandolier with brass cartridges, dark trousers, twin pistols holstered. Lean.
+
+Ravager: Male barbarian, blonde messy hair, bare chest with brown wraps + fur shoulders, two-handed axe with stone head. Bulky rough.
+
+Hexer: Female witch, short black messy hair, leather chestplate + grey skirt, holding orange-amber lantern in left hand. Mysterious tilt.
+
+Summoner: Female mage, white braided hair, long dark robe with hood half-down, holding tall wooden staff with green crystal top. Floating green wisp in raised hand.
+
+Ronin: Male samurai, black hair tied back, dark navy gi + grey hakama, katana sheathed at hip drawn slightly. Calm grounded stance.
+
+Brawler: Male monk, shaved head, bare chest + leather harness/wraps, hand bandages, plain trousers. Coiled ready stance.
+
+### NLM CONTEXT (pre-fetched, embed in relevant scenes)
+
+BOSS - Penitent Sovereign:
+- Phase 1 "Under the Chains" (100%-66% HP): 14x14 circular stone ritual platform, chain anchors around edge, 2 dash corridors N-S. Telegraphed kit: Chain Whip (6m straight line), Penitent Surge (4m radius push), Shackle Cast (8m single target chain). Armored knight with hanging chains. Posture bar visible.
+- Phase 2 "Breaking Chain" (66%-33%): Transition -- boss collapses, violet light bursts from chest, chains shatter, speed +30%. Rift Tear hazard (3m radius) appears center of arena. Dash lanes become one-way.
+- Phase 3 "Sovereign Awakened" (33%-0%): Boss floats up, remaining chains melt, body half-mutated with rift energy. Sovereign Wrath: entire arena red except 2m safe circle (rotates between center/edge/boss-behind). Speed +50% total. Chain Detonation: 4 markers, 1.5s to explode.
+
+BOSS - Architect Monster Form:
+- 6x player size twisted entity, volcanic basalt arena (black basalt floor #161822), lava cracks #4A1A1A glowing, cyan rift sigils (#00FFCC) etched on floor and boss body. Silence ability: skill icons sealed with cyan rune locks, 4-second timer.
+
+MOB ROSTER:
+- M01 Fracture Imp (48-96px): Triangle body, head = 40% silhouette, pointy arms, rift energy dripping from holes in body. Swarm type.
+- M02 Shard Walker (112-128px): Tall narrow body, 3-4 sharp crystal shards jutting from shoulders, body made of cracked crystal plates. Ranged caster.
+- M03 Seam Crawler (96px): Flat wide body, 6 claws, hugs ground, hides in floor cracks. Skirmisher.
+- M04 Penitent Bruiser (128-160px): Hunched massive body, drooping shoulders, head bowed. Purple Anti-Heal aura emitting from chest. Tank.
+- M05 Chain Warden Echo (128px): Heavy chest armor, two chains of rift energy floating from shoulders. Controller elite.
+- M06 Relic Caster (80-96px): Tall thin body, holds broken reliquary, intentionally smallest target in room. Support.
+- M07 Riftbound Augur (96-128px): Long cloak, hunched posture. Instead of eyes: 3 rift crystal protrusions at crown. Debuffer.
+- M08 Hollow Hulk (160-224px): Massive square shoulders, arms bigger than torso, NO HEAD -- rift light seeping from neck cavity. False threat.
+
+SKILL VFX:
+- Warblade Iron Combo (LMB): Wide arc, overhead, shoulder slam -- 3-hit heavy melee chain. Cold blue trail #7BA7BC.
+- Warblade Bladestorm (V): 5s AoE spin, CC immunity, blue circle ground effect.
+- Ranger Rift Arrow (LMB): Charged shot, bow vertical, arrow tip pulsing cold blue, Mark ring on target (cyan).
+- Ranger Spirit Bow (V): Giant phantom blue bow overlay, rapid auto-marked arrows to all mobs.
+- Shadowblade Veil Strike (LMB): Reverse-grip slash, 30-degree committed angle, violet streak afterimage #5A2A8A, Rift Scar mark left glowing on mob body.
+- Shadowblade Wraith Form (V): Translucent ghost overlay, twin blades raised, mid-pass through stone wall.
+- Elementalist Fireball (LMB): Both hands extended, brilliant red-orange fireball mid-flight, burning particle trail.
+- Elementalist Trinity Storm (V): Three vortices around character -- red fire, blue frost, gold radiant light. Arms raised. Central rune on floor.
+
+HUB NPCs (Fractured Sanctuary):
+- Ferryman: Hooded boatman, at boat dock. Hub shop counter with dangling wares. Single warm lantern. Cyan rift currency rune on counter. Hub Rest Pose (not combat stance).
+- Vrel (Smith): Burly bearded blacksmith at anvil, hammering glowing weapon. Warm orange forge fire. Weapon racks behind.
+- Sister Mourne: Robed mystic figure at shrine. Purple ambient glow. Candles. Ancestral relics. Somber prayer pose.
+- Cartographer: At map table with old notes and map developments.
+
+DEATH SCENE: Character collapses to knee, cyan rift smoke #00FFCC leaking from chest, environment dimming to black. Camera zoom-in slow-mo. Sword fallen beside. Then hub wake-up cinematic.
+
+### IMAGE GENERATION METHOD
+
+Use image_gen tool (or equivalent) to generate each scene. Save outputs to:
+- 01_combat/scene_NN_id.png
+- 02_boss/scene_NN_id.png
+- 03_environment/scene_NN_id.png
+- 04_cinematic/scene_NN_id.png
+
+All paths relative to: F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/concept_art/
+
+### 30 SCENES TO GENERATE
+
+#### 01_combat/ (scenes 1-10)
+
+scene_01_warblade_iron_combo:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view (Diablo 2 / Path of Exile camera). Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe like Hades or Diablo 2 in-game footage. Aspect ratio 16:9.
+Warblade (male warrior, short dark brown hair, short beard, broad heroic build, steel-blue pauldrons over brown leather coat, two-handed sword with glowing cold-blue crystalline edge #7BA7BC, hairline cold-blue cracks on armor plates) mid-3rd-hit Iron Combo overhead slam -- greatsword swung fully downward, Penitent Bruiser (hunched massive tank, drooping shoulders, purple Anti-Heal aura from chest, 128-160px) recoiling backward. Cold blue sword trail #7BA7BC arc behind blade. Stone keep arena floor, cracked tiles, torch light.
+
+scene_02_warblade_bladestorm_ult:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Warblade (male warrior, short dark brown hair, short beard, broad heroic build, steel-blue pauldrons, two-handed greatsword with cold-blue crystalline edge #7BA7BC) Bladestorm ultimate -- character spinning 360 degrees with greatsword fully extended outward, blue AoE circle radiating from feet on stone floor. Four Fracture Imps (tiny triangle bodies, head=40% silhouette, pointy arms, 48-96px) mid-knockback in all directions around him. Cold blue motion blur ring.
+
+scene_03_ranger_rift_arrow:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Ranger (female, white/silver long hair, lean agile build, leather chest binding + dark green-grey skirt, quiver on back, compound bow in left hand, cold blue accent on bowstring #7BA7BC, wild athletic posture) full draw Rift Arrow charged shot -- compound bow held vertically, charged arrow tip pulsing cold blue #7BA7BC, player holding breath (tension pose), target Fracture Imp marked with cyan ring on ground. Stone corridor background.
+
+scene_04_ranger_spirit_bow_ult:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Ranger (female, white/silver long hair, lean agile build, leather chest binding + dark green-grey skirt, quiver on back, cold blue accent #7BA7BC, wild athletic posture) Spirit Bow ultimate -- massive translucent phantom blue bow overlay on character, firing rapid auto-marked arrows simultaneously at 3 different mobs (2x Fracture Imp tiny triangle bodies + 1x Shard Walker tall crystal-plate body). Multiple cold blue arrow trails.
+
+scene_05_shadowblade_veil_strike:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Shadowblade (male assassin, short dark messy hair, slim agile build, dark navy/black scarf covering nose-down, hooded blue-grey vest, fitted dark trousers, twin short blades with VIOLET glowing edges #5A2A8A, predator low stance, NO body glow only blade glow) Veil Strike -- reverse-grip slash committed 30 degrees forward, violent violet streak afterimage #5A2A8A behind blade path, Rift Scar mark (glowing violet sigil) freshly left on Penitent Bruiser chest (hunched massive enemy). Dark corridor with ambient rift crack light.
+
+scene_06_shadowblade_wraith_form_ult:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Shadowblade (male assassin, short dark messy hair, slim agile build, dark navy/black scarf covering nose-down, hooded blue-grey vest, fitted dark trousers, twin short blades with VIOLET glowing edges #5A2A8A, NO body glow only blade glow) Wraith Form -- body semi-transparent ghost overlay (translucent pixel effect showing through), currently mid-pass THROUGH solid stone wall. Twin blades raised. Violet ghost-trail particles trailing behind. Dark stone dungeon wall cross-section visible showing inside the wall.
+
+scene_07_elementalist_fireball:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Elementalist (female mage, short blonde hair, slim build, simple grey-blue tunic + brown belt + boots, UNARMED casts via hand gestures) Fireball cast -- both hands extended forward, brilliant red-orange fireball mid-flight toward Shard Walker target (tall narrow body, 3-4 sharp crystal shards from shoulders, cracked crystal plate body, 112-128px). Burning particle trail behind fireball. Warm fire light casting glow on stone floor.
+
+scene_08_elementalist_trinity_storm_ult:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Elementalist (female mage, short blonde hair, slim build, simple grey-blue tunic + brown belt + boots, UNARMED casts via hand gestures) Trinity Storm ultimate -- three swirling elemental vortices orbiting character (red fire vortex, blue frost vortex, gold radiant light vortex). Arms raised wide. Central rune on stone floor beneath character. Mobs at edges of frame recoiling.
+
+scene_09_warblade_vs_chain_warden:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall character. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Warblade (male warrior, short dark brown hair, short beard, broad heroic build, steel-blue pauldrons, two-handed greatsword with cold-blue crystalline edge #7BA7BC) dodging Chain Warden Echo attack. Chain Warden Echo (heavy chest armor, 128px, rift-energy chains floating from shoulders, Controller elite mob) mid-Chain Pull: rift-energy chain flying through air toward Warblade. Warblade side-stepping with sword raised in guard pose. Stone altar room background, cold blue brazier light.
+
+scene_10_party_combat:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. ~128px tall characters. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screenshot vibe. Aspect ratio 16:9.
+All 4 classes fighting together in stone keep room: Warblade (male warrior, short dark brown hair, broad build, steel-blue pauldrons, greatsword cold-blue edge), Ranger (female, white/silver long hair, compound bow, green-grey skirt), Shadowblade (male assassin, dark scarf, navy vest, twin violet-edged blades), Elementalist (female mage, short blonde hair, grey-blue tunic, golden energy hands). Fighting wave of 5 Fracture Imps (tiny triangle bodies, pointy arms, swarm) + 2 Shard Walkers (tall crystal-plate bodies). Each class using signature skill. Gameplay screenshot composition.
+
+#### 02_boss/ (scenes 11-15)
+
+scene_11_sovereign_phase1:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Penitent Sovereign Phase 1 "Under the Chains" -- massive armored knight (~200px tall, heavy plate armor weathered grey, chains hanging from arms and collar, chained pauldrons heavy and rusted), mid-Chain Whip attack (rift-energy chain extending 6 tiles forward). 14x14 circular stone ritual arena floor visible, chain anchor points bolted around perimeter wall, two opposing dash corridors visible as clear paths. Posture bar UI element at screen top. Dim torch light, cold dungeon atmosphere.
+
+scene_12_sovereign_phase2_transition:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Penitent Sovereign Phase 2 transition -- boss collapsed to one knee, violet light BURSTING from cracked chest armor plates, chains SHATTERING (broken chain links flying outward as pixel debris). Central arena floor cracking open as Rift Tear hazard materializes (3m radius rift energy tear, cyan-violet vortex opening in stone). Dramatic lighting shift from cold torch to violent violet. Desperation energy.
+
+scene_13_sovereign_phase3_wrath:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Penitent Sovereign Wrath ability -- entire 14x14 arena floor covered in red danger-tint (pixel art red overlay pattern on stone tiles), Warblade player dodging into the small 2m safe circle near center. Penitent Sovereign floating above arena with arms spread wide, body half-mutated with violet rift energy replacing left half of torso. Original chains fully dissolved. Pixel speed lines.
+
+scene_14_architect_monster_form:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Final Architect boss monster form -- massive twisted corrupted humanoid entity 6x the size of a player character, volcanic basalt arena (black basalt floor #161822, red lava cracks #4A1A1A glowing between tiles). Cyan rift sigils (#00FFCC) etched on floor and boss body. Rift energy erupting from boss joints and eye sockets. Player character tiny in corner for scale comparison. Oppressive scale.
+
+scene_15_architect_silence_seal:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Architect Silence ability -- player character (any class, desperate straining pose) with all skill slot icons at screen bottom SEALED with glowing cyan rune locks (#00FFCC). 4-second countdown timer visible on each locked icon. Character straining against invisible force. Architect boss looming partially visible in background darkness. Urgent red border pulse on entire UI frame.
+
+#### 03_environment/ (scenes 16-25)
+
+scene_16_hub_sanctuary:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Fractured Sanctuary hub -- wide establishing shot. Central cyan rift altar glowing #00FFCC at center of stone room. Four distinct NPC zones: Ferryman at boat dock left (cool blue water glow), Vrel forge right (warm orange fire glow), Sister Mourne shrine back-left (purple ambient candles), Cartographer map table back-right (warm parchment). Warm-cold lighting contrast. Stone fractured floor with rift cracks. No enemies. NPCs in Hub Rest Pose (not combat stance).
+
+scene_17_hub_vrel_forge:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Vrel the Smith at his forge -- burly bearded blacksmith NPC (large build, leather apron, hammer raised mid-strike) hitting glowing weapon on anvil. Warm orange forge fire casting pixel-art orange light on stone walls. Weapon racks with various arms visible in background. Cold cyan rift ambient light seeping in from hub area outside forge. Metal sparks as pixel particles flying from hammer strike.
+
+scene_18_hub_sister_mourne:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Sister Mourne at shrine -- robed mystic female NPC (long dark robes, gentle posture, hands folded in prayer or reaching toward shrine), surrounded by candles with pixel-art flame shapes. Ancestral relics on stone shelves. Purple ambient glow emanating from shrine crystal behind her. Somber reverent atmosphere. Soft shadow play on stone wall behind.
+
+scene_19_keep_threshold:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Act 1 Broken Keep entry -- crumbling stone arch gateway framing the dungeon entrance. Weathered castle walls stone grey-blue #1E2030 texture, cold pale morning light beam cutting through the breach at angle. Amber torch sconces flanking arch. Rubble and broken stone at base. Dark foreboding corridor visible beyond threshold. Optional player character silhouette at frame edge.
+
+scene_20_combat_room_aftermath:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Act 1 combat room post-fight aftermath -- stone dungeon room with scattered hollow enemy corpses dissolving/fading into cyan rift smoke particles #00FFCC (bodies dissipating at edges). Broken stone columns, cracked floor tiles. Lingering rift energy particles floating upward like embers. Torchlight and one glowing rift wall crack illuminating the scene. Quiet after battle atmosphere. No living enemies.
+
+scene_21_elite_room_chain_warden:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Act 1 Elite room reveal -- Chain Warden Echo (heavy chest armor, 128px, two rift-energy chains floating from shoulders, Controller elite) standing center on raised stone altar platform. Two Fracture Imps flanking on either side (tiny triangle bodies, head=40% silhouette). Cold blue brazier flames on iron sconces flanking altar. Oppressive low stone ceiling. Chains decorating walls. Player POV boss reveal moment composition.
+
+scene_22_shop_ferryman:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Hub shop -- The Ferryman (hooded boatman NPC, weathered cloaked figure, calm demeanor, behind wooden counter) with various wares dangling from hooks above counter (weapons, flasks, relics as tiny pixel art icons). Single warm lantern casting orange pool of light. Cyan rift currency rune glowing on counter surface (#00FFCC). Boat dock water visible behind Ferryman in background.
+
+scene_23_crypt_corridor:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Crypt Depths F2 corridor -- narrow stone passage, claustrophobically low ceiling pressing down. Cyan rift energy cracks splitting walls (#00FFCC hairline cracks glowing in dark stone). Bone piles in alcoves along walls. Single Seam Crawler shadow visible flat against far ground (flat wide body, 6 claws, hugging floor). Torchlight barely reaching from behind player. Oppressive dark atmosphere.
+
+scene_24_volcanic_zone:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Volcanic Boss Zone F3 establishing shot -- wide view of black basalt floor #161822 with visible tile grid texture. Cyan rift energy cracks bleeding up from depths between tiles (#00FFCC glowing lines). Red lava visible far below through major cracks (deep orange glow). No enemies -- pure environmental dread. Heat shimmer effect as pixel dithering on air above cracks. Massive stalactites above with cyan rift drips.
+
+scene_25_rift_portal_appear:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Rare Rift Portal scene -- cracked stone floor with portal materializing from crack. Cyan and violet smoke rising in spiral from floor crack (#00FFCC + violet mix). Portal gateway forming -- glowing rift oval aperture of cyan-violet energy. Player character (any class) standing at edge facing portal, sword lowered at side (decision moment -- Burden plus Gift dilemma). Eerie quiet glow illuminating player from below.
+
+#### 04_cinematic/ (scenes 26-30)
+
+scene_26_death_scene:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Player character death -- warrior collapsed to one knee, body slumped forward exhausted. Cyan rift smoke #00FFCC leaking from chest wounds and seeping from back. Environment dimming to black (pixel art vignette darkening edges). Sword fallen to ground beside character. Single mote of cyan light rising upward from body. Somber quiet. Tight cinematic framing implying camera zoom-in.
+
+scene_27_ult_perfect_condition:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Perfect Condition ultimate ready state -- Warblade character (male warrior, short dark brown hair, short beard, steel-blue pauldrons, two-handed greatsword cold-blue edge) with subtle cyan edge aura highlighting silhouette (edge highlight only, not full glow). Resource bar at full shown at bottom of frame as pixel art UI. Ultimate ability slot icon PULSING with cyan energy. Screen edges very slightly lit cyan. Triumphant controlled ready pose.
+
+scene_28_boss_intro_zoom:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Boss intro cinematic frame -- Warblade character back-view small silhouette in foreground, Penitent Sovereign (massive armored knight, chains, 200px) looming enormous in background with dramatic cold backlight. Name banner "PENITENT SOVEREIGN" displayed in pixel-art styled text block at bottom of screen sliding up. Black cinematic letterbox bars (top and bottom). Dramatic scale contrast between player and boss.
+
+scene_29_hub_return_portal:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. 35-degree low top-down ARPG view. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Player returning to hub -- character back-view (any class, sword at side), stepping into glowing cyan rift gateway #00FFCC. Hub Fractured Sanctuary warmly lit interior faintly visible through portal. Stone dungeon corridor behind character (where they came from). Portal frame glowing and rippling with cyan pixel particles. Quiet triumphant moment. Safe return.
+
+scene_30_act1_map_select:
+PIXEL ART game asset in the exact style of RIMA character anchors. Heavy 1-pixel BLACK OUTLINE on every silhouette edge. Detailed pixel shading like Hades 2 / Eastward / Dead Cells. Muted dark fantasy palette. Hard pixel edges, no anti-aliasing, no bloom, no painterly brush strokes. Cinematic gameplay screen vibe. Aspect ratio 16:9.
+Act 1 procedural map screen -- top-down flat view of 15 connected nodes as branching path map. Current position node highlighted with cyan beacon pulse (#00FFCC glow). Boss node at far end glowing red-ominous. Mixed node types as pixel icons: combat (skull icon), shop (coins icon), elite (chains icon), rest (fire icon). Fractured parchment background texture with rift cracks running through the map. Pixel art UI border frame.
+
+### QUALITY GATE -- MANDATORY AFTER SCENE 5
+
+After generating scene_05_shadowblade_veil_strike.png -- STOP and evaluate:
+1. Is it pixel art? (heavy black outline, no smooth shading, hard pixel edges)
+2. Is there a ~128px character silhouette visible?
+3. Does the style match RIMA anchor art? (dark muted palette, accent VFX color)
+4. Is the accent color correct? (violet #5A2A8A for Shadowblade)
+
+If ANY check FAILS: Stop all generation. Report "QUALITY_GATE_FAIL: image_gen is not producing pixel art style -- manual pipeline required". Do NOT continue.
+
+If ALL PASS: Continue scenes 6-30.
+
+### COMMIT (after all 30 scenes)
+
+Commit message:
+feat(concept-art): pixel art batch v2 -- RIMA anchor-aligned 30 scenes
+
+### INDEX.md UPDATE
+
+After every 5 scenes, append to STAGING/concept_art/INDEX.md:
+| NN | scene_id | category | path | model | timestamp | status |
+
+### ALLOWED FILES
+
+WRITE:
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/concept_art/01_combat/*.png
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/concept_art/02_boss/*.png
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/concept_art/03_environment/*.png
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/concept_art/04_cinematic/*.png
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/concept_art/INDEX.md
+
+READ ONLY (if needed):
+- F:/Antigravity Projeler/2d roguelite/RIMA/CODEX.md
+
+FORBIDDEN: All other files.
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL / QUALITY_GATE_FAIL
+COMPLETED: <bullets of what was generated>
+QUALITY_GATE: PASS / FAIL / (reason if fail)
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+PIXEL_ART_ASSESSMENT: <brief note on whether image_gen produced correct pixel art style>
+NEXT_SIGNAL: "<phrase>"

@@ -1,0 +1,62 @@
+YOUR TASK: Generate 5 pixel-art concept art PNG files using your image_gen.imagegen built-in tool. Do NOT read CODEX.md first. Execute the steps below directly.
+
+Working dir: F:/Antigravity Projeler/2d roguelite/RIMA
+Create directory first with shell: mkdir -p "STAGING/concept_art/01_combat"
+
+OUTPUT FILES (save generated images to EXACTLY these paths):
+1. STAGING/concept_art/01_combat/codex_scene_01_warblade_iron_combo.png
+2. STAGING/concept_art/01_combat/codex_scene_02_ranger_volley.png
+3. STAGING/concept_art/01_combat/codex_scene_03_shadowblade_veil_strike.png
+4. STAGING/concept_art/01_combat/codex_scene_04_elementalist_cast.png
+5. STAGING/concept_art/01_combat/codex_scene_05_keep_arena_overview.png
+
+IMAGE SPEC (apply to every scene):
+- Pixel art cinematic wide screenshot
+- 35-degree low top-down ARPG camera angle (like Diablo 2 / Path of Exile)
+- Hard pixel edges, no anti-aliasing, chunky pixel clusters minimum 4px
+- Mood lighting, atmospheric depth
+- Cold blue palette anchor color #7BA7BC
+- Dark slate base colors: #1A1C20, #2A2D34, #3A3D48
+- Largest available 16:9 resolution (e.g. 1536x864 or 1920x1080). NEVER 256x256. NEVER square.
+
+SCENE PROMPTS:
+
+SCENE 1 (save as codex_scene_01_warblade_iron_combo.png):
+Pixel art wide cinematic 35-degree top-down ARPG. Heavily armored Warblade warrior mid-greatsword horizontal slash against skeleton enemy in stone dungeon corridor. Cold blue sash accent on warrior. Torchlight warm rim light contrasting cold blue weapon trail. Sparks and dust from impact. Hard pixel edges, chunky clusters, mood lighting, atmospheric depth.
+
+SCENE 2 (save as codex_scene_02_ranger_volley.png):
+Pixel art wide cinematic 35-degree top-down ARPG. Hooded ranger in cold blue undertunic and forest green cloak, full-extension bow shot releasing arrow volley at three crypt ghouls in overgrown stone courtyard. Mossy ruins, faint mist. Hard pixel edges, chunky clusters, mood lighting, atmospheric depth.
+
+SCENE 3 (save as codex_scene_03_shadowblade_veil_strike.png):
+Pixel art wide cinematic 35-degree top-down ARPG. Shadowblade assassin in dark cloak with violet undertones, body half-dissolved into violet shadow trail, twin short blades crossing in X shape at strike point next to elite mob. Dark crypt arena with violet ambient haze. Hard pixel edges, chunky clusters, mood lighting, atmospheric depth.
+
+SCENE 4 (save as codex_scene_04_elementalist_cast.png):
+Pixel art wide cinematic 35-degree top-down ARPG. Elementalist mage in deep blue-grey robe, both hands extended casting energy burst at volcanic enemy. Magma cracks in floor glow warm orange contrasting cold mage palette. Distant lava bridges visible in background. Hard pixel edges, chunky clusters, mood lighting, atmospheric depth.
+
+SCENE 5 (save as codex_scene_05_keep_arena_overview.png):
+Pixel art wide cinematic 35-degree top-down ARPG, no characters present — environmental establishing shot only. Stone keep arena room interior, four gate sockets at cardinal walls, central ritual altar with cold blue glow, scattered torches casting warm light pools, cool slate floor tiles, wall stones with carved runic accents. Empty pre-combat atmosphere. Hard pixel edges, chunky clusters, mood lighting, atmospheric depth.
+
+EXECUTION STEPS:
+Step 1: mkdir -p "STAGING/concept_art/01_combat"
+Step 2: Generate Scene 1 with image_gen.imagegen and save PNG to path 1 above.
+Step 3: Generate Scene 2 with image_gen.imagegen and save PNG to path 2 above.
+Step 4: Generate Scene 3 with image_gen.imagegen and save PNG to path 3 above.
+Step 5: Generate Scene 4 with image_gen.imagegen and save PNG to path 4 above.
+Step 6: Generate Scene 5 with image_gen.imagegen and save PNG to path 5 above.
+Step 7: Create or update STAGING/concept_art/INDEX.md — append these lines:
+  codex_scene_01_warblade_iron_combo.png  folder=01_combat  status=GENERATED
+  codex_scene_02_ranger_volley.png  folder=01_combat  status=GENERATED
+  codex_scene_03_shadowblade_veil_strike.png  folder=01_combat  status=GENERATED
+  codex_scene_04_elementalist_cast.png  folder=01_combat  status=GENERATED
+  codex_scene_05_keep_arena_overview.png  folder=01_combat  status=GENERATED
+Step 8: git add STAGING/concept_art/INDEX.md
+Step 9: git commit -m "feat(concept-art): add 5 codex combat scenes via imagegen"
+Step 10: Report results.
+
+REPORT FORMAT:
+STATUS: DONE or FAILED or PARTIAL
+COMPLETED: list scenes
+ERRORS: NONE or describe
+FILES_TOUCHED: list paths
+COMMIT_HASH: hash
+NEXT_SIGNAL: CODEX_IMAGEGEN_DONE

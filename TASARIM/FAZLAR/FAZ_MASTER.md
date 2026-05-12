@@ -1,6 +1,12 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-14
+ozet: "RIMA referans dokumani"
+---
 # RIMA — FAZ MASTER (Tüm Fazların Özet Haritası)
 
-*Son güncelleme: 2026-05-09 | S46 | Kaynak: GDD, SINIF_VE_SKILL, MOB_TASARIMI, BOSS_DESIGN, MEKANIK_KARARLARI, MASTER_KARAR_BELGESI.md (Karar #1-71), dungeon_act1_map.md, map_fragment_system.md, MAKEUP_BACKLOG.md, CINEMATIC_LAYER_v1.md, RIMA_MASTER_ART_PIPELINE.md*
+*Son güncelleme: 2026-05-13 | S60 | Kaynak: GDD, SINIF_VE_SKILL, MOB_TASARIMI, BOSS_DESIGN, MEKANIK_KARARLARI, MASTER_KARAR_BELGESI.md (Karar #1-80), dungeon_act1_map.md, map_fragment_system.md, MAKEUP_BACKLOG.md, CINEMATIC_LAYER_v1.md, RIMA_MASTER_ART_PIPELINE.md, chibi_lore_integration_decision_2026-05-13.md*
 
 > Bu dosya **genel haritadır** (high-level: sistem dağılımı, mob, narrative, asset pipeline overview).
 > Hafta-hafta detaylı plan + bütçe + kritik patika için: [`FAZ_DETAILED_SCOPE.md`](FAZ_DETAILED_SCOPE.md)
@@ -25,6 +31,7 @@
 - **Map Fragment + Kirrik Tas Tablet (Karar #63 LOCKED):** Fragment-based reveal sistemi, Boss kapisi 8 fragment. UI: TAB MapPanel + sol-ust MiniMap.
 - **Silah Gorünürlük Single-State (Karar #71 LOCKED):** Silah hep elde, Ronin istisna (sheath/draw kimligi). Pixel art constraint + combat-readability. Detay: `../MAKEUP_BACKLOG.md` + `../CINEMATIC_LAYER_v1.md`
 - **AD v1 Sprint (Karar #64-70):** ActionCommitProfile 5 alan, 3-layer feedback, posture v1 (boolean armor flag), dash-cancel per-class (Ravager/Shadow %15-25, Ranger/GS %30-55, Warblade/Brawler %60-75), OnDash proc, Cross-Class Proc text feedback.
+- **S59 Pivot LOCKED (Karar #72-76, 2026-05-12):** Pure 2D top-down + 64x64 chibi karakter, silahlı 1-piece (sınıf-silah sabit, body-only + WeaponAnchorMap REVOKED), boyut hiyerarşi 2^n + PPU=64 standardize, Final Boss 256x256+PPU=64 (sahnede ~2.5x), Map tools KULLANILMAYACAK (NLM lock), asset prompt format TYPE/HEAD/BODY/LIMBS. Eski 2.5D mimari + 128px native + chibi YASAK + KayKit/Blender pipeline REVOKED. Mevcut RIMA projesi RESTORE (RIMA_2.5D nested arsivlenecek).
 
 ---
 
@@ -248,3 +255,4 @@ Narrative direction:
 | 90 cross-class kombo (10×9) | 5 |
 | Fracture Echoes (tüm bosslar) | 5 |
 | Zorluk modu (Echo/Rift/Fracture/Void) | 5 |
+

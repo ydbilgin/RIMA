@@ -36,11 +36,11 @@ namespace RIMA.Tests.Editor
         [Test]
         public void RoomSaverSaveCreatesPrefabAndBlueprint()
         {
-            const string biome = "_TEST";
+            const BiomeType biome = BiomeType.Keep;
             const string roomId = "test_room";
-            const string dir = "Assets/_Generated/Rooms/_TEST";
-            const string prefabPath = "Assets/_Generated/Rooms/_TEST/test_room.prefab";
-            const string blueprintPath = "Assets/_Generated/Rooms/_TEST/test_room.asset";
+            const string dir = "Assets/_Generated/Rooms/Keep";
+            const string prefabPath = "Assets/_Generated/Rooms/Keep/test_room.prefab";
+            const string blueprintPath = "Assets/_Generated/Rooms/Keep/test_room.asset";
 
             var roomRoot = new GameObject("TempRoomRoot");
             try
@@ -71,11 +71,11 @@ namespace RIMA.Tests.Editor
         [Test]
         public void RoomSaverSaveRollsBackBlueprintWhenPrefabSaveFails()
         {
-            const string biome = "_TEST_ROLLBACK";
+            const BiomeType biome = BiomeType.Crypt;
             const string roomId = "bad_room";
-            const string dir = "Assets/_Generated/Rooms/_TEST_ROLLBACK";
-            const string prefabPath = "Assets/_Generated/Rooms/_TEST_ROLLBACK/bad_room.prefab";
-            const string blueprintPath = "Assets/_Generated/Rooms/_TEST_ROLLBACK/bad_room.asset";
+            const string dir = "Assets/_Generated/Rooms/Crypt";
+            const string prefabPath = "Assets/_Generated/Rooms/Crypt/bad_room.prefab";
+            const string blueprintPath = "Assets/_Generated/Rooms/Crypt/bad_room.asset";
 
             var roomRoot = new GameObject("TempRollbackRoomRoot");
             try

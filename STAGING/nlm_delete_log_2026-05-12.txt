@@ -1,0 +1,28 @@
+NLM bulk delete started: 05/12/2026 02:28:58
+Total sources: 213
+Batch 1: deleting 30 sources...
+✓ Deleted 30 sources
+  Cumulative deleted: 30
+Batch 2: deleting 30 sources...
+✓ Deleted 30 sources
+  Cumulative deleted: 60
+Batch 3: deleting 30 sources...
+✓ Deleted 30 sources
+  Cumulative deleted: 90
+Batch 4: deleting 30 sources...
+✓ Deleted 30 sources
+  Cumulative deleted: 120
+Batch 5: deleting 30 sources...
+✓ Deleted 30 sources
+  Cumulative deleted: 150
+Batch 6: deleting 30 sources...
+✓ Deleted 30 sources
+  Cumulative deleted: 180
+Batch 7: deleting 30 sources...
+✓ Deleted 30 sources
+  Cumulative deleted: 210
+Batch 8: deleting 3 sources...
+✓ Deleted 3 sources
+  Cumulative deleted: 213
+Delete phase done: 05/12/2026 02:29:16 - Total: 213
+Remaining sources after delete: 0

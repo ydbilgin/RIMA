@@ -1,7 +1,7 @@
 ---
 name: PixelLab Master Pipeline — All Asset Types
 created: 2026-05-10
-updated: 2026-05-10
+updated: 2026-05-13
 status: LOCKED
 supersedes: pixellab_animation_pipeline_v2.md (deleted, merged here)
 ---
@@ -13,6 +13,49 @@ Karakter animasyonu, boss uretimi, oda objeleri, tile'lar, UI — hepsi bu dosya
 
 **CANONICAL TOOL REFERENCE:** `MEMORY/PIXELLAB_TOOL_GUIDE.md` (2026-05-11 user verified, live UI map).
 Tutarsizlik varsa PIXELLAB_TOOL_GUIDE.md kazanir.
+
+---
+
+## ⚠️ S60 OVERRIDE — Pure 2D Top-Down (2026-05-13 LOCKED, supersedes 2.5D rules below)
+
+> Bu dosyanin geri kalanindaki "8 direction mandatory", "252x252 canvas", "128px karakter", "body-only anchor", "2.5D mimari" referanslari REVOKED. S59 pivot (2026-05-12) + S60 production lock'larina gore guncel kurallar:
+
+| Konu | Eski (2.5D / Faz 1 ChatGPT) | S60 LOCKED (2026-05-13) |
+|---|---|---|
+| **Karakter sprite** | 128-252px native + body-only anchor + WeaponAnchorMap | **64x64 chibi + silahli 1-piece**, PixelLab Create Character (Pixen) |
+| **Animation direction (MVP)** | 8 direction mandatory (S/SE/E/NE/N/NW/W/SW) | **4 direction (N/S/E uretilir, W=flipX)** — 8 direction post-v1 |
+| **Canvas boyutu** | 252x252 (Pixflux v3) veya 256x256 | **64x64 karakter / 32x32 tile / 64-128 VFX / 128 elite mob / 256 act+final boss** (2^n hierarchy) |
+| **PPU** | PPU=32 (Final Boss 96px insan formu Faz 4) | **PPU=64 TUM sprite** (boyut farki sprite canvas ile gelir, PPU manipulasyonuyla DEGIL) |
+| **Tile boyutu** | 64x64 floor + 64x128 iso wall | **32x32 top-down floor + 32x32 top-down wall + 32x32 decal** |
+| **Map Workshop** | (planlama vardi) | **YASAK (Karar #75)** — sadece single tile ok; multi-tile connected output yasak |
+| **Stil referansi** | 30deg ChatGPT init / 252px Pixflux | **Into Samomor (RPG Maker MZ) — 35° + 1-piece + 4 yon + neon accent + mat env palette** |
+| **Anim view** | low/medium top-down deneme | **High top-down ~30-35° (Hades match) KEEP** |
+| **Anim FPS** | 8 | **10-12 fps** |
+| **Renderer** | URP 3D + Billboard (2.5D) | **URP 2D Renderer + Pixel Perfect Camera + 2D Lights** |
+
+**Production pipeline (S60 LOCKED):**
+1. PixelLab AI uretim (NEW > PRO, transparent BG for character)
+2. **Manuel cleanup 5-15dk** (Aseprite/Photoshop): silhouette + outline + padding (hibrit zorunlu, saf MCP-only YETERSIZ — Karar #72/76 LOCKED)
+3. Unity import: Point filter, no compression, no mipmap, PPU=64
+4. SpriteAtlas pack per category
+5. QC: silhouette readable + tone match + size hierarchy correct
+
+**Tool secimi S60 (cogu KEEP):**
+- Karakter: create_character (Pixen) NEW + 4 direction
+- Tile: create_image_pixen NEW (S-XL) — single 32x32, chromakey #00FF00 fallback
+- Animation: Custom Animation V3 (karakter sayfasindan Add Animation) — 4 yon
+- Boss/Mob: create_character (mob preset) NEW + Pro fallback (drift varsa)
+- VFX 64-128px: create_object NEW + transparent BG
+- UI icon: create_ui_elements_pro
+
+**REVOKED bu dosyada (aramayin, kullanmayin):**
+- "8 direction mandatory" referanslari → 4 direction MVP
+- "252x252 / 256x256 canvas" → 64x64/128/256 2^n hierarchy
+- "Body-only anchor" → silahli 1-piece
+- "PPU=32 Final Boss" → PPU=64 standardize
+- "create_topdown_tileset connected output" → tek tile NEW only (Karar #75)
+
+Detay: `MEMORY/project_pure_2d_topdown_pivot_2026-05-12.md`, `MEMORY/project_64px_armed_character_locked.md`, `MEMORY/project_boss_size_hierarchy_2026-05-12.md`, `MEMORY/project_visual_canonical_pin_2026-05-12.md`.
 
 ---
 

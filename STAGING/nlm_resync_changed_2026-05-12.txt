@@ -1,0 +1,43 @@
+NLM re-sync changed files started: 05/12/2026 02:46:45
+Sources type: System.Object[]
+Sources count: 200
+
+=== Processing: MASTER_KARAR_BELGESI.md ===
+Matches: 1
+Deleting source ID: 7048a593-3901-47b1-9cef-3508822e4bd0
+Delete result: ✓ Deleted source: 7048a593-3901-47b1-9cef-3508822e4bd0
+Re-uploading: F:\Antigravity Projeler\2d roguelite\RIMA\TASARIM\MASTER_KARAR_BELGESI.md
+Add result: Uploading MASTER_KARAR_BELGESI.md... ✓ Added source: MASTER_KARAR_BELGESI.md Source ID: 476ee859-fdfe-4c9e-bb0e-c9ca259b4cfc
+
+=== Processing: FAZ_MASTER.md ===
+Matches: 1
+Deleting source ID: c881af36-3256-4787-84dc-3aba390329fb
+Delete result: ✓ Deleted source: c881af36-3256-4787-84dc-3aba390329fb
+Re-uploading: F:\Antigravity Projeler\2d roguelite\RIMA\TASARIM\FAZLAR\FAZ_MASTER.md
+Add result: Uploading FAZ_MASTER.md... ✓ Added source: FAZ_MASTER.md Source ID: 99401014-de6f-417d-89bd-e8ddc03b3ffa
+
+=== Processing: CURRENT_STATUS.md ===
+Matches: 1
+Deleting source ID: 09c8935e-9670-4503-b5ab-8b83f7003a8e
+Delete result: ✓ Deleted source: 09c8935e-9670-4503-b5ab-8b83f7003a8e
+Re-uploading: F:\Antigravity Projeler\2d roguelite\RIMA\CURRENT_STATUS.md
+Add result: Uploading CURRENT_STATUS.md... ✓ Added source: CURRENT_STATUS.md Source ID: 073a0a1a-7bf5-4eda-bd03-10fd83b40828
+
+=== Processing: asset_production_plan_2026-05-12.md ===
+Matches: 1
+Deleting source ID: f3659bb3-fd75-4fb5-98d4-b8da69527ca1
+Delete result: ✓ Deleted source: f3659bb3-fd75-4fb5-98d4-b8da69527ca1
+Re-uploading: F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\asset_production_plan_2026-05-12.md
+Add result: Uploading asset_production_plan_2026-05-12.md... ✓ Added source: asset_production_plan_2026-05-12.md Source ID: d3bc9bf6-a8e8-4af2-aa73-b9f0103f07a3
+
+=== Processing: INDEX.md ===
+Matches: 2
+Deleting source ID: 1ffbc053-ed87-49b3-82f4-d2186038022e
+Delete result: ✓ Deleted source: 1ffbc053-ed87-49b3-82f4-d2186038022e
+Deleting source ID: ba1f3e1a-afb3-4b7b-80b5-ef6220c2d879
+Delete result: ✓ Deleted source: ba1f3e1a-afb3-4b7b-80b5-ef6220c2d879
+Re-uploading: F:\Antigravity Projeler\2d roguelite\RIMA\MEMORY\INDEX.md
+Add result: Uploading INDEX.md... ✓ Added source: INDEX.md Source ID: c3140225-bb94-4a6a-aa13-7861bc344a22
+
+Done: 05/12/2026 02:47:14
+Final source count: 199

@@ -30,6 +30,8 @@ Open a file ONLY when its keywords match the current task.
 - [pixellab_animation_techniques.md](pixellab_animation_techniques.md) -- WHEN: run cycle, interpolation, animate-with-text
 - [pixellab_api_reliability.md](pixellab_api_reliability.md) -- WHEN: API error, retry, timeout, polling
 - [pixellab_pipeline_workflows.md](pixellab_pipeline_workflows.md) -- WHEN: pipeline, community workflow, spritesheet
+- [pixellab_master_pipeline.md](pixellab_master_pipeline.md) -- WHEN: tum asset tipleri tool->boyut->varyasyon tablosu, LOCKED 2026-05-10
+- [PIXELLAB_TOOL_GUIDE.md](PIXELLAB_TOOL_GUIDE.md) -- WHEN: PixelLab live UI tool map, tool ID + cost + NEW vs PRO, CANONICAL 2026-05-11
 
 ## Project (Active Design State)
 - [project_class_integration_order.md](project_class_integration_order.md) -- WHEN: class priority, which class next
@@ -41,6 +43,7 @@ Open a file ONLY when its keywords match the current task.
 - [project_gate_map_reveal.md](project_gate_map_reveal.md) -- WHEN: gates, door sockets, route reveal
 - [project_ui_state_blueprint.md](project_ui_state_blueprint.md) -- WHEN: HUD, skill bar, reward UI, gate choice
 - [project_dev_tool_rift_makeup.md](project_dev_tool_rift_makeup.md) -- WHEN: dev tool, building designer, rift portal, chaos gate, makeup VFX, buff visuals
+- [project_ui_qa_ai_skills.md](project_ui_qa_ai_skills.md) -- WHEN: UI concept, character menu, QA tester flow, Unity tests, shared AI skills
 - TASARIM/dungeon_act1_map.md -- WHEN: Act 1 node layout, oda tipleri, depth band, mob butce, Rift Portal spawn, procedural per-run (LOCKED v1)
 - TASARIM/map_fragment_system.md -- WHEN: map fragment drop, reveal sistemi, build planning UX, MapPanel, MiniMap, StS2-style (LOCKED v1)
 
@@ -55,6 +58,16 @@ Open a file ONLY when its keywords match the current task.
 - [project_test_automation.md](project_test_automation.md) -- WHEN: test, otomasyon, contract, modular test, QC workflow, behavioral testing
 
 - [project_chatgpt_canvas_fix.md](project_chatgpt_canvas_fix.md) -- WHEN: ChatGPT tile üretimi, boyut sorunu, canvas, process_tiles
+
+## Sub-Agent Architecture (S58/S59 — 2026-05-12)
+- [feedback_agent_architecture.md](feedback_agent_architecture.md) -- WHEN: router vs reasoning, rima-codex/research role, sub-agent spawn decision
+- [feedback_codex_task_routing.md](feedback_codex_task_routing.md) -- WHEN: UnityMCP routing, cx wrapper, CODEX_TASK.md vs /codex skill
+- [feedback_claude_md_stub.md](feedback_claude_md_stub.md) -- WHEN: CLAUDE.md stub pattern, PROJECT_RULES.md, sub-agent token economy
+- [feedback_nlm_auth_recovery.md](feedback_nlm_auth_recovery.md) -- WHEN: NLM auth expired, login fix
+- [project_nlm_notebook_id.md](project_nlm_notebook_id.md) -- WHEN: NotebookLM ID, RIMA Knowledge Base, eski yasak ID
+
+## Pivot — 2D Top-Down (S59 — 2026-05-12)
+- [project_pure_2d_topdown_pivot_2026-05-12.md](project_pure_2d_topdown_pivot_2026-05-12.md) -- WHEN: 2.5D vs 2D karar, chibi 64px, asset boyutları, sprite/tile/VFX spec, REVOKE listesi
 
 ## Add Memory
 Create MEMORY/<topic>.md with frontmatter, then add one line here.

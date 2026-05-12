@@ -50,7 +50,29 @@ Do NOT auto-discover context. If a required file is not in your task scope, STOP
 Every commit: Co-Authored-By: Codex (GPT 5.5) <noreply@antigravity.dev>
 One commit per bounded task. Commit message: imperative tense, what changed.
 
-## Workflow
+## CODEX_TASK.md Otomasyonu
+
+Kullanici "codex_task.md oku" ya da "codex.md oku" dediginde su sirayı takip et:
+
+1. **CODEX_DONE.md'yi bosalt** (tamamen sil veya bos birak) -- onceki sonucu temizle
+2. **CODEX_TASK.md'yi oku** -- gorev buradadir
+3. **Gorevi yap** -- sadece dosya okuma/yazma; MCP arac yok
+4. **CODEX_DONE.md'ye yaz** -- Claude'un anlayacagi formatta sonucu rapor et
+5. **Gorev DONE ve ERRORS: NONE ise** -- CODEX_TASK.md icerigini tamamen sil (bos birak)
+6. **Gorev PARTIAL veya BLOCKED ise** -- CODEX_TASK.md'ye dokunma, CODEX_DONE.md'ye neden bildir
+
+CODEX_DONE.md rapor formati:
+```
+STATUS: DONE / PARTIAL / BLOCKED
+COMPLETED:
+- <yapilan is>
+ERRORS: NONE / <liste>
+FILES_TOUCHED: <yollar>
+COMMIT: <hash veya NONE>
+NEXT_SIGNAL: <Claude'a ne yapacagini soyle>
+```
+
+## Standart Workflow
 
 1. Read CLAUDE.md (project rules, encoding, folder map).
 2. Read only the files the orchestrator listed. Nothing else.
