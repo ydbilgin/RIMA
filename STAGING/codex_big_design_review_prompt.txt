@@ -1,0 +1,142 @@
+RIMA proje icin 4 onemli tasarim karari hakkinda BAGIMSIZ Codex review yap. Sen GPT-5.5 xhigh olarak rima-design (Sonnet) judgment'larini cross-check ediyorsun.
+
+CIKTI FORMATI HER SORU ICIN:
+- VERDICT: AGREE / DISAGREE / MODIFY
+- REASONING: 2-4 madde, kisa
+- RISK FLAGS: varsa (production risk, scope risk, design conflict)
+- ALT_PROPOSAL: DISAGREE veya MODIFY ise spesifik oneri
+
+Toplam cevap <500 satir. Her soru ayri blok. Sonunda kisa OVERALL SUMMARY (1 paragraf).
+
+=== LOCKED TECH (degismez, soru disinda) ===
+- 64x64 chibi top-down + URP 2D Renderer + Pixel Perfect Camera
+- 32x32 tile, PPU=64, 10-12 fps anim
+- 4 yon + flipX (N/S/E sprite, W=flipX) -- S59 LOCKED 2026-05-12
+- Hibrit pipeline: PixelLab raw + Aseprite manual cleanup 5-15 dk/sprite (Karar #72)
+- Visual pin: Into Samomor (Sang Hendrix RPG Maker MZ) -- kamera 35 derece + palette mat env (#4A4A4A/#2A2E35/#1A2B1A) + neon accent (#FFB000/#FFF000) + Rift Cyan (#00FFCC)
+- 15 node procedural Act 1 (STS-vari node-choice)
+- Karakter silahli 1-piece, sinif silah sabit, PixelLab Create Character native (Karar #72)
+- Anim view ~30-35 derece high top-down (Hades match)
+
+=== LOCKED KARARLAR (degismez, soru disinda) ===
+- Karar #81 Open Vista 3-layer parallax + boss backdrop Faz 1 (LOCKED 2026-05-13)
+- Karar #83 Pocket Guardrails: sub-room only, Shop/Rest/Entry/Boss YASAK, max 2/run, Faz 2-3
+- Karar #82 Mob 3-Tier Skill System staged (T1+T2+T3, Faz 1: 3 T2 prototype only, T3 disabled)
+- Karar #84 Mob T2/T3 Staged Budget: Normal max 2 T2, Elite max 3 T2 (T3 disabled Faz 1), Boss T3 disabled Faz 1
+- Karar 2026-05-11 Terrain hazard var (F1 rift catlagi / F2 coken zemin / F3 lav+rift)
+- Karar 2026-05-11 Tile kenar invariance: 3px border = mortar #1A1C20, accent merkeze
+- Boss Penitent Sovereign 3 phase LOCKED (NLM teyitli):
+  * Faz 1 (100->66): Chain Whip + Penitent Surge + Shackle Cast + Litany of Restraint (4 chain anchor)
+  * Faz 2 (66->33): Rift Tear 3m + Rift Bloom 8s cycle + Chain Detonation + Fracture Strike (yeni hazard introduction, NOT escalation)
+  * Faz 3 (33->0) "Sovereign Awakened": Fracture Charge + Sovereign's Wrath + Hizlandirilmis Chain Det. + Echo Phantom Summon (3 phantom max)
+  * Posture: Faz1=700 / Faz2=850 / Faz3=1000
+
+===============================================
+SORU 1 -- ACIK DUNYA vs KAPALI DUNGEON
+===============================================
+
+RIMA SU AN: Act 1 = 15 node procedural (topoloji sabit, icerik random) -- Slay The Spire vari kapali dungeon. Kullanici sordu: "Acik dunyaya yedirebilir miyiz?"
+
+3 alternatif:
+- A) Last Epoch / PoE: Buyuk zone-level (200x200+ tile), oda kavrami yok, free roam
+- B) Hyper Light Drifter: Open exploration hub + lineer dungeon, hub'da NPC/shop
+- C) Hades: Arena chain (mevcut yapi) + Open Vista parallax ile "perceived openness" -- yapi kapali, gorsel acik
+
+RIMA-DESIGN JUDGMENT:
+SECIM: C (Hades-vari arena chain + Open Vista parallax). KAPALI YAPI KORUN, gorsel acik hissi.
+
+GEREKCE:
+- 64x64 chibi + 32x32 tile + hibrit pipeline ile A (PoE zone-level) Faz 1-3 boyunca infeasible -- 200x200 tile = ~40k cell, mob density + decal + LOS = scope kill
+- B (HLD hub) Act 1'in 15 node STS yapisini parcalar -- mevcut Karar 2026-05-10 procedural map'i atip hub+lineer'e gecmek = 3-4 hafta refactor + Room Designer F2 yatirimi kismen olu
+- C "perceived openness" Hades formulu: oda kucuk (15-25x15-25) ama background derin, transition cinematic. Mevcut yapiyi 0 refactor ile yedirir
+- Karar #81 Open Vista + #83 Pocket Guardrails zaten bu yonde -- "acik dunya hissi" parallax + boss backdrop'tan geliyor, yapi degismiyor
+
+IMPLEMENTATION:
+- Faz 1: Open Vista parallax kit (3-layer) + boss backdrop. 15 node procedural. Sifir refactor.
+- Faz 2: Karar #81 pocket sub-room (20x40, max 2/run) acilir
+- Faz 3: Act 2-3 icin "wider arena" room template (40x40 floor)
+- Asla: Free roam zone-level. RIMA'nin DNA'si roguelite arena chain.
+
+REVIEW SORU: 64x64 chibi + 30-35 derece top-down view'de "perceived openness via parallax" formulu isliyor mu, yoksa parallax sadece side-scroller / lower-angle game'lerde mi calisiyor? Faz 1 Open Vista parallax 3-layer + boss backdrop yeterince "acik dunya hissi" satar mi?
+
+===============================================
+SORU 2 -- MAP OBJECTS: NELER + SAYI + PIPELINE
+===============================================
+
+RIMA SU AN: Hicbir map object yok. Sadece tile (floor + wall) var.
+
+RIMA-DESIGN JUDGMENT:
+SECIM: Faz 1 = 14 obje minimum viable. 6 static + 3 dinamik + 3 interactive + 2 hazard.
+
+KATEGORILER:
+- Static decor (6): pillar 32x64, rubble 32x32, banner 32x64, altar 32x32, torch 32x64, skull-pile 32x32
+- Dinamik (3): chest 32x32 (3 state: closed/opening/open), breakable barrel 32x32, lever 32x32 (2 state)
+- Interactive (3): shrine 32x64, portal 32x64, shop counter 32x32
+- Hazard (2): spike-trap 32x32 (Karar 2026-05-11), terrain rift 32x32
+
+BOYUT KURALI: 32x32 base, 32x64 (1x2 tall) allowed, multi-tile YASAK (collision + asset cost sebebiyle).
+PIPELINE: PixelLab Create Object (raw) -> Aseprite manual cleanup 10-15 dk/obje -> ScriptableObject author -> Room Designer Object Brush placement.
+VARIANT POLICY: critical objects 1 variant Faz 1, decor 1 variant, Faz 2'de barrel ve rubble 2 variant.
+
+URETIM YUKU: 14 obje x ~30-45 dk = ~10 saat (Faz 1 budget'a paralel track, mob bittiginde devreye).
+
+REVIEW SORU: Faz 1 icin 14 obje (6+3+3+2) yeterli mi yoksa az mi? Hades / Dead Cells / Enter the Gungeon Act 1 typical obje count'u nedir? PixelLab Create Object endpoint karakter pipeline'i (Karar #72) ile ayni kalitede cikti veriyor mu? 32x32 + 32x64 sinir cok mu kisitlayici? Multi-tile (4x4 statue) tamamen yasak kalmali mi yoksa Faz 2-3'de optional mu?
+
+===============================================
+SORU 3 -- FIRLATILAN SKILL EFFECT: ACILAR + CIZIM
+===============================================
+
+RIMA SU AN: Skill keybind tanimli (LMB/RMB + Q/E/R/F + V/Space) ama skill effect angle policy yok.
+
+RIMA-DESIGN JUDGMENT:
+SECIM: Hybrid policy 4 angleMode kategori:
+1. Projectile (ok/magic bolt/throwing knife) = engine rotation, 1 sprite + Transform.rotation (continuous angle)
+2. Beam (lazer/isin) = ray-cast + sprite tile-stretch + rotation (1 tile)
+3. AOE Radial (explosion/frost nova/healing circle) = yonsuz, 1 sprite
+4. AOE Cone / Directional rectangle (flamethrower/sword sweep) = 8 yon sprite + engine snap to character facing
+
+GEREKCE:
+- Projectile symmetric (head+tail) -- 1 sprite + rotation visual kayipsiz, 16-32 angle smooth aim
+- Beam directional shader/stretch quad -- 1 tile sprite + length scale + rotation
+- AOE radial yonsuz -- top-down circle, rotation gereksiz
+- Cone/directional 8 yon zorunlu -- character 4 yon (S59 LOCKED) ile uyumlu (snap), W=flipX cone icin kirilir
+- V1 4 sinif: ~5-7 effect/sinif, cogu rotation/radial (cheap), ~5-8 Directional8 (expensive)
+
+BUDGET TAHMIN:
+- 4 sinif x 5-7 effect = 20-28 effect total
+- Rotation projectile: ~12-16 (cheap, 1 sprite + rot)
+- Radial AOE: ~6-8 (cheap, 1 sprite)
+- Beam: ~2-4 (cheap, 1 tile + stretch)
+- Directional8 cone/sweep: ~5-8 (expensive, 8 sprite/effect, ~5-10 saat asset uretim)
+
+REVIEW SORU: 30-35 derece top-down'da Hybrid skill angle policy okunabilir mi, yoksa cone AOE icin tum skillleri Directional8'e zorlamak gerekli mi? Engine rotation projectile (1 sprite + transform) chibi 64x64'te asymmetric sprite varsa visual artifact yaratir mi? 4 sinif x 5-7 skill effect Faz 1 butcesi icinde mi (mob spec'le paralel iki track)? Continuous angle (16-32) projectile aim performant mi yoksa 8-snap mi tercih edilir top-down chibi'de?
+
+===============================================
+SORU 4 -- 4 YON vs 8 YON
+===============================================
+
+RIMA SU AN: S59 LOCKED 2026-05-12 -- 4 yon + flipX MVP, 8 yon Faz 2-3 sonra. V1 4 sinif production'a yeni baslaniyor.
+
+RIMA-DESIGN JUDGMENT:
+SECIM: 4 yon + flipX LOCKED kalir (S59 onayi korunur). 8 yon staged Faz 2-3.
+
+GEREKCE:
+- S59 LOCKED 4 gun once alindi. Simdi pivot = 1-2 hafta kayip
+- PixelLab Create Character multi-view yapar ama Karar #72 hybrid pipeline manual cleanup 5-15 dk/sprite -- 4 -> 8 yon = 2x cleanup = sinif basina ~5-10 saat ek
+- Hades 8 yon ama 96-128px. RIMA 64x64 chibi 30-35 derece'de NW/NE/SW/SE pratik fark dusuk
+- 4+diagonal blend HYBRID REDDEDILDI -- sprite-based art'ta blend tearing risk
+- Skill aim Soru 3'te zaten continuous (Rotation) -- character body 4 yon kalir, aim layer ayri
+
+STAGED PLAN:
+- Faz 1: 4 yon LOCKED (mevcut S59), sifir degisiklik
+- Faz 2 trigger: V1 4 sinif playable + 2-3 saat playtest -> diagonal "step hissi" complaint > %30 ise 8 yon upgrade tetiklenir
+- Faz 2 8 yon staged: Once protagonist, mob T1/T2 4 yon kalir, boss T3 8 yon
+- Faz 3: Tum V1 sinif + boss 8 yon. Common mob 4 yon (visual hierarchy)
+
+REVIEW SORU: 64x64 chibi 30-35 derece top-down'da 4 yon + flipX movement diagonal'da "step" artifact'i olusturur mu, yoksa PPU=64 ve 10-12fps anim hizinda yeterince akici hissi verir mi? Hades benzeri akicilik 64x64 chibi'de mumkun mu yoksa 96-128px gerekli mi? Playtest sonrasi 8 yon upgrade gerekirse re-animation maliyeti production icin tahmini ne kadar (sinif basina sprite count + manual cleanup saat)?
+
+===============================================
+SON: OVERALL SUMMARY (1 paragraf)
+===============================================
+
+4 kararin birbirleriyle tutarliligini degerlendir. Karar #81/#82/#83/#84/#72 ile catisma var mi? Faz 1 butcesi (3 T2 mob + boss hazard merge + 14 map obj + 20-28 skill effect + 4 sinif 4-yon anim) realistik mi yoksa scope creep mi? Onerin: hangileri Faz 1 keep, hangileri Faz 2'ye ertelensin?
