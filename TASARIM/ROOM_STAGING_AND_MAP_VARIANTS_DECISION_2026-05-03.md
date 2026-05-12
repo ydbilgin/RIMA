@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-03
+ozet: "Oda staging ve map varyant kararı"
+---
 # RIMA Room Staging and Map Variant Decision - 2026-05-03
 
 Status: LOCKED
@@ -338,3 +344,4 @@ RIMA room maps are authored combat arenas inside a staged, non-playable architec
 The player should feel that each room is a different remembered part of a broken keep: sometimes
 ordered, sometimes collapsed, sometimes rift-torn. The visual shell and camera clamp solve edge
 safety. Playable floor flood is rejected.
+

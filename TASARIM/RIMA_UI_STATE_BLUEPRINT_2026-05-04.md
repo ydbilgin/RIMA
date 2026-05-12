@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-04
+ozet: "RIMA UI state blueprint"
+---
 # RIMA UI State Blueprint
 
 Status: design blueprint, not implementation lock
@@ -153,3 +159,4 @@ Production notes: `TASARIM/UI_PRODUCTION_RULES_FROM_OPUS_REVIEW_2026-05-04.md`
 
 Build UI as templates fed by runtime data. Do not bake text into concept art. Frames/cards/slots
 are reusable; content comes from player, room, route, offer, and passive systems.
+

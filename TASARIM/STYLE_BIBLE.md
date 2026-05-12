@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-17
+ozet: "Görsel stil rehberi (erken dönem)"
+---
 # STYLE_BIBLE.md
 > **Ne zaman yukle:** Yeni asset uretmeden once — tek dogruluk kaynagi.
 > **Ne zaman yukleme:** Kod yazma, Unity isleri sirasinda.
@@ -95,3 +101,4 @@ UI vurgu:  #A8C8D8             (buzul mavi)
 - **PPU=64 YASAK** — yeni standart PPU=128.
 - **Upscale YASAK** — PixelLab'da ne ciktiysa o (128px).
 - **Side view YASAK** — isometric/3/4 ARPG kurali.
+

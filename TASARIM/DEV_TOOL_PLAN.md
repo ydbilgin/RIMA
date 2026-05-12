@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Gelistirici arac planı"
+---
 # Dev Tool Plan
 Status: LOCKED 2026-05-06 — scheduled after UI/minimap/combat-camera acceptance
 
@@ -31,3 +37,4 @@ Out of scope for v0: multi-room, batch, procgen integration, undo/redo, final ar
   snapshot/restore state with hotkey
 - Asset Coverage Heatmap: editor window listing every class x state x direction sprite slot,
   red-flagging missing or placeholder assets
+

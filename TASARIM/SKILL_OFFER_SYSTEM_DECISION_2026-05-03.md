@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-03
+ozet: "Skill offer sistemi kararı"
+---
 # SKILL OFFER SYSTEM DECISION
 Date: 2026-05-03
 Status: LOCKED FOR PHASE 1 SYSTEM DESIGN
@@ -255,3 +261,4 @@ Phase 1 minimum for implementation can start smaller:
 4. Red-tier cinematic skills remain out of sprite production until their visual contract passes.
 
 This keeps the current production priority intact while giving future class passes a single routing rule.
+

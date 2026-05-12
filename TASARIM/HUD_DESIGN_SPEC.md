@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "HUD tasarım spesifikasyonu"
+---
 # RIMA HUD — "Ashen Glyph" Design Spec
 **Tarih:** 2026-04-13  
 **Durum:** ONAY BEKLENIYOR -> onaylaninca Unity greybox (rima-codex)  
@@ -228,3 +234,4 @@ Bone White (text):                     #E8E4D9
 ---
 
 *Bu doküman onaylanmadan Unity'e dokunulmaz.*
+

@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Hasar hesaplama formülleri"
+---
 # RIMA — Hasar Hesaplama Politikasi
 **Status: v1 LOCKED — 2026-05-09**
 
@@ -38,3 +44,4 @@ Toplam x3.0 asilirsa: asan fark Posture damage olur.
 1. Minyon vuruslarinin posture damage carpani → oneri: %50 (Summoner icin critical)
 2. ZONE skill'lerin posture katkisi → oneri: %75 (alan hasari, tam deger degil)
 3. Summoner minyon-HP posture hesabi → kararlastitirilmamis
+

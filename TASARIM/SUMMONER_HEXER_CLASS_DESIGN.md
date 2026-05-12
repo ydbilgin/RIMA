@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Summoner + Hexer sinif tasarımı"
+---
 # Summoner + Hexer Class Design
 Status: LOCKED 2026-05-06
 
@@ -168,3 +174,4 @@ including the two you Ill-Winded. Now half the room is at 1-2 stacks. You plant 
 the priority caster, snipe-utter to push it to 3, Wither again. The room dies in waves of
 self-detonating curses, and you barely moved. Less damage dealer, more clockmaker — every
 commit-beat is a tooth turning a gear, and the gears are inside the enemies.
+

@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-13
+ozet: "7 tone surface Vivid Vulnerability standardı (Karar #79)"
+---
 # TONE_SURFACES_STANDARD.md
 # Karar #79 + Karar #89 — LOCKED 2026-05-14
 
@@ -218,3 +224,4 @@ Hammerwatch metni islevi bildirir, tonu yoktur. RIMA'da her yüzey bir hissiyat 
 
 **Don't Starve (CAUTION -- cok kuru komedi):**
 Don't Starve'in ince absürd mizahı tutarlidir ama RIMA'nin dunyasina yabancidır. RIMA'nin dunyası ironiyi tasır ama hiçbir zaman şakaya donüstürmez -- olum komik degil, acı eglencelı degil, dünya kaba bir şakaya konu degil.
+

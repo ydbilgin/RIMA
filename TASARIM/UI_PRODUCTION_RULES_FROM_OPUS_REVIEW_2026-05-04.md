@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-04
+ozet: "UI produksiyon kuralları (Opus review)"
+---
 # UI Production Rules From Opus Review
 
 Status: adopted notes after review
@@ -59,3 +65,4 @@ Known conflict:
 - Baked text in PixelLab frames.
 - Icons below readable size.
 - Constant full-room gameplay camera.
+

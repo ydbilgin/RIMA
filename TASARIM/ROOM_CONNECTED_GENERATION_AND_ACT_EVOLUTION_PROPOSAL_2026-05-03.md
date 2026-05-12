@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-03
+ozet: "Baglı oda üretimi ve act evrim önerisi"
+---
 # RIMA Connected Room Generation and Act Evolution Proposal - 2026-05-03
 
 Status: PROPOSED FOR CLAUDE FINAL DECISION
@@ -399,3 +405,4 @@ Avoid:
 2. Should Act 2 lean more body-horror organic or more cursed battlefield?
 3. Should Act 3 be mostly void-gold clean architecture, or retain more ruined-stone continuity?
 4. Should LDtk/Tiled room authoring start before or after the code-side descriptor prototype?
+

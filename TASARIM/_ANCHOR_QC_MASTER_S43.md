@@ -1,3 +1,9 @@
+---
+status: ARCHIVED
+faz: 1
+tarih: 2026-04-24
+ozet: "ARCHIVED: S43 anchor QC master (2.5D dönem)"
+---
 # Anchor QC Master S43
 **Date:** 2026-04-29  
 **Merged from:** `_QC_REPORT_S43.md`, `_GEMINI_REVIEW_S43.md`, `_CODEX_VERIFY_S43.md`  
@@ -74,3 +80,4 @@
 - PASS: Technical/Gemini/CodexVerify conflicts preserved.
 - PASS: Root-level convenience anchor PNG copies excluded from cleanup.
 - PASS: No Unity Assets touched.
+

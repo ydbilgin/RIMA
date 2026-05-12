@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "VFX makeup contract kuralları"
+---
 # Makeup VFX Contract
 Status: LOCKED 2026-05-06
 
@@ -82,3 +88,4 @@ Rift Portal nearby (world floor cue, not on character body)
 - Combo ignition threshold: body loop intensifies (param ramp) when 2+ states stack, no extra layer added
 - StateMakeupProfile ScriptableObject per state family, bound to existing status/effect IDs
 - Debug overlay to preview all states on player and dummy enemy
+

@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-14
+ozet: "Tüm RIMA tasarım kararlarının canonical listesi"
+---
 # RIMA — MASTER KARAR BELGESİ
 > Son güncelleme: 2026-04-30
 > Bu belge Claude tarafından karar doğrulama için okunur. Detaylı tasarımlar ilgili faz dosyalarında.

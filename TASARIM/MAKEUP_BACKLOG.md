@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 2
+tarih: 2026-04-30
+ozet: "Polish backlog - Faz 2+ görevleri"
+---
 # RIMA — Makeup Backlog
 *Karar #71 sonrasi eksiklikler. Ileride yapilacak game feel + atmosphere duzeltmeleri.*
 *Son guncelleme: 2026-05-09 | Status: PLANNED*
@@ -66,3 +72,4 @@ v1 ship blocker DEGIL. Game polish phase'inde sirayla.
 1. Once HIGH priority: #1 Hub rest pose + #3 Boss intro + #5 Death sequence (3 hafta)
 2. Sonra MEDIUM: #2 yorgun idle + #4 run start + #6 skill draft drama (2 hafta)
 3. En son LOW: #7 Echo reveal + #8 NPC zoom (1 hafta)
+

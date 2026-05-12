@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-04
+ozet: "Gate/socket ve harita reveal blueprint"
+---
 # RIMA Gate Socket and Map Reveal Blueprint
 
 Status: design blueprint, not implementation lock
@@ -117,3 +123,4 @@ Decision effect:
 - fragments improve planning by revealing near future
 - if the player reaches a previously unseen node, its next exits become known by local room/gate
   logic, and further map knowledge still requires fragments
+

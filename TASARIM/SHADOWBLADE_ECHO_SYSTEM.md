@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-06
+ozet: "Shadowblade Echo sistemi"
+---
 # Shadowblade — Echo System
 Status: LOCKED 2026-05-06
 
@@ -68,3 +74,4 @@ Natural Echo expiry (timer runs out): 30% of accumulated damage as a small pulse
 1. Mirror at 50%, no skill auto-mirror — Echo DPS capped at ~35-40% of player DPS
 2. 1 Echo cap — no clone armies
 3. Charge-gated: Echo requires combo discipline. Skills-only Shadowblade never gets Echo.
+

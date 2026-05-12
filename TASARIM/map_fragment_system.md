@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-09
+ozet: "Map fragment + Kırık Taş Tablet sistemi (Karar #63)"
+---
 # Map Fragment Sistemi
 **Tarih: 2026-05-09 | Durum: LOCKED v1 spec | Kaynak: S46 user requirement**
 
@@ -121,3 +127,4 @@ Iki paradigma birden calisir: macro planlama (MapPanel) + micro navigation (Mini
 - Wild rarity etkisi loot pool genislemesi (v3)
 - 5 Rift Portal turu Burden+Gift content cesitliligi (v3)
 - Tile Room Memory Overlay (v2 -- DepthBandTileSet hookup sonrasi)
+

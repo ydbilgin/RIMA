@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Nisan alma ve boss yerlestirme sistemleri"
+---
 # Aim Shot, Boss Weak Spot, Area Skill Placement
 Status: LOCKED 2026-05-06 | UPDATED 2026-05-09 (S47: hold→tap-to-aim mode)
 
@@ -130,3 +136,4 @@ Primarily relevant for: Elementalist, Ranger (trap placement), Summoner, Hexer.
 - hurt (2-3 frames)
 - death (4-5 frames)
 Each set produced via: create_image_pro (pose sheet) -> animate (per motion).
+

@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-06
+ozet: "Skill taxonomy 4 aktif + 3 pasif tip (Karar #60)"
+---
 # SKILL SYSTEM TAXONOMY - 2026-05-06
 (Status: LOCKED)
 
@@ -426,3 +432,4 @@ Bu tablo gelecek skill uretiminde cross-contamination kontrolu icin zorunludur.
 | Hexer | hexed, curse, stack, accumulation, spread | bleed, armor-shred, veil, soul-bond, heat |
 
 Not: AVOIDS listesi "bu tag'i hic kullanamazsin" demez; sinerji veya Legendary upgrade baglaminda sinirli kullanim Taxonomy §4 (Cross-Family Carrier) kurallarina tabidir.
+

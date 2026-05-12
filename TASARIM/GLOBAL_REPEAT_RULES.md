@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-04-30
+ozet: "Evrensel repeat, execute gate ve skill kuralları"
+---
 # GLOBAL REPEAT RULES
 **Date:** 2026-04-30 | **Source:** Claude R4 final lock (Codex R4 ACCEPT_WITH_CHANGES)
 **Status:** v0.1 lock. Locks recurring patterns: counter / movement / execute / zone / ulti / toggle.
@@ -269,3 +275,4 @@ PixelLab concept sheets are mood/reference only. Production skill work must spli
 - v0.1.1 (2026-05-03): Added Hades-style run offer / active slot routing lock.
 - v0.2 (target after Phase 1 playtest): tune i-frame windows, zone count caps, ulti relock UI feedback.
 - Future: as new classes enter Phase 2/Later, revisit forbidden patterns for new conflict cases.
+

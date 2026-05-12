@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 2
+tarih: 2026-04-30
+ozet: "Cinematic layer A/B/C/D - Faz 2-5"
+---
 # RIMA — Cinematic Layer v1
 *Storytelling + animasyon zenginligi -- RIMA'nin 2D pixel art + roguelite + solo dev kisitlari icinde*
 *Son guncelleme: 2026-05-09 | Status: SPEC v1*
@@ -73,3 +79,4 @@ RIMA bunu **scope-dostu** sekilde 4 katmanda yapacak:
 - TASARIM/STORY_RUN_PROGRESSION.md (henuz yok -- lore audit kritik)
 - LocalizedString sistemi (Karar #51)
 - CameraDirector kod
+

@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-14
+ozet: "RIMA referans dokumani"
+---
 # FAZ 5 — FULL GAME (Early Access)
 
 *Updated: 2026-04-29 — S43 canonical class/skill list applied*
@@ -260,3 +266,4 @@ Bu class'lar Faz 5 sonrasında gelir:
 | **Hemomancer** | "Canım en keskin silahım." | HP + Blood Pool |
 
 > Tam skill tabloları: `SINIF_VE_SKILL_KARAR_BELGESI.md` §9-10
+

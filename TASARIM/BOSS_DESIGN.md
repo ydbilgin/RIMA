@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Boss tasarım referansı (Penitent/Echo Twin/Fracture Sovereign/Architect)"
+---
 # RIMA — Boss Tasarımı: Çok Fazlı Savaşlar
 
 *Son güncelleme: 2026-04-06 | Tasarım kararı: Claude*
@@ -267,3 +273,4 @@ Ama oyuncu da en güçlü halinde. Full build, Cross-class Ultimate kullanılabi
 4. Tüm varyantlar (faz sistemleri tamamlandıktan sonra)
 
 Faz geçiş sahneleri: `BossPhaseTransition.cs` — coroutine + müzik değişimi + brief slow-mo.
+

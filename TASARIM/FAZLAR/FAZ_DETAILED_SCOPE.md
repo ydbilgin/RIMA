@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-14
+ozet: "RIMA referans dokumani"
+---
 # RIMA -- FAZ MASTER v2 (Detayli Scope Dokumani)
 
 Son guncelleme: 2026-05-09
@@ -652,3 +658,4 @@ Asagidaki isler main kritik patikada degil -- paralel yuruyebilir:
 
 *Son guncelleme: 2026-05-09. Sonraki revizyon: Faz 1 Hf 4 (milestone loop sonrasi).*
 *Kaynak dosyalar: MASTER_KARAR_BELGESI.md, FAZ_MASTER.md, GUIDES/RIMA_MASTER_ART_PIPELINE.md*
+

@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-04
+ozet: "UI HUD production composite"
+---
 # RIMA UI / HUD Production Composite - 2026-05-04
 
 Status: production design draft
@@ -167,4 +173,5 @@ edges, high contrast, readable at small size
 - Combat HUD must not resize when cooldowns/locks/procs change.
 - Use color plus shape/icon, never color-only meaning.
 - Gate and map vocabulary should share icon shapes.
+
 

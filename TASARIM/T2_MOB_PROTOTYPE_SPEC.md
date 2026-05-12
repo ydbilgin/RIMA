@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-14
+ozet: "3 T2 mob spec ve 17 tuning Q (Kararlar #82+84)"
+---
 # T2_MOB_PROTOTYPE_SPEC.md
 **LOCKED 2026-05-13 -- Karar #82 + #84 -- Faz 1 Combat Expansion**
 
@@ -340,3 +346,4 @@ Seckilen 3 mob -- Shard Walker, Penitent Bruiser, Fracture Imp -- Faz 1 arena bu
 - 4 yon + flipX, 10-12 fps anim
 - Sub-imp ayri karakter seti gerektirir (32px, minimal animasyon: spawn/chase/explode/death)
 - Bruiser aura visual (kirmizi pulsing ring) UI overlay olarak ayri layer -- shader gerekebilir
+

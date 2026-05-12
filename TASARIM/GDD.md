@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-09
+ozet: "Game Design Document - ana referans"
+---
 # GAME DESIGN DOCUMENT — RIMA
 *Son güncelleme: 2026-03-30 | Solo dev — Antigravity | Unity 6.3 LTS, 2D URP | Steam hedefi*
 
@@ -620,3 +626,4 @@ Fractured King'in Faz 2'si HP'ye göre değil, 10 saniyede 3 farklı skill kulla
 
 **"Zorluk modu — ertelenmiş (Faz 2)"**
 3 zorluk seviyesi planlandı: Echo (kolay) / Rift (normal) / Fracture (zor) + bonus Void (permadeath). Temel loop çalışmadan sabit zorluk anlamlı değil. Skill Draft + Curse odası + Act 1 boss hazır olunca eklenecek.
+

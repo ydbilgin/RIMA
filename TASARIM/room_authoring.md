@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Room authoring rehberi"
+---
 # RIMA -- Room Authoring Spec
 **Karar tarihi: 2026-05-08 | Durum: LOCKED**
 
@@ -69,3 +75,4 @@ RoomLoader, Load() sirasinda prefab cellSize/gridLayout/orientation'ini base Iso
 - Task B: RuntimeRoomManager -> LegacyRuntimeRoomManager rename + [Obsolete] + event subscribe
 - Task C: Tile paint (3 pilot prefab icin F1 tile kullanimi)
 - Task D (Task B playtest PASS sonrasi): Legacy + DungeonWorldBuilder + RoomTemplate + DepthBandTileSet tek commit'te sil
+

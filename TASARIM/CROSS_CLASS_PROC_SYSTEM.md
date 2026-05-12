@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-09
+ozet: "Cross-class proc sistemi referansı"
+---
 # Cross-Class Proc System
 Status: LOCKED 2026-05-06
 
@@ -53,3 +59,4 @@ When a target carries 3+ different family tags, the next hit can trigger a Rift 
 | Pressure | Ronin, Brawler | Shared — martial intimidation family |
 | Strike | Brawler | Physical contact identity |
 | Rift | Meta-family | Triggers when 3+ families on same target; 50% resistance ignore |
+

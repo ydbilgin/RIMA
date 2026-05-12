@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-03
+ozet: "Oda inspiration pattern adaptasyon notları"
+---
 # RIMA Room Inspiration Patterns and Adaptation - 2026-05-03
 
 Status: DESIGN INPUT FOR CLAUDE REVIEW
@@ -104,4 +110,5 @@ Do not make random maps look natural.
 Define room role, source damage, and connected motif graph.
 Then let masks, adjacency, and influence fields resolve the tiles.
 ```
+
 

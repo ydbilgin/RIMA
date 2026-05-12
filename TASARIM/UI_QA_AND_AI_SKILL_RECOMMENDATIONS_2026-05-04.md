@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-04
+ozet: "UI QA ve AI skill önerileri"
+---
 # RIMA UI / QA / AI Skill Notes
 
 Status: design input, not lock
@@ -121,3 +127,4 @@ HP/resource, current act/room, four active skill cards, passive/echo rows, stack
 tags, recent reward, partial branching map with only next 1-2 nodes visible, and bottom skill bar.
 No equipment grid, no backpack, no generic item slots. Pale cyan spirit light, controlled gold,
 subtle red rift cracks, readable premium roguelite UI.
+

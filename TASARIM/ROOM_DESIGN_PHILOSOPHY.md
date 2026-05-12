@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Oda tasarım felsefesi"
+---
 # RIMA — Dungeon Oda Tasarım Felsefesi
 > **Referans:** Infamous Keepers'tan mood + yapı, RIMA combat sistemine uyarlanmış.
 > **Ne zaman yükle:** Yeni oda prefabı yaparken, tilemap tasarlarken, rima-codex'e oda gorevi verirken.
@@ -214,3 +220,4 @@ Her oda prefabı yapılırken şu kontrol listesi:
 ```
 
 **SADECE BUNU YAP. BAŞKA HİÇBİR DOSYAYA, SCRIPTE, PREFAB'A VEYA AYARA KARIŞMA.**
+

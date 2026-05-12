@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Skill VFX görsel contract"
+---
 # SKILL VISUAL CONTRACT
 > Per-skill visual gate document. No contract = no PixelLab generation.
 > Owner: rima-asset (fills) -> design lead (signs off) -> rima-codex (gens after sign-off).
@@ -346,3 +352,4 @@ RATIONALE: A camera-rotating Scar breaks spatial-memory gameplay; if engineering
 3. **`screen_overlay` for Shadowblade Scarbinding** -- The example marks this `no` on the basis that "identity comes from silhouette work, not screen FX." At signature tier, this is a judgment call. Design lead should confirm this is intentional and not an oversight.
 
 4. **Scar decal world-space anchor** -- Section C specifies "world-space (does not rotate with camera)." This is a rendering constraint that needs confirmation from the engineering lead -- does the current S43 pipeline support world-anchored decals on enemy silhouettes?
+

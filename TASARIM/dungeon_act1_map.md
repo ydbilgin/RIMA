@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-09
+ozet: "Act 1 15-node harita topolojisi (Karar #62)"
+---
 # Act 1 -- Shattered Keep -- Map Cizim Paketi
 **Tarih: 2026-05-09 | Durum: LOCKED v1 | Kaynak: Opus tasarim analizi + S46 user feedback**
 
@@ -125,3 +131,4 @@ Topoloji sabit, icerik random. Her run'da node sayisi/turu/depth ayni; ama:
 - [CLOSED] Q3: Spirit sistemi -> v1'DE YOK (sadece Shop; Spirit AD v2 onay sonrasi rotation aday)
 - [CLOSED] Q4: Map UI -> HIBRIT (StS macro panel TAB + Hades-style sol-ust minimap surekli)
 - [CLOSED] Q5: Boss kapisi fragment -> 8 fragment (combat+elite, rest haric)
+

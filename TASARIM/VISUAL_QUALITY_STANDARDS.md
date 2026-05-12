@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Görsel kalite standartları"
+---
 # RIMA — Görsel Kalite Standartları
 > [STALE — see MASTER #53 and #42]
 
@@ -145,3 +151,4 @@ Priority 3 (Faz 2):
 - [ ] Siyah/boş frame yok mu?
 - [ ] Yön tutarlı mı?
 - [ ] Style referansla renk tutarlı mı?
+

@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-06
+ozet: "Skill system v2 referans dokümanı"
+---
 # RIMA Skill System v2 — LOCKED
 # Tarih: 2026-05-09 | Opus + Codex sentezi | Onay: Yasin
 
@@ -245,3 +251,4 @@ NLM tutarsızlık sorgusu 6 çakışma tespit etti. Çözümler:
 | 6 | Shadow Cyan vs Shadowblade Violet | Renk dili (feature) | SHADOWBLADE_ECHO_SYSTEM (korunur) |
 
 **Sonuç:** 8 LOCKED karar tutarsız değil — eski dokümanlarla harmonize edildi.
+

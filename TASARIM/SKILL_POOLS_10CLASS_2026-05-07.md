@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-07
+ozet: "10 sınıf skill havuzu taslağı"
+---
 # SKILL POOLS 10 CLASS - 2026-05-07
 
 Kaynak kanon: `TASARIM/SKILL_SYSTEM_TAXONOMY_2026-05-06.md`
@@ -560,3 +566,4 @@ Notlar:
 | Accumulation Trance | Stack biriktirme modu. | 8s | LMB/RMB Hexed stack daha hizli verir, direkt hasar azalir; F aktifken bloklanir. Tag: `accumulation`. |
 | Curse Arithmetic | Stack hesaplama modu. | 6s | STRIKE stack tuketmek yerine stack'i kopyalar; F aktifken bloklanir. Tag: `accumulation`. |
 | Wither State | Yavaslatma ve baski modu. | 5s | ZONE icindeki Hexed hedefler daha yavas stack kaybeder; F aktifken bloklanir. Tag: `accumulation`. |
+

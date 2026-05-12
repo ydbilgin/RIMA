@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-23
+ozet: "Animasyon üretim kuralları ve workflow"
+---
 # RIMA Animation Bible — LOCKED
 # Tarih: 2026-05-09 | Opus kararı | v1
 
@@ -122,3 +128,4 @@ Idle, Walk, Attack_1, Attack_2, Telegraph, Hurt, Death, Phase_Transition
 **Tier 2 kredi tahmini:** ~750-1100 cred/sınıf → 10 sınıf ~4-5 ay
 
 Detay: `GUIDES/RIMA_MASTER_ART_PIPELINE.md`
+

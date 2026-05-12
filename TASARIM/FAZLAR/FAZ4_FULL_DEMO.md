@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-14
+ozet: "RIMA referans dokumani"
+---
 # FAZ 4 — FULL DEMO
 
 *Claude: Sadece bu dosyayı oku. Faz 1-3 tamamlanmış varsay.*
@@ -183,3 +189,4 @@ Curse Gate'ten veya bazı event'lerden alınır. Güçlü bonus karşılığınd
 - [ ] Legendary tier: en az 1 skill'de kökten değişim test edilmiş
 - [ ] Tam run: Act 1 + Act 2 + 2 boss = 30-45 dakika
 - [ ] **Bu build Steam Demo olarak yayınlanabilir**
+

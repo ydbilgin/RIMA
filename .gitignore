@@ -28,6 +28,12 @@ UserSettings/
 # External tools
 Pixellab extension/
 
+# Obsidian — workspace state (kişisel, commit edilmez)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+_attachments/
+
 # STAGING: heavy / ephemeral subdirectories
 STAGING/discord_pixellab/
 STAGING/yt_videos/

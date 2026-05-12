@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-27
+ozet: "Animasyon redesign notları"
+---
 # RIMA — Animasyon Yeniden Tasarımı
 *Karar tarihi: 2026-04-06 | S46 update: 2026-05-09*
 
@@ -204,3 +210,4 @@ Bu rima-codex'e verilebilir — `HitFlash.cs` komponenti, Health.OnDamageTaken'e
 | RelicCaster projectile | MobAttack_Barrier.cs → MobAttack_Projectile.cs | Barrier değil fırlatmalı |
 | HitFlash component | HitFlash.cs (yeni) | Tüm varlıklara eklenecek |
 | EnemyAnimator attack trigger | EnemyAnimator.cs | Bool → Trigger daha temiz |
+

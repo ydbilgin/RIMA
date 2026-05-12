@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Summoner kaynak ekonomi kuralları"
+---
 # SUMMONER ECONOMY RULES
 **Date:** 2026-04-30 | **Source:** Claude R4 final lock (Codex R4: "Summoner economy abuse risk -- do not approve without rules")
 **Status:** v0.1 lock. Required before any Summoner skill implementation.
@@ -134,3 +140,4 @@ Original R4 proposal: separate active skill.
 ## Versioning
 - v0.1 (2026-04-30): R4 lock. Hard caps applied. Phase tags locked.
 - v0.2 (target after Phase 2 Summoner playtest): tune numerical caps + ulti formula.
+

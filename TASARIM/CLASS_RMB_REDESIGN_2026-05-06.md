@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-06
+ozet: "RMB skill redesign 8 sınıf"
+---
 # Class RMB Redesign — All 10 Classes
 Status: LOCKED 2026-05-06
 Companion to: BASIC_ATTACK_LMB_RMB_8CLASS_CONTRACT_2026-05-06.md
@@ -51,3 +57,4 @@ RMB must be naturally repeatable without conscious decision-making.
 
 ### Hexer
 - RMB: Ill Wind — quick conical cursed mist puff (3 tiles), chip damage, 0.3s recovery. Tags adjacent enemies with 1 Hex stack between LMB cycles.
+

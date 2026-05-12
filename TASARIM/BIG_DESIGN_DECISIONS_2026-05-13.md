@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-14
+ozet: "Kararlar #85-91 konsolidasyonu (7 karar LOCKED)"
+---
 # BIG_DESIGN_DECISIONS_2026-05-13.md
 **STATUS: LOCKED 2026-05-14 — Kullanıcı onayladı (S60 Session 3 sonu)**
 
@@ -195,3 +201,4 @@
 2. Karar #86 8 required gameplay obje -> PixelLab Create Object + Aseprite (paralel track)
 3. Karar #87 5 AngleMode SO + Faz 1 limit 2-3 Directional8 -> SkillEffect ScriptableObject author
 4. Karar #85 vista room template (2-3 per biome) -> Room Designer F3 ile birlesir
+

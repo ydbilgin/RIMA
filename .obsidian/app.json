@@ -1,0 +1,14 @@
+{
+  "defaultViewMode": "source",
+  "livePreview": true,
+  "foldHeading": true,
+  "foldIndent": true,
+  "attachmentFolderPath": "_attachments",
+  "newFileLocation": "current",
+  "promptDelete": true,
+  "trashOption": "local",
+  "strictLineBreaks": false,
+  "showLineNumber": false,
+  "tabSize": 2,
+  "useTab": false
+}

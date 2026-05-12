@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-04
+ozet: "Act 1 oda blockout seti"
+---
 # Act 1 Shattered Keep Room Blockout Set - 2026-05-04
 
 Status: production design draft
@@ -416,4 +422,5 @@ Set:
 4. Add wall/shell edge modules.
 5. Test R04 Broken Causeway and R06 Sunken Crypt Basin first because they stress gaps/water.
 6. Import only PASS assets into Unity prototype folders.
+
 

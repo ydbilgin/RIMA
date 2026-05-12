@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-13
+ozet: "10 sınıf 64px chibi kimlik profili (Karar #80)"
+---
 # CLASS_SILHOUETTE_BIBLE.md
 **LOCKED 2026-05-13 -- Karar #80 -- RIMA 10 Sinif Siluet Standardi**
 **KRITIK KURAL: 1 sinif = 1 silah = 1 silhouette. Variant YOK. Silah degisimi = sinif degisimi. (Karar #72 + #80)**
@@ -375,3 +381,4 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 3. Hexer grimoire vs hancer secimi -- ikisi birden mi (iki elde kitap + belde hancer) veya tek secim mi?
 4. V2 siniflar icin color palette hex degerleri taslak -- Into Samomor mat env ile cakisma testi yapilmadi; uretim baslamadan once QC renk testi onerilir
 5. Ronin W=flipX kullanilabilir mi sorgusu acik -- kin sol belde olduğundan flipX yanlis taraf gosterebilir; 4 yon ayri uretim daha guvenli
+

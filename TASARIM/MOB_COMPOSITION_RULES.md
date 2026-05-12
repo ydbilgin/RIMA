@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-17
+ozet: "Mob kompozisyon ve yerleştirme kuralları"
+---
 # RIMA — Mob Kompozisyon Kurallari
 **Status: v1 LOCKED — 2026-05-09**
 
@@ -44,3 +50,4 @@ Status: **TODO v1 — Augur tanimi guncellenmeli.**
 | Versiyon | Tarih | Degisim |
 |---|---|---|
 | v1.0 | 2026-05-09 | Ilk kompozisyon kurallari (Opus denge review) |
+

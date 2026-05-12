@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-14
+ozet: "RIMA referans dokumani"
+---
 # FAZ 1 — CORE LOOP (Combat Prototype)
 
 *Claude: Sadece bu dosyayı oku. Bu fazın scope'u dışındaki hiçbir şeyi implemente etme.*
@@ -200,3 +206,4 @@ Bu faz "tamamlandı" sayılması için:
 - [ ] Ölüm ekranı gösterilir, restart çalışır
 - [ ] Combat hissi test edilmiş: hitstop, hit flash, death VFX çalışır
 - [ ] Harita parçası mekanizması çalışır (parça al → sonraki oda)
+

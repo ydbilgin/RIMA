@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Room Designer F2 UX spesifikasyonu"
+---
 # Room Designer F2 — UX Kararları (Opus, 2026-05-11)
 
 ## Q1: FloorVariantPainter UX — KARAR: (C) On Save + Preview Toggle
@@ -44,3 +50,4 @@ WallAutoConnect slipse demo yaşar; Reseed slipse demo ölür.
 - FloorVariantPainter parametreleri: warpFreq=0.05, zoneFreq=0.05, detailFreq=0.22 (LOCKED 2026-05-11)
 - Wall variant set: 8 varyant (straight_H/V, corner_NW/NE/SW/SE, end_L/R) (LOCKED 2026-05-11)
 - Floor tier dağılımı: base(<0.65), accent(0.65-0.88), hero(>=0.88) (LOCKED 2026-05-11)
+

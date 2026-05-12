@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Oda mekanik kuralları ve tag sinerji tablosu"
+---
 # RIMA — Oda Mekaniği Tasarımı (Mantıksal Spec)
 *Gorsel degil mantiksal. Kodlamaya ve rima-codex'e hazir referans.*
 *Son güncelleme: 2026-04-17*
@@ -512,3 +518,4 @@ SONUÇ
   Ölüm → istatistik → Echoes toplanır → Hub
   Zafer → 3 kapanış seçeneği (Kal / Kır / Taşı)
 ```
+

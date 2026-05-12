@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Harita esya sistemi - Relic + Skill Modifier"
+---
 # RIMA — MAP + ITEM SYSTEM
 > Final Karar Belgesi | 2026-04-12
 > ChatGPT + Gemini review entegrasyonu → Claude final kararları
@@ -394,3 +400,4 @@ Her legendary = 1 build anchor (o class'ın farklı oynanış yönü).
 | Anvil | Merchant'ta rare + pahalı safety valve |
 | Relic kaynağı | Boss + nadir özel Event ONLY (sandıktan kaldırıldı) |
 | Drop ekonomisi | Normal %20, Elite 100% seçimli, Boss = Relic+Legendary seçimi |
+

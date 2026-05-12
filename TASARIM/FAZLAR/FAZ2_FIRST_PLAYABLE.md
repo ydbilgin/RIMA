@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-14
+ozet: "RIMA referans dokumani"
+---
 # FAZ 2 — FIRST PLAYABLE LOOP
 
 *Claude: Sadece bu dosyayı oku. Faz 1 tamamlanmış varsay.*
@@ -229,3 +235,4 @@
 - [ ] Ölüm: restart + run recap ekranı
 - [ ] Echoes birikir (hub'da görünür, henüz harcanamaz)
 - [ ] Twice-Born elite: hasar paylaşımı + berserk çalışır
+

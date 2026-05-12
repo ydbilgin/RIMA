@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-14
+ozet: "Penitent Sovereign Faz 2 Rift Tear+Bloom spesifikasyonu"
+---
 # BOSS_PHASE2_RIFT_TEAR_SPEC.md
 **STATUS: KARAR ADAYI 2026-05-13 — Penitent Sovereign Faz 2 Hazard Introduction**
 **Boss spec LOCKED (NLM teyit), bu doc 6 design decision + accessibility + tutarlilik check.**
@@ -205,3 +211,4 @@ Class balance notu: Faz 2 melee %15 resistance vs ranged uniform tartismali. One
 ---
 
 *Bu dokuman rima-doc tarafindan yazildi — 2026-05-13. Sabah kullanici confirm -> STATUS: KARAR ONAYLANDI.*
+

@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-06
+ozet: "8 sınıf LMB/RMB basic attack contract"
+---
 # Basic Attack LMB/RMB 8-Class Contract
 Date: 2026-05-06
 Status: LOCKED 2026-05-06
@@ -292,3 +298,4 @@ Claude review request:
 - If approved, next Codex task should create a `BasicAttackProfile` or equivalent per-class data/logic boundary so classes cannot silently inherit Warblade fallback behavior.
 - Decide ranged/caster combo architecture: shared combo interface with class-specific cadence state,
   or separate per-class counters.
+

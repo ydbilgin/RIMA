@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-14
+ozet: "RIMA referans dokumani"
+---
 # FAZ 3 — SECONDARY CLASS BREAK
 
 *Updated: 2026-04-29 — S43 canonical class list applied*
@@ -213,3 +219,4 @@ Boss'un primary class'ı oyuncunun seçimine göre değişir:
 - [ ] Epic tier: skill mekanik değişimi çalışır
 - [ ] Echo Twin 2 faz — geçiş sahnesi + adaptive saldırılar
 - [ ] Tam run: Act 1 (6-7 oda) + Act 2 (8-9 oda) + 2 boss = 30 dakika+
+

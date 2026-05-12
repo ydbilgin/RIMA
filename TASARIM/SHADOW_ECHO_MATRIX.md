@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-06
+ozet: "Shadow Echo 3 katman sistemi referansı"
+---
 # RIMA Shadow Echo Matrix
 # Tarih: 2026-05-09 | Sistem LOCKED, içerik DESIGN PASS PENDING
 
@@ -170,3 +176,4 @@ Format: **Ana Sınıf → Shadow Sınıf:** Strong / Neutral / Weak (gerekçe)
 6. Particle aura 10 cross-class variant
 
 **Sahiplik:** rima-design (mekanik) + rima-codex (Unity prototip) + rima-asset (UI flash + particle)
+

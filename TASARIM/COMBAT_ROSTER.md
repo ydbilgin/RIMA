@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-17
+ozet: "Combat roster - 16 mob listesi ve rolleri"
+---
 # COMBAT_ROSTER.md — RIMA Düşman Tasarımı
 
 > **[S43 GÜNCEL]** Faz 1 mob listesi canonical. Act 2-3 bölümleri henüz tasarım bekliyor.
@@ -830,3 +836,4 @@ Sadece bunlarla başla — geri kalanı sonra:
 - Seam Crawler → zemine yapışık form PixelLab'ı zorlar, Aseprite hybrid önerilen
 - Echo Striker → oyuncuya benzeyecek ama farklı — tutarlılık riski
 - The Unfinished → şekil değişiyor, birden fazla sprite gerekiyor
+

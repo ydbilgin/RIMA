@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-04-14
+ozet: "Sınıf ve skill tasarım kararları (erken dönem #15-23)"
+---
 # Sınıf ve Skill Karar Belgesi
 *2026-04-11 güncellendi | Crusader+Lancer kaldırıldı → Ronin+Brawler+Gunslinger eklendi*
 *2026-04-11 v2 — Balance pass: 29 nokta düzeltme (abuse kapatma, loop kırma, mekanik netleştirme)*
@@ -604,3 +610,4 @@ Rift Arrow, Pinning Shot, Hunter's Step, Bone Trap, Marked Detonate, Predator's 
 ## ~~ESKI BÖLÜMLER (ARŞİV)~~
 
 *(Momentum ve Hemomancer detayları BACKUP'ta saklanıyor — post-launch DLC için)*
+

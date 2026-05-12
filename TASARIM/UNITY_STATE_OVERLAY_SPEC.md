@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-04
+ozet: "Unity state overlay UI spesifikasyonu"
+---
 # RIMA -- Unity State Overlay Specification
 Version: 1.0 | Date: 2026-05-01 | Status: DRAFT
 
@@ -371,3 +377,4 @@ Confirm:
 ---
 
 *End of UNITY_STATE_OVERLAY_SPEC.md*
+

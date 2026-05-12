@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-04-30
+ozet: "State ownership contract - Broken/Sundered/Cracked (Karar #55)"
+---
 # CLASS STATE CONTRACT (v0.1)
 **Date:** 2026-04-30 | **Source:** Claude R4 final lock (Codex R4 ACCEPT_WITH_CHANGES)
 **Status:** v0.1 draft. Iterative: v0.1 -> per-class pass -> v0.2 lock.
@@ -340,3 +346,4 @@ Each state must define:
 ## Versioning
 - v0.1 (this doc, 2026-04-30): R4 lock applied. State ownership locked. Boss/abuse patterns universal.
 - v0.2 (target after Phase 1 playtest): tune numerical caps based on PlaytestScenarios data.
+

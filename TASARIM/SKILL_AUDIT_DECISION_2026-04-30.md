@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-04-30
+ozet: "R4 skill audit kararları"
+---
 # SKILL AUDIT — FINAL DECISION
 Date: 2026-04-30 (v2, identity-fit reconciled)
 Status: LOCKED
@@ -340,3 +346,4 @@ Final numbers:
 Two audits independently confirmed the same priority class order in the top 3. Where they differed, Codex's mechanical perspective (cross-class synergy preservation, MASTER doc compliance) won most reconciliations. Claude's visual identity perspective drove the Brawler / Shadowblade / Ravager redesign list.
 
 **Production gate held** until canonical doc rewrites + Visual Contract template + top-4 contracts filled. Estimated 2-3 working sessions to clear gate.
+

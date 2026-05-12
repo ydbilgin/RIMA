@@ -1,3 +1,9 @@
+---
+status: LOCKED
+faz: 1
+tarih: 2026-05-11
+ozet: "Pre-rendered 2D REJECTED, PixelLab pixel art LOCKED"
+---
 # Pre-rendered 2D — RIMA Degerlendirme
 Date: 2026-05-11
 Status: DECISION REJECTED (B, C, D for v1) — (A) PixelLab pixel art LOCKED kalir
@@ -139,3 +145,4 @@ Degisiklik YOK. Mevcut pipeline aynen yurur:
 3. 3D animator takima katildi veya outsource butcesi onaylandi
 
 Aksi takdirde RIMA pre-rendered 2D pipeline'ina gecmez.
+

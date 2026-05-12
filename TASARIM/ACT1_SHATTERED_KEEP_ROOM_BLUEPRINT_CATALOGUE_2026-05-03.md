@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-05-03
+ozet: "Act 1 Shattered Keep oda blueprint katalogu"
+---
 # Act 1 Shattered Keep Room Blueprint Catalogue - 2026-05-03
 
 Status: BLUEPRINT DRAFT FOR CLAUDE REVIEW
@@ -300,4 +306,5 @@ The Fracturing damaged this order. Early rooms show the structure; late rooms sh
 2. Which 8-10 rooms become first Unity blockout set?
 3. Should `Chest`, `Forge`, `Spirit`, and `Unknown` use separate spatial grammars now or later?
 4. Should Act 1 start with more clean architecture or more immediate fracture damage?
+
 

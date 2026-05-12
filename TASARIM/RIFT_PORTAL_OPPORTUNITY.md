@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 2
+tarih: 2026-04-30
+ozet: "Rift portal fırsatı - Faz 2+ tasarım"
+---
 # Rift Portal Opportunity
 Status: LOCKED 2026-05-06
 
@@ -68,3 +74,4 @@ different player mental model. Shared utility helpers (modifier registration, du
 - Burden manifests visually on character (cracked makeup overlay) so NPCs/shrines can react to burdened state
 - Rift slightly warps next room modifier (extra elite or guaranteed shrine) via one-shot RuntimeRoomManager flag
 - Meta: if same Gift was taken in a previous run, show a mutated variant instead (gate behind opt-in toggle)
+

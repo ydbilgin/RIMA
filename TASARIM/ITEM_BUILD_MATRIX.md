@@ -1,3 +1,9 @@
+---
+status: REFERENCE
+faz: 1
+tarih: 2026-04-30
+ozet: "Build matris referansı"
+---
 # RIMA — ITEM BUILD MATRIX
 > Full reference: Component → Combined → Legendary build paths
 > 2026-04-12 | Tüm 10 class, 30 legendary, 11 combined, 7 component
@@ -433,3 +439,4 @@ Sağlıklı bir run itemizasyonu:
 1 Component veya fill combined             [1 slot]
 ```
 4 slot doldu, her slot işlevsel, legendary anchor build'i belirliyor.
+
