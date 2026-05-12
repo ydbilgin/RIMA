@@ -1,0 +1,26 @@
+SYSTEM ROLE: RIMA game design reviewer. Stress-test Open Vista decision draft.
+
+NO file reads. Inline context.
+
+LOCKED CONTEXT:
+- Karar #61: Hades-style discrete room flow + StS macro graph. Open world REJECTED, Diablo paradigm REJECTED.
+- Karar #62: Act 1 = 15 node (Entry/6Combat/2Elite/2Rest/Shop/Curse/Mystery/Boss).
+- Karar #63: Map Fragment + Kirik Tas Tablet reveal. 8 fragment boss gate.
+- Karar #72: Pure 2D top-down, 32x32 tile, PPU=64.
+- Karar #75: PixelLab Map Tools YASAK (single tile only).
+- Karar #77: Vivid Vulnerability (chibi vs monumental hostile, Hades+Salt and Sanctuary primary refs).
+
+PROPOSED Karar #81: Open Vista Composition + Rift Side-Pockets.
+- 3-layer parallax per room: (1) sky/vista (per-floor: F1 ruined kingdom, F2 corrupted forest, F3 void sky), (2) world-bleed (rift overlay), (3) gameplay 32x32 foreground.
+- Boss arenas: massive rift backdrop showing world-merging.
+- 50% of Mystery (6b) + Curse Gate (9b) rooms have OPTIONAL rift side-pocket entry → 20x40 open vista pocket world (2-3 per run max). Side reward: lore + cosmetic + rare upgrade. 1-3 min playtime each.
+
+REVIEW QUESTIONS (max 800 words):
+Q1. LOCKED RULE FLAGS — anything against Karar #61/#62/#63/#72/#75/#77?
+Q2. Pocket scope (2-3/run, 1-3 min each) — overall run time impact 55-70 min runs?
+Q3. Production: 3-layer parallax per floor x 3 floors = 9 parallax kits + 3 pocket templates. Realistic for Faz 1-2 alongside 16 sprite batch + 4 boss design?
+Q4. Visual inconsistency risk between closed dungeon rooms and open vista pockets — mitigation?
+Q5. CUT recommendation: which element to defer if scope tight? Parallax-per-room OR pocket-zones?
+Q6. Missing item: should boss arenas have unique rift-vista treatment beyond "big backdrop"?
+
+OUTPUT: Q1-Q6 each labeled. End with TLDR (approve/revise/reject).

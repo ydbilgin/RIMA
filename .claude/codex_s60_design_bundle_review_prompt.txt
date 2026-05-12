@@ -1,0 +1,161 @@
+SYSTEM ROLE: Senior game design + production reviewer for RIMA (2D top-down roguelite ARPG, Unity, single-player). Stress-test 3 design drafts (Open Vista, Mob/Boss Skill Expansion, Room Designer Top-Down Enhancement) for: (a) LOCKED rule contradictions, (b) production scope realism, (c) missing items, (d) recommended cuts/additions.
+
+DO NOT READ ANY OTHER PROJECT FILES. All context is INLINE below.
+
+================================================================
+RIMA LOCKED CONTEXT (cannot change)
+================================================================
+
+KARAR #30: Fractured Epic tone — Hades-like dramatic+vivid. Dark fantasy YASAK. Cute-only YASAK.
+KARAR #61: Hades-style discrete room flow + StS macro graph. Open world REJECTED. Diablo paradigm REJECTED.
+KARAR #62: Act 1 = 15 node (Entry+6Combat+2Elite+2Rest+1Shop+1Curse+1Mystery+1Boss).
+KARAR #63: Map Fragment + Kirik Tas Tablet reveal. 8 fragment boss kapisi.
+KARAR #71: Weapons single-state (no modular attach), class-baked 1-piece sprite.
+KARAR #72 (S59): Pure 2D top-down, 64x64 chibi, 32x32 tile, PPU=64, 4 directions MVP (W=flipX).
+KARAR #73-76: VFX 64-128px mix; 2^n canvas hierarchy; Final Boss 256x256+PPU=64 = ~2.5x player; Map Tools YASAK (single tile only); TYPE/HEAD/BODY/LIMBS prompt format.
+KARAR #77 (new): Vivid Vulnerability tonal model.
+KARAR #78 (new): Premium portrait tier v1 = Architect + 1 ending only.
+KARAR #79 (new): Tone Surfaces Standard.
+KARAR #80 (new): Class Silhouette Bible (10 sinif identity profile).
+
+Visual canonical pin: Into Samomor (Sang Hendrix, RPG Maker MZ) — 35° + 1-piece + 4 yon + engine VFX + mat env palette (#4A4A4A/#2A2E35/#1A2B1A) + neon accent (#FFB000/#FFF000).
+
+Narrative: RIMA = seal/place containing Rift March. Mob/boss = seal guardians / rift anomalies. 4 boss arc: Penitent Sovereign (F1, 3-phase) → Echo Twin (F2, 2-phase) → Fracture Sovereign (F3-4, 3-phase) → The Architect (Final, 4-phase). 3-ending system (Faz 5).
+
+Current mob roster (Faz 1, NLM canonical):
+- Shard Walker (ranged, Triple Shard fan + Fracture Burst death AoE)
+- Void Thrall (splitter, Void Pulse + Death Split → 2 HalfThrall)
+- Penitent Bruiser (Anti-Heal Aura + Penitent Surge)
+- Chain Warden Echo (Triple Chain + Chain Pull dash-immune)
+- Relic Caster (Summon Shardling + Aegis Mark)
+- Fracture Imp (swarm, Rift Lunge + Death Splatter)
+- Seam Crawler (Submerge + Burst Strike)
+- Twice-Born (Elite pair, shared damage + berserk on partner death)
+
+Penitent Sovereign Boss (Faz 1 boss, 3-phase, NLM):
+- Phase 1: Chain Whip + Shackle Cast + Penitent Surge
+- Phase 2: Rift Tear (arena hazard) + Chain Detonation + 3x Fracture Strike combo
+- Phase 3: Fracture Charge + Sovereign's Wrath (safe-zone follow)
+
+Room Designer state: F2 complete (Stamp/Eraser/Picker/Bucket brushes, FloorVariantPainter, WallAutoConnect, RoomMetadataPanel, RoomSaver BiomeType enum). Tile asset production = current bottleneck.
+
+================================================================
+DRAFT 1 — OPEN VISTA INTEGRATION
+================================================================
+
+Proposed Karar #81: Open Vista Composition + Rift Side-Pockets.
+
+PROPOSAL:
+- Every room gets 3-layer parallax: (1) sky/vista (per-floor theme: F1 ruined kingdom, F2 corrupted forest canopy, F3 void sky with rifts), (2) world-bleed (rift overlay in walls/floor revealing "other world bleeding through"), (3) gameplay 32x32 foreground.
+- Boss arenas: massive rift backdrop showing world-merging.
+- 50% of Mystery (node 6b) + Curse Gate (node 9b) rooms have OPTIONAL rift side-pocket entry → small open vista pocket world (20x40 outdoor courtyard, 2-3 per run max). Side reward: lore fragment + cosmetic + rare upgrade. 1-3 min playtime each.
+
+KEEPS: Karar #61 (Hades-style room flow), #62 (15 node), #63 (Map Fragment), #75 (no Map Workshop). Pockets are authored templates.
+
+PRODUCTION: Parallax kit per floor (Faz 1 polish), 3 pocket templates (Faz 2-3).
+
+================================================================
+DRAFT 2 — MOB/BOSS SKILL EXPANSION
+================================================================
+
+Proposed Karar #82: Mob 3-Tier Skill System.
+
+PROPOSAL: Each mob has 3 tiers:
+- T1 Core (keep current signature)
+- T2 Environmental (lore-tied terrain/rift/seal interaction)
+- T3 Synergy (pair-conditional combo with another mob type)
+
+T2 examples:
+- Shard Walker: Crystal Bloom (places crystal node, telegraph explosion, zone control)
+- Void Thrall: Tear Open (channels 2s, opens portal that spawns HalfThralls every 5s, portal 40 HP)
+- Penitent Bruiser: Self-Mortification (at <30% HP, kneels 1.5s then explodes; survival = +40% damage 8s)
+- Chain Warden: Anchor Chain (anchors to wall, immobile but Triple Chain x2 range, anchor 50 HP)
+- Relic Caster: Seal Repair Channel (3s channel, heals weakest ally 50% HP)
+- Fracture Imp: Imp Tide (3+ imp deaths in 4s → 4th wave spawn from rift)
+- Seam Crawler: Subterranean Web (submerge leaves visible seam lines, walking = 5 dmg/s + slow)
+- Twice-Born: Mirror Step (every 6s, both teleport-swap positions)
+
+T3 examples (pair-conditional):
+- Walker+Warden: Cleric Catch (pull → Triple Shard line)
+- Thrall+Caster: Brood Watch (Aegis-marked Thrall → 3s shielded berserk)
+- Warden+Crawler: Lockdown Net (pull + ground burst, both dash-immune)
+- Imp+Crawler: Goo Web (overlap zone, lock pathing)
+
+BOSS environmental hazards (Penitent Sovereign 3-phase):
+- Phase 1 ENV: Litany of Restraint (4 chain anchors, chain-line crossing = slow + 15 dmg, anchors 40 HP each)
+- Phase 2 ENV: Rift Bloom (void cracks open every 8s, 25 dmg/s + slow, arena gradually narrowing)
+- Phase 3 ENV: Echo Phantom Summon (every 10s "Chain Warden Echo Phantom" spawns, 50 HP, 12s lifespan, uses Chain Pull)
+
+LORE COHESION: All skills tied to The Fracturing, Rift March, seal/muhur metaphor, self-discipline breaking, world-merging.
+
+PRODUCTION: ~12-15 new VFX (64-128px), per-mob 1-2 new anim (8-12 total), behavior tree expansion, MobComposition pair detection.
+
+================================================================
+DRAFT 3 — ROOM DESIGNER TOP-DOWN ENHANCEMENT
+================================================================
+
+NO new Karar (F2 mimari KEEP).
+
+PROPOSAL E1+E2 (high priority, Faz 1 production enabler):
+- E1: Tile Import Wizard — batch import PixelLab PNG → Unity Tile asset (PPU=64, Point filter, no compression, no mipmap), naming convention enforce, Rule Tile autoconnect mapping for walls. ~200 lines C# EditorWindow.
+- E2: Pixel-Perfect Canvas Preview — designer canvas renders PPU=64 + 32x32 grid pixel-perfect, major lines per 8 cell, minor per 1 cell, Pixel Perfect Camera overlay simulation. ~120 lines.
+
+POLISH E3-E5 (Faz 1 polish):
+- E3: Brush Size Cycle ([ and ] hotkey, 1x1 to 5x5)
+- E4: Layer Visibility Toggle (F/W/D, 1/2/3 hotkey, Shift = solo)
+- E5: AutoConnect Dry-Run Preview (hover overlay shows variant before stroke)
+
+F3 ROADMAP E6-E8 (later):
+- E6 Object Library (T10), E7 Template Wizard (T11), E8 RoomSaver Export thumbnail (T12)
+
+FUTURE E9: AI Panel + MCP Bridge (Faz 2-3+).
+
+DISPATCH: E1+E2 single Codex dispatch (~320 lines C#). Direct Bash + cx.cmd (no rima-codex spawn).
+
+================================================================
+REVIEW QUESTIONS (answer each, max 1500 words total)
+================================================================
+
+R1. **LOCKED RULE CONTRADICTIONS:** Does any of the 3 drafts contradict locked Karar #30-80 above? If yes, flag with "🚨 LOCKED RULE FLAG" and cite exact karar number + specific contradiction.
+
+R2. **OPEN VISTA — Karar #61 EDGE:** Does the rift side-pocket mechanic (max 2-3/run, optional, 20x40 open vista) cross the line of "open world REJECTED"? Or is it acceptable as "authored pocket within macro graph"? Justify.
+
+R3. **MOB SKILL OVERLOAD:** Does T1+T2+T3 (potentially 3 active skills per mob) overload combat readability per RIMA's "Tell max 1.5s, window min 0.4s" rule? What's the max simultaneous T2 activations in a single room (8-12 threat budget)?
+
+R4. **BOSS ENV HAZARD TIMING:** Penitent Sovereign Phase 2 has Rift Tear (existing) + new Rift Bloom (proposed). Do these overlap and create unfair situations? Or is the arena big enough (40x30) to accommodate both?
+
+R5. **PRODUCTION SCOPE (3 drafts combined):**
+   - Open Vista: 3 parallax layers per floor + 3 pocket templates
+   - Mob Skills: 12-15 new VFX + 8-12 new mob anim + behavior tree expansion + composition pair detection
+   - Room Designer: 5 enhancements (E1-E5)
+   Is this realistic for Faz 1-2 alongside 16 sprite batch + 4 boss design? Or should we cut/defer?
+
+R6. **MISSING ITEMS:**
+   (a) Open Vista: Did the author miss any room type that should/shouldn't have pockets?
+   (b) Mob Skills: Are there mob roles unaddressed (e.g., summoner role for true minion-spam test)?
+   (c) Room Designer: Critical workflow gap not in E1-E9?
+
+R7. **CUT ONE / RANK 3:** If you had to cut ONE of the 3 drafts for Faz 1 (defer to Faz 2+), which and why? Rank by HIGHEST player-experience leverage.
+
+R8. **ALTERNATIVES:** For each draft, is there a simpler/cheaper alternative the author missed that achieves 80% of the value with 30% effort?
+
+R9. **NEW DECISIONS:** Propose 1-2 NEW LOCKED decisions you'd add to MASTER_KARAR_BELGESI (#83+) based on gaps you see.
+
+================================================================
+OUTPUT FORMAT
+================================================================
+
+Answer R1-R9 each as labeled section. Direct, no hedging. Bullet points OK. Max 1500 words.
+
+Start with: 🚨 LOCKED RULE FLAGS (if any) at TOP. Else "No locked rule contradictions."
+
+End with TLDR:
+- Top approval (which draft is strongest as-is)
+- Top concern (biggest risk across 3 drafts)
+- Top cut recommendation (which to defer/simplify)
+- Top missing item
+
+REPORT FILE PATH: F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\codex_s60_bundle_review_output.txt
+Write your full response to this file using `cat > "$path" <<'EOF' ... EOF` or equivalent. Also output to stdout.
+
+CONFIRM by ending with line: "REPORT_WRITTEN: codex_s60_bundle_review_output.txt"

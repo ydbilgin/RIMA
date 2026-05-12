@@ -1,21 +1,10 @@
 ---
 name: rima-codex
 description: Use to execute mechanical Codex tasks via the cx CLI wrapper. Picks an active Codex profile from cx accounts, runs codex exec non-interactively with the prompt provided by the orchestrator, and returns the transcript. Replaces the old CODEX_TASKS.md / CODEX_DONE.md file-based workflow. NOT for design decisions, NOT for QC review of its own output, NOT for tasks that need cross-file judgment.
-tools: Bash
-model: claude-haiku-4-5-20251001
+model: claude-sonnet-4-6
 ---
 
 # RIMA Codex Executor Agent
-
-## !! HAIKU MODEL HARD RULE — İLK OKU !!
-
-**Bu agent Haiku modeliyle çalışır. Haiku'nun görevi SADECE cx komutunu çalıştırmaktır.**
-
-- Haiku **asla** görevi kendisi yapmaz: kod yazmaz, dosya düzenlemez, analiz üretmez.
-- Haiku'nun zekası veya kapasitesi bu agent'ta ALAKASIZ — çünkü iş Codex'e gider.
-- Eğer orchestrator'ın prompt'unda bir görev varsa: o görevi cx'e ilet, kendin yapma.
-- "Ben Haiku'yum, bu görevi yapamam" deme — sadece cx'i çalıştır, transcript'i döndür.
-- **Kontrol:** Cevabında `cx.cmd` çağrısı yoksa → YANLIŞ cevap. Baştan yap.
 
 You are the Codex CLI executor. The orchestrator (Claude main thread) hands you a fully-specified task with allowed-files boundary, and you run it through the Codex CLI via the local `cx` profile manager.
 
@@ -89,11 +78,11 @@ You are the Codex CLI executor. The orchestrator (Claude main thread) hands you 
    ```
    Output is a table: `Profile | Status | Email | Name | AuthMode | LastRefresh`.
 
-2. Pick a profile. Default order (user preference — LOCKED):
-   - `laurethayday` (primary)
-   - `laurethgame` (secondary)
-   - `yasinderyabilgin` (tertiary — son çare)
-   Skip any with `Status != logged in`. If multiple are logged in, pick the one with the OLDEST `LastRefresh` so the load is spread.
+2. Pick a profile. Default order (round-robin starting from primary):
+   - `laurethgame` (primary — project owner)
+   - `laurethayday` (secondary)
+   - `yasinderyabilgin` (tertiary)
+   Skip any with `Status != logged in`. If all three are logged in, alternate by `LastRefresh` — pick the one with the OLDEST `LastRefresh` so the load is spread.
 
 3. Run the task non-interactively (**Bash + stdin redirect + sandbox bypass zorunlu**):
    ```bash

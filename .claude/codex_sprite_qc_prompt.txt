@@ -1,0 +1,86 @@
+RIMA projesi için PixelLab'den üretilen 16-slot batch sprite görselini metin bazlı inceliyorsun.
+Görseli göremiyorsun ama aşağıda her slotun ne ürettiğini açıkladım + spec'i verdim. Spec uyumunu kontrol et.
+
+---
+
+## SPEC (LOCKED kararlar)
+
+**Teknik:**
+- 64x64 chibi, top-down ~30-35° (Hades açısı = "High top-down")
+- South-facing = karakterin yüzü kameraya bakıyor, gözler görünür (Hades konvansiyonu)
+- Armed 1-piece: silah sprite'ın parçası, ayrı attach yok
+- Chibi proporsiyon: büyük baş (~40% yükseklik), kısa bacak, geniş omuz
+- 1px dark outline, no gradient, no anti-aliasing
+- Palette: muted env #4A4A4A/#2A2E35/#1A2B1A + accent #FFB000/#FFF000/#00FFCC
+
+**Silhouette kuralı:** Her karakter sadece siluetinden tanınabilmeli (silah şekli + duruş).
+
+---
+
+## CLASS_SILHOUETTE_BIBLE ÖZETI (10 sınıf)
+
+| Slot | Sınıf | Silah | Dominant Shape | Accent |
+|------|-------|-------|----------------|--------|
+| 1 | Warblade | Greatsword (iki el, low guard) | geniş omuz + büyük kılıç alt | #C09455 brass |
+| 2 | Ranger | Compound bow (sol el, lowered) | uzun ince + bow sol asimetrik | #7BA7BC blue |
+| 3 | Shadowblade | Twin blades (reverse-grip, elbow back) | dar + ikiz bıçak gövdeye yakın | #5A2A8A void purple |
+| 4 | Elementalist | YOK (silahsız, el jesti) | geniş etek + el yukarı + sarı saç | #FFF000 gold |
+| 5 | Ravager | BüYÜK İKİ-EL balta VEYA warhammer (tek silah, iki elle tutulur, %45-50 sprite) | Warblade'den daha kütlesel + balta yukarıda | #D43F3F blood red |
+| 6 | Ronin | Katana (sağ el, low ready) + kılıf sol kalçada | ince + katana bir taraf + kılıf karşı kalça | #C8A87A pale gold |
+| 7 | Gunslinger | Dual pistols (rift-tech, her iki el) | trench coat geniş + iki tabanca flank | #FF4400 fire orange |
+| 8 | Brawler | Yok (yumruk, boxing guard) | geniş kas + yüksek yumruklar | #FF8C00 orange |
+| 9 | Summoner | Uzun staff (sağ, baş üstü) + sol el açık | uzun etek + staff baş üstü | #00FF88 neon green |
+| 10 | Hexer | Grimoire/spellbook (iki el, önde açık) | hood + kitap önde orta | #8B0000 dark red |
+
+**MOB:**
+| Slot | Mob | Key Visual |
+|------|-----|-----------|
+| 11 | Shard Walker | Omuzdan çıkan teal-cyan kristal çıkıntılar, muted dark blue-grey body |
+| 12 | Penitent Bruiser | Geniş ağır gövde, ayak seviyesinde kırmızı aura ring, zincir sargı kollar |
+| 13 | Fracture Imp | Küçük, kanat, void-purple + pembe parlayan kırık çizgiler |
+| 14 | Relic Caster | Kapüşonlu cüppe, önde parlayan amber relic shard |
+| 15 | Riftbound Augur | Geniş kol jesti, yüzde/ellerde teal-cyan parlayan işaretler |
+| 16 | Hollow Hulk | Kare geniş gövde, hollow göz yuvaları, devasa yumruklar |
+
+---
+
+## ÜRETILEN GÖRSEL AÇIKLAMASI (Gözlemci notu)
+
+Görsel 4x4 grid, 16 chibi sprite. Genel izlenim:
+
+**Açı/Yön:**
+- Karakterlerin bir kısmı tam south-facing değil, hafif diagonal/3-quarter açıda görünüyor
+- Açı genel olarak ~30-35° top-down'a benziyor, yüzler görünüyor (south-facing olduğunda)
+- Bazı karakterler sol-ön diagonal pozisyona kaymış gibi
+
+**Slot bazlı gözlemler:**
+- Slot 1 (Warblade): Geniş omuz + büyük kılıç, iyi silhouette
+- Slot 2 (Ranger): Yay görünüyor, asimetrik duruş var
+- Slot 3 (Shadowblade): Koyu, kapüşon var, ince
+- Slot 4 (Elementalist): Sarı saçlı, geniş robe, el jesti
+- Slot 5 (Ravager): TEK balta tutuyor (iki elle değil gibi görünüyor, ağır build var)
+- Slot 6 (Ronin): Katana bir tarafta, ince
+- Slot 7 (Gunslinger): Karanlık, trench coat
+- Slot 8 (Brawler): Yumruk guard pozisyonu
+- Slot 9 (Summoner): Staff var, yeşil accent
+- Slot 10 (Hexer): Hood + kitap önde
+- Slot 11 (Shard Walker): Mavi kristalli, omuz çıkıntılar, iyi
+- Slot 12 (Penitent Bruiser): Geniş, ayakta kırmızı ring (aura göstergesi)
+- Slot 13 (Fracture Imp): Küçük, mor, kanatlı
+- Slot 14 (Relic Caster): Kapüşonlu, önde amber ışık
+- Slot 15 (Riftbound Augur): Geniş kol jesti, parlayan yüz
+- Slot 16 (Hollow Hulk): Büyük, gorilla-vari, hollow gözler
+
+---
+
+## SORULAR
+
+1. **Ravager silah sorunu:** Üretilen görselde tek balta var. Spec'e göre "büyük iki-el balta" (bir silah, iki elle tutulur, sprite %45-50). Kullanıcı "2 balta olmalı" dedi. Spec gerçekten dual axe mi, yoksa single two-handed axe mi? Bu durumda kullanıcıyı mı yoksa spec'i mi düzeltmeli?
+
+2. **South-facing açı:** PixelLab'de "Low top-down" parametresi kullanıldığında karakterler tam south mu bakıyor yoksa hafif diagonal mı üretiyor? Prompt'a eklenecek ek direktif var mı?
+
+3. **Genel spec uyumu:** Her slotun dominant shape ve weapon okuması spec'e uyuyor mu? Hangi slotlar en zayıf silhouette okumasına sahip?
+
+4. **Prompt düzeltme önerileri:** Sonraki batch için hangi slotlarda prompt güçlendirilmeli?
+
+Kısa PASS/PARTIAL/FAIL değerlendirmesi yap, revize edilmesi gereken slotları listele.

@@ -1,0 +1,226 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+REPO ROOT: F:/Antigravity Projeler/2d roguelite/RIMA
+
+STEP 1 — Read these files first (exact paths):
+1. F:/Antigravity Projeler/2d roguelite/RIMA/MEMORY/pixellab_master_pipeline.md
+2. F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/PRODUCTION_PLAYBOOK.md
+3. F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/04_NEXT_Warblade_anim/HOWTO.md
+
+STEP 2 — Create directories if they do not exist:
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/05_NEXT_Ranger_anim/
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/
+- F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/07_NEXT_Elementalist_anim/
+
+STEP 3 — Write these 5 files using the format template below. Pull prompts verbatim from PRODUCTION_PLAYBOOK.md (the exact steps specified per class).
+
+=== FORMAT TEMPLATE ===
+
+# [CLASS NAME] — Animasyon Uretim Rehberi
+*MEMORY/pixellab_master_pipeline.md Bolum 0 HARD RULES uygulanir*
+
+---
+
+## TEMEL KURALLAR
+- Tool: Custom Animation V3 (karakter sayfasi -> Add Animation -> Custom Animation V3)
+- YASAK: Standalone Animate with Text NEW | animate_character MCP | Preset butonlar
+- Start Frame: HER ZAMAN _clean.png (Eraser Pass sonrasi, PixelLab orijinalini kullanma)
+- Yonler: [class-specific -- see below]
+- Canvas: 252x252 (v3 otomatik)
+
+---
+
+## ERASER PASS (ZORUNLU -- her base sprite uretiminden sonra)
+1. Pixelorama'da base sprite'i ac
+2. Eraser tool -> arka plan piksellerini temizle (anti-alias kenarlar dahil)
+3. Kaydet: [classname]_[direction]_idle_clean.png
+4. BU DOSYAYI KULLAN -- PixelLab orijinalini ASLA start frame olarak koyma
+
+---
+
+## ADIM 1 -- 8 Yon Base Sprite
+[Class-specific direction notes]
+- PixelLab -> Create Character Pro -> "8 Directions" sec
+- Her yon icin Eraser Pass uygula -> _clean.png kaydet
+
+## ADIM 2 -- Idle
+- Custom Animation V3
+- Start Frame: idle_clean.png | End Frame: bos | Frames: 6-8 | Keep First: ON
+- [Class prompt from PRODUCTION_PLAYBOOK]
+
+## ADIM 3 -- Hurt
+- Custom Animation V3
+- Start Frame: idle_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
+- [Class prompt from PRODUCTION_PLAYBOOK]
+
+## ADIM 4 -- Death
+- Custom Animation V3
+- Start Frame: idle_clean.png | End Frame: bos | Frames: 6-8 | Keep First: OFF
+- [Class prompt from PRODUCTION_PLAYBOOK]
+
+## ADIM 5 -- Walk Cycle (3-sub-step)
+- 5a: Standalone Animate -> 12 frames -> en uc poz sec -> PoseA_clean.png kaydet
+- 5b: Aseprite'de PoseA'yi flipX -> PoseB_clean.png kaydet
+- 5c: Custom Animation V3, Start=PoseA_clean.png, End=PoseB_clean.png, Frames: 6, Keep First: ON
+- [Class prompt from PRODUCTION_PLAYBOOK]
+
+## ADIM 6a -- Attack LMB (3-Segment)
+- 6a-1: PEAK frame -- Custom Animation V3, Start=idle_clean.png, End=bos, Frames=4, Keep First=OFF -> son frame = PEAK_clean.png
+- 6a-2: Windup -- Custom Animation V3, Start=idle_clean.png, End=PEAK_clean.png, Frames=4, Keep First=ON
+- 6a-3: Follow -- Custom Animation V3, Start=PEAK_clean.png, End=idle_clean.png, Frames=4, Keep First=ON
+- Toplam unique frames: 8 (PEAK paylasilir, sayilmaz 2x)
+- [Class LMB prompt from PRODUCTION_PLAYBOOK]
+
+## ADIM 6b -- Attack RMB (3-Segment)
+- [Same 3-segment structure as 6a]
+- [Class RMB prompt from PRODUCTION_PLAYBOOK]
+
+## ADIM 6c -- Dash
+- Custom Animation V3
+- Start Frame: idle_clean.png | End Frame: bos | Frames: 4 | Keep First: ON
+- [Class prompt from PRODUCTION_PLAYBOOK]
+
+## ADIM 7 -- Weapon Pass
+[INCLUDE for Warblade/Ranger/Shadowblade. OMIT entirely for Elementalist]
+- Edit Image Pro -> weapon layer uzerinde calis
+- Silahi dogru tutma pozisyonuna getir / detaylandir
+- Her frame icin uygula
+
+## QC CHECKLIST
+- [ ] Tum animasyonlar _clean.png start frame kullandi
+- [ ] Custom Animation V3 disinda tool kullanilmadi
+- [ ] Keep First degerleri dogru (Idle/Hurt/Walk/Attack windup+follow=ON, Death/PEAK=OFF)
+- [ ] Frame sayilari: Idle=6-8, Hurt=4, Death=6-8, Walk=6, Attack segment=4+4+4=8 unique, Dash=4
+- [class-specific items]
+
+## KAYIT KLASORU
+outputs/[classname]/
+  idle/ | hurt/ | death/ | walk/ | attack_lmb/ | attack_rmb/ | dash/
+  [weapon/ -- if Weapon Pass applies]
+
+=== END FORMAT TEMPLATE ===
+
+=== FILE SPECIFICATIONS ===
+
+FILE 1: F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/04_NEXT_Warblade_anim/ANIMASYON_URETIM.md
+- Class: Warblade
+- Accent: #7BA7BC | Weapon: Greatsword
+- Direction note: Simetrik -> S/E/N uret, W = Unity flipX (8 directions sec Create Character'da)
+- Prompts: Pull from PRODUCTION_PLAYBOOK Adim 17-25 verbatim
+- Weapon Pass: VAR (Adim 7 dahil et)
+
+FILE 2: F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/05_NEXT_Ranger_anim/ANIMASYON_URETIM.md
+- Class: Ranger
+- Accent: #7BA7BC | Weapon: Compound bow (sol elde)
+- Direction note: Asimetrik -> 4 yon (8 directions Create Character)
+- Prompts: Pull from PRODUCTION_PLAYBOOK Adim 26-34 verbatim
+- Weapon Pass: VAR (Adim 7 dahil et)
+
+FILE 3: F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/ANIMASYON_URETIM.md
+- Class: Shadowblade
+- Accent: #5A2A8A | Weapon: Twin short blades
+- Direction note: Asimetrik -> 4 yon (8 directions Create Character)
+- Prompts: Pull from PRODUCTION_PLAYBOOK Adim 35-43 verbatim
+- Weapon Pass: VAR (Adim 7 dahil et)
+
+FILE 4: F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/07_NEXT_Elementalist_anim/ANIMASYON_URETIM.md
+- Class: Elementalist
+- Accent: (pull from PRODUCTION_PLAYBOOK) | Weapon: YOK (buyu el jestleri)
+- Direction note: Asimetrik -> 4 yon (8 directions Create Character)
+- Prompts: Pull from PRODUCTION_PLAYBOOK Adim 44-51 verbatim
+- Weapon Pass: YOK -- Adim 7 completely absent from this file
+
+FILE 5: F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/PIXELLAB/MOB_BOSS_ANIMASYON_URETIM.md
+Write this file with the following structure:
+
+# MOB & BOSS -- Animasyon Uretim Rehberi
+*MEMORY/pixellab_master_pipeline.md Bolum 0 ve Bolum 14 HARD RULES*
+
+---
+
+## TEMEL FARK: Player siniflarindan farkli -- mob/boss PixelLab'de karakter olarak degil, referans sprite olarak baslar
+
+---
+
+## ADIM 0 -- Sisteme Al (ZORUNLU -- mob/boss'ta bu adim VAR, player siniflarinda YOK)
+1. Base sprite uret: Create Image PRO -> hedef canvas boyutunda (boyut tablosuna bak)
+2. Eraser Pass -> _clean.png
+3. PixelLab -> Create Character -> "Create from Reference V3"
+   - Input: _clean.png upload
+   - Directions: 8 sec
+   - Karakter artik sistemde -> buradan sonra player ile ayni pipeline
+
+## MOB ANIMASYON SETI (LOCKED)
+| Tier | Animasyonlar | Adet |
+|------|-------------|------|
+| Standart Mob | Walk / Attack / Hurt / Death | 4 |
+| Elite Mob | Walk / Attack / Hurt / Death / Telegraph | 5 |
+| Boss | Idle / Walk / Attack_1 / Attack_2 / Telegraph / Hurt / Death / Phase_Transition | 8 |
+
+## BOYUT & PPU TABLOSU (LOCKED)
+[Pull the full size/PPU table from PRODUCTION_PLAYBOOK Section F -- Player/Miniboss/Act Boss/Final Boss/Architect rows -- copy verbatim]
+
+## FRAME SAYILARI
+- Hurt: 4 frames
+- Walk: 6 frames
+- Attack (3-segment): 4+4+4 -> 8 unique frames (PEAK paylasilir)
+- Death: 6-8 frames
+- Idle (boss): 6-8 frames
+- Telegraph: 4-6 frames
+- Phase_Transition: 8-12 frames
+
+## ANIMASYON ADIMLARI
+Same Custom Animation V3 pipeline as player classes -- Start Frame = _clean.png ZORUNLU.
+Use same 3-segment Attack structure (PEAK -> Windup -> Follow).
+Keep First rules same as player.
+
+## QC CHECKLIST
+- [ ] Adim 0 yapildi (Create from Reference V3)
+- [ ] Eraser Pass her base sprite icin
+- [ ] Boyut LOCKED tablodan kontrol edildi
+- [ ] Animasyon set tier'a gore dogru (4/5/8 anim)
+- [ ] Custom Animation V3 kullanildi (Standalone NEW YASAK)
+
+## KAYIT KLASORU
+outputs/mobs/[mob_name]/
+  walk/ | attack/ | hurt/ | death/ | telegraph/ (elite+boss)
+outputs/bosses/[boss_name]/
+  idle/ | walk/ | attack_1/ | attack_2/ | telegraph/ | hurt/ | death/ | phase_transition/
+
+=== END FILE 5 ===
+
+STEP 4 -- Update CURRENT_STATUS.md
+File: F:/Antigravity Projeler/2d roguelite/RIMA/CURRENT_STATUS.md
+- Read the file first
+- Replace ONLY the top summary section (the block at the very beginning -- the header + bullet summary + next session block)
+- Do NOT touch any section below the first horizontal rule (---) that follows the summary block
+- Replace with exactly this content (preserve markdown formatting):
+
+**2026-05-10 -- S52 | Aktif Sprint: Faz 1-2**
+
+> **S52 bu session ozet:**
+> - **PixelLab Master Pipeline LOCKED:** MEMORY/pixellab_master_pipeline.md Bolum 0 HARD RULES eklendi. Animasyon tool = Custom Animation V3 (karakter sayfasi, Start Frame zorunlu). Mob/Boss = Create from Reference V3 ile once sisteme al. 8 yon uretim zorunlu.
+> - **Warblade HOWTO -> ANIMASYON_URETIM:** 5 rehber dosya yeniden yazildi (Warblade/Ranger/Shadowblade/Elementalist/Mob-Boss). Dosya adi HOWTO.md -> ANIMASYON_URETIM.md.
+> - **Room Designer F1.2 visual bug:** PENDING -- STAGING/roomdesigner_F1_2_visual_fix.md brief hazir, dispatch bekliyor.
+
+> **Siradaki session (S53):**
+> 1. Room Designer F1.2 visual bug Codex dispatch
+> 2. F1.2 PASS -> tile asset ekleme -> end-to-end stamp test
+> 3. Warblade Adim 1 (base 4-yon) uretimi kullanici yapacak
+
+=== CONSTRAINTS ===
+- File names MUST be ANIMASYON_URETIM.md (NOT HOWTO.md)
+- All prompts in code blocks (copy-paste ready)
+- Hurt=4 frames, Attack=8 unique frames (3-segment PEAK shared), Idle=6-8, Death=6-8, Walk=6, Dash=4
+- Custom Animation V3 = CORRECT | Standalone Animate with Text NEW = YASAK
+- Start Frame = _clean.png ZORUNLU
+- Elementalist: NO Weapon Pass (Adim 7 completely absent from file)
+- Mob/Boss: Adim 0 (Create from Reference V3) ZORUNLU
+- CURRENT_STATUS.md: only update the top summary block, leave rest intact
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "<phrase>"

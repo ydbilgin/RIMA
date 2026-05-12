@@ -1,0 +1,42 @@
+You are Codex in a bounded RIMA task. Read CODEX.md. Stay inside the allowed file list only.
+
+TASK: Room Designer F1 BRUSH.
+Read F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/roomdesigner_F1_brush.md for full spec.
+Read F:/Antigravity Projeler/2d roguelite/RIMA/Assets/Editor/RoomDesigner/IRoomDesignerContext.cs for the interface contract.
+
+ALLOWED PATHS (STRICT):
+- Assets/Editor/RoomDesigner/Brushes/IBrush.cs (CREATE)
+- Assets/Editor/RoomDesigner/Brushes/BrushController.cs (CREATE)
+- Assets/Editor/RoomDesigner/Brushes/StampBrush.cs (CREATE)
+- Assets/Editor/RoomDesigner/Brushes/EraserBrush.cs (CREATE)
+- Assets/Editor/RoomDesigner/Brushes/PickerBrush.cs (CREATE)
+- Assets/Editor/RoomDesigner/Brushes/BucketFillBrush.cs (CREATE)
+- Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uss (APPEND only: add .rd-brush-toolbar selectors)
+- Assets/Tests/EditMode/Editor/BrushTests.cs (CREATE)
+
+KEY CONSTRAINTS:
+1. Multi-tilemap undo: Undo.IncrementCurrentGroup + Undo.GetCurrentGroup + Undo.SetCurrentGroupName + Undo.RegisterCompleteObjectUndo(maps[]) + Undo.CollapseUndoOperations(group). One undo group per full stroke (mousedown to mouseup).
+2. Stroke buffer: HashSet<Vector3Int> for duplicate detection. OnStrokeBegin inits, OnStrokeContinue appends, OnStrokeEnd calls ApplyStroke once.
+3. BucketFill: BFS 4-directional, max 10000 cells, EditorUtility.DisplayDialog on abort.
+4. MarkDirty debounce: skip if last call was < 32ms ago (EditorApplication.timeSinceStartup).
+5. BrushController.Instance static singleton pattern.
+6. All namespace: RIMA.Editor.RoomDesigner (brushes) / RIMA.Tests.Editor (tests).
+7. Test file: NUnit [Test], FakeContext implementing IRoomDesignerContext, 5 test cases as specified in the brief.
+
+COMMIT MESSAGE (exact):
+feat(room-designer): F1 brush -- Stamp/Eraser/Picker/Bucket + multi-tilemap undo grouping
+
+- IBrush + CellEdit struct
+- BrushController (stroke lifecycle, undo grouping, hotkeys B/E/I/G)
+- StampBrush + EraserBrush + PickerBrush + BucketFillBrush
+- USS brush toolbar selectors
+- EditMode tests (stroke happy path + bucket fill + undo grouping)
+
+Co-Authored-By: Codex (GPT 5.5) <noreply@antigravity.dev>
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "<phrase>"

@@ -1,0 +1,230 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+## Task 1: CREATE Assets/Editor/RoomDesigner/RoomMetadataPanel.cs
+
+Right-panel metadata inspector for the room designer. Bootstrap pattern (like TileLibraryPanel).
+
+Namespace: RIMA.Editor.RoomDesigner
+No comments except where the spec below explicitly adds them.
+FloorVariantPainter calls must be null-safe (if FloorTilemap is null or variantSet is null -> no-op).
+Must compile without errors.
+
+First read these files to understand existing types before writing:
+- Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs (find IRoomDesignerContext or Context property)
+- Assets/Scripts/Runtime/Rooms/RoomMetadata.cs (find BiomeType, RoomBlueprint)
+- Assets/Editor/RoomDesigner/Canvas/RoomDesignerCanvas.cs (find FloorVariantPainter or WallAutoConnect)
+- Assets/Editor/RoomDesigner/Brushes/StampBrush.cs (read before modifying)
+- Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uss (read before modifying)
+
+Then write Assets/Editor/RoomDesigner/RoomMetadataPanel.cs with this structure:
+
+```
+using RIMA.Runtime.Rooms;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.Tilemaps;
+
+namespace RIMA.Editor.RoomDesigner
+{
+    public sealed class RoomMetadataPanel : VisualElement
+    {
+        internal const string PanelName = "room-metadata-panel";
+        private readonly IRoomDesignerContext ctx;
+        private string roomId = "room_001";
+        private BiomeType biomeType = BiomeType.Keep;
+        private int gateCount = 2;
+        private int noiseSeed = 0;
+        private bool previewBakeEnabled = false;
+        private TileBase[] floorVariantSet;
+        private ObjectField[] variantSlots;
+        private IntegerField _seedField;
+
+        public RoomMetadataPanel(IRoomDesignerContext ctx)
+        {
+            this.ctx = ctx;
+            name = PanelName;
+            Build();
+        }
+
+        private void Build()
+        {
+            var title = new Label("Room Metadata");
+            title.AddToClassList("rd-meta-title");
+            Add(title);
+
+            var row2 = new VisualElement();
+            row2.AddToClassList("rd-meta-row");
+            var idField = new TextField { label = "", value = roomId };
+            idField.AddToClassList("rd-meta-field");
+            idField.RegisterValueChangedCallback(e => roomId = e.newValue);
+            var biomeChoices = new System.Collections.Generic.List<string> { "Keep", "Crypt", "Volcanic" };
+            var biomeDropdown = new DropdownField(biomeChoices, biomeChoices.IndexOf(biomeType.ToString()));
+            biomeDropdown.style.width = 80;
+            biomeDropdown.RegisterValueChangedCallback(e =>
+            {
+                if (System.Enum.TryParse<BiomeType>(e.newValue, out var parsed))
+                    biomeType = parsed;
+            });
+            row2.Add(idField);
+            row2.Add(biomeDropdown);
+            Add(row2);
+
+            var row3 = new VisualElement();
+            row3.AddToClassList("rd-meta-row");
+            var gatesField = new IntegerField("Gates") { value = gateCount };
+            gatesField.style.width = 80;
+            gatesField.RegisterValueChangedCallback(e => gateCount = e.newValue);
+            _seedField = new IntegerField("Seed") { value = noiseSeed };
+            _seedField.style.flexGrow = 1;
+            _seedField.RegisterValueChangedCallback(e => noiseSeed = e.newValue);
+            var reseedBtn = new Button(Reseed) { text = "Reseed" };
+            reseedBtn.style.width = 60;
+            row3.Add(gatesField);
+            row3.Add(_seedField);
+            row3.Add(reseedBtn);
+            Add(row3);
+
+            var previewToggle = new Toggle("Preview Floor") { value = previewBakeEnabled };
+            previewToggle.RegisterValueChangedCallback(e => OnPreviewBakeChanged(e.newValue));
+            Add(previewToggle);
+
+            var sep = new VisualElement();
+            sep.AddToClassList("rd-meta-sep");
+            Add(sep);
+
+            Add(new Label("Assign floor variant tiles below"));
+        }
+
+        private void Reseed()
+        {
+            noiseSeed = UnityEngine.Random.Range(0, 99999);
+            if (_seedField != null) _seedField.SetValueWithoutNotify(noiseSeed);
+            // if previewBakeEnabled && ctx.FloorTilemap != null -> FloorVariantPainter.PreviewVariants(...)
+            if (previewBakeEnabled && ctx?.FloorTilemap != null && floorVariantSet != null)
+                FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, GetMockBlueprint(), floorVariantSet);
+        }
+
+        private void OnPreviewBakeChanged(bool enabled)
+        {
+            previewBakeEnabled = enabled;
+            // if enabled -> FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, GetMockBlueprint(), floorVariantSet)
+            // if disabled -> FloorVariantPainter.RestoreDefault(ctx.FloorTilemap, floorVariantSet?[0])
+            // GetMockBlueprint(): create a temp RoomBlueprint with current noiseSeed/roomWidth=20/roomHeight=20
+            if (enabled)
+            {
+                if (ctx?.FloorTilemap != null && floorVariantSet != null)
+                    FloorVariantPainter.PreviewVariants(ctx.FloorTilemap, GetMockBlueprint(), floorVariantSet);
+            }
+            else
+            {
+                if (ctx?.FloorTilemap != null)
+                    FloorVariantPainter.RestoreDefault(ctx.FloorTilemap, floorVariantSet?[0]);
+            }
+        }
+
+        private RoomBlueprint GetMockBlueprint() =>
+            new RoomBlueprint { NoiseSeed = noiseSeed, RoomWidth = 20, RoomHeight = 20 };
+
+        public (string roomId, BiomeType biome, int noiseSeed, int gateCount) GetBlueprintData() =>
+            (roomId, biomeType, noiseSeed, gateCount);
+
+        internal static bool IsMounted(VisualElement rightPanel) =>
+            rightPanel?.Q<RoomMetadataPanel>(PanelName) != null;
+    }
+
+    [InitializeOnLoad]
+    internal static class RoomMetadataPanelBootstrap
+    {
+        static RoomMetadataPanelBootstrap()
+        {
+            EditorApplication.update += TryMount;
+        }
+
+        private static double _lastCheck = 0;
+
+        private static void TryMount()
+        {
+            if (EditorApplication.timeSinceStartup - _lastCheck < 0.25) return;
+            _lastCheck = EditorApplication.timeSinceStartup;
+
+            var win = EditorWindow.GetWindow<RimaRoomDesignerWindow>(false, null, false);
+            if (win == null) return;
+
+            var rightPanel = win.rootVisualElement?.Q<VisualElement>("right-panel");
+            if (rightPanel == null) return;
+            if (RoomMetadataPanel.IsMounted(rightPanel)) return;
+
+            var ctx = win.Context;
+            if (ctx == null) return;
+
+            var panel = new RoomMetadataPanel(ctx);
+            rightPanel.Add(panel);
+        }
+    }
+}
+```
+
+IMPORTANT ADAPTATION RULES:
+- Read RoomMetadata.cs first. Adapt field names of RoomBlueprint to match whatever properties actually exist (e.g. noiseSeed vs NoiseSeed, roomWidth vs RoomWidth). If RoomBlueprint does not exist, use a struct stub inline.
+- If BiomeType enum does not exist, define a minimal one inside the same file or namespace.
+- If FloorVariantPainter does not exist, comment out those calls with "// FloorVariantPainter not yet implemented" and remove the null-check blocks that call it.
+- If IRoomDesignerContext does not have FloorTilemap property, use whatever tilemap access exists or comment out.
+- If RimaRoomDesignerWindow does not have a Context property, read the file to find the correct accessor.
+- Adapt to compile. Do NOT leave unresolved symbol errors.
+
+## Task 2: MODIFY Assets/Editor/RoomDesigner/Brushes/StampBrush.cs
+
+Read the file first. Then add WallAutoConnect hook.
+
+If there is no _strokeCells tracking, add:
+  private readonly System.Collections.Generic.List<UnityEngine.Vector3Int> _strokeCells = new System.Collections.Generic.List<UnityEngine.Vector3Int>();
+
+Populate in OnStrokeContinue (add the painted cell to _strokeCells).
+Clear at start of each new stroke in OnStrokeBegin (or wherever a new stroke starts).
+
+In OnStrokeEnd, after undo group commit, add:
+  if (ctx.ActiveLayer == RoomLayer.Walls && ctx.WallsTilemap != null)
+  {
+      var touched = _strokeCells.ToArray();
+      WallAutoConnect.RefreshNeighborhood(ctx.WallsTilemap, touched, wallVariants: null);
+      ctx.MarkDirty();
+  }
+
+If WallAutoConnect does not exist, comment out that call with "// WallAutoConnect not yet implemented".
+If RoomLayer enum or ctx.ActiveLayer does not exist, adapt to whatever layer tracking field exists.
+Read the actual file and adapt the edit to fit.
+
+## Task 3: MODIFY Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uss
+
+Read the file first, then append these CSS classes at the very end:
+
+.rd-meta-title { font-size: 12px; -unity-font-style: bold; padding: 6px 8px 2px 8px; color: #d0d8e0; }
+.rd-meta-row { flex-direction: row; align-items: center; padding: 2px 6px; }
+.rd-meta-field { flex-grow: 1; margin-right: 4px; }
+.rd-meta-sep { height: 1px; background-color: #313941; margin: 6px 0; }
+
+## Task 4: COMMIT
+
+After writing all files, run:
+  git add Assets/Editor/RoomDesigner/RoomMetadataPanel.cs Assets/Editor/RoomDesigner/Brushes/StampBrush.cs Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uss
+  git commit -m "feat(room-designer): RoomMetadataPanel + StampBrush wall hook + USS metadata styles
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+
+Return the commit hash.
+
+## Files allowed
+- Assets/Editor/RoomDesigner/RoomMetadataPanel.cs (new, create it)
+- Assets/Editor/RoomDesigner/Brushes/StampBrush.cs (modify)
+- Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uss (modify)
+- Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs (read-only, for context)
+- Assets/Scripts/Runtime/Rooms/RoomMetadata.cs (read-only, for context)
+- Assets/Editor/RoomDesigner/Canvas/RoomDesignerCanvas.cs (read-only, for context)
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "<phrase>"

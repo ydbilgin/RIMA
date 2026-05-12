@@ -1,0 +1,123 @@
+OVERRIDE: DO NOT read CODEX_TASK.md or CODEX_DONE.md. DO NOT follow CODEX.md automation section. Follow ONLY this inline prompt. CODEX_TASK.md is empty and irrelevant.
+
+You are Codex executing a bounded RIMA task. Read CODEX.md for style rules ONLY (not automation). Stay strictly inside the allowed file list below.
+
+== TASK: E1 + E2 -- Tile Import Wizard + Pixel-Perfect Canvas Preview ==
+
+RIMA 2D roguelite, Unity 6.3 LTS, URP 2D Renderer, Pixel Perfect Camera.
+
+LOCKED TECH CONSTANTS:
+- PPU = 64
+- Tile = 32x32 top-down, point filter, no compression, no mipmap, binary alpha
+- Chromakey: #00FF00, filter G>200 AND R<60 AND B<60, binary alpha snap
+- Renderer: URP 2D + Pixel Perfect Camera (RefRes 320x180, PPU=64, PillarboxAndLetterbox)
+
+ALLOWED READ PATHS:
+- Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs
+- Assets/Editor/RoomDesigner/Canvas/RoomDesignerCanvas.cs
+- Assets/Editor/RoomDesigner/IRoomDesignerContext.cs
+- CODEX.md
+
+ALLOWED WRITE PATHS:
+- Assets/Editor/TileImport/TileImportWizard.cs (NEW)
+- Assets/Editor/TileImport/RIMA.Editor.TileImport.asmdef (NEW)
+- Assets/Editor/RoomDesigner/PixelPerfectCanvasPreview.cs (NEW)
+- Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs (SURGICAL EDIT ONLY)
+
+== E1: TILE IMPORT WIZARD ==
+
+Create NEW file: Assets/Editor/TileImport/TileImportWizard.cs
+Create asmdef: Assets/Editor/TileImport/RIMA.Editor.TileImport.asmdef (Editor platform only)
+
+Spec:
+1. EditorWindow with [MenuItem("RIMA/Tile Import Wizard")]
+2. IMGUI-based (GUILayout/EditorGUILayout) -- NOT UIToolkit
+3. Two input modes (radio toggle): Single (32x32 PNG) and Sheet (128x128 PNG -> 16 tiles, 4x4 grid)
+4. Preview panel: texture thumbnail + grid lines if sheet mode
+5. Validation (run on file change and on Import button click):
+   a. Size: must be 32x32 (single) or 128x128 (sheet). ERROR if wrong.
+   b. Alpha: warn if any pixel has alpha in range 1..254 (semi-transparent)
+   c. Border mortar: warn if outer 1px ring is not #1A1C20 +/-5 RGB tolerance
+   d. Chromakey: info + checkbox if any pixel matches G>200 AND R<60 AND B<60
+   e. Filter: check TextureImporter; if not Point/NoCompression/NoMipmap offer auto-fix
+6. Category dropdown: floor / wall / decal / obstacle
+7. Name field: base name (e.g. "floor_F1"). Sheet tiles get _v01.._v16 suffix.
+8. Import button action:
+   - Apply TextureImporter (Sprite, Point filter, NoCompression, mipmap=false, PPU=64, RGBA32)
+   - If chromakey convert checked: read pixels, set alpha=0 where G>200 AND R<60 AND B<60, write PNG back
+   - Create Tile assets (UnityEngine.Tilemaps.Tile) in Assets/Art/Tiles/{category}/{name}.asset
+   - For sheet: 16 sprites -> 16 Tile assets named {name}_v01.asset .. {name}_v16.asset
+   - Show EditorUtility.DisplayProgressBar for batch
+9. Validation errors shown in ScrollView. On error, show dialog "Validation failed. Import anyway?" default=Cancel.
+10. Texture pixel reading: GetPixels32() after ensuring isReadable; for non-readable use RenderTexture blit.
+
+== E2: PIXEL-PERFECT CANVAS PREVIEW ==
+
+First READ Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs and Canvas/RoomDesignerCanvas.cs.
+
+Create NEW file: Assets/Editor/RoomDesigner/PixelPerfectCanvasPreview.cs
+
+Class spec (namespace RIMA.Editor.RoomDesigner):
+- internal sealed class PixelPerfectCanvasPreview
+- Fields: bool isActive, int zoomLevel=2, UnityEngine.UIElements.Button labelRef
+- Constants: const int TilePixels=32, RefWidth=320, RefHeight=180, PPU=64
+- Constructor(IRoomDesignerContext ctx): store ctx
+- void SetLabelRef(UnityEngine.UIElements.Button btn): labelRef = btn
+- void Toggle(): isActive=!isActive; update labelRef.text if not null
+- void DrawOverlay(UnityEngine.Rect canvasRect):
+    if !isActive return
+    int cellSize = TilePixels * zoomLevel
+    Use Handles.BeginGUI() / Handles.EndGUI()
+    Draw vertical lines every cellSize px across canvasRect
+    Draw horizontal lines every cellSize px across canvasRect
+    Line color: new Color(0x1A/255f, 0x1C/255f, 0x20/255f, 0.6f) using GUI.DrawTexture with 1px wide/tall textures
+    Draw zoom buttons (1x 2x 3x 4x) in top-right corner -- clicking sets zoomLevel
+    Draw label "RefCam: 320x180 @ PPU=64" at top-left of canvasRect
+- void RefreshPixelPerfectCamera():
+    UnityEngine.Object.FindObjectsByType<UnityEngine.Rendering.Universal.PixelPerfectCamera>(FindObjectsSortMode.None)
+    foreach: set refResolutionX=320, refResolutionY=180, assetsPPU=64, cropFrameX=true, cropFrameY=true, stretchFill=false
+    Debug.Log("PixelPerfectCamera refreshed")
+- void Dispose(): no-op
+
+SURGICAL EDIT Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs:
+Add after the line "private bool isStrokeActive;":
+    private PixelPerfectCanvasPreview ppPreview;
+
+Add in OnEnable() after "EnsureCanvas();":
+    ppPreview = new PixelPerfectCanvasPreview(this);
+
+Add in OnDisable() before "canvas?.Dispose();":
+    ppPreview?.Dispose();
+    ppPreview = null;
+
+Add in BindToolbar() after the cellDebugLabel block (after "toolbar.Add(cellDebugLabel);"), still inside "if (toolbar != null)":
+    var ppBtn = new Button(() => { ppPreview?.Toggle(); MarkDirty(); });
+    ppBtn.text = "[Pixel-Perfect Preview] OFF";
+    ppBtn.name = "btn-pixel-perfect";
+    toolbar.Add(ppBtn);
+    ppPreview?.SetLabelRef(ppBtn);
+
+Add new method to the class (before the last closing brace):
+    private void OnGUI()
+    {
+        if (ppPreview == null || canvas == null) return;
+        var el = canvas.Element;
+        if (el != null) ppPreview.DrawOverlay(el.worldBound);
+    }
+
+ASMDEF NOTE:
+- Check if Assets/Editor/RoomDesigner/ has an .asmdef. If yes, PixelPerfectCanvasPreview.cs is auto-included.
+- TileImportWizard needs Assets/Editor/TileImport/RIMA.Editor.TileImport.asmdef with Editor platform and references to UnityEditor.
+
+COMMIT when done:
+- Message: "feat(editor): E1 TileImportWizard + E2 PixelPerfectCanvasPreview"
+- Co-Authored-By: Codex (GPT 5.5) <noreply@antigravity.dev>
+
+REPORT FORMAT (write to stdout, do NOT write CODEX_DONE.md):
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED:
+  - <bullet per file>
+ERRORS: <or NONE>
+FILES_TOUCHED: <absolute paths>
+LINE_COUNTS: <file: N lines>
+NEXT_SIGNAL: "E1E2_IMPL_COMPLETE"

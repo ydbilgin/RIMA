@@ -1,0 +1,104 @@
+TASK: PixelLab YouTube video kaynaklarini (transkript + gemma visual analiz + sample frame'ler) RIMA bagimsiz, RIMA-spesifik production tips dosyasi olarak senthezle.
+
+PROJE BAGLAMI (2026-05-13 S60 LOCKED):
+- RIMA = 2D top-down ARPG (Hammerwatch/HLD/Hades referans)
+- Karakter: 64x64 chibi, PixelLab Create Character (Pixen), silahli 1-piece (silah sinifa sabit)
+- Tile: 32x32 top-down grid (floor + wall + decal)
+- VFX: 64-128px mix
+- PPU=64, URP 2D Renderer + Pixel Perfect Camera
+- Yon (MVP): 4 (N/S/E uretilir, W=flipX)
+- Anim FPS: 10-12
+- View: high top-down ~30-35° (Hades match)
+- 10 sinif + 16 mob + 4 boss + final boss
+- AKTIF IS: 16 sprite batch (10 sinif + 6 mob), mob/boss/skill design refresh
+- LOCKED: PixelLab Map Tools KULLANILMAYACAK (Karar #75), AI uretim + manuel cleanup hibrit (Karar #72)
+
+GIRDI KAYNAKLARI (sirayla oku):
+
+1. TRANSKRIPTLER (15 video, hepsi temiz EN):
+   F:\Antigravity Projeler\2d roguelite\RIMA\ARCHIVE\RESEARCH_RAW\youtube_transcripts\*.en_clean.txt
+
+2. GEMMA VISUAL ANALIZLER (20 dosya, ZATEN gorsel+icerik ozeti var, transcript'lere ek):
+   F:\Antigravity Projeler\2d roguelite\RIMA\ARCHIVE\RESEARCH_RAW\gemma_analyses\*.txt
+   NOT: Bu klasorde "yeni videolar" da var (boss, art style, cohesive game art) -- transcript'i olmayan ama gemma analizi olan -- onlari da dahil et.
+
+3. SAMPLE FRAME'LER (referans icin, isteğe baglı):
+   F:\Antigravity Projeler\2d roguelite\RIMA\ARCHIVE\RESEARCH_RAW\yt_frames\<video_name>\frame_*.jpg
+   (Her video icin 5-10 frame ornek olarak var, gerek yok ama silhouette/UI sorularinda referans olabilir.)
+
+4. MEVCUT RIMA KANONIK:
+   F:\Antigravity Projeler\2d roguelite\RIMA\MEMORY\pixellab_master_pipeline.md
+   F:\Antigravity Projeler\2d roguelite\RIMA\MEMORY\PIXELLAB_TOOL_GUIDE.md
+   (Bu iki dosya ile celiski/destek tespiti yap.)
+
+5. RESMI DOKUMANTASYON (cross-reference icin):
+   F:\Antigravity Projeler\2d roguelite\RIMA\PixelLabDocs\*.md
+   (60+ resmi dosya; gerektigi yerde ata.)
+
+CIKTI (TEK DOSYA):
+F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\pixellab_videos_synthesis_2026-05-13.md
+
+CIKTI YAPISI (ASCII only, no Turkish special chars, MARKDOWN):
+
+# PixelLab Video Bilgi Sentezi -- RIMA Production Tips
+> 15 transcript + 20 gemma analiz, 2026-05-13 sentez
+
+## 1. KAYNAK ENVANTERI
+Tablo: hangi video -> hangi transcript -> hangi gemma analiz var.
+
+## 2. TOPIC SENTEZ (RIMA-uygulanabilir)
+
+### 2.1 Character Generation (64x64 chibi, sinifa sabit silah)
+- Tip (kaynak video adi): aciklama
+- RIMA application: NASIL kullanilacak / NE'i degistiriyor
+- Mevcut LOCKED karara: UYGUN / CELISKILI / GENISLET
+
+### 2.2 Tile Generation (32x32 top-down floor/wall/decal)
+(ayni format)
+
+### 2.3 Animation Pipeline (Animate with Text, Skeleton, Between 2 Frames, vs)
+(ayni format)
+
+### 2.4 Map / Tileset Workshop
+NOT: Map Workshop Karar #75 ile KULLANILMAYACAK; sadece "ne ogrenmeli, neden yasak" baglaminda yaz.
+
+### 2.5 Style Consistency Methods (multi-asset coherence)
+(ayni format)
+
+### 2.6 New Tools / Recent Features
+- Object Creator
+- Animate Between 2 Frames
+- Animate with Skeleton
+- Cohesive Game Art Style (yeni gemma analiz)
+- Boss generation (yeni gemma analiz)
+(her birini ozelliklere ayir, RIMA'da kullanilabilir mi?)
+
+### 2.7 Workflow Tricks / Non-Obvious Findings
+Docs'ta yok ama videoda var olan ipuclari.
+
+### 2.8 Confirmed Limitations (NE YAPILMAMALI)
+PixelLab'in yapamadiklari, baris noktalari.
+
+## 3. CELISKILER + GUNCELLEME ONERILERI
+Mevcut pixellab_master_pipeline.md ile celisen yeni bilgi varsa burada listele.
+| Mevcut karar | Yeni bulgu | Onerilen aksiyon |
+
+## 4. PRIORITE GUNCELLE TABLOSU
+RIMA'nin S60 onceligi (16 sprite batch, mob/boss/skill) icin video icgorulerinin oncelik sirasi:
+1. ... (siralanmis)
+
+## 5. REFERANS BAGLANTILARI
+Her videodaki en kritik 2-3 cumlenin direkt alintisi (transcript kaynak satir numarasiyla).
+
+KURALLAR:
+- Her tip bir kaynak video ile baglanmali (ID veya filename).
+- TR/EN karisik OK ama Turkish special char (s/c/g/u/i/o vs) ASCII'ye normalize et.
+- Mevcut LOCKED karara karsi celiski varsa BUYUK harfle "CELISKI" yaz, sebep belirt.
+- 6 sayfa esit kalinligin uzerinde yazma, vurus yap; fluff yok.
+- Sample frame'lerden bir tane bile gormeden cikti yazma. Mantikli frame ornekleri kaynak goster ("[frame_0007.jpg ref]" formatinda).
+
+STATUS RAPORU FORMATI (sona ekle):
+STATUS: DONE / FAILED / PARTIAL
+FILES_READ: <transcript count> + <gemma count> + <frame samples>
+FILES_WRITTEN: STAGING/pixellab_videos_synthesis_2026-05-13.md
+NEXT_SIGNAL: "pixellab_video_synthesis_done"

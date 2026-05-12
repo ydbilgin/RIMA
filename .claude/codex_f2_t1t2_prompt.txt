@@ -1,0 +1,100 @@
+ALLOWED FILES (read and write):
+- Assets/Scripts/Runtime/Rooms/RoomBlueprint.cs
+- Assets/Scripts/Runtime/Rooms/BiomeType.cs  (CREATE NEW)
+- Assets/Editor/RoomDesigner/SaveLoad/RoomSaver.cs
+- Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs
+
+Do not read or write any other files.
+
+TASK: RIMA Room Designer F2 - T1+T2
+
+Step 1 - MODIFY Assets/Scripts/Runtime/Rooms/RoomBlueprint.cs
+
+Replace the entire file content with exactly the following (preserve indentation):
+
+using UnityEngine;
+
+namespace RIMA.Runtime.Rooms
+{
+    [CreateAssetMenu(menuName = "RIMA/Room Blueprint")]
+    public class RoomBlueprint : ScriptableObject
+    {
+        [Header("Identity")]
+        public string roomId;
+        public string roomType;
+        public BiomeType biomeType;
+        public int gateCount;
+
+        [System.Obsolete("Use biomeType instead")]
+        public string biome;
+
+        [Header("Dimensions")]
+        public int roomWidth = 20;
+        public int roomHeight = 20;
+        public Vector3Int roomOrigin;
+
+        [Header("Procedural Seed")]
+        public int noiseSeed;
+
+        [Header("Baked Variant Data")]
+        // floorVariantIndex[cell] = tile variant index (0-15), length = roomWidth * roomHeight
+        // Populated by FloorVariantPainter on save. Empty = not yet baked.
+        public byte[] floorVariantIndex;
+        // wallVariantIndex[cell] = connection variant index (0-7), length = roomWidth * roomHeight
+        // Populated by WallAutoConnector on save. Empty = not yet baked.
+        public byte[] wallVariantIndex;
+        // overrideVariantIndex[cell] = true -> manual override, do not re-bake this cell
+        public bool[] overrideVariantIndex;
+
+        [Header("Prefab")]
+        public GameObject prefab;
+    }
+}
+
+Step 2 - CREATE Assets/Scripts/Runtime/Rooms/BiomeType.cs
+
+Write this exact content:
+
+namespace RIMA.Runtime.Rooms
+{
+    public enum BiomeType
+    {
+        Keep,
+        Crypt,
+        Volcanic
+    }
+}
+
+Step 3 - MODIFY Assets/Editor/RoomDesigner/SaveLoad/RoomSaver.cs
+
+Read the current file first. Then apply these changes:
+a) Add "using RIMA.Runtime.Rooms;" at the top of the file if not already present.
+b) Change the Save method signature from:
+   public static (string prefabPath, string blueprintPath) Save(GameObject roomRoot, string roomId, string biome)
+   to:
+   public static (string prefabPath, string blueprintPath) Save(GameObject roomRoot, string roomId, BiomeType biome, int noiseSeed = 0, int roomWidth = 20, int roomHeight = 20)
+c) After the blueprint object (bp) is created or loaded in the method body, add these assignments:
+   bp.biomeType = biome;
+   bp.noiseSeed = noiseSeed;
+   bp.roomWidth = roomWidth;
+   bp.roomHeight = roomHeight;
+d) Any place that uses the biome parameter as a string for a folder path, change it to biome.ToString().
+
+Step 4 - MODIFY Assets/Editor/RoomDesigner/RimaRoomDesignerWindow.cs
+
+Read the current file first. Find the line that calls RoomSaver.Save. Change the biome argument from a string literal to BiomeType.Keep. The result should look like:
+   var saved = RoomSaver.Save(canvas.StageRoot, "test_room", BiomeType.Keep);
+Also add "using RIMA.Runtime.Rooms;" at the top of the file if not already present.
+
+CONSTRAINTS:
+- No new comments except the three // comments specified above on the baked variant arrays
+- Do not remove or rename existing public fields
+- Do not run any Unity commands after writing files
+- Commit after all four files are written with message: "feat(room-designer): F2 T1+T2 -- BiomeType enum, RoomBlueprint F2 fields, RoomSaver BiomeType param"
+
+STATUS REPORT FORMAT (print at the end):
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "F2-T1T2-DONE"

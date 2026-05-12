@@ -1,8 +1,7 @@
 ---
 name: rima-doc
-description: Use for writing guides, updating CURRENT_STATUS.md, updating SYSTEM_MAP.md, archiving completed files, and updating memory files. Trigger when the task is purely about keeping project docs or memory in sync. NOT for design decisions, NOT for code, NOT for asset prompts, NOT for QC/review work, NOT for Codex task dispatch (Codex is invoked via cx bash directly, not through this agent).
-model: claude-haiku-4-5-20251001
-tools: Read, Write, Edit, Glob, Grep
+description: Use for writing guides, updating CURRENT_STATUS.md, updating SYSTEM_MAP.md, archiving completed files, and updating memory files. Trigger when the task is purely about keeping project docs or memory in sync. NOT for design decisions, NOT for code, NOT for asset prompts, NOT for QC/review work, NOT for writing Codex task files (Codex is now invoked via rima-codex agent).
+model: claude-sonnet-4-6
 ---
 
 # RIMA Doc Agent

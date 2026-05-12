@@ -1,0 +1,176 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+TASK: Execute concept art F1.2 full-context retry end-to-end.
+RIMA root: F:/Antigravity Projeler/2d roguelite/RIMA
+Branch: master
+
+ALLOWED PATHS:
+- STAGING/concept_art/01_combat/** (new codex_v2_ prefix files)
+- STAGING/concept_art/_DISCARDED_codex_v1_*/ (backup folder)
+- STAGING/concept_art/INDEX.md (only file to commit)
+
+=== STEP 0: BACKUP (mandatory before any generation) ===
+
+Move these 5 files to a new backup folder STAGING/concept_art/_DISCARDED_codex_v1_<UTC_timestamp>/:
+- STAGING/concept_art/01_combat/codex_scene_01_warblade_iron_combo.png
+- STAGING/concept_art/01_combat/codex_scene_02_ranger_volley.png
+- STAGING/concept_art/01_combat/codex_scene_03_shadowblade_veil_strike.png
+- STAGING/concept_art/01_combat/codex_scene_04_elementalist_cast.png
+- STAGING/concept_art/01_combat/codex_scene_05_keep_arena_overview.png
+
+=== STEP 1: REQUIRED READS (read ALL before generating any image) ===
+
+Read these files using the Read/shell tool. Do NOT skip any. Do NOT start image generation until all are read.
+
+CHARACTER ANCHORS (12 files):
+1. Characters/anchors/warblade/metadata.json
+2. Characters/anchors/warblade/warblade_anchor.png
+3. Characters/anchors/warblade/rotations/south.png
+4. Characters/anchors/ranger/metadata.json
+5. Characters/anchors/ranger/ranger_anchor.png
+6. Characters/anchors/ranger/rotations/south.png
+7. Characters/anchors/shadowblade/metadata.json
+8. Characters/anchors/shadowblade/shadowblade_anchor.png
+9. Characters/anchors/shadowblade/rotations/south.png
+10. Characters/anchors/elementalist/metadata.json
+11. Characters/anchors/elementalist/elementalist_anchor.png
+12. Characters/anchors/elementalist/rotations/south.png
+
+TASARIM/ CHARACTER+CLASS IDENTITY (9 files):
+13. TASARIM/STYLE_BIBLE.md
+14. TASARIM/ANIMATION_BIBLE.md
+15. TASARIM/MASTER_KARAR_BELGESI.md
+16. TASARIM/SINIF_VE_SKILL_KARAR_BELGESI.md
+17. TASARIM/CLASS_STATE_CONTRACT.md
+18. TASARIM/CLASS_RMB_REDESIGN_2026-05-06.md
+19. TASARIM/BASIC_ATTACK_LMB_RMB_8CLASS_CONTRACT_2026-05-06.md
+20. TASARIM/SUMMONER_HEXER_CLASS_DESIGN.md
+21. TASARIM/SUMMONER_ECONOMY_RULES.md
+
+TASARIM/ SKILL+VFX (11 files):
+22. TASARIM/SKILL_SYSTEM_v2.md
+23. TASARIM/SKILL_VISUAL_CONTRACT.md
+24. TASARIM/SKILL_POOLS_10CLASS_2026-05-07.md
+25. TASARIM/SKILL_SYSTEM_TAXONOMY_2026-05-06.md
+26. TASARIM/SKILL_AUDIT_DECISION_2026-04-30.md
+27. TASARIM/SKILL_OFFER_SYSTEM_DECISION_2026-05-03.md
+28. TASARIM/SHADOW_ECHO_MATRIX.md
+29. TASARIM/SHADOWBLADE_ECHO_SYSTEM.md
+30. TASARIM/CROSS_CLASS_PROC_SYSTEM.md
+31. TASARIM/MAKEUP_VFX_CONTRACT.md
+32. TASARIM/AIM_SHOT_BOSS_PLACEMENT_SYSTEMS.md
+
+TASARIM/ MOB+BOSS (4 files):
+33. TASARIM/MOB_COMPOSITION_RULES.md
+34. TASARIM/COMBAT_ROSTER.md
+35. TASARIM/BOSS_DESIGN.md
+36. TASARIM/DAMAGE_CALCULATION.md
+
+TASARIM/ ROOM+ENVIRONMENT (13 files):
+37. TASARIM/ROOM_DESIGN_PHILOSOPHY.md
+38. TASARIM/ROOM_MECHANICS.md
+39. TASARIM/ROOM_INSPIRATION_PATTERNS_AND_RIMA_ADAPTATION_2026-05-03.md
+40. TASARIM/ROOM_CONNECTED_GENERATION_AND_ACT_EVOLUTION_PROPOSAL_2026-05-03.md
+41. TASARIM/ROOM_STAGING_AND_MAP_VARIANTS_DECISION_2026-05-03.md
+42. TASARIM/ACT1_SHATTERED_KEEP_ROOM_BLUEPRINT_CATALOGUE_2026-05-03.md
+43. TASARIM/ACT1_SHATTERED_KEEP_ROOM_BLOCKOUT_SET_2026-05-04.md
+44. TASARIM/dungeon_act1_map.md
+45. TASARIM/MAP_ITEM_SYSTEM.md
+46. TASARIM/map_fragment_system.md
+47. TASARIM/room_authoring.md
+48. TASARIM/GATE_SOCKET_AND_MAP_REVEAL_BLUEPRINT_2026-05-04.md
+49. TASARIM/RIFT_PORTAL_OPPORTUNITY.md
+
+TASARIM/ QUALITY (1 file):
+50. TASARIM/VISUAL_QUALITY_STANDARDS.md
+
+MEMORY/ VISUAL+SCALE (OPTIONAL — read if file exists, skip silently if missing):
+51. MEMORY/project_rima_visual_identity.md
+52. MEMORY/project_camera_scale_zoom_rules.md
+53. MEMORY/project_mob_boss_sizes.md
+54. MEMORY/feedback_concept_art_pixel_art_only.md
+55. MEMORY/project_pixellab_no_concept_art.md
+56. MEMORY/project_pixellab_pipeline.md
+57. MEMORY/project_animation_bible.md
+58. MEMORY/project_v1_anim_4classes.md
+
+NOTE: The MEMORY/ files above may not exist in RIMA project MEMORY/ folder. If any file is missing, skip it silently and continue. Do NOT block on missing MEMORY/ files. The character anchors + TASARIM/ + GUIDES/ reads are sufficient context for generation.
+
+GUIDES/ (3 files):
+59. GUIDES/RIMA_MASTER_ART_PIPELINE.md
+60. GUIDES/RIMA_CAMERA_AND_WALL_OCCLUSION_SYSTEM_2026-05-03.md
+61. GUIDES/RIMA_ISOMETRIC_ENVIRONMENT_PRODUCTION_FEEDBACK_2026-05-03.md
+
+=== STEP 2: GENERATE 5 SCENES ===
+
+After reading all files above, generate 5 images using image_gen.imagegen tool.
+
+GLOBAL IMAGE SETTINGS:
+- Resolution: 1920x1080 (TARGET). If tool limits size, use largest available 16:9 ratio. Minimum: 1672x941.
+- Style: Pixel art, chunky pixel clusters min 4px, hard edges, no anti-aliasing, cinematic wide 16:9 screenshot composition
+- Camera: 35-degree low top-down ARPG (Diablo 2 / Path of Exile / Hades angle) - NOT bird's eye, NOT pure isometric, NOT side-scroll
+- Palette anchor: dark slate base (#1A1C20 / #2A2D34 / #3A3D48 / #4E5260 / #606575) with cold blue accent (#7BA7BC)
+- Negative: blur, 3d render, smooth gradient, anti-aliasing, photo-realistic, soft shading, anime, deformed, flat 2d cartoon, painterly, illustration, oil painting, pastel, watercolor, generic warrior, generic mage, default armor
+
+SCENE 1 — WARBLADE IRON COMBO:
+Output: STAGING/concept_art/01_combat/codex_v2_scene_01_warblade_iron_combo.png
+
+Prompt: Warblade warrior — heavy plate steel armor (#4A4E5A / #5C6070 / #6E7280), cold blue cloth accent (#7BA7BC) at sash and shoulder straps, broad shoulders, dark brown hair, stoic face — mid-combo greatsword horizontal slash with two-handed grip, blade tip past character silhouette right edge, cold blue weapon trail (#7BA7BC) VFX per Warblade LMB convention, body twisted 30 degrees to follow slash, weight on back foot. Standard tier melee skeleton enemy (rusted plate fragments, exposed bone joints, dim red eye sockets) recoiling from impact, sparks and bone dust kicked up, posture broken backward. Stone keep dungeon corridor combat room, mossy weathered stone walls (#2A2D34 / #1A1C20) with Norse-inspired runic carvings, cracked floor tiles (#3A3D48 / #4E5260), iron sconces with torches casting warm orange rim light contrasting the cold blue weapon trail, atmospheric haze for depth. Pixel art rendered as a cinematic wide 16:9 screenshot, 35-degree low top-down ARPG camera (Diablo 2 / Path of Exile / Hades angle, NOT bird's eye, NOT pure isometric, NOT side-scroll). Hard pixel edges, chunky pixel clusters minimum 4px wide, no anti-aliasing, no smooth gradients. Player figure approximately 10% screen height. Skeleton approximately 9% (slightly behind player plane). Style reference: Hyper Light Drifter, Eastward, Blasphemous wide cinematic shots.
+
+SCENE 2 — RANGER VOLLEY:
+Output: STAGING/concept_art/01_combat/codex_v2_scene_02_ranger_volley.png
+
+Prompt: Ranger — hooded cloak forest green (#3A4A38 / #4E5E48), cold blue undertunic (#7BA7BC), light leather armor (#3A2818 / #5A4028), lean agile build, hood up with partial face shadow, quiver visible on back with leather strap, skin (#C9A084) — compound bow at full draw, left arm extended forward holding bow vertical, right hand at cheek anchor, arrow released with multiple arrows mid-flight in foreground showing rapid volley, cold blue (#7BA7BC) glints on bowstring and arrow tips, faint motion blur on flight path (kept pixel-art chunky). Three crypt ghouls advancing — tattered grey-green burial shrouds (#3A4A38 desaturated), exposed greying flesh, hunched posture with elongated arms, one ghoul mid-leap, one walking, one rising from prone, cold blue eyes. Overgrown stone courtyard with mossy ruins, broken pillars, cracked flagstones, grass tufts pushing through, low fog at ground level, warm rim light from a setting sun behind ranger (left side), cold ambient cast on ghouls (right side) creating tension contrast. Pixel art rendered as a cinematic wide 16:9 screenshot, 35-degree low top-down ARPG camera. Hard pixel edges, chunky pixel clusters minimum 4px wide. Ranger approximately 10% screen height. Mid-ground ghouls approximately 8%, far ghoul approximately 6% (depth via scale).
+
+SCENE 3 — SHADOWBLADE VEIL STRIKE:
+Output: STAGING/concept_art/01_combat/codex_v2_scene_03_shadowblade_veil_strike.png
+
+Prompt: Shadowblade assassin — full dark hooded cloak silhouetted, cloak black-purple (#1A0E2A / #2A1A3A / #3A2A4E), accent void violet (#5A2A8A), only chin and jawline visible below deep hood, leather straps (#3A2818), slim agile build, low crouched ready posture — phase-strike with TWO visible moments fused into one frame: (1) original position shows fading violet silhouette with smoke wisps trailing right at approximately 70% alpha, (2) strike position has fully re-materialized character with twin short blades crossing in X-shape on elite mob, violet streak (#5A2A8A) connecting two positions. Shadow Echo cyan accent (#00FFCC) visible as Echo aura on phantom trail (cross-class proc layer). Elite armored undead knight (rusted partial plate, larger silhouette approximately 12% screen height = elite +20% scale), recoiling from blade strike with green-grey ichor splatter pixels. Dark crypt arena interior, violet ambient haze pooling at floor, cracked stone tile floor with carved sigils glowing faint cyan (#00FFCC Echo undertone), distant low-burning torches with cold blue pools, fog at edges, broken sarcophagi visible in background. Pixel art rendered as a cinematic wide 16:9 screenshot, 35-degree low top-down ARPG camera. Hard pixel edges, chunky pixel clusters minimum 4px wide.
+
+SCENE 4 — ELEMENTALIST CAST:
+Output: STAGING/concept_art/01_combat/codex_v2_scene_04_elementalist_cast.png
+
+Prompt: Elementalist mage — long flowing robe deep blue-grey (#2A3848 / #3E4C5E / #525E74), faint cool trim (#B8C8D0), sash leather (#3A2818), hood NOT up (face visible, confident mage), short hair, skin (#C9A084) — both hands extended forward, palms outward, fingers spread, peak cast moment, energy gathers at palms as element-agnostic VFX zone (approximately 10% character height each), soft cool-white glow (#B8C8D0) at palms without committing to fire/frost/lightning element, robe billowing backward from cast force. Brutish skeleton warrior with greatsword raised, bone armor charred from prior battles, warm bone-grey (#A09080), contrasting cold mage. Act 1 Shattered Keep boss antechamber — wider arena framing, broken stained glass behind mage casting cold ambient light, distant gate sockets visible left and right, cracked floor with sigil ring at center where fight occurs. Pixel art rendered as a cinematic wide 16:9 screenshot, 35-degree low top-down ARPG camera. Hard pixel edges, chunky pixel clusters minimum 4px wide. Mage approximately 12% (slightly forward casting pose). Mob approximately 10%.
+
+SCENE 5 — KEEP ARENA OVERVIEW (establishing shot, no player character):
+Output: STAGING/concept_art/01_combat/codex_v2_scene_05_keep_arena_overview.png
+
+Prompt: Act 1 Shattered Keep combat arena establishing shot — no characters, no player, empty pre-combat tension, just the room awaiting the player. Four gate sockets visible at cardinal walls (N/E/S/W), gate visuals = stone arches with iron portcullis, faint cold blue glow at gate edges (#7BA7BC) marking active connections. Central ritual altar — square stone block approximately 2 unit height, cold blue glow (#7BA7BC) emanating from carved sigil on top, faint particle wisps. Scattered iron-sconce torches in alcoves casting warm orange pools of light (#FFB060 mid + #803010 deep) contrasting central cold blue. Stone floor tiles cool slate (#3A3D48 / #4E5260) showing wear, cracks, ritual sigil engravings. Wall stones (#2A2D34 / #1A1C20) carved with Norse-inspired runic accents. Atmospheric haze for depth, dust motes catching torchlight beams. Distant gate openings show silhouettes of corridors beyond receding into darkness with cool blue ambient. Altar slightly off-center golden ratio composition. Pixel art rendered as a cinematic wide 16:9 screenshot, 35-degree low top-down ARPG camera (wider than character scenes, this is establishing shot). Hard pixel edges, chunky pixel clusters minimum 4px wide, no anti-aliasing. Palette: dark slate base (#1A1C20 / #2A2D34 / #3A3D48 / #4E5260 / #606575) with cold blue accent (#7BA7BC) and warm torch orange (#FFB060). Style reference: Hades arena screenshots, Hyper Light Drifter environment art — pixel art rendered at high resolution with cinematic framing.
+
+=== STEP 3: DOCUMENT ===
+
+After generating all 5 images:
+
+1. Read STAGING/concept_art/INDEX.md
+2. Update INDEX.md:
+   - Mark old 5 codex_scene_*.png entries as "DISCARDED v1, see _DISCARDED_codex_v1_<timestamp>/"
+   - Add new 5 codex_v2_scene_*.png entries with: resolution actually achieved, status: GENERATED, audit: pending user
+3. Commit ONLY INDEX.md with this message:
+   feat(concept-art): F1.2 retry -- 5 codex_v2 scenes with full anchor + design context
+
+   - Backup: codex_scene_01..05 moved to _DISCARDED_codex_v1_<ts>/
+   - New: codex_v2_scene_01..05 generated with metadata.json-aware character descriptions
+   - Resolution: <actual resolution achieved>
+   - INDEX.md updated: v1 marked DISCARDED, v2 GENERATED
+
+   Co-Authored-By: Codex (GPT 5.5) <noreply@antigravity.dev>
+
+DO NOT commit any PNG files (they are gitignored).
+DO NOT generate more than 5 scenes.
+STOP after Step 3.
+
+=== ANCHOR SELF-ASSESSMENT (report this per scene) ===
+
+After generating, for each scene report which anchor items are present:
+Scene 1 Warblade: plate armor #4A4E5A [YES/NO] / cold blue accent #7BA7BC [YES/NO] / greatsword two-handed [YES/NO] / cold blue weapon trail [YES/NO] / skeleton enemy [YES/NO] / keep dungeon room [YES/NO]
+Scene 2 Ranger: forest green cloak #3A4A38 [YES/NO] / cold blue undertunic #7BA7BC [YES/NO] / compound bow volley [YES/NO] / ghoul enemies [YES/NO] / courtyard environment [YES/NO]
+Scene 3 Shadowblade: black-purple cloak #1A0E2A [YES/NO] / void violet accent #5A2A8A [YES/NO] / phase-strike dual position [YES/NO] / Shadow Echo cyan #00FFCC [YES/NO] / elite undead knight [YES/NO] / crypt environment [YES/NO]
+Scene 4 Elementalist: blue-grey robe #2A3848 [YES/NO] / element-agnostic VFX [YES/NO] / face visible [YES/NO] / skeleton warrior enemy [YES/NO] / antechamber room [YES/NO]
+Scene 5 Keep Arena: gate sockets 4 cardinal walls [YES/NO] / central altar [YES/NO] / Norse runic walls [YES/NO] / torch warm light contrast [YES/NO] / no characters [YES/NO]
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "concept_art_F1_2_complete"

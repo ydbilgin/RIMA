@@ -1,0 +1,317 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+TASK: Update animation prompt blocks in ANIMASYON_URETIM.md files with detailed weapon mechanics prompts.
+
+ALLOWED FILES (read + write):
+- MEMORY/pixellab_master_pipeline.md (read only)
+- STAGING/PIXELLAB/04_NEXT_Warblade_anim/ANIMASYON_URETIM.md
+- STAGING/PIXELLAB/05_NEXT_Ranger_anim/ANIMASYON_URETIM.md
+- STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/ANIMASYON_URETIM.md
+- STAGING/PIXELLAB/07_NEXT_Elementalist_anim/ANIMASYON_URETIM.md
+- STAGING/PIXELLAB/MOB_BOSS_ANIMASYON_URETIM.md
+
+STEP 1: Read MEMORY/pixellab_master_pipeline.md - Bolum 0 HARD RULES (Custom Animation V3 rules).
+STEP 2: Read each ANIMASYON_URETIM.md file to understand current prompt structure.
+STEP 3: Update ONLY the animation prompt blocks in each file. Do NOT touch: step headings, save paths, QC checklists, or any structural elements.
+
+---
+
+PROMPT WRITING RULE (HARD RULE):
+Custom Animation V3 already knows the character (face, armor, color) from PixelLab.
+BUT weapon position, grip, and movement arc must be explicitly written in every attack animation.
+
+Every attack/weapon prompt must include:
+1. Where the weapon starts (position, angle)
+2. Grip (two-handed / one-handed / dominant hand)
+3. Weapon movement (direction, arc -- "sweeps horizontally left", "drives downward", "thrusts forward")
+4. Peak frame (most dramatic moment -- this is what AI anchors on)
+5. Body mechanics (rotation direction, weight transfer, which shoulder/hip drives)
+6. End position
+
+For non-weapon animations (idle, hurt, death, dash): body mechanics + frame breakdown is sufficient.
+
+Length: 50-120 words (attack), 30-60 words (idle/hurt/dash). Do NOT write short prompts.
+
+---
+
+CLASS WEAPON INFO:
+
+Warblade -- Greatsword (two-handed):
+- Grip: both hands on hilt, right hand dominant/top
+- Blade: ~3.5 head-heights long, wide blade
+- Rest pose: over right shoulder or hanging down on right side
+- LMB: horizontal slash (left to right or right to left arc)
+- RMB: vertical slam (overhead then straight down)
+
+Ranger -- Compound bow (left hand):
+- Left hand holds bow (bow grip), right hand draws string
+- Draw position: left arm extended, right hand at cheek level (anchor point)
+- LMB: quick shot (draw then release in one motion)
+- RMB: slow aim shot (long hold draw, aiming)
+
+Shadowblade -- Twin short blades (one in each hand):
+- Left hand + right hand each hold a short blade
+- Blade length: ~0.6x character height
+- Reverse grip or forward grip (per design)
+- LMB: right blade horizontal slash + left blade on guard
+- RMB: left blade forward thrust / phase-strike
+
+Elementalist -- No weapon (magic hand gestures):
+- Hands free, fingers open/curled for casting
+- Leave palm zone clear for VFX (~12-16px)
+- No weapon -- write only hand position and arm mechanics
+
+---
+
+FILE 1: STAGING/PIXELLAB/04_NEXT_Warblade_anim/ANIMASYON_URETIM.md
+
+Find every animation prompt block and rewrite it to this quality level. Keep the same block structure (Adim headings, Start/End frame info, etc.) but replace the prompt text inside code blocks.
+
+TARGET QUALITY -- use these as the exact content for Warblade:
+
+Idle:
+Slow controlled breathing -- chest expands and contracts, shoulders rise slightly on inhale.
+Greatsword held at right side, blade tip near ground, grip relaxed but ready.
+Weight shifts subtly from right to left foot over 4-6 frames, body center stays stable.
+Head turns 10-15 degrees left then returns -- scanning. Knees micro-bend on weight shift.
+
+Attack LMB Windup (Start=idle_clean, End=PEAK, Frame=4):
+Two-handed greatsword windup -- both hands grip hilt, right hand dominant at top.
+Sword draws back and upward, rotating to position blade at upper-right: tip up at ~2 o'clock angle, arms pull right shoulder back.
+Torso rotates clockwise 30-40 degrees, right shoulder pulls far back, hips pivot right.
+Weight fully shifts to right foot. Frame 4 = maximum coil: blade at upper-right, body loaded.
+
+Attack LMB Follow-through (Start=PEAK, End=idle_clean, Frame=4):
+Release from coiled position -- both hands drive the greatsword in a wide horizontal sweep from right to left.
+Blade arc: starts at 2 o'clock upper-right, sweeps through center at 9 o'clock, tip exits left silhouette fully extended.
+Body uncoils counter-clockwise: right shoulder drives forward, left foot becomes anchor, weight transfers left.
+Arms fully extended at mid-swing (frame 2). Deceleration frames 3-4: arms pull back, body settles, sword lowers to ready.
+
+Attack RMB Windup (Start=idle_clean, End=PEAK_raised, Frame=4):
+Overhead slam setup -- both hands bring greatsword directly overhead with both arms extended up.
+Grip: right hand above left, hilt at crown level, blade pointing straight up at 12 o'clock.
+Body rises onto balls of feet, knees extend, torso leans slightly back to accommodate overhead reach.
+Core engages to stabilize maximum overhead extension. Frame 4 = peak: arms fully up, sword vertical.
+
+Attack RMB Follow-through (Start=PEAK_slammed, End=idle_clean, Frame=4):
+From slammed position -- sword tip at feet, both hands at chest level having driven through.
+Begin recovery: arms absorb impact force, elbows bend to bring hilt up toward waist.
+Knees re-bend to absorb body weight momentum. Torso rolls back upright over frames 2-3.
+Frame 4: sword lifts off ground, body returns to upright ready stance.
+
+Hurt:
+Sharp full-body recoil -- torso snaps backward 15-20 degrees from impact force, head jerks back.
+Both hands reflexively tighten on greatsword hilt, sword swings back with body momentum.
+Knees buckle slightly, weight drops and shifts backward. Recovery: body pushes back upright frames 3-4.
+
+Death:
+Greatsword drops from loosening grip -- right hand releases first, sword falls and clatters.
+Body collapses forward: knees give, torso folds, arms fall limp to sides.
+Head drops last. Full collapse over 6-8 frames, body settling into ground-level heap.
+
+Dash:
+Explosive forward lunge -- lead foot drives hard into ground, body pitches forward at 30 degree lean.
+Greatsword tucked close to right side, both hands maintain grip, blade trailing horizontal.
+Arms press sword back to reduce air resistance. Body fully horizontal at frame 2-3. Recovery: feet catch, stance widens, sword raises back to ready.
+
+---
+
+FILE 2: STAGING/PIXELLAB/05_NEXT_Ranger_anim/ANIMASYON_URETIM.md
+
+TARGET QUALITY -- use these as the exact content for Ranger:
+
+Idle:
+Relaxed but alert -- weight on right foot, left foot slightly forward.
+Bow held in left hand at side, lower limb near ground, string loose.
+Subtle torso sway 5-10 degrees side to side. Right hand rests near quiver or hangs relaxed.
+Head scans slowly left then right. Breathing visible in chest rise/fall.
+
+Attack LMB Windup (Start=idle_clean, End=PEAK_draw, Frame=4):
+Compound bow raised to shooting position -- left arm extends forward holding bow vertical, elbow slightly bent.
+Right hand draws string back to right cheek anchor point.
+Body turns 45 degrees to face right/south-right (shooting stance -- side-on to target).
+Left shoulder extends forward, right elbow up at shoulder height. Frame 4 = full draw: arrow at cheek, string taut, body still.
+
+Attack LMB Release (Start=PEAK_draw, End=idle_clean, Frame=4):
+Release from full draw -- right hand opens, string snaps forward, left arm straightens with slight recoil.
+Bow arm (left) vibrates from string release, slight backward push.
+Right hand follows through, arm extends slightly back from release point.
+Body begins to relax from shooting stance, weight re-centers over frames 3-4.
+
+Attack RMB Windup (Start=idle_clean, End=PEAK_aim, Frame=6):
+Slow deliberate draw -- left arm raises bow with controlled, unhurried movement.
+Right hand draws string gradually to right cheek anchor point.
+Body settles into stillness mid-draw: shoulders square, breath held.
+Minimal body movement in final 2 frames -- body visibly stabilized in hold.
+Frame 6 = peak: arrow tip aimed, bow at full draw, body stone still, right elbow high.
+
+Attack RMB Release (Start=PEAK_aim, End=idle_clean, Frame=4):
+Controlled precision release -- right hand opens cleanly, string exits with minimal hand tremor.
+Bow arm holds steady for 1 frame after release (follow-through discipline).
+Right hand retracts slowly to quiver in deliberate follow-through.
+Body unwinds from shooting stance gradually -- weight shifts back to neutral over frames 3-4.
+
+Hurt:
+Bow flinches upward as body recoils -- left arm raises bow defensively, right arm pulls back.
+Torso twists away from hit direction, weight shifts hard to back foot.
+Head ducks and turns. Recovery over frames 3-4: body straightens, bow lowers back to side.
+
+Death:
+Bow slips from left hand -- fingers open, bow falls forward and to ground.
+Body lists to one side, right hand reaches out reflexively then falls limp.
+Legs buckle, collapse is slow and heavy -- no dramatic fall, just a weight-giving-out descent. 6-8 frames total.
+
+Dash:
+Quick side-step or back-step -- body shifts direction fast, low center of gravity.
+Bow stays in left hand, held close to body, string side tucked in.
+Feet rapid-step: lead foot plants, trail foot follows. Minimal arm swing -- bow arm stays controlled throughout.
+
+---
+
+FILE 3: STAGING/PIXELLAB/06_NEXT_Shadowblade_anim/ANIMASYON_URETIM.md
+
+TARGET QUALITY -- use these as the exact content for Shadowblade:
+
+Idle:
+Low predatory stance -- knees bent, weight forward on balls of feet.
+Left blade held low at hip pointing back, right blade raised near right shoulder pointing forward.
+Subtle constant weight shift: rocking heel-to-toe, never fully still. Cloak or clothing ripples.
+Head stays level -- eyes scanning, no large head movement.
+
+Attack LMB Windup (Start=idle_clean, End=PEAK_cocked, Frame=4):
+Right blade draws back for horizontal slash -- right arm pulls elbow back to hip level, blade pointing backward at 8 o'clock.
+Left blade stays forward and low as guard, left elbow bent at 45 degrees.
+Body coils: right shoulder pulls hard back, hips rotate right, weight loads onto right foot.
+Low aggressive crouch deepens slightly. Frame 4: right blade cocked at maximum reach-back, left guard blade held steady.
+
+Attack LMB Follow-through (Start=PEAK_cocked, End=idle_clean, Frame=4):
+Right blade releases in fast horizontal slash -- sweeps from 8 o'clock low-right across body to 10 o'clock left-center.
+Blade arc is tight and flat -- elbow-driven, not shoulder-driven, keeping strike fast.
+Body uncoils explosively: right shoulder drives forward, right foot pushes off.
+Left blade simultaneously pulls back to hip for follow-up readiness. Frame 3: full extension, right arm across body.
+
+Attack RMB Windup (Start=idle_clean, End=PEAK_coiled, Frame=4):
+Left blade coils for forward thrust -- left shoulder rotates back, left arm bends at elbow, blade points rearward at 4 o'clock.
+Right blade sweeps forward as decoy/guard distraction, arm extended toward target.
+Hips rotate: left hip pulls back loading the thrust, weight transfers to right foot.
+Frame 4 = maximum coil: left blade fully drawn back, right blade extended forward, body in deep rotation.
+
+Attack RMB Follow-through (Start=PEAK_coiled, End=idle_clean, Frame=4):
+Left blade drives forward in straight-line thrust -- arm extends from bent elbow directly toward target.
+Blade path: from 4 o'clock rearward to 12 o'clock forward, tip leads the motion throughout.
+Body uncoils: left hip drives forward, left shoulder snaps through, weight shifts hard to left foot.
+Right blade pulls back as counterbalance. Frame 2: full extension, left arm straight, tip at maximum reach.
+
+Hurt:
+Both blades flinch inward as body recoils -- arms cross defensively in front of torso.
+Body snaps backward, low crouch gets lower. Knees buckle, weight drops and shifts back.
+Head tucks -- chin down, shoulders up in protective curl. Recovery frames 3-4: blades re-extend, crouch re-establishes.
+
+Death:
+Blades fall from both hands simultaneously -- fingers open, blades drop and clatter at feet.
+Body loses its predatory crouch entirely: knees straighten briefly then give out completely.
+Collapse is forward and down -- body pitches toward ground, face-down. Arms spread wide as body falls. 6-8 frames.
+
+Dash:
+Shadow-step burst -- body vanishes into low sprint crouch, legs drive hard.
+Both blades pulled tight to body: left blade along left forearm pointing back, right blade along right forearm pointing forward.
+No wasted arm motion -- full tuck position to minimize silhouette. Feet barely leave ground. Frame 2: full horizontal body lean.
+
+---
+
+FILE 4: STAGING/PIXELLAB/07_NEXT_Elementalist_anim/ANIMASYON_URETIM.md
+
+TARGET QUALITY -- use these as the exact content for Elementalist:
+
+Idle:
+Calm meditative float or stand -- weight centered, spine upright, shoulders relaxed and low.
+Both hands hang at sides with fingers loosely curled, palms face inward toward body.
+Subtle energy shimmer implied in micro finger movements -- fingertips occasionally extend then relax.
+Palm zones (~12x12px each) kept clear for engine VFX overlay. Breathing slow and deep.
+
+Attack LMB Windup (Start=idle_clean, End=PEAK_gathered, Frame=4):
+Both hands draw back toward chest, palms rotating inward (gathering gesture).
+Fingers curl slightly as if compressing energy between palms and chest center.
+Elbows pull back, shoulders round forward into the gather. Body leans slightly forward in anticipation.
+Frame 4 = peak gather: hands at chest center, palms facing each other ~15cm apart, energy compressed.
+Palm zones (~12x12px each) intentionally left clear for engine VFX overlay throughout.
+
+Attack LMB Release (Start=PEAK_gathered, End=idle_clean, Frame=4):
+Both arms extend forward and outward from chest -- palms rotating to face forward (push gesture).
+Elbows straighten, arms reach full extension, fingers spread open wide.
+Body leans into the push: slight forward lean of torso follows arm extension.
+Frame 2: arms fully extended, palms forward at shoulder height. Frames 3-4: body settles back, hands lower to sides.
+
+Attack RMB Windup (Start=idle_clean, End=PEAK_charged, Frame=6):
+Right hand raises overhead, palm up -- slow deliberate raising motion, elbow bends then straightens as arm rises.
+Left hand extends forward at waist height, palm down, acting as anchor/stabilizer.
+Body straightens and rises slightly: weight shifts forward onto front foot, spine extends.
+Frame 6 = peak charge: right arm fully overhead, palm cupped upward, left arm extended forward. Body maximally extended vertically.
+Palm zones clear throughout for engine VFX placement.
+
+Attack RMB Release (Start=PEAK_charged, End=idle_clean, Frame=4):
+Right arm drives downward in arc from overhead -- elbow leads the drive, hand follows through.
+Palm flips from facing up to facing forward-down as arm descends.
+Left hand simultaneously pulls back to hip as counterbalance to the release force.
+Frame 2: right arm at waist-level mid-arc. Frames 3-4: arm settles at side, body re-centers.
+
+Hurt:
+Both hands snap up reflexively -- defensive ward gesture, palms forward and outward.
+Body steps back one pace hard, torso twists away from impact direction.
+Head ducks slightly. Fingers splay wide in the ward position. Recovery frames 3-4: hands lower, body re-centers.
+
+Death:
+Hands lose their energy -- fingers uncurl slowly, palms fall to face downward, arms drop.
+Body sways once then folds: knees give, torso tips forward, arms trail behind.
+No dramatic pose -- pure gravity taking over. Body settles into ground slowly, hands last to fall. 6-8 frames.
+
+Dash:
+Quick stride or glide forward -- body leans 20-25 degrees forward, legs drive.
+Both hands pull back along sides, elbows bent, palms trailing (aerodynamic tuck).
+No spell casting during dash -- hands in neutral closed position, fingers relaxed.
+Frame 2: maximum forward lean. Frame 4: feet plant, body decelerates back to upright.
+
+---
+
+FILE 5: STAGING/PIXELLAB/MOB_BOSS_ANIMASYON_URETIM.md
+
+Find the attack prompt section(s) and add/update with the generic template AND Final Boss example.
+Do NOT change any existing structure outside the prompt blocks.
+
+Add to the attack prompt section:
+
+GENERIC ATTACK WINDUP TEMPLATE:
+[Weapon/limb type] draws back for attack -- [starting position, angle, grip if applicable].
+Body coils: [rotation direction, shoulder/hip drive, weight shift to which foot].
+[Non-attacking limb position and role]. Frame 4 = peak: [exact peak position description with angle/clock reference].
+
+GENERIC ATTACK FOLLOW-THROUGH TEMPLATE:
+[Weapon/limb] releases from [peak position] -- [movement arc description with clock references].
+Body uncoils: [which body part drives, rotation direction, weight transfer].
+[Non-attacking limb counterbalance role]. Frame 2-3: [full extension moment]. Frame 4: [deceleration/recovery description].
+
+FINAL BOSS EXAMPLE (stone fist slam):
+WINDUP: Massive left stone fist raises overhead -- arm extends up and slightly right, elbow bends 30 degrees.
+Right blade arm extends forward as counterbalance. Body rises: legs straighten, torso tilts back.
+Shoulders tilt right side up. Weight on left foot. Frame 4: fist at maximum overhead reach, full body lean right.
+
+FOLLOW-THROUGH: Left fist drives straight down -- arm straightens fully, fist descends to ground level.
+Impact: body weight drops with the strike, knees bend absorbing force. Ground crack VFX placement zone = center of fist path.
+Right arm pulls back to balance. Frame 2: fist at impact. Frames 3-4: arm begins to lift, body recovers upright.
+
+---
+
+CONSTRAINTS:
+- ONLY update prompt text inside code blocks (``` delimited)
+- Do NOT change: step headings, file paths, QC checklists, save paths, Adim numbers, Start/End frame labels
+- Every attack prompt must be 50-120 words
+- Every idle/hurt/dash prompt must be 30-60 words
+- Elementalist has no weapon -- write hand position and palm zone instructions instead
+- Maintain Turkish headings/labels if they exist -- only replace English or placeholder prompt text
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "anim prompts updated"

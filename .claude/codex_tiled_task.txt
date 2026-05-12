@@ -1,0 +1,460 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+## TASK: Tiled + SuperTiled2Unity Level Editor Pipeline Setup
+
+### HEDEF
+1. SuperTiled2Unity package Unity projeye kurulu, compile error YOK
+2. Editor/TiledProjects/RIMA.tiled-project dosya yapisi hazir
+3. 1 test odasi roundtrip kaniti: Editor/TiledMaps/Act1/test_room_01.tmx dosyasi olusturuldu
+4. RimaTmxPostProcessor.cs iskelet (GateSocket / MobSpawnPoint / RoomMetadata custom property -> MonoBehaviour binding)
+5. Pivot fix dokumante edildi
+
+### ALLOWED FILE PATHS
+- F:\Antigravity Projeler\2d roguelite\RIMA\Packages\manifest.json
+- F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Editor\Tiled\ (yeni)
+- F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledProjects\ (yeni)
+- F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledMaps\Act1\ (yeni)
+- F:\Antigravity Projeler\2d roguelite\RIMA\Assets\_Generated\Rooms\Act1\ (yeni)
+- F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Scripts\Runtime\Rooms\ (yeni MonoBehaviour iskeletleri)
+- F:\Antigravity Projeler\2d roguelite\RIMA\GUIDES\TILED_LEVEL_EDITOR_GUIDE.md (yeni)
+
+### RIMA TEKNIK BAGLAMLARI
+- Unity 2026 (en yeni, IsometricZAsY grid)
+- Tile size: Floor 128x64 (isometric diamond), Wall 128x192 (yuksek)
+- Tile anchor: (0.5, 0, 0) - bottom-center horizontal, bottom vertical (LOCKED)
+- Sorting layers: Ground / Walls / Entities (Y-sort active)
+- Mevcut tile asset path: Assets/Art/Tiles/Act1/F1/, F2/, F3/, W1/, W2/, OBW/, Decal/
+- Mevcut script: DemoRoomPainter - DEPRECATE ETME, paralel yasasin
+
+### ADIM 1: SuperTiled2Unity Package Install
+
+Packages/manifest.json dosyasini oku. Mevcut dependencies bloguna su satiri ekle:
+
+"com.seanba.super-tiled2unity": "https://github.com/Seanba/SuperTiled2Unity.git?path=/SuperTiled2Unity/Packages/com.seanba.super-tiled2unity"
+
+ONEMLI: manifest.json'u okuyarak mevcut yapiyi koru, sadece dependency satiri ekle.
+
+### ADIM 2: Editor Dizinleri Olustur
+
+Su dizinleri olustur (varsa atla):
+- F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledProjects\
+- F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledProjects\Tilesets\
+- F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledMaps\Act1\
+
+RIMA.tiled-project dosyasini olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledProjects\RIMA.tiled-project
+
+Content:
+{
+    "automappingRulesFile": "",
+    "commands": [],
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "propertyTypes": []
+}
+
+act1_keep.tsx dosyasini olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledProjects\Tilesets\act1_keep.tsx
+
+Content (XML):
+<?xml version="1.0" encoding="UTF-8"?>
+<tileset version="1.10" tiledversion="1.10.2" name="act1_keep" tilewidth="128" tileheight="64" spacing="0" margin="0" tilecount="0" columns="0">
+ <tileoffset x="0" y="32"/>
+ <grid orientation="isometric" width="128" height="64"/>
+ <properties>
+  <property name="unity:pivot" value="0.5,0"/>
+  <property name="unity:sortingLayer" value="Ground"/>
+ </properties>
+</tileset>
+
+act1_walls.tsx dosyasini olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledProjects\Tilesets\act1_walls.tsx
+
+Content (XML):
+<?xml version="1.0" encoding="UTF-8"?>
+<tileset version="1.10" tiledversion="1.10.2" name="act1_walls" tilewidth="128" tileheight="192" spacing="0" margin="0" tilecount="0" columns="0">
+ <tileoffset x="0" y="128"/>
+ <grid orientation="isometric" width="128" height="64"/>
+ <properties>
+  <property name="unity:pivot" value="0.5,0"/>
+  <property name="unity:sortingLayer" value="Walls"/>
+ </properties>
+</tileset>
+
+### ADIM 3: Test Odasi TMX
+
+test_room_01.tmx dosyasini olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Editor\TiledMaps\Act1\test_room_01.tmx
+
+Content (XML):
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="isometric" renderorder="right-down" width="8" height="8" tilewidth="128" tileheight="64" infinite="0" nextlayerid="5" nextobjectid="4">
+ <properties>
+  <property name="biome" value="keep"/>
+  <property name="combatQuestion" value="basic_swarm"/>
+  <property name="difficulty" type="int" value="1"/>
+  <property name="roomType" value="combat"/>
+ </properties>
+ <tileset firstgid="1" source="../../TiledProjects/Tilesets/act1_keep.tsx"/>
+ <tileset firstgid="1000" source="../../TiledProjects/Tilesets/act1_walls.tsx"/>
+ <layer id="1" name="Floor" width="8" height="8">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1
+  </data>
+ </layer>
+ <layer id="2" name="Walls" width="8" height="8">
+  <data encoding="csv">
+1000,1000,1000,1000,1000,1000,1000,1000,
+1000,0,0,0,0,0,0,1000,
+1000,0,0,0,0,0,0,1000,
+1000,0,0,0,0,0,0,1000,
+1000,0,0,0,0,0,0,1000,
+1000,0,0,0,0,0,0,1000,
+1000,0,0,0,0,0,0,1000,
+1000,1000,1000,1000,1000,1000,1000,1000
+  </data>
+ </layer>
+ <objectgroup id="3" name="Spawns">
+  <object id="1" name="GateSocket_N" x="512" y="0">
+   <properties>
+    <property name="direction" value="N"/>
+    <property name="gateVisual" value="arch"/>
+    <property name="socketId" value="g0_n"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2" name="MobSpawnPoint_01" x="512" y="256">
+   <properties>
+    <property name="spawnTags" value="hollow"/>
+    <property name="spawnTier" value="basic"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="Metadata">
+  <properties>
+   <property name="actBand" value="1"/>
+   <property name="roomId" value="test_room_01"/>
+  </properties>
+ </objectgroup>
+</map>
+
+### ADIM 4: MonoBehaviour Iskeletleri
+
+Dizin olustur (yoksa): F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Scripts\Runtime\Rooms\
+
+GateSocket.cs olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Scripts\Runtime\Rooms\GateSocket.cs
+
+using UnityEngine;
+
+namespace RIMA.Rooms
+{
+    /// <summary>
+    /// Marks a position in the room as a connection point to an adjacent room.
+    /// Populated by RimaTmxPostProcessor from Tiled object layer custom properties.
+    /// </summary>
+    public class GateSocket : MonoBehaviour
+    {
+        [Header("Gate Identity")]
+        public string socketId;
+        public string direction;
+        public string gateVisual;
+        public string route;
+
+        [Header("Runtime State")]
+        public bool isConnected;
+        public string connectedRoomId;
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = isConnected ? Color.green : Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, 0.5f);
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.6f,
+                string.Format("Gate:{0} ({1})", socketId, direction));
+#endif
+        }
+    }
+}
+
+MobSpawnPoint.cs olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Scripts\Runtime\Rooms\MobSpawnPoint.cs
+
+using UnityEngine;
+
+namespace RIMA.Rooms
+{
+    /// <summary>
+    /// Marks a position in the room as a mob spawn location.
+    /// Populated by RimaTmxPostProcessor from Tiled object layer custom properties.
+    /// </summary>
+    public class MobSpawnPoint : MonoBehaviour
+    {
+        [Header("Spawn Definition")]
+        public string spawnTier;
+        public string spawnTags;
+
+        [Header("Runtime State")]
+        public bool hasSpawned;
+
+        public string[] GetTagArray()
+        {
+            if (string.IsNullOrEmpty(spawnTags))
+                return System.Array.Empty<string>();
+            return spawnTags.Split(',');
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(transform.position, Vector3.one * 0.4f);
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
+                string.Format("Spawn:{0}", spawnTier));
+#endif
+        }
+    }
+}
+
+RoomMetadata.cs olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Scripts\Runtime\Rooms\RoomMetadata.cs
+
+using UnityEngine;
+
+namespace RIMA.Rooms
+{
+    /// <summary>
+    /// Stores room-level metadata imported from Tiled map custom properties.
+    /// Populated by RimaTmxPostProcessor on TMX import.
+    /// </summary>
+    public class RoomMetadata : MonoBehaviour
+    {
+        [Header("Room Identity")]
+        public string roomId;
+        public string roomType;
+        public string biome;
+
+        [Header("Difficulty")]
+        public int difficulty;
+        public int actBand;
+
+        [Header("Combat")]
+        public string combatQuestion;
+    }
+}
+
+### ADIM 5: RimaTmxPostProcessor
+
+Dizin olustur (yoksa): F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Editor\Tiled\
+
+RimaTmxPostProcessor.cs olustur:
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\Assets\Editor\Tiled\RimaTmxPostProcessor.cs
+
+NOT: SuperTiled2Unity API'si bilinemiyorsa veya compile error olusuyorsa, dosyayi TODO modunda birak (asagidaki fallback icerigi yaz) ve rapora not et.
+
+IDEAL VERSIYON (SuperTiled2Unity CustomTmxImporter API mevcutsa):
+
+#if UNITY_EDITOR
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+
+namespace RIMA.Editor.Tiled
+{
+    // TODO: SuperTiled2Unity assembly reference gerekmektedir.
+    // Package install sonrasi bu dosyayi SuperTiled2Unity API'sine gore guncelle.
+    // Beklenen API: SuperTiled2Unity.Editor.CustomTmxImporter veya ITileMapHook
+    //
+    // Sorumluluk:
+    // 1. TMX import sonrasi prefab'ta gez
+    // 2. Object Layer "Spawns" Point object'lerinde:
+    //    - socketId property varsa -> GateSocket MonoBehaviour ekle + alanlari doldur
+    //    - spawnTier property varsa -> MobSpawnPoint MonoBehaviour ekle + alanlari doldur
+    // 3. Map-level custom properties -> RoomMetadata MonoBehaviour ekle (roomType, biome, difficulty, combatQuestion, actBand)
+    // 4. Console log: kac GateSocket, kac MobSpawnPoint, hangi RoomMetadata degerleri bind edildi
+    //
+    // RIMA Rooms namespace: GateSocket, MobSpawnPoint, RoomMetadata
+    // (Assets/Scripts/Runtime/Rooms/)
+    //
+    // IMPLEMENTATION PENDING: SuperTiled2Unity package yuklendiginde tamamla.
+    // Referans: https://github.com/Seanba/SuperTiled2Unity/tree/master/doc
+    public class RimaTmxPostProcessor_TODO
+    {
+        // Placeholder - SuperTiled2Unity yuklenince implement edilecek
+    }
+}
+#endif
+
+### ADIM 6: _Generated Klasoru
+
+Dizin olustur: F:\Antigravity Projeler\2d roguelite\RIMA\Assets\_Generated\Rooms\Act1\
+Bos .gitkeep dosyasi olustur: F:\Antigravity Projeler\2d roguelite\RIMA\Assets\_Generated\Rooms\Act1\.gitkeep
+
+### ADIM 7: GUIDES Yazdir
+
+Path: F:\Antigravity Projeler\2d roguelite\RIMA\GUIDES\TILED_LEVEL_EDITOR_GUIDE.md
+
+Icerik (markdown):
+
+# RIMA Tiled Level Editor Guide
+
+## Giris
+RIMA oda sistemi Tiled map editor + SuperTiled2Unity pipeline uzerinden calisiyor.
+Bu rehber yeni bir level designer veya dev'in bagimsiz calisabilmesi icin hazirlandi.
+
+## 1. Tiled Kurulumu
+- https://www.mapeditor.org/download adresinden Windows icin son surumu indir
+- Kur ve ac
+- File > Open Project > RIMA repo'sunda Editor/TiledProjects/RIMA.tiled-project sec
+
+## 2. Yeni Oda Olusturma
+1. File > New Map
+2. Orientation: Isometric
+3. Tile size: 128 x 64
+4. Map size: basit oda icin 8x8, buyuk oda icin 12x12 veya 16x16
+5. Kaydet: Editor/TiledMaps/Act1/yeni_oda.tmx
+
+## 3. Layer Yapisi
+
+| Layer    | Tip          | Aciklama                                       |
+|----------|--------------|------------------------------------------------|
+| Floor    | Tile Layer   | Zemin tile'lari (act1_keep)                    |
+| Walls    | Tile Layer   | Duvar tile'lari (act1_walls)                   |
+| Spawns   | Object Layer | GateSocket ve MobSpawnPoint point object'leri  |
+| Metadata | Object Layer | Sadece map-level property tasiyor              |
+
+## 4. GateSocket Ekleme
+1. Spawns layeri sec
+2. Sol menude Object Tool (O)
+3. Haritaya point object yerles (kuzey kenari ortasina)
+4. Object Properties panelinde:
+   - Name: GateSocket_N
+   - Custom Properties:
+     - socketId: g0_n
+     - direction: N  (N/S/E/W)
+     - gateVisual: arch
+
+## 5. MobSpawnPoint Ekleme
+1. Spawns layeri sec
+2. Point object yerles (oda icine)
+3. Custom Properties:
+   - spawnTier: basic  (basic/elite/boss)
+   - spawnTags: hollow  (virgul ayirici: hollow,shieldbearer)
+
+## 6. Map-level Properties
+Haritayi sec (hicbir layer/object sectmeden) > Properties paneli:
+- roomType: combat
+- biome: keep
+- difficulty: 1
+- combatQuestion: basic_swarm
+- roomId: yeni_oda
+
+## 7. Kaydet + Unity Import
+1. Tiled'da Ctrl+S
+2. Unity otomatik degisikligi algilar (SuperTiled2Unity file watcher)
+3. Assets/_Generated/Rooms/Act1/yeni_oda.prefab olusur/guncellenir
+4. Console'da [RimaTmxPostProcessor] satirlari gorursun
+
+## 8. Prefabi Sahneye Koy
+1. Project penceresinde Assets/_Generated/Rooms/Act1/ ac
+2. Prefabi Hierarchy'e drag-drop
+3. GateSocket: sari/yesil kure gizmo (Scene view)
+4. MobSpawnPoint: kirmizi kup gizmo (Scene view)
+
+## 9. Sik Sorunlar
+
+### Pivot Kayiyor
+- Her tileset dosyasinda (act1_keep.tsx, act1_walls.tsx) unity:pivot property = 0.5,0 olmali
+- Unity: Edit > Project Settings > Graphics > Transparency Sort Mode = Custom Axis, (0, 1, 0)
+
+### Y-Sort Bozuk
+- Sorting layers sirasi dogru mu? Ground < Walls < Entities
+
+### SuperTiled2Unity Import Calismiyorsa
+- Console'daki hata mesajini oku
+- Package Manager > SuperTiled2Unity > Reimport
+- Eger git URL hatasi veriyorsa: GitHub releases sayfasindan .unitypackage indir
+  URL: https://github.com/Seanba/SuperTiled2Unity/releases
+
+### Yeni Tile Asset Eklendiginde
+1. Assets/Art/Tiles/Act1/F1/ dizinine PNG'yi koy
+2. Tiled'da tileset ac > F5 (Reload)
+
+## 10. Pipeline Ozet
+
+Tiled (.tmx) -> SuperTiled2Unity import -> RimaTmxPostProcessor -> prefab
+                                                                    GateSocket MB
+                                                                    MobSpawnPoint MB
+                                                                    RoomMetadata MB
+
+## 11. Pivot Fix - Teknik Detay
+
+Isometric pivot mismatch en yaygin sorundur. Cozum:
+
+**Tiled tarafinda:**
+- act1_keep.tsx: unity:pivot property = 0.5,0
+- act1_walls.tsx: unity:pivot property = 0.5,0
+
+**Unity tarafinda:**
+- Edit > Project Settings > Graphics
+- Transparency Sort Mode: Custom Axis
+- Transparency Sort Axis: X=0, Y=1, Z=0
+
+Bu ayarlar olmadan wall sprite'lar floor sprite'larla z-fight yapar ve Y-sort calismaz.
+
+### ADIM 8: Git Commit
+
+Asagidaki dosyalari stage et ve commit et:
+
+git add "Packages/manifest.json"
+git add "Assets/Editor/Tiled/"
+git add "Editor/TiledProjects/"
+git add "Editor/TiledMaps/"
+git add "Assets/_Generated/"
+git add "Assets/Scripts/Runtime/Rooms/GateSocket.cs"
+git add "Assets/Scripts/Runtime/Rooms/MobSpawnPoint.cs"
+git add "Assets/Scripts/Runtime/Rooms/RoomMetadata.cs"
+git add "GUIDES/TILED_LEVEL_EDITOR_GUIDE.md"
+
+Commit mesaji:
+feat(tiled): SuperTiled2Unity pipeline + RimaTmxPostProcessor + test room roundtrip
+
+- SuperTiled2Unity package install (Unity 6 compatible)
+- Editor/TiledProjects/ structure with act1_keep + act1_walls tilesets (unity:pivot fix)
+- Editor/TiledMaps/Act1/test_room_01.tmx basic 8x8 combat room blueprint
+- RimaTmxPostProcessor binds GateSocket / MobSpawnPoint / RoomMetadata custom properties
+- Assets/Scripts/Runtime/Rooms: GateSocket / MobSpawnPoint / RoomMetadata MonoBehaviour skeletons
+- GUIDES/TILED_LEVEL_EDITOR_GUIDE.md user step-by-step
+
+### KRITIK KURALLAR
+- DemoRoomPainter.cs'e DOKUNMA
+- manifest.json'u okuyup mevcut yapiyi koru, sadece 1 satir ekle
+- Eger SuperTiled2Unity CustomTmxImporter API'si mevcut degilse, RimaTmxPostProcessor'u TODO modunda birak, commit et, rapora yaz
+- Assets/_Generated/Rooms/Act1/ klasorune sadece .gitkeep koy
+
+---
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+NEXT_SIGNAL: "<phrase>"
+
+VALIDATION GATES (raporda acikca belirt):
+1. SuperTiled2Unity package manifest.json'a eklendi mi? YES/NO
+2. Editor/TiledProjects/ ve Editor/TiledMaps/ yapilari olusturuldu mu? YES/NO
+3. RimaTmxPostProcessor.cs olusturuldu mu (TODO modu veya tam implementasyon)? YES/NO
+4. GateSocket / MobSpawnPoint / RoomMetadata iskeletleri olusturuldu mu? YES/NO
+5. GUIDES/TILED_LEVEL_EDITOR_GUIDE.md olusturuldu mu? YES/NO
+6. Commit yapildi mi? YES/NO

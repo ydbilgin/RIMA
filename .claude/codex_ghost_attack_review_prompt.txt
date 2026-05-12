@@ -1,0 +1,35 @@
+SYSTEM ROLE: RIMA design reviewer. Stress-test a karar revision.
+
+NO file reads. Inline context below.
+
+LOCKED CONTEXT:
+- Karar #24 (2026-04-16): Cross-class Tier Unlock — secondary class'tan 2 skill alinca Tier 2 cross-class acilir. Act 2 boss sonrasi Tier 3 + Cross-class Ultimate. Default temel sinerjiler Act 1 boss sonrasi.
+- Karar #60 (2026-05-06): Skill System v2 LOCKED — 8 LOCKED karar (Z/X kaldirildi, label upgrade, etc.). Keybind LMB+RMB+QERF+V+Space. Hold yasak.
+- Shadow Echo Cross-Class System (2026-05-09): Z/X yerine 3 katman (aura+phantom+UI flash), pozisyon skill tipine gore, 50 Echo havuzu.
+- F slot = Cross-class skill slot (current keybind LMB primary, RMB secondary, Q/E/R primary skills, F cross-class, V Burst, Space Dash).
+
+REVISION PROPOSAL (Karar #31 update):
+- Ghost Attack mechanic KORUNUR (cross-class skill kullanildiginda secondary class'in phantom animasyonu).
+- VISUAL DELIVERY: Shadow Echo aura+phantom+UI flash katmanlari uzerinden render edilir (artik ayri "Ghost Attack" sistemi degil).
+- MECHANIC DELIVERY: Cross-class havuzu (80 skill, 2 slot) F slot icinde — Tier unlock Karar #24'e uygun.
+- Z/X secondary kanal CALISMAZ (Karar #60 REVOKE).
+- Anim asseti (12f x 4 yon x 10 class = ~480 frame) Shadow Echo phantom layer'ina entegre, ayri pipeline DEGIL.
+
+REVIEW QUESTIONS (1-line each, max 600 words total):
+
+Q1. Karar #24 + #60 + Shadow Echo + Karar #31 revize SU AN BIRBIRINE TUTARLI MI?
+Q2. F slot cross-class = 2 slot mu yoksa 1 slot mu? (Karar #31 "2 slot" diyor, Karar #60 keybind tek F gosteriyor — celiski olabilir mi?)
+Q3. "Phantom layer Shadow Echo entegrasyonu" — sprite uretim acisindan extra cost mu, yoksa mevcut Shadow Echo asset'leri ile ortusur mu?
+Q4. Tier 1 (default) cross-class skill nasil aktif? F slot icin start-of-run draft mi, ya da Act 1 boss oncesi pool kapali mi?
+Q5. Eger revize tutarliyse: GUIDES/GHOST_ATTACK_SPEC.md hangi bolumler revize edilmeli?
+Q6. Kaybedilen veya unutulan tasarim elementi var mi? (Orn: Karar #31'deki "MaterialPropertyBlock class tint" — Shadow Echo'da var mi?)
+
+OUTPUT FORMAT:
+- Q1: YES/NO/PARTIAL + 1 sentence justification
+- Q2: 1 SLOT or 2 SLOT recommendation + reasoning
+- Q3: COST IMPACT (zero/minor/major)
+- Q4: Mechanism recommendation
+- Q5: bullets of sections to revise
+- Q6: bullets of forgotten elements
+
+End with TLDR: 1 sentence — revize SAFE TO LOCK or NEEDS_FURTHER_REVIEW.

@@ -1,0 +1,32 @@
+You are reviewing 3 design decisions for RIMA, a 2D roguelite game transitioning to a 2.5D architecture (3D environment + 2D billboard characters/objects, orthographic camera at 35 degrees, Unity URP). Do NOT ask clarifying questions. Output ONLY the review in the specified format below.
+
+CONTEXT:
+- Engine: Unity 6.3 LTS, URP, ProBuilder for walls, Plane for floors
+- Art: PixelLab pixel art sprites, PPU=32-128 depending on asset type
+- Billboard.cs: makes 2D sprites face camera every frame
+- Room Designer: ITileWriter abstraction, brush/palette/save preserved, outputs 3D prefabs
+
+DECISION S1 - Room Designer Workflow:
+2.5D transition simplified Room Designer workflow significantly. Rule Tile / 2D collider / Z-order / 2D light (~6 problem classes) removed. ProBuilder extrusion height + 3D collider auto-fit + 35-degree preview snapshot (new) added. ITileWriter contract: cell-grid => ProBuilder volume emit.
+LOCKED 2026-05-11
+
+DECISION S2 - Tile Production Pipeline:
+Floor/Wall now uses 256x256 seamless tileable texture (PixelLab Create Image S, tileable=true). Unity Material: Filter=Point, Wrap=Repeat, tilesPerMeter calibration. Old 64x64 tile inventory logic changes - 16 variant replaced by 3-5 seamless + 4-6 decal sprites. Create Tiles Pro / Isometric Tile tools disabled for v1.
+LOCKED 2026-05-11
+
+DECISION S3 - Object/Prop System:
+HYBRID: Architectural elements (pillar, altar, statue, wall decor, fixed brazier base, door frame trim) = 3D mesh + PixelLab texture. Small/interactive/breakable objects (barrel, crate, chest, torch flame, pickup) = 2D billboard sprite. POC GATE: Shadowblade room requires visual approval of 1 pillar(3D) + 2 barrel(billboard) before proceeding.
+LOCKED 2026-05-11
+
+REVIEW TASK:
+For each decision (S1, S2, S3), answer:
+1. Is this decision technically sound for Unity URP + ProBuilder + billboard pipeline?
+2. Are there any hidden implementation risks or gotchas not mentioned?
+3. Does anything conflict with standard Unity 6.3 / URP capabilities?
+4. Suggest any amendments or flag any issues.
+
+Output ONLY in this exact format (no preamble, no clarifying questions, no extra sections):
+S1 REVIEW: [PASS/WARN/FAIL] - <finding>
+S2 REVIEW: [PASS/WARN/FAIL] - <finding>
+S3 REVIEW: [PASS/WARN/FAIL] - <finding>
+OVERALL: [APPROVED/NEEDS_REVISION] - <summary 2 sentences max>
