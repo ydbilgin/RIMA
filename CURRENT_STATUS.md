@@ -1,6 +1,80 @@
-**2026-05-14 (geç gece, S60 SESSION 3) — Otonom Orchestrator Üretim | 4 yeni TASARIM doc + 4 Karar Adayı (#85-88) + Codex E1+E2 LIVE (commit f7afc01) | Sabah Kullanıcı Confirm Bekliyor**
+**2026-05-14 — S60 SESSION 3 SONU | 7 Yeni Karar LOCKED (#85-91) | 5 yeni TASARIM doc + Codex E1+E2 LIVE | S61 Asset Üretim Hazır**
 
-> **S60 SESSION 3 ENTRY POINT (orchestrator otonom, kullanıcı uyurken üretildi):**
+> **S60 SESSION 3 KAPANIŞ — 2026-05-14 (otonom orchestrator + sabah kullanıcı onayı):**
+>
+> ### 🔒 LOCKED Kararlar (#85-91 — 7 yeni karar)
+> | # | Karar | Özet |
+> |---|---|---|
+> | **#85** | Open-World Backdrop Language | Arena chain DNA korunur, 3-layer parallax + 3 vista room template (cliff/balcony/rift) Faz 1 zorunlu |
+> | **#86** | Map Object Set (Faz 1.0 / 1.5 ayrımı) | 6 required (chest/barrel/lever/shrine/spike/rift) + 6 nice-to-have decor + 2 hazard; portal+shop Faz 1.5'e |
+> | **#87** | Skill Effect AngleMode (5 kategori) | ProjectileRotated/Directional8 + BeamRotated + Radial + Cone; Faz 1.0 MVP 12 effect (sınıf×3 core), Faz 1.5 polish 16 ek; Directional8 limit 4 hero |
+> | **#88** | 4 yön + flipX LOCKED + Sayısal Trigger | S59 KEEP; "Hades match" → "Hades-like responsiveness"; Faz 2 8-yön trigger %30+/3 saat playtest |
+> | **#89** | Game Language EN-First Canonical | İngilizce canonical, TR localization. Architect monolog + boss dialog + lore → EN doğar |
+> | **#90** | PixelLab Batch Economy | CFSR 32px=64 cell, 64px=16 cell tek generation; esnek (1×N variant veya N×1 cell); map obj 14 obje ~4-6 saat (eski tahmin 12-18h) |
+> | **#91** | Accessibility Telegraph 3-Kanal Standard | Tüm hazard'larda outline pulse + ground shake + color glow; color tek başına güvenilirlik değil |
+>
+> ### Bu Oturumda Yapilan (S60 Session 3 — otonom + kapanış)
+> 1. **5 yeni TASARIM doc** (rima-doc):
+>    - `TASARIM/TONE_SURFACES_STANDARD.md` (5.2KB) — Karar #79+#89, EN-first not eklendi (tam rewrite S61'de)
+>    - `TASARIM/CLASS_SILHOUETTE_BIBLE.md` (6.5KB) — Karar #80, 10 sınıf (V1 4 + V2 6 NLM teyit)
+>    - `TASARIM/T2_MOB_PROTOTYPE_SPEC.md` (6.5KB) — Karar #82+#84, 3 T2 mob + 17 tuning Q
+>    - `TASARIM/BOSS_PHASE2_RIFT_TEAR_SPEC.md` (5.5KB) — Penitent Sovereign Faz 2 + 6 decision + accessibility
+>    - `TASARIM/BIG_DESIGN_DECISIONS_2026-05-13.md` — **7 LOCKED karar consolidation** (rima-design + Codex + Opus önerileri)
+>
+> 2. **MASTER_KARAR_BELGESI.md** — Karar #85-91 eklendi (7 satır)
+>
+> 3. **Codex E1+E2 Unity implementation** (commit `f7afc01` + benim compile fix commit `7d838b0`):
+>    - TileImportWizard (568 satır) + PixelPerfectCanvasPreview (115 satır) + asmdef
+>    - Compile fix: `UnityEngine.Rendering.Universal` → `UnityEngine.U2D` + Unity.2D.PixelPerfect asmdef ref
+>
+> 4. **🚨 Kritik düzeltme — Rift Bloom NLM teyit:**
+>    - Faz 1: Rift Tear YOK (Litany of Restraint)
+>    - **Faz 2: Rift Tear 3m + Rift Bloom 8s INTRODUCED**
+>    - Faz 3: Echo Phantom Summon
+>
+> 5. **5 yeni feedback memory** (auto-memory):
+>    - feedback_rima_design_no_write (judgment-only, doc → rima-doc)
+>    - feedback_subagent_no_nlm_tool (orchestrator NLM yapıp inline geçmeli)
+>    - feedback_nlm_skill_deprecated_nb (skill template yasak NB; manuel bash)
+>    - feedback_codex_task_workflow (CODEX_TASK.md stale içerik uyarısı)
+>    - **feedback_pixellab_batch_economy (Karar #90 detayı — CFSR esnekliği)**
+>
+> ### Sıradaki Adım (S61'de yapılacak)
+>
+> **PRIORITY 0 — Pipeline Pilot (Önce Warblade):**
+> - Tek Warblade pilot tam üretim: 4 yön + 6-8 anim + manuel cleanup
+> - Pipeline süre ölç (sprite başına gerçek dakika)
+> - Pilot OK → batch 16 sprite üretim
+>
+> **PRIORITY 1 — Asset Batch (PixelLab Karar #90 ile):**
+> - 16 sprite (10 sınıf + 6 mob, Warblade dahil) PixelLab Create Image Pro
+> - 14 map obj 32px batch (8 zorunlu + 6 decor) — tek generation potential
+> - Tile: F1 floor 16var + W1 wall 8var + decal 4var (32x32)
+>
+> **PRIORITY 2 — Vista Room Template (Karar #85 öne çekildi):**
+> - Room Designer F3 vista bölümü öncelik
+> - 3 vista template: cliff edge / balcony / rift opening
+> - 9 parallax layer image (3 template × 3 katman)
+>
+> **PRIORITY 3 — Skill Effect SO (Karar #87 MVP):**
+> - 5 AngleMode enum (SkillEffectDef ScriptableObject)
+> - Faz 1.0 MVP: 4 sınıf × 3 core effect = 12 effect (LMB + RMB + V Burst)
+> - Directional8 limit: 4 hero effect (sınıf başına 1, V Burst)
+>
+> **PRIORITY 4 — TONE_SURFACES EN-first rewrite (Karar #89):**
+> - rima-doc dispatch: tüm 7 surface EN canonical + TR localization formatına
+> - Architect monolog + boss cinematic dialog EN-first kompozisyon
+>
+> **PRIORITY 5 — T2 Mob + Boss Phase 2 Implementation:**
+> - 3 T2 mob behavior tree + skill (Shard Walker / Penitent Bruiser / Fracture Imp)
+> - Penitent Sovereign Phase 2 hazard merge (Rift Tear + Rift Bloom + Accessibility 3-kanal)
+>
+> ### Açık Uçlar (Faz 1+ planlamada)
+> - Faz 3 Echo Phantom Summon Karar #82 T3 disabled bağlamında ne zaman? (#84 bütçe)
+> - T2 mob sayısal balance placeholder'ları playtest (17 tuning Q)
+> - CLASS_SILHOUETTE 5 open question (Ravager silah / Summoner staff vs totem / Hexer / V2 palette / Ronin flipX)
+>
+> ### Önceki S60 Session 3 Notları (otonom üretim, kullanıcı uyurken)
 >
 > ### Bu Oturumda Yapilan (S60 Session 3)
 > 1. **4 yeni TASARIM doc** (rima-doc):

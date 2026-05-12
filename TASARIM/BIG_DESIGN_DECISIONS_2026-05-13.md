@@ -1,12 +1,44 @@
 # BIG_DESIGN_DECISIONS_2026-05-13.md
-**STATUS: KARAR ADAYI 2026-05-13 -- Sabah Kullanici Confirm Bekliyor**
+**STATUS: LOCKED 2026-05-14 — Kullanıcı onayladı (S60 Session 3 sonu)**
 
-## Surec Ozeti
-- rima-design (Sonnet) 4 soru icin judgment verdi
-- Codex (GPT-5.5 xhigh) bagimsiz review yapti: 3x MODIFY + 1x AGREE
-- Bu doc consolidation -- Codex modifier'lari rima-design judgment'larina entegre edildi
-- 4 karar adayi olusdu: #85, #86, #87, #88 (sabah lock)
-- Karar #72/#81/#82/#83/#84 ile catisma YOK (Codex teyit)
+## Süreç Özeti
+- rima-design (Sonnet) 4 soru için judgment verdi
+- Codex (GPT-5.5 xhigh) bağımsız review yaptı: 3x MODIFY + 1x AGREE
+- Opus orchestrator önerileri eklendi (Faz 1.0/1.5 ayrımı + vista template öncelik + sayısal trigger eşik + EN-first + PixelLab batch ekonomi düzeltmesi + accessibility 3-kanal genelleme)
+- **7 karar LOCKED 2026-05-14:** #85 Open-World Backdrop Language, #86 Map Object Set (Faz 1.0/1.5), #87 Skill Effect AngleMode (5 kategori), #88 4 Yön + Sayısal Trigger, #89 EN-First Canonical, #90 PixelLab Batch Economy, #91 Accessibility 3-Kanal Standard
+- Karar #72/#81/#82/#83/#84 ile çatışma YOK (Codex teyit)
+
+## ⚡ KRİTİK GÜNCELLEME — PixelLab Batch Economy (Karar #90)
+**Maliyet tahminleri ciddi şekilde düşer.** PixelLab Create from Style Reference tool tek generation'da **N cell tilesheet** veriyor:
+- 32x32 sprite → 64 cell (8×8 veya 16×4) tek seferde
+- 64x64 sprite → 16 cell (4×4) tek seferde
+- 128x128 sprite → 4 cell tek seferde
+
+**Esneklik:** 1 ürün × N variant veya N ürün × 1 cell veya karışım.
+
+**Etki:**
+- **Karar #86 (Map obj):** 14 obje 32px batch = 1 generation + ~2-4 saat cleanup ≈ **4-6 saat total** (eski 12-18 saat tahmini batch ekonomi ile düşer)
+- **Karar #87 (Skill effect):** Directional8 (8 sprite/effect) × 4 hero = 32 sprite = TEK 32px batch
+- **Projectile/fireball/ok:** Aynı batch ekonomi geçerli
+- **Pipeline disiplini:** önce 1 sprite pilot test → batch'e geç. Cleanup hâlâ 5-15 dk/sprite (manuel iş).
+
+## Faz 1.0 (Playable Demo) vs Faz 1.5 (Polish) Ayrımı
+
+### Faz 1.0 Zorunlu (playable olmadan çıkamaz)
+- 4 sınıf × 3 core effect (LMB + RMB + V Burst) = **12 skill effect**
+- 3 T2 mob + Penitent Sovereign 3-phase boss
+- 6 required gameplay map obj (chest/barrel/lever/shrine/spike/rift)
+- 15 oda procedural
+- **3 vista room template** (cliff edge / balcony / rift opening) — Karar #85 zorunlu
+- F1 tile set + 3-layer parallax F1 kit + boss arena backdrop
+
+### Faz 1.5 Polish (sonradan)
+- 4 sınıf × 4 ek effect (Q/E/R/F) = **16 skill effect**
+- Portal + shop counter
+- 6 decor obje (sütun/moloz/bayrak/sunak/meşale/kafatası)
+- Multi-tile landmark decor (non-colliding)
+- 8 yön upgrade (eğer Karar #88 trigger tetiklenirse)
+- Skill effect variant + barrel/rubble 2 variant
 
 ---
 

@@ -1,5 +1,27 @@
 # TONE_SURFACES_STANDARD.md
-# Karar #79 -- LOCKED 2026-05-13
+# Karar #79 + Karar #89 — LOCKED 2026-05-14
+
+## ⚠️ KARAR #89 — EN-FIRST CANONICAL (Format Notu)
+
+Oyun canonical dili **İngilizce**. Bu dokümandaki örnekler:
+- **EN canonical** = orijinal kompozisyon, lore'un asıl dili
+- **TR localization** = sonradan yerelleştirme, çeviri
+
+**Aşağıdaki örnekler şu an "TR + EN follow" formatında (2026-05-13 taslak).** Yeni format hedefi: **EN örnek YUKARI + TR localization AŞAĞI**.
+
+Bu doc bir sonraki session'da rima-doc tarafından EN-first yeniden yazılacak. Şimdilik içerik referans olarak korunur AMA tone'un kelime hazinesi (hollow / rift / echo / shackle / penitent gibi katmanlı EN terimleri) EN-first kompozisyon için baz alınır.
+
+**Architect monolog + boss cinematic dialog + lore portrait monolog + ending text → HEPSİ EN canonical doğsun, TR çevirisi sonra.**
+
+Örnek format hedefi:
+```
+EN canonical: "Still here. Beneath the rift, something keeps counting."
+TR localization: "Yine kaldın. Riftin altında bir şey saymaya devam ediyor."
+```
+
+---
+
+## Eski Format (TR önce + EN follow) — 2026-05-13 taslak, referans için korundu
 
 ---
 
