@@ -4,34 +4,40 @@ Routing details: `AGENTS.md`.
 
 ## HARD RULES (Always Active) — S58/S59 lessons
 
-### Orchestrator Context Koruma (S61 LOCKED)
+### Orchestrator Context Koruma (S63 UPDATED)
 **ORCHESTRATOR BULK İŞ YAPMAZ.** Bu hard rule — istisna yok.
 
 | Durum | Kural |
 |---|---|
-| 3+ dosya okuma/yazma | → rima-codex dispatch |
-| Herhangi bir kod yazma/düzenleme | → rima-codex dispatch (küçük bile olsa) |
-| Batch doc update / frontmatter ekleme | → rima-codex dispatch |
-| Git commit | → rima-codex dispatch |
+| Kod yazma/düzenleme / dosya batch | → cx_dispatch.py (Codex, background) |
+| Batch doc update / frontmatter ekleme | → cx_dispatch.py (Codex, background) |
+| Git commit | → cx_dispatch.py içinde Codex yapar |
 | Analiz / cross-ref / plan | → rima-sonnet dispatch |
 | Kısa QC / tek dosya okuma | → orchestrator direkt |
 
-**Dispatch formatı:** Orchestrator görevi tanımlar + izin verilen dosya listesini verir → rima-codex çalıştırır → orchestrator sadece sonucu onaylar. Context şişmez.
+**Dispatch formatı:** STAGING/'e task .md yaz → `python cx_dispatch.py --task-file ... --effort high` (run_in_background: true) → CODEX_DONE.md'den sonuç oku.
 
 ### Codex Görev Routing
-1. **UnityMCP gerekiyor mu?** EVET → CODEX_TASK.md'ye yaz → `rima-codex` agent spawn et.
-2. **UnityMCP yok mu?** (kod yazma / araştırma / mekanik / dosya işlemi) → `/codex` skill ile **cx bash** üzerinden çağır. CODEX_TASK.md'ye ASLA yazma.
-3. **cx wrapper** profil-bağlamlı Codex launcher'ı. 3 profil: `laurethgame` (ana), `laurethayday`, `yasinderyabilgin` (paralel/fallback). Non-interactive: `cx <profil> exec --prompt-file <dosya>`. **cx sadece PowerShell'de çalışır, Bash'te PATH'te yok.**
-4. **rima-codex agent** → sadece Bash tool'u, ~2-3k token baseline. Büyük batch UnityMCP işi için. Küçük iş (<5 tool call) → Claude direkt UnityMCP çağır.
+1. **Tüm Codex görevleri (impl, review, UnityMCP dahil):** `cx_dispatch.py` — sub-agent YOK.
+   ```bash
+   # Bash tool, run_in_background: true
+   python '/f/Antigravity Projeler/2d roguelite/RIMA/cx_dispatch.py' \
+     --task-file STAGING/task.md --effort high
+   ```
+2. **Workflow:** CODEX_TASK.md'ye yaz (cx_dispatch.py yapar) → cx exec → CODEX_DONE.md oku.
+3. **Background zorunlu:** Her cx_dispatch.py çağrısı `run_in_background: true` ile. Orchestrator bloklanmaz, notify gelince okur.
+4. **UnityMCP:** Her profil config'de stdio MCP olarak tanımlı, otonom çalışır. **Unity açık olmalı.**
+5. **Model:** gpt-5.5. Profil otomatik seçilir (cx_dispatch.py — en eski LastRefresh).
+6. **rima-codex agent:** KALDIRILDI. cx_dispatch.py ile replace edildi.
 
 ### Asset Üretim (S59 LOCKED — 2026-05-12)
 - **Pure 2D Top-Down chibi pixel art** mimarisi
-- Karakter sprite: **64x64 chibi**, PixelLab Create Character (Pixen)
+- Karakter sprite: **64x64 chibi** (Karar #100 RESTORE), PixelLab Create Image Pro (master sheet) -> Create Character -> Custom Animation V3
 - Tile: **32x32** top-down grid
 - VFX: **64-128px mix** (küçük 64-80, ultimate 96-128)
 - Yön (MVP): **4 yön** (N/S/E uretilir, W=flipX)
 - Renderer: **URP 2D Renderer + Pixel Perfect Camera + 2D Lights**
-- Anim view: **High top-down ~30-35° (Hades match)**
+- Anim view: **High top-down ~30-35° (Hades match, S59 KEEP via Karar #100)**
 - Anim FPS: **10-12 fps**
 - PPU: **64**
 - **YASAK:** 2.5D mimarisi, 3D environment + billboard, 128px detaylı karakter, KayKit/Blender 3D pipeline (S57-S58 REVOKED)
