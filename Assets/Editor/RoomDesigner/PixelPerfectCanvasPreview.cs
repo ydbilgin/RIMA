@@ -2,7 +2,7 @@ namespace RIMA.Editor.RoomDesigner
 {
     using UnityEditor;
     using UnityEngine;
-    using UnityEngine.Rendering.Universal;
+    using UnityEngine.U2D;
     using UnityEngine.UIElements;
     using Button = UnityEngine.UIElements.Button;
     using Object = UnityEngine.Object;

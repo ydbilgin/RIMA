@@ -2,7 +2,8 @@
     "name": "RIMA.RoomDesigner.Editor",
     "rootNamespace": "RIMA.Editor.RoomDesigner",
     "references": [
-        "RIMA.Runtime"
+        "RIMA.Runtime",
+        "Unity.2D.PixelPerfect"
     ],
     "includePlatforms": [
         "Editor"
