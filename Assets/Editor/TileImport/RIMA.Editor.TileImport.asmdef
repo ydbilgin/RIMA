@@ -1,0 +1,16 @@
+{
+  "name": "RIMA.Editor.TileImport",
+  "rootNamespace": "RIMA.Editor.TileImport",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

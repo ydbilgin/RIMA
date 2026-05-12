@@ -29,6 +29,7 @@ namespace RIMA.Editor.RoomDesigner
         private bool isCanvasHovered;
         private bool isDirty;
         private bool isStrokeActive;
+        private PixelPerfectCanvasPreview ppPreview;
         private double nextPollTime;
 
         [MenuItem("RIMA/Room Designer")]
@@ -185,12 +186,15 @@ namespace RIMA.Editor.RoomDesigner
             if (activeBp == null)
                 activeBp = ScriptableObject.CreateInstance<RoomBlueprint>();
             EnsureCanvas();
+            ppPreview = new PixelPerfectCanvasPreview(this);
             EditorApplication.update += PollMcp;
         }
 
         private void OnDisable()
         {
             EditorApplication.update -= PollMcp;
+            ppPreview?.Dispose();
+            ppPreview = null;
             canvas?.Dispose();
             canvas = null;
             brushController = null;
@@ -301,6 +305,12 @@ namespace RIMA.Editor.RoomDesigner
                 cellDebugLabel.name = "cell-debug";
                 cellDebugLabel.AddToClassList("rd-cell-debug");
                 toolbar.Add(cellDebugLabel);
+
+                var ppBtn = new Button(() => { ppPreview?.Toggle(); MarkDirty(); });
+                ppBtn.text = "[Pixel-Perfect Preview] OFF";
+                ppBtn.name = "btn-pixel-perfect";
+                toolbar.Add(ppBtn);
+                ppPreview?.SetLabelRef(ppBtn);
             }
         }
 
@@ -372,6 +382,13 @@ namespace RIMA.Editor.RoomDesigner
             int count = Directory.GetFiles(McpResponsePath, "*.json", SearchOption.TopDirectoryOnly).Length;
             Debug.Log($"Room Designer MCP poll: {count} json response file(s)");
 #endif
+        }
+
+        private void OnGUI()
+        {
+            if (ppPreview == null || canvas == null) return;
+            var el = canvas.Element;
+            if (el != null) ppPreview.DrawOverlay(el.worldBound);
         }
     }
 }
