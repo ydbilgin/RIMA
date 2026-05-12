@@ -8,6 +8,12 @@ ozet: "10 sınıf 64px chibi kimlik profili (Karar #80)"
 **LOCKED 2026-05-13 -- Karar #80 -- RIMA 10 Sinif Siluet Standardi**
 **KRITIK KURAL: 1 sinif = 1 silah = 1 silhouette. Variant YOK. Silah degisimi = sinif degisimi. (Karar #72 + #80)**
 
+> **S62 STYLE RESET REVOKE (Karar #100) -- 2026-05-13**
+> Karar #94 (mature 60°) IPTAL. Karakter sprite mimarisi: chibi 64x64 + ~35° kamera (S59 KEEP).
+> Dark gritty Salt and Sanctuary chibi tone korunur. Image #12 chibi warrior = yeni style anchor.
+> Karar #95 outfit cropped top REVOKED (chibi'de calismiyor), floating disc + no staff KORUNUR.
+> Karar #96 (Summoner cyan), #97 (Hexer curse staff), #98 (rift colors), #99 (weapon-in-hand) KALIR.
+
 ---
 
 ## Niyet
@@ -18,19 +24,20 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 ---
 
-## Tech Constraints (Hatirlatma Tablosu)
+## Tech Constraints (Karar #100 -- S62 REVOKE/RESTORE)
 
 | Alan | Deger |
 |---|---|
-| Sprite | 64x64 chibi top-down |
+| Sprite | 64x64 chibi top-down (S59 KEEP, Karar #100 RESTORE) |
+| Proportions | Chibi 2.5-3 head heights (head ~24-28px, body ~30-35px) |
+| Camera | ~30-35° high top-down (Hades match, Into Samomor reference) |
 | PPU | 64 |
-| Yon | 4 kardinal (N/S/E + W=flipX) |
-| View | ~30-35 derece high top-down (Hades eslesme) |
-| Silah | 1 sinif = 1 silah = 1 silhouette (variant YOK) |
+| Yon | 4 kardinal (N/S/E + W=flipX simetrik siniflar) |
+| Tone | Salt and Sanctuary chibi (dark gritty) -- Hades bright theatrical DEGIL |
+| Style anchor | Image #12 chibi warrior (reference image workflow) |
+| Silah kural | Elde veya belde, net dikey siluet (Karar #71 + #99) |
 | Animasyon canvas | 252x252 (PixelLab v3 zorunlu, Unity'ye 128x128 crop) |
-| Visual pin | Into Samomor (Sang Hendrix RPG Maker MZ) |
-| Lokomotion | Run (Walk YOK), 6 frame, 4 yon |
-| Pipeline | PixelLab Create Character native silahlı 1-piece (Karar #72) |
+| Pipeline | Create Image Pro (master sheet) -> crop -> Create Character -> Custom Animation V3 |
 
 ---
 
@@ -97,6 +104,22 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 - N: Yay arkadan cikiyor, omuz asimetrik. S: Yay one uzaniyor, kiz silueti okunuyor. E: Profil net -- uzun yay sol elde dis tarafa cikar. W: 4 yon ayri uretim (asimetrik sinif, flipX yok).
 
+### Gorsel Kimlik Detayi (Karar #92 -- 2026-05-12 LOCKED)
+
+**Sac:** Off-white / bleached ivory beyaz (platinum degil, gumus degil, mavi tonlu degil). Alcak gevşek at kuyrugu veya orgu, sakaklarda ve cene boyunca kacan tel saclar, ruzgarda savrulmus his. 64px'te beyaz okunur -- anime buz kraricesi degil, savasta agarmis.
+
+**Wild Seviye:** Savasta yipranmis taktik yabanillik -- yipranmis/asimetrik/yarali = wild. Kabile/feral/canavar = yasak.
+- Asimetrik zirh detaylari: sag omuza daha agir omuzluk, SOL (yay) kola deri on kol sargisi, yirtik pelerin etegi, cizmede camur/asinma
+- Yuzde ince bir yara izi (yanakta veya kasda, ince, ince)
+- Savasta yipranmis: temiz ve torensel'in tersi
+
+**YASAK (not-this-wild guardrail):**
+- Kabile isaretleri, yuz boyasi, savas boyasi
+- Sacda kemik/tuy/boncuk
+- Feral/iskelet/ciliz gorunum
+- Canavar ozellikleri (keskin disler, parlayan gozler, pence, boynuz, hayvan kulagi)
+- Gumus/platin/mavi tonlu beyaz sac
+
 ### Anti-Pattern
 
 - Run-and-gun hareketi -- Gunslinger arketipine kacis yasak (Karar #37)
@@ -106,7 +129,7 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 ### PixelLab Prompt Hook
 
-"64x64 chibi top-down female ranger, compound bow in left hand at-rest low position, dark forest armor with cold blue trim, slim upright posture distance-keeping stance, view 35 degree high top-down, cold blue accent #7BA7BC, pixel art PPU 64, 4 separate directional sprites"
+"64x64 chibi top-down female tactical rift hunter, off-white bleached-ivory hair in low loose ponytail with escaping temple strands, faint cheek or brow scar, dark forest green #2A3520 asymmetric battle-worn armor with heavier right pauldron and left forearm leather wrap, cold blue #7BA7BC hood/strap accents, compound bow in left hand at thigh-level rest, tactical hunter stance eyes forward, view 35 degree high top-down, pixel art PPU 64"
 
 ---
 
@@ -157,6 +180,25 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 - N: Robe genisligi arka siluette belirgin, eller yanlarda. S: Yuz okunuyor (honey-blonde sac, Karar #45 notu). E: Uzun robe profil, el one uzaniyor. W: 4 yon ayri uretim (asimetrik).
 
+### Kostum Detayi (Karar #93 + #95 -- 2026-05-13 CHIBI CONFIRMED)
+
+**El Jesti (asimetrik, 64px chibi okunabilir):**
+- Sag el omuz hizasina kaldirilmis, avuc yukari bakiyor, üzerinde floating golden rune disc (~8px hovering 3px above palm)
+- Sol el bel hizasinda, parmak uclari altin ember wisp izi
+- Iki el asimetrik diagonal eksen
+- HICBIR ELDE OBJE TUTULMAZ -- rune disc HAVADA havalanir
+
+**Kostum (chibi cropped top set):**
+- Cropped sleeveless top (~8px torso section, dusty indigo veya koyu mor)
+- Bare midriff strip (~4-6px exposed skin)
+- Flowing high-waisted skirt with side slit (krem veya deep teal)
+- Dark fitted tights + high boots
+- Cream sash at waist
+- Karar #93 cream/ivory color heritage = sash + skirt highlights
+- Karar #43 honey-blonde hair bun KEEP, loose temple strands
+
+**Palette:** dusty indigo top + cream sash + deep teal skirt + warm gold disc glow + honey-blonde hair
+
 ### Anti-Pattern
 
 - Asa veya herhangi bir silah -- silahsiz sinif, buyü eller ile (Karar tablosu)
@@ -166,7 +208,7 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 ### PixelLab Prompt Hook
 
-"64x64 chibi top-down female elementalist, no weapon, long dark robe element-agnostic, hands raised in casting gesture, warm honey-blonde hair bun, controlled academic posture, view 35 degree high top-down, dark purple robe #2A1F35 golden accent #FFF000, pixel art PPU 64, 4 separate directional sprites"
+"64x64 chibi top-down female elementalist, NO STAFF NO WAND, right hand raised palm-up at shoulder height with floating golden rune disc hovering 3px above palm, left hand at hip with faint golden ember wisp trailing, cropped sleeveless dusty indigo top with small bare midriff strip, flowing high-waisted skirt with cream sash, dark fitted tights and high boots, warm honey-blonde hair in neat low bun with loose temple strands, ~35 degree high top-down ARPG camera Hades match, pixel art PPU 64"
 
 ---
 
@@ -293,7 +335,7 @@ Ikinci niyeti: her sinifa ait anti-pattern listesi, uretim sirasinda tasarim kay
 
 ### PixelLab Prompt Hook
 
-"64x64 chibi top-down female summoner, long dark staff or totem raised overhead, very dark green-black robe, conductor gesture hands directing, neon green glowing accents, view 35 degree high top-down, dark green-black #0A1A0A neon green accent #00FF88, pixel art PPU 64, 4 directions"
+"64x64 mature top-down female summoner, soul lantern in left hand cold cyan light, right hand raised commanding gesture small cyan wisp above palm, dark indigo high-collar robe to ankle cyan trim at collar and cuffs, long straight dark hair pale skin, ~60 degree ARPG top-down camera, dark indigo robe, cyan glow accent, violet edge, ZERO green, pixel art PPU 64"
 
 ---
 
