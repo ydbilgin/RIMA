@@ -463,19 +463,6 @@ namespace RIMA
             return RiftLayouts[Mathf.Abs(roomIndex - 10) % RiftLayouts.Length];
         }
 
-        private string GetNarrativeBand(LayoutKind layout)
-        {
-            return layout switch
-            {
-                LayoutKind.BrokenEntryHall or LayoutKind.ChainGallery or LayoutKind.NarrowApproach => "threshold",
-                LayoutKind.CryptBasin or LayoutKind.ForkedOssuary or LayoutKind.ReliquaryLoop or LayoutKind.CollapsedLibrary => "ossuary",
-                LayoutKind.ShrineCrossroad or LayoutKind.RitualHall or LayoutKind.CrescentSanctum => "sanctum",
-                LayoutKind.SplitVault or LayoutKind.AmbushCloister or LayoutKind.RiftWell or LayoutKind.PillarArena => "rift",
-                LayoutKind.BossAntechamber => "boss",
-                _ => "threshold",
-            };
-        }
-
         private Vector2Int GetLayoutSize(LayoutKind layout, RoomType roomType)
         {
             if (roomType == RoomType.Boss) return new Vector2Int(132, 86);
@@ -1422,11 +1409,6 @@ namespace RIMA
         private void AddEllipse(bool[,] mask, int cx, int cy, int rx, int ry)
         {
             PaintEllipse(mask, cx, cy, rx, ry, true);
-        }
-
-        private void RemoveEllipse(bool[,] mask, int cx, int cy, int rx, int ry)
-        {
-            PaintEllipse(mask, cx, cy, rx, ry, false);
         }
 
         private void PaintEllipse(bool[,] mask, int cx, int cy, int rx, int ry, bool value)

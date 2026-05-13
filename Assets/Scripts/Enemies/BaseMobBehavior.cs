@@ -215,6 +215,11 @@ namespace RIMA
 
         // ─── Helpers ─────────────────────────────────────────────────────────
 
+        protected virtual void OnDestroy()
+        {
+            AttackTokenManager.Instance?.ReturnToken(gameObject, attackTokenType);
+        }
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using RIMA.Systems.Map;
@@ -719,33 +718,6 @@ namespace RIMA
                 Destroy(rp.gameObject);
         }
 
-        /// <summary>
-        /// Prefabı güvenli merkez pozisyonunda üretir.
-        /// offset: base pozisyondan dünya uzayında sapma (harita parçası için).
-        /// </summary>
-        private GameObject SpawnAtSafeCenter(GameObject prefab, Vector3 offset)
-        {
-            Vector3 basePos = GetSafeCenterPosition();
-
-            GameObject go;
-            if (offset != Vector3.zero && floorTilemap != null)
-            {
-                Vector3 candidate = basePos + offset;
-                var tileAtOffset = floorTilemap.WorldToCell(candidate);
-                if (floorTilemap.GetTile(tileAtOffset) == null ||
-                    (wallTilemap != null && wallTilemap.GetTile(tileAtOffset) != null))
-                    candidate = basePos;
-                go = Instantiate(prefab, candidate, Quaternion.identity);
-            }
-            else
-            {
-                go = Instantiate(prefab, basePos, Quaternion.identity);
-            }
-
-            activeRewards.Add(go);
-            return go;
-        }
-
         private GameObject SpawnRewardInFrontOfPlayer()
         {
             Vector3 fallback = GetSafeCenterPosition();
@@ -932,12 +904,6 @@ namespace RIMA
                 RoomTransitionFX.Instance.DoTransition(StartRoom);
             else
                 StartRoom();
-        }
-
-        private void TeleportPlayerToOppositeDoor(DoorDirection enteredFrom)
-        {
-            if (playerTransform == null) return;
-            playerTransform.position = GetRoomEntrancePosition();
         }
 
         private Vector3 GetRoomEntrancePosition()
