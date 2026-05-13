@@ -1,11 +1,17 @@
 namespace RIMA.Editor.RoomDesigner
 {
+    using RIMA.RoomDesigner.Core;
     using UnityEngine;
     using UnityEngine.Tilemaps;
     using UnityEngine.UIElements;
 
     public interface IRoomDesignerContext
     {
+        Tilemap BaseTilemap { get; }
+        Tilemap DecalTilemap { get; }
+        Tilemap WallFrontTilemap { get; }
+        Tilemap WallTopTilemap { get; }
+        Transform PropContainer { get; }
         Tilemap FloorTilemap { get; }
         Tilemap WallsTilemap { get; }
         Tilemap DecalsTilemap { get; }
@@ -14,6 +20,11 @@ namespace RIMA.Editor.RoomDesigner
 
         TileBase ActiveTile { get; set; }
         BrushMode ActiveBrush { get; set; }
+
+        int BrushRadius { get; set; }
+        float BrushFalloff { get; set; }
+        bool AutoCliff { get; set; }
+        TileBase CliffTile { get; set; }
 
         Vector3Int HoveredCell { get; set; }
         bool IsCanvasHovered { get; }
@@ -27,20 +38,5 @@ namespace RIMA.Editor.RoomDesigner
         VisualElement RightPanel { get; }
 
         void MarkDirty();
-    }
-
-    public enum RoomLayer
-    {
-        Floor,
-        Walls,
-        Decals
-    }
-
-    public enum BrushMode
-    {
-        Stamp,
-        Eraser,
-        Picker,
-        Bucket
     }
 }

@@ -47,15 +47,22 @@ namespace RIMA.Editor.RoomDesigner
 
         public VisualElement Element => imguiContainer;
         public GameObject StageRoot => stageRoot;
-        public Tilemap FloorTilemap { get; private set; }
-        public Tilemap WallsTilemap { get; private set; }
-        public Tilemap DecalsTilemap { get; private set; }
+        public Tilemap BaseTilemap { get; private set; }
+        public Tilemap DecalTilemap { get; private set; }
+        public Tilemap WallFrontTilemap { get; private set; }
+        public Tilemap WallTopTilemap { get; private set; }
+        public Transform PropContainer { get; private set; }
+        public Tilemap FloorTilemap => BaseTilemap;
+        public Tilemap WallsTilemap => WallFrontTilemap;
+        public Tilemap DecalsTilemap => DecalTilemap;
 
         public void ClearTilemaps()
         {
-            FloorTilemap?.ClearAllTiles();
-            WallsTilemap?.ClearAllTiles();
-            DecalsTilemap?.ClearAllTiles();
+            BaseTilemap?.ClearAllTiles();
+            DecalTilemap?.ClearAllTiles();
+            WallFrontTilemap?.ClearAllTiles();
+            WallTopTilemap?.ClearAllTiles();
+            ClearProps();
             ctx.MarkDirty();
         }
 
@@ -75,9 +82,11 @@ namespace RIMA.Editor.RoomDesigner
             stageRoot = null;
             previewCam = null;
             grid = null;
-            FloorTilemap = null;
-            WallsTilemap = null;
-            DecalsTilemap = null;
+            BaseTilemap = null;
+            DecalTilemap = null;
+            WallFrontTilemap = null;
+            WallTopTilemap = null;
+            PropContainer = null;
         }
 
         private void CreateSceneObjects()
@@ -99,9 +108,11 @@ namespace RIMA.Editor.RoomDesigner
             grid.cellSwizzle = GridLayout.CellSwizzle.XYZ;
             grid.cellSize = new Vector3(1f, 0.5f, 0f);
 
-            FloorTilemap = CreateTilemap("Floor", stageLayer, 0);
-            WallsTilemap = CreateTilemap("Walls", stageLayer, 10);
-            DecalsTilemap = CreateTilemap("Decals", stageLayer, 20);
+            BaseTilemap = CreateTilemap("BaseTilemap", stageLayer, 0, false);
+            DecalTilemap = CreateTilemap("DecalTilemap", stageLayer, 1, false);
+            WallFrontTilemap = CreateTilemap("WallsTilemap_Front", stageLayer, 2, true);
+            WallTopTilemap = CreateTilemap("WallsTilemap_Top", stageLayer, 3, false);
+            PropContainer = CreatePropContainer(stageLayer);
 
             var cameraObject = new GameObject("PreviewCamera");
             cameraObject.hideFlags = HideFlags.DontSave;
@@ -120,7 +131,7 @@ namespace RIMA.Editor.RoomDesigner
             previewCam.enabled = false;
         }
 
-        private Tilemap CreateTilemap(string name, int layer, int sortingOrder)
+        private Tilemap CreateTilemap(string name, int layer, int sortingOrder, bool hasCollider)
         {
             var tilemapObject = new GameObject(name);
             tilemapObject.hideFlags = HideFlags.DontSave;
@@ -131,7 +142,34 @@ namespace RIMA.Editor.RoomDesigner
             tilemap.tileAnchor = new Vector3(0.5f, 0f, 0f);
             var renderer = tilemapObject.AddComponent<TilemapRenderer>();
             renderer.sortingOrder = sortingOrder;
+            if (hasCollider)
+            {
+                tilemapObject.AddComponent<TilemapCollider2D>();
+            }
+
             return tilemap;
+        }
+
+        private Transform CreatePropContainer(int layer)
+        {
+            var propObject = new GameObject("PropContainer");
+            propObject.hideFlags = HideFlags.DontSave;
+            propObject.layer = layer;
+            propObject.transform.SetParent(stageRoot.transform, false);
+            return propObject.transform;
+        }
+
+        private void ClearProps()
+        {
+            if (PropContainer == null)
+            {
+                return;
+            }
+
+            for (int i = PropContainer.childCount - 1; i >= 0; i--)
+            {
+                Object.DestroyImmediate(PropContainer.GetChild(i).gameObject);
+            }
         }
 
         private void DrawCanvas()

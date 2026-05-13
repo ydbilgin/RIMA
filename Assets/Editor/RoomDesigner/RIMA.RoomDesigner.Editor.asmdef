@@ -5,6 +5,7 @@
         "RIMA.Runtime",
         "RIMA.RoomDesigner.Core",
         "RIMA.RoomDesigner.Core.Editor",
+        "Unity.2D.Tilemap.Extras",
         "Unity.2D.PixelPerfect",
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.RenderPipelines.Universal.2D.Runtime"

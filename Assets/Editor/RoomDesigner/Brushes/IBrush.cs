@@ -1,4 +1,5 @@
 using RIMA.Editor.RoomDesigner;
+using RIMA.RoomDesigner.Core;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 

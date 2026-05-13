@@ -1,4 +1,5 @@
 using RIMA.Editor.RoomDesigner;
+using RIMA.RoomDesigner.Core;
 using UnityEngine;
 
 namespace RIMA.Editor.RoomDesigner.Brushes
@@ -9,7 +10,9 @@ namespace RIMA.Editor.RoomDesigner.Brushes
 
         public void OnStrokeBegin(IRoomDesignerContext ctx, Vector3Int cell, int mouseButton)
         {
-            ctx.ActiveTile = ctx.GetActiveTilemap().GetTile(cell);
+            var tilemap = ctx.GetActiveTilemap();
+            if (tilemap == null) return;
+            ctx.ActiveTile = tilemap.GetTile(cell);
             if (BrushController.Instance != null)
             {
                 BrushController.Instance.SetBrush(ctx, BrushMode.Stamp);

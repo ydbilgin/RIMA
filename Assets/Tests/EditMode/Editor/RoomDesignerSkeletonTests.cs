@@ -3,6 +3,7 @@ namespace RIMA.Tests.Editor
     using System.IO;
     using NUnit.Framework;
     using RIMA.Editor.RoomDesigner;
+    using RIMA.RoomDesigner.Core;
     using RIMA.Runtime.Rooms;
     using UnityEditor;
     using UnityEngine;
@@ -24,7 +25,7 @@ namespace RIMA.Tests.Editor
             try
             {
                 Assert.AreEqual(BrushMode.Stamp, window.ActiveBrush);
-                Assert.AreEqual(RoomLayer.Floor, window.ActiveLayer);
+                Assert.AreEqual(RoomLayer.Base, window.ActiveLayer);
                 Assert.AreEqual(Vector3Int.zero, window.HoveredCell);
             }
             finally

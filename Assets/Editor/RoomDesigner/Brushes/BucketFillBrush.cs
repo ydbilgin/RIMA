@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RIMA.Editor.RoomDesigner;
+using RIMA.RoomDesigner.Core;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -18,6 +19,7 @@ namespace RIMA.Editor.RoomDesigner.Brushes
         public void OnStrokeBegin(IRoomDesignerContext ctx, Vector3Int cell, int mouseButton)
         {
             var tilemap = ctx.GetActiveTilemap();
+            if (tilemap == null) return;
             var targetTile = tilemap.GetTile(cell);
             if (targetTile == ctx.ActiveTile) return;
 

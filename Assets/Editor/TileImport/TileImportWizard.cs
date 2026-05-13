@@ -46,7 +46,7 @@ namespace RIMA.Editor.TileImport
             Error
         }
 
-        [MenuItem("RIMA/Tile Import Wizard")]
+        [MenuItem("RIMA/Legacy Tile Import Wizard")]
         public static void Open()
         {
             var window = GetWindow<TileImportWizard>();

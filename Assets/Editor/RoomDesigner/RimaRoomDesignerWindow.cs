@@ -48,15 +48,25 @@ namespace RIMA.Editor.RoomDesigner
             window.Show();
         }
 
-        public Tilemap FloorTilemap => canvas?.FloorTilemap;
-        public Tilemap WallsTilemap => canvas?.WallsTilemap;
-        public Tilemap DecalsTilemap => canvas?.DecalsTilemap;
+        public Tilemap BaseTilemap => canvas?.BaseTilemap;
+        public Tilemap DecalTilemap => canvas?.DecalTilemap;
+        public Tilemap WallFrontTilemap => canvas?.WallFrontTilemap;
+        public Tilemap WallTopTilemap => canvas?.WallTopTilemap;
+        public Transform PropContainer => canvas?.PropContainer;
+        public Tilemap FloorTilemap => BaseTilemap;
+        public Tilemap WallsTilemap => WallFrontTilemap;
+        public Tilemap DecalsTilemap => DecalTilemap;
         public RoomBlueprint ActiveBlueprint => activeBp;
         public bool IsWallOverrideMode { get; set; }
 
-        public RoomLayer ActiveLayer { get; set; } = RoomLayer.Floor;
+        public RoomLayer ActiveLayer { get; set; } = RoomLayer.Base;
         public TileBase ActiveTile { get; set; }
         public BrushMode ActiveBrush { get; set; } = BrushMode.Stamp;
+
+        public int BrushRadius { get; set; } = 4;
+        public float BrushFalloff { get; set; } = 0.5f;
+        public bool AutoCliff { get; set; } = true;
+        public TileBase CliffTile { get; set; }
 
         private Vector3Int hoveredCell;
 
@@ -85,13 +95,15 @@ namespace RIMA.Editor.RoomDesigner
         {
             switch (ActiveLayer)
             {
-                case RoomLayer.Walls:
-                    return WallsTilemap;
-                case RoomLayer.Decals:
-                    return DecalsTilemap;
-                case RoomLayer.Floor:
+                case RoomLayer.Wall:
+                    return WallFrontTilemap;
+                case RoomLayer.Decal:
+                    return DecalTilemap;
+                case RoomLayer.Prop:
+                    return null;
+                case RoomLayer.Base:
                 default:
-                    return FloorTilemap;
+                    return BaseTilemap;
             }
         }
 
@@ -188,7 +200,7 @@ namespace RIMA.Editor.RoomDesigner
         {
             EnsureRoomDesignerLayer();
             ActiveBrush = BrushMode.Stamp;
-            ActiveLayer = RoomLayer.Floor;
+            ActiveLayer = RoomLayer.Base;
             HoveredCell = Vector3Int.zero;
             if (activeBp == null)
                 activeBp = ScriptableObject.CreateInstance<RoomBlueprint>();
@@ -317,11 +329,18 @@ namespace RIMA.Editor.RoomDesigner
             activeLayerDropdown = rootVisualElement.Q<DropdownField>("active-layer");
             if (activeLayerDropdown != null)
             {
-                activeLayerDropdown.choices = new System.Collections.Generic.List<string>(Enum.GetNames(typeof(RoomLayer)));
-                activeLayerDropdown.value = ActiveLayer.ToString();
+                activeLayerDropdown.label = "Brush Layer";
+                activeLayerDropdown.choices = new System.Collections.Generic.List<string>
+                {
+                    LayerLabel(RoomLayer.Base),
+                    LayerLabel(RoomLayer.Decal),
+                    LayerLabel(RoomLayer.Wall),
+                    LayerLabel(RoomLayer.Prop)
+                };
+                activeLayerDropdown.value = LayerLabel(ActiveLayer);
                 activeLayerDropdown.RegisterValueChangedCallback(evt =>
                 {
-                    if (Enum.TryParse(evt.newValue, out RoomLayer parsed))
+                    if (TryParseLayerLabel(evt.newValue, out RoomLayer parsed))
                     {
                         ActiveLayer = parsed;
                         MarkDirty();
@@ -359,6 +378,66 @@ namespace RIMA.Editor.RoomDesigner
                 ppBtn.name = "btn-pixel-perfect";
                 toolbar.Add(ppBtn);
                 ppPreview?.SetLabelRef(ppBtn);
+
+                var radiusSlider = new SliderInt("Radius", 1, 8) { value = BrushRadius };
+                radiusSlider.RegisterValueChangedCallback(evt => { BrushRadius = evt.newValue; });
+                radiusSlider.style.width = 150;
+                toolbar.Add(radiusSlider);
+
+                var falloffSlider = new Slider("Falloff", 0f, 1f) { value = BrushFalloff };
+                falloffSlider.RegisterValueChangedCallback(evt => { BrushFalloff = evt.newValue; });
+                falloffSlider.style.width = 150;
+                toolbar.Add(falloffSlider);
+
+                var cliffToggle = new Toggle("Auto Cliff") { value = AutoCliff };
+                cliffToggle.RegisterValueChangedCallback(evt => { AutoCliff = evt.newValue; });
+                toolbar.Add(cliffToggle);
+
+                var cliffField = new ObjectField("Cliff Tile")
+                {
+                    objectType = typeof(TileBase),
+                    value = CliffTile
+                };
+                cliffField.style.width = 150;
+                cliffField.RegisterValueChangedCallback(evt => { CliffTile = evt.newValue as TileBase; });
+                toolbar.Add(cliffField);
+            }
+        }
+
+        private static string LayerLabel(RoomLayer layer)
+        {
+            switch (layer)
+            {
+                case RoomLayer.Decal:
+                    return "Paint Decal";
+                case RoomLayer.Wall:
+                    return "Paint Wall";
+                case RoomLayer.Prop:
+                    return "Paint Prop";
+                case RoomLayer.Base:
+                default:
+                    return "Paint Base";
+            }
+        }
+
+        private static bool TryParseLayerLabel(string label, out RoomLayer layer)
+        {
+            switch (label)
+            {
+                case "Paint Decal":
+                    layer = RoomLayer.Decal;
+                    return true;
+                case "Paint Wall":
+                    layer = RoomLayer.Wall;
+                    return true;
+                case "Paint Prop":
+                    layer = RoomLayer.Prop;
+                    return true;
+                case "Paint Base":
+                    layer = RoomLayer.Base;
+                    return true;
+                default:
+                    return Enum.TryParse(label, out layer);
             }
         }
 

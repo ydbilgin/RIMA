@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RIMA.Editor.RoomDesigner;
+using RIMA.RoomDesigner.Core;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -26,10 +27,10 @@ namespace RIMA.Editor.RoomDesigner.Brushes
             var toolbar = new VisualElement();
             toolbar.AddToClassList("rd-brush-toolbar");
 
-            var labels = new[] { "B", "E", "I", "G" };
-            var modes = new[] { BrushMode.Stamp, BrushMode.Eraser, BrushMode.Picker, BrushMode.Bucket };
+            var labels = new[] { "B", "E", "I", "G", "C", "S" };
+            var modes = new[] { BrushMode.Stamp, BrushMode.Eraser, BrushMode.Picker, BrushMode.Bucket, BrushMode.Circle, BrushMode.Soft };
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 6; i++)
             {
                 var btn = new Button();
                 btn.text = labels[i];
@@ -49,6 +50,8 @@ namespace RIMA.Editor.RoomDesigner.Brushes
                     case KeyCode.E: SetBrush(ctx, BrushMode.Eraser); break;
                     case KeyCode.I: SetBrush(ctx, BrushMode.Picker); break;
                     case KeyCode.G: SetBrush(ctx, BrushMode.Bucket); break;
+                    case KeyCode.C: SetBrush(ctx, BrushMode.Circle); break;
+                    case KeyCode.S: SetBrush(ctx, BrushMode.Soft); break;
                 }
             });
 
@@ -64,12 +67,20 @@ namespace RIMA.Editor.RoomDesigner.Brushes
                 BrushMode.Eraser => new EraserBrush(),
                 BrushMode.Picker => new PickerBrush(),
                 BrushMode.Bucket => new BucketFillBrush(),
+                BrushMode.Circle => new CircleBrush(),
+                BrushMode.Soft   => new SoftBrush(),
                 _                => new StampBrush()
             };
         }
 
         public void OnInvoke(IRoomDesignerContext ctx, int mouseButton, Vector3Int cell)
         {
+            if (ctx.ActiveLayer == RoomLayer.Prop)
+            {
+                Debug.Log("Room Designer Prop layer uses PropContainer placement, not tile painting.");
+                return;
+            }
+
             _activeBrush?.OnStrokeBegin(ctx, cell, mouseButton);
         }
 
@@ -85,6 +96,8 @@ namespace RIMA.Editor.RoomDesigner.Brushes
 
         public void ApplyStroke(IRoomDesignerContext ctx, IList<CellEdit> edits, string strokeName)
         {
+            if (edits.Count == 0) return;
+            edits = edits.Where(e => e.Target != null).ToList();
             if (edits.Count == 0) return;
             Undo.IncrementCurrentGroup();
             int group = Undo.GetCurrentGroup();

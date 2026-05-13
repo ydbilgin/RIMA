@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 using UnityEditor;
 using RIMA.Editor.RoomDesigner;
 using RIMA.Editor.RoomDesigner.Brushes;
+using RIMA.RoomDesigner.Core;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
@@ -14,9 +15,18 @@ namespace RIMA.Tests.Editor
         public Tilemap FloorTilemap { get; set; }
         public Tilemap WallsTilemap { get; set; }
         public Tilemap DecalsTilemap { get; set; }
-        public RoomLayer ActiveLayer { get; set; } = RoomLayer.Floor;
+        public Tilemap BaseTilemap => FloorTilemap;
+        public Tilemap DecalTilemap => DecalsTilemap;
+        public Tilemap WallFrontTilemap => WallsTilemap;
+        public Tilemap WallTopTilemap { get; set; }
+        public Transform PropContainer { get; set; }
+        public RoomLayer ActiveLayer { get; set; } = RoomLayer.Base;
         public TileBase ActiveTile { get; set; }
         public BrushMode ActiveBrush { get; set; }
+        public int BrushRadius { get; set; } = 1;
+        public float BrushFalloff { get; set; } = 0f;
+        public bool AutoCliff { get; set; } = false;
+        public TileBase CliffTile { get; set; }
         public Vector3Int HoveredCell { get; set; }
         public bool IsCanvasHovered => true;
         public RIMA.Runtime.Rooms.RoomBlueprint ActiveBlueprint { get; set; }
@@ -29,11 +39,11 @@ namespace RIMA.Tests.Editor
         {
             switch (ActiveLayer)
             {
-                case RoomLayer.Walls:
+                case RoomLayer.Wall:
                     return WallsTilemap;
-                case RoomLayer.Decals:
+                case RoomLayer.Decal:
                     return DecalsTilemap;
-                case RoomLayer.Floor:
+                case RoomLayer.Base:
                 default:
                     return FloorTilemap;
             }
@@ -164,7 +174,7 @@ namespace RIMA.Tests.Editor
             var ctx = new FakeContext
             {
                 FloorTilemap = tilemap,
-                ActiveLayer = RoomLayer.Floor,
+                ActiveLayer = RoomLayer.Base,
                 ActiveBrush = BrushMode.Picker
             };
             _ = new BrushController();

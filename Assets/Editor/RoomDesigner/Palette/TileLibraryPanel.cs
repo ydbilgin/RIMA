@@ -2,6 +2,7 @@ namespace RIMA.Editor.RoomDesigner.Palette
 {
     using System;
     using System.Collections.Generic;
+    using RIMA.RoomDesigner.Core;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Tilemaps;
@@ -31,6 +32,13 @@ namespace RIMA.Editor.RoomDesigner.Palette
         private readonly Dictionary<TileBase, Image> previewImagesByTile = new Dictionary<TileBase, Image>();
         private readonly Dictionary<string, Button> biomeButtons = new Dictionary<string, Button>();
         private readonly Dictionary<RoomLayer, Button> layerButtons = new Dictionary<RoomLayer, Button>();
+        private static readonly RoomLayer[] PaintLayers =
+        {
+            RoomLayer.Base,
+            RoomLayer.Decal,
+            RoomLayer.Wall,
+            RoomLayer.Prop
+        };
 
         private VisualElement grid;
         private Label emptyState;
@@ -109,7 +117,7 @@ namespace RIMA.Editor.RoomDesigner.Palette
             layerRow.AddToClassList("rd-layer-row");
             Add(layerRow);
 
-            foreach (RoomLayer layer in (RoomLayer[])Enum.GetValues(typeof(RoomLayer)))
+            foreach (RoomLayer layer in PaintLayers)
             {
                 RoomLayer capturedLayer = layer;
                 var button = new Button(() =>

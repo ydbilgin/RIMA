@@ -4,6 +4,7 @@ namespace RIMA.Tests.Editor
     using NUnit.Framework;
     using RIMA.Editor.RoomDesigner;
     using RIMA.Editor.RoomDesigner.Brushes;
+    using RIMA.RoomDesigner.Core;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Tilemaps;
@@ -28,7 +29,7 @@ namespace RIMA.Tests.Editor
                 Assert.AreSame(controller, BrushController.Instance);
                 Assert.IsNotNull(window.RightPanel.Q<VisualElement>(className: "rd-brush-toolbar"));
 
-                window.ActiveLayer = RoomLayer.Floor;
+                window.ActiveLayer = RoomLayer.Base;
                 window.ActiveTile = testTile;
 
                 window.InvokeBrush(0, Vector3Int.zero);

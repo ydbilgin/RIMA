@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RIMA.Editor.RoomDesigner;
+using RIMA.RoomDesigner.Core;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -25,7 +26,9 @@ namespace RIMA.Editor.RoomDesigner.Brushes
             if (_buffer == null || _visited.Contains(cell)) return;
             _visited.Add(cell);
             _strokeCells.Add(cell);
-            _buffer.Add(new CellEdit(ctx.GetActiveTilemap(), cell, null));
+            Tilemap target = ctx.GetActiveTilemap();
+            if (target == null) return;
+            _buffer.Add(new CellEdit(target, cell, null));
             ctx.MarkDirty();
         }
 
@@ -33,7 +36,7 @@ namespace RIMA.Editor.RoomDesigner.Brushes
         {
             if (_buffer == null) return;
             BrushController.Instance.ApplyStroke(ctx, _buffer, "Erase");
-            if (ctx.ActiveLayer == RoomLayer.Walls && ctx.WallsTilemap != null)
+            if (ctx.ActiveLayer == RoomLayer.Wall && ctx.WallsTilemap != null)
             {
                 WallAutoConnect.RefreshNeighborhood(ctx.WallsTilemap, _strokeCells, null, ctx.ActiveBlueprint);
                 ctx.MarkDirty();
