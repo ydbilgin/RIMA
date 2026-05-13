@@ -208,6 +208,8 @@ Narrative direction:
 | #121 | Scatter Brush | Faz 1+ |
 | #122 | Echo Resonance Multi-Tier | T1 Faz 1, T2/T3/T4 Faz 2 |
 | #123 | Weapon Decouple Architecture (Yol A) — EN SON KARAR | Faz 1+ |
+| #124 | Weapon Form Variation | Faz 1 reduced (Warblade × 2), Faz 2 full matrix |
+| #125 | Extra Weapon Attach | DEFER Faz 2+, Faz 1 sıfır |
 
 **Durum: FAZ_MASTER tablosu sadece Faz-impact özet. #72-#123 canonical kararlar için `../MASTER_KARAR_BELGESI.md` referans. Son güncelleme 2026-05-14 S70.**
 
