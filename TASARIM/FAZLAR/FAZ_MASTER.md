@@ -111,6 +111,11 @@ Narrative direction:
 | RelicCaster | — | ✅ | ✅ | 128px (PPU=64 standardı, Karar #74) | Grunt |
 | FractureImp | ✅ | ✅ | — | 128px (PPU=64 standardı, Karar #74) | Grunt |
 | SeamCrawler | ✅ | ✅ | — | 256×128px (S43) | Grunt |
+| plate_widow | ✅ | — | — | 128px (PPU=64 standardı, Karar #74) | Elite/Grunt TBD |
+| rift_gound | ✅ | — | — | 128px (PPU=64 standardı, Karar #74) | Grunt TBD |
+| hollow_arbitter | ✅ | — | — | 128px (PPU=64 standardı, Karar #74) | Elite TBD |
+
+> Brief'ler S70 sonrası rima-design ile finalize.
 
 ### Set B — Planlanan (MOB_TASARIMI)
 
@@ -183,8 +188,28 @@ Narrative direction:
 | #63 | Map Fragment + Kirrik Tas Tablet reveal sistemi, 8 fragment boss kapisi | Faz 2+ |
 | #64-70 | AD v1 Sprint: ActionCommitProfile, 3-layer feedback, posture v1, dash-cancel | Faz 1+ |
 | #71 | Silah Single-State: hep elde, Ronin sheath/draw istisna | Faz 1+ |
+| #72 | S59 Pivot — pure 2D top-down 64x64 chibi | Tüm fazlar |
+| #74 | Boyut hiyerarşi 2^n + PPU=64 | Tüm fazlar |
+| #80 | Class Silhouette Bible | Tüm fazlar |
+| #100 | Chibi 64x64 RESTORE | Tüm fazlar |
+| #108 | PixelLab Animation Hard Rules | Faz 1+ |
+| #109 | Ambient Idle System | Faz 1+ |
+| #110 | Combat FAZ 1.0 mimari | Faz 1 |
+| #111 | Awakening + Trace | Faz 1 |
+| #112 | Lore Glossary — Shard/Trace/Awakening | Tüm fazlar |
+| #113 | Camera ~35° convergence | Tüm fazlar |
+| #114 | 8 Direction Animation | Faz 1+ |
+| #115 | AI-Assisted Map Builder | Faz 1+ |
+| #116 | Tile Transition Quality | Faz 1+ |
+| #117 | Room Designer Portable Core | Faz 1+ |
+| #118 | Hybrid Tile Composition | Faz 1+ |
+| #119 | AI ASCII Matrix Parser | Faz 1.6 |
+| #120 | Split-Animation Technique | Faz 1+ |
+| #121 | Scatter Brush | Faz 1+ |
+| #122 | Echo Resonance Multi-Tier | T1 Faz 1, T2/T3/T4 Faz 2 |
+| #123 | Weapon Decouple Architecture (Yol A) — EN SON KARAR | Faz 1+ |
 
-**Durum: SYNC GUNCELLENDI 2026-05-13 S66 (#72-#114 eklendi, MASTER_KARAR_BELGESI canonical)**
+**Durum: FAZ_MASTER tablosu sadece Faz-impact özet. #72-#123 canonical kararlar için `../MASTER_KARAR_BELGESI.md` referans. Son güncelleme 2026-05-14 S70.**
 
 ---
 
