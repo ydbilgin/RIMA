@@ -138,6 +138,31 @@ namespace RIMA.Editor.RoomDesigner
             return true;
         }
 
+        public static int GetTransitionVariantIndex(BiomeType cellBiome, BiomeType neighborBiome, int connectionMask)
+        {
+            if (cellBiome == neighborBiome)
+            {
+                return 0;
+            }
+
+            if ((connectionMask & 4) != 0)
+            {
+                return 1;
+            }
+
+            if ((connectionMask & 8) != 0)
+            {
+                return 2;
+            }
+
+            if ((connectionMask & 3) != 0)
+            {
+                return 3;
+            }
+
+            return 1;
+        }
+
         private static TileBase GetVariantTile(TileBase[] wallVariants, int connType)
         {
             if (wallVariants != null && connType < wallVariants.Length)
@@ -153,6 +178,99 @@ namespace RIMA.Editor.RoomDesigner
             }
 
             return null;
+        }
+    }
+
+    public static class BiomeTransitionPainter
+    {
+        private static readonly Vector3Int[] CardinalOffsets =
+        {
+            new Vector3Int(-1, 0, 0),
+            new Vector3Int(1, 0, 0),
+            new Vector3Int(0, 1, 0),
+            new Vector3Int(0, -1, 0)
+        };
+
+        public static bool ApplyBiomeTransitions(Tilemap floorTilemap, RoomBlueprint bp, TileBase[] transitionVariants)
+        {
+            if (floorTilemap == null || bp == null || transitionVariants == null || transitionVariants.Length == 0)
+            {
+                return false;
+            }
+
+            BoundsInt bounds = floorTilemap.cellBounds;
+            BiomeType edgeBiome = GetFallbackNeighborBiome(bp.biomeType);
+
+            for (int x = bounds.xMin; x < bounds.xMax; x++)
+            {
+                for (int y = bounds.yMin; y < bounds.yMax; y++)
+                {
+                    var cell = new Vector3Int(x, y, 0);
+                    if (floorTilemap.GetTile(cell) == null)
+                    {
+                        continue;
+                    }
+
+                    int arrIdx = (y - bp.roomOrigin.y) * bp.roomWidth + (x - bp.roomOrigin.x);
+                    if (bp.overrideVariantIndex != null && arrIdx >= 0 && arrIdx < bp.overrideVariantIndex.Length && bp.overrideVariantIndex[arrIdx])
+                    {
+                        continue;
+                    }
+
+                    int mask = 0;
+                    for (int i = 0; i < CardinalOffsets.Length; i++)
+                    {
+                        Vector3Int neighbor = cell + CardinalOffsets[i];
+                        if (floorTilemap.GetTile(neighbor) == null)
+                        {
+                            mask |= OffsetToMask(CardinalOffsets[i]);
+                        }
+                    }
+
+                    if (mask == 0)
+                    {
+                        continue;
+                    }
+
+                    int variantIndex = WallAutoConnect.GetTransitionVariantIndex(bp.biomeType, edgeBiome, mask);
+                    if (variantIndex <= 0)
+                    {
+                        continue;
+                    }
+
+                    int tileIndex = Mathf.Clamp(variantIndex - 1, 0, transitionVariants.Length - 1);
+                    TileBase tile = transitionVariants[tileIndex];
+                    if (tile != null)
+                    {
+                        floorTilemap.SetTile(cell, tile);
+                    }
+                }
+            }
+
+            floorTilemap.RefreshAllTiles();
+            return true;
+        }
+
+        private static int OffsetToMask(Vector3Int offset)
+        {
+            if (offset.x < 0) return 1;
+            if (offset.x > 0) return 2;
+            if (offset.y > 0) return 4;
+            if (offset.y < 0) return 8;
+            return 0;
+        }
+
+        private static BiomeType GetFallbackNeighborBiome(BiomeType biome)
+        {
+            switch (biome)
+            {
+                case BiomeType.Keep:
+                    return BiomeType.Crypt;
+                case BiomeType.Crypt:
+                    return BiomeType.Volcanic;
+                default:
+                    return BiomeType.Keep;
+            }
         }
     }
 }

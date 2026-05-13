@@ -29,6 +29,8 @@ namespace RIMA.Runtime.Rooms
         // wallVariantIndex[cell] = connection variant index (0-7), length = roomWidth * roomHeight
         // Populated by WallAutoConnector on save. Empty = not yet baked.
         public byte[] wallVariantIndex;
+        // decalVariantIndex[cell] = decal variant index + 1, 0 means no decal.
+        public byte[] decalVariantIndex;
         // overrideVariantIndex[cell] = true -> manual override, do not re-bake this cell
         public bool[] overrideVariantIndex;
 

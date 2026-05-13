@@ -290,6 +290,24 @@ namespace RIMA.Editor.RoomDesigner
                 generateButton.clicked += GenerateRoom;
             }
 
+            var decalBtn = rootVisualElement.Q<Button>("btn-paint-decals");
+            if (decalBtn != null)
+            {
+                decalBtn.clicked += PaintDecals;
+            }
+
+            var propBtn = rootVisualElement.Q<Button>("btn-place-props");
+            if (propBtn != null)
+            {
+                propBtn.clicked += PlacePropsAction;
+            }
+
+            var transBtn = rootVisualElement.Q<Button>("btn-apply-transitions");
+            if (transBtn != null)
+            {
+                transBtn.clicked += ApplyTransitionsAction;
+            }
+
             var newButton = rootVisualElement.Q<Button>("btn-new");
             if (newButton != null)
             {
@@ -424,6 +442,93 @@ namespace RIMA.Editor.RoomDesigner
             WallAutoConnect.BakeWallVariants(WallsTilemap, activeBp, activeTemplate.wallVariants);
 
             MarkDirty();
+        }
+
+        private void PaintDecals()
+        {
+            if (activeTemplate == null)
+            {
+                Debug.LogError("Room Designer decal paint failed: assign a RimaRoomBaselineTemplate.");
+                return;
+            }
+
+            if (activeBp == null)
+            {
+                Debug.LogError("Room Designer decal paint failed: generate a room first.");
+                return;
+            }
+
+            EnsureCanvas();
+            if (DecalsTilemap == null)
+            {
+                Debug.LogError("Room Designer decal paint failed: DecalsTilemap is not ready.");
+                return;
+            }
+
+            if (DecalPainter.PaintDecals(DecalsTilemap, activeBp, activeTemplate.decalSprites, activeBp.noiseSeed, activeTemplate.decalDensity))
+            {
+                MarkDirty();
+            }
+        }
+
+        private void PlacePropsAction()
+        {
+            if (activeTemplate == null)
+            {
+                Debug.LogError("Room Designer prop placement failed: assign a RimaRoomBaselineTemplate.");
+                return;
+            }
+
+            if (activeBp == null)
+            {
+                Debug.LogError("Room Designer prop placement failed: generate a room first.");
+                return;
+            }
+
+            EnsureCanvas();
+            if (canvas?.StageRoot == null)
+            {
+                Debug.LogError("Room Designer prop placement failed: stage root is not ready.");
+                return;
+            }
+
+            AnchorZone[] anchors = RimaArchetypeGenerators.GetDefaultAnchorZones(
+                activeTemplate.archetypeId,
+                activeBp.noiseSeed,
+                activeBp.roomWidth,
+                activeBp.roomHeight);
+            List<GameObject> placed = PropPlacer.PlaceProps(canvas.StageRoot, anchors, activeTemplate.propSpecs, activeBp, activeBp.noiseSeed);
+            if (placed.Count > 0)
+            {
+                MarkDirty();
+            }
+        }
+
+        private void ApplyTransitionsAction()
+        {
+            if (activeTemplate == null)
+            {
+                Debug.LogError("Room Designer transition apply failed: assign a RimaRoomBaselineTemplate.");
+                return;
+            }
+
+            if (activeBp == null)
+            {
+                Debug.LogError("Room Designer transition apply failed: generate a room first.");
+                return;
+            }
+
+            EnsureCanvas();
+            if (FloorTilemap == null)
+            {
+                Debug.LogError("Room Designer transition apply failed: FloorTilemap is not ready.");
+                return;
+            }
+
+            if (BiomeTransitionPainter.ApplyBiomeTransitions(FloorTilemap, activeBp, activeTemplate.floorVariants))
+            {
+                MarkDirty();
+            }
         }
 
         private static List<Vector3Int> CollectOccupiedCells(Tilemap tilemap)

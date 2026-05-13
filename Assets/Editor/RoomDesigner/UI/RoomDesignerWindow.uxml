@@ -3,6 +3,9 @@
     <ui:VisualElement name="toolbar" class="rd-toolbar">
       <ui:Button name="btn-save" text="Save Room"/>
       <ui:Button name="btn-generate" text="Generate"/>
+      <ui:Button name="btn-paint-decals" text="Paint Decals" class="rd-toolbar-btn" />
+      <ui:Button name="btn-place-props" text="Place Props" class="rd-toolbar-btn" />
+      <ui:Button name="btn-apply-transitions" text="Apply Transitions" class="rd-toolbar-btn" />
       <ui:Button name="btn-new"  text="New Room"/>
       <ui:DropdownField name="active-layer" label="Layer"/>
     </ui:VisualElement>

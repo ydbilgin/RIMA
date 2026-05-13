@@ -15,6 +15,9 @@ namespace RIMA.Systems.Map
         public int maxHeight = 20;
         public TileBase[] floorVariants;
         public TileBase[] wallVariants;
+        public Sprite[] decalSprites;
+        [Range(0f, 1f)] public float decalDensity = 0.35f;
+        public PropSpec[] propSpecs;
         public int generatorVersion = 1;
     }
 }
