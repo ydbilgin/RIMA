@@ -7,6 +7,7 @@ namespace RIMA.Systems.Map
     public class TileAssetMetadata : ScriptableObject
     {
         public string tileId;
+        public string charKey; // single char used in ASCII map import (e.g. "#", "^", "~")
         public RimaBiomeType biomeType;
         public RimaTerrainType terrainType;
         public TileBase tile;
