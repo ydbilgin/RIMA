@@ -65,11 +65,12 @@ def select_profile(profiles):
 
 
 def dispatch(profile, task_content, effort):
-    # Always allow CODEX_DONE.md write — required for result reporting
-    if "CODEX_DONE.md" not in task_content:
-        task_content = "ALWAYS WRITE RESULT TO CODEX_DONE.md WHEN DONE.\n\n" + task_content
+    # Always wrap with CODEX_DONE.md instruction at both start and end
+    wrapper = "ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE.md AS THE VERY LAST STEP."
+    task_content = f"{wrapper}\n\n{task_content}\n\n---\n{wrapper}"
 
-    with open(CODEX_TASK_FILE, "w", encoding="utf-8") as f:
+    task_path = os.path.abspath(CODEX_TASK_FILE)
+    with open(task_path, "w", encoding="utf-8") as f:
         f.write(task_content)
     open(CODEX_DONE_FILE, "w").close()
 
@@ -79,14 +80,13 @@ def dispatch(profile, task_content, effort):
         "--color", "never",
         "--dangerously-bypass-approvals-and-sandbox",
         "--config", f"model_reasoning_effort={effort}",
-        "codex_task.md oku",
+        f"Read {CODEX_TASK_FILE} and execute every step using shell commands. Do not describe — actually run them.",
     ]
     result = subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=600)
-    # Stream transcript to stderr so user can see it
     if result.stdout:
         print(result.stdout, file=sys.stderr)
 
-    # Prefer CODEX_DONE.md; fall back to parsing STATUS block from cx stdout
+    # Prefer CODEX_DONE.md
     try:
         done = open(CODEX_DONE_FILE, encoding="utf-8").read().strip()
         if done:
@@ -96,7 +96,20 @@ def dispatch(profile, task_content, effort):
 
     # Fallback: extract STATUS block from cx stdout
     match = re.search(r"(STATUS:.*)", result.stdout, re.DOTALL)
-    return match.group(1).strip() if match else ""
+    if match:
+        summary = match.group(1).strip()
+        with open(CODEX_DONE_FILE, "w", encoding="utf-8") as f:
+            f.write(summary)
+        return summary
+
+    # Last resort: if cx exited 0, Codex completed but forgot to write CODEX_DONE.md
+    if result.returncode == 0:
+        summary = "STATUS: COMPLETED (inferred — Codex exit 0, CODEX_DONE.md not written)\nCheck git log for changes."
+        with open(CODEX_DONE_FILE, "w", encoding="utf-8") as f:
+            f.write(summary)
+        return summary
+
+    return ""
 
 
 def main():
