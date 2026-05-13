@@ -210,6 +210,11 @@ Narrative direction:
 | #123 | Weapon Decouple Architecture (Yol A) — EN SON KARAR | Faz 1+ |
 | #124 | Weapon Form Variation | Faz 1 reduced (Warblade × 2), Faz 2 full matrix |
 | #125 | Extra Weapon Attach | DEFER Faz 2+, Faz 1 sıfır |
+| #126 | Organic Room Dressing Pipeline (9-stage umbrella) | Faz 1.5 P1 |
+| #127 | Stamp/Cluster Library | Faz 1.5 P1 |
+| #128 | Tile Metadata SO + WangResolver | Faz 1 P0 |
+| #129 | Biome Preset SO (F1 Shattered Keep MVP) | Faz 1 P0 |
+| #130 | Naturalness Validator + Path Readability | Faz 1.5 P1 |
 
 **Durum: FAZ_MASTER tablosu sadece Faz-impact özet. #72-#123 canonical kararlar için `../MASTER_KARAR_BELGESI.md` referans. Son güncelleme 2026-05-14 S70.**
 
