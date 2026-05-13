@@ -1,0 +1,610 @@
+fileFormatVersion: 2
+guid: 3e107c6e2a6e059488ca6d7a7f8146a8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6404338533733137103
+    second: wang_rubble_path_0
+  - first:
+      213: 3587206594194741084
+    second: wang_rubble_path_1
+  - first:
+      213: -7425686723209890939
+    second: wang_rubble_path_2
+  - first:
+      213: -1640448554348668923
+    second: wang_rubble_path_3
+  - first:
+      213: 2486264163016017652
+    second: wang_rubble_path_4
+  - first:
+      213: 3947175126706695351
+    second: wang_rubble_path_5
+  - first:
+      213: -5846820737875236375
+    second: wang_rubble_path_6
+  - first:
+      213: -1771887217184761371
+    second: wang_rubble_path_7
+  - first:
+      213: -5760861059561387054
+    second: wang_rubble_path_8
+  - first:
+      213: 5912433598728210992
+    second: wang_rubble_path_9
+  - first:
+      213: -5602892338858461331
+    second: wang_rubble_path_10
+  - first:
+      213: 2708680621510145248
+    second: wang_rubble_path_11
+  - first:
+      213: 2846573794526026285
+    second: wang_rubble_path_12
+  - first:
+      213: 4887058557091034560
+    second: wang_rubble_path_13
+  - first:
+      213: 7858700310972651698
+    second: wang_rubble_path_14
+  - first:
+      213: 166232212555925641
+    second: wang_rubble_path_15
+  - first:
+      213: 7905079359662276883
+    second: wang_rubble_path_wang_00
+  - first:
+      213: -6820690706086848868
+    second: wang_rubble_path_wang_01
+  - first:
+      213: -4575645733329329440
+    second: wang_rubble_path_wang_02
+  - first:
+      213: -7166569824448914045
+    second: wang_rubble_path_wang_03
+  - first:
+      213: -3301933733361482551
+    second: wang_rubble_path_wang_04
+  - first:
+      213: -1748530826209962906
+    second: wang_rubble_path_wang_05
+  - first:
+      213: -5162633005842715167
+    second: wang_rubble_path_wang_06
+  - first:
+      213: -2069243195496949735
+    second: wang_rubble_path_wang_07
+  - first:
+      213: 1573225556633447374
+    second: wang_rubble_path_wang_08
+  - first:
+      213: -5452809155564237821
+    second: wang_rubble_path_wang_09
+  - first:
+      213: 6533833436318995525
+    second: wang_rubble_path_wang_10
+  - first:
+      213: -3823639884241354008
+    second: wang_rubble_path_wang_11
+  - first:
+      213: -6634274910572896744
+    second: wang_rubble_path_wang_12
+  - first:
+      213: -4713332331264807392
+    second: wang_rubble_path_wang_13
+  - first:
+      213: 5498023450739979094
+    second: wang_rubble_path_wang_14
+  - first:
+      213: -274402995550257307
+    second: wang_rubble_path_wang_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 0
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_00
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31141f17bcb74bd60800000000000000
+      internalID: 7905079359662276883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_01
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9692ecb0f90851a0800000000000000
+      internalID: -6820690706086848868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_02
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e2afd6c27a0080c0800000000000000
+      internalID: -4575645733329329440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_03
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38d50bbf6ba3b8c90800000000000000
+      internalID: -7166569824448914045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_04
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c40c1f83cc2d22d0800000000000000
+      internalID: -3301933733361482551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_05
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6645fe84a78fbb7e0800000000000000
+      internalID: -1748530826209962906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_06
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1eda90d42a4aa58b0800000000000000
+      internalID: -5162633005842715167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_07
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 918928ae6429843e0800000000000000
+      internalID: -2069243195496949735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_08
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecbe3b6fe4835d510800000000000000
+      internalID: 1573225556633447374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_09
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30c889696fab354b0800000000000000
+      internalID: -5452809155564237821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_10
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5441d5184e6dcaa50800000000000000
+      internalID: 6533833436318995525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_11
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e247c6a8c3bfeac0800000000000000
+      internalID: -3823639884241354008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81e14056e125ee3a0800000000000000
+      internalID: -6634274910572896744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_13
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02ee89e8731e69eb0800000000000000
+      internalID: -4713332331264807392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_14
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 653bf1cd237ec4c40800000000000000
+      internalID: 5498023450739979094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_wang_15
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56f7cecedef113cf0800000000000000
+      internalID: -274402995550257307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      wang_rubble_path_0: -6404338533733137103
+      wang_rubble_path_1: 3587206594194741084
+      wang_rubble_path_10: -5602892338858461331
+      wang_rubble_path_11: 2708680621510145248
+      wang_rubble_path_12: 2846573794526026285
+      wang_rubble_path_13: 4887058557091034560
+      wang_rubble_path_14: 7858700310972651698
+      wang_rubble_path_15: 166232212555925641
+      wang_rubble_path_2: -7425686723209890939
+      wang_rubble_path_3: -1640448554348668923
+      wang_rubble_path_4: 2486264163016017652
+      wang_rubble_path_5: 3947175126706695351
+      wang_rubble_path_6: -5846820737875236375
+      wang_rubble_path_7: -1771887217184761371
+      wang_rubble_path_8: -5760861059561387054
+      wang_rubble_path_9: 5912433598728210992
+      wang_rubble_path_wang_00: 7905079359662276883
+      wang_rubble_path_wang_01: -6820690706086848868
+      wang_rubble_path_wang_02: -4575645733329329440
+      wang_rubble_path_wang_03: -7166569824448914045
+      wang_rubble_path_wang_04: -3301933733361482551
+      wang_rubble_path_wang_05: -1748530826209962906
+      wang_rubble_path_wang_06: -5162633005842715167
+      wang_rubble_path_wang_07: -2069243195496949735
+      wang_rubble_path_wang_08: 1573225556633447374
+      wang_rubble_path_wang_09: -5452809155564237821
+      wang_rubble_path_wang_10: 6533833436318995525
+      wang_rubble_path_wang_11: -3823639884241354008
+      wang_rubble_path_wang_12: -6634274910572896744
+      wang_rubble_path_wang_13: -4713332331264807392
+      wang_rubble_path_wang_14: 5498023450739979094
+      wang_rubble_path_wang_15: -274402995550257307
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
