@@ -15,12 +15,21 @@ namespace RIMA.Editor.RoomDesigner
     using UnityEngine.UIElements;
     using Object = UnityEngine.Object;
 
+    public enum BrushLayerMode
+    {
+        Base,
+        Decal,
+        Wall,
+        Prop
+    }
+
     public sealed class RimaRoomDesignerWindow : EditorWindow, IRoomDesignerContext
     {
         private const string UxmlPath = "Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uxml";
         private const string UssPath = "Assets/Editor/RoomDesigner/UI/RoomDesignerWindow.uss";
         private const string McpResponsePath = "Assets/Editor/RoomDesigner/McpResponses";
         private const string RoomDesignerLayerName = "RoomDesigner";
+        private const string DropShadowTilePath = "Assets/Art/VFX/DropShadow_Wall.asset";
         private const double PollIntervalSeconds = 0.5d;
 
         private RoomDesignerCanvas canvas;
@@ -38,6 +47,7 @@ namespace RIMA.Editor.RoomDesigner
         private double nextPollTime;
 
         [SerializeField] private RimaRoomBaselineTemplate activeTemplate;
+        [SerializeField] private BrushLayerMode _brushMode = BrushLayerMode.Base;
 
         [MenuItem("RIMA/Room Designer")]
         public static void Open()
@@ -56,10 +66,17 @@ namespace RIMA.Editor.RoomDesigner
         public Tilemap FloorTilemap => BaseTilemap;
         public Tilemap WallsTilemap => WallFrontTilemap;
         public Tilemap DecalsTilemap => DecalTilemap;
+        public TileBase WallTopTile => ActiveTile;
+        public TileBase DropShadowTile => AssetDatabase.LoadAssetAtPath<TileBase>(DropShadowTilePath);
         public RoomBlueprint ActiveBlueprint => activeBp;
         public bool IsWallOverrideMode { get; set; }
 
-        public RoomLayer ActiveLayer { get; set; } = RoomLayer.Base;
+        public RoomLayer ActiveLayer
+        {
+            get => ToRoomLayer(_brushMode);
+            set => SetBrushMode(ToBrushLayerMode(value));
+        }
+
         public TileBase ActiveTile { get; set; }
         public BrushMode ActiveBrush { get; set; } = BrushMode.Stamp;
 
@@ -93,15 +110,15 @@ namespace RIMA.Editor.RoomDesigner
 
         public Tilemap GetActiveTilemap()
         {
-            switch (ActiveLayer)
+            switch (_brushMode)
             {
-                case RoomLayer.Wall:
+                case BrushLayerMode.Wall:
                     return WallFrontTilemap;
-                case RoomLayer.Decal:
+                case BrushLayerMode.Decal:
                     return DecalTilemap;
-                case RoomLayer.Prop:
+                case BrushLayerMode.Prop:
                     return null;
-                case RoomLayer.Base:
+                case BrushLayerMode.Base:
                 default:
                     return BaseTilemap;
             }
@@ -200,7 +217,7 @@ namespace RIMA.Editor.RoomDesigner
         {
             EnsureRoomDesignerLayer();
             ActiveBrush = BrushMode.Stamp;
-            ActiveLayer = RoomLayer.Base;
+            _brushMode = BrushLayerMode.Base;
             HoveredCell = Vector3Int.zero;
             if (activeBp == null)
                 activeBp = ScriptableObject.CreateInstance<RoomBlueprint>();
@@ -332,18 +349,17 @@ namespace RIMA.Editor.RoomDesigner
                 activeLayerDropdown.label = "Brush Layer";
                 activeLayerDropdown.choices = new System.Collections.Generic.List<string>
                 {
-                    LayerLabel(RoomLayer.Base),
-                    LayerLabel(RoomLayer.Decal),
-                    LayerLabel(RoomLayer.Wall),
-                    LayerLabel(RoomLayer.Prop)
+                    LayerLabel(BrushLayerMode.Base),
+                    LayerLabel(BrushLayerMode.Decal),
+                    LayerLabel(BrushLayerMode.Wall),
+                    LayerLabel(BrushLayerMode.Prop)
                 };
-                activeLayerDropdown.value = LayerLabel(ActiveLayer);
+                SyncBrushLayerDropdown();
                 activeLayerDropdown.RegisterValueChangedCallback(evt =>
                 {
-                    if (TryParseLayerLabel(evt.newValue, out RoomLayer parsed))
+                    if (TryParseLayerLabel(evt.newValue, out BrushLayerMode parsed))
                     {
-                        ActiveLayer = parsed;
-                        MarkDirty();
+                        SetBrushMode(parsed);
                     }
                 });
             }
@@ -404,37 +420,94 @@ namespace RIMA.Editor.RoomDesigner
             }
         }
 
-        private static string LayerLabel(RoomLayer layer)
+        private void SetBrushMode(BrushLayerMode mode)
+        {
+            bool changed = _brushMode != mode;
+            _brushMode = mode;
+            SyncBrushLayerDropdown();
+
+            if (mode == BrushLayerMode.Prop && changed)
+            {
+                ShowNotification(new GUIContent("Props use prefab drag-drop"));
+            }
+
+            if (changed)
+            {
+                MarkDirty();
+            }
+        }
+
+        private void SyncBrushLayerDropdown()
+        {
+            if (activeLayerDropdown != null)
+            {
+                activeLayerDropdown.SetValueWithoutNotify(LayerLabel(_brushMode));
+            }
+        }
+
+        private static RoomLayer ToRoomLayer(BrushLayerMode mode)
+        {
+            switch (mode)
+            {
+                case BrushLayerMode.Decal:
+                    return RoomLayer.Decal;
+                case BrushLayerMode.Wall:
+                    return RoomLayer.Wall;
+                case BrushLayerMode.Prop:
+                    return RoomLayer.Prop;
+                case BrushLayerMode.Base:
+                default:
+                    return RoomLayer.Base;
+            }
+        }
+
+        private static BrushLayerMode ToBrushLayerMode(RoomLayer layer)
         {
             switch (layer)
             {
                 case RoomLayer.Decal:
-                    return "Paint Decal";
+                    return BrushLayerMode.Decal;
                 case RoomLayer.Wall:
-                    return "Paint Wall";
+                    return BrushLayerMode.Wall;
                 case RoomLayer.Prop:
-                    return "Paint Prop";
+                    return BrushLayerMode.Prop;
                 case RoomLayer.Base:
+                default:
+                    return BrushLayerMode.Base;
+            }
+        }
+
+        private static string LayerLabel(BrushLayerMode layer)
+        {
+            switch (layer)
+            {
+                case BrushLayerMode.Decal:
+                    return "Paint Decal";
+                case BrushLayerMode.Wall:
+                    return "Paint Wall";
+                case BrushLayerMode.Prop:
+                    return "Paint Prop";
+                case BrushLayerMode.Base:
                 default:
                     return "Paint Base";
             }
         }
 
-        private static bool TryParseLayerLabel(string label, out RoomLayer layer)
+        private static bool TryParseLayerLabel(string label, out BrushLayerMode layer)
         {
             switch (label)
             {
                 case "Paint Decal":
-                    layer = RoomLayer.Decal;
+                    layer = BrushLayerMode.Decal;
                     return true;
                 case "Paint Wall":
-                    layer = RoomLayer.Wall;
+                    layer = BrushLayerMode.Wall;
                     return true;
                 case "Paint Prop":
-                    layer = RoomLayer.Prop;
+                    layer = BrushLayerMode.Prop;
                     return true;
                 case "Paint Base":
-                    layer = RoomLayer.Base;
+                    layer = BrushLayerMode.Base;
                     return true;
                 default:
                     return Enum.TryParse(label, out layer);
@@ -519,6 +592,7 @@ namespace RIMA.Editor.RoomDesigner
             List<Vector3Int> allWallCells = CollectOccupiedCells(WallsTilemap);
             WallAutoConnect.RefreshNeighborhood(WallsTilemap, allWallCells, activeTemplate.wallVariants, activeBp);
             WallAutoConnect.BakeWallVariants(WallsTilemap, activeBp, activeTemplate.wallVariants);
+            RoomDesignerWallPolish.RefreshAll(WallsTilemap, WallTopTilemap, FloorTilemap, DecalsTilemap, WallTopTile, DropShadowTile);
 
             MarkDirty();
         }
@@ -546,6 +620,7 @@ namespace RIMA.Editor.RoomDesigner
 
             if (DecalPainter.PaintDecals(DecalsTilemap, activeBp, activeTemplate.decalSprites, activeBp.noiseSeed, activeTemplate.decalDensity))
             {
+                RoomDesignerWallPolish.RefreshAll(WallsTilemap, WallTopTilemap, FloorTilemap, DecalsTilemap, WallTopTile, DropShadowTile);
                 MarkDirty();
             }
         }
