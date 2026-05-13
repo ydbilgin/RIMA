@@ -5,6 +5,7 @@ namespace RIMA.Editor.RoomDesigner.Tools
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using RIMA.Systems.Map;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Tilemaps;
@@ -252,7 +253,8 @@ namespace RIMA.Editor.RoomDesigner.Tools
             string outputBaseName = baseName.StartsWith("wang_", StringComparison.OrdinalIgnoreCase) ? baseName : $"wang_{baseName}";
             string outputName = $"{outputBaseName}_RuleTile.asset";
             string outputPath = UniqueAssetPath($"{GeneratedFolder}/{outputName}");
-            CreateRuleTileFromTemplate(Path.GetFileNameWithoutExtension(outputPath), maskSprites, outputPath);
+            RuleTile ruleTile = CreateRuleTileFromTemplate(Path.GetFileNameWithoutExtension(outputPath), maskSprites, outputPath);
+            CreateMetadataAssets(manifest, outputBaseName, ruleTile, outputPath);
             return outputPath;
         }
 
@@ -284,7 +286,8 @@ namespace RIMA.Editor.RoomDesigner.Tools
             }
 
             string outputPath = UniqueAssetPath($"{GeneratedFolder}/{tileSet.Key}_RuleTile.asset");
-            CreateRuleTileFromTemplate(Path.GetFileNameWithoutExtension(outputPath), spritesByMask, outputPath);
+            RuleTile ruleTile = CreateRuleTileFromTemplate(Path.GetFileNameWithoutExtension(outputPath), spritesByMask, outputPath);
+            CreateMetadataAssets(TileManifest.DefaultWang(), tileSet.Key, ruleTile, outputPath);
             string message = $"Imported existing tile assets:\n{outputPath}";
             Debug.Log(message);
             return message;
@@ -312,7 +315,7 @@ namespace RIMA.Editor.RoomDesigner.Tools
             importer.SaveAndReimport();
         }
 
-        private static void CreateRuleTileFromTemplate(string assetName, Sprite[] spritesByMask, string outputPath)
+        private static RuleTile CreateRuleTileFromTemplate(string assetName, Sprite[] spritesByMask, string outputPath)
         {
             RuleTile source = AssetDatabase.LoadAssetAtPath<RuleTile>(TemplatePath);
             if (source == null)
@@ -332,6 +335,70 @@ namespace RIMA.Editor.RoomDesigner.Tools
             }
 
             AssetDatabase.CreateAsset(tile, outputPath);
+            return tile;
+        }
+
+        private static void CreateMetadataAssets(TileManifest manifest, string outputBaseName, RuleTile ruleTile, string ruleTilePath)
+        {
+            RimaTerrainType terrainType = TerrainTypeFromTileType(manifest.TileType);
+            foreach (TileEntry entry in manifest.Tiles)
+            {
+                string assetName = $"metadata_{outputBaseName}_{entry.Mask:00}.asset";
+                string metadataPath = UniqueAssetPath($"{GeneratedFolder}/{assetName}");
+                var metadata = ScriptableObject.CreateInstance<TileAssetMetadata>();
+                metadata.name = Path.GetFileNameWithoutExtension(metadataPath);
+                metadata.tileId = $"{outputBaseName}_{entry.Mask:00}";
+                metadata.biomeType = RimaBiomeType.F1;
+                metadata.terrainType = terrainType;
+                metadata.tile = ruleTile;
+                metadata.weight = 1f;
+                metadata.supportsCollision = terrainType == RimaTerrainType.Wall || terrainType == RimaTerrainType.WallTop || terrainType == RimaTerrainType.Prop;
+                metadata.isCliffFront = terrainType == RimaTerrainType.Wall;
+                metadata.isCliffTop = terrainType == RimaTerrainType.WallTop;
+                metadata.isTransition = manifest.IsTransition;
+                metadata.decalAllowed = terrainType == RimaTerrainType.Floor;
+                metadata.scatterAllowed = terrainType == RimaTerrainType.Floor;
+                metadata.shadowRequired = metadata.supportsCollision;
+                metadata.wangMask = entry.Mask;
+                metadata.variantGroup = Path.GetFileNameWithoutExtension(ruleTilePath);
+                AssetDatabase.CreateAsset(metadata, metadataPath);
+            }
+        }
+
+        private static RimaTerrainType TerrainTypeFromTileType(string tileType)
+        {
+            if (string.IsNullOrWhiteSpace(tileType))
+            {
+                return RimaTerrainType.Floor;
+            }
+
+            string normalized = tileType.ToLowerInvariant();
+            if (normalized.Contains("wall_top") || normalized.Contains("walltop"))
+            {
+                return RimaTerrainType.WallTop;
+            }
+
+            if (normalized.Contains("wall") || normalized.Contains("cliff"))
+            {
+                return RimaTerrainType.Wall;
+            }
+
+            if (normalized.Contains("decal"))
+            {
+                return RimaTerrainType.Decal;
+            }
+
+            if (normalized.Contains("prop") || normalized.Contains("obstacle"))
+            {
+                return RimaTerrainType.Prop;
+            }
+
+            if (normalized.Contains("void"))
+            {
+                return RimaTerrainType.Void;
+            }
+
+            return RimaTerrainType.Floor;
         }
 
         private static RuleTile.TilingRule CreateNsewRule(int mask, Sprite sprite)
@@ -590,6 +657,18 @@ namespace RIMA.Editor.RoomDesigner.Tools
             public string TileType { get; }
             public int TileSize { get; }
             public List<TileEntry> Tiles { get; }
+            public bool IsTransition => TileType != null && TileType.IndexOf("transition", StringComparison.OrdinalIgnoreCase) >= 0;
+
+            public static TileManifest DefaultWang()
+            {
+                var tiles = new List<TileEntry>();
+                for (int mask = 0; mask < 16; mask++)
+                {
+                    tiles.Add(new TileEntry(mask, mask, 0, 0, DefaultTileSize, DefaultTileSize));
+                }
+
+                return new TileManifest("topdown_wang", DefaultTileSize, tiles);
+            }
         }
 
         private sealed class TileEntry
