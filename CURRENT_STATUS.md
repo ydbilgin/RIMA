@@ -1,12 +1,32 @@
 # CURRENT_STATUS
-**2026-05-13 -- S66 sonu | Combat FAZ 1.0 TAMAMLANDI**
+**2026-05-13 -- S66 sonu | 8 LOCK + 60+ dosya temizlik (commit 3b14b39 [cleanup])**
 
-## Active Priorities
-P0: F1 Shattered Keep tileset Aseprite cleanup + Unity import (Karar #116 quality bar)
-P1: F1 props uretim (broken_pillar, rubble_pile, cracked_rune_stone, iron_cage) — tileset style reference ile
-P2: Codex Faz 1.0 MVP RoomBaselineGenerator dispatch (Karar #115)
-P3: PixelPerfectCamera ayar test (Karar #113 — GridSnapping/CropFrame/Orthographic)
-P4: Combat FAZ 1.0 Unity playtest (InputBuffer+AttackToken+MercifulDodge)
+## YENI SESSION ILK ADIMLAR (S67 Start)
+
+**Sıralı yapılacak — yukarıdan aşağı:**
+
+1. **Bu dosya + PROJECT_RULES okundu** (session start kuralı zaten yapıyor)
+2. **STAGING/PIXELLAB_PRODUCTION_STEPS.md** oku → PixelLab adım adım üretim talimatları (kullanıcı yapacak)
+3. **STAGING/SESSION_S66_HANDOFF.md** oku → full S66 context (gerekirse)
+4. **Codex Faz 1.0 MVP dispatch isteği gelirse** → `STAGING/task_faz1_0_map_builder_mvp.md` yaz, cx_dispatch.py ile background gönder (Karar #115 + #117 + #118 mimarisi, 12-16h scope)
+5. **Kullanıcı asset üretiyor mu?** Sor — eğer evet, PixelLab çıktıları geldikçe QC yap (Karar #116 quality bar: Raggedness, edge-blend, palette, view angle ~35°)
+6. **Asset PASS olunca:** TileImportWizard ile Unity'ye import (Codex Faz 1.0 sonrası JSON parser otomatize eder)
+
+## Active Priorities (S67)
+
+P0: PixelLab F1 floor variant 64-batch üretim (`create_tiles_pro`, prompt STAGING/'de hazır)
+P1: PixelLab F1 wall variant 64-batch üretim (floor PASS sonrası)
+P2: PixelLab F1 decor 64-batch üretim (`create_object`, 64 numbered item liste hazır)
+P3: Codex Faz 1.0 MVP dispatch (RoomBaselineGenerator + PixelLab JSON parser + multi-layer tilemap, ~12-16h)
+P4: PixelPerfectCamera ayar test (Karar #113 — GridSnapping/CropFrame/Orthographic kalibrasyon)
+P5: Combat FAZ 1.0 Unity playtest (InputBuffer+AttackToken+MercifulDodge)
+P6: 8 yön anim rework (Karar #114) — Faz 1.0 sonu
+
+## Sub-Cleanup Aday (S67 başında veya sonunda)
+- `STAGING/_archive/` daha sıkı eleme (DUNGEON_LIGHTING + alabaster_dawn_polish_ref REF_NUGGETS'a damıtıldı, originaller silinebilir)
+- `subs_*.json3` ve `parsed_transcripts.txt` (S66'da YouTube video subtitle dump) — kontrol et, hala lazım mı, değilse sil
+- `_FULL_INDEX.md` orphan check tekrar
+- Kullanıcının söylediği "tekrar cleanup yapalım" — S67'de quick lint + arşivle
 
 ## Open Questions
 - AttackToken player-scope: mob-only kalacak karar verildi (FAZ 1.0'da player token almaz)
