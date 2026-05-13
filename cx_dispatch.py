@@ -64,15 +64,19 @@ def select_profile(profiles):
     return None
 
 
-def dispatch(profile, task_content, effort):
-    # Always wrap with CODEX_DONE.md instruction at both start and end
-    wrapper = "ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE.md AS THE VERY LAST STEP."
+def dispatch(profile, task_content, effort, task_file_path=None):
+    # Use profile-specific task/done files to avoid parallel dispatch race condition
+    safe_profile = re.sub(r"[^a-zA-Z0-9_-]", "_", profile)
+    task_file = f"CODEX_TASK_{safe_profile}.md"
+    done_file = f"CODEX_DONE_{safe_profile}.md"
+
+    wrapper = f"ALWAYS WRITE YOUR RESULT SUMMARY TO {done_file} AS THE VERY LAST STEP."
     task_content = f"{wrapper}\n\n{task_content}\n\n---\n{wrapper}"
 
-    task_path = os.path.abspath(CODEX_TASK_FILE)
+    task_path = os.path.abspath(task_file)
     with open(task_path, "w", encoding="utf-8") as f:
         f.write(task_content)
-    open(CODEX_DONE_FILE, "w").close()
+    open(done_file, "w").close()
 
     cmd = [
         "cmd", "/c", CX_CMD, "run", profile, "exec",
@@ -80,19 +84,24 @@ def dispatch(profile, task_content, effort):
         "--color", "never",
         "--dangerously-bypass-approvals-and-sandbox",
         "--config", f"model_reasoning_effort={effort}",
-        f"Read {CODEX_TASK_FILE} and execute every step using shell commands. Do not describe — actually run them.",
+        f"Read {task_file} and execute every step using shell commands. Do not describe — actually run them.",
     ]
-    result = subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=600)
+    result = subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1200)
     if result.stdout:
         print(result.stdout, file=sys.stderr)
 
-    # Prefer CODEX_DONE.md
-    try:
-        done = open(CODEX_DONE_FILE, encoding="utf-8").read().strip()
-        if done:
-            return done
-    except FileNotFoundError:
-        pass
+    # Prefer profile-specific DONE file, fallback to shared CODEX_DONE.md
+    for df in [done_file, CODEX_DONE_FILE]:
+        try:
+            done = open(df, encoding="utf-8").read().strip()
+            if done:
+                # Append to shared CODEX_DONE.md for history
+                if df != CODEX_DONE_FILE:
+                    with open(CODEX_DONE_FILE, "a", encoding="utf-8") as f:
+                        f.write("\n" + done)
+                return done
+        except FileNotFoundError:
+            pass
 
     # Fallback: extract STATUS block from cx stdout
     match = re.search(r"(STATUS:.*)", result.stdout, re.DOTALL)

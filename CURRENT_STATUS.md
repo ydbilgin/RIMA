@@ -1,185 +1,225 @@
 # CURRENT_STATUS
-**2026-05-14 — S69 sonu (Yol A + Karar #122 LOCKED) | /clear öncesi**
+**2026-05-14 — S70 gece Sonnet orchestrator | 2 Codex task hâlâ çalışıyor**
 
 > **Path convention:** `~/.ccs/.../memory/` = user-level auto-memory (Claude auto-loads via STUB MODE). `MEMORY/` (project root) = Codex/Gemini shared. Below references use full path for clarity when ambiguous.
 
-## YENI SESSION ILK ADIMLAR (S70 Start)
+## S71 İLK ADIMLAR (Yeni session — kullanıcı uyandığında)
 
-**Sıralı yapılacak:**
+1. **CURRENT_STATUS oku** (bu dosya)
+2. **Antigravity 4 P0 sonucu kontrol:** `STAGING/antigravity_4_p0_iter2_report.md` var mı? read_console → 0 error?
+3. **Karar #126-130 LOCK:** `TASARIM/MASTER_KARAR_BELGESI.md`'ye #126-130 eklendi mi? (laurethgame Codex tamamlandıysa)
+4. **Karar #118b dispatch:** `STAGING/codex_karar_118b_tilemap_layers.md` → laurethgame profil (eğer S70 gece tamamlanmadıysa)
+5. **Animation spec LOCK onayı:** `STAGING/animation_system_spec_LOCKED.md` kullanıcıya göster — PixelLab batch başlamadan önce son onay
+6. **Tile asset pack karar:** `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io satın alma kararı
+7. **Karar #128 dispatch:** Karar #118a tamamlandı → Tile Metadata SO + WangResolver (bağımlılık: #118a ✓)
+
+**Öncelik sırası:** Antigravity 4 P0 sonuç QC → #118b → #128 → animation batch başlat (PixelLab Web UI)
+
+## YENİ SESSION İLK ADIMLAR (Sonnet S70 gece / sonraki)
 
 1. **Bu dosya + PROJECT_RULES okundu** (session start kuralı)
-2. **STAGING/karar_122_echo_resonance_tiers.md** oku — Karar #122 4-tier Echo Resonance LOCK spec
-3. **C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_yol_a_weapon_decouple.md** oku — Yol A weapon decouple mimari LOCK
-4. **C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_karar_122_echo_resonance.md** oku — Karar #122 lookup memory
-5. **STAGING/batch_silahsiz_body_prompts.md** oku — 10 class silahsız body batch prompts (NLM canon names + neutral idle)
-6. **rima-design background task status check:** T2/T3/T4 addon design + Codex review beklemede (dispatched S69 sonu)
-   - Output dosyaları: `STAGING/karar_122_addons_codex_review.md` + `STAGING/karar_122_addons_final.md`
+2. **STAGING/handoff_sonnet_overnight.md** oku — gece yapılacaklar kapsamlı talimat
+3. **3 Codex dispatch durumu kontrol:** notify gelmiş mi?
+   - `STAGING/animation_codex_step2_review.md` → output dosyası beklenir
+   - `STAGING/codex_antigravity_4_p0_iter2.md` → implementation report beklenir
+   - `STAGING/codex_karar_118_tile_import_wizard.md` → wizard + 4-layer iskelet beklenir
+4. Notify sırasıyla devam et — handoff dosyasında her bir Codex sonucu için "next step" listelendi
 
-## S69 — Major Decisions LOCKED 2026-05-14
+## S70 LOCKED Decisions (2026-05-14)
 
-### 1. Yol A — Weapon Decouple Architecture
-Body silahsız + ayrı weapon sprite + Unity transform attach (Hades/ETG/Brotato pattern). PixelLab weapon-drift problemini yapısal olarak çözer.
-- Player primary = decouple
-- Phantom Echo = weapon-baked OK (0.4s brief)
-- Level 1 MVP (orbit attach) → Level 2 polish (per-frame anchor)
-- Detay: `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_yol_a_weapon_decouple.md`
+### LOCKED bu session
+- **Karar #119 LOCK** — AI ASCII Matrix Parser (MASTER_KARAR'a eklendi, S68 P4 priority, Faz 1.6 Codex ~6-8h)
+- **Karar #122 LOCK** — Echo Resonance Multi-Tier (4-tier T1 MVP + T2/T3/T4 Faz 2)
+- **Karar #123 LOCK — EN SON KARAR** — Yol A Weapon Decouple (body silahsız + ayrı weapon sprite, Faz 1 OrbitAttach Level 1)
+- **Karar #124 LOCK** — Weapon Form Variation (Faz 1 Warblade Base+T2 Rift, Faz 2 full matrix)
+- **Karar #125 LOCK + DEFER Faz 2+** — Extra Weapon Attach (Faz 1 SIFIR, 10 class secondary roster)
+- **Karar #18 HYBRID annotation** — no equip slot core korunur, class identity-bound secondary istisna
 
-### 2. Karar #122 — Echo Resonance Multi-Tier
-Cross-class Shadow Echo extension, 4-tier trigger architecture. Mevcut Karar #5/#7'yi extend, no conflict.
-- T1 Commit-Beat (100%, 1.2s ICD, 35% dmg) — **MVP baseline**
-- T2 Resonance Hit (15-25%, 0.8s ICD, 25%) — Faz 2 (rima-design dispatched)
-- T3 Empowered Skill (100% on cast, 50%) — Faz 2
-- T4 Rift Proc Bond (3 Family Tags → 100% + armor pen) — Faz 2
-- Primary Skill Enhancement, Universal 3-Beat Combo, Facing-Relative Spawn
-- Detay: `STAGING/karar_122_echo_resonance_tiers.md` + `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_karar_122_echo_resonance.md`
+### PROPOSED LOCK Codex BEKLİYOR
+- **Karar #126** — Organic Room Dressing Pipeline (9-stage umbrella)
+- **Karar #127** — Stamp/Cluster Library (ChatGPT en kritik)
+- **Karar #128** — Tile Metadata SO + WangResolver (Unity-side logic)
+- **Karar #129** — Biome Preset SO (RimaBiomeType enum yükseltmesi)
+- **Karar #130** — Naturalness Validator + Path Readability
 
-### 3. Neutral Idle Base Pose
-Base rotation = sadece yön referansı (neutral standing). Class-specific stance idle = ANİMASYON clip'lerinde (Karar #109 ambient idle).
-- Detay: `STAGING/batch_silahsiz_body_prompts.md` Universal Rules
+Detay: `STAGING/karar_126_to_130_organic_pipeline.md` + `~/.ccs/.../memory/project_karar_126_to_130_organic_pipeline_proposed.md`
 
-### 4. ETG × Alabaster Dawn Visual Positioning (Confirmed)
-RIMA = pixel art top-down action + polished environments + chibi 64×64 (Karar #100 KEEP) + dark fantasy mood.
+## Active Background Tasks (S70 gece Sonnet — SON DURUM)
 
-### 5. School Deadline — ~25 days from 2026-05-14
-MVP target: 1 class (Warblade) + 1 mob (seam_crawler) + 1 room (F1 Shattered Keep) + Tier 1 cross-class proof (Elementalist Fireball Echo).
+**cx_dispatch.py:** timeout 600→1200s + encoding fix + profile-specific task file (race condition fix). Her profil artık kendi `CODEX_TASK_<profile>.md` dosyasını kullanıyor.
 
-## Active Priorities S70
+### ✅ TAMAMLANAN (S70 gece)
+- **Karar #118a TileImportWizard** — `commit 1b99080` ✓ (TileImportWizard.cs + RuleTile template, compile clean, test pass)
+- **Animation Step 2 review** — `STAGING/animation_step2_review_output.md` ✓ (rima-sonnet, 7 soru cevaplandı)
+- **Animation Step 3 LOCK** — `STAGING/animation_system_spec_LOCKED.md` ✓ (rima-design Opus, ~2600+ kelime, 10 LOCK kararı)
+- **Karar #122 T2/T3/T4 review** — `STAGING/karar_122_addons_review_output.md` ✓ (rima-sonnet)
+- **Tile asset pack araştırması** — `STAGING/tile_asset_pack_research.md` ✓ (rima-research, en iyi aday: RafaelMatos Crypt + Old Prison itch.io)
+
+### 🔄 ÇALIŞIYOR
+1. **Codex yasinderyabilgin → Antigravity 4 P0 iter 2** — Y-Sort (0,1,0) + Drop Shadow + Wall Front/Top + 1px Wang outline. Output: STAGING/antigravity_4_p0_iter2_report.md.
+2. **Codex laurethgame → Karar #126-130 MASTER_KARAR LOCK** — 5 yeni karar tablosu + FAZ_MASTER sync. Output: CODEX_DONE_laurethgame.md.
+
+### ⏳ BEKLEYEN (laurethgame bitince)
+- **Karar #118b** — 4-layer tilemap iskelet (BaseTilemap/DecalTilemap/WallsTilemap_Front/WallsTilemap_Top/PropContainer) + brush mode dropdown. Task: `STAGING/codex_karar_118b_tilemap_layers.md`.
+
+## 🎬 Video Analiz DONE
+
+- URL: https://www.youtube.com/shorts/1X4Oq2X41ZU
+- Method: Gemini vision (rima-research dispatch S70)
+- Sonuç: **85-90% RIMA spec uyumlu** (10-12 fps snappy frame-skip, 35° top-down 8-dir, 64×64 hi-fi, 1px selout, breathing idle, extreme run lean, attack smear, dust puff VFX)
+- Tek divergence: video standart anatomi, RIMA chibi adapt gerek
+- 5 action item: smear/breathing/lean/selout/dust → animation_spec_draft.md Bölüm 6'ya entegre
+- Detay: `STAGING/animation_video_analysis.md`
+
+## 🔬 Yeni Session Research Items
+
+1. **Hazır tile asset pack araştırması** — RIMA spec'lerine uygun (Unity Asset Store, itch.io, GitHub):
+   - Alabaster Dawn benzeri organik top-down
+   - 32px tile / PPU=64 / chibi 64×64 karakter uyumu
+   - F1 Shattered Keep biome match (ruined keep, charcoal floor, plate wall)
+   - Wang autotile veya 3x3 RuleTile set ready
+   - License: commercial OK (Steam release)
+   - Hedef: PixelLab gen yerine veya tamamlayıcı olarak hazır pack kullan, hız +
+   - rima-research dispatch yeni session ilk işlerden
+
+## S70 Discovery Flow (Opus session)
+
+1. /lint atıldı — 5 conflict bulundu (MASTER_KARAR'da #119/#122 eksik, FAZ_MASTER sync overstated, mob roster mismatch, MEMORY stub eksik, CURRENT_STATUS path confusion)
+2. Codex lint fix dispatch → tüm conflict düzeltildi, commit ed1eed7
+3. Video analizi (rima-research, Gemini vision): 85-90% RIMA spec uyumlu, 5 action item (smear/breathing/lean/selout/dust)
+4. 16 idle Create Image Pro prompt (rima-asset) — 10 class + 6 mob
+5. 3 mob brief eksik (Plate Widow, Rift Hound, Hollow Arbiter) → rima-design (Opus) full brief
+6. rima-asset 3 mob prompt revize (no-chains Arbiter, 96px Hound, no-insect Widow)
+7. Unity error fix → 0 error, 0 warning (stale console, refresh temizledi)
+8. rima-design weapon variation extension (Karar #124/#125 + #18 HYBRID) → MASTER_KARAR + FAZ_MASTER sync (Codex commit)
+9. Animation spec draft (rima-design Opus Step 1/3) → STAGING/animation_spec_draft.md, ~200 gen Warblade Faz 1, MARGINAL FIT 25-day
+10. User Alabaster Dawn doğallık emphasized → ChatGPT feedback geldi (Organic Pipeline + Stamp Library + WangResolver) → 5 yeni Karar #126-130 PROPOSED
+11. 3 paralel Codex dispatch (Animation Step 2 + Antigravity 4 P0 + Karar #118)
+12. Unity scene cleanup: `_IsoGame.unity` (yanlış IsometricZAsY sample artifact) silindi. `Demo/RoomPipelineTest.unity` Build Settings tek scene (top-down Rectangle ✓)
+
+## Faz 1 MVP Scope (25-gün school deadline, 2026-05-14'ten)
 
 ### Hafta 1 (Gün 1-7): Foundation
-- **P0 Codex dispatch:** Unity weapon-attach Level 1 + 3-Beat combo state machine + Commit-Beat detection + phantom shader skeleton
-- **P0 PixelLab batch:** 10 silahsız body regen (Style Reference workflow, neutral idle, NLM canon class identities — `STAGING/batch_silahsiz_body_prompts.md`)
-- **P0 Weapon sprites:** 8 weapon decouple items + 1 Elementalist rune disc (Brawler exempt = 9 total)
+- **P0 Codex dispatch (running):** Animation Step 2 + Antigravity 4 P0 + Karar #118 TileImportWizard
+- **P0 PixelLab batch:** 16 idle Create Image Pro gen (10 class + 6 mob) — kullanıcı Web UI (`STAGING/idle_batch_class_mob_create_image_pro.md`)
+- **P0 Karar #128 base** (Tile Metadata SO + WangResolver) — Karar #118 dispatch extension olarak ekle
+- **P0 Karar #129 F1 preset** — 1 BiomePreset SO Shattered Keep (1 saat)
 
 ### Hafta 2 (Gün 8-14): Warblade Primary + Animations
-- Warblade idle (breathing-idle template) + run (Brian's Extreme Pose × 8 dir) + 3-hit Iron Combo (Commit-Beat marker on Beat 3)
-- Warblade hurt + death anims
-- seam_crawler idle + walk + attack + death
+- Warblade 8 anim × 8 yön ~176 gen (idle/run/Beat1-2-3/hurt/death/dash)
+- Karar #122 T1 AnimationClip event Beat 3 marker
+- Yol A Level 1 OrbitAttach (HandAnchor + WeaponDatabase)
+- seam_crawler 4-yön ~24 gen
+- Karar #124 Warblade Base+T2 Rift greatsword sprite (~30 min + 1h Unity)
+- **Faz 1.5 polish stretch:** Karar #109 Warblade ambient idle (16 gen)
 
 ### Hafta 3 (Gün 15-21): Room + Cross-Class T1
-- F1 Shattered Keep 1 room (mevcut LayeredRoomGenerator + Karar #123 polish if scope allows)
+- F1 Shattered Keep 1 room (LayeredRoomGenerator + Antigravity 4 P0 + Karar #118 4-layer + Karar #128 WangResolver)
 - Combat loop integration
-- T1 Echo implementation: Iron Combo Beat 3 → Elementalist Fireball Echo proc, facing-relative spawn, phantom shader, ICD 1.2s
-- Primary enhancement T1 (+20% Commit-Beat dmg)
+- T1 Echo: Iron Combo Beat 3 → Elementalist Fireball Echo proc, facing-relative ±45° 24px, phantom 0.4s
+- Primary enhancement T1 (+20% Beat 3 dmg)
 
 ### Hafta 3.5 (Gün 22-25): Polish + Demo
 - SFX + screen shake + hit pause
-- Balance pass (Warblade dmg, mob HP, room complexity)
+- Balance pass
 - Demo build
 
-## Background Tasks (Pending S70 Start Check)
-
-### rima-design (dispatched 2026-05-14, S69 sonu) — Karar #122 T2/T3/T4 Addon Design
-**Task:** Proper T2/T3/T4 spec with Codex review.
-- T2 Resonance Hit: Altar pasif tasarımı (count, scaling math, family tag mapping)
-- T3 Empowered Skill: Skill Evolution draft system (10 primary × Q/E/R/F evolution variants, weapon swap potential)
-- T4 Rift Proc Bond: Family Tag system (4 tags, application matrix, 3-stack detection, UI feedback)
-- Each tier's primary enhancement detail
-- Codex review for production cost + balance complexity + Faz 2 fit
-- Output: `STAGING/karar_122_addons_final.md`
-
-**Status:** Bekleniyor (S70 başında result check)
-
-## Asset Inventory (Quick Reference)
+## Asset Inventory
 
 ### Player class anchors (10/10, chibi)
 `Characters/anchors/{warblade, ranger, shadowblade, elementalist, ravager, ronin, gunslinger, brawler, summoner, hexer}.png` + `reference.png`
-- Note: elementalist.png + summoner.png anchor visuals may be swapped — NLM canon authoritative
+- elementalist.png + summoner.png anchor visuals may be swapped — NLM canon authoritative
 - Detay: `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\reference_pixellab_anchors_inventory.md`
 
 ### Mob anchors (6/6, F1-uygun chibi)
-seam_crawler, plate_widow, relic_caster, rift_gound, hollow_arbitter, fracture_imp
+seam_crawler, plate_widow, relic_caster, rift_hound (canonical, `rift_gound` filename typo), hollow_arbiter (canonical, `hollow_arbitter` filename typo), fracture_imp
 
-### PixelLab characters (10 chibi 120-124px)
-Detay: `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\reference_pixellab_anchors_inventory.md`
+### Idle Create Image Pro prompts (DONE)
+- `STAGING/idle_batch_class_mob_create_image_pro.md` — 10 class + 6 mob ready
+- 3 mob brief authoritative: `STAGING/3_mob_visual_brief.md`
 
-## Open Questions (S70)
+### Animation spec
+- DRAFT: `STAGING/animation_spec_draft.md`
+- Step 2 Codex review BEKLİYOR
+- Step 3 rima-design LOCK BEKLİYOR (Codex output sonrası)
 
-1. **School deadline kesin tarih?** (~25 gün tahmin)
-2. **PixelLab Style Reference image source:** `reference.png` mi yoksa silahsız warblade master sheet mi gen edilecek?
-3. **hollow_arbitter weapon decouple:** MVP'de bake (kolay) yoksa decouple (consistency)?
-4. **summoner/elementalist anchor swap:** rename mi yoksa NLM canon ile uyumlu regen mi?
-5. ✅ **rima-design T2/T3/T4 result GELDİ** — `STAGING/karar_122_addons_final.md` yazıldı. Codex review task `STAGING/karar_122_addons_codex_review.md` hazır, dispatch BEKLİYOR.
+## Pending User Tasks
 
-## 🎬 Animation Style Reference — Video PENDING USER DESCRIPTION
+1. **Create Image Pro gen 16 idle** — `STAGING/idle_batch_class_mob_create_image_pro.md` (10 class + 6 mob)
+2. **Karar #116 Pro tile prompt re-gen** (Faz 1.5) — Raggedness ≥40% + 3+ variant Perlin
+3. **PixelLab Style Reference image source confirm** — reference.png mi yoksa Warblade master sheet mi
+4. **summoner/elementalist anchor swap fix** (rename veya regen)
+5. **Karar #126-130 LOCK onayı** (rima-design Opus önerdi, user verdict)
 
-**User S69 sonu paylaştı:** https://www.youtube.com/shorts/1X4Oq2X41ZU
-- Title: "Player character customization!"
-- WebFetch description çekemedi (YouTube scraping limited)
-- **Claude videoyu izleyemiyor**
-- **S70 başında user'dan iste:** Video'da görsel animation stilini tarif et (frame count? smoothness? fidelity? motion blur? squash&stretch? hangi referans?) veya 4-5 key frame screenshot paylaş
+## Closed Questions
 
-**Pending dispatch:** Video stil anlaşılınca rima-design + Codex paralel dispatch:
-- Tüm animasyonların stil spec'i (idle, run, attack, hurt, death, skill VFX)
-- Yol A weapon-attach animation timing
-- Karar #122 T1 phantom + facing-relative spawn animation feel
-- Per-class ambient idle (Karar #109) detail
-- Frame count + cost-bracket optimization
-
-## 🔁 Pending Dispatches S70 Start
-
-1. **Codex review T2/T3/T4:** `STAGING/karar_122_addons_codex_review.md` → cx_dispatch.py
-2. **rima-design animation system spec** (video açıklaması sonrası)
-3. **Codex Unity weapon-attach Level 1 + 3-Beat combo state machine** (paralel)
-4. **PixelLab batch silahsız body regen** (paralel, kullanıcı Web UI)
-
-## NLM Canon Findings (S69)
-
-NLM `30ddffa5-292f-4248-8e77-68074af901be` notebook'tan çekilen kritik bilgiler:
-- **Karar #5 + #7 LOCKED:** Cross-class = Shadow Echo + Resonance Altar (0 manuel slot, Commit-Beat proc)
-- **Karar #42:** No walk anim, only Run cycle (Brian's Extreme Pose workflow: 2 ekstrem poz + interpolate)
-- **Karar #52 + #59:** Physical equipment = sprite, glow/aura/projectile = Unity VFX (embedded glow YASAK)
-- **Karar #80 Class Silhouette Bible:** 10 class locked identity (canonical names + colors + pose archetypes)
-- **Karar #99 + #71:** Weapons always in hand/belt, no puff (Ronin sheath/draw exception)
-- **Karar #109 Ambient Idle:** Each class has personality-specific idle
-- **50 Echo Skills locked:** 5 per class, mix of Melee/Ranged/Zone/Buff
-
-## Obsolete (S69 cleanup)
-
-- `STAGING/warblade_run_prompt_S69.md` — Yol A öncesi state-anchored run pivot scrap
-- `STAGING/warblade_run_v2_state_anchored.md` — Yol A öncesi, scrap
-- S68 STATUS class roster names (Rivenguard, Shrike, Lonebow, Pyrelance, Rotwidow, Hollowcaller, Veilbinder, Sparkbreech) — RETIRED, NLM canon authoritative
-- "Karar #122 Off-hand Summon" early draft — REVOKED 2026-05-14
-- "Karar #122 Rift Echo 2-ghost SW+SE world-relative" intermediate — REVOKED
+- ~~School deadline kesin tarih?~~ → ~25 gün, MVP scope tek class + tek mob + tek room + T1 Echo
+- ~~Video stil tanımı?~~ → Gemini vision 85-90% RIMA spec uyumlu (10-12 fps, 35° top-down 8-dir, 64×64 hi-fi, smear/breathing/lean/selout/dust action items)
+- ~~hollow_arbitter weapon decouple?~~ → rima-design verdict: MOB için Karar #123 uygulanmaz, baked OK (Phantom Echo emsali)
+- ~~rima-design T2/T3/T4 addon?~~ → DONE `STAGING/karar_122_addons_final.md` (Codex review BEKLİYOR — Sonnet gece dispatch)
+- ~~_IsoGame.unity yanlış scene?~~ → Silindi, RoomPipelineTest tek scene Build Settings'te
 
 ## Session History
 
+### S70 gece (2026-05-14) — Sonnet overnight orchestrator — cx timeout fix + 4 parallel dispatch
+
+**cx_dispatch.py:** timeout 600s→1200s, encoding='utf-8' errors='replace' fix (UnicodeDecodeError çözüldü).
+
+**Task splits:** Karar #118 → 3 parça (#118a wizard, #118b tilemap layers, #118c brush mode stretch).
+
+**Paralel başlatılan:**
+- Codex yasinderyabilgin: Antigravity 4 P0 iter 2 (re-dispatch)
+- Codex laurethgame: Karar #118a wizard only
+- rima-sonnet: Animation Step 2 review
+- rima-research: Tile asset pack araştırması
+
+**Karar #126-130 MASTER_KARAR task dosyası hazır** (STAGING/codex_karar_126_to_130_master_add.md) — Opus auto-lock onayıyla, uygun Codex profili açılınca dispatch.
+
+**Profile kullanılan:** yasinderyabilgin + laurethgame (user onayı). laurethayday önceliği düşürüldü.
+
+### S70 (2026-05-14) — /lint + 5 Karar LOCK + ChatGPT Organic Pipeline + 3 Codex dispatch + Unity scene cleanup
+
+**Commits:**
+- ed1eed7 — `[lint S70] Karar #119/#122/#123 + FAZ_MASTER sync + path netleşt`
+- (BEKLİYOR) Codex MASTER_KARAR Karar #124/#125 + #18 HYBRID commit
+- (BEKLİYOR) Codex Antigravity 4 P0 iter 2 commit
+- (BEKLİYOR) Codex Karar #118 TileImportWizard commit
+
+**Memory files created S70:**
+- `~/.ccs/.../memory/project_karar_124_125_weapon_extensions.md`
+- `~/.ccs/.../memory/project_karar_126_to_130_organic_pipeline_proposed.md`
+
+**STAGING workfiles S70:**
+- `lint_fix_2026_05_14.md` — Codex lint fix task
+- `animation_video_analysis.md` — Gemini video analizi 85-90% match
+- `idle_batch_class_mob_create_image_pro.md` — 10 class + 6 mob idle prompts
+- `3_mob_visual_brief.md` — rima-design 3 mob full brief
+- `weapon_variation_extension.md` — rima-design Karar #124/#125 design
+- `karar_124_125_master_add.md` — Codex MASTER_KARAR add task
+- `animation_spec_draft.md` — rima-design Step 1/3 draft
+- `animation_codex_step2_review.md` — Codex Step 2 task
+- `codex_antigravity_4_p0_iter2.md` — Codex 4 P0 implementation task
+- `codex_karar_118_tile_import_wizard.md` — Codex #118 task
+- `karar_126_to_130_organic_pipeline.md` — Karar #126-130 full spec
+- `handoff_sonnet_overnight.md` — Sonnet gece talimat
+
 ### S69 (2026-05-13 → 2026-05-14) — Yol A Pivot + Karar #122 Lock + NLM Canon Audit
+Detay: `~/.ccs/.../memory/project_yol_a_weapon_decouple.md` + `~/.ccs/.../memory/project_karar_122_echo_resonance.md`
 
-**Discovery flow:**
-1. Warblade run anim drift (greatsword tutmuyor, pose walking-like)
-2. State-anchored running stride apex `8d5d8d19` denemesi — yine drift, edit-image inpaint farklı sword üretti
-3. **PIVOT to Yol A** — weapon decouple architectural decision (Hades/ETG/Brotato pattern)
-4. ETG × Alabaster Dawn positioning confirmed (chibi 64×64 KEEP)
-5. Neutral idle base + ambient idle in anim clips
-6. Cross-class design question raised → NLM canon revealed Karar #5/#7 already locked
-7. User input: tier system + LMB proc chance + empowered skill + serious combo design
-8. **Karar #122 LOCKED** — 4-tier Echo Resonance extending #5/#7
-9. rima-design dispatched for T2/T3/T4 addon spec
-
-**Memory files created S69:**
-- `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_yol_a_weapon_decouple.md`
-- `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_karar_122_echo_resonance.md`
-- `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_class_roster_canon.md`
-- `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\reference_pixellab_anchors_inventory.md`
-- `C:\Users\ydbil\.ccs\instances\yasinderyabilgin\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\project_pixellab_friendly_genres.md` (Yol B reference, S69 early)
-
-**STAGING workfiles created S69:**
-- `karar_122_echo_resonance_tiers.md` — full Karar #122 spec
-- `batch_silahsiz_body_prompts.md` — 10 class silahsız body batch (NLM canon + neutral idle)
-- `cross_class_design_codex_question.md` + `cross_class_design_final.md` — initial Codex consultation
-
-### S68 (2026-05-13) — Map Layered + Warblade Production Guide
-**Map progress:**
-- LayeredRoomGenerator (CA cave, B5678/S45678) + LayeredRoomPainter
-- Keep_Combat.asset charcoal palette
-- F1 palette LOCKED: Floor #2C2A2A, Wall #4A3F3F, Cold blue #7BA7BC, Rift cyan #00FFCC, Torch #C4682A
-- Antigravity 4 spec (Y-Axis Sort applied, Drop Shadow/Wall Elevation/1px Outline pending Codex iter 2)
-- Karar #123 PROPOSED (URP 2D Light + torch flicker + dust mote + sub-tile fragments)
-
-**Warblade Production Guide v3→v4 motion-only narrative format** (REPLACED by Yol A approach S69).
+### S68 (2026-05-13) — Map Layered + Antigravity 4 P0 LOCKED feedback
+Detay: `~/.ccs/.../memory/feedback_antigravity_2_5d_locked_specs.md`
 
 ### S67 (2026-05-13) — Faz 1.0+1.5 implementation
-Commits: a4757ae, 2192fcf, 388f6d0, 5017622 — Room Designer MVP + DecalPainter + PropPlacer + Wang transition + per-biome templates + Wang RuleTile importer.
+Commits: a4757ae, 2192fcf, 388f6d0, 5017622 — Room Designer MVP + Wang RuleTile importer.
 
-### S66 (2026-05-13) — Combat FAZ 1.0 + Anim FIX prompts
-(detail in S66 handoff)
+## NLM Canon (S69 audit findings — korundu)
+
+NLM `30ddffa5-292f-4248-8e77-68074af901be`:
+- **Karar #5/#7:** Cross-class Shadow Echo + Resonance Altar (Karar #122 extension)
+- **Karar #42:** Run only, Brian's Extreme Pose
+- **Karar #52/#59:** Sprite equipment, Unity VFX glow
+- **Karar #80:** Class Silhouette Bible (10 class canon)
+- **Karar #98:** Rift cyan+violet mob palette LOCKED (Plate Widow/Rift Hound/Hollow Arbiter canon)
+- **Karar #99/#71:** Weapons in hand (Ronin sheath/draw exception)
+- **Karar #109:** Ambient idle per class
+- **50 Echo Skills:** 5 per class, mix Melee/Ranged/Zone/Buff
