@@ -15,6 +15,7 @@ Notlar:
 - REACTIVE: HP, Resource, Hit, Kill veya Dodge kosul ailesinden tetiklenir. Dodge tetigi REACTIVE CD reset'ine sebep olamaz.
 - STATE: 4-10s surer ve F aktifken bloklanir.
 - Summoner STRIKE skill'leri `summon` tag alir ve Ghost Attack'e koyulamaz.
+> **REVOKED 2026-05-13:** Ghost Attack Z/X slot sistemi Karar #60 + SKILL_SYSTEM_v2 ile kaldirildi. Shadowblade icin sadece Shadow Echo kalir.
 - Hexer STATE skill'leri `accumulation` tag alir.
 
 ---

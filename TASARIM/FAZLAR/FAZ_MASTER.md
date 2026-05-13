@@ -44,7 +44,7 @@ ozet: "RIMA referans dokumani"
 | **Act** | Act 1 kismen (~5-7 node — Entry+Combat+Elite slice) | Act 1 tam (15 node, dungeon_act1_map.md) | Act 1 + Act 2 | Act 1-2 tam | Act 1-2-3 + Final |
 | **Boss** | Penitent Sovereign (F1) | Penitent Sovereign (F1+F2) | Echo Twin (F1+F2) | Fracture Sovereign (F1-F3) | The Architect (F1-F4) |
 | **Mob** | 7 (3 grunt + 4 prefab) | 9 (+SeamCrawler, Twice-Born) | 11 (+EchoHound, FractureBorn) | 13 (+SporeHollow, TheWound) | 16 (tam set) |
-| **Oda** | Combat, Elite | +Shop, Unknown | +Spirit Encounter | +Curse Gate, Event | Tam |
+| **Oda** | Combat, Elite | +Shop, Unknown | +Spirit Encounter | +Curse Gate (Faz 2, Karar #62), Event | Tam |
 | **Tier** | Common | Common, Rare | +Epic | +Legendary | Tam |
 | **Economy** | Shards | Shards + Echoes basit | Echoes aktif | + meta shop | Tam meta-prog |
 | **Cross-class** | — | — | Pasif (28 kombo: 8x7/2) | +Ultimate | 45 kombo (10x9/2) |
@@ -104,12 +104,12 @@ Narrative direction:
 
 | Mob | Act 1 | Act 2 | Act 3 | Boyut | Tier |
 |-----|-------|-------|-------|-------|------|
-| ShardWalker | ✅ | ✅ | ✅ | 128px (S43) | Grunt |
-| VoidThrall (+HalfThrall) | ✅ | ✅ | — | 128px (S43) | Grunt |
-| Penitent | ✅ | ✅ | — | 128px (S43) | Grunt |
-| ChainWarden | ✅ | ✅ | ✅ | 128px (S43) | Grunt |
-| RelicCaster | — | ✅ | ✅ | 128px (S43) | Grunt |
-| FractureImp | ✅ | ✅ | — | 128px (S43) | Grunt |
+| ShardWalker | ✅ | ✅ | ✅ | 128px (PPU=64 standardı, Karar #74) | Grunt |
+| VoidThrall (+HalfThrall) | ✅ | ✅ | — | 128px (PPU=64 standardı, Karar #74) | Grunt |
+| Penitent | ✅ | ✅ | — | 128px (PPU=64 standardı, Karar #74) | Grunt |
+| ChainWarden | ✅ | ✅ | ✅ | 128px (PPU=64 standardı, Karar #74) | Grunt |
+| RelicCaster | — | ✅ | ✅ | 128px (PPU=64 standardı, Karar #74) | Grunt |
+| FractureImp | ✅ | ✅ | — | 128px (PPU=64 standardı, Karar #74) | Grunt |
 | SeamCrawler | ✅ | ✅ | — | 256×128px (S43) | Grunt |
 
 ### Set B — Planlanan (MOB_TASARIMI)
@@ -184,7 +184,7 @@ Narrative direction:
 | #64-70 | AD v1 Sprint: ActionCommitProfile, 3-layer feedback, posture v1, dash-cancel | Faz 1+ |
 | #71 | Silah Single-State: hep elde, Ronin sheath/draw istisna | Faz 1+ |
 
-**Durum: SYNC GUNCELLENDI 2026-05-09 S46 (#60-#71 eklendi).**
+**Durum: SYNC GUNCELLENDI 2026-05-13 S66 (#72-#114 eklendi, MASTER_KARAR_BELGESI canonical)**
 
 ---
 
@@ -197,7 +197,7 @@ Narrative direction:
 | Shop | 🛒 | — | ✅ | ✅ | ✅ | ✅ |
 | Unknown | ❓ | — | ✅ | ✅ | ✅ | ✅ |
 | Spirit Encounter | 👁️ | — | — | ✅ | ✅ | ✅ |
-| Curse Gate | 🌀 | — | — | — | ✅ | ✅ |
+| Curse Gate | 🌀 | — | ✅ Faz 2 (Karar #62) | — | — | — |
 | Event | 🎲 | — | — | — | ✅ | ✅ |
 
 ---

@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE.md AS THE VERY LAST STEP.
-
 # Codex Final Strategy Review: PixelLab Tool Stratejisi (S66)
 
 **Tarih:** 2026-05-13
@@ -132,7 +130,3 @@ Faz 1.0'a +2-3 saat ek scope. Gelecek tüm PixelLab export'larını saniyeler i�
 - Kod yazma yok, sadece strateji + tasarım
 - User pipeline disiplini istiyor — "şu kadar gen + şu kadar iş, hangi siparişle" net olmalı
 - Effort: high
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE.md AS THE VERY LAST STEP.

@@ -1,21 +1,30 @@
 # CURRENT_STATUS
-**2026-05-13 -- S65 sonu | Animation Prompts Skill-Aligned + Ambient Idle System**
+**2026-05-13 -- S66 sonu | Combat FAZ 1.0 TAMAMLANDI**
 
 ## Active Priorities
-P0: PixelLab animasyon uretimi (web UI) -- STAGING/pixellab_animation_prompts_10char.md HAZIR (30/30 prompt, skill-aligned). Opus final judgment pending (yeni sessionda bak: STAGING/anim_prompts_skill_review_result.md). Ronin attack_basic FIX bekleniyor (FAIL: stationary draw-slash → moving Sheath Walk slash).
-P1: Unity cleanup -- eski placeholder/dead code temizligi (Codex gorevi yeni sessionda). BaseMobBehavior OnDestroy token cleanup hala bekliyor.
-P2: Unity combat impl devami -- Plan+Opus ile sonraki adim (InputBuffer, AttackToken entegrasyonu).
-P3: Asset batch -- 14 map obj 32px; tile F1+W1
-P4: Vista Room Template (Karar #85)
-P5: Local audio/video pipeline
+P0: F1 Shattered Keep tileset Aseprite cleanup + Unity import (Karar #116 quality bar)
+P1: F1 props uretim (broken_pillar, rubble_pile, cracked_rune_stone, iron_cage) — tileset style reference ile
+P2: Codex Faz 1.0 MVP RoomBaselineGenerator dispatch (Karar #115)
+P3: PixelPerfectCamera ayar test (Karar #113 — GridSnapping/CropFrame/Orthographic)
+P4: Combat FAZ 1.0 Unity playtest (InputBuffer+AttackToken+MercifulDodge)
 
 ## Open Questions
-- Ronin attack_basic: Opus final kararı bekleniyor (stationary draw-slash → moving Sheath Walk)
-- Bazi WARN items: Elementalist Rift Bolt el kaynagi, Ravager 3-hit zincir, Brawler jab kimliği — Opus FIX/ACCEPT karar verecek
+- AttackToken player-scope: mob-only kalacak karar verildi (FAZ 1.0'da player token almaz)
+- Cancel window: progress-based (BasicAttackProfile.cancelWindowFraction) korunacak, AnimationEvent yok
 - Batch17 4 FAIL mob regen: PixelLab web UI ile uretim (Karar #106)
 - Camera shake Faz 1.0'a ne zaman: combat core oturduktan sonra
 
 ## Session History
+
+### S66 (2026-05-13) — Combat FAZ 1.0 Dispatch + Anim FIX Prompts
+- 5 FIX animation prompt yaziildi (rima-asset): Ronin attack_basic (moving sheath slash), Ronin attack_heavy (Soken-giri fan), Elementalist attack_basic (bolt elden, disc orbiting), Ranger attack_basic (compound bow+cam wheels), Ravager attack_basic (3-hit Brutal Swing chain)
+- Combat FAZ 1.0 plan LOCKED: Step1=mob OnDestroy fix, Step2=token mob-only (karar), Step3=InputBuffer ns fix, Step4=cancel progress-based (karar), Step5=MercifulDodge
+- Codex dispatch: unity_cleanup_s66 + inputbuffer_fix_s66 + mercifuldodge_s66 (tumu running)
+- Mimari kararlar: AttackToken player-scope DISI (mob-only), Cancel window AnimationEvent DISI (progress-based korunacak)
+- Combat FAZ 1.0 TAMAMLANDI: cleanup(1ebaf42) + MercifulDodge(b420f08) commit edildi; InputBuffer no-change-required (zaten dogruymus); AttackToken mob-only + cancel progress-based mimari karar olarak kilitledi
+- Karar #115 AI-Assisted Map Builder LOCKED: deterministic procedural baseline + designer brush polish; Faz 1.0 MVP 12-16h, Faz 1.5 polish 30-40h
+- Karar #116 Tile Transition Quality Standard LOCKED: Raggedness/variant/edge-blend/runtime lighting kriterleri
+- Karar #115 onaylama: kullanici Antigravity onerisini netlestirdi (oyun gibi = PixelLab Map editor uyarlamasi, fullscreen game-view DEGIL)
 
 ### S65 sonu (2026-05-13) -- Animation Prompts Skill-Aligned + Ambient Idle System
 - PixelLab UI kapasitesi LOCKED (Karar #108): Custom V3 4-16f, Create State 20-40 gen, Custom Frames interpolasyon workflow, keep-first-frame optional
@@ -93,3 +102,10 @@ P5: Local audio/video pipeline
 | #105 | Create Character Params | view=low top-down, n_directions=8, proportions=chibi, outline=black |
 | #106 | PixelLab MCP Scope | Uretim icin MCP kullanilmaz (ref image yok); web UI kullanilir |
 | #107 | Animation Prompts | run+attack_basic+attack_heavy/skill_cast; STAGING/pixellab_animation_prompts_10char.md |
+| #111 | Awakening + Trace | Class intro shard + run-içi cryptic identity trace overlay, Faz 1.0 4-cap pool |
+| #112 | Lore Glossary | Shard/Trace/Awakening/Echo terim disambiguation |
+| #113 | Camera Convergence | ~35° tek konverjans + Orthographic Size kalibrasyonu, 45° tile REJECT |
+| #114 | 8 Direction Animation | 8 yön LOCKED (5 gen + 3 mirror), Karar #53/#88 REVOKED |
+| #115 | AI-Assisted Map Builder | Unity Editor F2 + Generate + brush rotur; Faz 1.0 MVP generator + RoomConfig save kopru |
+| #116 | Tile Transition Quality | Raggedness >=40, 3+ variant, edge-blend QC, runtime lighting only |
+| #110 | Combat FAZ 1.0 Mimari | AttackToken player-scope DISI (mob-only); Cancel window progress-based (BasicAttackProfile.cancelWindowFraction); MercifulDodge 0.18s grace flag |

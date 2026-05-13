@@ -25,7 +25,7 @@ Overhead greatsword smash, both arms raise dark steel blade high above head full
 Light forward run with floating rune disc orbiting the right hand at waist height, robes trailing behind, knees lifting moderately, free left arm swinging in counter rhythm, faint ember wisps streaming from the disc edge. [6] frames.
 
 **attack_basic:**
-Right hand thrusts rune disc forward at arm extension, brief amber charge glow pulses across the disc surface, disc launches off the hand as a spinning projectile trailing ember wisps, arm recoils slightly, body leans forward into the cast. [5] frames.
+Right hand extends forward with open palm, floating golden rune disc pulses bright amber beside the right shoulder as a channeling focus, a compressed bolt of rift energy launches from the open palm fingertips in a straight line, brief recoil pulls the hand back, rune disc continues orbiting at shoulder height throughout. [5] frames.
 
 **skill_cast:**
 Both arms raise overhead, floating rune disc detaches and hovers directly above the head spinning at high speed, body arches back as concentric amber-ember rings pulse outward from the disc in expanding waves, both arms snap downward in release as the disc surges forward. [7] frames.
@@ -51,7 +51,7 @@ Twin-dagger lunge stab, both arms coil back with daggers in reverse grip flankin
 Athletic forward run, bow held low in left hand parallel to the body, right arm swinging freely in counter rhythm, slight forward lean, medium knee lift, hair and back quiver bouncing with each stride. [6] frames.
 
 **attack_basic:**
-Bow raised to eye level in left hand, right hand nocks arrow and draws string back to cheek, brief hold at full draw, fingers release, string snaps forward, arrow launches, upper body absorbs the kick with a slight backward lean. [5] frames.
+Compound bow raised to eye level in left hand showing the cam wheels at both limb tips, right hand nocks arrow and draws string back to cheek using the mechanical let-off, brief hold at full draw with bow arm steady, fingers release cleanly, string snaps and cams rotate forward, arrow launches, upper body absorbs the kick with a slight backward lean. [5] frames.
 
 **skill_cast:**
 Arrow nocked and bow arm raised, right hand draws string fully past the cheek with body coiling back, charged energy brightens along the arrow shaft during a sustained hold with bow arm trembling slightly, explosive release snap fires the arrow in a bright streak, bow arm extends fully forward in follow-through. [7] frames.
@@ -64,7 +64,7 @@ Arrow nocked and bow arm raised, right hand draws string fully past the cheek wi
 Wild aggressive forward charge, dual short compact axes held wide at the sides, bare shoulders rolling heavily with each stride, exaggerated stomping footfalls, head tilted slightly down and forward. [6] frames.
 
 **attack_basic:**
-Alternating axe chops, right short compact axe swings down diagonally from upper right into the center, immediately followed by left short compact axe swinging down from upper left, body rocks side to side with each chop in rhythm. [5] frames.
+Brutal Swing three-hit chain, first hit: both short compact axes swing outward simultaneously in a wide horizontal arc sweeping across at torso height, second hit: both axes raise overhead and slam down together in an overhead blow, third hit: axes drive into the ground with body weight behind them in a final ground-pound, body resets to wide stance after the third impact. [5] frames.
 
 **attack_heavy:**
 Short aggressive forward leap with both short compact axes held at the sides, legs tucked into landing position while airborne, both feet slam down hard and simultaneously on landing, both compact axes swing down and outward in a brief AoE arc on impact, body settles into a low crouched landing stance. [7] frames.
@@ -77,10 +77,10 @@ Short aggressive forward leap with both short compact axes held at the sides, le
 Disciplined steady forward run, left hand resting on katana saya at left hip, right hand floating near the grip in draw-ready position, minimal vertical bob, smooth even strides with controlled posture. [6] frames.
 
 **attack_basic:**
-Iaido draw-slash, right hand grips katana and blade flashes out of saya in a single horizontal sweep at chest height, brief extended arm pose held at full reach, fluid return slide of blade back into saya at left hip. [5] frames.
+Moving sheath-draw light slash, body stepping forward while right hand draws katana from left-hip saya mid-stride, blade flicks out in a quick diagonal cut from low-left to high-right without stopping, momentum carries the step through and blade stays drawn at the end of the swing rather than returning to saya. [5] frames.
 
 **attack_heavy:**
-Two-handed overhead iaido cut, katana drawn fully overhead with both hands gripping the hilt, brief stillness at the apex, explosive vertical downward cut splitting straight down the centerline, low finishing stance with blade angled down and body leaning into the strike. [6] frames.
+Soken-giri fan-slash sequence, katana drawn into a low-left starting stance with both hands gripping the hilt, body pivoting sharply to sweep the blade in a rising diagonal arc from low-left to high-right, brief pause at apex, second sweeping arc descending from high-right back down and across in the opposite direction, follow-through with blade angled low and body rotated through the full fan motion. [6] frames.
 
 ---
 

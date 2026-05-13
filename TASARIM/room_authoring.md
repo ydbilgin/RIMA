@@ -76,3 +76,46 @@ RoomLoader, Load() sirasinda prefab cellSize/gridLayout/orientation'ini base Iso
 - Task C: Tile paint (3 pilot prefab icin F1 tile kullanimi)
 - Task D (Task B playtest PASS sonrasi): Legacy + DungeonWorldBuilder + RoomTemplate + DepthBandTileSet tek commit'te sil
 
+## RIMA Map Builder (Karar #115 LOCKED)
+
+### Mimari
+- Unity Editor Window tabanli (mevcut F2 hotkey).
+- Fullscreen "in-game editor" framing REJECTED — mevcut Editor Window kalir, brush UX ve toolbar polish ile evrilir.
+- LLM/PixelLab API cagrisi YASAK (Karar #106 uyumlu) — tum AI baseline pure C# deterministic.
+
+### Faz 1.0 Bilesenleri (MVP, 12-16 saat)
+- `Assets/Scripts/Systems/Map/RoomBaselineGenerator.cs` — System.Random, GenerationInput kontrati.
+- `Assets/Scripts/Systems/Map/RoomBaselineTemplate.cs` — ScriptableObject (biome, archetypeId, w/h araligi, floor variant weight, wall variant rules, anchor zone defaults).
+- `RoomDesignerWindow` toolbar `btn-generate` butonu.
+- Save akisi: RoomBlueprint asset + Room Prefab + RoomPrefabLink + **RoomConfig** (zorunlu, RoomLoader kontratina uyumluluk).
+- FloorVariantPainter + WallAutoConnect bake entegrasyonu (mevcut sistemler cagrilir).
+- byte[] grid + LUT variant metadata (mevcut RoomBlueprint.floorVariantIndex byte[] uyumlu).
+
+### Faz 1.5 Bilesenleri (Polish, 30-40 saat)
+- Inpaint Region brush mode — kilitsiz hucreleri re-seed, locked hucreler dokunulmaz.
+- Force re-seed komutu — lock'lari yok sayar (explicit designer action).
+- Anchor Zone painter — tile-mask + zone type enum + weight float. Save sirasinda Transform/child marker'a donusur.
+- RenderTexture cache + repaint debounce.
+- Preview kamera ~35 derece konverjans kalibrasyonu (Karar #113 uyumu).
+- floorOverrideVariantIndex eklenmesi (wall icin mevcut overrideVariantIndex var, floor icin de gerekli).
+
+### Exit Criteria Faz 1.0
+- Ayni GenerationInput ile bit-identical RoomBlueprint uretilir.
+- 5 farkli seed/biome/archetype generate, RoomLoader runtime hatasiz yukler.
+- Designer manuel duzeltme orani %20 alti.
+- Save edilen prefab RoomConfig referansi tasir, RoomLoader RoomConfig-missing hata atmaz.
+- UnityEngine.Random global state generator cagrisi sirasinda degismez.
+
+### Naming Netlestirme
+"8 wall variant" terminolojisi yanlis okunabilir. Dogrusu: **4-bit NSEW mask → 8 wall connection tile variants** (her komsuluk kombinasyonu icin ayri tile). Karakter 8 yon animasyonu (Karar #114) ile karistirilmamali — ayri domain.
+
+### REJECTED Listesi
+- Fullscreen "oyun gibi" in-game editor (Antigravity onerisi, scope yutucu)
+- LLM runtime/editor cagrisi
+- PixelLab Inpaint API cagrisi (Karar #106 ihlali)
+- PNG export (RIMA prefab tabanli)
+- Runtime procedural 15-node placement override (Karar #62 ihlali)
+- RoomLoader secim mantigi bypass
+- Rect/polygon anchor schema (tile-mask kullanilir)
+- UnityEngine.Random global state kullanimi (determinism)
+
