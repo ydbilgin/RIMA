@@ -1,29 +1,19 @@
 # CURRENT_STATUS
-**2026-05-14 — S70 gece Sonnet orchestrator | 2 Codex task hâlâ çalışıyor**
+**2026-05-14 — S71 Sonnet gece orchestrator | Faz 1 P0 Codex TAMAMLANDI | Kullanıcı uyandığında: animasyon onayı + PixelLab batch**
 
 > **Path convention:** `~/.ccs/.../memory/` = user-level auto-memory (Claude auto-loads via STUB MODE). `MEMORY/` (project root) = Codex/Gemini shared. Below references use full path for clarity when ambiguous.
 
-## S71 İLK ADIMLAR (Yeni session — kullanıcı uyandığında)
+## S72 İLK ADIMLAR (Yeni session — kullanıcı uyandığında)
 
 1. **CURRENT_STATUS oku** (bu dosya)
-2. **Antigravity 4 P0 sonucu kontrol:** `STAGING/antigravity_4_p0_iter2_report.md` var mı? read_console → 0 error?
-3. **Karar #126-130 LOCK:** `TASARIM/MASTER_KARAR_BELGESI.md`'ye #126-130 eklendi mi? (laurethgame Codex tamamlandıysa)
-4. **Karar #118b dispatch:** `STAGING/codex_karar_118b_tilemap_layers.md` → laurethgame profil (eğer S70 gece tamamlanmadıysa)
-5. **Animation spec LOCK onayı:** `STAGING/animation_system_spec_LOCKED.md` kullanıcıya göster — PixelLab batch başlamadan önce son onay
-6. **Tile asset pack karar:** `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io satın alma kararı
-7. **Karar #128 dispatch:** Karar #118a tamamlandı → Tile Metadata SO + WangResolver (bağımlılık: #118a ✓)
+2. **2 aktif Codex dispatch kontrol** (blvtexp8a + bbat8dpw5):
+   - `CODEX_DONE_yasinderyabilgin.md` → LayeredRoomPainter biome wiring tamamlandı mı?
+   - `CODEX_DONE_laurethgame.md` → Player prefab wiring tamamlandı mı?
+3. **Animation spec LOCK onayı:** `STAGING/animation_system_spec_LOCKED.md` kullanıcıya göster — PixelLab batch başlamadan önce son onay gerekiyor
+4. **Tile asset pack karar:** `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io — satın alma kararı kullanıcıda
+5. **Idle batch başlat (PixelLab Web UI):** `STAGING/idle_batch_class_mob_create_image_pro.md` — 10 class + 6 mob, kullanıcı kredileri yenilince
 
-**Öncelik sırası:** Antigravity 4 P0 sonuç QC → #118b → #128 → animation batch başlat (PixelLab Web UI)
-
-## YENİ SESSION İLK ADIMLAR (Sonnet S70 gece / sonraki)
-
-1. **Bu dosya + PROJECT_RULES okundu** (session start kuralı)
-2. **STAGING/handoff_sonnet_overnight.md** oku — gece yapılacaklar kapsamlı talimat
-3. **3 Codex dispatch durumu kontrol:** notify gelmiş mi?
-   - `STAGING/animation_codex_step2_review.md` → output dosyası beklenir
-   - `STAGING/codex_antigravity_4_p0_iter2.md` → implementation report beklenir
-   - `STAGING/codex_karar_118_tile_import_wizard.md` → wizard + 4-layer iskelet beklenir
-4. Notify sırasıyla devam et — handoff dosyasında her bir Codex sonucu için "next step" listelendi
+**Öncelik sırası:** Dispatch sonuçları QC → animation spec onayı → PixelLab idle batch → Karar #119 AI ASCII Parser dispatch
 
 ## S70 LOCKED Decisions (2026-05-14)
 
@@ -35,41 +25,46 @@
 - **Karar #125 LOCK + DEFER Faz 2+** — Extra Weapon Attach (Faz 1 SIFIR, 10 class secondary roster)
 - **Karar #18 HYBRID annotation** — no equip slot core korunur, class identity-bound secondary istisna
 
-### PROPOSED LOCK Codex BEKLİYOR
+### ✅ LOCKED (S70 gece Codex commit e9f329c)
 - **Karar #126** — Organic Room Dressing Pipeline (9-stage umbrella)
-- **Karar #127** — Stamp/Cluster Library (ChatGPT en kritik)
-- **Karar #128** — Tile Metadata SO + WangResolver (Unity-side logic)
-- **Karar #129** — Biome Preset SO (RimaBiomeType enum yükseltmesi)
-- **Karar #130** — Naturalness Validator + Path Readability
+- **Karar #127** — Stamp/Cluster Library (Faz 1.5 P1)
+- **Karar #128** — Tile Metadata SO + WangResolver ✓ IMPLEMENTED commit 737e3d1
+- **Karar #129** — Biome Preset SO ✓ IMPLEMENTED commit 6859ec9
+- **Karar #130** — Naturalness Validator + Path Readability (Faz 1.5 P1)
 
-Detay: `STAGING/karar_126_to_130_organic_pipeline.md` + `~/.ccs/.../memory/project_karar_126_to_130_organic_pipeline_proposed.md`
+Detay: `STAGING/karar_126_to_130_organic_pipeline.md`
 
-## Active Background Tasks (S70 gece Sonnet — SON DURUM)
+## Active Background Tasks (S71 gece Sonnet — SON DURUM)
 
-**cx_dispatch.py:** timeout 600→1200s + encoding fix + profile-specific task file (race condition fix). Her profil artık kendi `CODEX_TASK_<profile>.md` dosyasını kullanıyor.
+**cx_dispatch.py:** timeout 600→1200s + encoding fix + profile-specific task file (race condition fix).
 
 ### ✅ TAMAMLANAN (S70 gece)
-- **Karar #118a TileImportWizard** — `commit 1b99080` ✓ (TileImportWizard.cs + RuleTile template, compile clean, test pass)
-- **Animation Step 2 review** — `STAGING/animation_step2_review_output.md` ✓ (rima-sonnet, 7 soru cevaplandı)
-- **Animation Step 3 LOCK** — `STAGING/animation_system_spec_LOCKED.md` ✓ (rima-design Opus, ~2600+ kelime, 10 LOCK kararı)
-- **Karar #122 T2/T3/T4 review** — `STAGING/karar_122_addons_review_output.md` ✓ (rima-sonnet)
-- **Tile asset pack araştırması** — `STAGING/tile_asset_pack_research.md` ✓ (rima-research, en iyi aday: RafaelMatos Crypt + Old Prison itch.io)
+- **Karar #118a TileImportWizard** — `commit 1b99080` ✓
+- **Animation Step 2 review** — `STAGING/animation_step2_review_output.md` ✓
+- **Animation Step 3 LOCK** — `STAGING/animation_system_spec_LOCKED.md` ✓ (10 LOCK kararı)
+- **Karar #122 T2/T3/T4 review** — `STAGING/karar_122_addons_review_output.md` ✓
+- **Tile asset pack araştırması** — `STAGING/tile_asset_pack_research.md` ✓ (RafaelMatos Crypt + Old Prison)
+- **Karar #118b** — `commit 562c575` ✓ (5 tilemap layer + BrushLayerMode dropdown)
+- **Karar #126-130 MASTER_KARAR LOCK** — `commit e9f329c` ✓
+- **Antigravity 4 P0 iter 2** — `commit 4ea918e` ✓ (Y-Sort + DropShadow + Wall + Wang, 178/178 test)
+- **Karar #128 TileAssetMetadata + WangTileResolver** — `commit 737e3d1` ✓
+- **Karar #129 RimaBiomePreset + F1 Shattered Keep asset** — `commit 6859ec9` ✓
 
-### ✅ TAMAMLANAN (S70 gece — 2. batch)
-- **Karar #118b** — commit `562c575` ✓ (5 tilemap layer + BrushLayerMode dropdown, compile clean)
-- **Karar #126-130 MASTER_KARAR LOCK** — commit `e9f329c` ✓
+### ✅ TAMAMLANAN (S71 gece)
+- **SeloutOutline URP shader** — `commit e37541a` ✓ (8-neighbor selout, SeloutSprite.mat, ApplySeloutMaterial.cs)
+- **Beat3CommitTrigger + CombatHandler** — `commit 1158775` ✓ (StateMachineBehaviour, ICD 1.2s, Karar #122 T1)
+- **WeaponDatabaseSO + HandAnchorAttach Level 1** — `commit 3662ec6` ✓ (Karar #123 Yol A L1, Warblade Base asset)
 
-### ✅ TAMAMLANAN (S70 gece — 3. batch)
-- **Antigravity 4 P0 iter 2** — commit `4ea918e` ✓ (Y-Sort + DropShadow + Wall Front/Top + Wang outline prompt, 178/178 test)
+### ✅ TAMAMLANAN (S71 gece — 2. batch)
+- **LayeredRoomPainter PaintBiome()** — `commit 804a3f6` ✓ (4-layer Wang+biome, wallFront/wallTop routing)
+- **Player.prefab + HandAnchorAttach wiring** — `commit c33c5bd` ✓ (Player.prefab, CharacterSelectScreen scene fix)
 
-### 🔄 ÇALIŞIYOR
-1. **Codex laurethgame → Karar #128** — TileAssetMetadata SO + WangTileResolver.
-2. **Codex yasinderyabilgin → Karar #129** — F1 Shattered Keep BiomePreset SO (küçük scope, ~1h).
+### 🔄 ÇALIŞIYOR (S71 gece — 3. batch)
+1. **Codex laurethgame (bwstaax4z) → Karar #119 AI ASCII Parser** — TileAssetMetadata.charKey + AITilemapImporter EditorWindow
+2. **Codex yasinderyabilgin (bxs4ax12n) → Demo Scene Bootstrap** — _FazMVP_Demo.unity, Pixel Perfect Camera, Player.prefab spawn
 
-### ⏳ SIRADAKI (profil açılınca)
-- **Selout URP shader** (animation spec §5) — ScriptableRendererFeature, ~4-6h Codex
-- **Beat3CommitTrigger** (animation spec §4.3) — StateMachineBehaviour Karar #122 T1
-- **WeaponDatabase Level 1** (animation spec §4.4) — HandAnchor + OrbitAttach
+### ⏳ SIRADAKI
+- (Profiller meşgul — sonuçlar beklenince karar ver)
 
 ## 🎬 Video Analiz DONE
 
@@ -108,25 +103,23 @@ Detay: `STAGING/karar_126_to_130_organic_pipeline.md` + `~/.ccs/.../memory/proje
 
 ## Faz 1 MVP Scope (25-gün school deadline, 2026-05-14'ten)
 
-### Hafta 1 (Gün 1-7): Foundation
-- **P0 Codex dispatch (running):** Animation Step 2 + Antigravity 4 P0 + Karar #118 TileImportWizard
-- **P0 PixelLab batch:** 16 idle Create Image Pro gen (10 class + 6 mob) — kullanıcı Web UI (`STAGING/idle_batch_class_mob_create_image_pro.md`)
-- **P0 Karar #128 base** (Tile Metadata SO + WangResolver) — Karar #118 dispatch extension olarak ekle
-- **P0 Karar #129 F1 preset** — 1 BiomePreset SO Shattered Keep (1 saat)
+### Hafta 1 (Gün 1-7): Foundation — ✅ CODEX TAMAMLANDI
+- **✅ P0 Codex:** #118a/#118b TileImportWizard + 4-layer stack, #128 WangResolver, #129 BiomePreset, Antigravity 4 P0
+- **✅ P0 Codex:** SeloutOutline URP shader, Beat3CommitTrigger, WeaponDatabaseSO + HandAnchorAttach
+- **🔄 P0 Codex (çalışıyor):** LayeredRoomPainter biome wiring, Player.prefab + HandAnchorAttach wiring
+- **⏳ P0 PixelLab batch:** 16 idle Create Image Pro gen (10 class + 6 mob) — kullanıcı Web UI, krediler yenilenince
 
 ### Hafta 2 (Gün 8-14): Warblade Primary + Animations
-- Warblade 8 anim × 8 yön ~176 gen (idle/run/Beat1-2-3/hurt/death/dash)
-- Karar #122 T1 AnimationClip event Beat 3 marker
-- Yol A Level 1 OrbitAttach (HandAnchor + WeaponDatabase)
-- seam_crawler 4-yön ~24 gen
-- Karar #124 Warblade Base+T2 Rift greatsword sprite (~30 min + 1h Unity)
-- **Faz 1.5 polish stretch:** Karar #109 Warblade ambient idle (16 gen)
+- **⏳** Warblade 8 anim × 8 yön ~176 gen (idle/run/Beat1-2-3/hurt/death/dash) — PixelLab kullanıcı task
+- **✅** Karar #122 T1 Beat3CommitTrigger — commit 1158775
+- **✅** Yol A Level 1 OrbitAttach (WeaponDatabaseSO + HandAnchorAttach) — commit 3662ec6
+- **⏳** seam_crawler 4-yön ~24 gen — PixelLab kullanıcı task
+- **⏳** Karar #124 Warblade Base+T2 Rift greatsword sprite — PixelLab + Unity wiring
 
 ### Hafta 3 (Gün 15-21): Room + Cross-Class T1
-- F1 Shattered Keep 1 room (LayeredRoomGenerator + Antigravity 4 P0 + Karar #118 4-layer + Karar #128 WangResolver)
-- Combat loop integration
-- T1 Echo: Iron Combo Beat 3 → Elementalist Fireball Echo proc, facing-relative ±45° 24px, phantom 0.4s
-- Primary enhancement T1 (+20% Beat 3 dmg)
+- **🔄** F1 Shattered Keep 1 room — LayeredRoomPainter biome wiring şu an çalışıyor
+- Combat loop integration — Player.prefab wiring şu an çalışıyor
+- T1 Echo: Iron Combo Beat 3 → Elementalist Fireball Echo proc (CombatHandler stub mevcut)
 
 ### Hafta 3.5 (Gün 22-25): Polish + Demo
 - SFX + screen shake + hit pause
@@ -149,8 +142,8 @@ seam_crawler, plate_widow, relic_caster, rift_hound (canonical, `rift_gound` fil
 
 ### Animation spec
 - DRAFT: `STAGING/animation_spec_draft.md`
-- Step 2 Codex review BEKLİYOR
-- Step 3 rima-design LOCK BEKLİYOR (Codex output sonrası)
+- ✅ Step 2 review: `STAGING/animation_step2_review_output.md`
+- ✅ Step 3 LOCK: `STAGING/animation_system_spec_LOCKED.md` (10 LOCK kararı, ~184 gen Warblade)
 
 ## Pending User Tasks
 
@@ -169,6 +162,19 @@ seam_crawler, plate_widow, relic_caster, rift_hound (canonical, `rift_gound` fil
 - ~~_IsoGame.unity yanlış scene?~~ → Silindi, RoomPipelineTest tek scene Build Settings'te
 
 ## Session History
+
+### S71 gece (2026-05-14) — Sonnet overnight orchestrator — Faz 1 P0 Codex tamamlama + biome wiring
+
+**Tamamlanan S71 gece:**
+- SeloutOutline URP shader `e37541a` (animation spec L1)
+- Beat3CommitTrigger `1158775` (Karar #122 T1)
+- WeaponDatabaseSO + HandAnchorAttach `3662ec6` (Karar #123 Yol A L1)
+- LayeredRoomPainter PaintBiome() — 4-layer Wang+biome wiring (çalışıyor → blvtexp8a)
+- Player.prefab + HandAnchorAttach wiring (çalışıyor → bbat8dpw5)
+
+**Profil kullanılan:** yasinderyabilgin + laurethgame
+
+**rima-design konsültasyon:** 4 sonraki safe task belirlendi (T1 biome wiring, T2 player prefab, T3 Karar #119, T4 demo scene)
 
 ### S70 gece (2026-05-14) — Sonnet overnight orchestrator — cx timeout fix + 4 parallel dispatch
 
