@@ -6,44 +6,27 @@ namespace RIMA.Editor.RoomDesigner.Tools
     using System.Linq;
     using System.Text.RegularExpressions;
     using UnityEditor;
-    using UnityEditor.SceneManagement;
     using UnityEngine;
-    using UnityEngine.SceneManagement;
     using UnityEngine.Tilemaps;
-    using Object = UnityEngine.Object;
 
     public sealed class TileImportWizard : EditorWindow
     {
         public const string GeneratedFolder = "Assets/Art/Tiles/F1/Generated";
         public const string TemplatePath = GeneratedFolder + "/RuleTile_F1_Wang_Template.asset";
-        public const string DemoScenePath = "Assets/Scenes/Demo/RoomPipelineTest.unity";
 
         private const int DefaultTileSize = 32;
-        private const int PixelsPerUnit = 32;
-        private const string DefaultFolder = "Assets/Art/Tiles/F1";
+        private const string DefaultPickFolder = "Assets/Art/Tiles";
 
         private static readonly Vector3Int[] NsewPositions =
         {
             new Vector3Int(0, 1, 0),
-            new Vector3Int(1, 0, 0),
             new Vector3Int(0, -1, 0),
+            new Vector3Int(1, 0, 0),
             new Vector3Int(-1, 0, 0)
         };
 
-        private static readonly Vector3Int[] EightWayPositions =
-        {
-            new Vector3Int(0, 1, 0),
-            new Vector3Int(1, 1, 0),
-            new Vector3Int(1, 0, 0),
-            new Vector3Int(1, -1, 0),
-            new Vector3Int(0, -1, 0),
-            new Vector3Int(-1, -1, 0),
-            new Vector3Int(-1, 0, 0),
-            new Vector3Int(-1, 1, 0)
-        };
-
-        private string selectedFolder = DefaultFolder;
-        private string lastResult = "Select a PixelLab export folder.";
+        private string selectedFolder = "Assets/Art/Tiles/F1";
+        private string result = "Select a PixelLab export folder.";
         private Vector2 scroll;
 
         [MenuItem("RIMA/Tile Import Wizard")]
@@ -51,45 +34,41 @@ namespace RIMA.Editor.RoomDesigner.Tools
         {
             var window = GetWindow<TileImportWizard>();
             window.titleContent = new GUIContent("Tile Import Wizard");
-            window.minSize = new Vector2(560f, 360f);
+            window.minSize = new Vector2(560f, 320f);
             window.Show();
         }
 
-        [MenuItem("RIMA/Tile Import Wizard/Create Wang Template")]
-        public static void CreateWangTemplateFromMenu()
+        [MenuItem("RIMA/Tile Import Wizard/Create RuleTile F1 Wang Template")]
+        public static void CreateTemplateMenu()
         {
-            CreateWangTemplateAsset();
+            RuleTile template = CreateWangTemplateAsset();
+            Selection.activeObject = template;
         }
 
-        [MenuItem("RIMA/Tile Import Wizard/Apply Demo 4-Layer Stack")]
-        public static void ApplyDemoStackFromMenu()
+        [MenuItem("RIMA/Tile Import Wizard/Import Generated Folder")]
+        public static void ImportGeneratedMenu()
         {
-            ApplyFourLayerStackToDemoScene();
+            ImportFolder(GeneratedFolder, true);
         }
 
-        public static void BatchCreateTemplate()
+        public static string BatchImportDefaultF1()
         {
-            CreateWangTemplateAsset();
+            return ImportFolder("Assets/Art/Tiles/F1", false);
         }
 
-        public static void BatchApplyDemoStack()
+        public static string BatchImportGeneratedFolder()
         {
-            ApplyFourLayerStackToDemoScene();
+            return ImportFolder(GeneratedFolder, false);
         }
 
-        public static void BatchImportDefaultF1()
+        public static RuleTile BatchCreateTemplate()
         {
-            ImportFolder("Assets/Art/Tiles/F1");
-        }
-
-        public static void BatchImportGeneratedTileAssets()
-        {
-            ImportFolder(GeneratedFolder);
+            return CreateWangTemplateAsset();
         }
 
         private void OnGUI()
         {
-            EditorGUILayout.LabelField("PixelLab Tile Import Wizard", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Tile Import Wizard", EditorStyles.boldLabel);
             EditorGUILayout.Space(4f);
 
             using (new EditorGUILayout.HorizontalScope())
@@ -97,264 +76,243 @@ namespace RIMA.Editor.RoomDesigner.Tools
                 EditorGUILayout.TextField("Folder", selectedFolder);
                 if (GUILayout.Button("Select", GUILayout.Width(96f)))
                 {
-                    string absolute = EditorUtility.OpenFolderPanel("PixelLab Export Folder", DefaultFolder, string.Empty);
-                    if (!string.IsNullOrEmpty(absolute))
+                    string absolute = EditorUtility.OpenFolderPanel("Select PixelLab export folder", DefaultPickFolder, string.Empty);
+                    if (!string.IsNullOrWhiteSpace(absolute))
                     {
-                        string projectPath = ToProjectPath(absolute);
-                        selectedFolder = string.IsNullOrEmpty(projectPath) ? absolute : projectPath;
+                        selectedFolder = ToProjectPath(absolute) ?? absolute;
                     }
                 }
             }
 
-            if (GUILayout.Button("Import Folder", GUILayout.Height(30f)))
+            if (GUILayout.Button("Import Wang Tileset", GUILayout.Height(30f)))
             {
-                try
-                {
-                    lastResult = ImportFolder(selectedFolder);
-                }
-                catch (Exception ex)
-                {
-                    lastResult = ex.Message;
-                    Debug.LogError($"Tile Import Wizard failed: {ex}");
-                }
+                result = ImportFolder(selectedFolder, true);
             }
 
-            using (new EditorGUILayout.HorizontalScope())
+            if (GUILayout.Button("Create RuleTile_F1_Wang_Template"))
             {
-                if (GUILayout.Button("Create Template"))
-                {
-                    CreateWangTemplateAsset();
-                }
-
-                if (GUILayout.Button("Apply Demo Stack"))
-                {
-                    ApplyFourLayerStackToDemoScene();
-                }
+                CreateWangTemplateAsset();
+                result = $"Template ready: {TemplatePath}";
             }
 
             EditorGUILayout.Space(8f);
             scroll = EditorGUILayout.BeginScrollView(scroll);
-            EditorGUILayout.HelpBox(lastResult, MessageType.Info);
+            EditorGUILayout.HelpBox(result, MessageType.Info);
             EditorGUILayout.EndScrollView();
         }
 
-        public static string ImportFolder(string folderPath)
+        public static string ImportFolder(string folderPath, bool showDialogs = true)
         {
-            string projectFolder = NormalizeProjectPath(folderPath);
-            EnsureFolder(GeneratedFolder);
-            CreateWangTemplateAsset();
-
-            string manifestPath = FindManifest(projectFolder);
-            if (!string.IsNullOrEmpty(manifestPath))
+            try
             {
-                string texturePath = FindTextureForManifest(projectFolder, manifestPath);
-                if (string.IsNullOrEmpty(texturePath))
+                string projectFolder = NormalizeProjectPath(folderPath);
+                if (!Directory.Exists(projectFolder))
                 {
-                    throw new InvalidDataException($"No PNG sheet found beside {manifestPath}.");
+                    return Fail($"Folder not found: {projectFolder}", showDialogs);
                 }
 
-                return ImportManifest(projectFolder, manifestPath, texturePath);
-            }
+                EnsureFolder(GeneratedFolder);
+                CreateWangTemplateAsset();
 
-            string migrated = TryImportExistingTileAssets(projectFolder);
-            if (!string.IsNullOrEmpty(migrated))
-            {
-                return migrated;
-            }
+                string[] jsonPaths = Directory.GetFiles(projectFolder, "*.json", SearchOption.TopDirectoryOnly)
+                    .Select(NormalizeProjectPath)
+                    .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                    .ToArray();
 
-            throw new InvalidDataException($"No asset_000.json, metadata.json, or wang_*_tile_*.asset set found in {projectFolder}.");
-        }
+                if (jsonPaths.Length == 0)
+                {
+                    string migrated = TryImportExistingTileAssets(projectFolder);
+                    if (!string.IsNullOrEmpty(migrated))
+                    {
+                        AssetDatabase.SaveAssets();
+                        AssetDatabase.Refresh();
+                        return migrated;
+                    }
 
-        public static string ImportManifest(string folderPath, string manifestPath, string texturePath)
-        {
-            string json = File.ReadAllText(manifestPath);
-            if (json.IndexOf("\"tileset_data\"", StringComparison.Ordinal) >= 0)
-            {
-                var document = JsonUtility.FromJson<TopdownTilesetDocument>(json);
-                ValidateTopdownDocument(document, manifestPath);
-                ConfigureTextureImporter(texturePath, document.tileset_data.tiles, document.tileset_data.tile_size.width, Path.GetFileNameWithoutExtension(texturePath));
-                Sprite[] sprites = LoadSlicedSprites(texturePath, document.tileset_data.tiles.Length);
-                string outputPath = $"{GeneratedFolder}/{Path.GetFileNameWithoutExtension(texturePath)}_wizard_RuleTile.asset";
-                CreateTopdownRuleTile(document, sprites, outputPath);
+                    return Fail($"No PixelLab JSON metadata found in {projectFolder}.", showDialogs);
+                }
+
+                var outputs = new List<string>();
+                for (int i = 0; i < jsonPaths.Length; i++)
+                {
+                    EditorUtility.DisplayProgressBar("Tile Import Wizard", $"Parsing {Path.GetFileName(jsonPaths[i])}", Progress(i, jsonPaths.Length, 0f));
+                    if (!TryParseManifest(jsonPaths[i], out TileManifest manifest, out string parseError))
+                    {
+                        return Fail(parseError, showDialogs);
+                    }
+
+                    if (!IsWang(manifest.TileType))
+                    {
+                        continue;
+                    }
+
+                    string[] textures = Directory.GetFiles(Path.GetDirectoryName(jsonPaths[i]) ?? projectFolder, "*.png", SearchOption.TopDirectoryOnly)
+                        .Select(NormalizeProjectPath)
+                        .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                        .ToArray();
+
+                    if (textures.Length == 0)
+                    {
+                        return Fail($"No PNG texture found beside {jsonPaths[i]}.", showDialogs);
+                    }
+
+                    foreach (string texturePath in textures)
+                    {
+                        string output = ImportTexture(manifest, texturePath, i, jsonPaths.Length);
+                        outputs.Add(output);
+                    }
+                }
+
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                string result = $"Imported topdown Wang tileset: {outputPath}";
-                Debug.Log(result);
-                return result;
+
+                if (outputs.Count == 0)
+                {
+                    return Fail($"No Wang tileset metadata found in {projectFolder}.", showDialogs);
+                }
+
+                string message = "Imported RuleTiles:\n" + string.Join("\n", outputs);
+                Debug.Log(message);
+                return message;
             }
-
-            var flat = JsonUtility.FromJson<FlatExportDocument>(json);
-            ValidateFlatDocument(flat, manifestPath);
-            ConfigureTextureImporter(texturePath, flat.tiles, flat.tile_size > 0 ? flat.tile_size : DefaultTileSize, Path.GetFileNameWithoutExtension(texturePath));
-            Sprite[] flatSprites = LoadSlicedSprites(texturePath, flat.tiles.Length);
-
-            if (IsWang(flat.tile_type))
+            catch (Exception ex)
             {
-                string outputPath = $"{GeneratedFolder}/{Path.GetFileNameWithoutExtension(texturePath)}_wizard_RuleTile.asset";
-                CreateFlatRuleTile(flat, flatSprites, outputPath);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-                string result = $"Imported create_tiles_pro Wang tileset: {outputPath}";
-                Debug.Log(result);
-                return result;
+                return Fail($"Tile import failed: {ex.Message}", showDialogs);
             }
-
-            string tileFolder = $"{GeneratedFolder}/{Sanitize(Path.GetFileNameWithoutExtension(texturePath))}_Tiles";
-            EnsureFolder(tileFolder);
-            for (int i = 0; i < flatSprites.Length; i++)
+            finally
             {
-                CreateTileAsset(flatSprites[i], $"{tileFolder}/{flatSprites[i].name}.asset", Tile.ColliderType.None);
+                EditorUtility.ClearProgressBar();
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            string nonWangResult = $"Imported {flat.tile_type} sprite tiles: {tileFolder}";
-            Debug.Log(nonWangResult);
-            return nonWangResult;
         }
 
         public static RuleTile CreateWangTemplateAsset()
         {
             EnsureFolder(GeneratedFolder);
+
             var template = ScriptableObject.CreateInstance<RuleTile>();
             template.name = Path.GetFileNameWithoutExtension(TemplatePath);
             template.m_DefaultColliderType = Tile.ColliderType.None;
+            template.m_DefaultSprite = null;
+            template.m_TilingRules.Clear();
 
             for (int mask = 0; mask < 16; mask++)
             {
-                template.m_TilingRules.Add(CreateNsewRule(mask, null, Tile.ColliderType.None));
+                template.m_TilingRules.Add(CreateNsewRule(mask, null));
             }
 
-            ReplaceAsset(template, TemplatePath);
+            RuleTile existing = AssetDatabase.LoadAssetAtPath<RuleTile>(TemplatePath);
+            if (existing == null)
+            {
+                AssetDatabase.CreateAsset(template, TemplatePath);
+                existing = template;
+            }
+            else
+            {
+                EditorUtility.CopySerialized(template, existing);
+                UnityEngine.Object.DestroyImmediate(template);
+            }
+
+            EditorUtility.SetDirty(existing);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            return template;
+            return existing;
         }
 
-        public static void ApplyFourLayerStackToDemoScene()
+        private static string ImportTexture(TileManifest manifest, string texturePath, int jsonIndex, int jsonCount)
         {
-            Scene scene = EditorSceneManager.OpenScene(DemoScenePath, OpenSceneMode.Single);
-            GameObject gridObject = GameObject.Find("Grid");
-            if (gridObject == null)
+            string textureName = Path.GetFileNameWithoutExtension(texturePath);
+            string baseName = Sanitize(textureName);
+            int tileSize = manifest.TileSize > 0 ? manifest.TileSize : DefaultTileSize;
+
+            EditorUtility.DisplayProgressBar("Tile Import Wizard", $"Slicing {Path.GetFileName(texturePath)}", Progress(jsonIndex, jsonCount, 0.35f));
+            var spriteMeta = manifest.Tiles
+                .OrderBy(tile => tile.SortOrder)
+                .Select(tile => new SpriteMetaData
+                {
+                    name = SpriteName(baseName, tile.Mask),
+                    rect = new Rect(tile.X, tile.Y, tile.Width > 0 ? tile.Width : tileSize, tile.Height > 0 ? tile.Height : tileSize),
+                    alignment = (int)SpriteAlignment.Center,
+                    pivot = new Vector2(0.5f, 0.5f)
+                })
+                .ToArray();
+
+            ConfigureTextureImporter(texturePath, spriteMeta, tileSize);
+
+            EditorUtility.DisplayProgressBar("Tile Import Wizard", $"Creating RuleTile for {textureName}", Progress(jsonIndex, jsonCount, 0.75f));
+            Dictionary<string, Sprite> sprites = AssetDatabase.LoadAllAssetRepresentationsAtPath(texturePath)
+                .OfType<Sprite>()
+                .ToDictionary(sprite => sprite.name, StringComparer.OrdinalIgnoreCase);
+
+            Sprite[] maskSprites = new Sprite[16];
+            foreach (TileEntry tile in manifest.Tiles)
             {
-                gridObject = new GameObject("Grid");
-                gridObject.AddComponent<Grid>();
+                sprites.TryGetValue(SpriteName(baseName, tile.Mask), out maskSprites[tile.Mask]);
             }
 
-            Grid grid = gridObject.GetComponent<Grid>();
-            if (grid == null)
-            {
-                grid = gridObject.AddComponent<Grid>();
-            }
-            grid.cellLayout = GridLayout.CellLayout.Isometric;
-            grid.cellSwizzle = GridLayout.CellSwizzle.XYZ;
-            grid.cellSize = new Vector3(1f, 0.5f, 0f);
-
-            RenameChild(gridObject.transform, "FloorTilemap", "BaseTilemap");
-            RenameChild(gridObject.transform, "DecalsTilemap", "DecalTilemap");
-            RenameChild(gridObject.transform, "WallsTilemap", "WallsTilemap_Front");
-
-            EnsureTilemap(gridObject.transform, "BaseTilemap", 0, false);
-            EnsureTilemap(gridObject.transform, "DecalTilemap", 1, false);
-            EnsureTilemap(gridObject.transform, "WallsTilemap_Front", 2, true);
-            EnsureTilemap(gridObject.transform, "WallsTilemap_Top", 3, false);
-            EnsureChild(gridObject.transform, "PropContainer");
-
-            EditorSceneManager.MarkSceneDirty(scene);
-            EditorSceneManager.SaveScene(scene);
-            Debug.Log("RoomPipelineTest demo scene updated with Base/Decal/Wall_Front/Wall_Top/Prop stack.");
+            string outputBaseName = baseName.StartsWith("wang_", StringComparison.OrdinalIgnoreCase) ? baseName : $"wang_{baseName}";
+            string outputName = $"{outputBaseName}_RuleTile.asset";
+            string outputPath = UniqueAssetPath($"{GeneratedFolder}/{outputName}");
+            CreateRuleTileFromTemplate(Path.GetFileNameWithoutExtension(outputPath), maskSprites, outputPath);
+            return outputPath;
         }
 
         private static string TryImportExistingTileAssets(string folderPath)
         {
             string[] tileGuids = AssetDatabase.FindAssets("t:TileBase", new[] { folderPath });
-            var tiles = tileGuids
+            var tileSet = tileGuids
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Where(path => Regex.IsMatch(Path.GetFileNameWithoutExtension(path), @"^wang_.+_tile_\d+$"))
                 .Select(path => new { Path = path, Tile = AssetDatabase.LoadAssetAtPath<Tile>(path) })
                 .Where(item => item.Tile != null)
-                .ToList();
+                .GroupBy(item => Regex.Replace(Path.GetFileNameWithoutExtension(item.Path), @"_tile_\d+$", string.Empty))
+                .OrderByDescending(group => group.Count())
+                .FirstOrDefault();
 
-            if (tiles.Count < 16)
+            if (tileSet == null || tileSet.Count() < 16)
             {
                 return null;
             }
 
-            string baseName = Regex.Replace(Path.GetFileNameWithoutExtension(tiles[0].Path), @"_tile_\d+$", string.Empty);
-            Sprite[] sprites = tiles
-                .OrderBy(item => TileIndex(item.Path))
-                .Take(16)
-                .Select(item => item.Tile.sprite)
-                .ToArray();
-            if (sprites.All(sprite => sprite == null))
+            Sprite[] spritesByMask = new Sprite[16];
+            foreach (var item in tileSet)
             {
-                string siblingTexture = $"Assets/Art/Tiles/F1/{baseName}.png";
-                if (File.Exists(siblingTexture))
+                Match match = Regex.Match(Path.GetFileNameWithoutExtension(item.Path), @"_tile_(\d+)$");
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int index) && index >= 0 && index < spritesByMask.Length)
                 {
-                    sprites = LoadSlicedSprites(siblingTexture, 16);
+                    spritesByMask[index] = item.Tile.sprite;
                 }
             }
 
-            string outputPath = $"{GeneratedFolder}/{baseName}_tileassets_wizard_RuleTile.asset";
-            CreateNsewRuleTileFromTemplate(baseName + "_wizard_RuleTile", sprites, outputPath, Tile.ColliderType.None);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            string result = $"Migrated existing tile assets into {outputPath}";
-            Debug.Log(result);
-            return result;
+            string outputPath = UniqueAssetPath($"{GeneratedFolder}/{tileSet.Key}_RuleTile.asset");
+            CreateRuleTileFromTemplate(Path.GetFileNameWithoutExtension(outputPath), spritesByMask, outputPath);
+            string message = $"Imported existing tile assets:\n{outputPath}";
+            Debug.Log(message);
+            return message;
         }
 
-        private static void CreateTopdownRuleTile(TopdownTilesetDocument document, Sprite[] sprites, string outputPath)
+        private static void ConfigureTextureImporter(string texturePath, SpriteMetaData[] spriteMeta, int tileSize)
         {
-            var tile = ScriptableObject.CreateInstance<RuleTile>();
-            tile.name = Path.GetFileNameWithoutExtension(outputPath);
-            tile.m_DefaultColliderType = Tile.ColliderType.None;
-
-            TopdownTile allLower = document.tileset_data.tiles.FirstOrDefault(IsAllLower);
-            tile.m_DefaultSprite = allLower != null ? sprites[Mathf.Clamp(SpriteIndexFor(allLower), 0, sprites.Length - 1)] : sprites[0];
-
-            foreach (TopdownTile item in document.tileset_data.tiles.OrderByDescending(Specificity))
+            var importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
+            if (importer == null)
             {
-                int index = Mathf.Clamp(SpriteIndexFor(item), 0, sprites.Length - 1);
-                var rule = new RuleTile.TilingRule
-                {
-                    m_Output = RuleTile.TilingRuleOutput.OutputSprite.Single,
-                    m_Sprites = new[] { sprites[index] },
-                    m_ColliderType = Tile.ColliderType.None,
-                    m_RuleTransform = RuleTile.TilingRuleOutput.Transform.Fixed,
-                    m_NeighborPositions = new List<Vector3Int>(EightWayPositions),
-                    m_Neighbors = BuildCornerNeighborMask(item)
-                };
-                tile.m_TilingRules.Add(rule);
+                throw new InvalidDataException($"TextureImporter not found for {texturePath}.");
             }
 
-            ReplaceAsset(tile, outputPath);
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Multiple;
+            importer.spritePixelsPerUnit = tileSize;
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.mipmapEnabled = false;
+            importer.alphaIsTransparency = true;
+            importer.npotScale = TextureImporterNPOTScale.None;
+#pragma warning disable 0618
+            importer.spritesheet = spriteMeta;
+#pragma warning restore 0618
+            importer.SaveAndReimport();
         }
 
-        private static void CreateFlatRuleTile(FlatExportDocument document, Sprite[] sprites, string outputPath)
-        {
-            var ordered = document.tiles
-                .Select((tile, i) => new { Tile = tile, Sprite = sprites[Mathf.Clamp(i, 0, sprites.Length - 1)] })
-                .OrderBy(item => item.Tile.index)
-                .ToArray();
-
-            var byMask = new Dictionary<int, Sprite>();
-            for (int i = 0; i < ordered.Length; i++)
-            {
-                int mask = ParseMask(ordered[i].Tile.wang_mask, ordered[i].Tile.index);
-                byMask[mask] = ordered[i].Sprite;
-            }
-
-            Sprite[] nsewSprites = new Sprite[16];
-            for (int mask = 0; mask < 16; mask++)
-            {
-                nsewSprites[mask] = byMask.TryGetValue(mask, out Sprite sprite) ? sprite : ordered[Mathf.Clamp(mask, 0, ordered.Length - 1)].Sprite;
-            }
-
-            CreateNsewRuleTileFromTemplate(Path.GetFileNameWithoutExtension(outputPath), nsewSprites, outputPath, Tile.ColliderType.None);
-        }
-
-        private static void CreateNsewRuleTileFromTemplate(string name, Sprite[] sprites, string outputPath, Tile.ColliderType colliderType)
+        private static void CreateRuleTileFromTemplate(string assetName, Sprite[] spritesByMask, string outputPath)
         {
             RuleTile source = AssetDatabase.LoadAssetAtPath<RuleTile>(TemplatePath);
             if (source == null)
@@ -363,294 +321,156 @@ namespace RIMA.Editor.RoomDesigner.Tools
             }
 
             RuleTile tile = Instantiate(source);
-            tile.name = name;
-            tile.m_DefaultSprite = sprites.FirstOrDefault(sprite => sprite != null);
-            tile.m_DefaultColliderType = colliderType;
+            tile.name = assetName;
+            tile.m_DefaultColliderType = Tile.ColliderType.None;
+            tile.m_DefaultSprite = spritesByMask.FirstOrDefault(sprite => sprite != null);
             tile.m_TilingRules.Clear();
 
             for (int mask = 0; mask < 16; mask++)
             {
-                tile.m_TilingRules.Add(CreateNsewRule(mask, sprites[Mathf.Clamp(mask, 0, sprites.Length - 1)], colliderType));
+                tile.m_TilingRules.Add(CreateNsewRule(mask, spritesByMask[mask]));
             }
 
-            ReplaceAsset(tile, outputPath);
+            AssetDatabase.CreateAsset(tile, outputPath);
         }
 
-        private static RuleTile.TilingRule CreateNsewRule(int mask, Sprite sprite, Tile.ColliderType colliderType)
+        private static RuleTile.TilingRule CreateNsewRule(int mask, Sprite sprite)
         {
             return new RuleTile.TilingRule
             {
                 m_Output = RuleTile.TilingRuleOutput.OutputSprite.Single,
                 m_Sprites = sprite == null ? Array.Empty<Sprite>() : new[] { sprite },
-                m_ColliderType = colliderType,
+                m_ColliderType = Tile.ColliderType.None,
                 m_RuleTransform = RuleTile.TilingRuleOutput.Transform.Fixed,
                 m_NeighborPositions = new List<Vector3Int>(NsewPositions),
                 m_Neighbors = new List<int>
                 {
-                    (mask & 1) != 0 ? RuleTile.TilingRuleOutput.Neighbor.This : RuleTile.TilingRuleOutput.Neighbor.NotThis,
-                    (mask & 2) != 0 ? RuleTile.TilingRuleOutput.Neighbor.This : RuleTile.TilingRuleOutput.Neighbor.NotThis,
-                    (mask & 4) != 0 ? RuleTile.TilingRuleOutput.Neighbor.This : RuleTile.TilingRuleOutput.Neighbor.NotThis,
-                    (mask & 8) != 0 ? RuleTile.TilingRuleOutput.Neighbor.This : RuleTile.TilingRuleOutput.Neighbor.NotThis
+                    NeighborFor(mask, 0),
+                    NeighborFor(mask, 1),
+                    NeighborFor(mask, 2),
+                    NeighborFor(mask, 3)
                 }
             };
         }
 
-        private static void ConfigureTextureImporter(string texturePath, TopdownTile[] tiles, int tileSize, string baseName)
+        private static int NeighborFor(int mask, int bit)
         {
-            var metadata = new SpriteMetaData[tiles.Length];
-            for (int i = 0; i < tiles.Length; i++)
-            {
-                TopdownTile tile = tiles[i];
-                int index = SpriteIndexFor(tile);
-                metadata[i] = CreateSpriteMetaData(baseName, index, tile.bounding_box.x, tile.bounding_box.y, tile.bounding_box.width, tile.bounding_box.height);
-            }
-
-            ConfigureImporter(texturePath, metadata, tileSize);
+            return (mask & (1 << bit)) != 0
+                ? RuleTile.TilingRuleOutput.Neighbor.This
+                : RuleTile.TilingRuleOutput.Neighbor.NotThis;
         }
 
-        private static void ConfigureTextureImporter(string texturePath, FlatTile[] tiles, int tileSize, string baseName)
+        private static bool TryParseManifest(string path, out TileManifest manifest, out string error)
         {
-            var metadata = new SpriteMetaData[tiles.Length];
-            for (int i = 0; i < tiles.Length; i++)
+            manifest = null;
+            error = null;
+
+            string json = File.ReadAllText(path);
+            if (string.IsNullOrWhiteSpace(json))
             {
-                FlatTile tile = tiles[i];
-                metadata[i] = CreateSpriteMetaData(baseName, tile.index, tile.sprite_x, tile.sprite_y, tile.width > 0 ? tile.width : tileSize, tile.height > 0 ? tile.height : tileSize);
+                error = $"{path}: JSON is empty.";
+                return false;
             }
 
-            ConfigureImporter(texturePath, metadata, tileSize);
-        }
-
-        private static void ConfigureImporter(string texturePath, SpriteMetaData[] metadata, int tileSize)
-        {
-            var importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
-            if (importer == null)
+            if (json.IndexOf("\"tileset_data\"", StringComparison.Ordinal) >= 0)
             {
-                throw new IOException($"TextureImporter not found for {texturePath}.");
-            }
-
-            importer.textureType = TextureImporterType.Sprite;
-            importer.spriteImportMode = SpriteImportMode.Multiple;
-            importer.spritePixelsPerUnit = tileSize > 0 ? tileSize : PixelsPerUnit;
-            importer.filterMode = FilterMode.Point;
-            importer.textureCompression = TextureImporterCompression.Uncompressed;
-            importer.mipmapEnabled = false;
-            importer.alphaIsTransparency = true;
-            importer.npotScale = TextureImporterNPOTScale.None;
-            importer.spritesheet = metadata;
-            importer.SaveAndReimport();
-        }
-
-        private static SpriteMetaData CreateSpriteMetaData(string baseName, int index, int x, int y, int width, int height)
-        {
-            return new SpriteMetaData
-            {
-                name = $"{Sanitize(baseName)}_{index:00}",
-                alignment = (int)SpriteAlignment.Center,
-                pivot = new Vector2(0.5f, 0.5f),
-                rect = new Rect(x, y, width, height)
-            };
-        }
-
-        private static Sprite[] LoadSlicedSprites(string texturePath, int expectedCount)
-        {
-            Sprite[] sprites = AssetDatabase.LoadAllAssetRepresentationsAtPath(texturePath)
-                .OfType<Sprite>()
-                .OrderBy(sprite => sprite.name, StringComparer.OrdinalIgnoreCase)
-                .ToArray();
-
-            if (sprites.Length != expectedCount)
-            {
-                throw new InvalidDataException($"Expected {expectedCount} sliced sprites in {texturePath}, found {sprites.Length}.");
-            }
-
-            return sprites;
-        }
-
-        private static void CreateTileAsset(Sprite sprite, string assetPath, Tile.ColliderType colliderType)
-        {
-            var tile = ScriptableObject.CreateInstance<Tile>();
-            tile.sprite = sprite;
-            tile.colliderType = colliderType;
-            ReplaceAsset(tile, assetPath);
-        }
-
-        private static void EnsureTilemap(Transform parent, string name, int sortingOrder, bool collider)
-        {
-            GameObject go = EnsureChild(parent, name);
-            if (go.GetComponent<Tilemap>() == null)
-            {
-                go.AddComponent<Tilemap>();
-            }
-
-            TilemapRenderer renderer = go.GetComponent<TilemapRenderer>();
-            if (renderer == null)
-            {
-                renderer = go.AddComponent<TilemapRenderer>();
-            }
-
-            renderer.sortingOrder = sortingOrder;
-
-            TilemapCollider2D existingCollider = go.GetComponent<TilemapCollider2D>();
-            if (collider && existingCollider == null)
-            {
-                go.AddComponent<TilemapCollider2D>();
-            }
-            else if (!collider && existingCollider != null)
-            {
-                DestroyImmediate(existingCollider);
-            }
-        }
-
-        private static GameObject EnsureChild(Transform parent, string name)
-        {
-            Transform existing = parent.Find(name);
-            if (existing != null)
-            {
-                return existing.gameObject;
-            }
-
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-            return go;
-        }
-
-        private static void RenameChild(Transform parent, string oldName, string newName)
-        {
-            Transform child = parent.Find(oldName);
-            if (child != null)
-            {
-                child.name = newName;
-            }
-        }
-
-        private static string FindManifest(string folderPath)
-        {
-            foreach (string file in new[] { "asset_000.json", "metadata.json" })
-            {
-                string path = $"{folderPath}/{file}";
-                if (File.Exists(path))
+                TopdownDocument document = JsonUtility.FromJson<TopdownDocument>(json);
+                if (document == null || document.tileset_data == null || document.tileset_data.tiles == null || document.tileset_data.tiles.Length == 0)
                 {
-                    return NormalizeProjectPath(path);
+                    error = $"{path}: malformed PixelLab tileset_data JSON.";
+                    return false;
                 }
+
+                int tileSize = document.tileset_data.tile_size != null && document.tileset_data.tile_size.width > 0
+                    ? document.tileset_data.tile_size.width
+                    : DefaultTileSize;
+
+                var tiles = new List<TileEntry>();
+                foreach (TopdownTile tile in document.tileset_data.tiles)
+                {
+                    int mask = ParseTopdownMask(tile);
+                    if (mask < 0 || mask > 15 || tile.bounding_box == null)
+                    {
+                        error = $"{path}: malformed Wang tile entry.";
+                        return false;
+                    }
+
+                    tiles.Add(new TileEntry(mask, mask, tile.bounding_box.x, tile.bounding_box.y, tile.bounding_box.width, tile.bounding_box.height));
+                }
+
+                manifest = new TileManifest("topdown_wang", tileSize, tiles);
+                return true;
             }
 
-            return Directory.Exists(folderPath)
-                ? Directory.GetFiles(folderPath, "*.json", SearchOption.TopDirectoryOnly).Select(NormalizeProjectPath).FirstOrDefault()
-                : null;
-        }
-
-        private static string FindTextureForManifest(string folderPath, string manifestPath)
-        {
-            string manifestDirectory = NormalizeProjectPath(Path.GetDirectoryName(manifestPath));
-            string preferred = Directory.GetFiles(manifestDirectory, "*.png", SearchOption.TopDirectoryOnly)
-                .Select(NormalizeProjectPath)
-                .FirstOrDefault();
-            return preferred ?? Directory.GetFiles(folderPath, "*.png", SearchOption.AllDirectories).Select(NormalizeProjectPath).FirstOrDefault();
-        }
-
-        private static void ValidateTopdownDocument(TopdownTilesetDocument document, string path)
-        {
-            if (document == null || document.tileset_data == null || document.tileset_data.tiles == null)
+            FlatDocument flat = JsonUtility.FromJson<FlatDocument>(json);
+            if (flat == null || string.IsNullOrWhiteSpace(flat.tile_type) || flat.tiles == null || flat.tiles.Length == 0)
             {
-                throw new InvalidDataException($"{path}: missing tileset_data.tiles.");
+                error = $"{path}: expected tile_size, tile_type, and tiles[].";
+                return false;
             }
 
-            if (document.tileset_data.tile_size == null || document.tileset_data.tile_size.width <= 0 || document.tileset_data.tile_size.height <= 0)
-            {
-                throw new InvalidDataException($"{path}: missing valid tile_size.");
-            }
-
-            if (document.tileset_data.tiles.Length != 16 && document.tileset_data.tiles.Length != 47)
-            {
-                throw new InvalidDataException($"{path}: expected 16 or 47 topdown Wang tiles, found {document.tileset_data.tiles.Length}.");
-            }
-        }
-
-        private static void ValidateFlatDocument(FlatExportDocument document, string path)
-        {
-            if (document == null || string.IsNullOrWhiteSpace(document.tile_type) || document.tiles == null || document.tiles.Length == 0)
-            {
-                throw new InvalidDataException($"{path}: expected tile_size, tile_type, and tiles[].");
-            }
-
-            foreach (FlatTile tile in document.tiles)
+            var flatTiles = new List<TileEntry>();
+            foreach (FlatTile tile in flat.tiles)
             {
                 if (tile.width <= 0 || tile.height <= 0)
                 {
-                    throw new InvalidDataException($"{path}: tile index {tile.index} has invalid width/height.");
+                    error = $"{path}: tile index {tile.index} has invalid width/height.";
+                    return false;
                 }
+
+                int mask = ParseFlatMask(tile.wang_mask, tile.index);
+                flatTiles.Add(new TileEntry(mask, tile.index, tile.sprite_x, tile.sprite_y, tile.width, tile.height));
             }
+
+            manifest = new TileManifest(flat.tile_type, flat.tile_size > 0 ? flat.tile_size : DefaultTileSize, flatTiles);
+            return true;
         }
 
-        private static List<int> BuildCornerNeighborMask(TopdownTile tile)
+        private static int ParseTopdownMask(TopdownTile tile)
         {
-            CornerSet corners = tile.corners;
-            return new List<int>
+            int fromName = ParseTrailingNumber(tile.name);
+            if (fromName >= 0)
             {
-                SideMatch(corners.NW, corners.NE),
-                CornerMatch(corners.NE),
-                SideMatch(corners.NE, corners.SE),
-                CornerMatch(corners.SE),
-                SideMatch(corners.SW, corners.SE),
-                CornerMatch(corners.SW),
-                SideMatch(corners.NW, corners.SW),
-                CornerMatch(corners.NW)
-            };
-        }
+                return fromName;
+            }
 
-        private static int SideMatch(string a, string b)
-        {
-            if (IsUpper(a) && IsUpper(b)) return RuleTile.TilingRuleOutput.Neighbor.This;
-            if (!IsUpper(a) && !IsUpper(b)) return RuleTile.TilingRuleOutput.Neighbor.NotThis;
-            return 0;
-        }
-
-        private static int CornerMatch(string value)
-        {
-            return IsUpper(value) ? RuleTile.TilingRuleOutput.Neighbor.This : RuleTile.TilingRuleOutput.Neighbor.NotThis;
-        }
-
-        private static int Specificity(TopdownTile tile)
-        {
-            return BuildCornerNeighborMask(tile).Count(value => value != 0);
-        }
-
-        private static int SpriteIndexFor(TopdownTile tile)
-        {
-            int tileSize = tile.bounding_box.width > 0 ? tile.bounding_box.width : DefaultTileSize;
-            int column = Mathf.Max(0, tile.bounding_box.x / tileSize);
-            int row = Mathf.Max(0, tile.bounding_box.y / tileSize);
-            return row * 4 + column;
-        }
-
-        private static bool IsAllLower(TopdownTile tile)
-        {
-            CornerSet c = tile.corners;
-            return !IsUpper(c.NE) && !IsUpper(c.NW) && !IsUpper(c.SE) && !IsUpper(c.SW);
-        }
-
-        private static bool IsUpper(string value)
-        {
-            return string.Equals(value, "upper", StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static int ParseMask(string mask, int fallback)
-        {
-            if (!string.IsNullOrWhiteSpace(mask) && mask.Length == 4)
+            int fromId = ParseTrailingNumber(tile.id);
+            if (fromId >= 0)
             {
-                int result = 0;
+                return fromId;
+            }
+
+            return -1;
+        }
+
+        private static int ParseFlatMask(string wangMask, int fallback)
+        {
+            if (!string.IsNullOrWhiteSpace(wangMask) && wangMask.Length == 4)
+            {
+                int value = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    if (mask[i] == '1')
+                    if (wangMask[i] == '1')
                     {
-                        result |= 1 << i;
+                        value |= 1 << i;
                     }
                 }
 
-                return result;
+                return Mathf.Clamp(value, 0, 15);
             }
 
             return Mathf.Clamp(fallback, 0, 15);
+        }
+
+        private static int ParseTrailingNumber(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return -1;
+            }
+
+            Match match = Regex.Match(value, @"(\d+)$");
+            return match.Success && int.TryParse(match.Groups[1].Value, out int result) ? result : -1;
         }
 
         private static bool IsWang(string tileType)
@@ -658,20 +478,26 @@ namespace RIMA.Editor.RoomDesigner.Tools
             return tileType != null && tileType.IndexOf("wang", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        private static int TileIndex(string path)
+        private static string UniqueAssetPath(string path)
         {
-            Match match = Regex.Match(Path.GetFileNameWithoutExtension(path), @"_tile_(\d+)$");
-            return match.Success ? int.Parse(match.Groups[1].Value) : 0;
-        }
-
-        private static void ReplaceAsset(Object asset, string assetPath)
-        {
-            if (AssetDatabase.LoadAssetAtPath<Object>(assetPath) != null)
+            if (AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path) == null)
             {
-                AssetDatabase.DeleteAsset(assetPath);
+                return path;
             }
 
-            AssetDatabase.CreateAsset(asset, assetPath);
+            string directory = Path.GetDirectoryName(path)?.Replace('\\', '/') ?? GeneratedFolder;
+            string name = Path.GetFileNameWithoutExtension(path);
+            string extension = Path.GetExtension(path);
+            string candidate = $"{directory}/{name}_new{extension}";
+            int suffix = 2;
+
+            while (AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(candidate) != null)
+            {
+                candidate = $"{directory}/{name}_new_{suffix}{extension}";
+                suffix++;
+            }
+
+            return candidate;
         }
 
         private static void EnsureFolder(string folderPath)
@@ -691,6 +517,27 @@ namespace RIMA.Editor.RoomDesigner.Tools
             }
         }
 
+        private static string Fail(string message, bool showDialog)
+        {
+            Debug.LogError(message);
+            if (showDialog)
+            {
+                EditorUtility.DisplayDialog("Tile Import Wizard", message, "OK");
+            }
+
+            return message;
+        }
+
+        private static float Progress(int index, int total, float localProgress)
+        {
+            return Mathf.Clamp01((index + localProgress) / Mathf.Max(1, total));
+        }
+
+        private static string SpriteName(string baseName, int mask)
+        {
+            return $"{baseName}_{mask:00}";
+        }
+
         private static string ToProjectPath(string absolutePath)
         {
             string normalized = NormalizeSlashes(absolutePath);
@@ -702,7 +549,7 @@ namespace RIMA.Editor.RoomDesigner.Tools
 
         private static string NormalizeProjectPath(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
                 return string.Empty;
             }
@@ -731,8 +578,42 @@ namespace RIMA.Editor.RoomDesigner.Tools
             return string.IsNullOrWhiteSpace(sanitized) ? "tiles" : sanitized.Trim();
         }
 
+        private sealed class TileManifest
+        {
+            public TileManifest(string tileType, int tileSize, List<TileEntry> tiles)
+            {
+                TileType = tileType;
+                TileSize = tileSize;
+                Tiles = tiles;
+            }
+
+            public string TileType { get; }
+            public int TileSize { get; }
+            public List<TileEntry> Tiles { get; }
+        }
+
+        private sealed class TileEntry
+        {
+            public TileEntry(int mask, int sortOrder, int x, int y, int width, int height)
+            {
+                Mask = Mathf.Clamp(mask, 0, 15);
+                SortOrder = sortOrder;
+                X = x;
+                Y = y;
+                Width = width;
+                Height = height;
+            }
+
+            public int Mask { get; }
+            public int SortOrder { get; }
+            public int X { get; }
+            public int Y { get; }
+            public int Width { get; }
+            public int Height { get; }
+        }
+
         [Serializable]
-        public sealed class FlatExportDocument
+        private sealed class FlatDocument
         {
             public int tile_size;
             public string tile_type;
@@ -740,7 +621,7 @@ namespace RIMA.Editor.RoomDesigner.Tools
         }
 
         [Serializable]
-        public sealed class FlatTile
+        private sealed class FlatTile
         {
             public int index;
             public string wang_mask;
@@ -751,38 +632,28 @@ namespace RIMA.Editor.RoomDesigner.Tools
         }
 
         [Serializable]
-        public sealed class TopdownTilesetDocument
+        private sealed class TopdownDocument
         {
             public TopdownTilesetData tileset_data;
         }
 
         [Serializable]
-        public sealed class TopdownTilesetData
+        private sealed class TopdownTilesetData
         {
             public TopdownTile[] tiles;
             public TileSize tile_size;
         }
 
         [Serializable]
-        public sealed class TopdownTile
+        private sealed class TopdownTile
         {
             public string id;
             public string name;
-            public CornerSet corners;
             public BoundingBox bounding_box;
         }
 
         [Serializable]
-        public sealed class CornerSet
-        {
-            public string NE;
-            public string NW;
-            public string SE;
-            public string SW;
-        }
-
-        [Serializable]
-        public sealed class BoundingBox
+        private sealed class BoundingBox
         {
             public int x;
             public int y;
@@ -791,7 +662,7 @@ namespace RIMA.Editor.RoomDesigner.Tools
         }
 
         [Serializable]
-        public sealed class TileSize
+        private sealed class TileSize
         {
             public int width;
             public int height;
