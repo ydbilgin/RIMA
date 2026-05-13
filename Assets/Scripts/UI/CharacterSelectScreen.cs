@@ -16,7 +16,7 @@ namespace RIMA
     public class CharacterSelectScreen : MonoBehaviour
     {
         [Header("Scene")]
-        [SerializeField] private string gameSceneName = "GameScene";
+        [SerializeField] private string gameSceneName = "RoomPipelineTest";
 
         [Header("Optional Overrides")]
         [SerializeField] private Canvas targetCanvas;
