@@ -4,8 +4,10 @@ namespace RIMA.Editor.RoomDesigner
     using System.Collections.Generic;
     using System.IO;
     using RIMA.Runtime.Rooms;
+    using RIMA.Systems.Map;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.Tilemaps;
 
     public static class RoomSaver
     {
@@ -51,12 +53,25 @@ namespace RIMA.Editor.RoomDesigner
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
                 bp.prefab = prefab;
                 bp.roomId = roomId;
+                bp.roomType = RoomType.Combat.ToString();
 
                 var link = prefab.GetComponent<RoomPrefabLink>() ?? prefab.AddComponent<RoomPrefabLink>();
                 link.blueprint = bp;
 
+                var config = prefab.GetComponent<RoomConfig>() ?? prefab.AddComponent<RoomConfig>();
+                config.roomId = bp.roomId;
+                config.roomType = ParseRoomType(bp.roomType);
+                config.depthBandMin = 0;
+                config.depthBandMax = 99;
+
+                Grid baseGrid = roomRoot.GetComponent<Grid>();
+                config.cellSize = baseGrid != null ? baseGrid.cellSize : new Vector3(1f, 0.5f, 0f);
+                config.gridLayout = GridLayout.CellLayout.Isometric;
+                config.orientation = GridLayout.CellSwizzle.XYZ;
+
                 EditorUtility.SetDirty(bp);
                 EditorUtility.SetDirty(prefab);
+                PrefabUtility.SavePrefabAsset(prefab);
                 AssetDatabase.SaveAssets();
                 return (prefabPath, soPath);
             }
@@ -69,6 +84,11 @@ namespace RIMA.Editor.RoomDesigner
 
                 throw;
             }
+        }
+
+        private static RoomType ParseRoomType(string value)
+        {
+            return Enum.TryParse(value, true, out RoomType parsed) ? parsed : RoomType.Combat;
         }
     }
 }

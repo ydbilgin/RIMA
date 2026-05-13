@@ -1,10 +1,15 @@
 namespace RIMA.Editor.RoomDesigner
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using RIMA.Editor.RoomDesigner.Brushes;
+    using RIMA.RoomDesigner.Core;
+    using RIMA.RoomDesigner.Core.Editor;
     using RIMA.Runtime.Rooms;
+    using RIMA.Systems.Map;
     using UnityEditor;
+    using UnityEditor.UIElements;
     using UnityEngine;
     using UnityEngine.Tilemaps;
     using UnityEngine.UIElements;
@@ -31,6 +36,8 @@ namespace RIMA.Editor.RoomDesigner
         private bool isStrokeActive;
         private PixelPerfectCanvasPreview ppPreview;
         private double nextPollTime;
+
+        [SerializeField] private RimaRoomBaselineTemplate activeTemplate;
 
         [MenuItem("RIMA/Room Designer")]
         public static void Open()
@@ -277,6 +284,12 @@ namespace RIMA.Editor.RoomDesigner
                 saveButton.clicked += SaveCurrentRoom;
             }
 
+            var generateButton = rootVisualElement.Q<Button>("btn-generate");
+            if (generateButton != null)
+            {
+                generateButton.clicked += GenerateRoom;
+            }
+
             var newButton = rootVisualElement.Q<Button>("btn-new");
             if (newButton != null)
             {
@@ -301,6 +314,23 @@ namespace RIMA.Editor.RoomDesigner
             var toolbar = rootVisualElement.Q<VisualElement>("toolbar");
             if (toolbar != null)
             {
+                if (toolbar.Q<ObjectField>("active-template") == null)
+                {
+                    var templateField = new ObjectField("Template")
+                    {
+                        name = "active-template",
+                        objectType = typeof(RimaRoomBaselineTemplate),
+                        value = activeTemplate
+                    };
+                    templateField.style.minWidth = 220f;
+                    templateField.RegisterValueChangedCallback(evt =>
+                    {
+                        activeTemplate = evt.newValue as RimaRoomBaselineTemplate;
+                        MarkDirty();
+                    });
+                    toolbar.Add(templateField);
+                }
+
                 cellDebugLabel = new Label();
                 cellDebugLabel.name = "cell-debug";
                 cellDebugLabel.AddToClassList("rd-cell-debug");
@@ -312,6 +342,112 @@ namespace RIMA.Editor.RoomDesigner
                 toolbar.Add(ppBtn);
                 ppPreview?.SetLabelRef(ppBtn);
             }
+        }
+
+        private void GenerateRoom()
+        {
+            if (activeTemplate == null)
+            {
+                Debug.LogError("Room Designer generate failed: assign a RimaRoomBaselineTemplate.");
+                return;
+            }
+
+            if (activeTemplate.floorVariants == null || activeTemplate.floorVariants.Length == 0)
+            {
+                Debug.LogError("Room Designer generate failed: template floorVariants must contain at least one tile.");
+                return;
+            }
+
+            if (activeTemplate.wallVariants == null || activeTemplate.wallVariants.Length == 0)
+            {
+                Debug.LogError("Room Designer generate failed: template wallVariants must contain at least one tile.");
+                return;
+            }
+
+            EnsureCanvas();
+            if (FloorTilemap == null || WallsTilemap == null)
+            {
+                Debug.LogError("Room Designer generate failed: tilemaps are not ready.");
+                return;
+            }
+
+            string roomId = "room_001";
+            int noiseSeed = activeBp != null ? activeBp.noiseSeed : 0;
+            int gateCount = activeBp != null ? activeBp.gateCount : 2;
+            var metaPanel = rightPanel?.Q<RoomMetadataPanel>(RoomMetadataPanel.PanelName);
+            if (metaPanel != null)
+            {
+                var data = metaPanel.GetBlueprintData();
+                roomId = data.roomId;
+                noiseSeed = data.noiseSeed;
+                gateCount = data.gateCount;
+            }
+
+            if (activeBp == null)
+            {
+                activeBp = ScriptableObject.CreateInstance<RoomBlueprint>();
+            }
+
+            int minWidth = Mathf.Max(3, activeTemplate.minWidth);
+            int maxWidth = Mathf.Max(minWidth, activeTemplate.maxWidth);
+            int minHeight = Mathf.Max(3, activeTemplate.minHeight);
+            int maxHeight = Mathf.Max(minHeight, activeTemplate.maxHeight);
+            int width = Mathf.Clamp(activeBp.roomWidth > 0 ? activeBp.roomWidth : maxWidth, minWidth, maxWidth);
+            int height = Mathf.Clamp(activeBp.roomHeight > 0 ? activeBp.roomHeight : maxHeight, minHeight, maxHeight);
+
+            activeBp.roomId = roomId;
+            activeBp.roomType = RoomType.Combat.ToString();
+            activeBp.biomeType = activeTemplate.biome;
+            activeBp.noiseSeed = noiseSeed;
+            activeBp.gateCount = gateCount;
+            activeBp.roomWidth = width;
+            activeBp.roomHeight = height;
+
+            var input = new GenerationInput(
+                noiseSeed,
+                activeTemplate.biome.ToString(),
+                activeTemplate.archetypeId,
+                width,
+                height,
+                activeTemplate.generatorVersion);
+
+            GridSnapshot snapshot = CoreRoomBaselineRunner.Run(new RimaRoomBaselineGenerator(), input, FloorTilemap, WallsTilemap);
+            activeBp.roomOrigin = snapshot.origin;
+            activeBp.floorVariantIndex = new byte[width * height];
+            activeBp.wallVariantIndex = new byte[width * height];
+            activeBp.overrideVariantIndex = new bool[width * height];
+
+            FloorVariantPainter.BakeVariants(FloorTilemap, activeBp, activeTemplate.floorVariants);
+
+            List<Vector3Int> allWallCells = CollectOccupiedCells(WallsTilemap);
+            WallAutoConnect.RefreshNeighborhood(WallsTilemap, allWallCells, activeTemplate.wallVariants, activeBp);
+            WallAutoConnect.BakeWallVariants(WallsTilemap, activeBp, activeTemplate.wallVariants);
+
+            MarkDirty();
+        }
+
+        private static List<Vector3Int> CollectOccupiedCells(Tilemap tilemap)
+        {
+            var cells = new List<Vector3Int>();
+            if (tilemap == null)
+            {
+                return cells;
+            }
+
+            BoundsInt bounds = tilemap.cellBounds;
+            for (int x = bounds.xMin; x < bounds.xMax; x++)
+            {
+                for (int y = bounds.yMin; y < bounds.yMax; y++)
+                {
+                    var cell = new Vector3Int(x, y, 0);
+                    if (tilemap.GetTile(cell) != null)
+                    {
+                        cells.Add(cell);
+                    }
+                }
+            }
+
+            return cells;
         }
 
         private void SaveCurrentRoom()
@@ -335,7 +471,9 @@ namespace RIMA.Editor.RoomDesigner
                     (roomId, biome, noiseSeed, gateCount) = metaPanel.GetBlueprintData();
                 }
 
-                var saved = RoomSaver.Save(canvas.StageRoot, roomId, biome, noiseSeed);
+                int width = activeBp != null ? activeBp.roomWidth : 20;
+                int height = activeBp != null ? activeBp.roomHeight : 20;
+                var saved = RoomSaver.Save(canvas.StageRoot, roomId, biome, noiseSeed, width, height);
                 Debug.Log($"Room Designer saved: {saved.prefabPath}, {saved.blueprintPath}");
             }
             catch (Exception ex)

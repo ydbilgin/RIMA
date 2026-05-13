@@ -57,7 +57,7 @@ namespace RIMA.Editor.RoomDesigner
                     uint hash = (uint)((x * 73856093) ^ (y * 19349663) ^ seed);
                     int varIdx = tierOffset + (int)(hash % (uint)tierSize);
 
-                    floorTilemap.SetTile(cell, variantSet[varIdx]);
+                    floorTilemap.SetTile(cell, variantSet[varIdx % variantSet.Length]);
 
                     int arrIdx = (y - bp.roomOrigin.y) * bp.roomWidth + (x - bp.roomOrigin.x);
                     if (arrIdx >= 0 && arrIdx < bp.floorVariantIndex.Length)
@@ -110,7 +110,7 @@ namespace RIMA.Editor.RoomDesigner
                     uint hash = (uint)((x * 73856093) ^ (y * 19349663) ^ seed);
                     int varIdx = tierOffset + (int)(hash % (uint)tierSize);
 
-                    floorTilemap.SetTile(cell, variantSet[varIdx]);
+                    floorTilemap.SetTile(cell, variantSet[varIdx % variantSet.Length]);
                 }
             }
 

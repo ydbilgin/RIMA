@@ -1,7 +1,10 @@
 {
   "name": "RIMA.Editor.TileImport",
   "rootNamespace": "RIMA.Editor.TileImport",
-  "references": [],
+  "references": [
+    "RIMA.Runtime",
+    "Unity.2D.Tilemap.Extras"
+  ],
   "includePlatforms": [
     "Editor"
   ],
