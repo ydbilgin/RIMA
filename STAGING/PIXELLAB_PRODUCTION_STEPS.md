@@ -6,15 +6,38 @@
 
 ---
 
-## ⚙️ HER BATCH İÇİN ORTAK KURAL
+## ⚙️ STYLE REFERENCE POLİTİKASI (Önemli Revize)
 
-**Style Reference Images** alanına HER ZAMAN şu 4 tile'ı yükle:
-- `style_ref_00.png` — saf zemin
-- `style_ref_05.png` — transition iç köşe
-- `style_ref_10.png` — transition iç köşe
-- `style_ref_15.png` — saf duvar
+Wang sheet'in `style_ref_05` + `style_ref_10` aslında **transition tile** (yarı floor yarı wall), style reference olarak kafa karıştırır. **Kullanma onları.**
 
-(Palette tutması için kritik — atlama.)
+### Onaylı Style Reference Akışı
+
+**ADIM 0 (Batch 1 öncesi, ZORUNLU): Pilot Tile Üret**
+
+1. PixelLab Web UI → **Create Image** tool (`create_image_pixen NEW` / S-XL boyutu)
+2. Tek temiz 32×32 floor tile üret. Prompt:
+```
+single dark rubble stone floor tile, 32x32 top-down pixel art viewed from ~35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and hairline cyan rift cracks scattered asymmetrically. Mat painterly pixel, dark gritty palette, heavy texture, no anti-aliased gradients, pixel-honest dithering. Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone. No characters, no props, no walls, no borders, fully tileable on all 4 edges, full coverage no transparent areas.
+```
+3. Boyut: 32×32 (S/küçük)
+4. Beğendiğin ilk PASS çıktıyı kaydet → `STAGING/TILESET_OUTPUT/pilot_floor_clean.png`
+5. (Opsiyonel) Aynı yöntemle **pilot wall tile** üret → `pilot_wall_clean.png` (Wall batch için kullanılır)
+
+**Wall pilot prompt:**
+```
+single dark broken stone wall tile, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy texture, mat painterly pixel, dark gritty palette, no anti-aliased gradients. Vivid Vulnerability mood. No characters, no doors, no borders, full coverage, tileable on all 4 edges.
+```
+
+### Tüm Batch'ler İçin Style Reference Kuralı
+
+| Batch | Yüklenecek Style Ref'ler |
+|---|---|
+| **1 — Floor 64-batch** | `pilot_floor_clean.png` + `style_ref_00.png` (Wang saf floor double-check) |
+| **2 — Wall 64-batch** | `pilot_wall_clean.png` + `style_ref_15.png` (Wang saf wall) + Batch 1 best floor 1 tile (kontrast) |
+| **3 — Decor 64** | `pilot_floor_clean.png` + `pilot_wall_clean.png` + Batch 1 best 2 + Batch 2 best 2 (palette anchor karışım) |
+| **4 — Medium 16** | Batch 3'ten en iyi 3-4 prop + pilot'lar |
+
+**Kural:** Transition tile'ı (05/10) ASLA style reference olarak kullanma — kafa karıştırır. Sadece pure terrain tile'lar + pilot'lar.
 
 ---
 
