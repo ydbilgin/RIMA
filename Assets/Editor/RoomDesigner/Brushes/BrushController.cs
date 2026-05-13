@@ -97,7 +97,7 @@ namespace RIMA.Editor.RoomDesigner.Brushes
         public void ApplyStroke(IRoomDesignerContext ctx, IList<CellEdit> edits, string strokeName)
         {
             if (edits.Count == 0) return;
-            edits = edits.Where(e => e.Target != null).ToList();
+            edits = RoomDesignerWallPolish.ExpandWallEdits(ctx, edits).Where(e => e.Target != null).ToList();
             if (edits.Count == 0) return;
             Undo.IncrementCurrentGroup();
             int group = Undo.GetCurrentGroup();

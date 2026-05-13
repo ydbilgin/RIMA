@@ -1,316 +1,320 @@
-# PixelLab Üretim — Adım Adım Talimatlar
+# PixelLab Uretim -- Alabaster Dawn Asset Model
 
-**Son güncelleme:** 2026-05-13 (S66 sonu, S67 başlangıcı için hazırlandı)
-**Strateji:** Karar #118 (Hybrid Tile Composition)
-**Style Reference dosyaları:** `C:\Users\ydbil\Downloads\PixelLab_Map_Cozumu\asset_006_sliced\style_refs\` (4 tile)
-
----
-
-## ⚙️ YAKLAŞIM: SUB-STYLE MIX (Style Ref'siz, Prompt-Driven Palette)
-
-**Strateji (S66 revize):**
-- Floor batch'te **3 floor alt-türü** + aralarındaki blendler → 64 cell
-- Wall batch'te **3 wall alt-türü** + aralarındaki blendler → 64 cell
-- Wang autoconnect zaten asset_006/007'de halloldu — bu batch'ler sadece **RandomTile variant pool** için
-- Style reference **gerekmiyor** — palette prompt içinde sıkı hex değerlerle zorlanıyor, hepsi aynı terrain tipi olduğu için drift düşük
-
-**Karar:** Floor=floor variants, Wall=wall variants. Birbirine karıştırma. Wang ayrı katmanda zaten dikişi sağlar.
-
-**Style Tiles alanı:** Boş bırak (Wang transition tile'larından kafa karıştıran ref alma).
+**Son guncelleme:** 2026-05-13 (S67 revize)
+**Strateji:** Karar #118 + Alabaster Dawn philosophy -- minimal ham asset + Room Designer procedural composition (Faz 1.0 commit a4757ae)
 
 ---
 
-## 🟢 BATCH 1: Floor Variant 64 — `create_tiles_pro` (3 Floor Sub-Style)
+## DEPRECATED (S66 64-batch sub-style mix)
 
-### Adım Adım
-1. PixelLab web UI'da **Create tiles PRO** tool'unu aç (Map editor değil)
-2. Form'a şunları gir:
+Eski 192-sprite spec (64 floor + 64 wall + 64 decor mixed sub-style) IPTAL. Sebep:
+- PixelLab Create Tiles PRO 32px'te max 16 variant dondurur (64 degil)
+- Sub-style mix tek pool'a girince Unity RandomTile clean ile full-moss yan yana koyar -- kaotik
+- Room Designer Faz 1.0 RandomTile + Wang + decal layer composition'i halleder; tek tile'da bake gereksiz
 
-| Alan | Değer |
+---
+
+## YENi MODEL -- 46 unique sprite, 6 batch, ~120 kredi
+
+| Batch | Tool | Icerik | Adet | Tahmini Kredi |
+|---|---|---|---|---|
+| 1 | create_tiles_pro | F1-Base-Clean floor | 8 | ~15 |
+| 2 | create_object | F1-Decal-Moss (transparent BG) | 8 | ~15 |
+| 3 | create_object | F1-Decal-Rift (transparent BG) | 8 | ~15 |
+| 4 | create_object | F1-Decal-Dust (transparent BG) | 6 | ~12 |
+| 5 | create_tiles_pro | F1-Wall-Clean variant + corner | 6 | ~15 |
+| 6 | create_object | F1-Props | 10 | ~25 |
+| **TOPLAM** | | | **46** | **~97-120** |
+
+---
+
+## Roller -- Asset vs Composition
+
+| Gorev | Kim yapar | Notlar |
+|---|---|---|
+| Ham sprite uretimi | PixelLab / Aseprite | Clean floor, moss/rift/dust decal, wall, prop |
+| RandomTile variant secimi | Room Designer (Faz 1.0) | FloorVariantPainter LUT tabani |
+| Wang autotile dikiş | Room Designer | WallAutoConnect bake -- 4-bit NSEW mask |
+| Decal scatter + asymmetric weathering | Room Designer | Overlay tilemap katmani |
+| Runtime aydinlatma | Unity URP 2D Light | Point Light 2D prop-anchored, floating light YASAK |
+
+## Wang Transition Seam Outline -- ZORUNLU
+
+PixelLab Wang transition prompt'larina su mandatory clause eklenecek:
+
+```
+1px lighter outline on upper terrain seam (HSV +10%), 1px darker outline on lower terrain seam (HSV -10%), crisp edges no muddy pixel blend
+```
+
+Not: Mevcut F1 Wang tile sheet'ler otomatik re-generate edilmeyecek. Bir sonraki PixelLab batch'inde bu clause ile yeniden uretilecek.
+
+---
+
+## BATCH 1: F1-Base-Clean (8 sade clean floor)
+
+**Tool:** create_tiles_pro (PixelLab web UI)
+
+| Alan | Deger |
 |---|---|
-| Tile type | **square_topdown** |
-| Tile size | **32** |
-| View angle | **35°** (slider) |
-| Thickness | **0%** |
-| Outline mode | **segmentation** |
-| Style Tiles | **BOŞ BIRAK** (palette prompt'tan gelir) |
+| Tile type | square_topdown |
+| Tile size | 32 |
+| View angle | 35 (slider) |
+| Thickness | 0% |
+| Outline mode | segmentation |
+| Style Tiles | BOŞ BIRAK |
 
-3. **Description** alanına yapıştır:
+**Prompt:**
 
 ```
-Dark rubble stone floor variations for a shattered keep, 32x32 top-down pixel art tiles viewed from ~35 degrees high top-down angle (Hades reference). Generate a varied set distributing across three sub-styles of the SAME floor terrain AND their natural blends:
+Clean weathered dark stone floor for a shattered keep dungeon, 32x32 top-down pixel art tiles,
+high top-down angle ~35 degrees (Hades reference). Generate 8 distinct floor tile variants,
+all SAME terrain type (no moss, no rift cracks -- pure clean floor only):
 
-1) CLEAN WEATHERED FLOOR: uneven charcoal flagstones, worn cracked mortar, chipped slab edges, base color #2C2A2A, subtle cold blue shadow tint #7BA7BC, sparse dust, foot-traffic polish, minimal damage. Basic floor in good shape.
+1). Flat charcoal flagstone, worn cracked mortar, chipped slab edges, base #2C2A2A, cold blue shadow tint #7BA7BC, minimal dust, foot-traffic polish
+2). Uneven flagstone with slight height variation, deeper shadow in crevice #4A3F3F, sparse stone chips at corners
+3). Large single-slab tile, hairline spider-web surface crack, near-pristine #2C2A2A, very subtle cold blue rim
+4). Two-slab layout, mortar line off-center, asymmetric edge wear, base #2C2A2A
+5). Rough-hewn stone, deep irregular mortar channels, base #2C2A2A, cool shadow pools #4A3F3F
+6). Polished central zone with worn perimeter, faint gloss dithering, base #2C2A2A to #4A3F3F
+7). Mottled surface with cold mineral staining, trace dust accumulation, base #2C2A2A
+8). Worn threshold stone, directional scratch marks, edge chips, base #2C2A2A
 
-2) MOSS-COVERED FLOOR: same dark stone base #2C2A2A but with cold grey-green lichen patches in corners and crevices, scattered moss tufts, occasional small fern sprouts, damp shadow tint, mineral staining. Floor where moisture seeps in.
-
-3) CRACKED RIFT-DUST FLOOR: same dark stone base #2C2A2A with strong hairline cyan-violet rift cracks branching across surface, scattered small floating rift fragments, silver rune dust fragments half-buried, faint void glow seeping into cracks. Floor where rift corruption breaks through.
-
-NATURAL BLENDS between these three sub-styles: clean-to-moss transitions (light lichen creeping into clean stone), clean-to-cracked transitions (initial hairline cracks appearing), moss-to-cracked transitions (rift breaking through mossy patches), and gradual decay sequences where one state evolves into another. Each blend tile asymmetric — moss patches off-center, cracks branching irregularly, rift dust scattered randomly, no symmetrical patterns.
-
-STRICT PALETTE DISCIPLINE: ONLY #2C2A2A dark rubble base, #4A3F3F deep shadow, #7BA7BC cold blue rim, cyan-violet rift accent (rare, only in cracked variants), pale grey-green lichen (rare, only in moss variants), silver rune dust (rare, only in cracked variants). NO bright colors, NO blood, NO outdoor greenery, NO yellow/orange, NO gradients, NO anti-aliasing — pixel-honest dithering only.
-
-Mat painterly pixel art, dark gritty palette, heavy texture, Salt and Sanctuary chibi-but-serious tone + Hades theatrical mythic mood, Vivid Vulnerability aesthetic, ritual catastrophe (cyan-violet rift only, NO gore).
-
-Each tile fully tileable on all 4 edges, full coverage no transparent areas, no characters, no props, no walls, no doors — pure floor tile set only across three sub-styles and their blends.
+STRICT PALETTE: ONLY #2C2A2A dark rubble base, #4A3F3F deep shadow, #7BA7BC cold blue rim.
+NO moss, NO rift cracks, NO props, NO walls, NO transparent areas.
+Each tile fully tileable on all 4 edges.
+Mat painterly pixel art, dark gritty palette, pixel-honest dithering only, no anti-aliasing.
+Salt and Sanctuary chibi-but-serious tone + Hades theatrical mythic mood.
 ```
 
-4. **Generate** bas → ~60-90 sn bekle
-5. Çıktıyı (256×256 sheet, 8×8 grid, 64 tile) **Export** veya save image
-6. Kaydet: `STAGING/TILESET_OUTPUT/F1_FloorVariants_64batch/floor_64_variants.png`
-7. **QC için Claude'a göster** → palette + 3 sub-style ayrımı + ~35° view angle kontrolü
-
-### Beklenen Dağılım
-- ~%30-35 clean weathered floor (20-22 cell)
-- ~%25-30 moss-covered floor (16-19 cell)
-- ~%25-30 cracked rift floor (16-19 cell)
-- ~%15-20 blended transition states (10-12 cell)
-- **Hepsi kullanılabilir** (palette sabit, sadece sub-style farklı)
+**Kaydet:** `STAGING/TILESET_OUTPUT/F1_Floor_Clean_8/floor_clean_8.png`
 
 ---
 
-## 🟢 BATCH 2: Wall Variant 64 — `create_tiles_pro` (3 Wall Sub-Style)
+## BATCH 2: F1-Decal-Moss (8 moss patch, transparent BG)
 
-### Adım Adım
-1. **Create tiles PRO** tool'u aç (Batch 1 ile aynı)
-2. Form ayarları **Batch 1 ile aynı** (square_topdown / 32 / 35° / 0% / segmentation)
-3. **Style Tiles** alanı: **BOŞ BIRAK**
-4. **Description** alanına yapıştır:
+**Tool:** create_object (PixelLab web UI)
 
-```
-Dark broken stone wall variations for a ruined keep, 32x32 top-down pixel art tiles viewed from ~35 degrees high top-down angle (Hades reference). Generate a varied set distributing across three sub-styles of the SAME wall terrain AND their natural blends:
-
-1) CLEAN MASONRY WALL: raised rough wall stones with shadow crevices, base color #4A3F3F, cold blue rim highlights #7BA7BC, ancient fortress masonry pattern, subtle weathering, occasional minor chips. Basic intact wall.
-
-2) DAMAGED COLLAPSED WALL: same dark stone base #4A3F3F but with broken block gaps, exposed mortar fractures, rubble pile fragments at base, soot stains from old fires, hairline cracks branching across surface. Wall where structure has failed in places.
-
-3) RUNE-CARVED RITUAL WALL: same dark stone base #4A3F3F with faint silver sigil fragments embedded in stone, partial ritual circle patterns, occasional cyan-violet rift dust seeping from carved channels, ancient inscriptions half-erased. Wall marking ceremonial or warded sections.
-
-NATURAL BLENDS between these three sub-styles: clean-to-damaged transitions (initial cracks evolving into block loss), clean-to-rune transitions (sigils emerging from intact masonry), damaged-to-rune transitions (broken walls revealing carved fragments beneath), and gradual decay sequences where one state evolves into another. Each blend tile asymmetric — debris off-center, sigil fragments scattered, cracks branching irregularly, no symmetrical patterns.
-
-STRICT PALETTE DISCIPLINE: ONLY #4A3F3F dark wall stone base, #2C2A2A deep crevice shadow, #7BA7BC cold blue rim highlight, silver rune fragments (rare, only in rune variants), cyan-violet rift accent (rare, only in rune variants), occasional rust orange #C4682A on iron loops (rare, only in damaged variants). NO bright colors, NO blood, NO greenery, NO yellow/orange torch glow, NO gradients, NO anti-aliasing — pixel-honest dithering only.
-
-Mat painterly pixel art, dark gritty palette, heavy texture, Salt and Sanctuary chibi-but-serious tone + Hades theatrical mythic mood, Vivid Vulnerability aesthetic.
-
-Each tile fully tileable on all 4 edges, full coverage no transparent areas, no characters, no doors, no archways, no floor — pure wall surface tile set only across three sub-styles and their blends.
-```
-
-5. **Generate** → 60-90 sn → sheet kaydet
-6. Kaydet: `STAGING/TILESET_OUTPUT/F1_WallVariants_64batch/wall_64_variants.png`
-7. **QC için Claude'a göster**
-
-### Beklenen Dağılım
-- ~%30-35 clean masonry wall
-- ~%25-30 damaged collapsed wall
-- ~%25-30 rune-carved ritual wall
-- ~%15-20 blended transition states
-
----
-
-## 🟢 BATCH 3: F1 Decor + Decal + Gameplay 64 — `create_object` (Web UI)
-
-### Adım Adım
-1. PixelLab web UI'da **Create Object** tool'unu aç
-2. Form'da şunları gir:
-
-| Alan | Değer |
+| Alan | Deger |
 |---|---|
-| Directions | **1** |
-| Default Style View | **Top-Down** |
-| Size | **32** (slider) — otomatik 8×8 grid = 64 obje |
+| Directions | 1 |
+| Default Style View | Top-Down |
+| Size | 32 |
 
-3. **Style Reference Images** alanına yükle:
-   - `style_ref_00.png`, `style_ref_05.png`, `style_ref_10.png`, `style_ref_15.png` (4 Wang tile)
-   - + **Batch 1 ve Batch 2'nin best 2-3 tile'ı** (palette anchor için)
-
-4. **Object Description** (üst, genel alan) yapıştır:
+**Prompt (Object Description ust alan):**
 
 ```
-Single environmental object or decal for a shattered keep dungeon, 32x32 transparent background top-down pixel art viewed from ~35 degrees high top-down angle (Hades reference). Mat painterly pixel, dark gritty palette (#2C2A2A dark stone, #4A3F3F shadow, #7BA7BC cold blue, occasional cyan-violet rift accent), Salt and Sanctuary chibi-but-serious tone, Vivid Vulnerability mood. Single isolated object, no characters, no walls, no large background. Decal-style (no shadow baked, Unity URP 2D Light handles lighting). Each item asymmetric weathering.
+Single moss patch decal for dungeon floor overlay, 32x32 transparent background,
+top-down ~35 degree angle. Isolated organic shape, NO baked floor underneath.
+Dark gritty palette, pixel art, mat painterly, no anti-aliasing.
+Unity URP 2D Light handles all lighting -- no shadow baked into sprite.
 ```
 
-5. Arayüz **Describe each item (64)** açacak → her item kutusuna **alttaki listeden ilgili satırı** yapıştır:
+**Her item icin (64 obje alani -- sadece 8 doldur, geri bos birak):**
 
-### Item 1-20: DECALS (yere serilen overlay)
 ```
-1. small moss patch, cold grey-green lichen cluster, organic irregular shape
-2. medium moss patch, denser lichen with small fern tufts
-3. dry moss patch, withered grey-green, sparse coverage
-4. rift crack, cyan-violet hairline, short jagged line
-5. rift crack, cyan-violet hairline, long branching pattern
-6. rift crack, cyan-violet hairline, curved diagonal sweep
-7. rift fragment cluster, small floating cyan-violet dots, scattered
-8. dust pile, fine grey ash with stone chips, light coverage
-9. dust trail, elongated grey ash drift, directional
-10. blood stain old, dark dried brown patch, irregular splatter
-11. grime patch, dark stain on stone, oily texture
-12. soot mark, charcoal black streak, smoke residue
-13. small ash pile, white-grey volcanic ash mound
-14. broken pottery fragment, terracotta shard scattered, 3-4 pieces
-15. spilled candle wax, off-white dried wax pool
-16. ink spill, dark blue-black liquid stain
-17. small bone fragments, ivory white shard scatter
-18. scratched stone overlay, hairline gouges across floor
-19. footprint mark, dark boot tread on dust, single track
-20. ritual sigil residue, faint silver-cyan glow pattern, half-erased
+1). small moss patch, cold grey-green lichen cluster, irregular amoeba shape, sparse coverage
+2). medium moss patch, denser cold grey-green lichen with tiny fern tufts at edges
+3). large moss patch, layered lichen mat, dark centre #2C2A2A showing through at gaps
+4). dry moss patch, withered grey-green, crumbling edges, sparse bleached tips
+5). corner moss cluster, wedge-shaped lichen growth, hugs an implied corner
+6). moss tuft thin strip, narrow elongated growth, fits along a wall edge
+7). moss with mineral stain, cold grey-green lichen over dark mineral seep mark
+8). heavy moss mat, near-full coverage, small stone chips visible through growth
 ```
 
-### Item 21-50: SMALL PROPS
-```
-21. small wooden barrel, weathered planks, iron bands
-22. small iron chest, dark metal, rusted hinges, closed
-23. small clay urn, terracotta, cracked rim
-24. broken stone urn, fragments scattered around base
-25. lit candle, white wax stub, small flame
-26. unlit candle, white wax stub, melted top
-27. candle holder, dark iron base with candle
-28. small skull, human, weathered ivory
-29. small bone pile, mixed fragments, vertebrae and ribs
-30. broken sword fragment, snapped blade in stone
-31. broken shield half, splintered wood with iron rim
-32. rusted dagger, half-buried in dust
-33. broken arrow, snapped shaft with iron tip
-34. coin pile small, tarnished silver coins, scattered
-35. coin pile medium, mix of silver and copper
-36. scroll rolled, dark parchment with red wax seal
-37. scroll unrolled, faded parchment partially visible
-38. spell book closed, leather-bound dark tome
-39. broken book pages, scattered parchment fragments
-40. ink pot, dark glass with quill, half-empty
-41. small rubble pile, mixed stones and dust
-42. medium rubble pile, larger broken masonry chunks
-43. broken stone tile single, chipped 32x32 fragment
-44. cracked floor stone, hairline rift crack visible
-45. moss covered rock, small boulder with lichen
-46. chain segment short, rusted iron links
-47. iron ring single, dark metal, embedded in floor
-48. broken padlock, snapped shackle, dark iron
-49. ritual stone small, carved sigil, faint glow
-50. rune fragment, broken stone with cyan glyph
-```
-
-### Item 51-64: GAMEPLAY (Karar #86 F1 minimum 6 + variants)
-```
-51. interactive chest gameplay, polished dark wood with iron bands, intact, closed
-52. interactive chest opened, lid raised, glowing interior
-53. shrine altar small, dark stone slab with rune carving, intact
-54. broken shrine altar, split stone with rune fragment scattered
-55. spike trap embedded, iron spikes protruding from stone floor
-56. spike trap retracted, closed iron grate flush with floor
-57. lever wall mounted, dark iron handle, upright position
-58. lever pulled, dark iron handle, lowered position
-59. pressure plate, stone tile slightly recessed, faint glow
-60. brazier small, dark iron bowl with cold blue flame
-61. unlit brazier, dark iron bowl, ash residue
-62. rift gate small, cyan-violet portal fragment, swirling void
-63. door wooden small, dark planks with iron studs, closed
-64. door wooden small, opened position, swung inward
-```
-
-6. **Generate** bas → ~2-4 dakika bekle (büyük batch)
-7. Çıktıyı (sheet, 8×8 grid, 64 obje, transparent BG) kaydet
-8. Kaydet: `STAGING/PROP_OUTPUT/F1_Decor_64batch_32px/decor_64.png`
-9. **QC için Claude'a göster**
+**Kaydet:** `STAGING/PROP_OUTPUT/F1_Decal_Moss_8/decal_moss_8.png`
 
 ---
 
-## 🟡 BATCH 4: F1 Medium Props 16 — `create_object` (Batch 1+2+3 sonrası)
+## BATCH 3: F1-Decal-Rift (8 cyan rift crack + rune dust, transparent BG)
 
-### Adım Adım
-1. **Create Object** tool aç (Batch 3 ile aynı)
-2. Form değişikliği:
+**Tool:** create_object
 
-| Alan | Değer |
+**Prompt (Object Description ust alan):**
+
+```
+Single rift crack or rune dust decal for dungeon floor overlay, 32x32 transparent background,
+top-down ~35 degree angle. Isolated shape, NO baked floor underneath.
+Cyan-violet rift accent (#00FFCC-adjacent, muted), silver rune dust fragments.
+Dark gritty pixel art, mat painterly, no anti-aliasing, no bright glow baked in sprite.
+Unity URP 2D Light handles glow -- sprite is the shape only.
+```
+
+**Her item icin:**
+
+```
+1). short rift crack, cyan-violet hairline, straight with slight jag
+2). long rift crack, cyan-violet hairline, branching Y-shape, asymmetric
+3). curved rift crack, cyan-violet diagonal sweep, tapers at ends
+4). rift fragment cluster, small floating cyan-violet dust motes, scattered irregular
+5). rune dust patch, silver-cyan glyph fragment half-buried in implied floor, illegible
+6). rift seam wide, two parallel hairlines with void-dark gap between, faint inner glow shape
+7). rift crack with rune dust, branching crack plus scattered silver fragment trail
+8). micro rift cluster, three short hairline cracks radiating from a centre point
+```
+
+**Kaydet:** `STAGING/PROP_OUTPUT/F1_Decal_Rift_8/decal_rift_8.png`
+
+---
+
+## BATCH 4: F1-Decal-Dust (6 dust/ash overlay, transparent BG)
+
+**Tool:** create_object
+
+**Prompt (Object Description ust alan):**
+
+```
+Single dust or ash overlay decal for dungeon floor, 32x32 transparent background,
+top-down ~35 degree angle. Isolated shape, NO baked floor underneath.
+Pale grey ash, fine stone chips, dark gritty palette, mat pixel art, no anti-aliasing.
+```
+
+**Her item icin:**
+
+```
+1). fine grey ash pile, circular low mound, soft dithered edge
+2). ash trail, elongated directional drift, tapers at one end
+3). stone chip scatter, 4-6 tiny irregular fragments, ivory-grey
+4). mixed dust and chip, ash pool with stone chip cluster at centre
+5). soot streak, charcoal-black elongated mark, smoke residue
+6). ash drift thin, narrow wisp-shaped deposit along implied edge
+```
+
+**Kaydet:** `STAGING/PROP_OUTPUT/F1_Decal_Dust_6/decal_dust_6.png`
+
+---
+
+## BATCH 5: F1-Wall-Clean (6 wall variant + corner)
+
+**Tool:** create_tiles_pro
+
+**Form ayarlari Batch 1 ile ayni** (square_topdown / 32 / 35 / 0% / segmentation / Style Tiles bos)
+
+**Prompt:**
+
+```
+Clean dark stone wall variants for a ruined keep, 32x32 top-down pixel art tiles,
+high top-down angle ~35 degrees. Generate 6 wall tile variants, all SAME terrain
+(no rune carvings, no heavy damage -- clean intact masonry only):
+
+1). Standard wall tile, raised rough stone blocks, shadow crevice #4A3F3F, cold blue rim #7BA7BC
+2). Wall tile with vertical mortar line off-center, subtle weathering chips
+3). Larger block face, single horizontal crack near top edge, base #4A3F3F
+4). Corner wall tile (implied 90-degree exterior corner), two faces meeting, asymmetric shadow
+5). Wall end cap, one open edge (floor-facing), mortar exposed at cut edge
+6). Wall with minor soot stain from old fire, dark streak on base #4A3F3F, no structural damage
+
+STRICT PALETTE: ONLY #4A3F3F dark wall stone, #2C2A2A deep crevice, #7BA7BC cold blue rim.
+NO moss, NO rune carvings, NO rift cracks, NO characters, NO floor.
+Each tile fully tileable on relevant edges. Full coverage no transparent areas.
+Mat painterly pixel art, pixel-honest dithering, no anti-aliasing.
+```
+
+**Kaydet:** `STAGING/TILESET_OUTPUT/F1_Wall_Clean_6/wall_clean_6.png`
+
+---
+
+## BATCH 6: F1-Props (10 prop)
+
+**Tool:** create_object
+
+| Alan | Deger |
 |---|---|
-| Size | **64** → 4×4 grid = 16 obje |
+| Directions | 1 |
+| Default Style View | Top-Down |
+| Size | 32 |
 
-3. **Style Reference Images:**
-   - 4 style_ref Wang tile
-   - + Batch 3'ten **en iyi 2-3 prop** (palette anchor)
+**Prompt (Object Description ust alan):**
 
-4. **Object Description** (üst alan):
 ```
-Single medium-sized environmental prop or interactive object for a shattered keep dungeon, 64x64 transparent background top-down pixel art viewed from ~35 degrees high top-down angle (Hades reference). Mat painterly pixel, dark gritty palette (#2C2A2A dark stone, #4A3F3F shadow, #7BA7BC cold blue, occasional rust orange #C4682A, occasional cyan-violet rift accent), Salt and Sanctuary chibi-but-serious tone. Single isolated object, no characters, no walls.
-```
-
-5. **Item 1-16:**
-```
-1. broken_pillar_section, 32x64 fragment, half-collapsed dark stone column
-2. iron_cage_large, rusted bars, broken door, hanging chain
-3. large_chest, dark wood with brass bindings, closed
-4. brazier_tall, iron pillar with cold blue flame bowl on top
-5. altar_intact, dark stone slab with rune carving, ritual circle base
-6. altar_broken, split stone slab with shattered rune fragments
-7. throne_fragment, broken stone throne side, ancient royal seat
-8. statue_head_fallen, weathered stone head on side, half-buried
-9. large_urn, terracotta vessel, intact with carved sigil
-10. large_rubble_pile, heaped masonry chunks with dust cloud
-11. broken_column_top, crowned capital piece lying on floor
-12. iron_torch_stand, wall-mount holder with flame
-13. ritual_circle_partial, faded chalk pattern with cold glow remains
-14. broken_statue_torso, headless figure remains, kneeling pose
-15. large_skull_horned, oversized ram or beast skull, ivory bone
-16. ancient_anvil, dark iron forge anvil with hammer marks
+Single environmental prop for a shattered keep dungeon, 32x32 transparent background,
+top-down ~35 degree angle (Hades reference). Single isolated object.
+Dark gritty palette (#2C2A2A, #4A3F3F, #7BA7BC cold blue, occasional #C4682A rust).
+Mat painterly pixel art, no anti-aliasing, no shadow baked (Unity URP 2D Light).
+Salt and Sanctuary chibi-but-serious tone. Asymmetric weathering on each prop.
 ```
 
-6. **Generate** → bekle → kaydet
-7. Yer: `STAGING/PROP_OUTPUT/F1_MediumProps_16batch_64px/medium_props_16.png`
+**Her item icin:**
+
+```
+1). small iron chest, dark metal, rusted hinges, closed, tarnished surface
+2). small clay urn, terracotta, cracked rim, dust-coated
+3). lit brazier small, dark iron bowl, cold blue flame (no orange glow baked)
+4). small skull, human, weathered ivory, jaw slightly displaced
+5). scroll rolled, dark parchment with cracked red wax seal
+6). broken sword fragment, snapped blade half-buried in implied floor
+7). small rubble pile, 3-4 mixed masonry chunks with dust
+8). chain segment short, rusted iron links, coiled loosely
+9). ritual stone small, carved sigil, muted silver-cyan accent (no bright glow baked)
+10). interactive chest gameplay, dark wood with iron bands, intact closed, slightly larger than item 1
+```
+
+**Kaydet:** `STAGING/PROP_OUTPUT/F1_Props_10/props_10.png`
 
 ---
 
-## ⚪ BATCH 5 (FAZ 1.5 — Opsiyonel): Large Props 4 — `create_object`
+## Split-Animation Workflow (Karar #120)
 
-### Adım Adım
-1. **Create Object** aç
-2. Size: **128** → 2×2 grid = 4 obje
-3. Item 1-4:
-```
-1. full_pillar_intact, complete dark stone column, ornate base and capital
-2. boss_arena_altar, large dark ritual altar with cold blue glow centerpiece
-3. shattered_statue_full, complete fallen guardian statue, ruined
-4. rift_obelisk, tall cyan-violet glowing monolith, ritual catastrophe centerpiece
-```
+Trigger: frame budget >= 12f VE net tek apex frame.
 
-4. Faz 1.5'te, şimdi opsiyonel — boss arena için lazım olduğunda yap.
+Adimlar:
+1. Apex frame # ve pose tanimla (kaydet: apex_frame, apex_state_id per direction)
+2. Create State ile apex pose uret (20-40 gen, 8 yon per Karar #108+#114)
+3. Part 1 Custom V3: frames 1..APEX, End Frame = Apex State
+4. Part 2 Custom V3: frames APEX..N, First Frame = Apex State
+5. Aseprite: Part 1 full + Part 2 frame 2..N, apex bir kez, label fNN_APEX
 
----
+Export QC (5 madde -- PASS olmadan commit yok):
+[ ] Part 1 son frame hash == Part 2 ilk frame hash (per direction)
+[ ] Sheet frame count per row == N
+[ ] Exactly 1 fNN_APEX per direction
+[ ] Frame order: Part 1 full + Part 2 frames 2..N
+[ ] Apex frame hash == Stage 1 apex_pixel_hash
 
-## 📋 Sıra ve Bağımlılıklar
-
-```
-Batch 1 (Floor 64)  ──┐
-                      ├──> Batch 3 (Decor 64) ──> Batch 4 (Medium 16)
-Batch 2 (Wall 64)   ──┘                                  │
-                                                          └──> Batch 5 (Large 4, Faz 1.5)
-```
-
-**Önemli:**
-- Batch 2 başlamadan **Batch 1 PASS olmalı** (style ref Batch 2'ye Batch 1'in best tile'ları girer)
-- Batch 3 başlamadan **Batch 1+2 PASS olmalı** (style ref karışımı)
-- Her batch sonrası **Claude'a göster QC için** — devam onayı al
+Part 1 + Part 2 prompt sablonu (weapon animasyonlari icin Karar #71 blok):
+[motion description]
+weapon gripped and attached every frame, weapon hand fingers and wrist fixed on haft every frame,
+during collapse weapon follows hand as one rigid unit, [body-part lock list per drift rules]
 
 ---
 
-## ❌ Yapma Listesi
+## Yapma Listesi
 
-- ❌ PixelLab Map editor'ünde harita çizme — mockup bile Unity'de yapılacak (Karar #118 disiplin)
-- ❌ Wang chain üretme (Floor↔Moss, Floor↔Rift) — moss/rift decal olarak Batch 3'te
-- ❌ Style reference olmadan generate — palette drift eder
-- ❌ Tile size 32 dışında bir şey (Karar #100 LOCKED)
-- ❌ View angle 35° dışında (Karar #113 LOCKED)
-- ❌ Outline `single color` veya `selective` (`segmentation`/`lineless` kullan — dark gritty için)
+- Floor tile'a moss / rift / dust BAKE -- decal overlay katmanina ayir (Room Designer halleder)
+- Tile icinde light bake -- Unity URP 2D Light runtime (Point Light 2D prop-anchored)
+- 64 variant istemek -- PixelLab 32px = max 16 tile dondurur; batch basina 6-8 hedefle
+- View angle 30 derece -- 35 derece LOCKED (Karar #113)
+- Tek pool'a sub-style mix -- clean / moss / rift her biri ayri pool veya decal katman
+- PixelLab Map editor'unde harita cizme -- mockup bile Unity'de (Karar #118 disiplin)
+- Style reference olmadan generate -- palette drift eder; pilot tile set sonrasi style_ref ver
+- Outline mode single_color veya selective -- segmentation veya lineless kullan (dark gritty)
+- Floating light -- her Point Light 2D'nin gorunur prop sahibi olmali (REF_NUGGETS kural)
 
 ---
 
-## 🔧 Yardımcı Script'ler
+## Per-Batch QC Checklist
+
+1. Palette discipline -- #2C2A2A / #4A3F3F / #7BA7BC paletinden cikmamis mi?
+2. Tile view -- pure high top-down floor (Batch 1/5); no vertical wall in floor tiles
+3. Raggedness yuzde 40 veya uzeri (Karar #116) -- tile kenarlari dogal, grid-block hissi yok
+4. Decal transparent BG, no baked floor under (Batch 2/3/4)
+5. Asymmetric weathering -- simetrik pattern, merkeze kilitlenen dekor yok
+6. Tileable (Batch 1/5) -- 4-edge seamless, yan yana koyunca dikis okunmuyor
+7. No banned content -- kan splatter, parlak cartoon renk, outline cartoon, gradient yok
+
+Tum 7 PASS olursa -- Next Batch veya Aseprite cleanup + Unity import.
+
+---
+
+## Yardimci Scriptler
 
 **Wang sheet'ten 32px tile kesimi:**
 ```bash
 python tools/slice_wang_sheet.py "<sheet.png>"
 ```
-Otomatik 16 tile + 4 style_ref klasörü üretir.
+Otomatik 16 tile + 4 style_ref klasoru uretir.
 
-**Büyük görseli resize (Claude okuyabilmek için):**
+**Buyuk gorseli resize (Claude okuyabilmek icin):**
 ```bash
 python tools/resize_image.py "<image.png>"
 ```
@@ -318,13 +322,5 @@ Aspect-ratio koruyarak max 1800px'e indirir.
 
 ---
 
-## ✅ Her Batch Sonrası QC Checklist (Claude bunu yapacak)
-
-1. **Palette tutarlılığı** — #2C2A2A / #4A3F3F / #7BA7BC paletinden çıkmamış mı?
-2. **View angle ~35°** — 45° kuş bakışı değil, hafif eğik
-3. **Raggedness ≥40%** (Karar #116) — tile kenarları doğal, grid-block hissi yok
-4. **Variant zenginliği** — 64 tile'da gerçekten farklı kompozisyonlar
-5. **No banned content** — kan splatter, parlak cartoon renk, outline cartoon, gradient yok
-6. **Tileable** — yan yana koyunca dikiş okunmuyor (4x zoom'da hairline crack continuity)
-
-Tüm 6 PASS olursa → **Next Batch** veya **Aseprite cleanup + Unity import**
+**Revize tarihi:** 2026-05-13 (S67)
+**Revize sebebi:** Faz 1.0 Room Designer (commit a4757ae) procedural composition'i sagliyor -- floor/wall/decal katman ayirimi Room Designer gorevidir, PixelLab sadece minimal ham asset uretir. 192-sprite overkill spec kaldirildi.

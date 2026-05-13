@@ -98,6 +98,36 @@ TextureImporter:
   - first:
       213: -274402995550257307
     second: wang_rubble_path_wang_15
+  - first:
+      213: 8723092845540764860
+    second: wang_rubble_path_00
+  - first:
+      213: -5090500825752664061
+    second: wang_rubble_path_01
+  - first:
+      213: 6410439614447734738
+    second: wang_rubble_path_02
+  - first:
+      213: -7194501781415829580
+    second: wang_rubble_path_03
+  - first:
+      213: -4913983053529875410
+    second: wang_rubble_path_04
+  - first:
+      213: -8004961396335056748
+    second: wang_rubble_path_05
+  - first:
+      213: -5141492899271330850
+    second: wang_rubble_path_06
+  - first:
+      213: -5074711517944014996
+    second: wang_rubble_path_07
+  - first:
+      213: 6080019930574373061
+    second: wang_rubble_path_08
+  - first:
+      213: 5367364529956383464
+    second: wang_rubble_path_09
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -143,7 +173,7 @@ TextureImporter:
   spriteExtrude: 0
   spriteMeshType: 0
   alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  spritePivot: {x: 0.5, y: 0}
   spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
@@ -206,353 +236,353 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: wang_rubble_path_wang_00
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 31141f17bcb74bd60800000000000000
-      internalID: 7905079359662276883
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_01
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c9692ecb0f90851a0800000000000000
-      internalID: -6820690706086848868
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_02
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0e2afd6c27a0080c0800000000000000
-      internalID: -4575645733329329440
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_03
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 38d50bbf6ba3b8c90800000000000000
-      internalID: -7166569824448914045
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_04
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9c40c1f83cc2d22d0800000000000000
-      internalID: -3301933733361482551
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_05
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6645fe84a78fbb7e0800000000000000
-      internalID: -1748530826209962906
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_06
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1eda90d42a4aa58b0800000000000000
-      internalID: -5162633005842715167
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_07
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 918928ae6429843e0800000000000000
-      internalID: -2069243195496949735
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_08
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ecbe3b6fe4835d510800000000000000
-      internalID: 1573225556633447374
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_09
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 30c889696fab354b0800000000000000
-      internalID: -5452809155564237821
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wang_rubble_path_wang_10
+      name: wang_rubble_path_00
       rect:
         serializedVersion: 2
         x: 64
         y: 32
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5441d5184e6dcaa50800000000000000
-      internalID: 6533833436318995525
+      spriteID: cbc6531e9b6ae0970800000000000000
+      internalID: 8723092845540764860
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wang_rubble_path_wang_11
+      name: wang_rubble_path_01
       rect:
         serializedVersion: 2
         x: 96
         y: 32
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8e247c6a8c3bfeac0800000000000000
-      internalID: -3823639884241354008
+      spriteID: 3080e283878ea59b0800000000000000
+      internalID: -5090500825752664061
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wang_rubble_path_wang_12
+      name: wang_rubble_path_02
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 64
+        y: 64
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 81e14056e125ee3a0800000000000000
-      internalID: -6634274910572896744
+      spriteID: 2dfcf398dd476f850800000000000000
+      internalID: 6410439614447734738
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wang_rubble_path_wang_13
+      name: wang_rubble_path_03
       rect:
         serializedVersion: 2
         x: 32
-        y: 0
+        y: 64
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 02ee89e8731e69eb0800000000000000
-      internalID: -4713332331264807392
+      spriteID: 4bf5bc67fbef72c90800000000000000
+      internalID: -7194501781415829580
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wang_rubble_path_wang_14
+      name: wang_rubble_path_04
       rect:
         serializedVersion: 2
         x: 64
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 653bf1cd237ec4c40800000000000000
-      internalID: 5498023450739979094
+      spriteID: e2cff0eb2760ecbb0800000000000000
+      internalID: -4913983053529875410
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wang_rubble_path_wang_15
+      name: wang_rubble_path_05
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 498ebbaa50aa8e090800000000000000
+      internalID: -8004961396335056748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_06
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed33dbbe27fb5a8b0800000000000000
+      internalID: -5141492899271330850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_07
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c671d5be2c00399b0800000000000000
+      internalID: -5074711517944014996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_08
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c04e2dd9e1906450800000000000000
+      internalID: 6080019930574373061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_09
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eae41c3a95bc7a40800000000000000
+      internalID: 5367364529956383464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_10
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d67759b6a178e32b0800000000000000
+      internalID: -5602892338858461331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e4b81f8caa279520800000000000000
+      internalID: 2708680621510145248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_12
       rect:
         serializedVersion: 2
         x: 96
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56f7cecedef113cf0800000000000000
-      internalID: -274402995550257307
+      spriteID: d2ad8a9c8cf018720800000000000000
+      internalID: 2846573794526026285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c5b1fb6dd152d340800000000000000
+      internalID: 4887058557091034560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_14
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b8d6cfab46bf0d60800000000000000
+      internalID: 7858700310972651698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_rubble_path_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9888f9b01539e4200800000000000000
+      internalID: 166232212555925641
       vertices: []
       indices: 
       edges: []
@@ -572,6 +602,16 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       wang_rubble_path_0: -6404338533733137103
+      wang_rubble_path_00: 8723092845540764860
+      wang_rubble_path_01: -5090500825752664061
+      wang_rubble_path_02: 6410439614447734738
+      wang_rubble_path_03: -7194501781415829580
+      wang_rubble_path_04: -4913983053529875410
+      wang_rubble_path_05: -8004961396335056748
+      wang_rubble_path_06: -5141492899271330850
+      wang_rubble_path_07: -5074711517944014996
+      wang_rubble_path_08: 6080019930574373061
+      wang_rubble_path_09: 5367364529956383464
       wang_rubble_path_1: 3587206594194741084
       wang_rubble_path_10: -5602892338858461331
       wang_rubble_path_11: 2708680621510145248

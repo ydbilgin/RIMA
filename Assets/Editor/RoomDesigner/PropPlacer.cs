@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using RIMA.RoomDesigner.Core;
 using RIMA.Runtime.Rooms;
 using RIMA.Systems.Map;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -9,6 +10,9 @@ namespace RIMA.Editor.RoomDesigner
 {
     public static class PropPlacer
     {
+        private const string DropShadowSpritePath = "Assets/Art/VFX/DropShadow_Oval.png";
+        private static readonly Vector3 ShadowOffset = new Vector3(0f, -0.2f, 0.01f);
+
         public static List<GameObject> PlaceProps(GameObject stageRoot, AnchorZone[] anchors, PropSpec[] propSpecs, RoomBlueprint bp, int masterSeed)
         {
             var placed = new List<GameObject>();
@@ -47,6 +51,7 @@ namespace RIMA.Editor.RoomDesigner
                 Vector3 worldPos = GetWorldPosition(stageRoot, grid, bp, anchor);
                 GameObject prop = Object.Instantiate(spec.prefab, worldPos, Quaternion.identity, stageRoot.transform);
                 prop.name = $"{spec.prefab.name}_{anchor.tag}";
+                AddDropShadow(prop);
                 placed.Add(prop);
 
                 if (spec.requiresVisibleSource)
@@ -61,6 +66,26 @@ namespace RIMA.Editor.RoomDesigner
             }
 
             return placed;
+        }
+
+        private static void AddDropShadow(GameObject prop)
+        {
+            Sprite shadowSprite = AssetDatabase.LoadAssetAtPath<Sprite>(DropShadowSpritePath);
+            if (shadowSprite == null)
+            {
+                Debug.LogWarning($"PropPlacer: drop shadow sprite missing at {DropShadowSpritePath}");
+                return;
+            }
+
+            var shadow = new GameObject("Shadow");
+            shadow.transform.SetParent(prop.transform, false);
+            shadow.transform.localPosition = ShadowOffset;
+            shadow.transform.SetAsFirstSibling();
+
+            var shadowRenderer = shadow.AddComponent<SpriteRenderer>();
+            shadowRenderer.sprite = shadowSprite;
+            shadowRenderer.color = new Color(0f, 0f, 0f, 0.4f);
+            shadowRenderer.sortingOrder = -1;
         }
 
         private static List<PropSpec> CollectMatchingSpecs(PropSpec[] propSpecs, string anchorTag)
