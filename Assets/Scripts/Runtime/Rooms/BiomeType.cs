@@ -4,6 +4,9 @@ namespace RIMA.Runtime.Rooms
     {
         Keep,
         Crypt,
-        Volcanic
+        Volcanic,
+        ShatteredRuins,
+        BleedingWastes,
+        CoreApproach
     }
 }

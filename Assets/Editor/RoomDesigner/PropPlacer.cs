@@ -18,6 +18,12 @@ namespace RIMA.Editor.RoomDesigner
                 return placed;
             }
 
+            if (propSpecs.Length == 0)
+            {
+                Debug.LogWarning("PropPlacer: propSpecs is empty.");
+                return placed;
+            }
+
             int subSeed = SeedPipeline.DeriveSubSeed(masterSeed, "prop");
             var random = new System.Random(subSeed);
             Grid grid = stageRoot.GetComponent<Grid>();

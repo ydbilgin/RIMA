@@ -6,6 +6,7 @@
         "UnityEditor.TestRunner",
         "RIMA.Runtime",
         "RIMA.RoomDesigner.Core",
+        "RIMA.RoomDesigner.Core.Editor",
         "RIMA.RoomDesigner.Editor",
         "GUID:2bafac87e7f4b9b418d9448d219b01ab",
         "RIMA.Tests.Contracts"
