@@ -6,14 +6,15 @@
 ## S72 İLK ADIMLAR (Yeni session — kullanıcı uyandığında)
 
 1. **CURRENT_STATUS oku** (bu dosya)
-2. **2 aktif Codex dispatch kontrol** (blvtexp8a + bbat8dpw5):
-   - `CODEX_DONE_yasinderyabilgin.md` → LayeredRoomPainter biome wiring tamamlandı mı?
-   - `CODEX_DONE_laurethgame.md` → Player prefab wiring tamamlandı mı?
-3. **Animation spec LOCK onayı:** `STAGING/animation_system_spec_LOCKED.md` kullanıcıya göster — PixelLab batch başlamadan önce son onay gerekiyor
-4. **Tile asset pack karar:** `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io — satın alma kararı kullanıcıda
-5. **Idle batch başlat (PixelLab Web UI):** `STAGING/idle_batch_class_mob_create_image_pro.md` — 10 class + 6 mob, kullanıcı kredileri yenilince
+2. **Tüm Codex taskları tamamlandı** — read_console ile compile durumu kontrol et
+3. **Demo sahne test et:** Unity'de `Assets/Scenes/Demo/_FazMVP_Demo.unity` aç → `GenerateBiomeLayered` context menu → sonuç kontrol
+4. **Animation spec onayı:** `STAGING/animation_system_spec_LOCKED.md` oku → PixelLab batch kararı ver
+5. **Tile asset pack karar:** `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io satın alma
+6. **PixelLab idle batch:** `STAGING/idle_batch_class_mob_create_image_pro.md` — 10 class + 6 mob (krediler yenilince)
 
-**Öncelik sırası:** Dispatch sonuçları QC → animation spec onayı → PixelLab idle batch → Karar #119 AI ASCII Parser dispatch
+**Öncelik sırası:** Demo test → animation spec onayı → PixelLab batch OR tile asset pack karar
+
+**Codex tamamlanan (S71 gece):** 8 commit — selout, beat3, weapondb, biome wiring, player prefab, Karar #119 ASCII parser, demo scene
 
 ## S70 LOCKED Decisions (2026-05-14)
 
@@ -59,12 +60,14 @@ Detay: `STAGING/karar_126_to_130_organic_pipeline.md`
 - **LayeredRoomPainter PaintBiome()** — `commit 804a3f6` ✓ (4-layer Wang+biome, wallFront/wallTop routing)
 - **Player.prefab + HandAnchorAttach wiring** — `commit c33c5bd` ✓ (Player.prefab, CharacterSelectScreen scene fix)
 
-### 🔄 ÇALIŞIYOR (S71 gece — 3. batch)
-1. **Codex laurethgame (bwstaax4z) → Karar #119 AI ASCII Parser** — TileAssetMetadata.charKey + AITilemapImporter EditorWindow
-2. **Codex yasinderyabilgin (bxs4ax12n) → Demo Scene Bootstrap** — _FazMVP_Demo.unity, Pixel Perfect Camera, Player.prefab spawn
+### ✅ TAMAMLANAN (S71 gece — 3. batch)
+- **Karar #119 AITilemapImporter** — `commit 256eb6d` ✓ (TileAssetMetadata.charKey + EditorWindow RIMA > Tools > AI Tilemap Importer, 3-layer parsing)
+- **_FazMVP_Demo.unity Demo Scene** — `commit 8f922c5` ✓ (Tilemap stack + Shattered Keep biome preset + Player.prefab spawned)
 
-### ⏳ SIRADAKI
-- (Profiller meşgul — sonuçlar beklenince karar ver)
+### ⏳ SIRADAKI (kullanıcı için)
+- **Animation spec LOCK onayı** — `STAGING/animation_system_spec_LOCKED.md` okuyup PixelLab batch başlat
+- **Tile asset pack karar** — `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io
+- **PixelLab idle batch** — `STAGING/idle_batch_class_mob_create_image_pro.md` (10 class + 6 mob, krediler yenilince)
 
 ## 🎬 Video Analiz DONE
 
@@ -175,6 +178,8 @@ seam_crawler, plate_widow, relic_caster, rift_hound (canonical, `rift_gound` fil
 **Profil kullanılan:** yasinderyabilgin + laurethgame
 
 **rima-design konsültasyon:** 4 sonraki safe task belirlendi (T1 biome wiring, T2 player prefab, T3 Karar #119, T4 demo scene)
+
+**Tamamlanan 3. batch:** Karar #119 AITilemapImporter `256eb6d`, Demo Scene _FazMVP_Demo.unity `8f922c5`
 
 ### S70 gece (2026-05-14) — Sonnet overnight orchestrator — cx timeout fix + 4 parallel dispatch
 
