@@ -15,6 +15,10 @@ namespace RIMA.Demo
         [SerializeField] private Tilemap baseTilemap;
         [SerializeField] private Tilemap decalsTilemap;
         [SerializeField] private Tilemap wallsTilemap;
+        [SerializeField] private Tilemap wallsFrontTilemap;
+        [SerializeField] private Tilemap wallsTopTilemap;
+        [SerializeField] private RimaBiomePreset biomePreset;
+        [SerializeField] private TileAssetMetadata[] wangTileLibrary;
         [SerializeField] private GameObject stageRoot;
         [SerializeField] private int seed = 42;
 
@@ -28,8 +32,9 @@ namespace RIMA.Demo
                 return;
             }
 
-            int width = Mathf.Clamp(15, Mathf.Max(3, template.minWidth), Mathf.Max(template.minWidth, template.maxWidth));
-            int height = Mathf.Clamp(12, Mathf.Max(3, template.minHeight), Mathf.Max(template.minHeight, template.maxHeight));
+            var rng = new System.Random(seed);
+            int width = rng.Next(Mathf.Max(3, template.minWidth), Mathf.Max(template.minWidth + 1, template.maxWidth + 1));
+            int height = rng.Next(Mathf.Max(3, template.minHeight), Mathf.Max(template.minHeight + 1, template.maxHeight + 1));
             var input = new GenerationInput(seed, template.biome.ToString(), template.archetypeId, width, height, template.generatorVersion);
             GridSnapshot snapshot = RunCoreRoomBaseline(new RimaRoomBaselineGenerator(), input, baseTilemap, wallsTilemap);
 
@@ -65,6 +70,82 @@ namespace RIMA.Demo
                 InvokeVoid("RIMA.Editor.RoomDesigner.WallAutoConnect, RIMA.RoomDesigner.Editor", "RefreshNeighborhood", wallsTilemap, wallCells, template.wallVariants, bp);
                 InvokeBool("RIMA.Editor.RoomDesigner.WallAutoConnect, RIMA.RoomDesigner.Editor", "BakeWallVariants", wallsTilemap, bp, template.wallVariants);
             }
+        }
+
+        [ContextMenu("0. Generate Layered (Karar #122)")]
+        public void GenerateLayered()
+        {
+            if (!EnsureTemplateAndTilemaps())
+            {
+                return;
+            }
+
+            if (template.singleFloorTile == null || template.singleWallTile == null)
+            {
+                Debug.LogError("RoomPipelineTestController: assign singleFloorTile + singleWallTile on template for layered mode.");
+                return;
+            }
+
+            var rng = new System.Random(seed);
+            int width = rng.Next(Mathf.Max(3, template.minWidth), Mathf.Max(template.minWidth + 1, template.maxWidth + 1));
+            int height = rng.Next(Mathf.Max(3, template.minHeight), Mathf.Max(template.minHeight + 1, template.maxHeight + 1));
+
+            var input = new GenerationInput(seed, template.biome.ToString(), template.archetypeId, width, height, template.generatorVersion);
+            var gen = new LayeredRoomGenerator();
+            GridSnapshot snapshot = gen.Generate(input);
+
+            LayeredRoomPainter.Paint(
+                baseTilemap,
+                wallsTilemap,
+                snapshot.floorMask,
+                snapshot.wallMask,
+                snapshot.width,
+                snapshot.height,
+                template.singleFloorTile,
+                template.singleWallTile,
+                template.floorAccentTiles,
+                template.floorAccentRatio,
+                seed);
+
+            Debug.Log($"RoomPipelineTestController: Generated layered {snapshot.width}x{snapshot.height} via CA cave (seed={seed}).");
+        }
+
+        [ContextMenu("0b. Generate Biome Layered")]
+        public void GenerateBiomeLayered()
+        {
+            if (!EnsureTemplateAndTilemaps())
+            {
+                return;
+            }
+
+            if (biomePreset == null)
+            {
+                Debug.LogError("RoomPipelineTestController: assign biomePreset.");
+                return;
+            }
+
+            var rng = new System.Random(seed);
+            int width = rng.Next(Mathf.Max(3, template.minWidth), Mathf.Max(template.minWidth + 1, template.maxWidth + 1));
+            int height = rng.Next(Mathf.Max(3, template.minHeight), Mathf.Max(template.minHeight + 1, template.maxHeight + 1));
+
+            var input = new GenerationInput(seed, template.biome.ToString(), template.archetypeId, width, height, template.generatorVersion);
+            var gen = new LayeredRoomGenerator();
+            GridSnapshot snapshot = gen.Generate(input);
+
+            LayeredRoomPainter.PaintBiome(
+                baseTilemap,
+                decalsTilemap,
+                wallsFrontTilemap,
+                wallsTopTilemap,
+                snapshot.floorMask,
+                snapshot.wallMask,
+                snapshot.width,
+                snapshot.height,
+                biomePreset,
+                wangTileLibrary,
+                seed);
+
+            Debug.Log($"RoomPipelineTestController: BiomePaint {snapshot.width}x{snapshot.height} (seed={seed}, biome={biomePreset.biomeName})");
         }
 
         [ContextMenu("2. Paint Decals")]
