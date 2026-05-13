@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -20,10 +21,12 @@ namespace RIMA
         [SerializeField] private float attackCooldown = 3f;
 
         private BaseMobBehavior mob;
+        private AttackTokenType _tokenType;
 
         private void Awake()
         {
             mob = GetComponent<BaseMobBehavior>();
+            _tokenType = AttackTokenType.Ranged;
             mob.attackCooldown = attackCooldown;
             mob.attackRange    = 8f;
             mob.OnAttackReady += FireHoming;
@@ -33,7 +36,7 @@ namespace RIMA
 
         private void FireHoming(Vector2 dir)
         {
-            if (projectilePrefab == null || mob.Player == null) return;
+            if (projectilePrefab == null || mob.Player == null) { ReturnToken(); return; }
 
             var go = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             var rb = go.GetComponent<Rigidbody2D>();
@@ -52,6 +55,12 @@ namespace RIMA
 
             var homing = go.AddComponent<HomingBehavior>();
             homing.Init(mob.Player, homingStrength);
+            ReturnToken();
+        }
+
+        private void ReturnToken()
+        {
+            AttackTokenManager.Instance?.ReturnToken(gameObject, _tokenType);
         }
     }
 

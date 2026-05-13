@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -37,10 +38,14 @@ namespace RIMA
         private BaseMobBehavior mob;
         private IMobAffix[]     affixes;
         private bool            comboRunning;
+        private AttackTokenType _tokenType;
 
         private void Awake()
         {
             mob = GetComponent<BaseMobBehavior>();
+            _tokenType = GetComponent<MobAttack_Throw>() != null || GetComponent<SeamCrawler_Homing>() != null
+                ? AttackTokenType.Ranged
+                : AttackTokenType.Melee;
             mob.attackCooldown = attackCooldown;
             mob.OnAttackReady += StartCombo;
         }
@@ -51,7 +56,7 @@ namespace RIMA
 
         private void StartCombo(Vector2 _)
         {
-            if (comboRunning) return;
+            if (comboRunning) { ReturnToken(); return; }
             StartCoroutine(ComboRoutine());
         }
 
@@ -83,6 +88,12 @@ namespace RIMA
             }
 
             comboRunning = false;
+            ReturnToken();
+        }
+
+        private void ReturnToken()
+        {
+            AttackTokenManager.Instance?.ReturnToken(gameObject, _tokenType);
         }
 
         private bool Strike(int dmg, bool armorBreak)

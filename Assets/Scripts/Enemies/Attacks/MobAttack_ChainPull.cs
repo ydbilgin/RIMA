@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -28,10 +29,14 @@ namespace RIMA
 
         private BaseMobBehavior mob;
         private bool            pulling;
+        private AttackTokenType _tokenType;
 
         private void Awake()
         {
             mob = GetComponent<BaseMobBehavior>();
+            _tokenType = GetComponent<MobAttack_Throw>() != null || GetComponent<SeamCrawler_Homing>() != null
+                ? AttackTokenType.Ranged
+                : AttackTokenType.Melee;
             mob.attackCooldown = attackCooldown;
             // ChainWarden saldırısı uzak mesafede de tetiklenir
             mob.attackRange = pullRange;
@@ -42,7 +47,7 @@ namespace RIMA
 
         private void TriggerPull(Vector2 dir)
         {
-            if (pulling || mob.Player == null) return;
+            if (pulling || mob.Player == null) { ReturnToken(); return; }
             StartCoroutine(PullRoutine());
         }
 
@@ -60,6 +65,7 @@ namespace RIMA
             if (mob.Player == null)
             {
                 pulling = false;
+                ReturnToken();
                 yield break;
             }
 
@@ -74,12 +80,21 @@ namespace RIMA
 
             // Follow-up melee
             yield return new WaitForSeconds(followupDelay);
-            float dist = Vector2.Distance(transform.position, mob.Player.position);
-            if (dist <= 1.5f)
-                mob.Player.GetComponent<Health>()?.TakeDamage(followupDmg);
+            if (mob.Player != null)
+            {
+                float dist = Vector2.Distance(transform.position, mob.Player.position);
+                if (dist <= 1.5f)
+                    mob.Player.GetComponent<Health>()?.TakeDamage(followupDmg);
+            }
 
             // Void-Touched affix varsa delayed zone spawner tetiklenir (affix kendisi dinler)
             pulling = false;
+            ReturnToken();
+        }
+
+        private void ReturnToken()
+        {
+            AttackTokenManager.Instance?.ReturnToken(gameObject, _tokenType);
         }
     }
 }

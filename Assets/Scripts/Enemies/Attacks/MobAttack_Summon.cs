@@ -1,4 +1,5 @@
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -16,10 +17,14 @@ namespace RIMA
         [SerializeField] private float      spawnRadius = 1.2f;
 
         private BaseMobBehavior mob;
+        private AttackTokenType _tokenType;
 
         private void Awake()
         {
             mob = GetComponent<BaseMobBehavior>();
+            _tokenType = GetComponent<MobAttack_Throw>() != null || GetComponent<SeamCrawler_Homing>() != null
+                ? AttackTokenType.Ranged
+                : AttackTokenType.Melee;
             mob.OnDeathTriggered += SpawnMinions;
         }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -29,10 +30,14 @@ namespace RIMA
         private BaseMobBehavior mob;
         private int             activeCount;
         private bool            casting;
+        private AttackTokenType _tokenType;
 
         private void Awake()
         {
             mob = GetComponent<BaseMobBehavior>();
+            _tokenType = GetComponent<MobAttack_Throw>() != null || GetComponent<SeamCrawler_Homing>() != null
+                ? AttackTokenType.Ranged
+                : AttackTokenType.Melee;
             mob.attackCooldown = attackCooldown;
             mob.attackRange    = 7f;   // uzaktan cast eder
             mob.OnAttackReady += SpawnBarrier;
@@ -42,9 +47,9 @@ namespace RIMA
 
         private void SpawnBarrier(Vector2 _)
         {
-            if (casting) return;
-            if (activeCount >= maxBarriers || mob.Player == null) return;
-            if (barrierPrefab == null) return;
+            if (casting) { ReturnToken(); return; }
+            if (activeCount >= maxBarriers || mob.Player == null) { ReturnToken(); return; }
+            if (barrierPrefab == null) { ReturnToken(); return; }
             StartCoroutine(BarrierRoutine());
         }
 
@@ -65,6 +70,7 @@ namespace RIMA
             if (activeCount >= maxBarriers || barrierPrefab == null)
             {
                 casting = false;
+                ReturnToken();
                 yield break;
             }
 
@@ -74,6 +80,12 @@ namespace RIMA
             var barrier = go.AddComponent<BarrierObject>();
             barrier.Init(barrierHP, barrierDuration, GetComponents<IMobAffix>(), () => activeCount--);
             casting = false;
+            ReturnToken();
+        }
+
+        private void ReturnToken()
+        {
+            AttackTokenManager.Instance?.ReturnToken(gameObject, _tokenType);
         }
     }
 

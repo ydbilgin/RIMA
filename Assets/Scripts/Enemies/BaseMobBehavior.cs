@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using RIMA.Combat;
 using RIMA.Environment;
 
 namespace RIMA
@@ -56,6 +57,7 @@ namespace RIMA
 
         private float attackTimer;
         private Animator anim;
+        private AttackTokenType attackTokenType;
 
         // ─── Init ────────────────────────────────────────────────────────────
 
@@ -66,6 +68,7 @@ namespace RIMA
             StatusFx = GetComponent<StatusEffectSystem>();
             SR       = GetComponentInChildren<SpriteRenderer>();
             anim     = GetComponentInChildren<Animator>();
+            attackTokenType = HasRangedAttackComponent() ? AttackTokenType.Ranged : AttackTokenType.Melee;
 
             Rb.gravityScale  = 0f;
             Rb.freezeRotation = true;
@@ -170,6 +173,11 @@ namespace RIMA
 
                 if (CurrentState == MobState.Attack && attackTimer <= 0f)
                 {
+                    if (OnAttackReady == null) return;
+
+                    var tokenManager = AttackTokenManager.Instance;
+                    if (tokenManager == null || !tokenManager.TryConsumeToken(gameObject, attackTokenType)) return;
+
                     attackTimer = attackCooldown;
                     OnAttackReady?.Invoke(dir);
                 }
@@ -185,6 +193,8 @@ namespace RIMA
 
             var col = GetComponent<Collider2D>();
             if (col != null) col.enabled = false;
+
+            AttackTokenManager.Instance?.OnEnemyDeath(gameObject);
 
             OnDeathTriggered?.Invoke();
 
@@ -211,6 +221,11 @@ namespace RIMA
             Gizmos.DrawWireSphere(transform.position, detectionRange);
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
+
+        private bool HasRangedAttackComponent()
+        {
+            return GetComponent<MobAttack_Throw>() != null || GetComponent<SeamCrawler_Homing>() != null;
         }
     }
 }

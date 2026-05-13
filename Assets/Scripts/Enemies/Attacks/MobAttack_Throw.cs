@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -29,10 +30,14 @@ namespace RIMA
         private BaseMobBehavior mob;
         private IMobAffix[] affixes;
         private bool windingUp;
+        private AttackTokenType _tokenType;
 
         private void Awake()
         {
             mob = GetComponent<BaseMobBehavior>();
+            _tokenType = GetComponent<MobAttack_Throw>() != null || GetComponent<SeamCrawler_Homing>() != null
+                ? AttackTokenType.Ranged
+                : AttackTokenType.Melee;
             mob.attackCooldown = attackCooldown;
             mob.OnAttackReady += Fire;
         }
@@ -43,7 +48,7 @@ namespace RIMA
 
         private void Fire(Vector2 dir)
         {
-            if (projectilePrefab == null || windingUp) return;
+            if (projectilePrefab == null || windingUp) { ReturnToken(); return; }
 
             StartCoroutine(FireRoutine(dir));
         }
@@ -78,6 +83,12 @@ namespace RIMA
             }
 
             windingUp = false;
+            ReturnToken();
+        }
+
+        private void ReturnToken()
+        {
+            AttackTokenManager.Instance?.ReturnToken(gameObject, _tokenType);
         }
 
         private void SpawnProjectile(Vector2 dir)
