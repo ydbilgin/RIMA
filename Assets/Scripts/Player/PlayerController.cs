@@ -42,6 +42,8 @@ namespace RIMA
         private float dashTimer;
         private float dashCooldownTimer;
         private Vector2 dashDir;
+        private bool _mercifulDodgeActive;
+        private float _mercifulDodgeExpiry;
 
         // Obstacle awareness
         // NarrowPassage: during dash we switch the player's physics layer so
@@ -87,6 +89,9 @@ namespace RIMA
             statusEffects = GetComponent<StatusEffectSystem>();
             attack = GetComponent<PlayerAttack>();
             inputBuffer = GetComponent<InputBufferService>();
+            var health = GetComponent<Health>();
+            if (health != null)
+                health.OnDamageTaken.AddListener(ActivateMercifulDodge);
             rb.gravityScale = 0f;
             rb.freezeRotation = true;
             mainCam = Camera.main;
@@ -139,8 +144,25 @@ namespace RIMA
         {
             if (isDashing || dashCooldownTimer > 0f) return false;
 
+            bool bypassAttackCommit = false;
+            if (_mercifulDodgeActive)
+            {
+                if (Time.time <= _mercifulDodgeExpiry)
+                {
+                    _mercifulDodgeActive = false;
+                    _mercifulDodgeExpiry = 0f;
+                    if (attack != null)
+                        attack.CommitTimer = 0f;
+                    bypassAttackCommit = true;
+                }
+                else
+                {
+                    _mercifulDodgeActive = false;
+                }
+            }
+
             // Blocked if mid-commit and past the dash-cancel window
-            if (attack != null && !attack.TryCancelForDash())
+            if (!bypassAttackCommit && attack != null && !attack.TryCancelForDash())
             {
                 inputBuffer?.RequestDash();
                 return false;
@@ -173,6 +195,9 @@ namespace RIMA
 
         private void Update()
         {
+            if (_mercifulDodgeActive && Time.time > _mercifulDodgeExpiry)
+                _mercifulDodgeActive = false;
+
             moveInput = moveAction.ReadValue<Vector2>();
 
             if (moveInput.sqrMagnitude <= MoveDeadzoneSqr)
@@ -283,6 +308,12 @@ namespace RIMA
                 if (pushDir == Vector2.zero) pushDir = -lastMoveDir;
                 rb.linearVelocity = pushDir * moveSpeed * 2f;
             }
+        }
+
+        private void ActivateMercifulDodge(int _)
+        {
+            _mercifulDodgeActive = true;
+            _mercifulDodgeExpiry = Time.time + 0.18f;
         }
     }
 }
