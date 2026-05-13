@@ -6,42 +6,21 @@
 
 ---
 
-## ⚙️ STYLE REFERENCE POLİTİKASI (Önemli Revize)
+## ⚙️ YAKLAŞIM: SUB-STYLE MIX (Style Ref'siz, Prompt-Driven Palette)
 
-Wang sheet'in `style_ref_05` + `style_ref_10` aslında **transition tile** (yarı floor yarı wall), style reference olarak kafa karıştırır. **Kullanma onları.**
+**Strateji (S66 revize):**
+- Floor batch'te **3 floor alt-türü** + aralarındaki blendler → 64 cell
+- Wall batch'te **3 wall alt-türü** + aralarındaki blendler → 64 cell
+- Wang autoconnect zaten asset_006/007'de halloldu — bu batch'ler sadece **RandomTile variant pool** için
+- Style reference **gerekmiyor** — palette prompt içinde sıkı hex değerlerle zorlanıyor, hepsi aynı terrain tipi olduğu için drift düşük
 
-### Onaylı Style Reference Akışı
+**Karar:** Floor=floor variants, Wall=wall variants. Birbirine karıştırma. Wang ayrı katmanda zaten dikişi sağlar.
 
-**ADIM 0 (Batch 1 öncesi, ZORUNLU): Pilot Tile Üret**
-
-1. PixelLab Web UI → **Create Image** tool (`create_image_pixen NEW` / S-XL boyutu)
-2. Tek temiz 32×32 floor tile üret. Prompt:
-```
-single dark rubble stone floor tile, 32x32 top-down pixel art viewed from ~35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and hairline cyan rift cracks scattered asymmetrically. Mat painterly pixel, dark gritty palette, heavy texture, no anti-aliased gradients, pixel-honest dithering. Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone. No characters, no props, no walls, no borders, fully tileable on all 4 edges, full coverage no transparent areas.
-```
-3. Boyut: 32×32 (S/küçük)
-4. Beğendiğin ilk PASS çıktıyı kaydet → `STAGING/TILESET_OUTPUT/pilot_floor_clean.png`
-5. (Opsiyonel) Aynı yöntemle **pilot wall tile** üret → `pilot_wall_clean.png` (Wall batch için kullanılır)
-
-**Wall pilot prompt:**
-```
-single dark broken stone wall tile, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy texture, mat painterly pixel, dark gritty palette, no anti-aliased gradients. Vivid Vulnerability mood. No characters, no doors, no borders, full coverage, tileable on all 4 edges.
-```
-
-### Tüm Batch'ler İçin Style Reference Kuralı
-
-| Batch | Yüklenecek Style Ref'ler |
-|---|---|
-| **1 — Floor 64-batch** | `pilot_floor_clean.png` + `style_ref_00.png` (Wang saf floor double-check) |
-| **2 — Wall 64-batch** | `pilot_wall_clean.png` + `style_ref_15.png` (Wang saf wall) + Batch 1 best floor 1 tile (kontrast) |
-| **3 — Decor 64** | `pilot_floor_clean.png` + `pilot_wall_clean.png` + Batch 1 best 2 + Batch 2 best 2 (palette anchor karışım) |
-| **4 — Medium 16** | Batch 3'ten en iyi 3-4 prop + pilot'lar |
-
-**Kural:** Transition tile'ı (05/10) ASLA style reference olarak kullanma — kafa karıştırır. Sadece pure terrain tile'lar + pilot'lar.
+**Style Tiles alanı:** Boş bırak (Wang transition tile'larından kafa karıştıran ref alma).
 
 ---
 
-## 🟢 BATCH 1: Floor Variant 64 — `create_tiles_pro`
+## 🟢 BATCH 1: Floor Variant 64 — `create_tiles_pro` (3 Floor Sub-Style)
 
 ### Adım Adım
 1. PixelLab web UI'da **Create tiles PRO** tool'unu aç (Map editor değil)
@@ -54,55 +33,77 @@ single dark broken stone wall tile, 32x32 high top-down pixel art viewed from ~3
 | View angle | **35°** (slider) |
 | Thickness | **0%** |
 | Outline mode | **segmentation** |
+| Style Tiles | **BOŞ BIRAK** (palette prompt'tan gelir) |
 
-3. **Style Tiles** alanına yukarıdaki 4 style_ref PNG'sini yükle
-4. **Description** alanına yapıştır:
+3. **Description** alanına yapıştır:
 
 ```
-Dark rubble stone floor variations for a shattered keep, 32x32 top-down pixel art tiles viewed from ~35 degrees high top-down angle (Hades reference). Generate a natural varied set where each tile is a distinct flagstone arrangement on the same shared material — they must read as belonging to the same dungeon floor but each carries different character.
+Dark rubble stone floor variations for a shattered keep, 32x32 top-down pixel art tiles viewed from ~35 degrees high top-down angle (Hades reference). Generate a varied set distributing across three sub-styles of the SAME floor terrain AND their natural blends:
 
-Mix freely across these states: clean weathered flagstones with light dust; cracked variants with hairline cyan rift dust seeping into cracks; moss-covered variants with cold grey-green lichen patches in corners and crevices; rune-dust scattered variants with faint silver sigil fragments half-buried; damp shaded variants with subtle moisture sheen and mineral staining; broken rubble variants with chipped slab edges and small debris piles; foot-traffic polished variants with smoother centers; lichen-fern fringe variants where moss spreads to plant tufts.
+1) CLEAN WEATHERED FLOOR: uneven charcoal flagstones, worn cracked mortar, chipped slab edges, base color #2C2A2A, subtle cold blue shadow tint #7BA7BC, sparse dust, foot-traffic polish, minimal damage. Basic floor in good shape.
 
-Each tile asymmetric weathering — cracks off-center, debris randomly clustered, moss patches irregular shape. NO copy-paste micro-detail between tiles, no uniform grid alignment, no perfect borders. Tiles must blend seamlessly when placed adjacent: shared palette discipline (#2C2A2A dark rubble base, #4A3F3F shadow, #7BA7BC cold blue rift accent, occasional pale grey-green lichen, occasional silver rune dust), shared texture vocabulary, shared lighting direction (subtle top-left).
+2) MOSS-COVERED FLOOR: same dark stone base #2C2A2A but with cold grey-green lichen patches in corners and crevices, scattered moss tufts, occasional small fern sprouts, damp shadow tint, mineral staining. Floor where moisture seeps in.
 
-Mat painterly pixel art, dark gritty palette, heavy texture, no anti-aliased gradients, pixel-honest dithering. Vivid Vulnerability mood — Salt and Sanctuary chibi-but-serious + Hades theatrical mythic tone. Ritual catastrophe aesthetic (cyan-violet rift only, NO blood, NO gore).
+3) CRACKED RIFT-DUST FLOOR: same dark stone base #2C2A2A with strong hairline cyan-violet rift cracks branching across surface, scattered small floating rift fragments, silver rune dust fragments half-buried, faint void glow seeping into cracks. Floor where rift corruption breaks through.
 
-Do not include characters, props, walls, transitions to other terrain types — pure floor tile set only, full coverage (no transparent areas), every tile tileable on all 4 edges.
+NATURAL BLENDS between these three sub-styles: clean-to-moss transitions (light lichen creeping into clean stone), clean-to-cracked transitions (initial hairline cracks appearing), moss-to-cracked transitions (rift breaking through mossy patches), and gradual decay sequences where one state evolves into another. Each blend tile asymmetric — moss patches off-center, cracks branching irregularly, rift dust scattered randomly, no symmetrical patterns.
+
+STRICT PALETTE DISCIPLINE: ONLY #2C2A2A dark rubble base, #4A3F3F deep shadow, #7BA7BC cold blue rim, cyan-violet rift accent (rare, only in cracked variants), pale grey-green lichen (rare, only in moss variants), silver rune dust (rare, only in cracked variants). NO bright colors, NO blood, NO outdoor greenery, NO yellow/orange, NO gradients, NO anti-aliasing — pixel-honest dithering only.
+
+Mat painterly pixel art, dark gritty palette, heavy texture, Salt and Sanctuary chibi-but-serious tone + Hades theatrical mythic mood, Vivid Vulnerability aesthetic, ritual catastrophe (cyan-violet rift only, NO gore).
+
+Each tile fully tileable on all 4 edges, full coverage no transparent areas, no characters, no props, no walls, no doors — pure floor tile set only across three sub-styles and their blends.
 ```
 
-5. **Generate** bas
-6. ~60-90 sn bekle
-7. Çıktıyı (256×256 sheet, 8×8 grid, 64 tile) **Export** veya save image
-8. Kaydet: `STAGING/TILESET_OUTPUT/F1_FloorVariants_64batch/floor_64_variants.png`
-9. **QC için Claude'a göster** → palette + variant zenginliği + ~35° view angle kontrolü
+4. **Generate** bas → ~60-90 sn bekle
+5. Çıktıyı (256×256 sheet, 8×8 grid, 64 tile) **Export** veya save image
+6. Kaydet: `STAGING/TILESET_OUTPUT/F1_FloorVariants_64batch/floor_64_variants.png`
+7. **QC için Claude'a göster** → palette + 3 sub-style ayrımı + ~35° view angle kontrolü
+
+### Beklenen Dağılım
+- ~%30-35 clean weathered floor (20-22 cell)
+- ~%25-30 moss-covered floor (16-19 cell)
+- ~%25-30 cracked rift floor (16-19 cell)
+- ~%15-20 blended transition states (10-12 cell)
+- **Hepsi kullanılabilir** (palette sabit, sadece sub-style farklı)
 
 ---
 
-## 🟢 BATCH 2: Wall Variant 64 — `create_tiles_pro` (Floor PASS sonrası)
+## 🟢 BATCH 2: Wall Variant 64 — `create_tiles_pro` (3 Wall Sub-Style)
 
 ### Adım Adım
 1. **Create tiles PRO** tool'u aç (Batch 1 ile aynı)
 2. Form ayarları **Batch 1 ile aynı** (square_topdown / 32 / 35° / 0% / segmentation)
-3. **Style Tiles** alanına yükle:
-   - `style_ref_00.png`, `style_ref_15.png` (Wang sheet'ten)
-   - + **Batch 1'in best 2 floor tile'ı** (Aseprite/PixelOrama'da kırparak — Claude'a göster, hangileri en iyi söylesin)
+3. **Style Tiles** alanı: **BOŞ BIRAK**
 4. **Description** alanına yapıştır:
 
 ```
-Dark broken stone wall variations for a ruined keep, 32x32 top-down pixel art tiles viewed from ~35 degrees high top-down angle (Hades reference). Generate a natural varied set of wall surface tiles — all share same fortress masonry vocabulary but each carries different damage character.
+Dark broken stone wall variations for a ruined keep, 32x32 top-down pixel art tiles viewed from ~35 degrees high top-down angle (Hades reference). Generate a varied set distributing across three sub-styles of the SAME wall terrain AND their natural blends:
 
-Mix freely across these states: clean fortress masonry with subtle weathering; cracked variants with hairline cyan rift dust seeping through mortar gaps; moss-fringe variants with cold grey-green lichen creeping at base; rune-carved variants with faint silver sigil fragments embedded in stone; damaged variants with collapsed block gaps and rubble pile fragments; soot-stained variants from old fires; banner-fragment variants with torn cloth scraps hanging; chained variants with rusted iron loops embedded.
+1) CLEAN MASONRY WALL: raised rough wall stones with shadow crevices, base color #4A3F3F, cold blue rim highlights #7BA7BC, ancient fortress masonry pattern, subtle weathering, occasional minor chips. Basic intact wall.
 
-Each tile asymmetric damage pattern — cracks branching off-center, debris clustered irregularly, moss patches edge-only. NO copy-paste micro-detail, no uniform grid, no perfect borders. Tiles must blend seamlessly when adjacent: shared palette discipline (#4A3F3F dark stone base, #2C2A2A deep crevice shadow, #7BA7BC cold blue rim highlight, occasional pale grey-green lichen, occasional rust orange), shared masonry style, shared lighting direction (subtle top-left).
+2) DAMAGED COLLAPSED WALL: same dark stone base #4A3F3F but with broken block gaps, exposed mortar fractures, rubble pile fragments at base, soot stains from old fires, hairline cracks branching across surface. Wall where structure has failed in places.
 
-Mat painterly pixel art, dark gritty palette, heavy texture, no anti-aliased gradients, pixel-honest dithering. Vivid Vulnerability mood — Salt and Sanctuary chibi-but-serious + Hades theatrical mythic tone. Ritual catastrophe aesthetic.
+3) RUNE-CARVED RITUAL WALL: same dark stone base #4A3F3F with faint silver sigil fragments embedded in stone, partial ritual circle patterns, occasional cyan-violet rift dust seeping from carved channels, ancient inscriptions half-erased. Wall marking ceremonial or warded sections.
 
-Do not include characters, doors, archways, transitions to floor — pure wall surface tile set only, full coverage, every tile tileable on all 4 edges.
+NATURAL BLENDS between these three sub-styles: clean-to-damaged transitions (initial cracks evolving into block loss), clean-to-rune transitions (sigils emerging from intact masonry), damaged-to-rune transitions (broken walls revealing carved fragments beneath), and gradual decay sequences where one state evolves into another. Each blend tile asymmetric — debris off-center, sigil fragments scattered, cracks branching irregularly, no symmetrical patterns.
+
+STRICT PALETTE DISCIPLINE: ONLY #4A3F3F dark wall stone base, #2C2A2A deep crevice shadow, #7BA7BC cold blue rim highlight, silver rune fragments (rare, only in rune variants), cyan-violet rift accent (rare, only in rune variants), occasional rust orange #C4682A on iron loops (rare, only in damaged variants). NO bright colors, NO blood, NO greenery, NO yellow/orange torch glow, NO gradients, NO anti-aliasing — pixel-honest dithering only.
+
+Mat painterly pixel art, dark gritty palette, heavy texture, Salt and Sanctuary chibi-but-serious tone + Hades theatrical mythic mood, Vivid Vulnerability aesthetic.
+
+Each tile fully tileable on all 4 edges, full coverage no transparent areas, no characters, no doors, no archways, no floor — pure wall surface tile set only across three sub-styles and their blends.
 ```
 
 5. **Generate** → 60-90 sn → sheet kaydet
 6. Kaydet: `STAGING/TILESET_OUTPUT/F1_WallVariants_64batch/wall_64_variants.png`
 7. **QC için Claude'a göster**
+
+### Beklenen Dağılım
+- ~%30-35 clean masonry wall
+- ~%25-30 damaged collapsed wall
+- ~%25-30 rune-carved ritual wall
+- ~%15-20 blended transition states
 
 ---
 
