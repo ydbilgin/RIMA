@@ -55,12 +55,21 @@ Detay: `STAGING/karar_126_to_130_organic_pipeline.md` + `~/.ccs/.../memory/proje
 - **Karar #122 T2/T3/T4 review** — `STAGING/karar_122_addons_review_output.md` ✓ (rima-sonnet)
 - **Tile asset pack araştırması** — `STAGING/tile_asset_pack_research.md` ✓ (rima-research, en iyi aday: RafaelMatos Crypt + Old Prison itch.io)
 
-### 🔄 ÇALIŞIYOR
-1. **Codex yasinderyabilgin → Antigravity 4 P0 iter 2** — Y-Sort (0,1,0) + Drop Shadow + Wall Front/Top + 1px Wang outline. Output: STAGING/antigravity_4_p0_iter2_report.md.
-2. **Codex laurethgame → Karar #126-130 MASTER_KARAR LOCK** — 5 yeni karar tablosu + FAZ_MASTER sync. Output: CODEX_DONE_laurethgame.md.
+### ✅ TAMAMLANAN (S70 gece — 2. batch)
+- **Karar #118b** — commit `562c575` ✓ (5 tilemap layer + BrushLayerMode dropdown, compile clean)
+- **Karar #126-130 MASTER_KARAR LOCK** — commit `e9f329c` ✓
 
-### ⏳ BEKLEYEN (laurethgame bitince)
-- **Karar #118b** — 4-layer tilemap iskelet (BaseTilemap/DecalTilemap/WallsTilemap_Front/WallsTilemap_Top/PropContainer) + brush mode dropdown. Task: `STAGING/codex_karar_118b_tilemap_layers.md`.
+### ✅ TAMAMLANAN (S70 gece — 3. batch)
+- **Antigravity 4 P0 iter 2** — commit `4ea918e` ✓ (Y-Sort + DropShadow + Wall Front/Top + Wang outline prompt, 178/178 test)
+
+### 🔄 ÇALIŞIYOR
+1. **Codex laurethgame → Karar #128** — TileAssetMetadata SO + WangTileResolver.
+2. **Codex yasinderyabilgin → Karar #129** — F1 Shattered Keep BiomePreset SO (küçük scope, ~1h).
+
+### ⏳ SIRADAKI (profil açılınca)
+- **Selout URP shader** (animation spec §5) — ScriptableRendererFeature, ~4-6h Codex
+- **Beat3CommitTrigger** (animation spec §4.3) — StateMachineBehaviour Karar #122 T1
+- **WeaponDatabase Level 1** (animation spec §4.4) — HandAnchor + OrbitAttach
 
 ## 🎬 Video Analiz DONE
 
