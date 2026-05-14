@@ -87,6 +87,7 @@ namespace RIMA.Editor
 
             public int[] vertexData;
             public string[] layerNames;
+            public MapObjectPlacement[] objects;
         }
 
         [Serializable]
@@ -135,6 +136,8 @@ namespace RIMA.Editor
         private Vector2 panStartMouse;
         private Vector2 panStartScroll;
         private Vector2Int lastPaintedCell = new Vector2Int(-1, -1);
+        [SerializeField] private List<MapObjectPlacement> mapObjects = new List<MapObjectPlacement>();
+        [SerializeField] private ObjectsPanelDrawer objectsPanel = new ObjectsPanelDrawer();
 
         [MenuItem("RIMA/Tools/Map Designer")]
         public static void Open()
@@ -173,6 +176,16 @@ namespace RIMA.Editor
 
         private void EnsureInitialized()
         {
+            if (mapObjects == null)
+            {
+                mapObjects = new List<MapObjectPlacement>();
+            }
+
+            if (objectsPanel == null)
+            {
+                objectsPanel = new ObjectsPanelDrawer();
+            }
+
             NormalizeCellSize();
             if (activeBiome == null)
             {
@@ -279,7 +292,13 @@ namespace RIMA.Editor
             GUILayout.Label("|", EditorStyles.miniLabel, GUILayout.Width(8f));
             if (GUILayout.Button("Objects", EditorStyles.toolbarButton, GUILayout.Width(66f)))
             {
-                EditorUtility.DisplayDialog("Object Layer", "Objects (NPCs, props, spawn points) coming in Faz 1.5", "OK");
+                objectsPanel.isOpen = !objectsPanel.isOpen;
+                if (!objectsPanel.isOpen)
+                {
+                    objectsPanel.placeMode = false;
+                }
+
+                Repaint();
             }
 
             GUILayout.FlexibleSpace();
@@ -470,7 +489,8 @@ namespace RIMA.Editor
 
         private void DrawRightPanel()
         {
-            EditorGUILayout.BeginVertical(GUILayout.Width(RightPanelWidth), GUILayout.ExpandHeight(true));
+            float panelWidth = GetRightPanelWidth();
+            EditorGUILayout.BeginVertical(GUILayout.Width(panelWidth), GUILayout.ExpandHeight(true));
             GUILayout.Space(8f);
 
             GUIStyle eraseButton = new GUIStyle(GUI.skin.button) { fixedHeight = 38f, fontSize = 12, fontStyle = FontStyle.Bold };
@@ -544,7 +564,21 @@ namespace RIMA.Editor
 
             GUILayout.FlexibleSpace();
             DrawActivePairingPanel();
+
+            if (objectsPanel.isOpen)
+            {
+                GUILayout.Space(8f);
+                float objectsHeight = Mathf.Min(360f, Mathf.Max(220f, position.height - ToolbarHeight - StatusHeight - 260f));
+                Rect objectsRect = GUILayoutUtility.GetRect(panelWidth - 12f, objectsHeight, GUILayout.ExpandWidth(true));
+                objectsPanel.Draw(objectsRect, mapObjects, AddMapObject, RemoveMapObject);
+            }
+
             EditorGUILayout.EndVertical();
+        }
+
+        private float GetRightPanelWidth()
+        {
+            return objectsPanel != null && objectsPanel.isOpen ? 360f : RightPanelWidth;
         }
 
         private static void DrawSeparator()
@@ -606,6 +640,9 @@ namespace RIMA.Editor
 
             DrawCursorPreviewOverlay();
             Handles.EndGUI();
+
+            DrawPlacedObjectsOnCanvas();
+            DrawObjectPlacePreview();
         }
 
         private void DrawCellHover(Vector2Int cell)
@@ -758,6 +795,14 @@ namespace RIMA.Editor
 
             if (evt.type == EventType.KeyDown)
             {
+                if (evt.keyCode == KeyCode.Escape && objectsPanel != null && objectsPanel.placeMode)
+                {
+                    objectsPanel.placeMode = false;
+                    evt.Use();
+                    Repaint();
+                    return;
+                }
+
                 if (evt.keyCode == KeyCode.Plus || evt.keyCode == KeyCode.KeypadPlus || evt.character == '+')
                 {
                     SetCellSize(cellSize + 4f);
@@ -791,6 +836,11 @@ namespace RIMA.Editor
             if (evt.type == EventType.MouseMove && inCanvas)
             {
                 Repaint();
+            }
+
+            if (HandleObjectLayerInput(evt, mouse, inCanvas))
+            {
+                return;
             }
 
             if (evt.type == EventType.MouseDown && evt.button == 2)
@@ -916,6 +966,199 @@ namespace RIMA.Editor
                 evt.Use();
                 Repaint();
             }
+        }
+
+        private bool HandleObjectLayerInput(Event evt, Vector2 mouse, bool inCanvas)
+        {
+            if (objectsPanel == null || !objectsPanel.isOpen || !inCanvas)
+            {
+                return false;
+            }
+
+            bool canPlace = objectsPanel.placeMode && objectsPanel.selectedPrefab != null;
+            if (canPlace)
+            {
+                if (evt.type == EventType.MouseDown && evt.button == 0)
+                {
+                    AddMapObject(objectsPanel.CreatePlacement(CanvasMouseToObjectPositionPx(mouse)));
+                    evt.Use();
+                    Repaint();
+                    return true;
+                }
+
+                if (evt.type == EventType.MouseMove)
+                {
+                    Repaint();
+                }
+
+                return true;
+            }
+
+            if (evt.type == EventType.MouseDown && evt.button == 0)
+            {
+                MapObjectPlacement hit = GetObjectAtCanvasPosition(mouse);
+                if (hit != null)
+                {
+                    objectsPanel.selectedPlacement = hit;
+                    evt.Use();
+                    Repaint();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void AddMapObject(MapObjectPlacement placement)
+        {
+            if (placement == null)
+            {
+                return;
+            }
+
+            mapObjects.Add(placement);
+            objectsPanel.selectedPlacement = placement;
+        }
+
+        private void RemoveMapObject(MapObjectPlacement placement)
+        {
+            if (placement == null)
+            {
+                return;
+            }
+
+            mapObjects.Remove(placement);
+            if (objectsPanel != null && objectsPanel.selectedPlacement == placement)
+            {
+                objectsPanel.selectedPlacement = null;
+            }
+
+            Repaint();
+        }
+
+        private Vector2 CanvasMouseToObjectPositionPx(Vector2 mouse)
+        {
+            float widthPx = roomWidth * cellSize;
+            float heightPx = roomHeight * cellSize;
+            return new Vector2(
+                Mathf.Clamp(mouse.x - CanvasPadding, 0f, widthPx),
+                Mathf.Clamp(heightPx - (mouse.y - CanvasPadding), 0f, heightPx));
+        }
+
+        private Vector2 ObjectPositionPxToCanvas(MapObjectPlacement placement)
+        {
+            float heightPx = roomHeight * cellSize;
+            return new Vector2(
+                CanvasPadding + placement.positionPx.x,
+                CanvasPadding + heightPx - placement.positionPx.y);
+        }
+
+        private Rect GetObjectCanvasRect(MapObjectPlacement placement)
+        {
+            Vector2 center = ObjectPositionPxToCanvas(placement);
+            float size = Mathf.Clamp(cellSize * 0.8f, 18f, 56f);
+            return new Rect(center.x - size * 0.5f, center.y - size * 0.5f, size, size);
+        }
+
+        private MapObjectPlacement GetObjectAtCanvasPosition(Vector2 mouse)
+        {
+            for (int i = mapObjects.Count - 1; i >= 0; i--)
+            {
+                MapObjectPlacement placement = mapObjects[i];
+                if (placement != null && placement.visible && GetObjectCanvasRect(placement).Contains(mouse))
+                {
+                    return placement;
+                }
+            }
+
+            return null;
+        }
+
+        private void DrawPlacedObjectsOnCanvas()
+        {
+            if (mapObjects == null || mapObjects.Count == 0)
+            {
+                return;
+            }
+
+            foreach (MapObjectPlacement placement in mapObjects.OrderBy(o => o != null ? o.layer : 0))
+            {
+                if (placement == null || !placement.visible)
+                {
+                    continue;
+                }
+
+                Rect rect = GetObjectCanvasRect(placement);
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(placement.prefabPath);
+                Texture preview = prefab != null ? AssetPreview.GetAssetPreview(prefab) : null;
+                if (preview == null && prefab != null)
+                {
+                    preview = AssetPreview.GetMiniThumbnail(prefab);
+                }
+
+                Color oldColor = GUI.color;
+                GUI.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0.92f);
+                if (preview != null)
+                {
+                    GUI.DrawTexture(rect, preview, ScaleMode.ScaleToFit);
+                }
+                else
+                {
+                    EditorGUI.DrawRect(rect, new Color(0.25f, 0.55f, 0.8f, 0.75f));
+                    GUI.Label(rect, "OBJ", EditorStyles.centeredGreyMiniLabel);
+                }
+
+                GUI.color = oldColor;
+
+                Handles.BeginGUI();
+                Handles.color = objectsPanel != null && objectsPanel.selectedPlacement == placement ? Color.cyan : new Color(1f, 1f, 1f, 0.45f);
+                Handles.DrawSolidRectangleWithOutline(rect, Color.clear, Handles.color);
+                Handles.EndGUI();
+            }
+        }
+
+        private void DrawObjectPlacePreview()
+        {
+            if (objectsPanel == null || !objectsPanel.isOpen || !objectsPanel.placeMode || objectsPanel.selectedPrefab == null)
+            {
+                return;
+            }
+
+            Event evt = Event.current;
+            Vector2 mouse = evt.mousePosition;
+            float widthPx = roomWidth * cellSize;
+            float heightPx = roomHeight * cellSize;
+            Rect canvasBounds = new Rect(CanvasPadding, CanvasPadding, widthPx, heightPx);
+            if (!canvasBounds.Contains(mouse))
+            {
+                return;
+            }
+
+            float size = Mathf.Clamp(cellSize * 0.8f, 18f, 56f);
+            Rect rect = new Rect(mouse.x - size * 0.5f, mouse.y - size * 0.5f, size, size);
+            Texture preview = AssetPreview.GetAssetPreview(objectsPanel.selectedPrefab);
+            if (preview == null)
+            {
+                preview = AssetPreview.GetMiniThumbnail(objectsPanel.selectedPrefab);
+            }
+
+            Color oldColor = GUI.color;
+            GUI.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0.5f);
+            if (preview != null)
+            {
+                GUI.DrawTexture(rect, preview, ScaleMode.ScaleToFit);
+            }
+            else
+            {
+                EditorGUI.DrawRect(rect, new Color(0f, 1f, 1f, 0.28f));
+            }
+
+            GUI.color = oldColor;
+
+            Handles.BeginGUI();
+            Handles.color = Color.cyan;
+            Handles.DrawSolidRectangleWithOutline(rect, Color.clear, Handles.color);
+            Handles.EndGUI();
         }
 
         private int GetActualPaintValue(bool invertForButton)
@@ -1432,7 +1675,7 @@ namespace RIMA.Editor
 
         private void FitCanvasToWindow()
         {
-            float availW = position.width - LeftPanelWidth - RightPanelWidth - CanvasPadding * 2f;
+            float availW = position.width - LeftPanelWidth - GetRightPanelWidth() - CanvasPadding * 2f;
             float availH = position.height - ToolbarHeight - StatusHeight - CanvasPadding * 2f;
             SetCellSize(Mathf.Floor(Mathf.Min(availW / Mathf.Max(1, roomWidth), availH / Mathf.Max(1, roomHeight))));
             gridScroll = Vector2.zero;
@@ -1454,6 +1697,13 @@ namespace RIMA.Editor
             roomWidth = DefaultRoomWidth;
             roomHeight = DefaultRoomHeight;
             ResizeGrid(roomWidth, roomHeight, false);
+            mapObjects.Clear();
+            if (objectsPanel != null)
+            {
+                objectsPanel.selectedPlacement = null;
+                objectsPanel.placeMode = false;
+            }
+
             FillAll(0);
         }
 
@@ -1621,7 +1871,8 @@ namespace RIMA.Editor
                 height = roomHeight,
                 terrainGrid = FlattenGrid(terrainGrid),
                 biomePresetGuid = activeBiome != null ? AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(activeBiome)) : string.Empty,
-                layers = Array.Empty<LayerSaveData>()
+                layers = Array.Empty<LayerSaveData>(),
+                objects = mapObjects != null ? mapObjects.ToArray() : Array.Empty<MapObjectPlacement>()
             };
 
             File.WriteAllText(path, JsonUtility.ToJson(data, true));
@@ -1661,6 +1912,13 @@ namespace RIMA.Editor
             flatTerrainData = data.terrainGrid != null && data.terrainGrid.Length > 0
                 ? data.terrainGrid
                 : ConvertLegacyLayersToTerrainGrid(data);
+            mapObjects = data.objects != null ? data.objects.Where(o => o != null).ToList() : new List<MapObjectPlacement>();
+            if (objectsPanel != null)
+            {
+                objectsPanel.selectedPlacement = null;
+                objectsPanel.placeMode = false;
+            }
+
             terrainGrid = null;
             EnsureTerrainGrid(roomWidth, roomHeight, false);
 
@@ -1692,6 +1950,13 @@ namespace RIMA.Editor
             flatTerrainData = generated.terrainGrid != null && generated.terrainGrid.Length > 0
                 ? generated.terrainGrid
                 : ConvertLegacyLayersToTerrainGrid(generated);
+            mapObjects = generated.objects != null ? generated.objects.Where(o => o != null).ToList() : new List<MapObjectPlacement>();
+            if (objectsPanel != null)
+            {
+                objectsPanel.selectedPlacement = null;
+                objectsPanel.placeMode = false;
+            }
+
             terrainGrid = null;
             EnsureTerrainGrid(roomWidth, roomHeight, false);
 
@@ -1869,7 +2134,65 @@ namespace RIMA.Editor
                 }
             }
 
+            int placedObjects = ApplyObjectsToScene();
             Debug.Log("[MapDesigner] Applied " + roomWidth + "x" + roomHeight + " map to " + applied + " tilemap(s).");
+            if (placedObjects > 0)
+            {
+                Debug.Log("[MapDesigner] Instantiated " + placedObjects + " object(s).");
+            }
+        }
+
+        private int ApplyObjectsToScene()
+        {
+            if (outputTilemap == null || mapObjects == null || mapObjects.Count == 0)
+            {
+                return 0;
+            }
+
+            Transform parent = outputTilemap.transform.parent != null ? outputTilemap.transform.parent : outputTilemap.transform;
+            int count = 0;
+            foreach (MapObjectPlacement obj in mapObjects)
+            {
+                if (obj == null || !obj.visible || string.IsNullOrEmpty(obj.prefabPath))
+                {
+                    continue;
+                }
+
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(obj.prefabPath);
+                if (prefab == null)
+                {
+                    Debug.LogWarning("[MapDesigner] Object prefab missing: " + obj.prefabPath);
+                    continue;
+                }
+
+                GameObject instance = PrefabUtility.InstantiatePrefab(prefab, parent) as GameObject;
+                if (instance == null)
+                {
+                    continue;
+                }
+
+                instance.transform.position = ObjectPositionPxToWorld(obj.positionPx);
+                instance.name = !string.IsNullOrEmpty(obj.displayName) ? obj.displayName : prefab.name;
+                foreach (SpriteRenderer renderer in instance.GetComponentsInChildren<SpriteRenderer>())
+                {
+                    renderer.sortingOrder = obj.layer;
+                }
+
+                Undo.RegisterCreatedObjectUndo(instance, "Place RIMA Object");
+                count++;
+            }
+
+            return count;
+        }
+
+        private Vector3 ObjectPositionPxToWorld(Vector2 positionPx)
+        {
+            Vector3 origin = outputTilemap.CellToWorld(Vector3Int.zero);
+            Vector3 unitX = outputTilemap.CellToWorld(Vector3Int.right) - origin;
+            Vector3 unitY = outputTilemap.CellToWorld(Vector3Int.up) - origin;
+            float xCells = cellSize > 0f ? positionPx.x / cellSize : 0f;
+            float yCells = cellSize > 0f ? positionPx.y / cellSize : 0f;
+            return origin + unitX * xCells + unitY * yCells;
         }
 
         private void ClearAllTilemaps()
