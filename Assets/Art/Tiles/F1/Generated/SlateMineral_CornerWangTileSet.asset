@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa369bb6ab2a284fab77a45ed0fde39, type: 3}
+  m_Name: SlateMineral_CornerWangTileSet
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.CornerWangTileSetSO
+  lowerTerrainLabel: cold slate
+  upperTerrainLabel: lighter mineral
+  tiles:
+  - {fileID: 11400000, guid: daed2ac9825e5b64584df64f73af136b, type: 2}
+  - {fileID: 11400000, guid: 22de67cecad81454dbe0b3f51408ac04, type: 2}
+  - {fileID: 11400000, guid: 34962afaff2cb1b419ea1674946ef408, type: 2}
+  - {fileID: 11400000, guid: 0f4788b5780f8154e92d91b43dad7112, type: 2}
+  - {fileID: 11400000, guid: a683aa43a8c925d4ca2bb54430d4c6f9, type: 2}
+  - {fileID: 11400000, guid: 75c20bd2c90912b4d8d7ebff61280d8d, type: 2}
+  - {fileID: 11400000, guid: 4864bf252620c0d4983bf5e45aaad278, type: 2}
+  - {fileID: 11400000, guid: 7a78ba8c4bcd28a408b8a0267e53b1f6, type: 2}
+  - {fileID: 11400000, guid: be98c8d1cde54554baac4c7790b6b7cb, type: 2}
+  - {fileID: 11400000, guid: 060f98934d8e4cf429bde4e62ceaa1fb, type: 2}
+  - {fileID: 11400000, guid: 9ca35d8b73f90b340b8667234d865c2d, type: 2}
+  - {fileID: 11400000, guid: 3d639898bfcde5c42b2c65670cfa5ba2, type: 2}
+  - {fileID: 11400000, guid: 78feba49335b9e747ac6a7ecb928c5c1, type: 2}
+  - {fileID: 11400000, guid: b8dd965bb1aae1041a8b0ccd5d050445, type: 2}
+  - {fileID: 11400000, guid: a80b1339c0bc97045b5ca6d82d73666e, type: 2}
+  - {fileID: 11400000, guid: dbc928e22de85b14f8793698470b7a25, type: 2}

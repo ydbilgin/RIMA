@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using RIMA;
 using UnityEditor;
 using UnityEditorInternal;
@@ -15,13 +17,14 @@ namespace RIMA.Editor
         private const int MinRoomSize = 4;
         private const int MaxRoomSize = 64;
         private const int MaxLayers = 4;
-        private const float LeftPanelWidth = 200f;
+        private const float LeftPanelWidth = 220f;
         private const float RightPanelWidth = 200f;
         private const float ToolbarHeight = 28f;
         private const float StatusHeight = 22f;
         private const float VertexRadius = 5f;
         private const float CanvasPadding = 24f;
         private const string MapDataFolder = "Assets/RIMA_MapData";
+
         private static readonly string[] CornerKeyNames =
         {
             "All Floor",
@@ -30,10 +33,10 @@ namespace RIMA.Editor
             "S Edge",
             "NE Corner",
             "E Edge",
-            "NE↔SW Diag",
+            "NE-SW Diag",
             "No NW",
             "NW Corner",
-            "NW↔SE Diag",
+            "NW-SE Diag",
             "W Edge",
             "No NE",
             "N Edge",
@@ -44,6 +47,12 @@ namespace RIMA.Editor
 
         private static readonly int[] KeyToIndex = { 6, 7, 10, 9, 2, 11, 4, 15, 5, 14, 1, 8, 3, 0, 13, 12 };
 
+        public enum PaintMode
+        {
+            Cell,
+            Vertex
+        }
+
         private enum PaintTool
         {
             Brush,
@@ -51,22 +60,35 @@ namespace RIMA.Editor
             Rectangle
         }
 
-        [System.Serializable]
+        [Serializable]
         public class MapLayer
         {
             public string name = "Base";
             public Tilemap tilemap;
             public CornerWangTileSetSO tileSet;
             public bool enabled = true;
+            [HideInInspector] public int[] flatVertexData;
+            [NonSerialized] public int[,] vertGrid;
         }
 
-        [System.Serializable]
+        [Serializable]
         public class MapSaveData
         {
             public int width;
             public int height;
+            public LayerSaveData[] layers;
+
             public int[] vertexData;
             public string[] layerNames;
+        }
+
+        [Serializable]
+        public class LayerSaveData
+        {
+            public string name;
+            public string tileSet;
+            public bool enabled;
+            public int[] vertexData;
         }
 
         [SerializeField] private int roomWidth = DefaultRoomWidth;
@@ -80,13 +102,18 @@ namespace RIMA.Editor
         [SerializeField] private bool tilePreviewFoldout = true;
         [SerializeField] private bool showTilePreview = true;
         [SerializeField] private PaintTool activeTool = PaintTool.Brush;
+        [SerializeField] private PaintMode paintMode = PaintMode.Cell;
+        [SerializeField] private bool eraseMode;
         [SerializeField] private int brushRadius = 1;
         [SerializeField] private List<MapLayer> layers = new List<MapLayer>();
 
-        private int[,] vertGrid;
+        private readonly BrushInputHandler brushInput = new BrushInputHandler();
+        private readonly TilesetPaletteDrawer tilesetPalette = new TilesetPaletteDrawer();
         private ReorderableList layerList;
         private Vector2 gridScroll;
+        private Vector2 leftScroll;
         private Vector2Int hoveredVertex = new Vector2Int(-1, -1);
+        private Vector2Int hoveredCell = new Vector2Int(-1, -1);
         private Vector2Int rectStart = new Vector2Int(-1, -1);
         private Vector2Int rectCurrent = new Vector2Int(-1, -1);
         private bool isPainting;
@@ -99,7 +126,7 @@ namespace RIMA.Editor
         [MenuItem("RIMA/Tools/Map Designer")]
         public static void Open()
         {
-            var window = GetWindow<RimaMapDesignerWindow>("RIMA Map Designer");
+            RimaMapDesignerWindow window = GetWindow<RimaMapDesignerWindow>("RIMA Map Designer");
             window.minSize = new Vector2(720f, 420f);
             window.Show();
         }
@@ -108,22 +135,25 @@ namespace RIMA.Editor
         {
             EnsureInitialized();
             BuildLayerList();
+            tilesetPalette.Refresh();
+        }
+
+        private void OnDisable()
+        {
+            StoreAllLayerGrids();
         }
 
         private void OnGUI()
         {
             EnsureInitialized();
-
             DrawToolbar();
 
             Rect contentRect = new Rect(0f, ToolbarHeight, position.width, Mathf.Max(0f, position.height - ToolbarHeight - StatusHeight));
             GUILayout.BeginArea(contentRect);
             EditorGUILayout.BeginHorizontal();
-
             DrawLeftPanel();
             DrawCenterPanel(contentRect.height);
             DrawRightPanel();
-
             EditorGUILayout.EndHorizontal();
             GUILayout.EndArea();
 
@@ -143,11 +173,48 @@ namespace RIMA.Editor
             }
 
             activeLayerIndex = Mathf.Clamp(activeLayerIndex, 0, layers.Count - 1);
-
-            if (vertGrid == null || vertGrid.GetLength(0) != roomWidth + 1 || vertGrid.GetLength(1) != roomHeight + 1)
+            foreach (MapLayer layer in layers)
             {
-                ResizeGrid(roomWidth, roomHeight, true);
+                EnsureLayerGrid(layer, roomWidth, roomHeight, false);
             }
+        }
+
+        private void EnsureLayerGrid(MapLayer layer, int width, int height, bool preserve)
+        {
+            if (layer == null)
+            {
+                return;
+            }
+
+            int expectedWidth = width + 1;
+            int expectedHeight = height + 1;
+            if (layer.vertGrid != null && layer.vertGrid.GetLength(0) == expectedWidth && layer.vertGrid.GetLength(1) == expectedHeight)
+            {
+                return;
+            }
+
+            int[,] oldGrid = preserve ? layer.vertGrid : null;
+            int[,] newGrid = new int[expectedWidth, expectedHeight];
+
+            if (oldGrid != null)
+            {
+                int copyWidth = Mathf.Min(oldGrid.GetLength(0), expectedWidth);
+                int copyHeight = Mathf.Min(oldGrid.GetLength(1), expectedHeight);
+                for (int y = 0; y < copyHeight; y++)
+                {
+                    for (int x = 0; x < copyWidth; x++)
+                    {
+                        newGrid[x, y] = oldGrid[x, y];
+                    }
+                }
+            }
+            else if (layer.flatVertexData != null)
+            {
+                UnflattenGridInto(layer.flatVertexData, newGrid, width, height);
+            }
+
+            layer.vertGrid = newGrid;
+            StoreLayerGrid(layer);
         }
 
         private void BuildLayerList()
@@ -168,7 +235,9 @@ namespace RIMA.Editor
                     return;
                 }
 
-                layers.Add(new MapLayer { name = layers.Count == 0 ? "Base" : "Layer " + (layers.Count + 1) });
+                var layer = new MapLayer { name = layers.Count == 0 ? "Base" : "Layer " + (layers.Count + 1) };
+                EnsureLayerGrid(layer, roomWidth, roomHeight, false);
+                layers.Add(layer);
                 activeLayerIndex = layers.Count - 1;
                 layerList.index = activeLayerIndex;
             };
@@ -201,11 +270,9 @@ namespace RIMA.Editor
             MapLayer layer = layers[index];
             float line = EditorGUIUtility.singleLineHeight;
             float y = rect.y + 4f;
-            Rect labelRect = new Rect(rect.x, y, 54f, line);
-            Rect fieldRect = new Rect(rect.x + 58f, y, rect.width - 58f, line);
 
-            EditorGUI.LabelField(labelRect, "Name");
-            layer.name = EditorGUI.TextField(fieldRect, layer.name);
+            EditorGUI.LabelField(new Rect(rect.x, y, 54f, line), "Name");
+            layer.name = EditorGUI.TextField(new Rect(rect.x + 58f, y, rect.width - 58f, line), layer.name);
 
             y += line + 3f;
             EditorGUI.LabelField(new Rect(rect.x, y, 54f, line), "Tilemap");
@@ -223,12 +290,10 @@ namespace RIMA.Editor
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.Height(ToolbarHeight));
 
-            if (GUILayout.Button("New", EditorStyles.toolbarButton, GUILayout.Width(48f)))
+            if (GUILayout.Button("New", EditorStyles.toolbarButton, GUILayout.Width(48f)) &&
+                EditorUtility.DisplayDialog("New Map", "Reset to an empty 20x15 floor map?", "New", "Cancel"))
             {
-                if (EditorUtility.DisplayDialog("New Map", "Reset to an empty 20x15 floor map?", "New", "Cancel"))
-                {
-                    ResetMap();
-                }
+                ResetMap();
             }
 
             if (GUILayout.Button("Save", EditorStyles.toolbarButton, GUILayout.Width(48f)))
@@ -251,6 +316,10 @@ namespace RIMA.Editor
                 ClearAllTilemaps();
             }
 
+            GUILayout.Space(8f);
+            paintMode = (PaintMode)GUILayout.Toolbar((int)paintMode, new[] { "Cell", "Vertex" }, EditorStyles.toolbarButton, GUILayout.Width(112f));
+            eraseMode = GUILayout.Toggle(eraseMode, "Erase", EditorStyles.toolbarButton, GUILayout.Width(54f));
+
             GUILayout.FlexibleSpace();
             GUILayout.Label("Cell", GUILayout.Width(28f));
             cellSize = GUILayout.HorizontalSlider(cellSize, 10f, 80f, GUILayout.Width(120f));
@@ -262,12 +331,24 @@ namespace RIMA.Editor
         private void DrawLeftPanel()
         {
             EditorGUILayout.BeginVertical(GUILayout.Width(LeftPanelWidth), GUILayout.ExpandHeight(true));
+            leftScroll = EditorGUILayout.BeginScrollView(leftScroll);
+
+            MapLayer activeLayer = GetActiveLayer();
+            CornerWangTileSetSO clicked = tilesetPalette.Draw(LeftPanelWidth - 20f, activeLayer != null ? activeLayer.tileSet : null);
+            if (clicked != null && activeLayer != null)
+            {
+                activeLayer.tileSet = clicked;
+                Repaint();
+            }
+
+            EditorGUILayout.Space(8f);
             if (layerList == null)
             {
                 BuildLayerList();
             }
 
             layerList.DoLayoutList();
+            EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
         }
 
@@ -294,14 +375,13 @@ namespace RIMA.Editor
             showTilePreview = EditorGUILayout.Toggle("Show Tiles", showTilePreview);
 
             EditorGUILayout.Space(8f);
-            DrawTilePreviewPanel(layers.Count > 0 ? layers[activeLayerIndex] : null);
+            DrawTilePreviewPanel(GetActiveLayer());
 
             EditorGUILayout.Space(8f);
             proceduralFoldout = EditorGUILayout.Foldout(proceduralFoldout, "Procedural Generation", true);
             if (proceduralFoldout)
             {
-                wallThickness = EditorGUILayout.IntField("Wall Thickness", wallThickness);
-                wallThickness = Mathf.Clamp(wallThickness, 1, Mathf.Min(roomWidth, roomHeight) / 2);
+                wallThickness = Mathf.Clamp(EditorGUILayout.IntField("Wall Thickness", wallThickness), 1, Mathf.Min(roomWidth, roomHeight) / 2);
 
                 if (GUILayout.Button("Make Rectangular Room"))
                 {
@@ -345,11 +425,8 @@ namespace RIMA.Editor
 
             EditorGUILayout.Space(8f);
             EditorGUILayout.LabelField("Room Size", EditorStyles.boldLabel);
-            int newWidth = EditorGUILayout.IntField("Width", roomWidth);
-            int newHeight = EditorGUILayout.IntField("Height", roomHeight);
-            newWidth = Mathf.Clamp(newWidth, MinRoomSize, MaxRoomSize);
-            newHeight = Mathf.Clamp(newHeight, MinRoomSize, MaxRoomSize);
-
+            int newWidth = Mathf.Clamp(EditorGUILayout.IntField("Width", roomWidth), MinRoomSize, MaxRoomSize);
+            int newHeight = Mathf.Clamp(EditorGUILayout.IntField("Height", roomHeight), MinRoomSize, MaxRoomSize);
             if (newWidth != roomWidth || newHeight != roomHeight)
             {
                 roomWidth = newWidth;
@@ -380,18 +457,14 @@ namespace RIMA.Editor
 
             CornerWangTileSetSO ts = activeLayer.tileSet;
             EditorGUILayout.LabelField("Layer: " + activeLayer.name, EditorStyles.miniLabel);
-            EditorGUILayout.LabelField("Lower: " + ts.lowerTerrainLabel + "  |  Upper: " + ts.upperTerrainLabel, EditorStyles.miniLabel);
+            EditorGUILayout.LabelField("Lower: " + ts.lowerTerrainLabel + " | Upper: " + ts.upperTerrainLabel, EditorStyles.miniLabel);
 
             const float previewSize = 40f;
             const float labelHeight = 28f;
             const float cellW = previewSize + 4f;
             const float cellH = previewSize + labelHeight;
             const int cols = 4;
-            GUIStyle labelStyle = new GUIStyle(EditorStyles.miniLabel)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                wordWrap = true
-            };
+            var labelStyle = new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter, wordWrap = true };
 
             for (int key = 0; key < CornerKeyNames.Length; key++)
             {
@@ -410,7 +483,6 @@ namespace RIMA.Editor
                 GUILayout.BeginVertical(GUILayout.Width(cellW));
                 Rect bgRect = GUILayoutUtility.GetRect(cellW, cellH);
                 EditorGUI.DrawRect(bgRect, bg);
-
                 Rect previewRect = new Rect(bgRect.x + 2f, bgRect.y + 2f, previewSize, previewSize);
                 if (preview != null)
                 {
@@ -421,9 +493,7 @@ namespace RIMA.Editor
                     EditorGUI.DrawRect(previewRect, new Color(0.15f, 0.15f, 0.15f, 0.8f));
                 }
 
-                Rect labelRect = new Rect(bgRect.x, bgRect.y + previewSize + 2f, cellW, labelHeight);
-                GUI.Label(labelRect, new GUIContent(CornerKeyNames[key], tooltip), labelStyle);
-
+                GUI.Label(new Rect(bgRect.x, bgRect.y + previewSize + 2f, cellW, labelHeight), new GUIContent(CornerKeyNames[key], tooltip), labelStyle);
                 GUILayout.EndVertical();
 
                 if (col == cols - 1)
@@ -446,12 +516,7 @@ namespace RIMA.Editor
             }
 
             Texture preview = AssetPreview.GetAssetPreview(tile);
-            if (preview != null)
-            {
-                return preview;
-            }
-
-            return EditorGUIUtility.ObjectContent(tile, typeof(TileBase)).image;
+            return preview != null ? preview : EditorGUIUtility.ObjectContent(tile, typeof(TileBase)).image;
         }
 
         private Color GetTilePreviewBackground(int key)
@@ -499,46 +564,50 @@ namespace RIMA.Editor
         private void DrawGridCanvas(Rect viewRect)
         {
             EditorGUI.DrawRect(viewRect, new Color(0.12f, 0.12f, 0.12f, 1f));
+            int[,] grid = GetActiveGrid();
 
             if (showTilePreview)
             {
-                DrawLiveTilePreviewCells();
+                DrawLiveTilePreviewCells(grid);
+            }
+
+            if (paintMode == PaintMode.Cell && brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight))
+            {
+                DrawCellHover(hoveredCell);
             }
 
             Handles.BeginGUI();
-            Color lineColor = new Color(0.333f, 0.333f, 0.333f, 0.5f);
-            Handles.color = lineColor;
+            Handles.color = new Color(0.333f, 0.333f, 0.333f, 0.5f);
 
             for (int y = 0; y <= roomHeight; y++)
             {
-                Vector3 from = VertexToCanvasPosition(0, y);
-                Vector3 to = VertexToCanvasPosition(roomWidth, y);
-                Handles.DrawLine(from, to);
+                Handles.DrawLine(VertexToCanvasPosition(0, y), VertexToCanvasPosition(roomWidth, y));
             }
 
             for (int x = 0; x <= roomWidth; x++)
             {
-                Vector3 from = VertexToCanvasPosition(x, 0);
-                Vector3 to = VertexToCanvasPosition(x, roomHeight);
-                Handles.DrawLine(from, to);
+                Handles.DrawLine(VertexToCanvasPosition(x, 0), VertexToCanvasPosition(x, roomHeight));
             }
 
-            for (int y = 0; y <= roomHeight; y++)
+            if (grid != null)
             {
-                for (int x = 0; x <= roomWidth; x++)
+                for (int y = 0; y <= roomHeight; y++)
                 {
-                    Handles.color = vertGrid[x, y] == 0 ? HexColor(0x3A, 0x3A, 0x3A) : HexColor(0x7A, 0x4A, 0x2A);
-                    Handles.DrawSolidDisc(VertexToCanvasPosition(x, y), Vector3.forward, VertexRadius);
+                    for (int x = 0; x <= roomWidth; x++)
+                    {
+                        Handles.color = grid[x, y] == 0 ? HexColor(0x3A, 0x3A, 0x3A) : HexColor(0x7A, 0x4A, 0x2A);
+                        Handles.DrawSolidDisc(VertexToCanvasPosition(x, y), Vector3.forward, VertexRadius);
+                    }
                 }
             }
 
-            if (IsValidVertex(hoveredVertex))
+            if (paintMode == PaintMode.Vertex && IsValidVertex(hoveredVertex))
             {
-                Handles.color = Color.cyan;
+                Handles.color = eraseMode ? new Color(1f, 0.3f, 0.3f, 0.6f) : new Color(0f, 1f, 1f, 0.6f);
                 Handles.DrawWireDisc(VertexToCanvasPosition(hoveredVertex.x, hoveredVertex.y), Vector3.forward, VertexRadius + 2f);
             }
 
-            if (isRectangleDragging && IsValidVertex(rectStart) && IsValidVertex(rectCurrent))
+            if (isRectangleDragging)
             {
                 DrawRectangleOverlay(rectStart, rectCurrent);
             }
@@ -546,26 +615,33 @@ namespace RIMA.Editor
             Handles.EndGUI();
         }
 
-        private void DrawLiveTilePreviewCells()
+        private void DrawCellHover(Vector2Int cell)
         {
-            MapLayer activeLayer = layers != null && layers.Count > 0 ? layers[Mathf.Clamp(activeLayerIndex, 0, layers.Count - 1)] : null;
+            Color cursorColor = eraseMode ? new Color(1f, 0.3f, 0.3f, 0.6f) : new Color(0f, 1f, 1f, 0.6f);
+            Rect rect = CellToCanvasRect(cell);
+            EditorGUI.DrawRect(rect, new Color(cursorColor.r, cursorColor.g, cursorColor.b, 0.3f));
+        }
+
+        private void DrawLiveTilePreviewCells(int[,] grid)
+        {
+            MapLayer activeLayer = GetActiveLayer();
             CornerWangTileSetSO tileSet = activeLayer != null ? activeLayer.tileSet : null;
+            if (grid == null)
+            {
+                return;
+            }
 
             for (int y = 0; y < roomHeight; y++)
             {
                 for (int x = 0; x < roomWidth; x++)
                 {
-                    int nw = vertGrid[x, y + 1];
-                    int ne = vertGrid[x + 1, y + 1];
-                    int sw = vertGrid[x, y];
-                    int se = vertGrid[x + 1, y];
+                    int nw = grid[x, y + 1];
+                    int ne = grid[x + 1, y + 1];
+                    int sw = grid[x, y];
+                    int se = grid[x + 1, y];
                     TileBase tile = tileSet != null ? tileSet.GetTile(nw, ne, sw, se) : null;
                     Texture tex = GetCanvasTileTexture(tile);
-                    Rect cellRect = new Rect(
-                        CanvasPadding + x * cellSize,
-                        CanvasPadding + (roomHeight - y - 1) * cellSize,
-                        cellSize,
-                        cellSize);
+                    Rect cellRect = CellToCanvasRect(new Vector2Int(x, y));
 
                     if (tex != null)
                     {
@@ -582,13 +658,8 @@ namespace RIMA.Editor
 
         private Texture GetCanvasTileTexture(TileBase tile)
         {
-            if (tile == null)
-            {
-                return null;
-            }
-
             Texture tex = (tile as Tile)?.sprite?.texture;
-            return tex != null ? tex : AssetPreview.GetAssetPreview(tile);
+            return tex != null ? tex : tile != null ? AssetPreview.GetAssetPreview(tile) : null;
         }
 
         private static Color GetLiveTileFallbackColor(int wangKey, int filledCorners)
@@ -613,8 +684,7 @@ namespace RIMA.Editor
             Event evt = Event.current;
             if (evt.type == EventType.ScrollWheel)
             {
-                float zoomDelta = -evt.delta.y * 2f;
-                cellSize = Mathf.Clamp(cellSize + zoomDelta, 10f, 80f);
+                cellSize = Mathf.Clamp(cellSize - evt.delta.y * 2f, 10f, 80f);
                 evt.Use();
                 Repaint();
                 return;
@@ -622,6 +692,7 @@ namespace RIMA.Editor
 
             Vector2 canvasMouse = evt.mousePosition;
             hoveredVertex = GetNearestVertex(canvasMouse);
+            hoveredCell = brushInput.GetCellAtMouse(canvasMouse, cellSize, CanvasPadding, roomHeight);
 
             if (evt.type == EventType.MouseMove && centerRect.Contains(evt.mousePosition + gridScroll))
             {
@@ -652,28 +723,32 @@ namespace RIMA.Editor
                 return;
             }
 
-            if (!IsValidVertex(hoveredVertex))
+            bool hasPaintTarget = paintMode == PaintMode.Cell
+                ? brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight)
+                : IsValidVertex(hoveredVertex);
+            if (!hasPaintTarget)
             {
                 return;
             }
 
             if (evt.type == EventType.MouseDown && (evt.button == 0 || evt.button == 1))
             {
-                int value = evt.button == 0 ? currentPaintValue : 1 - currentPaintValue;
+                int value = GetActualPaintValue(evt.button == 1);
+                Vector2Int start = paintMode == PaintMode.Cell ? hoveredCell : hoveredVertex;
 
                 if (activeTool == PaintTool.Rectangle)
                 {
-                    rectStart = hoveredVertex;
-                    rectCurrent = hoveredVertex;
+                    rectStart = start;
+                    rectCurrent = start;
                     isRectangleDragging = true;
                 }
                 else if (activeTool == PaintTool.Fill)
                 {
-                    FloodFill(hoveredVertex, value);
+                    FloodFill(start, value);
                 }
                 else
                 {
-                    PaintWithRadius(hoveredVertex, value);
+                    PaintWithRadius(start, value);
                     isPainting = true;
                 }
 
@@ -682,15 +757,16 @@ namespace RIMA.Editor
             }
             else if (evt.type == EventType.MouseDrag && (evt.button == 0 || evt.button == 1))
             {
-                int value = evt.button == 0 ? currentPaintValue : 1 - currentPaintValue;
+                int value = GetActualPaintValue(evt.button == 1);
+                Vector2Int current = paintMode == PaintMode.Cell ? hoveredCell : hoveredVertex;
 
                 if (activeTool == PaintTool.Rectangle && isRectangleDragging)
                 {
-                    rectCurrent = hoveredVertex;
+                    rectCurrent = current;
                 }
                 else if (activeTool == PaintTool.Brush && isPainting)
                 {
-                    PaintWithRadius(hoveredVertex, value);
+                    PaintWithRadius(current, value);
                 }
 
                 evt.Use();
@@ -698,11 +774,12 @@ namespace RIMA.Editor
             }
             else if (evt.type == EventType.MouseUp && (evt.button == 0 || evt.button == 1))
             {
-                int value = evt.button == 0 ? currentPaintValue : 1 - currentPaintValue;
+                int value = GetActualPaintValue(evt.button == 1);
+                Vector2Int current = paintMode == PaintMode.Cell ? hoveredCell : hoveredVertex;
 
                 if (activeTool == PaintTool.Rectangle && isRectangleDragging)
                 {
-                    PaintRectangle(rectStart, hoveredVertex, value);
+                    PaintRectangle(rectStart, current, value);
                     isRectangleDragging = false;
                     rectStart = new Vector2Int(-1, -1);
                     rectCurrent = new Vector2Int(-1, -1);
@@ -714,9 +791,24 @@ namespace RIMA.Editor
             }
         }
 
+        private int GetActualPaintValue(bool invertForButton)
+        {
+            int value = eraseMode ? 1 - currentPaintValue : currentPaintValue;
+            return invertForButton ? 1 - value : value;
+        }
+
         private Vector2 VertexToCanvasPosition(int x, int y)
         {
             return new Vector2(CanvasPadding + x * cellSize, CanvasPadding + (roomHeight - y) * cellSize);
+        }
+
+        private Rect CellToCanvasRect(Vector2Int cell)
+        {
+            return new Rect(
+                CanvasPadding + cell.x * cellSize,
+                CanvasPadding + (roomHeight - cell.y - 1) * cellSize,
+                cellSize,
+                cellSize);
         }
 
         private Vector2Int GetNearestVertex(Vector2 mousePosition)
@@ -724,7 +816,6 @@ namespace RIMA.Editor
             int x = Mathf.RoundToInt((mousePosition.x - CanvasPadding) / cellSize);
             int invertedY = Mathf.RoundToInt((mousePosition.y - CanvasPadding) / cellSize);
             int y = roomHeight - invertedY;
-
             Vector2 vertexPos = VertexToCanvasPosition(x, y);
             if (Vector2.Distance(mousePosition, vertexPos) > cellSize * 0.45f)
             {
@@ -739,14 +830,51 @@ namespace RIMA.Editor
             return vertex.x >= 0 && vertex.y >= 0 && vertex.x <= roomWidth && vertex.y <= roomHeight;
         }
 
+        private MapLayer GetActiveLayer()
+        {
+            if (layers == null || layers.Count == 0)
+            {
+                return null;
+            }
+
+            return layers[Mathf.Clamp(activeLayerIndex, 0, layers.Count - 1)];
+        }
+
+        private int[,] GetActiveGrid()
+        {
+            MapLayer layer = GetActiveLayer();
+            if (layer == null)
+            {
+                return null;
+            }
+
+            EnsureLayerGrid(layer, roomWidth, roomHeight, false);
+            return layer.vertGrid;
+        }
+
         private void PaintVertex(Vector2Int vertex, int value)
         {
-            if (!IsValidVertex(vertex))
+            int[,] grid = GetActiveGrid();
+            if (grid == null || !IsValidVertex(vertex))
             {
                 return;
             }
 
-            vertGrid[vertex.x, vertex.y] = Mathf.Clamp(value, 0, 1);
+            grid[vertex.x, vertex.y] = Mathf.Clamp(value, 0, 1);
+            StoreLayerGrid(GetActiveLayer());
+        }
+
+        private void PaintCell(Vector2Int cellOrigin, int value)
+        {
+            if (!brushInput.IsValidCell(cellOrigin, roomWidth, roomHeight))
+            {
+                return;
+            }
+
+            PaintVertex(new Vector2Int(cellOrigin.x, cellOrigin.y), value);
+            PaintVertex(new Vector2Int(cellOrigin.x + 1, cellOrigin.y), value);
+            PaintVertex(new Vector2Int(cellOrigin.x, cellOrigin.y + 1), value);
+            PaintVertex(new Vector2Int(cellOrigin.x + 1, cellOrigin.y + 1), value);
         }
 
         private void PaintWithRadius(Vector2Int center, int value)
@@ -756,7 +884,15 @@ namespace RIMA.Editor
             {
                 for (int dx = -r; dx <= r; dx++)
                 {
-                    PaintVertex(new Vector2Int(center.x + dx, center.y + dy), value);
+                    Vector2Int p = new Vector2Int(center.x + dx, center.y + dy);
+                    if (paintMode == PaintMode.Cell)
+                    {
+                        PaintCell(p, value);
+                    }
+                    else
+                    {
+                        PaintVertex(p, value);
+                    }
                 }
             }
         }
@@ -772,19 +908,33 @@ namespace RIMA.Editor
             {
                 for (int x = minX; x <= maxX; x++)
                 {
-                    PaintVertex(new Vector2Int(x, y), value);
+                    if (paintMode == PaintMode.Cell)
+                    {
+                        PaintCell(new Vector2Int(x, y), value);
+                    }
+                    else
+                    {
+                        PaintVertex(new Vector2Int(x, y), value);
+                    }
                 }
             }
         }
 
         private void FloodFill(Vector2Int start, int value)
         {
-            if (!IsValidVertex(start))
+            if (paintMode == PaintMode.Cell)
+            {
+                PaintCell(start, value);
+                return;
+            }
+
+            int[,] grid = GetActiveGrid();
+            if (grid == null || !IsValidVertex(start))
             {
                 return;
             }
 
-            int target = vertGrid[start.x, start.y];
+            int target = grid[start.x, start.y];
             value = Mathf.Clamp(value, 0, 1);
             if (target == value)
             {
@@ -793,7 +943,7 @@ namespace RIMA.Editor
 
             Queue<Vector2Int> queue = new Queue<Vector2Int>();
             queue.Enqueue(start);
-            vertGrid[start.x, start.y] = value;
+            grid[start.x, start.y] = value;
 
             while (queue.Count > 0)
             {
@@ -803,27 +953,42 @@ namespace RIMA.Editor
                 TryFloodNeighbor(queue, current.x, current.y + 1, target, value);
                 TryFloodNeighbor(queue, current.x, current.y - 1, target, value);
             }
+
+            StoreLayerGrid(GetActiveLayer());
         }
 
         private void TryFloodNeighbor(Queue<Vector2Int> queue, int x, int y, int target, int value)
         {
-            if (x < 0 || y < 0 || x > roomWidth || y > roomHeight || vertGrid[x, y] != target)
+            int[,] grid = GetActiveGrid();
+            if (grid == null || x < 0 || y < 0 || x > roomWidth || y > roomHeight || grid[x, y] != target)
             {
                 return;
             }
 
-            vertGrid[x, y] = value;
+            grid[x, y] = value;
             queue.Enqueue(new Vector2Int(x, y));
         }
 
         private void DrawRectangleOverlay(Vector2Int start, Vector2Int end)
         {
-            Vector2 a = VertexToCanvasPosition(Mathf.Min(start.x, end.x), Mathf.Min(start.y, end.y));
-            Vector2 b = VertexToCanvasPosition(Mathf.Max(start.x, end.x), Mathf.Max(start.y, end.y));
-            Rect rect = Rect.MinMaxRect(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
+            if (start.x < 0 || end.x < 0)
+            {
+                return;
+            }
 
-            Handles.color = new Color(0f, 1f, 1f, 0.18f);
-            Handles.DrawSolidRectangleWithOutline(rect, new Color(0f, 1f, 1f, 0.12f), Color.cyan);
+            if (paintMode == PaintMode.Cell)
+            {
+                Rect a = CellToCanvasRect(new Vector2Int(Mathf.Min(start.x, end.x), Mathf.Min(start.y, end.y)));
+                Rect b = CellToCanvasRect(new Vector2Int(Mathf.Max(start.x, end.x), Mathf.Max(start.y, end.y)));
+                Rect rect = Rect.MinMaxRect(a.xMin, b.yMin, b.xMax, a.yMax);
+                Handles.DrawSolidRectangleWithOutline(rect, new Color(0f, 1f, 1f, 0.12f), Color.cyan);
+                return;
+            }
+
+            Vector2 va = VertexToCanvasPosition(Mathf.Min(start.x, end.x), Mathf.Min(start.y, end.y));
+            Vector2 vb = VertexToCanvasPosition(Mathf.Max(start.x, end.x), Mathf.Max(start.y, end.y));
+            Rect vertexRect = Rect.MinMaxRect(Mathf.Min(va.x, vb.x), Mathf.Min(va.y, vb.y), Mathf.Max(va.x, vb.x), Mathf.Max(va.y, vb.y));
+            Handles.DrawSolidRectangleWithOutline(vertexRect, new Color(0f, 1f, 1f, 0.12f), Color.cyan);
         }
 
         private static Color HexColor(byte r, byte g, byte b)
@@ -843,125 +1008,151 @@ namespace RIMA.Editor
         {
             newWidth = Mathf.Clamp(newWidth, MinRoomSize, MaxRoomSize);
             newHeight = Mathf.Clamp(newHeight, MinRoomSize, MaxRoomSize);
-            int[,] oldGrid = vertGrid;
-            int[,] newGrid = new int[newWidth + 1, newHeight + 1];
-
-            if (preserve && oldGrid != null)
-            {
-                int copyWidth = Mathf.Min(oldGrid.GetLength(0), newWidth + 1);
-                int copyHeight = Mathf.Min(oldGrid.GetLength(1), newHeight + 1);
-                for (int y = 0; y < copyHeight; y++)
-                {
-                    for (int x = 0; x < copyWidth; x++)
-                    {
-                        newGrid[x, y] = oldGrid[x, y];
-                    }
-                }
-            }
-
+            StoreAllLayerGrids();
             roomWidth = newWidth;
             roomHeight = newHeight;
-            vertGrid = newGrid;
+
+            foreach (MapLayer layer in layers)
+            {
+                EnsureLayerGrid(layer, roomWidth, roomHeight, preserve);
+            }
+
             Repaint();
         }
 
         private void FillAll(int value)
         {
+            int[,] grid = GetActiveGrid();
+            if (grid == null)
+            {
+                return;
+            }
+
             value = Mathf.Clamp(value, 0, 1);
             for (int y = 0; y <= roomHeight; y++)
             {
                 for (int x = 0; x <= roomWidth; x++)
                 {
-                    vertGrid[x, y] = value;
+                    grid[x, y] = value;
                 }
             }
 
+            StoreLayerGrid(GetActiveLayer());
             Repaint();
         }
 
         private void MakeRectangularRoom()
         {
-            wallThickness = Mathf.Clamp(wallThickness, 1, Mathf.Min(roomWidth, roomHeight) / 2);
+            int[,] grid = GetActiveGrid();
+            if (grid == null)
+            {
+                return;
+            }
 
+            wallThickness = Mathf.Clamp(wallThickness, 1, Mathf.Min(roomWidth, roomHeight) / 2);
             for (int y = 0; y <= roomHeight; y++)
             {
                 for (int x = 0; x <= roomWidth; x++)
                 {
                     bool isWall = x < wallThickness || y < wallThickness || x > roomWidth - wallThickness || y > roomHeight - wallThickness;
-                    vertGrid[x, y] = isWall ? 1 : 0;
+                    grid[x, y] = isWall ? 1 : 0;
                 }
             }
 
+            StoreLayerGrid(GetActiveLayer());
             Repaint();
         }
 
         private void MakeLShapeRoom()
         {
             FillAll(1);
+            int[,] grid = GetActiveGrid();
+            if (grid == null)
+            {
+                return;
+            }
 
             int splitX = Mathf.Max(wallThickness + 2, Mathf.RoundToInt(roomWidth * 0.58f));
             int splitY = Mathf.Max(wallThickness + 2, Mathf.RoundToInt(roomHeight * 0.52f));
-
             for (int y = wallThickness; y <= roomHeight - wallThickness; y++)
             {
                 for (int x = wallThickness; x <= roomWidth - wallThickness; x++)
                 {
-                    bool lowerArm = y <= splitY;
-                    bool leftArm = x <= splitX;
-                    if (lowerArm || leftArm)
+                    if (y <= splitY || x <= splitX)
                     {
-                        vertGrid[x, y] = 0;
+                        grid[x, y] = 0;
                     }
                 }
             }
 
+            StoreLayerGrid(GetActiveLayer());
             Repaint();
         }
 
         private void PerlinNoiseFill()
         {
+            int[,] grid = GetActiveGrid();
+            if (grid == null)
+            {
+                return;
+            }
+
             float offsetX = noiseSeed * 0.173f;
             float offsetY = noiseSeed * 0.317f;
-
             for (int y = 0; y <= roomHeight; y++)
             {
                 for (int x = 0; x <= roomWidth; x++)
                 {
                     float sample = Mathf.PerlinNoise(offsetX + x * 0.18f, offsetY + y * 0.18f);
-                    vertGrid[x, y] = sample < noiseDensity ? 1 : 0;
+                    grid[x, y] = sample < noiseDensity ? 1 : 0;
                 }
             }
 
+            StoreLayerGrid(GetActiveLayer());
             Repaint();
         }
 
         private void PaintHorizontalCorridor()
         {
+            int[,] grid = GetActiveGrid();
+            if (grid == null)
+            {
+                return;
+            }
+
             int centerY = roomHeight / 2;
             int half = Mathf.Max(1, wallThickness / 2);
             for (int y = Mathf.Max(0, centerY - half); y <= Mathf.Min(roomHeight, centerY + half); y++)
             {
                 for (int x = 0; x <= roomWidth; x++)
                 {
-                    vertGrid[x, y] = 0;
+                    grid[x, y] = 0;
                 }
             }
 
+            StoreLayerGrid(GetActiveLayer());
             Repaint();
         }
 
         private void PaintVerticalCorridor()
         {
+            int[,] grid = GetActiveGrid();
+            if (grid == null)
+            {
+                return;
+            }
+
             int centerX = roomWidth / 2;
             int half = Mathf.Max(1, wallThickness / 2);
             for (int x = Mathf.Max(0, centerX - half); x <= Mathf.Min(roomWidth, centerX + half); x++)
             {
                 for (int y = 0; y <= roomHeight; y++)
                 {
-                    vertGrid[x, y] = 0;
+                    grid[x, y] = 0;
                 }
             }
 
+            StoreLayerGrid(GetActiveLayer());
             Repaint();
         }
 
@@ -974,12 +1165,18 @@ namespace RIMA.Editor
                 return;
             }
 
+            StoreAllLayerGrids();
             MapSaveData data = new MapSaveData
             {
                 width = roomWidth,
                 height = roomHeight,
-                vertexData = FlattenGrid(),
-                layerNames = GetLayerNames()
+                layers = layers.Select(layer => new LayerSaveData
+                {
+                    name = layer.name,
+                    tileSet = layer.tileSet != null ? AssetDatabase.GetAssetPath(layer.tileSet) : string.Empty,
+                    enabled = layer.enabled,
+                    vertexData = FlattenGrid(layer.vertGrid)
+                }).ToArray()
             };
 
             File.WriteAllText(path, JsonUtility.ToJson(data, true));
@@ -997,7 +1194,7 @@ namespace RIMA.Editor
 
             string json = File.ReadAllText(absolutePath);
             MapSaveData data = JsonUtility.FromJson<MapSaveData>(json);
-            if (data == null || data.vertexData == null)
+            if (data == null)
             {
                 Debug.LogError("[MapDesigner] Invalid map data: " + absolutePath);
                 return;
@@ -1005,74 +1202,126 @@ namespace RIMA.Editor
 
             roomWidth = Mathf.Clamp(data.width, MinRoomSize, MaxRoomSize);
             roomHeight = Mathf.Clamp(data.height, MinRoomSize, MaxRoomSize);
-            ResizeGrid(roomWidth, roomHeight, false);
-            UnflattenGrid(data.vertexData);
 
-            if (data.layerNames != null)
+            if (data.layers != null && data.layers.Length > 0)
             {
-                for (int i = 0; i < Mathf.Min(data.layerNames.Length, layers.Count); i++)
+                layers = data.layers.Select(saved => new MapLayer
                 {
-                    layers[i].name = data.layerNames[i];
+                    name = string.IsNullOrEmpty(saved.name) ? "Layer" : saved.name,
+                    tileSet = string.IsNullOrEmpty(saved.tileSet) ? null : AssetDatabase.LoadAssetAtPath<CornerWangTileSetSO>(saved.tileSet),
+                    enabled = saved.enabled,
+                    flatVertexData = saved.vertexData
+                }).ToList();
+            }
+            else
+            {
+                layers = new List<MapLayer> { new MapLayer { name = "Base", flatVertexData = data.vertexData } };
+                if (data.layerNames != null)
+                {
+                    for (int i = 0; i < Mathf.Min(data.layerNames.Length, layers.Count); i++)
+                    {
+                        layers[i].name = data.layerNames[i];
+                    }
                 }
             }
 
+            if (layers.Count == 0)
+            {
+                layers.Add(new MapLayer { name = "Base" });
+            }
+
+            foreach (MapLayer layer in layers)
+            {
+                EnsureLayerGrid(layer, roomWidth, roomHeight, false);
+            }
+
+            activeLayerIndex = Mathf.Clamp(activeLayerIndex, 0, layers.Count - 1);
+            BuildLayerList();
             Debug.Log("[MapDesigner] Loaded map data: " + absolutePath);
             Repaint();
         }
 
-        private int[] FlattenGrid()
+        private int[] FlattenGrid(int[,] grid)
         {
             int[] values = new int[(roomWidth + 1) * (roomHeight + 1)];
-            int index = 0;
+            if (grid == null)
+            {
+                return values;
+            }
 
+            int index = 0;
             for (int y = 0; y <= roomHeight; y++)
             {
                 for (int x = 0; x <= roomWidth; x++)
                 {
-                    values[index++] = vertGrid[x, y];
+                    values[index++] = grid[x, y];
                 }
             }
 
             return values;
         }
 
-        private void UnflattenGrid(int[] values)
+        private void StoreLayerGrid(MapLayer layer)
+        {
+            if (layer != null)
+            {
+                layer.flatVertexData = FlattenGrid(layer.vertGrid);
+            }
+        }
+
+        private void StoreAllLayerGrids()
+        {
+            if (layers == null)
+            {
+                return;
+            }
+
+            foreach (MapLayer layer in layers)
+            {
+                StoreLayerGrid(layer);
+            }
+        }
+
+        private static void UnflattenGridInto(int[] values, int[,] grid, int width, int height)
         {
             int index = 0;
-            for (int y = 0; y <= roomHeight; y++)
+            for (int y = 0; y <= height; y++)
             {
-                for (int x = 0; x <= roomWidth; x++)
+                for (int x = 0; x <= width; x++)
                 {
-                    vertGrid[x, y] = index < values.Length ? Mathf.Clamp(values[index], 0, 1) : 0;
+                    grid[x, y] = values != null && index < values.Length ? Mathf.Clamp(values[index], 0, 1) : 0;
                     index++;
                 }
             }
         }
 
-        private string[] GetLayerNames()
-        {
-            string[] names = new string[layers.Count];
-            for (int i = 0; i < layers.Count; i++)
-            {
-                names[i] = layers[i].name;
-            }
-
-            return names;
-        }
-
         private void ApplyToScene()
         {
-            int applied = 0;
-            foreach (MapLayer layer in layers)
+            StoreAllLayerGrids();
+            int applied = TilemapMutator.ApplyVertexGrids(layers, roomWidth, roomHeight);
+            for (int i = 0; i < layers.Count; i++)
             {
-                if (!layer.enabled || layer.tilemap == null || layer.tileSet == null)
+                MapLayer layer = layers[i];
+                if (layer == null || !layer.enabled || layer.tilemap == null || layer.tileSet == null)
                 {
                     continue;
                 }
 
-                CornerWangPainter.Paint(layer.tilemap, layer.tileSet, vertGrid, roomWidth, roomHeight);
-                EditorUtility.SetDirty(layer.tilemap);
-                applied++;
+                TilemapRenderer renderer = layer.tilemap.GetComponent<TilemapRenderer>();
+                if (renderer != null)
+                {
+                    renderer.sortingOrder = i * 10;
+                }
+
+                CliffYSortManager sorter = layer.tilemap.GetComponent<CliffYSortManager>();
+                if (sorter == null)
+                {
+                    sorter = Undo.AddComponent<CliffYSortManager>(layer.tilemap.gameObject);
+                }
+
+                sorter.tileSet = layer.tileSet;
+                sorter.ApplySortMode();
+                EditorUtility.SetDirty(sorter);
             }
 
             Debug.Log("[MapDesigner] Applied " + roomWidth + "x" + roomHeight + " map to " + applied + " layer(s).");
@@ -1088,6 +1337,7 @@ namespace RIMA.Editor
                     continue;
                 }
 
+                Undo.RegisterCompleteObjectUndo(layer.tilemap, "Clear RIMA Tilemap");
                 layer.tilemap.ClearAllTiles();
                 EditorUtility.SetDirty(layer.tilemap);
                 cleared++;
@@ -1100,18 +1350,18 @@ namespace RIMA.Editor
         {
             Rect rect = new Rect(0f, position.height - StatusHeight, position.width, StatusHeight);
             EditorGUI.DrawRect(rect, new Color(0.16f, 0.16f, 0.16f, 1f));
-            MapLayer layer = layers != null && layers.Count > 0 ? layers[Mathf.Clamp(activeLayerIndex, 0, layers.Count - 1)] : null;
+            MapLayer layer = GetActiveLayer();
             string layerName = layer != null ? layer.name : "None";
             string tileSetName = layer != null && layer.tileSet != null ? layer.tileSet.name : "No Tileset";
             string status = string.Format(
-                "Room: {0}x{1} | Vertices: {2}x{3} | Active Layer: {4} ({5}) | Tool: {6}",
+                "Room: {0}x{1} | Active Layer: {2} ({3}) | Tool: {4} | Mode: {5} | Erase: {6}",
                 roomWidth,
                 roomHeight,
-                roomWidth + 1,
-                roomHeight + 1,
                 layerName,
                 tileSetName,
-                activeTool);
+                activeTool,
+                paintMode,
+                eraseMode ? "On" : "Off");
 
             EditorGUI.LabelField(new Rect(rect.x + 8f, rect.y + 2f, rect.width - 16f, rect.height - 4f), status, EditorStyles.miniLabel);
         }

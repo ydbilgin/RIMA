@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa369bb6ab2a284fab77a45ed0fde39, type: 3}
+  m_Name: MauveHexagon_CornerWangTileSet
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.CornerWangTileSetSO
+  lowerTerrainLabel: warm mauve
+  upperTerrainLabel: hexagon
+  tiles:
+  - {fileID: 11400000, guid: 5fc0f24bcf0f5ce429e871b57c44b831, type: 2}
+  - {fileID: 11400000, guid: b0f860390a82fe6498acbe38a7524440, type: 2}
+  - {fileID: 11400000, guid: 015c4e103635ba446989a38ff4629834, type: 2}
+  - {fileID: 11400000, guid: e3536f9d0e72e2e44a4203651e6b95c1, type: 2}
+  - {fileID: 11400000, guid: 7276236fa9ad32542920b950c305a832, type: 2}
+  - {fileID: 11400000, guid: 29e9a433b298dcf40ac1ee25edf889a1, type: 2}
+  - {fileID: 11400000, guid: 1a2551347c830c247ab8bceebcab8405, type: 2}
+  - {fileID: 11400000, guid: cfb17e16f5a56324d8ed06bb03970f92, type: 2}
+  - {fileID: 11400000, guid: ac48c6c9c1ba4cd40b5479a9ffe449eb, type: 2}
+  - {fileID: 11400000, guid: 2a8aaf580294f324d8362a99487fedc2, type: 2}
+  - {fileID: 11400000, guid: 8bb555ff1b88e1c49819060ac8d02cee, type: 2}
+  - {fileID: 11400000, guid: 49f9136324dd6284188bb93a4c9ac8dc, type: 2}
+  - {fileID: 11400000, guid: 8f23749ac12cd184cb594a356cf16511, type: 2}
+  - {fileID: 11400000, guid: 992cf12935c63d14e8cfc78e934ef6db, type: 2}
+  - {fileID: 11400000, guid: b943532502a84b8418985075a8586c43, type: 2}
+  - {fileID: 11400000, guid: 097fa65d7b6ae15439ff794f36856b60, type: 2}
