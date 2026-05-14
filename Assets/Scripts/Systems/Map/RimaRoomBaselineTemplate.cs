@@ -19,5 +19,12 @@ namespace RIMA.Systems.Map
         [Range(0f, 1f)] public float decalDensity = 0.35f;
         public PropSpec[] propSpecs;
         public int generatorVersion = 1;
+
+        [Header("Alabaster Layered (Karar #122)")]
+        public TileBase singleFloorTile;
+        public TileBase[] floorAccentTiles;
+        [Range(0f, 1f)] public float floorAccentRatio = 0.15f;
+        public TileBase singleWallTile;
+        public bool useLayeredGenerator = true;
     }
 }

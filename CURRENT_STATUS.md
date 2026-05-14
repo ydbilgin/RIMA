@@ -1,16 +1,62 @@
 # CURRENT_STATUS
-**2026-05-14 — S72 Sonnet orchestrator | Karar #131/132/133 LOCK | Corner Wang Pipeline + Map Designer + Game UI dispatch çalışıyor**
+**2026-05-14 — S73 Sonnet orchestrator | Map Designer UX Overhaul + Wang SO Wizard dispatch çalışıyor**
 
 > **Path convention:** `~/.ccs/.../memory/` = user-level auto-memory (Claude auto-loads via STUB MODE). `MEMORY/` (project root) = Codex/Gemini shared. Below references use full path for clarity when ambiguous.
 
-## S73 İLK ADIMLAR (Yeni session)
+## S73 AKTİF DISPATCH (Kullanıcı bilgisayardan ayrıldı)
 
-1. **CURRENT_STATUS oku** (bu dosya)
-2. **read_console** — compile durumu kontrol
-3. **Map Designer test:** Unity'de `RIMA > Tools > Map Designer` aç → vertex grid çalışıyor mu kontrol et
-4. **Wang TileSet oluştur:** `RIMA > Tools > Create Corner Wang TileSets` → FloorWall + RubblePath SO'ları oluştur
+### ✅ TAMAMLANDI — laurethayday
+**Map Designer UX Overhaul** — `commit e9d2bee`
+- Scroll wheel zoom (10-80px, evt.ScrollWheel) ✓
+- Live tile preview on canvas (actual sprites, Show Tiles toggle) ✓
+- Brush radius slider 1-5 + PaintWithRadius ✓
+
+### ✅ TAMAMLANDI — laurethgame
+**Wang SO Wizard + 4 Remaining Tilesets** — `commit 72eee93`
+- DebrisRift_CornerWangTileSet.asset (16/16 tiles) ✓
+- ColdFloorWall_CornerWangTileSet.asset (16/16 tiles) ✓
+- SlateMineral_CornerWangTileSet.asset (16/16 tiles) ✓
+- MauveHexagon_CornerWangTileSet.asset (16/16 tiles) ✓
+- CreateMissingWangSOs.cs + WangTileSetWizard.cs editor scripts ✓
+- 4 spritesheet.png → Multiple sprite import (4×4 grid, 32px) ✓
+
+### ✅ TAMAMLANDI — laurethayday `commit 42e4b20`
+**Pixel Perfect Camera Fix + Map Designer QC**
+- _FazMVP_Demo + MainMenu + CharacterSelect: upscaleRT=true ✓ (odd-res uyarısı gider)
+- Player Settings 1920×1080 Windowed ✓
+- 6/6 CornerWangTileSetSO mevcut ✓, wang_floor_wall 16/16 tile ✓
+- CornerWangPainter functional test PASS (10 unique tile type, 0 error) ✓
+- RimaMapDesignerWindow.cs: 0 error, 0 warning ✓
+
+### ✅ TAMAMLANDI — direkt UnityMCP `commit 1730837`
+**Camera z=-10 fix + CameraFollow wire**
+- Camera z 0→-10 (sahnede hiçbir şey görünmeme nedeni) ✓
+- CameraFollow Main Camera'ya eklendi (Player'ı takip eder, oda sınırlarına kenetlenir) ✓
+
+### ✅ TAMAMLANDI — laurethgame `commit c7eba13`
+**5 Example Map JSON + Sahneye Uygula**
+- small_room (20×15) / large_chamber (30×22) / corridor_cross (24×18) / l_shape (24×20) / dungeon_main (28×20) ✓
+- Tüm JSON'lar vertexData boyutu doğru (5/5 OK) ✓
+- dungeon_main → _FazMVP_Demo BaseTilemap FloorWall SO ile paint ✓
+- QC: tile count > 0, 0 error ✓
+
+### Bağlam (PixelLab Maps araştırması S73)
+- PixelLab Maps = AI inpainting tool (selection box + mask), cell-based, NOT vertex-based
+- Bizim Corner Wang sistemi = Tiled-benzeri manual level editor, daha iyi
+- "Akıcı boyama" = scroll zoom + tile preview + brush radius → bu dispatch karşılıyor
+- 6 tileset zaten indirildi; FloorWall+RubblePath SO mevcut; 4 eksik SO bu dispatch'te
+
+### Profil önceliği bu session
+laurethayday → laurethgame → yasinderyabilgin (sorun yaşanırsa)
+
+## S73 SONRAKI ADIMLAR (dispatch bittikten sonra)
+
+1. **read_console** — compile durumu kontrol (S73 dispatch'leri bitti mi?)
+2. **RIMA > Tools > Create Missing Wang SOs** — 4 eksik SO oluştur (dispatch bitince)
+3. **Map Designer test:** `RIMA > Tools > Map Designer` → scroll zoom + live tile preview çalışıyor mu?
+4. **Wang Tileset Wizard test:** `RIMA > Tools > Wang Tileset Wizard` → yeni tileset workflow
 5. **Game UI test:** `RIMA > Tools > Create UI Scenes` → MainMenu + CharacterSelect sahneleri
-6. **Map Designer'da tile thumbnail** — SO bağla, layer ekle, "Make Rectangular Room" + Apply
+6. **Map Designer'da tile thumbnail** — 6 SO bağla, layer ekle, "Make Rectangular Room" + Apply
 
 **S72 dispatch edilen (çalışıyor/tamamlandı):**
 - Karar #131 CornerWangPainter system — yasinderyabilgin profile

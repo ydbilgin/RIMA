@@ -394,13 +394,19 @@ namespace RIMA
         {
             if (floorTilemap == null)
             {
-                var go = GameObject.Find("IsoGrid/Ground") ?? GameObject.Find("Room/Floor");
+                var go = GameObject.Find("IsoGrid/Ground")
+                    ?? GameObject.Find("Room/Floor")
+                    ?? GameObject.Find("Grid/BaseTilemap")
+                    ?? GameObject.Find("BaseTilemap");
                 if (go != null) floorTilemap = go.GetComponent<Tilemap>();
             }
 
             if (wallTilemap == null)
             {
-                var go = GameObject.Find("IsoGrid/Walls") ?? GameObject.Find("Room/Wall");
+                var go = GameObject.Find("IsoGrid/Walls")
+                    ?? GameObject.Find("Room/Wall")
+                    ?? GameObject.Find("Grid/WallsTilemap")
+                    ?? GameObject.Find("WallsTilemap");
                 if (go != null) wallTilemap = go.GetComponent<Tilemap>();
             }
         }

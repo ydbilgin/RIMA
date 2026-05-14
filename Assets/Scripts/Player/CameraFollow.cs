@@ -99,7 +99,11 @@ namespace RIMA
             Tilemap floor = null;
             var floorGO = GameObject.Find(floorTilemapPath) ?? GameObject.Find("Room/Floor");
             if (floorGO != null) floor = floorGO.GetComponent<Tilemap>();
-            if (floor == null) return;
+            if (floor == null) 
+            {
+                useBounds = false; // Disable bounds if we can't find the floor
+                return;
+            }
 
             var rendererBounds = floor.GetComponent<Renderer>()?.bounds;
             if (rendererBounds == null || rendererBounds.Value.size.sqrMagnitude <= 0f)

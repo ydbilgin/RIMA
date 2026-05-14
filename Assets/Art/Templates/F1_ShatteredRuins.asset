@@ -35,7 +35,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 34ae10a9c10d75645a1048e8fc4209f2, type: 2}
   - {fileID: 11400000, guid: c7ebc3be4e8e19046a6ad8906874e37d, type: 2}
   - {fileID: 11400000, guid: 72261a0291092114bb7c5686754105d0, type: 2}
-  wallVariants: []
+  wallVariants:
+  - {fileID: 11400000, guid: 34e47b33ffa8e5e40a0bc83e355ccd46, type: 2}
   decalSprites: []
   decalDensity: 0.25
   propSpecs: []

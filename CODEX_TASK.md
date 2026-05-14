@@ -1,137 +1,102 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE.md AS THE VERY LAST STEP.
 
-# Codex Final Strategy Review: PixelLab Tool Stratejisi (S66)
+# Karar #118a — TileImportWizard script only — execute every step, commit at end
 
-**Tarih:** 2026-05-13
-**Tip:** ARCHITECTURE REVIEW + FINAL DECISION
-**Çıktı:** CODEX_DONE.md append
+## Context
 
-## Kullanıcı Vizyonu (NET, son hali)
+Karar #118 büyük olduğu için 3 parçaya bölündü. Bu #118a: sadece TileImportWizard Editor script + RuleTile template asset.
 
-> "PixelLab **sadece tile/asset üretim** için kullanılacak. Map tasarımı, oda layout, kompozisyon, mockup — **HEPSİ Unity Room Designer içinde** olacak. PixelLab Map editor artık kullanılmayacak (mockup için bile). Ben Unity'de PixelLab'daki gibi brush ile boyayıp sileceğim, Claude+Codex baseline'ı kuracak."
+#118b (tilemap layers) ve #118c (brush mode) ayrı dispatch'te gelecek.
 
-Bu vizyon Karar #115 (Map Builder), #117 (Portable Core), #118 (Hybrid Tile Composition) ile uyumlu — ama tool seçim stratejisini Codex final değerlendirsin.
+## STEP 1 — TileImportWizard Editor script
 
-## Mevcut Asset Durumu
+Create `Assets/Editor/RoomDesigner/Tools/TileImportWizard.cs`:
 
-PixelLab Map export edildi (`STAGING/TILESET_OUTPUT/F1_FloorWallPath_2026-05-13/`):
-- ✅ Wang Floor↔Wall sheet (128x128, 4x4 grid, 16 tile) — `asset_006.png`
-- ✅ Wang Floor↔Path sheet (128x128, 4x4 grid, 16 tile) — `asset_007.png`
-- ✅ `asset_000.json` — terrain metadata + `wangIndexMapping: "standard"`
-- ✅ Warblade sprite — `asset_008.png` (bonus)
-- ❌ Floor variant zenginliği (sadece Wang'in 16 tile'ı)
-- ❌ Decals (moss, rift crack) henüz yok
-- ❌ Props henüz yok
+- EditorWindow, menu: `RIMA > Tile Import Wizard`
+- Folder picker button: `EditorUtility.OpenFolderPanel("Select PixelLab export folder", "Assets/Art/Tiles", "")`
+- JSON parse: scan folder for `*.json` (PixelLab batch export metadata). Use `JsonUtility` (no Newtonsoft required).
+- Expected JSON schema:
+  ```json
+  { "tile_size": 32, "tile_type": "topdown_wang", "tiles": [{"index": 0, "wang_mask": "0000", "sprite_x": 0, "sprite_y": 0, "width": 32, "height": 32}] }
+  ```
+- If JSON missing or malformed: show EditorUtility.DisplayDialog error, do not crash.
+- Sheet slice: for each texture (.png) in folder, call `TextureImporter` set `spriteImportMode = SpriteImportMode.Multiple`, generate `SpriteMetaData[]` from JSON tile entries, call `AssetDatabase.ImportAsset`.
+- RuleTile auto-create: for each wang tileset found, create a new `RuleTile` asset at `Assets/Art/Tiles/F1/Generated/wang_{name}_RuleTile.asset`. Do NOT overwrite existing assets with same name (append `_new` suffix).
+- Use 16-tile NSEW Wang mapping (Karar #116 baseline): neighbors = N, S, E, W bitmask 0-15.
+- Progress bar: `EditorUtility.DisplayProgressBar` during slice + import.
 
-## Üç Aday Strateji
+## STEP 2 — RuleTile template asset
 
-### A — Wang Minimal + create_tiles_pro Maksimal
-- Wang: Sadece **Floor↔Wall** (ana gameplay collider ilişkisi)
-- `create_tiles_pro` 64-batch: Floor variants (64) + Wall variants (64) + Path variants (64)
-- `create_object`: decals + props
-- Mevcut Wang Floor↔Path tutulur (transition reference olarak)
-- Toplam PixelLab gen: ~5-7
-- Avantaj: Variant zenginliği max, Unity RuleTile + RandomTile esnek
-- Dezavantaj: Path-floor edge için Unity'de Codex ek RuleTile rule iş
+Create via `AssetDatabase.CreateAsset` in STEP 1 code or separate script:
+`Assets/Art/Tiles/F1/Generated/RuleTile_F1_Wang_Template.asset`
 
-### B — Wang Primary + create_tiles_pro Refinement
-- Wang: Tüm major terrain pair'leri (Floor↔Wall, Floor↔Path, Floor↔Moss, F2↔F1)
-- `create_tiles_pro`: Her terrain için variant batch
-- `create_object`: props sadece
-- Toplam PixelLab gen: ~10-12
-- Avantaj: Tüm transition'lar PixelLab'dan hazır
-- Dezavantaj: Maliyetli, decals Wang'a sokuluyor (overlay olmalıydı)
+- Standard 16-rule RuleTile with NSEW neighbors
+- All sprite refs null (placeholder template — wizard clones this and fills refs)
+- No RIMA biome enum references in this template (Karar #117 Portable Core compliance)
 
-### C — Hybrid Asymmetric (mevcut Karar #118 ana çizgisi)
-- Wang: Floor↔Wall (DONE) + Floor↔Path (DONE — tut)
-- `create_tiles_pro` 64-batch: Floor variants + Wall variants
-- `create_object`: Moss decals, Rift crack decals, Props
-- Faz 2/3 biome geçişleri için Wang chain
-- Toplam ek PixelLab gen: ~4-5
-- Avantaj: Mevcut Wang sheet'ler kullanılır + variant zenginliği + decal/prop ayrımı
-- Dezavantaj: Yok (en dengeli)
+## STEP 3 — Compile check
 
-## JSON Parser Önerisi (Faz 1.0'a ek)
+After creating the scripts:
+- Use Unity MCP `read_console` to check for compilation errors
+- If errors: fix them. Do not commit broken code.
 
-PixelLab export `asset_000.json` yapısı:
-```json
-"tilesets": [{
-  "lowerTerrainId": 1, "upperTerrainId": 2,
-  "tileSize": 32, "gridLayout": "4x4",
-  "wangIndexMapping": "standard"
-}]
+## STEP 4 — Test
+
+Open TileImportWizard (RIMA > Tile Import Wizard).
+Test with existing `Assets/Art/Tiles/F1/Generated/` folder (wang tile PNGs from S67).
+Verify: no crash, progress bar shows, output .asset files generate.
+
+## STEP 5 — Commit
+
+```bash
+git add Assets/Editor/RoomDesigner/Tools/TileImportWizard.cs Assets/Art/Tiles/F1/Generated/RuleTile_F1_Wang_Template.asset
+git commit -m "[karar118a] TileImportWizard Editor script + RuleTile_F1 template
+
+- Folder picker → JSON parse → sheet slice → RuleTile auto-create
+- 16-tile NSEW Wang mapping (Karar #116)
+- Karar #117 portable core compliance (no biome refs in template)
+- Test: existing F1 Generated folder import OK"
 ```
 
-**Öneri:** `TileImportWizard`'a PixelLab Export Parser ek modül:
-1. User folder seç (export klasörü)
-2. JSON parse → terrain + tileset metadata
-3. Sheet PNG'ler auto-slice (Wang grid + tile size)
-4. RuleTile asset'leri Wang index ile auto-create
-5. Multi-layer tilemap iskeleti hazır
+## STEP 6 — Report
 
-Faz 1.0'a +2-3 saat ek scope. Gelecek tüm PixelLab export'larını saniyeler içinde Unity'ye getirir.
-
-## Senin Görevin (Codex)
-
-3 stratejiyi RIMA bağlamında değerlendir + JSON parser kararı. LOCKED bağlamlar:
-- Karar #100: 32x32 tile, ~35° top-down, PPU=64, chibi
-- Karar #115: Unity Editor F2 Map Builder
-- Karar #116: Tile Transition Quality (Raggedness, edge-blend, decal layer, drop shadow)
-- Karar #117: Portable Core (RIMA-specific Game Layer)
-- Karar #118: Multi-layer tilemap (Base/Decal/Wall/Prop)
-- Karar #90: PixelLab Batch Economy (32px → 64 cell)
-
-### Output Format
-
+Write `STAGING/karar_118a_wizard_report.md`:
 ```
-# Codex Final Strategy Review: PixelLab Tool S66
+# Karar #118a TileImportWizard Report
 
-## Verdict
-[A / B / C / Hybrid blend + neden]
+## TileImportWizard
+[functional Y/N]
+[test result on existing wang assets]
+[any issues]
 
-## Strateji Karşılaştırma Tablosu
-| Konu | A | B | C |
-|---|---|---|---|
-| Variant zenginliği | ... | ... | ... |
-| Cost | ... | ... | ... |
-| Unity entegrasyon karmaşıklığı | ... | ... | ... |
-| Decal/Prop ayrımı | ... | ... | ... |
-| Karar #118 uyumu | ... | ... | ... |
+## RuleTile Template
+[created Y/N]
 
-## Mevcut Wang Sheet'leri Kullanım Önerisi
-- Floor↔Wall: KEEP/REPLACE — neden
-- Floor↔Path: KEEP/REPLACE — neden
-
-## JSON Parser Önerisi
-- INTEGRATE Faz 1.0 / DEFER Faz 1.5 / REJECT — neden
-- Implementation tasarım önerisi (TileImportWizard hook noktası)
-
-## Pixellab Pipeline Önerilen Sıralama (Adım Adım)
-1. ... (concrete action)
-2. ...
-
-## RIMA Spesifik Risk + Mitigation
-- Variant zenginliği yetersiz olursa: ...
-- Wang sheet'in Unity RuleTile rule'a mapping karmaşıklığı: ...
-- create_tiles_pro 64-batch palet driftleyebilir: ...
-
-## Karar #118 Güncelleme İhtiyacı
-[Varsa ek madde önerisi, yoksa "no change"]
-
-## Faz 1.0 MVP Codex Task Scope Önerisi
-[RoomBaselineGenerator + TileImportWizard PixelLab parser + multi-layer setup için somut iş listesi, saat tahmini]
-
-## ORCHESTRATOR NEXT STEP
-1. ... (concrete)
-2. ...
+## Console
+[0 errors Y/N]
 ```
 
-## Kısıtlar
-- LOCKED kararları override etme; ek refine öner
-- Türkçe, 800-1200 kelime
-- Kod yazma yok, sadece strateji + tasarım
-- User pipeline disiplini istiyor — "şu kadar gen + şu kadar iş, hangi siparişle" net olmalı
-- Effort: high
+Append CODEX_DONE.md:
+```
+## [2026-05-14] Karar #118a TileImportWizard
+- TileImportWizard.cs created: Y/N
+- RuleTile template: Y/N
+- Compile errors: none/list
+- Test: pass/fail
+```
+
+## Constraints
+
+- DO NOT overwrite existing wang_*_RuleTile.asset files (append _new suffix)
+- DO NOT implement brush mode or tilemap layers (that is #118b/#118c)
+- Karar #117: TileImportWizard goes in Editor layer, template asset has NO game-layer dependencies
+- Use JsonUtility (built-in), NOT Newtonsoft
+
+## Source References
+
+1. `Assets/Editor/RoomDesigner/` — mevcut Room Designer kod (referans)
+2. `Assets/Art/Tiles/F1/Generated/` — S67 wang importer output (test input)
+3. `TASARIM/MASTER_KARAR_BELGESI.md` — Karar #116/#117/#118 referans (sadece ilgili satırlar)
 
 
 ---

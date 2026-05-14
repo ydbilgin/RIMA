@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5904b61d06d2dd84a863f4e4d8d59bfc, type: 3}
+  m_Name: ScatterDatabase
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Runtime.Scatter.ScatterDatabase
+  items:
+  - category: Stones
+    sprites:
+    - {fileID: 21300000, guid: ef99132fc5f4cb646b6392ce53023e79, type: 3}
+    - {fileID: 21300000, guid: b1e4ee0765217054ca588a2d40e2d9d2, type: 3}
+    - {fileID: 21300000, guid: 708309297094ce04799d7782605da00a, type: 3}
+    - {fileID: 21300000, guid: 78cbc0aaa7ac8af45a2ee30acf7e55e4, type: 3}
+    minScale: 0.8
+    maxScale: 1.2
+    randomRotation: 1
+    sortingOrder: 5
+  - category: Moss
+    sprites:
+    - {fileID: 21300000, guid: f3b55ed2c965cec4bbba7372eaccd209, type: 3}
+    - {fileID: 21300000, guid: 4cc94502a662a364996514fea6c428f0, type: 3}
+    - {fileID: 21300000, guid: 446e00dbf3ca1294c81ab0eddcb8f521, type: 3}
+    - {fileID: 21300000, guid: 5c78b4beefdcdef43bef08a6be149763, type: 3}
+    minScale: 0.8
+    maxScale: 1.2
+    randomRotation: 1
+    sortingOrder: 5
+  - category: Rubble
+    sprites:
+    - {fileID: 21300000, guid: e0abe1ff32487f844a0025600dcbfa06, type: 3}
+    - {fileID: 21300000, guid: 294de44fcdfa65141acc136144e5425a, type: 3}
+    - {fileID: 21300000, guid: 0d8bea88409043240be56f64efac0ae0, type: 3}
+    - {fileID: 21300000, guid: 472dc7f1760e36349a991f9f004cd5aa, type: 3}
+    minScale: 0.8
+    maxScale: 1.2
+    randomRotation: 1
+    sortingOrder: 5
+  - category: Dirt
+    sprites:
+    - {fileID: 21300000, guid: 21b93b3f510e4ce4c903a752806e73e0, type: 3}
+    - {fileID: 21300000, guid: 70f8f16deea2e52419a56df682fcb347, type: 3}
+    - {fileID: 21300000, guid: 047249b5cd7353e42bd1dff191e5caec, type: 3}
+    - {fileID: 21300000, guid: be2ef9b853e75a24581d5cfa89aa1e6f, type: 3}
+    minScale: 0.8
+    maxScale: 1.2
+    randomRotation: 1
+    sortingOrder: 5

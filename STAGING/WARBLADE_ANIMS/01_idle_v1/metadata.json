@@ -1,0 +1,54 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "6bf7afdb-fc51-4bb4-9fc0-6c1039b1c0f3",
+        "name": "warblade",
+        "prompt": "Use the uploaded reference image as the main character design. Create the same character as a south-facing humanoid pixel art warrior in a strict high top-down gameplay camera, around 35 degrees from above.\n\nCamera and pose rules: the character must face directly south toward the viewer in a neutral idle pose. The top of the head must be clearly visible, the top planes of the shoulders and armor must be visible, and the body must have slight top-down foreshortening. The face should still be readable, but the camera must feel clearly above the character. Feet should appear slightly smaller and farther back because of the perspective. Do not use eye-level front view. Do not use flat portrait view. Do not fake the angle by making the character bow his head.\n\nCharacter design: dark-haired male warblade, serious face, heavy dark steel armor, dark leather straps, cold blue cloth accents, battle-worn fantasy armor, large steel sword held low, grounded heroic proportions, strong readable silhouette, not chibi, not anime, not cute.\n\nKeep the exact same character identity, armor style, weapon, proportions, sprite scale, and pixel art style from the reference image. Generate clean gameplay-ready rotations with consistent scale and the same high top-down camera angle in every direction.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "high top-down",
+        "created_at": "2026-05-12T23:48:25.227792+00:00"
+      },
+      "folder": "states/warblade",
+      "frames": {
+        "rotations": {
+          "south": "states/warblade/rotations/south.png",
+          "south-east": "states/warblade/rotations/south-east.png",
+          "east": "states/warblade/rotations/east.png",
+          "north-east": "states/warblade/rotations/north-east.png",
+          "north": "states/warblade/rotations/north.png",
+          "north-west": "states/warblade/rotations/north-west.png",
+          "west": "states/warblade/rotations/west.png",
+          "south-west": "states/warblade/rotations/south-west.png"
+        },
+        "animations": {
+          "Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d": {
+            "south": [
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_000.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_001.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_002.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_003.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_004.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_005.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_006.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_007.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_008.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_009.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_010.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_011.png",
+              "states/warblade/animations/Slow_deep_breathing_chest_rises_and_falls_with_del-755ae11d/south/frame_012.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-05-13T16:26:43.355091"
+}
