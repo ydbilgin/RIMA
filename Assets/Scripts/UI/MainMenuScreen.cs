@@ -21,8 +21,16 @@ namespace RIMA
             EnsureEventSystemHook();
             EnsureEventSystem();
 
-            // Never create the main menu when loading the game/test scene directly.
-            if (SceneManager.GetActiveScene().name == "_IsoGame") return;
+            // Never create the legacy procedural menu when loading scene-backed UI or game/test scenes directly.
+            var activeScene = SceneManager.GetActiveScene().name;
+            if (activeScene == "_IsoGame" ||
+                activeScene == "MainMenu" ||
+                activeScene == "CharacterSelect" ||
+                activeScene == "RoomPipelineTest" ||
+                activeScene == "_FazMVP_Demo")
+            {
+                return;
+            }
             if (_gameStarted) return;
             if (Object.FindFirstObjectByType<MainMenuScreen>() != null) return;
             var go = new GameObject("[MainMenuScreen]");
