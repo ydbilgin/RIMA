@@ -1,4 +1,5 @@
 using RIMA;
+using RIMA.Data;
 using UnityEngine;
 
 namespace RIMA.Systems.Map
@@ -17,5 +18,8 @@ namespace RIMA.Systems.Map
         [TextArea(2, 4)]
         [Tooltip("PixelLab transition prompt - re-generation icin referans")]
         public string transitionDescription = "";
+
+        [Tooltip("Optional organic patch overlay atlas for this terrain pair.")]
+        public PatchAtlasSO patchAtlasRef;
     }
 }
