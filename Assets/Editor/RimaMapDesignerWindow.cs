@@ -78,7 +78,9 @@ namespace RIMA.Editor
         [SerializeField] private int noiseSeed = 12345;
         [SerializeField] private bool proceduralFoldout = true;
         [SerializeField] private bool tilePreviewFoldout = true;
+        [SerializeField] private bool showTilePreview = true;
         [SerializeField] private PaintTool activeTool = PaintTool.Brush;
+        [SerializeField] private int brushRadius = 1;
         [SerializeField] private List<MapLayer> layers = new List<MapLayer>();
 
         private int[,] vertGrid;
@@ -251,7 +253,7 @@ namespace RIMA.Editor
 
             GUILayout.FlexibleSpace();
             GUILayout.Label("Cell", GUILayout.Width(28f));
-            cellSize = GUILayout.HorizontalSlider(cellSize, 16f, 36f, GUILayout.Width(120f));
+            cellSize = GUILayout.HorizontalSlider(cellSize, 10f, 80f, GUILayout.Width(120f));
             GUILayout.Label(Mathf.RoundToInt(cellSize) + "px", GUILayout.Width(34f));
 
             EditorGUILayout.EndHorizontal();
@@ -288,6 +290,8 @@ namespace RIMA.Editor
             EditorGUILayout.LabelField("Paint Tools", EditorStyles.boldLabel);
             activeTool = (PaintTool)GUILayout.Toolbar((int)activeTool, new[] { "Brush", "Fill", "Rect" });
             currentPaintValue = GUILayout.Toolbar(currentPaintValue == 0 ? 0 : 1, new[] { "Floor (0)", "Wall (1)" });
+            brushRadius = EditorGUILayout.IntSlider("Brush Radius", brushRadius, 1, 5);
+            showTilePreview = EditorGUILayout.Toggle("Show Tiles", showTilePreview);
 
             EditorGUILayout.Space(8f);
             DrawTilePreviewPanel(layers.Count > 0 ? layers[activeLayerIndex] : null);
@@ -496,6 +500,11 @@ namespace RIMA.Editor
         {
             EditorGUI.DrawRect(viewRect, new Color(0.12f, 0.12f, 0.12f, 1f));
 
+            if (showTilePreview)
+            {
+                DrawLiveTilePreviewCells();
+            }
+
             Handles.BeginGUI();
             Color lineColor = new Color(0.333f, 0.333f, 0.333f, 0.5f);
             Handles.color = lineColor;
@@ -537,9 +546,80 @@ namespace RIMA.Editor
             Handles.EndGUI();
         }
 
+        private void DrawLiveTilePreviewCells()
+        {
+            MapLayer activeLayer = layers != null && layers.Count > 0 ? layers[Mathf.Clamp(activeLayerIndex, 0, layers.Count - 1)] : null;
+            CornerWangTileSetSO tileSet = activeLayer != null ? activeLayer.tileSet : null;
+
+            for (int y = 0; y < roomHeight; y++)
+            {
+                for (int x = 0; x < roomWidth; x++)
+                {
+                    int nw = vertGrid[x, y + 1];
+                    int ne = vertGrid[x + 1, y + 1];
+                    int sw = vertGrid[x, y];
+                    int se = vertGrid[x + 1, y];
+                    TileBase tile = tileSet != null ? tileSet.GetTile(nw, ne, sw, se) : null;
+                    Texture tex = GetCanvasTileTexture(tile);
+                    Rect cellRect = new Rect(
+                        CanvasPadding + x * cellSize,
+                        CanvasPadding + (roomHeight - y - 1) * cellSize,
+                        cellSize,
+                        cellSize);
+
+                    if (tex != null)
+                    {
+                        GUI.DrawTexture(cellRect, tex, ScaleMode.StretchToFill);
+                    }
+                    else
+                    {
+                        int wangKey = (nw << 3) | (ne << 2) | (sw << 1) | se;
+                        EditorGUI.DrawRect(cellRect, GetLiveTileFallbackColor(wangKey, nw + ne + sw + se));
+                    }
+                }
+            }
+        }
+
+        private Texture GetCanvasTileTexture(TileBase tile)
+        {
+            if (tile == null)
+            {
+                return null;
+            }
+
+            Texture tex = (tile as Tile)?.sprite?.texture;
+            return tex != null ? tex : AssetPreview.GetAssetPreview(tile);
+        }
+
+        private static Color GetLiveTileFallbackColor(int wangKey, int filledCorners)
+        {
+            Color floorColor = new Color(0.20f, 0.20f, 0.20f);
+            Color wallColor = new Color(0.45f, 0.28f, 0.16f);
+            if (wangKey == 0)
+            {
+                return floorColor;
+            }
+
+            if (wangKey == 15)
+            {
+                return wallColor;
+            }
+
+            return Color.Lerp(floorColor, wallColor, filledCorners / 4f);
+        }
+
         private void HandleGridInput(Rect centerRect)
         {
             Event evt = Event.current;
+            if (evt.type == EventType.ScrollWheel)
+            {
+                float zoomDelta = -evt.delta.y * 2f;
+                cellSize = Mathf.Clamp(cellSize + zoomDelta, 10f, 80f);
+                evt.Use();
+                Repaint();
+                return;
+            }
+
             Vector2 canvasMouse = evt.mousePosition;
             hoveredVertex = GetNearestVertex(canvasMouse);
 
@@ -593,7 +673,7 @@ namespace RIMA.Editor
                 }
                 else
                 {
-                    PaintVertex(hoveredVertex, value);
+                    PaintWithRadius(hoveredVertex, value);
                     isPainting = true;
                 }
 
@@ -610,7 +690,7 @@ namespace RIMA.Editor
                 }
                 else if (activeTool == PaintTool.Brush && isPainting)
                 {
-                    PaintVertex(hoveredVertex, value);
+                    PaintWithRadius(hoveredVertex, value);
                 }
 
                 evt.Use();
@@ -667,6 +747,18 @@ namespace RIMA.Editor
             }
 
             vertGrid[vertex.x, vertex.y] = Mathf.Clamp(value, 0, 1);
+        }
+
+        private void PaintWithRadius(Vector2Int center, int value)
+        {
+            int r = brushRadius - 1;
+            for (int dy = -r; dy <= r; dy++)
+            {
+                for (int dx = -r; dx <= r; dx++)
+                {
+                    PaintVertex(new Vector2Int(center.x + dx, center.y + dy), value);
+                }
+            }
         }
 
         private void PaintRectangle(Vector2Int start, Vector2Int end, int value)
