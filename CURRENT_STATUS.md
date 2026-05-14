@@ -86,14 +86,15 @@ Detay: `STAGING/karar_126_to_130_organic_pipeline.md`
 ### ✅ TAMAMLANDI (S72)
 - **Karar #131 CornerWangPainter** — `commit 4f8cf5a` ✓ — BaseTilemap 192 tile painted, 0 missing. FloorWall SO 16/16, RubblePath SO 16/16.
 - **Karar #132 Map Designer UI** — `commit 0255b47` ✓ — RimaMapDesignerWindow: vertex grid, Brush/Fill/Rectangle, MakeRoom, PerlinNoise, SaveMap, LoadMap, ApplyToScene.
-- **6 PixelLab Tileset indirildi** — `Assets/Art/Tiles/F1/Tilesets/` (rubble_path, floor_wall, debris_rift, cold_floor_wall, slate_mineral, mauve_hexagon) ✓
+- **Karar #132b Wang Tile Preview** — `commit 17f6fe2` ✓ — 16 tile grid, corner names (All Floor→All Wall), sprite thumbnails, terrain label (lower/upper), FloorWall+RubblePath SO labels güncellendi.
+- **6 PixelLab Tileset indirildi** — `commit 91c98d4` ✓ — `Assets/Art/Tiles/F1/Tilesets/` (rubble_path, floor_wall, debris_rift, cold_floor_wall, slate_mineral, mauve_hexagon)
 
-### ⏳ ÇALIŞIYOR (S72 — şu an)
-- **Karar #133 Game UI** — yasinderyabilgin dispatch çalışıyor (MainMenu + CharacterSelect scenes, STAGING/codex_game_ui_screens.md)
+### ✅ TAMAMLANDI (S72 — devam)
+- **Karar #133 Game UI** — `commit 01985d7` ✓ — MainMenu + CharacterSelect scenes, title alpha pulse, rift crack motion, 10 class button, Hexer→info panel doğrulandı, Build Settings 0=MainMenu/1=CharacterSelect/2=RoomPipelineTest/3=_FazMVP_Demo.
 
 ### ⏳ KULLANICI İÇİN
-- **Map Designer test** — `RIMA > Tools > Map Designer` aç, Wang SO bağla, map çiz, kaydet
-- **Game UI test** — `RIMA > Tools > Create UI Scenes` → MainMenu → CharacterSelect flow test
+- **Map Designer kullan** — `RIMA > Tools > Map Designer` → Base layer'a FloorWall SO bağla → Map çiz → Save → Apply to Scene
+- **Yeni oda üret** — PixelLab MCP'den yeni tileset üret (ör. başka biome), Map Designer'a ekle, ikinci layer ile çok-tileset map
 - **Animation spec LOCK onayı** — `STAGING/animation_system_spec_LOCKED.md` okuyup PixelLab batch başlat
 - **PixelLab idle batch** — `STAGING/idle_batch_class_mob_create_image_pro.md` (10 class + 6 mob, krediler yenilince)
 
