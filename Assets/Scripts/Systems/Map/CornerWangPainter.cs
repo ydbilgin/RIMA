@@ -28,7 +28,7 @@ namespace RIMA
                     int sw = terrainGrid[x, y];
                     int se = terrainGrid[x + 1, y];
 
-                    TileBase tile = ResolveTile(biome, nw, ne, sw, se);
+                    TileBase tile = ResolveTile(biome, nw, ne, sw, se, x, y);
                     if (tile == null)
                     {
                         continue;
@@ -43,7 +43,7 @@ namespace RIMA
             tilemap.RefreshAllTiles();
         }
 
-        public static TileBase ResolveTile(RimaBiomePreset biome, int nw, int ne, int sw, int se)
+        public static TileBase ResolveTile(RimaBiomePreset biome, int nw, int ne, int sw, int se, int x = 0, int y = 0)
         {
             if (biome == null)
             {
@@ -91,7 +91,8 @@ namespace RIMA
             int neBit = ne == upper ? 1 : 0;
             int swBit = sw == upper ? 1 : 0;
             int seBit = se == upper ? 1 : 0;
-            return pairing.tileSet.GetTile(nwBit, neBit, swBit, seBit);
+            int seed = (x * 73856093) ^ (y * 19349663);
+            return pairing.tileSet.GetTile(nwBit, neBit, swBit, seBit, seed);
         }
 
         // Deprecated: binary per-layer painter kept for older tools and scenes.
@@ -112,7 +113,8 @@ namespace RIMA
                         vertices[x, y + 1],
                         vertices[x + 1, y + 1],
                         vertices[x, y],
-                        vertices[x + 1, y]);
+                        vertices[x + 1, y],
+                        (x * 73856093) ^ (y * 19349663));
 
                     if (tile != null)
                     {

@@ -676,7 +676,7 @@ namespace RIMA.Editor
                     int sw = grid[x, y];
                     int se = grid[x + 1, y];
                     var unique = new HashSet<int> { nw, ne, sw, se };
-                    TileBase tile = CornerWangPainter.ResolveTile(activeBiome, nw, ne, sw, se);
+                    TileBase tile = CornerWangPainter.ResolveTile(activeBiome, nw, ne, sw, se, x, y);
                     Sprite sprite = (tile as Tile)?.sprite;
                     Rect cellRect = CellToCanvasRect(new Vector2Int(x, y));
 
@@ -1239,7 +1239,7 @@ namespace RIMA.Editor
             info.ne = simulatePaint ? value : grid[cell.x + 1, cell.y + 1];
             info.sw = simulatePaint ? value : grid[cell.x, cell.y];
             info.se = simulatePaint ? value : grid[cell.x + 1, cell.y];
-            info.tile = CornerWangPainter.ResolveTile(activeBiome, info.nw, info.ne, info.sw, info.se);
+            info.tile = CornerWangPainter.ResolveTile(activeBiome, info.nw, info.ne, info.sw, info.se, cell.x, cell.y);
 
             var unique = new HashSet<int> { info.nw, info.ne, info.sw, info.se };
             info.uniqueCount = unique.Count;

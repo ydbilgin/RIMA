@@ -185,7 +185,35 @@ namespace RIMA.Editor
                 so.tiles[cornerKey] = AssetDatabase.LoadAssetAtPath<TileBase>($"{GeneratedFolder}/wang_{meta.name}_tile_{cornerKey}.asset");
             }
 
+            so.variantsByKey = BuildVariantsByKey(meta.name);
             AssetDatabase.CreateAsset(so, soPath);
+        }
+
+        private static CornerWangTileSetSO.WangVariants[] BuildVariantsByKey(string tilesetName)
+        {
+            var variantsByKey = new CornerWangTileSetSO.WangVariants[16];
+            for (int cornerKey = 0; cornerKey < 16; cornerKey++)
+            {
+                var variants = new List<TileBase>();
+                AddIfPresent(variants, $"{GeneratedFolder}/wang_{tilesetName}_tile_{cornerKey}.asset");
+                for (int variantIndex = 1; variantIndex <= 5; variantIndex++)
+                {
+                    AddIfPresent(variants, $"{GeneratedFolder}/wang_{tilesetName}_tile_{cornerKey}_v{variantIndex}.asset");
+                }
+
+                variantsByKey[cornerKey] = new CornerWangTileSetSO.WangVariants { variants = variants.ToArray() };
+            }
+
+            return variantsByKey;
+        }
+
+        private static void AddIfPresent(List<TileBase> variants, string path)
+        {
+            TileBase tile = AssetDatabase.LoadAssetAtPath<TileBase>(path);
+            if (tile != null)
+            {
+                variants.Add(tile);
+            }
         }
 
         private static void EnsureGeneratedFolder()
@@ -399,8 +427,36 @@ internal static class WangTilesetBuilder
             tileSet.tiles[cornerKey] = AssetDatabase.LoadAssetAtPath<TileBase>(GetTilePath(meta.name, cornerKey));
         }
 
+        tileSet.variantsByKey = BuildVariantsByKey(meta.name);
         AssetDatabase.CreateAsset(tileSet, soPath);
         return soPath;
+    }
+
+    private static CornerWangTileSetSO.WangVariants[] BuildVariantsByKey(string tilesetName)
+    {
+        var variantsByKey = new CornerWangTileSetSO.WangVariants[16];
+        for (int cornerKey = 0; cornerKey < 16; cornerKey++)
+        {
+            var variants = new List<TileBase>();
+            AddIfPresent(variants, GetTilePath(tilesetName, cornerKey));
+            for (int variantIndex = 1; variantIndex <= 5; variantIndex++)
+            {
+                AddIfPresent(variants, $"{GeneratedFolder}/wang_{tilesetName}_tile_{cornerKey}_v{variantIndex}.asset");
+            }
+
+            variantsByKey[cornerKey] = new CornerWangTileSetSO.WangVariants { variants = variants.ToArray() };
+        }
+
+        return variantsByKey;
+    }
+
+    private static void AddIfPresent(List<TileBase> variants, string path)
+    {
+        TileBase tile = AssetDatabase.LoadAssetAtPath<TileBase>(path);
+        if (tile != null)
+        {
+            variants.Add(tile);
+        }
     }
 
     private static string GetTilePath(string name, int cornerKey)
