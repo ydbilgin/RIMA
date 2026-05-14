@@ -7,7 +7,7 @@ namespace RIMA
 {
     public static class CornerWangPainter
     {
-        public static void Paint(Tilemap tilemap, RimaBiomePreset biome, int[,] terrainGrid, int width, int height, Vector3Int origin = default)
+        public static void Paint(Tilemap tilemap, RimaBiomePreset biome, int[,] terrainGrid, int width, int height, Vector3Int origin = default, int variantSeed = 0)
         {
             if (tilemap == null || biome == null || terrainGrid == null)
             {
@@ -28,7 +28,7 @@ namespace RIMA
                     int sw = terrainGrid[x, y];
                     int se = terrainGrid[x + 1, y];
 
-                    TileBase tile = ResolveTile(biome, nw, ne, sw, se, x, y);
+                    TileBase tile = ResolveTile(biome, nw, ne, sw, se, x, y, variantSeed);
                     if (tile == null)
                     {
                         continue;
@@ -43,7 +43,7 @@ namespace RIMA
             tilemap.RefreshAllTiles();
         }
 
-        public static TileBase ResolveTile(RimaBiomePreset biome, int nw, int ne, int sw, int se, int x = 0, int y = 0)
+        public static TileBase ResolveTile(RimaBiomePreset biome, int nw, int ne, int sw, int se, int x = 0, int y = 0, int variantSeed = 0)
         {
             if (biome == null)
             {
@@ -58,6 +58,12 @@ namespace RIMA
                 if (terrain == null)
                 {
                     return null;
+                }
+
+                TileBase variant = ResolveVariantTile(terrain, x, y, variantSeed);
+                if (variant != null)
+                {
+                    return variant;
                 }
 
                 if (terrain.baseTile != null)
@@ -93,6 +99,45 @@ namespace RIMA
             int seBit = se == upper ? 1 : 0;
             int seed = (x * 73856093) ^ (y * 19349663);
             return pairing.tileSet.GetTile(nwBit, neBit, swBit, seBit, seed);
+        }
+
+        private static TileBase ResolveVariantTile(MapTerrain terrain, int x, int y, int variantSeed)
+        {
+            if (terrain == null || terrain.variantPool == null || terrain.variantPool.Count == 0)
+            {
+                return null;
+            }
+
+            int start = PositiveModulo(MixHash(x, y, terrain.id, variantSeed), terrain.variantPool.Count);
+            for (int i = 0; i < terrain.variantPool.Count; i++)
+            {
+                TileBase candidate = terrain.variantPool[(start + i) % terrain.variantPool.Count];
+                if (candidate != null)
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
+        }
+
+        private static int MixHash(int x, int y, int terrainId, int seed)
+        {
+            unchecked
+            {
+                int hash = seed;
+                hash = (hash * 397) ^ x;
+                hash = (hash * 397) ^ y;
+                hash = (hash * 397) ^ terrainId;
+                hash ^= hash >> 16;
+                return hash;
+            }
+        }
+
+        private static int PositiveModulo(int value, int modulo)
+        {
+            int result = value % modulo;
+            return result < 0 ? result + modulo : result;
         }
 
         // Deprecated: binary per-layer painter kept for older tools and scenes.

@@ -108,6 +108,7 @@ namespace RIMA.Editor
         [SerializeField] private int wallThickness = 2;
         [SerializeField] private float noiseDensity = 0.45f;
         [SerializeField] private int noiseSeed = 12345;
+        [SerializeField] private int variantSeed = 12345;
         [SerializeField] private bool advancedFoldout;
         [SerializeField] private bool proceduralFoldout;
         [SerializeField] private bool showTilePreview = true;
@@ -276,6 +277,12 @@ namespace RIMA.Editor
 
             if (GUILayout.Button("Apply", EditorStyles.toolbarButton, GUILayout.Width(54f)))
             {
+                ApplyToScene();
+            }
+
+            if (GUILayout.Button("Reseed Variants", EditorStyles.toolbarButton, GUILayout.Width(112f)))
+            {
+                variantSeed = UnityEngine.Random.Range(1, int.MaxValue);
                 ApplyToScene();
             }
 
@@ -2123,7 +2130,7 @@ namespace RIMA.Editor
             if (outputTilemap != null && activeBiome != null && terrainGrid != null)
             {
                 Undo.RegisterCompleteObjectUndo(outputTilemap, "Apply RIMA Map");
-                CornerWangPainter.Paint(outputTilemap, activeBiome, terrainGrid, roomWidth, roomHeight);
+                CornerWangPainter.Paint(outputTilemap, activeBiome, terrainGrid, roomWidth, roomHeight, default, variantSeed);
                 EditorUtility.SetDirty(outputTilemap);
                 applied = 1;
 
@@ -2215,14 +2222,15 @@ namespace RIMA.Editor
             EditorGUI.DrawRect(rect, new Color(0.16f, 0.16f, 0.16f, 1f));
             string tilemapName = outputTilemap != null ? outputTilemap.name : "No Tilemap";
             string terrainName = GetTerrainName(activeTerrainId);
-            string line1 = string.Format("Room {0}x{1} | Biome: {2} | Active: {3} (id={4}) | Output: {5} | Erase: {6}",
+            string line1 = string.Format("Room {0}x{1} | Biome: {2} | Active: {3} (id={4}) | Output: {5} | Erase: {6} | VariantSeed: {7}",
                 roomWidth,
                 roomHeight,
                 activeBiome != null ? activeBiome.biomeName : "None",
                 terrainName,
                 activeTerrainId,
                 tilemapName,
-                eraseMode ? "On" : "Off");
+                eraseMode ? "On" : "Off",
+                variantSeed);
 
             string line2 = "Cell: hover canvas for corners, Wang key, tileSet, transition";
             string line3 = "Tip: Drag to paint, Space+drag to pan, scroll to zoom, +/- to zoom";
