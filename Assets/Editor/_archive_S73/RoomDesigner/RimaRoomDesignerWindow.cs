@@ -49,7 +49,6 @@ namespace RIMA.Editor.RoomDesigner
         [SerializeField] private RimaRoomBaselineTemplate activeTemplate;
         [SerializeField] private BrushLayerMode _brushMode = BrushLayerMode.Base;
 
-        [MenuItem("RIMA/Room Designer")]
         public static void Open()
         {
             var window = GetWindow<RimaRoomDesignerWindow>();
