@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
-
 # S74 Batch B — Map Designer PixelLab-style UI redesign
 
 **Effort:** high
@@ -207,7 +205,3 @@ Tek commit:
 ```
 
 CODEX_DONE.md'ye yaz, sonuç + screenshot path özetle.
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.

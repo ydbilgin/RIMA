@@ -1,8 +1,17 @@
-# Character Idle (Weaponless) + Weapon Prompts — LOCK
+# Character Idle (Weaponless) + Weapon Prompts — LOCK [SUPERSEDED S74]
 
-**Date:** 2026-05-14 S73
+> ⚠️ **SUPERSEDED 2026-05-14 S74** — split into 3 new LOCK files:
+> - `STAGING/character_idle_LOCK_S74.md` (10 class idle, NEW K4 Warblade-reference prefix)
+> - `STAGING/new_mobs_64px_LOCK_S74.md` (6 yeni mob, mevcut 6 harici)
+> - `STAGING/weapons_pixel_sizes_LOCK_S74.md` (J3 canvas size revize: greatsword 56×20, bow/staff 48×56, grimoire CUT)
+>
+> Use S74 files. This S73 doc preserved for history.
+
+---
+
+**Date:** 2026-05-14 S73 (HISTORICAL)
 **Source:** rima-design Opus verdict (dispatch a080564b62e90b77b)
-**Status:** LOCKED for PixelLab Create Image Pro batch
+**Status:** SUPERSEDED — use S74 split files
 
 **Locked rules honored:**
 - Karar #71 — silah grip pose-ready (silahsız body bile grip geometry)

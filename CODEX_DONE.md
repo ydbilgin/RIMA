@@ -331,3 +331,170 @@ Notes:
 - Rubble overlay skipped: no RubbleTilemap or GroundTilemap was present in the scene.
 - QC: tile count log was positive; final read_console error query returned 0 entries after console clear.
 - Commit: c7eba13 [map-examples] 5 dungeon map presets + dungeon_main applied to demo scene.
+# CODEX DONE - laurethayday
+
+Task: Smart Map Painter Faz 1 - Clean Slate
+Commit: f871495 `[map-designer Faz 1] Clean reslice 6 tilesets + Cell-paint + Palette + Per-layer + Erase + CliffYSort`
+
+## Implemented
+- Rebuilt all 6 F1 Wang tilesets from `Assets/Art/Tiles/F1/Tilesets/*/spritesheet.png`.
+- Created 96 generated `Tile` assets plus 6 `CornerWangTileSetSO` assets under `Assets/Art/Tiles/F1/Generated/`.
+- Added `Assets/Editor/RebuildAllWangTilesets.cs` with menu item `RIMA/Tools/Rebuild All Wang Tilesets`.
+- Reworked `Assets/Editor/RimaMapDesignerWindow.cs` for default Cell paint mode, Vertex toggle, erase mode, tileset palette, per-layer vertex grids, JSON layer save data, and ApplyToScene delegation.
+- Added `BrushInputHandler`, `TilesetPaletteDrawer`, and `TilemapMutator`.
+- Added runtime `Assets/Scripts/Systems/Map/CliffYSortManager.cs`.
+- Removed deprecated `Assets/Editor/CreateMissingWangSOs.cs`.
+
+## Validation Run
+- Unity compile/import completed with no C# errors from this change.
+- Rebuild menu executed successfully.
+- Test 1: all six SOs reported `null tiles = 0/16`.
+- Programmatic editor tests passed:
+  - Cell paint sets all 4 vertices.
+  - Inactive layers are not modified.
+  - Per-layer grids remain independent.
+  - ApplyToScene paints separate tilemaps.
+  - JSON layer roundtrip preserves 2 layer grids.
+  - CliffYSortManager is attached and switches cliff tilemap renderer to Individual.
+- Final E2E:
+  - Opened `Assets/Scenes/Demo/_FazMVP_Demo.unity`.
+  - Loaded/applied `Assets/RIMA_MapData/examples/dungeon_main.json`.
+  - Painted tile count: 560.
+  - Base tilemap renderer mode: Individual.
+  - Captured `STAGING/qc_dispatch1_final.png`; visual check shows populated dungeon frame with no black margin.
+
+## Notes
+- `STAGING/qc_dispatch1_final.png` is ignored by `.gitignore` (`*.png`), so it was not included in the commit.
+- Left uncommitted because they were pre-existing/unrelated to this Codex task: `CURRENT_STATUS.md`, `STAGING/character_idle_weaponless_prompts_LOCK.md`.
+- Final console read showed only MCP-for-Unity client disconnect noise after clearing; no project C# compile errors were present.
+RESULT SUMMARY - laurethgame
+
+Task: Map Designer mouse alignment + minimal right panel UI.
+
+Files modified:
+- Assets/Editor/RimaMapDesignerWindow.cs
+
+Implementation status:
+- Wang Tile Preview panel removed from right panel.
+- Right panel is reduced to WALL / FLOOR / ERASE buttons, brush slider, Cell/Vertex toggle, and collapsed Advanced section.
+- Default cellSize is 32f.
+- DrawCenterPanel now passes viewRect to HandleGridInput.
+- HandleGridInput now uses scroll-view-local Event.current.mousePosition and viewRect bounds.
+- Cell hover now draws a strong green/red filled highlight plus outline.
+- Status bar now reports hovered cell and WangKey.
+
+Validation:
+- Test A PASS: Map Designer window opened.
+- Test B PASS: GetCellAtMouse test returned (5, 5).
+- Test C PASS: DrawTilePreviewPanel method is absent.
+- Test D PASS: tileset assigned, PaintCell set/reset the four vertices, ApplyToScene produced 300 tiles.
+- Test E PASS: STAGING/qc_editor_fix.png created, 108757 bytes.
+- Test F PASS: status bar hover WangKey code implemented.
+- git diff --check PASS.
+- read_console filtered for RimaMapDesignerWindow returned 0 error/warning entries. Unfiltered console is polluted by MCP transport exit messages and pre-existing obsolete API warnings outside this task.
+
+Commit:
+- 442c295 [map-designer fix] Mouse coord precision + minimal right panel UI (remove Wang preview)
+- Note: the main implementation was already present in parent commit 6227898 when the final commit was amended; 442c295 is an empty marker commit with the requested message and preserves the concurrent sprite-slicing change.
+Dispatch 2 complete.
+
+Commit: 600fd1d [room-generator] AI room template library (8 Hades-style) + RoomGeneratorWindow + variation processor
+
+Implemented:
+- Created Assets/Editor/RoomGeneratorWindow.cs with template dropdown, seed random/input, Subtle/Medium/Wild variation selector, preview canvas, and Generate -> Map Designer publish flow.
+- Created Assets/Editor/RoomVariationProcessor.cs with deterministic Perlin-based variation and flatten/unflatten helpers.
+- Created Assets/Editor/RoomTemplateGenerator.cs with 8 procedural Hades-style room templates and validation menu.
+- Added Assets/RIMA_MapData/templates/*.json for all 8 templates with Unity meta files.
+- Updated Assets/Editor/RimaMapDesignerWindow.cs with Generate Room toolbar button and public LoadFromGenerator(MapSaveData generated).
+
+Validation run:
+- Unity refresh/compile completed in the already-open Unity editor.
+- In-editor validation PASS: all 8 templates load, each has 2+ layers, vertex counts match (width+1)*(height+1).
+- Variation determinism PASS: same seed produced same output; different seed produced different output.
+- E2E PASS: loaded broken_courtyard_32x28 with Medium variation seed 42 into Map Designer, assigned BaseTilemap and DecalTilemap, applied one cell edit on top, then applied to scene.
+- QC screenshot captured at STAGING/qc_dispatch2_final.png.
+
+Notes:
+- Batchmode Unity could not run because this project was already open in another Unity instance, so compile/generator validation used the open editor instance.
+- Console project errors were not found; console contained MCP transport disconnect noise only.
+- Existing unrelated dirty files were left unstaged/uncommitted.
+# CODEX DONE - laurethgame
+
+Commit: 19a4828
+Message: [map-designer 1.6] Multi-terrain refactor + terrain compatibility validation + Pixelorama controls + drag-paint
+
+Implemented:
+- Added MapTerrain and TilesetPairing data classes.
+- Extended RimaBiomePreset with terrains, tileset pairings, FindPairing, and IsValidPair.
+- Added multi-terrain CornerWangPainter overload while keeping the legacy binary overload.
+- Refactored RimaMapDesignerWindow to use a single int terrainGrid with Biome selector, Terrain palette, Paint/Erase controls, drag-paint, Space+drag pan, scroll/+/- zoom, and Fit button.
+- Added canvas error visualization for 3+ terrain cells and orange warning for missing 2-terrain pairings.
+- Added terrainGrid + biomePresetGuid map save/load support and legacy layer-to-terrain conversion.
+- Updated RoomTemplateGenerator to emit terrainGrid templates.
+- Updated RoomGeneratorWindow compatibility for terrainGrid preview/load/variation.
+- Updated Shattered_Keep_F1_BiomePreset with Floor, Wall, Path, Rift terrains and Floor/Wall, Floor/Path, Floor/Rift pairings.
+- Regenerated all 8 room template JSON files in the new terrainGrid format.
+
+Validation run:
+- Unity refresh/compile completed with no C# compiler errors from this change.
+- Biome validation passed: Shattered_Keep_F1_BiomePreset has 4 terrains and 3 pairings.
+- RoomTemplateGenerator.TestAll passed for all 8 templates.
+- Reflected editor checks passed: Wall paint tile, Path paint tile, 3+ terrain error resolve, drag-paint storage, Fit sizing.
+- Screenshot captured: STAGING/qc_d16_final.png
+
+Notes:
+- The task named Assets/Art/Templates/F1_ShatteredRuins.asset as a RimaBiomePreset, but that asset is currently a RimaRoomBaselineTemplate. I preserved it and updated the actual F1 biome preset at Assets/Art/Tiles/F1/Shattered_Keep_F1_BiomePreset.asset.
+- Unity console still logs MCP transport disconnect entries when tools connect/disconnect; these are not project compile errors.
+- git diff --check passes for the files committed in this dispatch. Pre-existing uncommitted changes remain outside this task.
+# CODEX_DONE_laurethayday
+
+Result: PASS
+
+Commit: 9b75507 [tilesets] Full mesh (3 pairings) + 2 floor-to-floor (moss, alabaster dirt) + Floor baseTile bug fix + BiomePreset extension
+
+Completed:
+- Downloaded and imported 5 PixelLab tilesets: wall_path, wall_rift, path_rift, rubble_moss, pink_cream.
+- Wrote normalized legacy-compatible tileset_meta.json files with cornerKeyToSpriteIndex arrays.
+- Updated RebuildAllWangTilesets.cs to include the 5 new tileset folders.
+- Ran Unity rebuild through the open editor instance after batchmode was blocked by an already-open Unity project.
+- Generated 80 Tile assets and 5 CornerWangTileSetSO assets.
+- Updated Shattered_Keep_F1_BiomePreset.asset:
+  - Floor baseTile is wang_floor_wall_tile_0.
+  - Added Moss terrain id 4.
+  - Added Wall-Path, Wall-Rift, Path-Rift, and Floor-Moss pairings.
+- Created Alabaster_Dawn_BiomePreset.asset skeleton using PinkCream_CornerWangTileSet.
+- Created QC screenshot at STAGING/qc_5tilesets_imported.png.
+
+Validation:
+- Test A passed: all 5 new CornerWangTileSetSO assets exist and each has 16/16 non-null Tile sprites.
+- Test B passed: Shattered Keep has 5 terrains, 7 pairings, and Floor baseTile is wang_floor_wall_tile_0.
+- Test C passed: Wall/Path pairing resolves non-null, BaseTilemap tile count was 20, screenshot generated.
+
+Notes:
+- ANTIGRAVITY.md was not present at repo root.
+- Existing dirty files left untouched: CODEX_DONE.md, CODEX_DONE_laurethgame.md, CODEX_TASK_laurethayday.md, CODEX_TASK_laurethgame.md.
+S74 Batch A complete.
+
+Commit:
+- 67f20ce [S74-A] PixelLab parity + Auto-BiomePreset + Archive RoomDesigner
+
+Changed files:
+- Assets/Scripts/Systems/Map/TilesetPairing.cs
+- Assets/Editor/AutoBiomePresetBuilder.cs
+- Assets/Editor/AutoBiomePresetBuilder.cs.meta
+- Assets/Editor/RoomDesigner/ moved to Assets/Editor/_archive_S73/RoomDesigner/ with meta files preserved
+- Assets/Editor/_archive_S73.meta
+- Assets/Editor/_archive_S73/RoomDesigner.meta
+
+Task results:
+- TilesetPairing now has transitionSize default 0.25 and transitionDescription default empty string.
+- AutoBiomePresetBuilder added at menu path RIMA > Tools > Auto-Build BiomePreset from Tilesets.
+- Builder scans recursive tileset_meta.json files, assigns deterministic terrain ids with floor/rubble reserved at id 0, populates terrains and pairings, loads generated CornerWangTileSetSO assets, assigns all-lower/all-upper base tiles, applies transition size heuristic, preserves unrelated RimaBiomePreset fields, then SetDirty/SaveAssets/Refresh.
+- RoomDesigner archived via AssetDatabase.MoveAsset to Assets/Editor/_archive_S73/RoomDesigner/.
+- Archived RimaRoomDesignerWindow menu attribute was removed so RIMA/Room Designer is not registered from the archived editor assembly.
+
+Verification:
+- dotnet build RIMA.slnx: PASS, 0 errors.
+- Build warnings: 13 existing warnings remain in unrelated editor/importer code, mostly obsolete Unity APIs and existing RebuildAllWangTilesets JsonUtility fields. AutoBiomePresetBuilder-specific JsonUtility backing-field warnings were suppressed.
+- Menu source check: rg found no MenuItem("RIMA/Room Designer") under Assets after the archive.
+- Unity console read: initial read before the menu probe showed only existing warnings plus MCP client logs, no compile errors. Later MCP console reads timed out after an accidental modal OpenFolderPanel probe; the modal was canceled through Windows UI automation. Editor.log fallback showed MCP timeout/client messages from that probe, not Unity compile errors.

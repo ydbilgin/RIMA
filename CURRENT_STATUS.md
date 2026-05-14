@@ -1,11 +1,66 @@
 # CURRENT_STATUS
-**2026-05-14 — S73 KAPANIŞ | Map Designer multi-terrain refactor done ama USER "istediğim gibi çalışmıyor" → S74'te tam diagnostic + test gerekli**
+**2026-05-14 — S74 KAPANIŞ | Map Designer PixelLab-style UI canlı çalışıyor, 3 LOCK dosyası yazıldı, asset batch user'a hazır**
 
 > **Path convention:** `~/.ccs/.../memory/` = user-level auto-memory. `MEMORY/` (project root) = Codex/Gemini shared.
 
 ---
 
-## S74 İLK ADIMLAR (NEW SESSION OPENING)
+## S74 TAMAMLANAN İŞLER
+
+### ✅ Commit'lenen (chrono)
+| Commit | Açıklama |
+|---|---|
+| `67f20ce` | **[S74-A]** TilesetPairing+transitionSize/Description, AutoBiomePresetBuilder Editor tool, RoomDesigner → `_archive_S73/` |
+| `3c08ae4` | **[S74-B]** Map Designer PixelLab-style UI redesign: multi-layer kaldırıldı, terrain thumbnail palette, simplify toolbar/panels, 2-satır status, integer cellSize, [Auto-Biome] + [Objects] toolbar buttons |
+| `S74-C` (this) | Moss baseTile fix (`_15`), RubbleMoss flat-ground pairing transitionSize=0, archived asmdef devre dışı, 3 LOCK + reference doc, CURRENT_STATUS sync |
+
+### ✅ Map Designer test (Sonnet UnityMCP direct)
+- Yeni UI canlı görüldü (`STAGING/s74_mapdesigner_painted_small.png`)
+- Toolbar: New/Save/Load/Apply/Generate/Clear/Fit/Cell-slider/**Auto-Biome**/**Objects** ✓
+- Sol panel: Biome + New/Edit + Terrain thumbnails (Wall selected cyan border, Path/Rift/Moss) + Output ✓
+- Sağ panel: ERASE toggle + Brush slider + Advanced/Procedural foldouts ✓
+- Status bar: "Room 16x12 | Biome: Shattered Keep | Active: Wall | Output: No Tilemap | Erase: Off"
+- Tip line: "Drag to paint, Space+drag to pan, scroll to zoom, +/- to zoom"
+- **Mouse precision testi PASS:** 3 senaryoda math doğru — bottom-left, top-right, center hover
+- **PaintCell testi PASS:** Wall@(3,5) ve Path@(10,8) vertices doğru set, görsel olarak Wang transitions doğru render
+
+### ✅ 3 Asset LOCK Dosyası (Opus karar + rima-asset prompt'lar)
+- `STAGING/character_idle_LOCK_S74.md` — 10 class silahsız idle prompt, **Warblade reference image K4 prefix** (replicate ONLY angle/proportions/facing)
+- `STAGING/new_mobs_64px_LOCK_S74.md` — 6 YENİ F1 mob (Seam Crawler / Plate Widow / Relic Caster / Rift Hound / Hollow Arbiter / Spire Choirling), silüet ayrımlı (quadruped/wide/tall/low/crowned/floating)
+- `STAGING/weapons_pixel_sizes_LOCK_S74.md` — Opus revize boyutlar:
+  - Greatsword/Katana 64×32 → **56×20** (chibi-orantısız %100 height düzeldi)
+  - Bow/Staff 64×64 → **48×56** (Karar #80 silhouette eşitsizliği)
+  - **Hexer grimoire CUT** (Karar #18 + #123 ihlali, passive body accessory olarak kalır)
+- **S73 LOCK dosyası SUPERSEDED notu** ile history'de duruyor
+
+### 📚 Kalıcı Reference
+- **`STAGING/pixellab_map_export_analysis_LOCK.md`** — PixelLab Map Tool export'unun tam analizi
+  - Mimari **%95 uyumlu** (4x4 corner-Wang, "standard" wang mapping)
+  - Kalite farkı: prompt mühendisliği + transitionSize + Pro mode raggedness
+  - Per-cell grid avantajı sadece BİZDE var
+  - Bir daha bu ZIP'e dönmeye gerek yok
+
+---
+
+## Kullanıcı Sıradaki Adım
+
+**PixelLab Create Image Pro batch — 27 sprite gen ≈ 162 credit:**
+1. 10 class silahsız idle (`character_idle_LOCK_S74.md` prompts, Warblade reference image olarak verilecek)
+2. 6 yeni mob 64px (`new_mobs_64px_LOCK_S74.md` prompts)
+3. 11 weapon sprite (`weapons_pixel_sizes_LOCK_S74.md` prompts, Hexer grimoire CUT)
+
+---
+
+## S75 (Sıradaki Session) Sıradaki
+
+- **Multi-variant per Wang key** (task #4 pending) — PixelLab Pro Web UI raggedness 50% ek varyantlar
+- 8-dir derivation Create Character pipeline (ayrı step)
+- Object layer support (NPC/prop placement, Faz 1.5)
+- BiomePreset CustomEditor (Faz 1.5 opsiyonel ergonomi)
+
+---
+
+## S74 İLK ADIMLAR (NEW SESSION OPENING — geçmiş)
 
 **Bu agent açık olduğunda yapacaklar:**
 

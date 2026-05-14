@@ -53,27 +53,41 @@ MonoBehaviour:
   - id: 4
     name: Moss
     paletteColor: {r: 0.21, g: 0.29, b: 0.18, a: 1}
-    baseTile: {fileID: 11400000, guid: 3d2331649a91ee84a972271002b75228, type: 2}
+    baseTile: {fileID: 11400000, guid: efa0dbd9911d2e74a91b671879082e71, type: 2}
     baseTileSource: {fileID: 11400000, guid: 32dd14273983a3541a5a0e763080d4e8, type: 2}
   tilesetPairings:
   - lowerTerrainId: 0
     upperTerrainId: 1
     tileSet: {fileID: 11400000, guid: 69e58271c19f87a4ea4d413e26ebdada, type: 2}
+    transitionSize: 0.25
+    transitionDescription: 
   - lowerTerrainId: 0
     upperTerrainId: 2
     tileSet: {fileID: 11400000, guid: e1ce00521ee60f04da54d4435df6c87d, type: 2}
+    transitionSize: 0.25
+    transitionDescription: 
   - lowerTerrainId: 0
     upperTerrainId: 3
     tileSet: {fileID: 11400000, guid: 6193018753a63934b93cfcc75e27b11a, type: 2}
+    transitionSize: 0.25
+    transitionDescription: 
   - lowerTerrainId: 1
     upperTerrainId: 2
     tileSet: {fileID: 11400000, guid: 9e2db59a8476d4243b262e64dae8577e, type: 2}
+    transitionSize: 0.25
+    transitionDescription: 
   - lowerTerrainId: 1
     upperTerrainId: 3
     tileSet: {fileID: 11400000, guid: bbe0eb1676d17c644abd2d81c20768e9, type: 2}
+    transitionSize: 0.25
+    transitionDescription: 
   - lowerTerrainId: 2
     upperTerrainId: 3
     tileSet: {fileID: 11400000, guid: a439d0bccb9509d43a845111358cf570, type: 2}
+    transitionSize: 0.25
+    transitionDescription: 
   - lowerTerrainId: 0
     upperTerrainId: 4
     tileSet: {fileID: 11400000, guid: 32dd14273983a3541a5a0e763080d4e8, type: 2}
+    transitionSize: 0
+    transitionDescription: 
