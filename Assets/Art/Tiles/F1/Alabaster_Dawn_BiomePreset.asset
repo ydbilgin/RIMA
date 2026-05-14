@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a72bbf0e6b214b90bfa584bd6d8e4f4b, type: 3}
+  m_Name: Alabaster_Dawn_BiomePreset
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Systems.Map.RimaBiomePreset
+  biomeType: 0
+  biomeName: Alabaster Dawn
+  description: Phase 2 skeleton biome preset for pink soil and cream sand floor transitions.
+  allowedFloorTiles: []
+  allowedWallTiles: []
+  transitionTiles: []
+  decalTiles: []
+  allowedScatterTags: []
+  paletteBaseColor: {r: 0.71, g: 0.54, b: 0.55, a: 1}
+  paletteShadowColor: {r: 0.42, g: 0.3, b: 0.33, a: 1}
+  decalDensity: 0.3
+  scatterDensity: 0.2
+  useCliffFront: 1
+  useCliffTop: 1
+  terrains:
+  - id: 0
+    name: Pink Soil
+    paletteColor: {r: 0.71, g: 0.54, b: 0.55, a: 1}
+    baseTile: {fileID: 11400000, guid: c189e726250ab434bb8139995aa9ca59, type: 2}
+    baseTileSource: {fileID: 11400000, guid: 6ae579e61ec29c344a60d3b50d3ba1bd, type: 2}
+  - id: 1
+    name: Cream Sand
+    paletteColor: {r: 0.86, g: 0.78, b: 0.67, a: 1}
+    baseTile: {fileID: 11400000, guid: 2177002fa917c2345868c5eec645164f, type: 2}
+    baseTileSource: {fileID: 11400000, guid: 6ae579e61ec29c344a60d3b50d3ba1bd, type: 2}
+  tilesetPairings:
+  - lowerTerrainId: 0
+    upperTerrainId: 1
+    tileSet: {fileID: 11400000, guid: 6ae579e61ec29c344a60d3b50d3ba1bd, type: 2}

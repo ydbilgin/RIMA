@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa369bb6ab2a284fab77a45ed0fde39, type: 3}
+  m_Name: WallRift_CornerWangTileSet
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.CornerWangTileSetSO
+  lowerTerrainLabel: wall
+  upperTerrainLabel: rift
+  tiles:
+  - {fileID: 11400000, guid: 848fc5c438b74ee46969d8997d7689a7, type: 2}
+  - {fileID: 11400000, guid: b72e98484ff051c429e4fabd8cecc026, type: 2}
+  - {fileID: 11400000, guid: b6e17fca3fd9eaa47899348b03fb0933, type: 2}
+  - {fileID: 11400000, guid: fbed8937c8bc42346bf5e6daa6d54f8e, type: 2}
+  - {fileID: 11400000, guid: 9ecfb53ebed7dea468874290c218b979, type: 2}
+  - {fileID: 11400000, guid: ece5bbdf112395744802abcb74b07bfd, type: 2}
+  - {fileID: 11400000, guid: 1a9ccf091e688b24fabf885038147660, type: 2}
+  - {fileID: 11400000, guid: b922d6057c9a7eb4aa4875cc3d23c16a, type: 2}
+  - {fileID: 11400000, guid: 5c8fa2c2aa4231a45a361020d6f57e82, type: 2}
+  - {fileID: 11400000, guid: d65cc6e0132790040be88802e92eb4ec, type: 2}
+  - {fileID: 11400000, guid: 7da6b52fc24b4b14985bbbe07feb1eec, type: 2}
+  - {fileID: 11400000, guid: 01e7e5beff6ede443b61f0cf8e53e64d, type: 2}
+  - {fileID: 11400000, guid: 485bda1bfb32aa14cbb1c5de778d8e49, type: 2}
+  - {fileID: 11400000, guid: cf17a7cdcb6054c429f64b2480b068fe, type: 2}
+  - {fileID: 11400000, guid: dcb4c8fbf33598648ab501262c466c5a, type: 2}
+  - {fileID: 11400000, guid: 2792852eddc2ae7469ad4255b3874dd3, type: 2}

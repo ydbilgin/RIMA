@@ -1,0 +1,28 @@
+{
+  "name": "path_rift",
+  "tileSize": 32,
+  "lower": "path",
+  "upper": "rift",
+  "spritesheet": "spritesheet.png",
+  "gridRows": 4,
+  "gridCols": 4,
+  "cornerKeyToSpriteIndex": [
+    6,
+    5,
+    2,
+    3,
+    10,
+    1,
+    4,
+    13,
+    7,
+    14,
+    11,
+    0,
+    9,
+    8,
+    15,
+    12
+  ],
+  "id": "ecfee0a0-a5ec-4992-b435-1f1d3ae2dfdb"
+}

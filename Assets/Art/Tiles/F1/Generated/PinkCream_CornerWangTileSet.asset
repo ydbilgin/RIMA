@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa369bb6ab2a284fab77a45ed0fde39, type: 3}
+  m_Name: PinkCream_CornerWangTileSet
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.CornerWangTileSetSO
+  lowerTerrainLabel: pink soil
+  upperTerrainLabel: cream sand
+  tiles:
+  - {fileID: 11400000, guid: c189e726250ab434bb8139995aa9ca59, type: 2}
+  - {fileID: 11400000, guid: cad1de1b82257a0459a9098a403d8ac7, type: 2}
+  - {fileID: 11400000, guid: f6d4bf354adc68b4d977942b627dd82d, type: 2}
+  - {fileID: 11400000, guid: aa632461e78308e46a97352f4cf327b4, type: 2}
+  - {fileID: 11400000, guid: e01c366667c050e49a49b3989ad7c459, type: 2}
+  - {fileID: 11400000, guid: 72b5008579b99dc4ca9e4c4e9f221c54, type: 2}
+  - {fileID: 11400000, guid: 0ce3bd9c42ea934438fc1beb7eb462a1, type: 2}
+  - {fileID: 11400000, guid: 6d4ba6e37be8e9544b5ca1a1b50d1fac, type: 2}
+  - {fileID: 11400000, guid: 58de90a944324134ab32272e9174df8e, type: 2}
+  - {fileID: 11400000, guid: d357110c44b0ced43a82e37dba7f2190, type: 2}
+  - {fileID: 11400000, guid: 5a451f19c6906074b84b086379ec6224, type: 2}
+  - {fileID: 11400000, guid: dde7ff1febdda26408b503e523c111e0, type: 2}
+  - {fileID: 11400000, guid: 4d2d85f3670e2db428eb2e7a62b71954, type: 2}
+  - {fileID: 11400000, guid: 91be0c9898036bd4a93913a67d23be12, type: 2}
+  - {fileID: 11400000, guid: d4077d4aceaf98548af8118818788247, type: 2}
+  - {fileID: 11400000, guid: 2177002fa917c2345868c5eec645164f, type: 2}

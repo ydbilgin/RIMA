@@ -22,7 +22,12 @@ namespace RIMA.Editor
             "debris_rift",
             "cold_floor_wall",
             "slate_mineral",
-            "mauve_hexagon"
+            "mauve_hexagon",
+            "wall_path",
+            "wall_rift",
+            "path_rift",
+            "rubble_moss",
+            "pink_cream"
         };
 
         [MenuItem("RIMA/Tools/Rebuild All Wang Tilesets")]

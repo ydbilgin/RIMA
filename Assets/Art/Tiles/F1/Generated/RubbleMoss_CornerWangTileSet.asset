@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa369bb6ab2a284fab77a45ed0fde39, type: 3}
+  m_Name: RubbleMoss_CornerWangTileSet
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.CornerWangTileSetSO
+  lowerTerrainLabel: rubble floor
+  upperTerrainLabel: moss
+  tiles:
+  - {fileID: 11400000, guid: 3d2331649a91ee84a972271002b75228, type: 2}
+  - {fileID: 11400000, guid: a8434387754da084fb0c39e7b597ba6e, type: 2}
+  - {fileID: 11400000, guid: 6bf467d2d122d104784d8094444eba7c, type: 2}
+  - {fileID: 11400000, guid: ee67eb43b82250d4c981cc9296f16706, type: 2}
+  - {fileID: 11400000, guid: dad6583f28519244eb2e39a7dc04508e, type: 2}
+  - {fileID: 11400000, guid: e2ee57bac09dd43448cbfb0762ff0c23, type: 2}
+  - {fileID: 11400000, guid: e102056f83acffe43a7cc4719db91bfd, type: 2}
+  - {fileID: 11400000, guid: 356478df835fae74ca9a50d63317a478, type: 2}
+  - {fileID: 11400000, guid: 3b653a7c7b6a82a4fb44d0b03da840dc, type: 2}
+  - {fileID: 11400000, guid: 6fd672deebb865b4eae0d7dcb54bd450, type: 2}
+  - {fileID: 11400000, guid: 6c1d83d7b42de024f98bab6915e85c9e, type: 2}
+  - {fileID: 11400000, guid: d5a8db67fade5ae4a9ff0a96d6864369, type: 2}
+  - {fileID: 11400000, guid: b71a314e8d7b8e94083c23032960b629, type: 2}
+  - {fileID: 11400000, guid: 08bd7eef79cd7504389fe1da1cd73fbc, type: 2}
+  - {fileID: 11400000, guid: 21b1ea2c62d541548ba76ce88569f713, type: 2}
+  - {fileID: 11400000, guid: efa0dbd9911d2e74a91b671879082e71, type: 2}
