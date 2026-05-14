@@ -45,8 +45,6 @@ namespace RIMA.Editor
             "All Wall"
         };
 
-        private static readonly int[] KeyToIndex = { 6, 7, 10, 9, 2, 11, 4, 15, 5, 14, 1, 8, 3, 0, 13, 12 };
-
         public enum PaintMode
         {
             Cell,
@@ -93,13 +91,12 @@ namespace RIMA.Editor
 
         [SerializeField] private int roomWidth = DefaultRoomWidth;
         [SerializeField] private int roomHeight = DefaultRoomHeight;
-        [SerializeField] private float cellSize = 28f;
+        [SerializeField] private float cellSize = 32f;
         [SerializeField] private int currentPaintValue = 1;
         [SerializeField] private int wallThickness = 2;
         [SerializeField] private float noiseDensity = 0.45f;
         [SerializeField] private int noiseSeed = 12345;
-        [SerializeField] private bool proceduralFoldout = true;
-        [SerializeField] private bool tilePreviewFoldout = true;
+        [SerializeField] private bool proceduralFoldout;
         [SerializeField] private bool showTilePreview = true;
         [SerializeField] private PaintTool activeTool = PaintTool.Brush;
         [SerializeField] private PaintMode paintMode = PaintMode.Cell;
@@ -361,28 +358,58 @@ namespace RIMA.Editor
 
             gridScroll = GUI.BeginScrollView(centerRect, gridScroll, viewRect, true, true);
             DrawGridCanvas(viewRect);
-            HandleGridInput(centerRect);
+            HandleGridInput(viewRect);
             GUI.EndScrollView();
         }
 
         private void DrawRightPanel()
         {
             EditorGUILayout.BeginVertical(GUILayout.Width(RightPanelWidth), GUILayout.ExpandHeight(true));
-            EditorGUILayout.LabelField("Paint Tools", EditorStyles.boldLabel);
-            activeTool = (PaintTool)GUILayout.Toolbar((int)activeTool, new[] { "Brush", "Fill", "Rect" });
-            currentPaintValue = GUILayout.Toolbar(currentPaintValue == 0 ? 0 : 1, new[] { "Floor (0)", "Wall (1)" });
-            brushRadius = EditorGUILayout.IntSlider("Brush Radius", brushRadius, 1, 5);
-            showTilePreview = EditorGUILayout.Toggle("Show Tiles", showTilePreview);
+            EditorGUILayout.LabelField("Paint", EditorStyles.boldLabel);
+
+            GUIStyle bigButton = new GUIStyle(GUI.skin.button) { fixedHeight = 36f, fontSize = 12, fontStyle = FontStyle.Bold };
+
+            bool isWall = !eraseMode && currentPaintValue == 1;
+            bool isFloor = !eraseMode && currentPaintValue == 0;
+            bool isErase = eraseMode;
+
+            Color prevBg = GUI.backgroundColor;
+            GUI.backgroundColor = isWall ? new Color(0.8f, 0.4f, 0.2f) : prevBg;
+            if (GUILayout.Button("WALL", bigButton))
+            {
+                currentPaintValue = 1;
+                eraseMode = false;
+            }
+
+            GUI.backgroundColor = isFloor ? new Color(0.3f, 0.5f, 0.8f) : prevBg;
+            if (GUILayout.Button("FLOOR", bigButton))
+            {
+                currentPaintValue = 0;
+                eraseMode = false;
+            }
+
+            GUI.backgroundColor = isErase ? new Color(0.9f, 0.3f, 0.3f) : prevBg;
+            if (GUILayout.Button("ERASE", bigButton))
+            {
+                eraseMode = true;
+            }
+
+            GUI.backgroundColor = prevBg;
+
+            EditorGUILayout.Space(6f);
+
+            brushRadius = EditorGUILayout.IntSlider("Brush", brushRadius, 1, 5);
+
+            EditorGUILayout.Space(6f);
+
+            paintMode = (PaintMode)GUILayout.Toolbar((int)paintMode, new[] { "Cell", "Vertex" });
 
             EditorGUILayout.Space(8f);
-            DrawTilePreviewPanel(GetActiveLayer());
 
-            EditorGUILayout.Space(8f);
-            proceduralFoldout = EditorGUILayout.Foldout(proceduralFoldout, "Procedural Generation", true);
+            proceduralFoldout = EditorGUILayout.Foldout(proceduralFoldout, "Advanced", true);
             if (proceduralFoldout)
             {
-                wallThickness = Mathf.Clamp(EditorGUILayout.IntField("Wall Thickness", wallThickness), 1, Mathf.Min(roomWidth, roomHeight) / 2);
-
+                EditorGUILayout.LabelField("Procedural Helpers", EditorStyles.miniBoldLabel);
                 if (GUILayout.Button("Make Rectangular Room"))
                 {
                     MakeRectangularRoom();
@@ -393,172 +420,37 @@ namespace RIMA.Editor
                     MakeLShapeRoom();
                 }
 
-                noiseDensity = EditorGUILayout.Slider("Density", noiseDensity, 0f, 1f);
-                noiseSeed = EditorGUILayout.IntField("Seed", noiseSeed);
                 if (GUILayout.Button("Perlin Noise Fill"))
                 {
                     PerlinNoiseFill();
                 }
 
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("Corridor H"))
+                EditorGUILayout.Space(4f);
+                EditorGUILayout.LabelField("Tool", EditorStyles.miniBoldLabel);
+                activeTool = (PaintTool)GUILayout.Toolbar((int)activeTool, new[] { "Brush", "Fill", "Rect" });
+
+                EditorGUILayout.Space(4f);
+                EditorGUILayout.LabelField("Room Size", EditorStyles.miniBoldLabel);
+                int newW = EditorGUILayout.IntField("W", roomWidth);
+                int newH = EditorGUILayout.IntField("H", roomHeight);
+                newW = Mathf.Clamp(newW, MinRoomSize, MaxRoomSize);
+                newH = Mathf.Clamp(newH, MinRoomSize, MaxRoomSize);
+                if (newW != roomWidth || newH != roomHeight)
                 {
-                    PaintHorizontalCorridor();
+                    roomWidth = newW;
+                    roomHeight = newH;
                 }
 
-                if (GUILayout.Button("Corridor V"))
+                if (GUILayout.Button("Resize"))
                 {
-                    PaintVerticalCorridor();
-                }
-                EditorGUILayout.EndHorizontal();
-
-                if (GUILayout.Button("Clear -> All Floor"))
-                {
-                    FillAll(0);
+                    ResizeGrid(roomWidth, roomHeight, true);
                 }
 
-                if (GUILayout.Button("Fill -> All Wall"))
-                {
-                    FillAll(1);
-                }
-            }
-
-            EditorGUILayout.Space(8f);
-            EditorGUILayout.LabelField("Room Size", EditorStyles.boldLabel);
-            int newWidth = Mathf.Clamp(EditorGUILayout.IntField("Width", roomWidth), MinRoomSize, MaxRoomSize);
-            int newHeight = Mathf.Clamp(EditorGUILayout.IntField("Height", roomHeight), MinRoomSize, MaxRoomSize);
-            if (newWidth != roomWidth || newHeight != roomHeight)
-            {
-                roomWidth = newWidth;
-                roomHeight = newHeight;
-            }
-
-            if (GUILayout.Button("Resize"))
-            {
-                ResizeGrid(roomWidth, roomHeight, true);
+                EditorGUILayout.Space(4f);
+                showTilePreview = EditorGUILayout.Toggle("Show Tiles on Canvas", showTilePreview);
             }
 
             EditorGUILayout.EndVertical();
-        }
-
-        private void DrawTilePreviewPanel(MapLayer activeLayer)
-        {
-            tilePreviewFoldout = EditorGUILayout.Foldout(tilePreviewFoldout, "Wang Tile Preview", true);
-            if (!tilePreviewFoldout)
-            {
-                return;
-            }
-
-            if (activeLayer == null || activeLayer.tileSet == null)
-            {
-                EditorGUILayout.HelpBox("Assign a CornerWangTileSetSO to the active layer to see previews.", MessageType.Info);
-                return;
-            }
-
-            CornerWangTileSetSO ts = activeLayer.tileSet;
-            EditorGUILayout.LabelField("Layer: " + activeLayer.name, EditorStyles.miniLabel);
-            EditorGUILayout.LabelField("Lower: " + ts.lowerTerrainLabel + " | Upper: " + ts.upperTerrainLabel, EditorStyles.miniLabel);
-
-            const float previewSize = 40f;
-            const float labelHeight = 28f;
-            const float cellW = previewSize + 4f;
-            const float cellH = previewSize + labelHeight;
-            const int cols = 4;
-            var labelStyle = new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter, wordWrap = true };
-
-            for (int key = 0; key < CornerKeyNames.Length; key++)
-            {
-                int col = key % cols;
-                if (col == 0)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                }
-
-                int spriteIdx = KeyToIndex[key];
-                TileBase tile = ts.tiles != null && spriteIdx >= 0 && spriteIdx < ts.tiles.Length ? ts.tiles[spriteIdx] : null;
-                Texture preview = GetTilePreview(tile);
-                Color bg = GetTilePreviewBackground(key);
-                string tooltip = GetCornerTooltip(key, spriteIdx, activeLayer.name, ts.lowerTerrainLabel, ts.upperTerrainLabel);
-
-                GUILayout.BeginVertical(GUILayout.Width(cellW));
-                Rect bgRect = GUILayoutUtility.GetRect(cellW, cellH);
-                EditorGUI.DrawRect(bgRect, bg);
-                Rect previewRect = new Rect(bgRect.x + 2f, bgRect.y + 2f, previewSize, previewSize);
-                if (preview != null)
-                {
-                    GUI.DrawTexture(previewRect, preview, ScaleMode.ScaleToFit);
-                }
-                else
-                {
-                    EditorGUI.DrawRect(previewRect, new Color(0.15f, 0.15f, 0.15f, 0.8f));
-                }
-
-                GUI.Label(new Rect(bgRect.x, bgRect.y + previewSize + 2f, cellW, labelHeight), new GUIContent(CornerKeyNames[key], tooltip), labelStyle);
-                GUILayout.EndVertical();
-
-                if (col == cols - 1)
-                {
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-
-            if (Event.current.type == EventType.Repaint)
-            {
-                Repaint();
-            }
-        }
-
-        private Texture GetTilePreview(TileBase tile)
-        {
-            if (tile == null)
-            {
-                return null;
-            }
-
-            Texture preview = AssetPreview.GetAssetPreview(tile);
-            return preview != null ? preview : EditorGUIUtility.ObjectContent(tile, typeof(TileBase)).image;
-        }
-
-        private Color GetTilePreviewBackground(int key)
-        {
-            bool isSelectedFloor = currentPaintValue == 0 && key == 0;
-            bool isSelectedWall = currentPaintValue != 0 && key == 15;
-            if (isSelectedFloor)
-            {
-                return new Color(0.16f, 0.28f, 0.45f, 0.5f);
-            }
-
-            if (isSelectedWall)
-            {
-                return new Color(0.45f, 0.28f, 0.16f, 0.5f);
-            }
-
-            if (key == 0)
-            {
-                return new Color(0.16f, 0.28f, 0.45f, 0.28f);
-            }
-
-            if (key == 15)
-            {
-                return new Color(0.45f, 0.28f, 0.16f, 0.28f);
-            }
-
-            return key < 8 ? new Color(0.16f, 0.28f, 0.45f, 0.2f) : new Color(0.45f, 0.28f, 0.16f, 0.2f);
-        }
-
-        private static string GetCornerTooltip(int key, int spriteIdx, string layerName, string lowerLabel, string upperLabel)
-        {
-            return string.Format(
-                "{0}: NW {1}, NE {2}, SW {3}, SE {4}\nLayer: {5}\nLower: {6}\nUpper: {7}\nSprite Index: {8}",
-                CornerKeyNames[key],
-                (key & 8) != 0 ? "upper" : "lower",
-                (key & 4) != 0 ? "upper" : "lower",
-                (key & 2) != 0 ? "upper" : "lower",
-                (key & 1) != 0 ? "upper" : "lower",
-                layerName,
-                lowerLabel,
-                upperLabel,
-                spriteIdx);
         }
 
         private void DrawGridCanvas(Rect viewRect)
@@ -569,11 +461,6 @@ namespace RIMA.Editor
             if (showTilePreview)
             {
                 DrawLiveTilePreviewCells(grid);
-            }
-
-            if (paintMode == PaintMode.Cell && brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight))
-            {
-                DrawCellHover(hoveredCell);
             }
 
             Handles.BeginGUI();
@@ -607,6 +494,11 @@ namespace RIMA.Editor
                 Handles.DrawWireDisc(VertexToCanvasPosition(hoveredVertex.x, hoveredVertex.y), Vector3.forward, VertexRadius + 2f);
             }
 
+            if (paintMode == PaintMode.Cell && brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight))
+            {
+                DrawCellHover(hoveredCell);
+            }
+
             if (isRectangleDragging)
             {
                 DrawRectangleOverlay(rectStart, rectCurrent);
@@ -617,9 +509,12 @@ namespace RIMA.Editor
 
         private void DrawCellHover(Vector2Int cell)
         {
-            Color cursorColor = eraseMode ? new Color(1f, 0.3f, 0.3f, 0.6f) : new Color(0f, 1f, 1f, 0.6f);
             Rect rect = CellToCanvasRect(cell);
-            EditorGUI.DrawRect(rect, new Color(cursorColor.r, cursorColor.g, cursorColor.b, 0.3f));
+            Color fill = eraseMode ? new Color(1f, 0.2f, 0.2f, 0.4f) : new Color(0.2f, 1f, 0.4f, 0.4f);
+            Color border = eraseMode ? Color.red : Color.green;
+            EditorGUI.DrawRect(rect, fill);
+            Handles.color = border;
+            Handles.DrawSolidRectangleWithOutline(rect, Color.clear, border);
         }
 
         private void DrawLiveTilePreviewCells(int[,] grid)
@@ -640,12 +535,18 @@ namespace RIMA.Editor
                     int sw = grid[x, y];
                     int se = grid[x + 1, y];
                     TileBase tile = tileSet != null ? tileSet.GetTile(nw, ne, sw, se) : null;
-                    Texture tex = GetCanvasTileTexture(tile);
+                    Sprite sprite = (tile as Tile)?.sprite;
                     Rect cellRect = CellToCanvasRect(new Vector2Int(x, y));
 
-                    if (tex != null)
+                    if (sprite != null && sprite.texture != null)
                     {
-                        GUI.DrawTexture(cellRect, tex, ScaleMode.StretchToFill);
+                        // Sprite slice rect -> normalized texCoords (avoid drawing whole spritesheet)
+                        Rect tc = new Rect(
+                            sprite.rect.x / sprite.texture.width,
+                            sprite.rect.y / sprite.texture.height,
+                            sprite.rect.width / sprite.texture.width,
+                            sprite.rect.height / sprite.texture.height);
+                        GUI.DrawTextureWithTexCoords(cellRect, sprite.texture, tc);
                     }
                     else
                     {
@@ -679,10 +580,13 @@ namespace RIMA.Editor
             return Color.Lerp(floorColor, wallColor, filledCorners / 4f);
         }
 
-        private void HandleGridInput(Rect centerRect)
+        private void HandleGridInput(Rect viewRect)
         {
             Event evt = Event.current;
-            if (evt.type == EventType.ScrollWheel)
+            Vector2 mouse = evt.mousePosition;
+            bool inCanvas = viewRect.Contains(mouse);
+
+            if (evt.type == EventType.ScrollWheel && inCanvas)
             {
                 cellSize = Mathf.Clamp(cellSize - evt.delta.y * 2f, 10f, 80f);
                 evt.Use();
@@ -690,11 +594,10 @@ namespace RIMA.Editor
                 return;
             }
 
-            Vector2 canvasMouse = evt.mousePosition;
-            hoveredVertex = GetNearestVertex(canvasMouse);
-            hoveredCell = brushInput.GetCellAtMouse(canvasMouse, cellSize, CanvasPadding, roomHeight);
+            hoveredCell = brushInput.GetCellAtMouse(mouse, cellSize, CanvasPadding, roomHeight);
+            hoveredVertex = GetNearestVertex(mouse);
 
-            if (evt.type == EventType.MouseMove && centerRect.Contains(evt.mousePosition + gridScroll))
+            if (evt.type == EventType.MouseMove && inCanvas)
             {
                 Repaint();
             }
@@ -702,7 +605,7 @@ namespace RIMA.Editor
             if (evt.type == EventType.MouseDown && evt.button == 2)
             {
                 isPanning = true;
-                panStartMouse = evt.mousePosition;
+                panStartMouse = mouse;
                 panStartScroll = gridScroll;
                 evt.Use();
                 return;
@@ -710,7 +613,7 @@ namespace RIMA.Editor
 
             if (evt.type == EventType.MouseDrag && isPanning && evt.button == 2)
             {
-                gridScroll = panStartScroll - (evt.mousePosition - panStartMouse);
+                gridScroll = panStartScroll - (mouse - panStartMouse);
                 evt.Use();
                 Repaint();
                 return;
@@ -723,11 +626,21 @@ namespace RIMA.Editor
                 return;
             }
 
+            if (!inCanvas)
+            {
+                return;
+            }
+
             bool hasPaintTarget = paintMode == PaintMode.Cell
                 ? brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight)
                 : IsValidVertex(hoveredVertex);
             if (!hasPaintTarget)
             {
+                if (evt.type == EventType.MouseMove)
+                {
+                    Repaint();
+                }
+
                 return;
             }
 
@@ -1353,15 +1266,24 @@ namespace RIMA.Editor
             MapLayer layer = GetActiveLayer();
             string layerName = layer != null ? layer.name : "None";
             string tileSetName = layer != null && layer.tileSet != null ? layer.tileSet.name : "No Tileset";
-            string status = string.Format(
-                "Room: {0}x{1} | Active Layer: {2} ({3}) | Tool: {4} | Mode: {5} | Erase: {6}",
-                roomWidth,
-                roomHeight,
-                layerName,
-                tileSetName,
-                activeTool,
-                paintMode,
-                eraseMode ? "On" : "Off");
+            string status = string.Format("Room {0}x{1} | Active Layer: {2} ({3}) | Tool: {4} | Mode: {5} | Erase: {6}",
+                roomWidth, roomHeight, layerName, tileSetName, activeTool, paintMode, eraseMode ? "On" : "Off");
+
+            if (brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight) && layer != null)
+            {
+                EnsureLayerGrid(layer, roomWidth, roomHeight, false);
+                int[,] grid = layer.vertGrid;
+                if (grid != null)
+                {
+                    int nw = grid[hoveredCell.x, hoveredCell.y + 1];
+                    int ne = grid[hoveredCell.x + 1, hoveredCell.y + 1];
+                    int sw = grid[hoveredCell.x, hoveredCell.y];
+                    int se = grid[hoveredCell.x + 1, hoveredCell.y];
+                    int wangKey = (nw << 3) | (ne << 2) | (sw << 1) | se;
+                    string keyName = wangKey >= 0 && wangKey < CornerKeyNames.Length ? CornerKeyNames[wangKey] : "Unknown";
+                    status += string.Format(" | Cell ({0},{1}) WangKey={2} ({3})", hoveredCell.x, hoveredCell.y, wangKey, keyName);
+                }
+            }
 
             EditorGUI.LabelField(new Rect(rect.x + 8f, rect.y + 2f, rect.width - 16f, rect.height - 4f), status, EditorStyles.miniLabel);
         }
