@@ -308,6 +308,11 @@ namespace RIMA.Editor
                 ApplyToScene();
             }
 
+            if (GUILayout.Button("Generate Room", EditorStyles.toolbarButton, GUILayout.Width(110f)))
+            {
+                RoomGeneratorWindow.Open(this);
+            }
+
             if (GUILayout.Button("Clear All", EditorStyles.toolbarButton, GUILayout.Width(72f)))
             {
                 ClearAllTilemaps();
@@ -1152,6 +1157,81 @@ namespace RIMA.Editor
             BuildLayerList();
             Debug.Log("[MapDesigner] Loaded map data: " + absolutePath);
             Repaint();
+        }
+
+        public void LoadFromGenerator(MapSaveData generated)
+        {
+            if (generated == null)
+            {
+                Debug.LogError("[MapDesigner] Generator returned no map data.");
+                return;
+            }
+
+            Tilemap[] existingTilemaps = layers != null ? layers.Select(layer => layer != null ? layer.tilemap : null).ToArray() : Array.Empty<Tilemap>();
+            roomWidth = Mathf.Clamp(generated.width, MinRoomSize, MaxRoomSize);
+            roomHeight = Mathf.Clamp(generated.height, MinRoomSize, MaxRoomSize);
+            layers = new List<MapLayer>();
+
+            if (generated.layers != null)
+            {
+                for (int i = 0; i < generated.layers.Length; i++)
+                {
+                    LayerSaveData layerData = generated.layers[i];
+                    var layer = new MapLayer
+                    {
+                        name = string.IsNullOrEmpty(layerData.name) ? "Layer " + (i + 1) : layerData.name,
+                        enabled = layerData.enabled,
+                        tileSet = FindTilesetByName(layerData.tileSet),
+                        tilemap = i < existingTilemaps.Length ? existingTilemaps[i] : null,
+                        flatVertexData = layerData.vertexData
+                    };
+
+                    EnsureLayerGrid(layer, roomWidth, roomHeight, false);
+                    layers.Add(layer);
+                }
+            }
+
+            if (layers.Count == 0)
+            {
+                layers.Add(new MapLayer { name = "Base" });
+                EnsureLayerGrid(layers[0], roomWidth, roomHeight, false);
+            }
+
+            activeLayerIndex = Mathf.Clamp(activeLayerIndex, 0, layers.Count - 1);
+            BuildLayerList();
+            Repaint();
+            Debug.Log("[MapDesigner] Loaded generated room " + roomWidth + "x" + roomHeight + " with " + layers.Count + " layer(s).");
+        }
+
+        private static CornerWangTileSetSO FindTilesetByName(string tileSetNameOrPath)
+        {
+            if (string.IsNullOrEmpty(tileSetNameOrPath))
+            {
+                return null;
+            }
+
+            var byPath = AssetDatabase.LoadAssetAtPath<CornerWangTileSetSO>(tileSetNameOrPath);
+            if (byPath != null)
+            {
+                return byPath;
+            }
+
+            string expectedName = Path.GetFileNameWithoutExtension(tileSetNameOrPath);
+            foreach (string guid in AssetDatabase.FindAssets("t:CornerWangTileSetSO"))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var candidate = AssetDatabase.LoadAssetAtPath<CornerWangTileSetSO>(path);
+                if (candidate != null &&
+                    (string.Equals(candidate.name, tileSetNameOrPath, StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(candidate.name, expectedName, StringComparison.OrdinalIgnoreCase) ||
+                     path.IndexOf(tileSetNameOrPath, StringComparison.OrdinalIgnoreCase) >= 0))
+                {
+                    return candidate;
+                }
+            }
+
+            Debug.LogWarning("[MapDesigner] Tileset not found for generated layer: " + tileSetNameOrPath);
+            return null;
         }
 
         private int[] FlattenGrid(int[,] grid)
