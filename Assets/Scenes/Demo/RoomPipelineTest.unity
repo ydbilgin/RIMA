@@ -10695,6 +10695,10 @@ MonoBehaviour:
   baseTilemap: {fileID: 973471802}
   decalsTilemap: {fileID: 569998273}
   wallsTilemap: {fileID: 233768264}
+  wallsFrontTilemap: {fileID: 0}
+  wallsTopTilemap: {fileID: 0}
+  biomePreset: {fileID: 0}
+  wangTileLibrary: []
   stageRoot: {fileID: 1712182976}
   seed: 42
 --- !u!4 &1850064498
