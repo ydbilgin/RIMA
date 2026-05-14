@@ -12,14 +12,14 @@ namespace RIMA.Editor
 {
     public class RimaMapDesignerWindow : EditorWindow
     {
-        private const int DefaultRoomWidth = 16;
-        private const int DefaultRoomHeight = 12;
+        private const int DefaultRoomWidth = 32;
+        private const int DefaultRoomHeight = 24;
         private const int MinRoomSize = 4;
         private const int MaxRoomSize = 64;
         private const float LeftPanelWidth = 220f;
         private const float RightPanelWidth = 200f;
         private const float ToolbarHeight = 28f;
-        private const float StatusHeight = 40f;
+        private const float StatusHeight = 60f;
         private const float VertexRadius = 5f;
         private const float CanvasPadding = 24f;
         private const string MapDataFolder = "Assets/RIMA_MapData";
@@ -58,6 +58,24 @@ namespace RIMA.Editor
             Rectangle
         }
 
+        private struct CellPairingInfo
+        {
+            public bool isValid;
+            public Vector2Int cell;
+            public int nw;
+            public int ne;
+            public int sw;
+            public int se;
+            public int uniqueCount;
+            public int lower;
+            public int upper;
+            public int wangKey;
+            public string wangName;
+            public string resolves;
+            public float transitionSize;
+            public TileBase tile;
+        }
+
         [Serializable]
         public class MapSaveData
         {
@@ -82,7 +100,7 @@ namespace RIMA.Editor
 
         [SerializeField] private int roomWidth = DefaultRoomWidth;
         [SerializeField] private int roomHeight = DefaultRoomHeight;
-        [SerializeField] private float cellSize = 32f;
+        [SerializeField] private float cellSize = 40f;
         [SerializeField] private int currentPaintValue = 1;
         [SerializeField] private RimaBiomePreset activeBiome;
         [SerializeField] private int activeTerrainId = 1;
@@ -98,6 +116,7 @@ namespace RIMA.Editor
         [SerializeField] private bool eraseMode;
         [SerializeField] private int brushRadius = 1;
         [SerializeField] private Tilemap outputTilemap;
+        [SerializeField, HideInInspector] private bool hasFittedOnce;
 
         private readonly BrushInputHandler brushInput = new BrushInputHandler();
         [NonSerialized] private int[,] terrainGrid;
@@ -166,6 +185,8 @@ namespace RIMA.Editor
             {
                 paintMode = PaintMode.Cell;
             }
+
+            TryAutoFitOnce();
         }
 
         private void EnsureTerrainGrid(int width, int height, bool preserve)
@@ -223,7 +244,7 @@ namespace RIMA.Editor
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.Height(ToolbarHeight));
 
             if (GUILayout.Button("New", EditorStyles.toolbarButton, GUILayout.Width(48f)) &&
-                EditorUtility.DisplayDialog("New Map", "Reset to an empty 16x12 floor map?", "New", "Cancel"))
+                EditorUtility.DisplayDialog("New Map", "Reset to an empty 32x24 floor map?", "New", "Cancel"))
             {
                 ResetMap();
             }
@@ -303,8 +324,7 @@ namespace RIMA.Editor
             EditorGUI.BeginDisabledGroup(activeBiome == null);
             if (GUILayout.Button("Edit Biome", GUILayout.Height(22f)))
             {
-                Selection.activeObject = activeBiome;
-                EditorGUIUtility.PingObject(activeBiome);
+                BiomeQuickEditorWindow.Open(activeBiome);
             }
 
             EditorGUI.EndDisabledGroup();
@@ -338,8 +358,8 @@ namespace RIMA.Editor
                 return;
             }
 
-            const float buttonWidth = 60f;
-            const float buttonHeight = 72f;
+            const float buttonWidth = 64f;
+            const float buttonHeight = 98f;
             const int columns = 3;
             int column = 0;
 
@@ -372,10 +392,12 @@ namespace RIMA.Editor
             Color baseColor = terrain.paletteColor;
             EditorGUI.DrawRect(btnRect, active ? baseColor * 0.6f : baseColor * (hover ? 0.45f : 0.3f));
 
-            Rect spriteRect = new Rect(btnRect.x + 6f, btnRect.y + 6f, 48f, 48f);
-            Rect labelRect = new Rect(btnRect.x + 2f, btnRect.y + 54f, btnRect.width - 4f, 16f);
+            Rect spriteRect = new Rect(btnRect.x + 8f, btnRect.y + 5f, 48f, 42f);
+            Rect labelRect = new Rect(btnRect.x + 2f, btnRect.y + 48f, btnRect.width - 4f, 16f);
+            Rect idRect = new Rect(btnRect.x + 2f, btnRect.y + 64f, btnRect.width - 4f, 13f);
+            Rect pairRect = new Rect(btnRect.x + 2f, btnRect.y + 78f, btnRect.width - 4f, 16f);
             DrawTerrainSpritePreview(spriteRect, terrain);
-            EditorGUI.DrawRect(new Rect(btnRect.x + 2f, btnRect.y + btnRect.height - 14f, btnRect.width - 4f, 12f), baseColor);
+            EditorGUI.DrawRect(new Rect(btnRect.x + 2f, btnRect.y + btnRect.height - 7f, btnRect.width - 4f, 5f), baseColor);
 
             GUIStyle labelStyle = new GUIStyle(EditorStyles.miniBoldLabel)
             {
@@ -383,6 +405,13 @@ namespace RIMA.Editor
                 clipping = TextClipping.Clip
             };
             GUI.Label(labelRect, GetTerrainName(terrain.id), labelStyle);
+            GUIStyle subStyle = new GUIStyle(EditorStyles.miniLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                clipping = TextClipping.Clip
+            };
+            GUI.Label(idRect, "id=" + terrain.id, subStyle);
+            GUI.Label(pairRect, GetTerrainPairingHint(terrain.id), subStyle);
 
             Handles.BeginGUI();
             Handles.color = active ? Color.cyan : hover ? new Color(1f, 1f, 1f, 0.5f) : new Color(0f, 0f, 0f, 0.35f);
@@ -513,6 +542,8 @@ namespace RIMA.Editor
                 }
             }
 
+            GUILayout.FlexibleSpace();
+            DrawActivePairingPanel();
             EditorGUILayout.EndVertical();
         }
 
@@ -573,17 +604,60 @@ namespace RIMA.Editor
                 DrawRectangleOverlay(rectStart, rectCurrent);
             }
 
+            DrawCursorPreviewOverlay();
             Handles.EndGUI();
         }
 
         private void DrawCellHover(Vector2Int cell)
         {
             Rect rect = CellToCanvasRect(cell);
-            Color fill = eraseMode ? new Color(1f, 0.2f, 0.2f, 0.4f) : new Color(0.2f, 1f, 0.4f, 0.4f);
             Color border = eraseMode ? Color.red : Color.green;
-            EditorGUI.DrawRect(rect, fill);
+
+            if (paintMode == PaintMode.Cell)
+            {
+                int previewValue = eraseMode ? 0 : activeTerrainId;
+                CellPairingInfo preview = BuildCellPairingInfo(cell, true, previewValue);
+                if (preview.tile != null)
+                {
+                    DrawTileBase(rect, preview.tile, GetTerrainColor(previewValue), 0.6f);
+                }
+                else
+                {
+                    Color fill = eraseMode ? new Color(1f, 0.2f, 0.2f, 0.35f) : new Color(0.2f, 1f, 0.4f, 0.28f);
+                    EditorGUI.DrawRect(rect, fill);
+                }
+
+                MapTerrain activeTerrain = GetTerrain(activeTerrainId);
+                if (activeTerrain != null)
+                {
+                    Rect thumbRect = new Rect(rect.xMax + 4f, rect.yMin - 4f, 24f, 24f);
+                    DrawTileBase(thumbRect, GetTerrainBaseTile(activeTerrain), activeTerrain.paletteColor, 0.9f);
+                }
+            }
+            else
+            {
+                Color fill = eraseMode ? new Color(1f, 0.2f, 0.2f, 0.4f) : new Color(0.2f, 1f, 0.4f, 0.4f);
+                EditorGUI.DrawRect(rect, fill);
+            }
+
             Handles.color = border;
             Handles.DrawSolidRectangleWithOutline(rect, Color.clear, border);
+
+            if (brushRadius > 1)
+            {
+                int r = brushRadius - 1;
+                Vector2Int min = new Vector2Int(Mathf.Max(0, cell.x - r), Mathf.Max(0, cell.y - r));
+                Vector2Int max = new Vector2Int(Mathf.Min(roomWidth - 1, cell.x + r), Mathf.Min(roomHeight - 1, cell.y + r));
+                Rect a = CellToCanvasRect(min);
+                Rect b = CellToCanvasRect(max);
+                Rect outline = Rect.MinMaxRect(
+                    Mathf.Min(a.xMin, b.xMin),
+                    Mathf.Min(a.yMin, b.yMin),
+                    Mathf.Max(a.xMax, b.xMax),
+                    Mathf.Max(a.yMax, b.yMax));
+                Handles.color = new Color(0f, 1f, 1f, 0.5f);
+                Handles.DrawSolidRectangleWithOutline(outline, Color.clear, Handles.color);
+            }
         }
 
         private void DrawLiveTilePreviewCells(int[,] grid)
@@ -703,7 +777,9 @@ namespace RIMA.Editor
 
             if (evt.type == EventType.ScrollWheel && inCanvas)
             {
-                SetCellSize(cellSize - evt.delta.y * 2f);
+                float delta = evt.delta.y;
+                float t = Mathf.Sign(delta) * Mathf.Pow(Mathf.Abs(delta) * 0.1f, 1.5f);
+                SetCellSize(cellSize - t * 2f);
                 evt.Use();
                 Repaint();
                 return;
@@ -806,7 +882,15 @@ namespace RIMA.Editor
                 {
                     if (paintMode != PaintMode.Cell || current != lastPaintedCell)
                     {
-                        PaintWithRadius(current, value);
+                        if (paintMode == PaintMode.Cell && brushInput.IsValidCell(lastPaintedCell, roomWidth, roomHeight))
+                        {
+                            PaintLineFromTo(lastPaintedCell, current, value);
+                        }
+                        else
+                        {
+                            PaintWithRadius(current, value);
+                        }
+
                         lastPaintedCell = paintMode == PaintMode.Cell ? current : new Vector2Int(-1, -1);
                     }
                 }
@@ -923,6 +1007,39 @@ namespace RIMA.Editor
                     {
                         PaintVertex(p, value);
                     }
+                }
+            }
+        }
+
+        private void PaintLineFromTo(Vector2Int a, Vector2Int b, int value)
+        {
+            int dx = Mathf.Abs(b.x - a.x);
+            int dy = Mathf.Abs(b.y - a.y);
+            int sx = a.x < b.x ? 1 : -1;
+            int sy = a.y < b.y ? 1 : -1;
+            int err = dx - dy;
+            int x = a.x;
+            int y = a.y;
+
+            while (true)
+            {
+                PaintWithRadius(new Vector2Int(x, y), value);
+                if (x == b.x && y == b.y)
+                {
+                    break;
+                }
+
+                int e2 = err * 2;
+                if (e2 > -dy)
+                {
+                    err -= dy;
+                    x += sx;
+                }
+
+                if (e2 < dx)
+                {
+                    err += dx;
+                    y += sy;
                 }
             }
         }
@@ -1058,6 +1175,229 @@ namespace RIMA.Editor
             }
 
             return fallback;
+        }
+
+        private MapTerrain GetTerrain(int terrainId)
+        {
+            return activeBiome != null && activeBiome.terrains != null
+                ? activeBiome.terrains.FirstOrDefault(t => t != null && t.id == terrainId)
+                : null;
+        }
+
+        private static TileBase GetTerrainBaseTile(MapTerrain terrain)
+        {
+            if (terrain == null)
+            {
+                return null;
+            }
+
+            return terrain.baseTile != null
+                ? terrain.baseTile
+                : terrain.baseTileSource != null ? terrain.baseTileSource.GetTile(0, 0, 0, 0) : null;
+        }
+
+        private static void DrawTileBase(Rect rect, TileBase tile, Color fallbackColor, float alpha)
+        {
+            Sprite sprite = (tile as Tile)?.sprite;
+            Color oldColor = GUI.color;
+            GUI.color = new Color(oldColor.r, oldColor.g, oldColor.b, oldColor.a * alpha);
+            if (sprite != null && sprite.texture != null)
+            {
+                Rect tc = new Rect(
+                    sprite.rect.x / sprite.texture.width,
+                    sprite.rect.y / sprite.texture.height,
+                    sprite.rect.width / sprite.texture.width,
+                    sprite.rect.height / sprite.texture.height);
+                GUI.DrawTextureWithTexCoords(rect, sprite.texture, tc);
+            }
+            else
+            {
+                EditorGUI.DrawRect(rect, new Color(fallbackColor.r, fallbackColor.g, fallbackColor.b, fallbackColor.a * alpha));
+            }
+
+            GUI.color = oldColor;
+        }
+
+        private CellPairingInfo BuildCellPairingInfo(Vector2Int cell, bool simulatePaint, int simulatedTerrainId)
+        {
+            CellPairingInfo info = new CellPairingInfo
+            {
+                cell = cell,
+                wangName = "Unknown",
+                resolves = "None",
+                transitionSize = 0.25f
+            };
+
+            int[,] grid = GetActiveGrid();
+            if (grid == null || !brushInput.IsValidCell(cell, roomWidth, roomHeight))
+            {
+                return info;
+            }
+
+            int value = Mathf.Max(0, simulatedTerrainId);
+            info.nw = simulatePaint ? value : grid[cell.x, cell.y + 1];
+            info.ne = simulatePaint ? value : grid[cell.x + 1, cell.y + 1];
+            info.sw = simulatePaint ? value : grid[cell.x, cell.y];
+            info.se = simulatePaint ? value : grid[cell.x + 1, cell.y];
+            info.tile = CornerWangPainter.ResolveTile(activeBiome, info.nw, info.ne, info.sw, info.se);
+
+            var unique = new HashSet<int> { info.nw, info.ne, info.sw, info.se };
+            info.uniqueCount = unique.Count;
+            info.isValid = true;
+
+            if (unique.Count == 1)
+            {
+                info.lower = info.nw;
+                info.upper = info.nw;
+                info.wangKey = 0;
+                info.wangName = "All " + GetTerrainName(info.nw);
+                info.resolves = info.tile != null ? GetTerrainName(info.nw) : "Missing base tile";
+                info.transitionSize = 0f;
+                return info;
+            }
+
+            if (unique.Count != 2)
+            {
+                info.lower = unique.Min();
+                info.upper = unique.Max();
+                info.wangKey = -1;
+                info.wangName = "Fallback";
+                info.resolves = "Fallback: " + unique.Count + " terrains";
+                return info;
+            }
+
+            info.lower = unique.Min();
+            info.upper = unique.Max();
+            info.wangKey =
+                ((info.nw == info.upper ? 1 : 0) << 3) |
+                ((info.ne == info.upper ? 1 : 0) << 2) |
+                ((info.sw == info.upper ? 1 : 0) << 1) |
+                (info.se == info.upper ? 1 : 0);
+            info.wangName = info.wangKey >= 0 && info.wangKey < CornerKeyNames.Length ? CornerKeyNames[info.wangKey] : "Unknown";
+
+            TilesetPairing pairing = activeBiome != null ? activeBiome.FindPairing(info.lower, info.upper) : null;
+            if (pairing != null)
+            {
+                info.transitionSize = pairing.transitionSize;
+                info.resolves = pairing.tileSet != null ? pairing.tileSet.name + "[" + info.wangKey + "]" : "Missing tileSet";
+            }
+            else
+            {
+                info.resolves = "Missing pairing " + GetTerrainName(info.lower) + "<->" + GetTerrainName(info.upper);
+            }
+
+            return info;
+        }
+
+        private string GetTerrainPairingHint(int terrainId)
+        {
+            if (activeBiome == null || activeBiome.tilesetPairings == null)
+            {
+                return "Pairs: none";
+            }
+
+            List<string> peers = new List<string>();
+            foreach (TilesetPairing pairing in activeBiome.tilesetPairings)
+            {
+                if (pairing == null)
+                {
+                    continue;
+                }
+
+                if (pairing.lowerTerrainId == terrainId)
+                {
+                    peers.Add(GetTerrainName(pairing.upperTerrainId));
+                }
+                else if (pairing.upperTerrainId == terrainId)
+                {
+                    peers.Add(GetTerrainName(pairing.lowerTerrainId));
+                }
+            }
+
+            peers = peers.Where(p => !string.IsNullOrEmpty(p)).Distinct().ToList();
+            if (peers.Count == 0)
+            {
+                return "Pairs: none";
+            }
+
+            string text = "Pairs: " + peers[0];
+            int shown = 1;
+            while (shown < peers.Count && (text + ", " + peers[shown]).Length <= 17)
+            {
+                text += ", " + peers[shown];
+                shown++;
+            }
+
+            if (shown < peers.Count)
+            {
+                text += " +" + (peers.Count - shown);
+            }
+
+            return text;
+        }
+
+        private void DrawActivePairingPanel()
+        {
+            DrawSeparator();
+            EditorGUILayout.LabelField("Active Pairing", EditorStyles.boldLabel);
+            if (!brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight))
+            {
+                EditorGUILayout.LabelField("Hover a cell to see pairing info", EditorStyles.wordWrappedMiniLabel);
+                return;
+            }
+
+            CellPairingInfo info = BuildCellPairingInfo(hoveredCell, false, activeTerrainId);
+            EditorGUILayout.LabelField("Hover cell: (" + info.cell.x + ", " + info.cell.y + ")", EditorStyles.miniLabel);
+            EditorGUILayout.LabelField(
+                string.Format("Corners: NW={0} NE={1}", info.nw, info.ne),
+                EditorStyles.miniLabel);
+            EditorGUILayout.LabelField(
+                string.Format("         SW={0} SE={1}", info.sw, info.se),
+                EditorStyles.miniLabel);
+            EditorGUILayout.LabelField("Wang Key: " + info.wangKey + " (" + info.wangName + ")", EditorStyles.miniLabel);
+            EditorGUILayout.LabelField("Resolves: " + info.resolves, EditorStyles.wordWrappedMiniLabel);
+            EditorGUILayout.LabelField("Transition: " + info.transitionSize.ToString("0.##"), EditorStyles.miniLabel);
+        }
+
+        private void DrawCursorPreviewOverlay()
+        {
+            if (paintMode != PaintMode.Cell || !brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight))
+            {
+                return;
+            }
+
+            Vector2 mouse = Event.current.mousePosition;
+            Rect previewRect = new Rect(mouse.x + 12f, mouse.y + 12f, 32f, 32f);
+            if (eraseMode)
+            {
+                EditorGUI.DrawRect(previewRect, new Color(1f, 0f, 0f, 0.18f));
+                Handles.color = new Color(1f, 0f, 0f, 0.85f);
+                Handles.DrawLine(new Vector3(previewRect.xMin, previewRect.yMin), new Vector3(previewRect.xMax, previewRect.yMax));
+                Handles.DrawLine(new Vector3(previewRect.xMax, previewRect.yMin), new Vector3(previewRect.xMin, previewRect.yMax));
+                Handles.DrawSolidRectangleWithOutline(previewRect, Color.clear, Handles.color);
+                return;
+            }
+
+            MapTerrain activeTerrain = GetTerrain(activeTerrainId);
+            if (activeTerrain == null)
+            {
+                return;
+            }
+
+            DrawTileBase(previewRect, GetTerrainBaseTile(activeTerrain), activeTerrain.paletteColor, 0.5f);
+            Handles.color = new Color(0f, 1f, 1f, 0.45f);
+            Handles.DrawSolidRectangleWithOutline(previewRect, Color.clear, Handles.color);
+        }
+
+        private void TryAutoFitOnce()
+        {
+            if (hasFittedOnce || position.width <= 1f || position.height <= 1f)
+            {
+                return;
+            }
+
+            hasFittedOnce = true;
+            FitCanvasToWindow();
         }
 
         private void CreateNewBiomePreset()
@@ -1561,35 +1901,27 @@ namespace RIMA.Editor
                 tilemapName,
                 eraseMode ? "On" : "Off");
 
-            string line2 = "Tip: Drag to paint, Space+drag to pan, scroll to zoom, +/- to zoom";
+            string line2 = "Cell: hover canvas for corners, Wang key, tileSet, transition";
+            string line3 = "Tip: Drag to paint, Space+drag to pan, scroll to zoom, +/- to zoom";
             if (brushInput.IsValidCell(hoveredCell, roomWidth, roomHeight))
             {
-                int[,] grid = terrainGrid;
-                if (grid != null)
+                CellPairingInfo info = BuildCellPairingInfo(hoveredCell, false, activeTerrainId);
+                if (info.isValid)
                 {
-                    int nw = grid[hoveredCell.x, hoveredCell.y + 1];
-                    int ne = grid[hoveredCell.x + 1, hoveredCell.y + 1];
-                    int sw = grid[hoveredCell.x, hoveredCell.y];
-                    int se = grid[hoveredCell.x + 1, hoveredCell.y];
-                    var unique = new HashSet<int> { nw, ne, sw, se };
-                    if (unique.Count >= 3)
+                    line2 = string.Format("Cell ({0},{1}) | Corners: NW={2} NE={3} SW={4} SE={5} | WangKey={6} | TileSet: {7} | Transition={8:0.##}",
+                        hoveredCell.x,
+                        hoveredCell.y,
+                        info.nw,
+                        info.ne,
+                        info.sw,
+                        info.se,
+                        info.wangKey,
+                        info.resolves,
+                        info.transitionSize);
+
+                    if (info.uniqueCount >= 3)
                     {
-                        line2 = string.Format("Cell ({0},{1}) | Corners: NW={2} NE={3} SW={4} SE={5} | ERROR: {6} terrains",
-                            hoveredCell.x, hoveredCell.y, nw, ne, sw, se, unique.Count);
-                    }
-                    else if (unique.Count == 2)
-                    {
-                        int lower = unique.Min();
-                        int upper = unique.Max();
-                        int wangKey = ((nw == upper ? 1 : 0) << 3) | ((ne == upper ? 1 : 0) << 2) | ((sw == upper ? 1 : 0) << 1) | (se == upper ? 1 : 0);
-                        string keyName = wangKey >= 0 && wangKey < CornerKeyNames.Length ? CornerKeyNames[wangKey] : "Unknown";
-                        line2 = string.Format("Cell ({0},{1}) | Corners: NW={2} NE={3} SW={4} SE={5} | WangKey={6} | TileSet: {7}",
-                            hoveredCell.x, hoveredCell.y, nw, ne, sw, se, wangKey, GetPairingName(lower, upper, keyName));
-                    }
-                    else
-                    {
-                        line2 = string.Format("Cell ({0},{1}) | Corners: NW={2} NE={3} SW={4} SE={5} | WangKey=0 | TileSet: {6}",
-                            hoveredCell.x, hoveredCell.y, nw, ne, sw, se, GetTerrainName(nw));
+                        line3 = string.Format("WARNING: Cell ({0},{1}) has {2} terrains; rendering fallback", hoveredCell.x, hoveredCell.y, info.uniqueCount);
                     }
                 }
             }
@@ -1601,7 +1933,8 @@ namespace RIMA.Editor
             }
 
             EditorGUI.LabelField(new Rect(rect.x + 8f, rect.y + 3f, rect.width - 16f, 16f), line1, EditorStyles.miniLabel);
-            EditorGUI.LabelField(new Rect(rect.x + 8f, rect.y + 20f, rect.width - 16f, 16f), line2, EditorStyles.miniLabel);
+            EditorGUI.LabelField(new Rect(rect.x + 8f, rect.y + 21f, rect.width - 16f, 16f), line2, EditorStyles.miniLabel);
+            EditorGUI.LabelField(new Rect(rect.x + 8f, rect.y + 39f, rect.width - 16f, 16f), line3, EditorStyles.miniLabel);
         }
     }
 }
