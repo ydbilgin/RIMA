@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using RIMA;
+using RIMA.Data;
+using RIMA.MapDesigner;
 using RIMA.Systems.Map;
 using UnityEditor;
 using UnityEngine;
@@ -109,6 +111,10 @@ namespace RIMA.Editor
         [SerializeField] private float noiseDensity = 0.45f;
         [SerializeField] private int noiseSeed = 12345;
         [SerializeField] private int variantSeed = 12345;
+        [SerializeField] private RoomRecipe selectedRoomRecipe;
+        [SerializeField] private int roomRecipeSeed = 78101;
+        [SerializeField] private bool applyPatchAtlas = true;
+        [SerializeField] private bool applyScatterBrush = true;
         [SerializeField] private bool advancedFoldout;
         [SerializeField] private bool proceduralFoldout;
         [SerializeField] private bool showTilePreview = true;
@@ -290,6 +296,20 @@ namespace RIMA.Editor
             {
                 RoomGeneratorWindow.Open(this);
             }
+
+            selectedRoomRecipe = (RoomRecipe)EditorGUILayout.ObjectField(selectedRoomRecipe, typeof(RoomRecipe), false, GUILayout.Width(150f));
+            if (GUILayout.Button("Generate Room", EditorStyles.toolbarButton, GUILayout.Width(104f)))
+            {
+                GenerateRoomFromRecipe(false);
+            }
+
+            if (GUILayout.Button("Reseed", EditorStyles.toolbarButton, GUILayout.Width(58f)))
+            {
+                GenerateRoomFromRecipe(true);
+            }
+
+            applyPatchAtlas = GUILayout.Toggle(applyPatchAtlas, "Patch", EditorStyles.toolbarButton, GUILayout.Width(52f));
+            applyScatterBrush = GUILayout.Toggle(applyScatterBrush, "Scatter", EditorStyles.toolbarButton, GUILayout.Width(62f));
 
             if (GUILayout.Button("Clear", EditorStyles.toolbarButton, GUILayout.Width(54f)))
             {
@@ -1972,6 +1992,57 @@ namespace RIMA.Editor
             Debug.Log("[MapDesigner] Loaded generated room " + roomWidth + "x" + roomHeight + " with single terrain grid.");
         }
 
+        private void GenerateRoomFromRecipe(bool reseed)
+        {
+            if (selectedRoomRecipe == null)
+            {
+                string[] guids = AssetDatabase.FindAssets("RoomRecipe_ShatteredKeep_Combat_01 t:RoomRecipe");
+                if (guids.Length > 0)
+                {
+                    selectedRoomRecipe = AssetDatabase.LoadAssetAtPath<RoomRecipe>(AssetDatabase.GUIDToAssetPath(guids[0]));
+                }
+            }
+
+            if (selectedRoomRecipe == null)
+            {
+                Debug.LogWarning("[MapDesigner] Assign a RoomRecipe before generating.");
+                return;
+            }
+
+            if (reseed || roomRecipeSeed == 0)
+            {
+                roomRecipeSeed = UnityEngine.Random.Range(1, int.MaxValue);
+            }
+            else if (roomRecipeSeed == 78101)
+            {
+                roomRecipeSeed = selectedRoomRecipe.seed;
+            }
+
+            RoomData roomData = ProceduralRoomGenerator.Generate(selectedRoomRecipe, roomRecipeSeed);
+            LoadFromGenerator(ToMapSaveData(roomData, selectedRoomRecipe));
+            ApplyToScene();
+            ApplyRecipeDressing(selectedRoomRecipe);
+        }
+
+        private MapSaveData ToMapSaveData(RoomData roomData, RoomRecipe recipe)
+        {
+            string biomeGuid = string.Empty;
+            if (recipe != null && recipe.biome != null)
+            {
+                biomeGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(recipe.biome));
+            }
+
+            return new MapSaveData
+            {
+                width = roomData.size.x,
+                height = roomData.size.y,
+                terrainGrid = FlattenGrid(roomData.vertexGrid, roomData.size.x, roomData.size.y),
+                biomePresetGuid = biomeGuid,
+                layers = Array.Empty<LayerSaveData>(),
+                objects = Array.Empty<MapObjectPlacement>()
+            };
+        }
+
         private static CornerWangTileSetSO FindTilesetByName(string tileSetNameOrPath)
         {
             if (string.IsNullOrEmpty(tileSetNameOrPath))
@@ -2147,6 +2218,43 @@ namespace RIMA.Editor
             {
                 Debug.Log("[MapDesigner] Instantiated " + placedObjects + " object(s).");
             }
+        }
+
+        private void ApplyRecipeDressing(RoomRecipe recipe)
+        {
+            if (recipe == null || outputTilemap == null)
+            {
+                return;
+            }
+
+            Transform host = outputTilemap.transform.parent != null ? outputTilemap.transform.parent : outputTilemap.transform;
+            if (applyPatchAtlas && recipe.patchAtlas != null)
+            {
+                PatchOverlayPainter patchPainter = EnsureSceneComponent<PatchOverlayPainter>(host, "PatchOverlayPainter");
+                patchPainter.PaintPatches(outputTilemap, recipe.patchAtlas, roomRecipeSeed);
+                EditorUtility.SetDirty(patchPainter);
+            }
+
+            if (applyScatterBrush && recipe.scatterBrush != null)
+            {
+                ScatterBrushPainter scatterPainter = EnsureSceneComponent<ScatterBrushPainter>(host, "ScatterBrushPainter");
+                scatterPainter.PaintScatter(outputTilemap, recipe.scatterBrush, roomRecipeSeed);
+                EditorUtility.SetDirty(scatterPainter);
+            }
+        }
+
+        private static T EnsureSceneComponent<T>(Transform parent, string objectName) where T : Component
+        {
+            T existing = parent.GetComponentInChildren<T>(true);
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            GameObject child = new GameObject(objectName);
+            Undo.RegisterCreatedObjectUndo(child, "Create " + objectName);
+            child.transform.SetParent(parent, false);
+            return child.AddComponent<T>();
         }
 
         private int ApplyObjectsToScene()

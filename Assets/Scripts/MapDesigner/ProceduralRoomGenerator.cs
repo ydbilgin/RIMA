@@ -39,6 +39,11 @@ namespace RIMA.MapDesigner
     {
         public static RoomData Generate(RoomRecipe recipe)
         {
+            return recipe != null ? Generate(recipe, recipe.seed) : default;
+        }
+
+        public static RoomData Generate(RoomRecipe recipe, int seed)
+        {
             if (recipe == null)
             {
                 return default;
@@ -46,7 +51,6 @@ namespace RIMA.MapDesigner
 
             int width = Mathf.Max(4, recipe.size.x);
             int height = Mathf.Max(4, recipe.size.y);
-            int seed = recipe.seed;
             int floorTerrain = GetTerrainId(recipe, 0, 0);
             int secondaryTerrain = GetTerrainId(recipe, 1, floorTerrain);
             int wallTerrain = GetTerrainId(recipe, recipe.allowedTerrains != null ? recipe.allowedTerrains.Count - 1 : 0, 1);
