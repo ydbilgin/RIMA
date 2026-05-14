@@ -1,0 +1,650 @@
+fileFormatVersion: 2
+guid: 75d1de6603355e846990f6d302ca63ad
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1428666948431357892
+    second: wang_floor_wall_0
+  - first:
+      213: -9045627119858664017
+    second: wang_floor_wall_1
+  - first:
+      213: 563942916649726050
+    second: wang_floor_wall_2
+  - first:
+      213: 1670229498536990482
+    second: wang_floor_wall_3
+  - first:
+      213: 768918497327828224
+    second: wang_floor_wall_4
+  - first:
+      213: -1285445319289304901
+    second: wang_floor_wall_5
+  - first:
+      213: 6359126703670931939
+    second: wang_floor_wall_6
+  - first:
+      213: -8084575792989459418
+    second: wang_floor_wall_7
+  - first:
+      213: -1868253811650715176
+    second: wang_floor_wall_8
+  - first:
+      213: 5522931351775795571
+    second: wang_floor_wall_9
+  - first:
+      213: -6240207380240607007
+    second: wang_floor_wall_10
+  - first:
+      213: 971051109288732577
+    second: wang_floor_wall_11
+  - first:
+      213: 2747807990095898936
+    second: wang_floor_wall_12
+  - first:
+      213: 402152551184340200
+    second: wang_floor_wall_13
+  - first:
+      213: 1274382143514134109
+    second: wang_floor_wall_14
+  - first:
+      213: -5297039341452883160
+    second: wang_floor_wall_15
+  - first:
+      213: -3237290486191512453
+    second: wang_floor_wall_wang_00
+  - first:
+      213: 3772874697484265956
+    second: wang_floor_wall_wang_01
+  - first:
+      213: -8591572863802788765
+    second: wang_floor_wall_wang_02
+  - first:
+      213: 7759353053801977387
+    second: wang_floor_wall_wang_03
+  - first:
+      213: -362787209904268705
+    second: wang_floor_wall_wang_04
+  - first:
+      213: 2602816712724954291
+    second: wang_floor_wall_wang_05
+  - first:
+      213: 6542789318620209272
+    second: wang_floor_wall_wang_06
+  - first:
+      213: -3879636158085779831
+    second: wang_floor_wall_wang_07
+  - first:
+      213: 4387708738379867277
+    second: wang_floor_wall_wang_08
+  - first:
+      213: 7984975691999836240
+    second: wang_floor_wall_wang_09
+  - first:
+      213: 5170863816789939726
+    second: wang_floor_wall_wang_10
+  - first:
+      213: 7272192273047885191
+    second: wang_floor_wall_wang_11
+  - first:
+      213: -7353866915817259377
+    second: wang_floor_wall_wang_12
+  - first:
+      213: -5076025135849747783
+    second: wang_floor_wall_wang_13
+  - first:
+      213: 5200611254641971406
+    second: wang_floor_wall_wang_14
+  - first:
+      213: -207180454629374415
+    second: wang_floor_wall_wang_15
+  - first:
+      213: 6066062243228935526
+    second: wang_floor_wall_00
+  - first:
+      213: 6156815607704884689
+    second: wang_floor_wall_01
+  - first:
+      213: 456970075531505548
+    second: wang_floor_wall_02
+  - first:
+      213: -5356771031225336834
+    second: wang_floor_wall_03
+  - first:
+      213: -2836299332368943933
+    second: wang_floor_wall_04
+  - first:
+      213: -7703435240523383253
+    second: wang_floor_wall_05
+  - first:
+      213: -3927953082529772621
+    second: wang_floor_wall_06
+  - first:
+      213: 931532197611889066
+    second: wang_floor_wall_07
+  - first:
+      213: -2759401536038328386
+    second: wang_floor_wall_08
+  - first:
+      213: 8986163682077755719
+    second: wang_floor_wall_09
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 0
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wang_floor_wall_00
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 665e119887bfe2450800000000000000
+      internalID: 6066062243228935526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_01
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d594dccc27617550800000000000000
+      internalID: 6156815607704884689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_02
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8fe901dcdb775600800000000000000
+      internalID: 456970075531505548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_03
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efbf5b4e02de8a5b0800000000000000
+      internalID: -5356771031225336834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_04
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c4b879d8c073a8d0800000000000000
+      internalID: -2836299332368943933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_05
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2eb06a9676e71590800000000000000
+      internalID: -7703435240523383253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_06
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bb896d8b7b1d79c0800000000000000
+      internalID: -3927953082529772621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_07
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa1ee7729977dec00800000000000000
+      internalID: 931532197611889066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_08
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb7a4c34ce2a4b9d0800000000000000
+      internalID: -2759401536038328386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_09
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 749c2c3124445bc70800000000000000
+      internalID: 8986163682077755719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_10
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e8dcff13745669a0800000000000000
+      internalID: -6240207380240607007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a767ebc6ddd97d00800000000000000
+      internalID: 971051109288732577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_12
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83965a8fecc222620800000000000000
+      internalID: 2747807990095898936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e41cd65d9bb49500800000000000000
+      internalID: 402152551184340200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_14
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d56c24cbec38fa110800000000000000
+      internalID: 1274382143514134109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_floor_wall_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82b8e6ba8c22d76b0800000000000000
+      internalID: -5297039341452883160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      wang_floor_wall_0: -1428666948431357892
+      wang_floor_wall_00: 6066062243228935526
+      wang_floor_wall_01: 6156815607704884689
+      wang_floor_wall_02: 456970075531505548
+      wang_floor_wall_03: -5356771031225336834
+      wang_floor_wall_04: -2836299332368943933
+      wang_floor_wall_05: -7703435240523383253
+      wang_floor_wall_06: -3927953082529772621
+      wang_floor_wall_07: 931532197611889066
+      wang_floor_wall_08: -2759401536038328386
+      wang_floor_wall_09: 8986163682077755719
+      wang_floor_wall_1: -9045627119858664017
+      wang_floor_wall_10: -6240207380240607007
+      wang_floor_wall_11: 971051109288732577
+      wang_floor_wall_12: 2747807990095898936
+      wang_floor_wall_13: 402152551184340200
+      wang_floor_wall_14: 1274382143514134109
+      wang_floor_wall_15: -5297039341452883160
+      wang_floor_wall_2: 563942916649726050
+      wang_floor_wall_3: 1670229498536990482
+      wang_floor_wall_4: 768918497327828224
+      wang_floor_wall_5: -1285445319289304901
+      wang_floor_wall_6: 6359126703670931939
+      wang_floor_wall_7: -8084575792989459418
+      wang_floor_wall_8: -1868253811650715176
+      wang_floor_wall_9: 5522931351775795571
+      wang_floor_wall_wang_00: -3237290486191512453
+      wang_floor_wall_wang_01: 3772874697484265956
+      wang_floor_wall_wang_02: -8591572863802788765
+      wang_floor_wall_wang_03: 7759353053801977387
+      wang_floor_wall_wang_04: -362787209904268705
+      wang_floor_wall_wang_05: 2602816712724954291
+      wang_floor_wall_wang_06: 6542789318620209272
+      wang_floor_wall_wang_07: -3879636158085779831
+      wang_floor_wall_wang_08: 4387708738379867277
+      wang_floor_wall_wang_09: 7984975691999836240
+      wang_floor_wall_wang_10: 5170863816789939726
+      wang_floor_wall_wang_11: 7272192273047885191
+      wang_floor_wall_wang_12: -7353866915817259377
+      wang_floor_wall_wang_13: -5076025135849747783
+      wang_floor_wall_wang_14: 5200611254641971406
+      wang_floor_wall_wang_15: -207180454629374415
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
