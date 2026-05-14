@@ -41,11 +41,25 @@ namespace RIMA
             bool hasRight = data.TryGetRight(out Vector2 rightPx);
             if (!hasLeft && !hasRight) return;
 
-            Vector3 target = hasLeft && hasRight
-                ? Vector3.Lerp(SpritePixelToWorld(bodyRenderer, data.sprite, leftPx), SpritePixelToWorld(bodyRenderer, data.sprite, rightPx), 0.5f)
-                : SpritePixelToWorld(bodyRenderer, data.sprite, preferRightHand && hasRight ? rightPx : leftPx);
+            Vector3 leftWorld = hasLeft ? SpritePixelToWorld(bodyRenderer, data.sprite, leftPx) : Vector3.zero;
+            Vector3 rightWorld = hasRight ? SpritePixelToWorld(bodyRenderer, data.sprite, rightPx) : Vector3.zero;
+            bool useTwoHand = _currentEntry != null && _currentEntry.twoHanded && hasLeft && hasRight;
+            Vector3 target = useTwoHand
+                ? Vector3.Lerp(leftWorld, rightWorld, 0.5f)
+                : preferRightHand && hasRight ? rightWorld : leftWorld;
 
-            _weaponInstance.transform.position = target + (_currentEntry != null ? _currentEntry.anchorOffset : Vector3.zero);
+            Vector3 gripOffset = _currentEntry != null ? _currentEntry.gripOffset : Vector3.zero;
+            _weaponInstance.transform.position = target + gripOffset;
+
+            if (useTwoHand && _currentEntry.orientBetweenHands)
+            {
+                Vector3 direction = rightWorld - leftWorld;
+                if (direction.sqrMagnitude > 0.0001f)
+                {
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + _currentEntry.orientationOffsetDegrees;
+                    _weaponInstance.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+                }
+            }
         }
 
         public void AttachWeapon(string formId)

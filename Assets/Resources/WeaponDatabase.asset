@@ -15,5 +15,9 @@ MonoBehaviour:
   entries:
   - classId: Warblade
     formId: Base
-    weaponPrefab: {fileID: 0}
+    weaponPrefab: {fileID: 3689238102083876011, guid: 837acdf62eb1be9459882c84c0353150, type: 3}
     anchorOffset: {x: 0.2, y: 0.1, z: 0}
+    gripOffset: {x: 0, y: 0, z: 0}
+    twoHanded: 1
+    orientBetweenHands: 1
+    orientationOffsetDegrees: 0
