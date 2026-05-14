@@ -1,6 +1,6 @@
 #if UNITY_EDITOR
 using System;
-using RIMA.Runtime.Scatter;
+using RIMA.MapDesigner;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -10,41 +10,26 @@ namespace RIMA.Editor.ScatterBrush
 {
     public sealed class ScatterBrushWindow : EditorWindow
     {
-        private static readonly string[] Categories = { "Stones", "Moss", "Rubble", "Dirt" };
-        private static readonly Vector2[] NoiseOffsets =
-        {
-            new Vector2(0f, 0f),
-            new Vector2(50f, 50f),
-            new Vector2(100f, 0f),
-            new Vector2(0f, 100f)
-        };
-        private static readonly float[] NoiseThresholds = { 0.6f, 0.5f, 0.7f, 0.45f };
-        private static readonly float[] NaturalDensities = { 0.3f, 0.4f, 0.2f, 0.5f };
+        private const string RootName = "ScatterBrushPreview";
 
-        private const string DatabasePath = "Assets/Art/Scatter/ScatterDatabase.asset";
-        private const string RootName = "ScatterRoot";
-        private const float NoiseScale = 0.15f;
-        private const float GridStep = 0.5f;
-
-        private ScatterDatabase database;
-        private int selectedCategory;
-        private float brushRadius = 2f;
-        private float density = 0.5f;
-        private float minScale = 0.8f;
-        private float maxScale = 1.2f;
+        [SerializeField] private ScatterBrushSO brush;
+        [SerializeField] private Tilemap baseTilemap;
+        [SerializeField] private ScatterBrushPainter painter;
+        [SerializeField] private int seed = 12345;
+        [SerializeField] private float brushRadius = 2f;
+        [SerializeField] private bool showPreview = true;
         private bool isPainting;
 
         [MenuItem("Tools/RIMA/Scatter Brush")]
         public static void Open()
         {
             ScatterBrushWindow window = GetWindow<ScatterBrushWindow>("Scatter Brush");
-            window.minSize = new Vector2(320f, 300f);
+            window.minSize = new Vector2(320f, 280f);
             window.Show();
         }
 
         private void OnEnable()
         {
-            database = AssetDatabase.LoadAssetAtPath<ScatterDatabase>(DatabasePath);
             SceneView.duringSceneGui -= OnSceneGUI;
             SceneView.duringSceneGui += OnSceneGUI;
         }
@@ -58,47 +43,47 @@ namespace RIMA.Editor.ScatterBrush
         private void OnGUI()
         {
             EditorGUILayout.Space(8f);
-            database = (ScatterDatabase)EditorGUILayout.ObjectField("Scatter Database", database, typeof(ScatterDatabase), false);
+            brush = (ScatterBrushSO)EditorGUILayout.ObjectField("Brush", brush, typeof(ScatterBrushSO), false);
+            baseTilemap = (Tilemap)EditorGUILayout.ObjectField("Base Tilemap", baseTilemap, typeof(Tilemap), true);
+            painter = (ScatterBrushPainter)EditorGUILayout.ObjectField("Painter", painter, typeof(ScatterBrushPainter), true);
+            seed = EditorGUILayout.IntField("Seed", seed);
+            brushRadius = EditorGUILayout.Slider("Paint Radius", brushRadius, 0.5f, 8f);
+            showPreview = EditorGUILayout.ToggleLeft("Preview Gizmo", showPreview);
 
             EditorGUILayout.Space(8f);
-            selectedCategory = GUILayout.Toolbar(selectedCategory, Categories);
-
-            EditorGUILayout.Space(8f);
-            brushRadius = EditorGUILayout.Slider("Brush Radius", brushRadius, 0.5f, 8f);
-            density = EditorGUILayout.Slider("Density", density, 0.1f, 1f);
-            minScale = EditorGUILayout.FloatField("Min Scale", minScale);
-            maxScale = EditorGUILayout.FloatField("Max Scale", maxScale);
-            if (maxScale < minScale)
-                maxScale = minScale;
-
-            EditorGUILayout.Space(8f);
-            using (new EditorGUI.DisabledScope(database == null))
+            using (new EditorGUI.DisabledScope(brush == null))
             {
                 if (GUILayout.Button("Generate Natural Map", GUILayout.Height(30f)))
+                {
                     GenerateNaturalMap();
+                }
 
-                if (GUILayout.Button("Clear Category", GUILayout.Height(26f)))
-                    ClearCategory(CurrentCategory);
-
-                if (GUILayout.Button("Clear All", GUILayout.Height(26f)))
-                    ClearAll();
+                if (GUILayout.Button("Clear Scatter", GUILayout.Height(26f)))
+                {
+                    ClearScatter();
+                }
             }
         }
 
         private void OnSceneGUI(SceneView sceneView)
         {
-            if (database == null)
+            if (brush == null || !showPreview)
+            {
                 return;
+            }
 
             Event current = Event.current;
             Vector3 mouseWorld = GetMouseWorldPosition(current.mousePosition);
 
             Handles.color = new Color(0.2f, 0.85f, 0.95f, 0.9f);
             Handles.DrawWireDisc(mouseWorld, Vector3.forward, brushRadius);
+            DrawPreviewPoints(mouseWorld);
             sceneView.Repaint();
 
             if (current.alt || current.button != 0)
+            {
                 return;
+            }
 
             if (current.type == EventType.MouseDown)
             {
@@ -118,177 +103,130 @@ namespace RIMA.Editor.ScatterBrush
             }
         }
 
+        private void GenerateNaturalMap()
+        {
+            Tilemap tilemap = baseTilemap != null ? baseTilemap : FindFloorTilemap();
+            ScatterBrushPainter activePainter = painter != null ? painter : EnsurePainter(tilemap);
+            if (tilemap == null || activePainter == null)
+            {
+                Debug.LogWarning("[ScatterBrush] Assign a base Tilemap or place one in the scene.");
+                return;
+            }
+
+            Undo.RegisterFullObjectHierarchyUndo(activePainter.gameObject, "Generate Scatter Brush");
+            activePainter.PaintScatter(tilemap, brush, seed);
+            EditorUtility.SetDirty(activePainter);
+            MarkActiveSceneDirty();
+        }
+
         private void PaintAt(Vector3 center)
         {
-            ScatterItem item = GetCurrentItem();
-            if (!CanPlace(item))
+            if (brush == null || brush.entries == null || brush.entries.Count == 0)
+            {
                 return;
+            }
 
-            int count = Mathf.Max(1, Mathf.RoundToInt(brushRadius * brushRadius * Mathf.PI * density));
-            GameObject parent = GetCategoryRoot(item.category);
-
+            Transform root = EnsurePreviewRoot();
+            int count = Mathf.Max(1, Mathf.RoundToInt(brushRadius * brushRadius));
+            Undo.IncrementCurrentGroup();
+            Undo.SetCurrentGroupName("Paint Scatter Brush");
             for (int i = 0; i < count; i++)
             {
+                ScatterEntry entry = brush.entries[i % brush.entries.Count];
+                if (entry == null || entry.sprite == null)
+                {
+                    continue;
+                }
+
                 Vector2 offset = UnityEngine.Random.insideUnitCircle * brushRadius;
-                Vector3 position = new Vector3(center.x + offset.x, center.y + offset.y, 0f);
-                CreateScatterObject(item, parent.transform, position, minScale, maxScale);
+                GameObject scatter = new GameObject("ScatterPaint_" + DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+                Undo.RegisterCreatedObjectUndo(scatter, "Paint Scatter Brush");
+                scatter.transform.SetParent(root, false);
+                scatter.transform.position = center + new Vector3(offset.x, offset.y, 0f);
+                scatter.transform.rotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
+                scatter.transform.localScale = Vector3.one * UnityEngine.Random.Range(0.75f, 1.2f);
+                SpriteRenderer renderer = scatter.AddComponent<SpriteRenderer>();
+                renderer.sprite = entry.sprite;
+                renderer.sortingLayerName = "Scatter";
+                renderer.sortingOrder = 2;
             }
 
             MarkActiveSceneDirty();
         }
 
-        private void GenerateNaturalMap()
+        private static ScatterBrushPainter EnsurePainter(Tilemap tilemap)
         {
-            if (database == null)
-                return;
-
-            Bounds bounds = GetFloorBounds();
-            int created = 0;
-
-            Undo.IncrementCurrentGroup();
-            Undo.SetCurrentGroupName("Generate Natural Scatter Map");
-            int undoGroup = Undo.GetCurrentGroup();
-
-            for (int i = 0; i < Categories.Length; i++)
+            if (tilemap == null)
             {
-                ScatterItem item = database.GetItem(Categories[i]);
-                if (!CanPlace(item))
-                    continue;
+                return null;
+            }
 
-                GameObject parent = GetCategoryRoot(item.category);
-                Vector2 noiseOffset = NoiseOffsets[i];
-                float threshold = NoiseThresholds[i];
-                float categoryDensity = NaturalDensities[i];
+            ScatterBrushPainter existing = tilemap.GetComponentInParent<ScatterBrushPainter>();
+            if (existing != null)
+            {
+                return existing;
+            }
 
-                for (float x = bounds.min.x; x <= bounds.max.x; x += GridStep)
+            GameObject host = new GameObject("ScatterBrushPainter");
+            Undo.RegisterCreatedObjectUndo(host, "Create ScatterBrushPainter");
+            host.transform.SetParent(tilemap.transform.parent != null ? tilemap.transform.parent : tilemap.transform, false);
+            return host.AddComponent<ScatterBrushPainter>();
+        }
+
+        private static void ClearScatter()
+        {
+            foreach (ScatterBrushPainter activePainter in FindObjectsByType<ScatterBrushPainter>(FindObjectsSortMode.None))
+            {
+                Transform layer = activePainter.transform.Find("ScatterLayer");
+                if (layer == null)
                 {
-                    for (float y = bounds.min.y; y <= bounds.max.y; y += GridStep)
-                    {
-                        float noise = Mathf.PerlinNoise((x + noiseOffset.x) * NoiseScale, (y + noiseOffset.y) * NoiseScale);
-                        if (noise <= threshold || UnityEngine.Random.value > categoryDensity)
-                            continue;
+                    continue;
+                }
 
-                        Vector3 position = new Vector3(
-                            x + UnityEngine.Random.Range(-GridStep * 0.35f, GridStep * 0.35f),
-                            y + UnityEngine.Random.Range(-GridStep * 0.35f, GridStep * 0.35f),
-                            0f);
-                        CreateScatterObject(item, parent.transform, position, item.minScale, item.maxScale);
-                        created++;
-                    }
+                Undo.RegisterFullObjectHierarchyUndo(layer.gameObject, "Clear Scatter");
+                for (int i = layer.childCount - 1; i >= 0; i--)
+                {
+                    Undo.DestroyObjectImmediate(layer.GetChild(i).gameObject);
                 }
             }
 
-            Undo.CollapseUndoOperations(undoGroup);
-            MarkActiveSceneDirty();
-            Debug.Log($"[ScatterBrush] Generated {created} natural scatter objects.");
-        }
-
-        private void ClearCategory(string category)
-        {
-            GameObject root = GameObject.Find(RootName);
-            if (root == null)
-                return;
-
-            Transform categoryRoot = root.transform.Find(category);
-            if (categoryRoot == null)
-                return;
-
-            Undo.RegisterFullObjectHierarchyUndo(categoryRoot.gameObject, $"Clear {category} Scatter");
-            for (int i = categoryRoot.childCount - 1; i >= 0; i--)
-                Undo.DestroyObjectImmediate(categoryRoot.GetChild(i).gameObject);
-
-            MarkActiveSceneDirty();
-        }
-
-        private void ClearAll()
-        {
-            GameObject root = GameObject.Find(RootName);
-            if (root == null)
-                return;
-
-            Undo.RegisterFullObjectHierarchyUndo(root, "Clear All Scatter");
-            for (int i = root.transform.childCount - 1; i >= 0; i--)
+            GameObject previewRoot = GameObject.Find(RootName);
+            if (previewRoot != null)
             {
-                Transform categoryRoot = root.transform.GetChild(i);
-                for (int j = categoryRoot.childCount - 1; j >= 0; j--)
-                    Undo.DestroyObjectImmediate(categoryRoot.GetChild(j).gameObject);
+                Undo.DestroyObjectImmediate(previewRoot);
             }
 
             MarkActiveSceneDirty();
         }
 
-        private ScatterItem GetCurrentItem()
+        private void DrawPreviewPoints(Vector3 center)
         {
-            return database != null ? database.GetItem(CurrentCategory) : null;
+            if (brush.entries == null)
+            {
+                return;
+            }
+
+            Handles.color = new Color(0.35f, 1f, 0.55f, 0.7f);
+            int points = Mathf.Min(16, Mathf.Max(0, brush.entries.Count * 4));
+            for (int i = 0; i < points; i++)
+            {
+                float angle = i * 137.5f * Mathf.Deg2Rad;
+                float radius = brushRadius * Mathf.Sqrt((i + 0.5f) / points);
+                Vector3 point = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
+                Handles.DrawSolidDisc(point, Vector3.forward, 0.035f);
+            }
         }
 
-        private bool CanPlace(ScatterItem item)
-        {
-            return item != null && item.sprites != null && item.sprites.Length > 0;
-        }
-
-        private GameObject GetCategoryRoot(string category)
+        private static Transform EnsurePreviewRoot()
         {
             GameObject root = GameObject.Find(RootName);
             if (root == null)
             {
                 root = new GameObject(RootName);
-                Undo.RegisterCreatedObjectUndo(root, "Create ScatterRoot");
+                Undo.RegisterCreatedObjectUndo(root, "Create Scatter Preview Root");
             }
 
-            EnsureCategoryRoots(root);
-
-            Transform categoryRoot = root.transform.Find(category);
-            return categoryRoot != null ? categoryRoot.gameObject : root;
-        }
-
-        private static void EnsureCategoryRoots(GameObject root)
-        {
-            foreach (string category in Categories)
-            {
-                if (root.transform.Find(category) != null)
-                    continue;
-
-                GameObject child = new GameObject(category);
-                Undo.RegisterCreatedObjectUndo(child, $"Create {category} Scatter Root");
-                child.transform.SetParent(root.transform);
-            }
-        }
-
-        private static void CreateScatterObject(ScatterItem item, Transform parent, Vector3 position, float overrideMinScale, float overrideMaxScale)
-        {
-            Sprite sprite = item.sprites[UnityEngine.Random.Range(0, item.sprites.Length)];
-            GameObject scatter = new GameObject($"{item.category}_scatter_{DateTime.Now:yyyyMMddHHmmssfff}");
-            Undo.RegisterCreatedObjectUndo(scatter, "Paint Scatter");
-
-            scatter.transform.SetParent(parent);
-            scatter.transform.position = position;
-
-            float scale = UnityEngine.Random.Range(overrideMinScale, overrideMaxScale);
-            scatter.transform.localScale = Vector3.one * scale;
-
-            if (item.randomRotation)
-                scatter.transform.rotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
-
-            SpriteRenderer renderer = scatter.AddComponent<SpriteRenderer>();
-            renderer.sprite = sprite;
-            renderer.sortingLayerName = "Default";
-            renderer.sortingOrder = item.sortingOrder;
-        }
-
-        private static Bounds GetFloorBounds()
-        {
-            Tilemap floor = FindFloorTilemap();
-            if (floor != null)
-            {
-                floor.CompressBounds();
-                Bounds localBounds = floor.localBounds;
-                Vector3 min = floor.transform.TransformPoint(localBounds.min);
-                Vector3 max = floor.transform.TransformPoint(localBounds.max);
-                return new Bounds((min + max) * 0.5f, max - min);
-            }
-
-            return new Bounds(Vector3.zero, new Vector3(20f, 20f, 0f));
+            return root.transform;
         }
 
         private static Tilemap FindFloorTilemap()
@@ -300,10 +238,13 @@ namespace RIMA.Editor.ScatterBrush
                 foreach (Tilemap tilemap in tilemaps)
                 {
                     if (tilemap != null && tilemap.name.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
                         return tilemap;
+                    }
                 }
             }
-            return null;
+
+            return tilemaps.Length > 0 ? tilemaps[0] : null;
         }
 
         private static Vector3 GetMouseWorldPosition(Vector2 guiPosition)
@@ -316,10 +257,10 @@ namespace RIMA.Editor.ScatterBrush
         private static void MarkActiveSceneDirty()
         {
             if (!Application.isPlaying)
+            {
                 EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            }
         }
-
-        private string CurrentCategory => Categories[Mathf.Clamp(selectedCategory, 0, Categories.Length - 1)];
     }
 }
 #endif
