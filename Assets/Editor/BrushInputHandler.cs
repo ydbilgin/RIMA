@@ -6,8 +6,9 @@ namespace RIMA.Editor
     {
         public Vector2Int GetCellAtMouse(Vector2 mousePos, float cellSize, float canvasPadding, int roomH)
         {
-            int x = Mathf.FloorToInt((mousePos.x - canvasPadding) / cellSize);
-            int invertedY = Mathf.FloorToInt((mousePos.y - canvasPadding) / cellSize);
+            float roundedCellSize = Mathf.Max(1f, Mathf.Round(cellSize));
+            int x = Mathf.FloorToInt((mousePos.x - canvasPadding) / roundedCellSize);
+            int invertedY = Mathf.FloorToInt((mousePos.y - canvasPadding) / roundedCellSize);
             int y = roomH - invertedY - 1;
             return new Vector2Int(x, y);
         }

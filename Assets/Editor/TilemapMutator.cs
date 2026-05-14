@@ -1,35 +1,25 @@
-using System.Collections.Generic;
 using RIMA;
+using RIMA.Systems.Map;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace RIMA.Editor
 {
     public static class TilemapMutator
     {
-        public static int ApplyVertexGrids(List<RimaMapDesignerWindow.MapLayer> layers, int w, int h)
+        public static int ApplyTerrainGrid(Tilemap outputTilemap, RimaBiomePreset biome, int[,] terrainGrid, int w, int h)
         {
-            int painted = 0;
-            if (layers == null)
+            if (outputTilemap == null || biome == null || terrainGrid == null)
             {
-                return painted;
+                return 0;
             }
 
-            foreach (RimaMapDesignerWindow.MapLayer layer in layers)
-            {
-                if (layer == null || !layer.enabled || layer.tilemap == null || layer.tileSet == null || layer.vertGrid == null)
-                {
-                    continue;
-                }
-
-                Undo.RegisterCompleteObjectUndo(layer.tilemap, "Apply RIMA Tilemap Layer");
-                CornerWangPainter.Paint(layer.tilemap, layer.tileSet, layer.vertGrid, w, h);
-                EditorUtility.SetDirty(layer.tilemap);
-                painted++;
-            }
-
-            Debug.Log("[TilemapMutator] Applied " + painted + " layers");
-            return painted;
+            Undo.RegisterCompleteObjectUndo(outputTilemap, "Apply RIMA Map");
+            CornerWangPainter.Paint(outputTilemap, biome, terrainGrid, w, h);
+            EditorUtility.SetDirty(outputTilemap);
+            Debug.Log("[TilemapMutator] Applied single terrain grid");
+            return 1;
         }
     }
 }
