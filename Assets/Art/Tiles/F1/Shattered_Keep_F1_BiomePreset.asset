@@ -29,3 +29,34 @@ MonoBehaviour:
   scatterDensity: 0.2
   useCliffFront: 1
   useCliffTop: 1
+  terrains:
+  - id: 0
+    name: Floor
+    paletteColor: {r: 0.23921569, g: 0.19607843, b: 0.1882353, a: 1}
+    baseTile: {fileID: 11400000, guid: dc617d2bdefe3ec4f99bc5f05c495a04, type: 2}
+    baseTileSource: {fileID: 11400000, guid: 69e58271c19f87a4ea4d413e26ebdada, type: 2}
+  - id: 1
+    name: Wall
+    paletteColor: {r: 0.55, g: 0.36, b: 0.22, a: 1}
+    baseTile: {fileID: 11400000, guid: 51384e245b10b1c4a8c0ef743c55c3e0, type: 2}
+    baseTileSource: {fileID: 11400000, guid: 69e58271c19f87a4ea4d413e26ebdada, type: 2}
+  - id: 2
+    name: Path
+    paletteColor: {r: 0.62, g: 0.58, b: 0.45, a: 1}
+    baseTile: {fileID: 11400000, guid: 72261a0291092114bb7c5686754105d0, type: 2}
+    baseTileSource: {fileID: 11400000, guid: e1ce00521ee60f04da54d4435df6c87d, type: 2}
+  - id: 3
+    name: Rift
+    paletteColor: {r: 0.18, g: 0.66, b: 0.88, a: 1}
+    baseTile: {fileID: 11400000, guid: f4cb13e01a9c68b459e785fc47edfb33, type: 2}
+    baseTileSource: {fileID: 11400000, guid: 6193018753a63934b93cfcc75e27b11a, type: 2}
+  tilesetPairings:
+  - lowerTerrainId: 0
+    upperTerrainId: 1
+    tileSet: {fileID: 11400000, guid: 69e58271c19f87a4ea4d413e26ebdada, type: 2}
+  - lowerTerrainId: 0
+    upperTerrainId: 2
+    tileSet: {fileID: 11400000, guid: e1ce00521ee60f04da54d4435df6c87d, type: 2}
+  - lowerTerrainId: 0
+    upperTerrainId: 3
+    tileSet: {fileID: 11400000, guid: 6193018753a63934b93cfcc75e27b11a, type: 2}

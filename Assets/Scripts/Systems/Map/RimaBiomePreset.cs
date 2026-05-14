@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RIMA.Systems.Map
@@ -24,5 +25,32 @@ namespace RIMA.Systems.Map
 
         public bool useCliffFront = true;
         public bool useCliffTop = true;
+
+        public List<MapTerrain> terrains = new List<MapTerrain>();
+        public List<TilesetPairing> tilesetPairings = new List<TilesetPairing>();
+
+        public TilesetPairing FindPairing(int t1, int t2)
+        {
+            foreach (TilesetPairing pairing in tilesetPairings)
+            {
+                if (pairing == null)
+                {
+                    continue;
+                }
+
+                if ((pairing.lowerTerrainId == t1 && pairing.upperTerrainId == t2) ||
+                    (pairing.lowerTerrainId == t2 && pairing.upperTerrainId == t1))
+                {
+                    return pairing;
+                }
+            }
+
+            return null;
+        }
+
+        public bool IsValidPair(int t1, int t2)
+        {
+            return t1 == t2 || FindPairing(t1, t2) != null;
+        }
     }
 }

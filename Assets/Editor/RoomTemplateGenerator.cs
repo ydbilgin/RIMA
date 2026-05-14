@@ -11,6 +11,7 @@ namespace RIMA.Editor
         public const string FloorWallTileSetPath = "Assets/Art/Tiles/F1/Generated/FloorWall_CornerWangTileSet.asset";
         public const string RubblePathTileSetPath = "Assets/Art/Tiles/F1/Generated/RubblePath_CornerWangTileSet.asset";
         public const string DebrisRiftTileSetPath = "Assets/Art/Tiles/F1/Generated/DebrisRift_CornerWangTileSet.asset";
+        public const string BiomePresetPath = "Assets/Art/Tiles/F1/Shattered_Keep_F1_BiomePreset.asset";
 
         public static readonly string[] TemplateNames =
         {
@@ -45,8 +46,8 @@ namespace RIMA.Editor
             foreach (string name in TemplateNames)
             {
                 var data = LoadTemplate(name);
-                Debug.Assert(data.layers != null && data.layers.Length >= 2, name + " missing layers");
-                Debug.Assert(data.layers[0].vertexData.Length == (data.width + 1) * (data.height + 1), name + " invalid vertex count");
+                Debug.Assert(data.terrainGrid != null, name + " missing terrain grid");
+                Debug.Assert(data.terrainGrid.Length == (data.width + 1) * (data.height + 1), name + " invalid terrain count");
             }
 
             Debug.Log("All 8 templates valid");
@@ -243,30 +244,12 @@ namespace RIMA.Editor
 
         private static RimaMapDesignerWindow.MapSaveData Data(int w, int h, int[,] baseGrid, int[,] path, int[,] rift)
         {
-            if (rift == null)
-            {
-                return new RimaMapDesignerWindow.MapSaveData
-                {
-                    width = w,
-                    height = h,
-                    layers = new[]
-                    {
-                        Layer("Base", FloorWallTileSetPath, true, baseGrid, w, h),
-                        Layer("Path", RubblePathTileSetPath, true, path, w, h)
-                    }
-                };
-            }
-
             return new RimaMapDesignerWindow.MapSaveData
             {
                 width = w,
                 height = h,
-                layers = new[]
-                {
-                    Layer("Base", FloorWallTileSetPath, true, baseGrid, w, h),
-                    Layer("Path", RubblePathTileSetPath, true, path, w, h),
-                    Layer("Rift", DebrisRiftTileSetPath, true, rift, w, h)
-                }
+                terrainGrid = FlattenTerrainGrid(baseGrid, path, rift, w, h),
+                biomePresetGuid = AssetDatabase.AssetPathToGUID(BiomePresetPath)
             };
         }
 
@@ -279,6 +262,32 @@ namespace RIMA.Editor
                 enabled = enabled,
                 vertexData = RoomVariationProcessor.Flatten(grid, w, h)
             };
+        }
+
+        private static int[] FlattenTerrainGrid(int[,] baseGrid, int[,] path, int[,] rift, int w, int h)
+        {
+            int[] values = new int[(w + 1) * (h + 1)];
+            int index = 0;
+            for (int y = 0; y <= h; y++)
+            {
+                for (int x = 0; x <= w; x++)
+                {
+                    int terrainId = baseGrid != null && baseGrid[x, y] != 0 ? 1 : 0;
+                    if (path != null && path[x, y] != 0)
+                    {
+                        terrainId = 2;
+                    }
+
+                    if (rift != null && rift[x, y] != 0)
+                    {
+                        terrainId = 3;
+                    }
+
+                    values[index++] = terrainId;
+                }
+            }
+
+            return values;
         }
 
         private static int[,] WallGrid(int w, int h)
