@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40218820cfd4250afdfbcfdd0801a92, type: 3}
+  m_Name: RoomRecipe_ShatteredKeep_Combat_01
+  m_EditorClassIdentifier: 
+  size: {x: 16, y: 12}
+  allowedTerrains:
+  - {fileID: 11400000, guid: 0b115c4770e4428d911bdfdfd93bb938, type: 2}
+  - {fileID: 11400000, guid: 17a9f43df0a24c759419c2c170f2afea, type: 2}
+  - {fileID: 11400000, guid: 6f6a26475f314a5db33c4583151378f3, type: 2}
+  encounters:
+  - gridPos: {x: 8, y: 6}
+    slotType: spawn
+    prefabHint: {fileID: 0}
+  - gridPos: {x: 4, y: 8}
+    slotType: loot
+    prefabHint: {fileID: 0}
+  - gridPos: {x: 12, y: 4}
+    slotType: objective
+    prefabHint: {fileID: 0}
+  biome: {fileID: 11400000, guid: c4a33d56caad43d69213dec52ab7e5a7, type: 2}
+  patchAtlas: {fileID: 11400000, guid: 17238907f8b04df4aa095496b5bcf3f1, type: 2}
+  scatterBrush: {fileID: 11400000, guid: f2d9fcdff33a4e2f94df70d8696399b8, type: 2}
+  seed: 78101
