@@ -1,0 +1,28 @@
+{
+  "name": "rubble_path",
+  "tileSize": 32,
+  "upper": "worn path",
+  "spritesheet": "spritesheet.png",
+  "gridRows": 4,
+  "cornerKeyToSpriteIndex": [
+    6,
+    7,
+    10,
+    9,
+    2,
+    11,
+    4,
+    15,
+    5,
+    14,
+    1,
+    8,
+    3,
+    0,
+    13,
+    12
+  ],
+  "id": "49913501-fd93-41df-8a9f-f24e97a7b76c",
+  "gridCols": 4,
+  "lower": "rubble floor"
+}

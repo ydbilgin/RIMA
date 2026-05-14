@@ -1,20 +1,39 @@
 # CURRENT_STATUS
-**2026-05-14 — S71 Sonnet gece orchestrator | Faz 1 P0 Codex TAMAMLANDI | Kullanıcı uyandığında: animasyon onayı + PixelLab batch**
+**2026-05-14 — S72 Sonnet orchestrator | Karar #131/132/133 LOCK | Corner Wang Pipeline + Map Designer + Game UI dispatch çalışıyor**
 
 > **Path convention:** `~/.ccs/.../memory/` = user-level auto-memory (Claude auto-loads via STUB MODE). `MEMORY/` (project root) = Codex/Gemini shared. Below references use full path for clarity when ambiguous.
 
-## S72 İLK ADIMLAR (Yeni session — kullanıcı uyandığında)
+## S73 İLK ADIMLAR (Yeni session)
 
 1. **CURRENT_STATUS oku** (bu dosya)
-2. **Tüm Codex taskları tamamlandı** — read_console ile compile durumu kontrol et
-3. **Demo sahne test et:** Unity'de `Assets/Scenes/Demo/_FazMVP_Demo.unity` aç → `GenerateBiomeLayered` context menu → sonuç kontrol
-4. **Animation spec onayı:** `STAGING/animation_system_spec_LOCKED.md` oku → PixelLab batch kararı ver
-5. **Tile asset pack karar:** `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io satın alma
-6. **PixelLab idle batch:** `STAGING/idle_batch_class_mob_create_image_pro.md` — 10 class + 6 mob (krediler yenilince)
+2. **read_console** — compile durumu kontrol
+3. **Map Designer test:** Unity'de `RIMA > Tools > Map Designer` aç → vertex grid çalışıyor mu kontrol et
+4. **Wang TileSet oluştur:** `RIMA > Tools > Create Corner Wang TileSets` → FloorWall + RubblePath SO'ları oluştur
+5. **Game UI test:** `RIMA > Tools > Create UI Scenes` → MainMenu + CharacterSelect sahneleri
+6. **Map Designer'da tile thumbnail** — SO bağla, layer ekle, "Make Rectangular Room" + Apply
 
-**Öncelik sırası:** Demo test → animation spec onayı → PixelLab batch OR tile asset pack karar
+**S72 dispatch edilen (çalışıyor/tamamlandı):**
+- Karar #131 CornerWangPainter system — yasinderyabilgin profile
+- Karar #132 Map Designer EditorWindow — laurethgame profile
+- Karar #133 Game UI screens — queue (A/B bitince dispatch)
+- 6 tileset indirildi → `Assets/Art/Tiles/F1/Tilesets/`
 
 **Codex tamamlanan (S71 gece):** 8 commit — selout, beat3, weapondb, biome wiring, player prefab, Karar #119 ASCII parser, demo scene
+
+## S72 LOCKED Decisions (2026-05-14)
+
+### LOCKED bu session
+- **Karar #131 LOCK** — Corner Wang Pipeline: PixelLab JSON→CornerWangTileSetSO→CornerWangPainter→Tilemap. Tüm mapler agent-driven `int[,]` vertex grid. Universal lookup `{6,7,10,9,2,11,4,15,5,14,1,8,3,0,13,12}`. 6 tileset hazır. Sınırsız layer/tileset. Hem zemin hem yükseklik geçişleri.
+- **Karar #132 LOCK** — Map Designer EditorWindow (RIMA > Tools > Map Designer). Multi-layer vertex editör, Wang thumbnails, procedural gen, save/load JSON, Apply to Scene.
+- **Karar #133 LOCK** — Game UI: MainMenu + CharacterSelect scenes. Koyu rift paleti, 10 sınıf seçici, Build Settings 0=MainMenu/1=CharacterSelect/2=FazMVP_Demo.
+
+### Tilesetler (S72 indirilen, public backblaze URL)
+- `Assets/Art/Tiles/F1/Tilesets/rubble_path/` — ID: 49913501 (lower=rubble, upper=path)
+- `Assets/Art/Tiles/F1/Tilesets/floor_wall/` — ID: 9ffbb4d1 (lower=floor, upper=wall) **← ANA DUNGEON**
+- `Assets/Art/Tiles/F1/Tilesets/debris_rift/` — ID: 4c962284 (lower=debris, upper=rift)
+- `Assets/Art/Tiles/F1/Tilesets/cold_floor_wall/` — ID: bdca2623 (lower=cold floor, upper=wall edge)
+- `Assets/Art/Tiles/F1/Tilesets/slate_mineral/` — ID: d43914a8 (lower=cold slate, upper=mineral)
+- `Assets/Art/Tiles/F1/Tilesets/mauve_hexagon/` — ID: a1b63282 (lower=warm mauve, upper=hexagon)
 
 ## S70 LOCKED Decisions (2026-05-14)
 
@@ -60,13 +79,22 @@ Detay: `STAGING/karar_126_to_130_organic_pipeline.md`
 - **LayeredRoomPainter PaintBiome()** — `commit 804a3f6` ✓ (4-layer Wang+biome, wallFront/wallTop routing)
 - **Player.prefab + HandAnchorAttach wiring** — `commit c33c5bd` ✓ (Player.prefab, CharacterSelectScreen scene fix)
 
-### ✅ TAMAMLANAN (S71 gece — 3. batch)
+### ✅ TAMAMLANDI (S71 gece — 3. batch)
 - **Karar #119 AITilemapImporter** — `commit 256eb6d` ✓ (TileAssetMetadata.charKey + EditorWindow RIMA > Tools > AI Tilemap Importer, 3-layer parsing)
 - **_FazMVP_Demo.unity Demo Scene** — `commit 8f922c5` ✓ (Tilemap stack + Shattered Keep biome preset + Player.prefab spawned)
 
-### ⏳ SIRADAKI (kullanıcı için)
+### ✅ TAMAMLANDI (S72)
+- **Karar #131 CornerWangPainter** — `commit 4f8cf5a` ✓ — BaseTilemap 192 tile painted, 0 missing. FloorWall SO 16/16, RubblePath SO 16/16.
+- **Karar #132 Map Designer UI** — `commit 0255b47` ✓ — RimaMapDesignerWindow: vertex grid, Brush/Fill/Rectangle, MakeRoom, PerlinNoise, SaveMap, LoadMap, ApplyToScene.
+- **6 PixelLab Tileset indirildi** — `Assets/Art/Tiles/F1/Tilesets/` (rubble_path, floor_wall, debris_rift, cold_floor_wall, slate_mineral, mauve_hexagon) ✓
+
+### ⏳ ÇALIŞIYOR (S72 — şu an)
+- **Karar #133 Game UI** — yasinderyabilgin dispatch çalışıyor (MainMenu + CharacterSelect scenes, STAGING/codex_game_ui_screens.md)
+
+### ⏳ KULLANICI İÇİN
+- **Map Designer test** — `RIMA > Tools > Map Designer` aç, Wang SO bağla, map çiz, kaydet
+- **Game UI test** — `RIMA > Tools > Create UI Scenes` → MainMenu → CharacterSelect flow test
 - **Animation spec LOCK onayı** — `STAGING/animation_system_spec_LOCKED.md` okuyup PixelLab batch başlat
-- **Tile asset pack karar** — `STAGING/tile_asset_pack_research.md` → RafaelMatos Crypt + Old Prison itch.io
 - **PixelLab idle batch** — `STAGING/idle_batch_class_mob_create_image_pro.md` (10 class + 6 mob, krediler yenilince)
 
 ## 🎬 Video Analiz DONE
@@ -165,6 +193,23 @@ seam_crawler, plate_widow, relic_caster, rift_hound (canonical, `rift_gound` fil
 - ~~_IsoGame.unity yanlış scene?~~ → Silindi, RoomPipelineTest tek scene Build Settings'te
 
 ## Session History
+
+### S72 (2026-05-14) — Sonnet orchestrator — Corner Wang Pipeline + Map Designer + Game UI + 6 Tileset indir
+
+**Karar LOCK:** #131 Corner Wang Pipeline | #132 Map Designer UI | #133 Game UI screens
+
+**Teknik keşif S72:**
+- PixelLab MCP ile tüm tilesetler görünüyor (6 topdown tileset)
+- Corner Wang lookup tablosu tüm PixelLab tilesetleri için AYNI: `{6,7,10,9,2,11,4,15,5,14,1,8,3,0,13,12}`
+- Hem zemin geçişi hem yükseklik geçişi aynı corner Wang sistemiyle → sınırsız kullanım
+- Tileset chaining (upper ID → next lower base) = sorunsuz geçiş
+- 6 spritesheet public backblaze URL'den indirildi
+
+**Dispatch (çalışıyor):**
+- yasinderyabilgin: Karar #131 CornerWangPainter
+- laurethgame: Karar #132 Map Designer EditorWindow
+
+**Kullanılan profiller:** yasinderyabilgin + laurethgame
 
 ### S71 gece (2026-05-14) — Sonnet overnight orchestrator — Faz 1 P0 Codex tamamlama + biome wiring
 

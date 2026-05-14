@@ -1,0 +1,28 @@
+{
+  "name": "floor_wall",
+  "tileSize": 32,
+  "upper": "broken stone wall",
+  "spritesheet": "spritesheet.png",
+  "gridRows": 4,
+  "cornerKeyToSpriteIndex": [
+    6,
+    7,
+    10,
+    9,
+    2,
+    11,
+    4,
+    15,
+    5,
+    14,
+    1,
+    8,
+    3,
+    0,
+    13,
+    12
+  ],
+  "id": "9ffbb4d1-79d0-441d-8c23-e1df62e25644",
+  "gridCols": 4,
+  "lower": "rubble floor"
+}

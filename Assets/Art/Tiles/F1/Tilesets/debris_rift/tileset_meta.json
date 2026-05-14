@@ -1,0 +1,28 @@
+{
+  "name": "debris_rift",
+  "tileSize": 32,
+  "upper": "rift crack",
+  "spritesheet": "spritesheet.png",
+  "gridRows": 4,
+  "cornerKeyToSpriteIndex": [
+    6,
+    7,
+    10,
+    9,
+    2,
+    11,
+    4,
+    15,
+    5,
+    14,
+    1,
+    8,
+    3,
+    0,
+    13,
+    12
+  ],
+  "id": "4c962284-90f4-43ee-8192-2b108a77b6ca",
+  "gridCols": 4,
+  "lower": "dark debris"
+}
