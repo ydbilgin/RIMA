@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
-
 # S75-C — Object Layer (Faz 1.5 Stub Impl)
 
 **Effort:** medium
@@ -162,7 +160,3 @@ Eğer henüz yoksa oluştur:
 - ApplyToScene instantiates prefabs at world positions
 - Placeholder prefabs: PlayerSpawnPoint, MobSpawnPoint
 ```
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.

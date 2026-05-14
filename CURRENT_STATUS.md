@@ -1,5 +1,50 @@
 # CURRENT_STATUS
-**2026-05-14 — S74 KAPANIŞ | Map Designer PixelLab-style UI canlı çalışıyor, 3 LOCK dosyası yazıldı, asset batch user'a hazır**
+**2026-05-15 — S75 OTONOM KAPANIŞ | 6 phase chain bitti, user okuldan dönüşte verify + PixelLab gen batch**
+
+> **Close report:** `STAGING/s75_close_report.md` — tüm detaylar burada.
+
+---
+
+## S75 Commit Chain (6 commits)
+
+| Commit | Phase | Açıklama |
+|---|---|---|
+| `9f3ed68` | S75-A | Map Designer UX deep PixelLab parity (12 fix) |
+| `00fce23` | S75-B | Multi-variant per Wang key (528 stub variants) |
+| `b94218f` | S75-C | Object Layer Faz 1.5 stub impl |
+| `8ac282c` | S75-D | CharacterClass + MobDefinition SO scaffold |
+| `410b85a` | S75-E | Stub placeholder sprite generator |
+| `<S75-F>` | S75-F | This close + s75_close_report |
+
+---
+
+## User Verification Path (önce bunu yap)
+
+1. **Unity tam restart** (close + reopen) — sticky scriptCompilationFailed temizlensin
+2. `RIMA > Tools > Map Designer` aç → 32×24 canvas + tile thumbnails + 3-line status
+3. `RIMA > Tools > Initialize Class + Mob Definition Assets` → 16 SO oluşur
+4. `RIMA > Tools > Generate Placeholder Sprites` → renkli placeholder sprite'lar SO'lara bağlanır
+5. Map Designer'da test paint → "Upper/lower terrain mantığı PixelLab gibi mi?" sorusunu yanıtla
+
+## Sonraki Adım (verify sonrası)
+
+**PixelLab Create Image Pro batch — 27 sprite gen ≈ 162 credit:**
+- `STAGING/character_idle_LOCK_S74.md` — 10 class prompt
+- `STAGING/new_mobs_64px_LOCK_S74.md` — 6 yeni mob
+- `STAGING/weapons_pixel_sizes_LOCK_S74.md` — 11 weapon
+
+Generate → import → Inspector ile placeholder sprite'ı PixelLab sprite ile replace et.
+
+---
+
+## Kalan Bilinen Sorun
+
+- Unity Editor S75 commits sırasında scriptCompilationFailed sticky (S75-A note). Tam restart sonrası temizlenir.
+- Codex S75-B auto-commit miss (manuel kurtarıldı), S75-D + S75-E 20-min timeout (Sonnet impl). Code kalitesi etkilenmedi (dotnet build PASS tüm phase'lerde).
+
+---
+
+## S74 (önceki session)
 
 > **Path convention:** `~/.ccs/.../memory/` = user-level auto-memory. `MEMORY/` (project root) = Codex/Gemini shared.
 
@@ -51,12 +96,39 @@
 
 ---
 
-## S75 (Sıradaki Session) Sıradaki
+## 🤖 S75 OTONOM EXECUTION (user AFK, Sonnet orchestrator drives Codex chain)
 
-- **Multi-variant per Wang key** (task #4 pending) — PixelLab Pro Web UI raggedness 50% ek varyantlar
-- 8-dir derivation Create Character pipeline (ayrı step)
-- Object layer support (NPC/prop placement, Faz 1.5)
-- BiomePreset CustomEditor (Faz 1.5 opsiyonel ergonomi)
+**Plan dosyası:** `STAGING/s75_autonomous_plan.md`
+**Started:** 2026-05-14 night
+**User feedback (verbatim):** "bu tam istediğim gibi pixellabdaki gibi çalışmıyor. ben şimdi okula gidecem... otomasyona bağla"
+
+### 6 Phase Sequential Codex Dispatch
+
+| Phase | Task spec | Status |
+|---|---|---|
+| **S75-A** UX deep parity | `codex_s75_a_mapdesigner_ux_deep.md` | 🔄 RUNNING (bg b3hs1xsbh) |
+| **S75-B** Multi-variant Wang | `codex_s75_b_multivariant_wang.md` | ⏳ Queued |
+| **S75-C** Object layer (Faz 1.5) | `codex_s75_c_object_layer.md` | ⏳ Queued |
+| **S75-D** Class + Mob SO scaffold | `codex_s75_d_class_mob_so.md` | ⏳ Queued |
+| **S75-E** Stub placeholder sprites | `codex_s75_e_stub_sprites.md` | ⏳ Queued |
+| **S75-F** Integration test + close | `codex_s75_f_integration_test.md` | ⏳ Queued |
+
+### S75-A Hedefi (12 fix)
+Canvas 32×24, Auto-Fit, real tile hover preview, brush radius outline, Bresenham drag-paint, cursor thumbnail, pairing info panel, palette pairing peer hint, 3-line status, smooth zoom, optional BiomeQuickEditorWindow.
+
+### Otonom workflow
+Her Codex phase auto-commit, Sonnet UnityMCP test (compile + console error + screenshot), sonra sonraki dispatch. Fail durumunda max 2 retry. Tüm chain ~4-6 saat estimate.
+
+User dönünce: `git log --oneline -10` ile tüm S75 commit chain görünür. `STAGING/s75_close_report.md` final özet.
+
+---
+
+## S76 Handoff Sıradaki (after S75)
+
+- 8-dir derivation Create Character pipeline (PixelLab batch sonrası)
+- Karar #122 T2/T3/T4 Echo Resonance (cross-class)
+- Karar #126-130 organic pipeline P0 Faz 1 implementation
+- Final Faz MVP demo build
 
 ---
 

@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
-
 # S75-E — Stub Placeholder Sprites
 
 **Effort:** small
@@ -93,7 +91,3 @@ Font bitmap source: built-in basic 5×7 font (e.g., Hexagon or any simple bitmap
 - Auto-assigned to CharacterClassDefinition + MobDefinition asset idleSprite/weaponSprite
 - Allows gameplay test without real PixelLab gen (user replaces later)
 ```
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
