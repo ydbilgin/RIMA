@@ -22,6 +22,27 @@ namespace RIMA.Editor
         private const float VertexRadius = 5f;
         private const float CanvasPadding = 24f;
         private const string MapDataFolder = "Assets/RIMA_MapData";
+        private static readonly string[] CornerKeyNames =
+        {
+            "All Floor",
+            "SE Corner",
+            "SW Corner",
+            "S Edge",
+            "NE Corner",
+            "E Edge",
+            "NE↔SW Diag",
+            "No NW",
+            "NW Corner",
+            "NW↔SE Diag",
+            "W Edge",
+            "No NE",
+            "N Edge",
+            "No SW",
+            "No SE",
+            "All Wall"
+        };
+
+        private static readonly int[] KeyToIndex = { 6, 7, 10, 9, 2, 11, 4, 15, 5, 14, 1, 8, 3, 0, 13, 12 };
 
         private enum PaintTool
         {
@@ -56,6 +77,7 @@ namespace RIMA.Editor
         [SerializeField] private float noiseDensity = 0.45f;
         [SerializeField] private int noiseSeed = 12345;
         [SerializeField] private bool proceduralFoldout = true;
+        [SerializeField] private bool tilePreviewFoldout = true;
         [SerializeField] private PaintTool activeTool = PaintTool.Brush;
         [SerializeField] private List<MapLayer> layers = new List<MapLayer>();
 
@@ -268,6 +290,9 @@ namespace RIMA.Editor
             currentPaintValue = GUILayout.Toolbar(currentPaintValue == 0 ? 0 : 1, new[] { "Floor (0)", "Wall (1)" });
 
             EditorGUILayout.Space(8f);
+            DrawTilePreviewPanel(layers.Count > 0 ? layers[activeLayerIndex] : null);
+
+            EditorGUILayout.Space(8f);
             proceduralFoldout = EditorGUILayout.Foldout(proceduralFoldout, "Procedural Generation", true);
             if (proceduralFoldout)
             {
@@ -333,6 +358,138 @@ namespace RIMA.Editor
             }
 
             EditorGUILayout.EndVertical();
+        }
+
+        private void DrawTilePreviewPanel(MapLayer activeLayer)
+        {
+            tilePreviewFoldout = EditorGUILayout.Foldout(tilePreviewFoldout, "Wang Tile Preview", true);
+            if (!tilePreviewFoldout)
+            {
+                return;
+            }
+
+            if (activeLayer == null || activeLayer.tileSet == null)
+            {
+                EditorGUILayout.HelpBox("Assign a CornerWangTileSetSO to the active layer to see previews.", MessageType.Info);
+                return;
+            }
+
+            CornerWangTileSetSO ts = activeLayer.tileSet;
+            EditorGUILayout.LabelField("Layer: " + activeLayer.name, EditorStyles.miniLabel);
+            EditorGUILayout.LabelField("Lower: " + ts.lowerTerrainLabel + "  |  Upper: " + ts.upperTerrainLabel, EditorStyles.miniLabel);
+
+            const float previewSize = 40f;
+            const float labelHeight = 28f;
+            const float cellW = previewSize + 4f;
+            const float cellH = previewSize + labelHeight;
+            const int cols = 4;
+            GUIStyle labelStyle = new GUIStyle(EditorStyles.miniLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                wordWrap = true
+            };
+
+            for (int key = 0; key < CornerKeyNames.Length; key++)
+            {
+                int col = key % cols;
+                if (col == 0)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                }
+
+                int spriteIdx = KeyToIndex[key];
+                TileBase tile = ts.tiles != null && spriteIdx >= 0 && spriteIdx < ts.tiles.Length ? ts.tiles[spriteIdx] : null;
+                Texture preview = GetTilePreview(tile);
+                Color bg = GetTilePreviewBackground(key);
+                string tooltip = GetCornerTooltip(key, spriteIdx, activeLayer.name, ts.lowerTerrainLabel, ts.upperTerrainLabel);
+
+                GUILayout.BeginVertical(GUILayout.Width(cellW));
+                Rect bgRect = GUILayoutUtility.GetRect(cellW, cellH);
+                EditorGUI.DrawRect(bgRect, bg);
+
+                Rect previewRect = new Rect(bgRect.x + 2f, bgRect.y + 2f, previewSize, previewSize);
+                if (preview != null)
+                {
+                    GUI.DrawTexture(previewRect, preview, ScaleMode.ScaleToFit);
+                }
+                else
+                {
+                    EditorGUI.DrawRect(previewRect, new Color(0.15f, 0.15f, 0.15f, 0.8f));
+                }
+
+                Rect labelRect = new Rect(bgRect.x, bgRect.y + previewSize + 2f, cellW, labelHeight);
+                GUI.Label(labelRect, new GUIContent(CornerKeyNames[key], tooltip), labelStyle);
+
+                GUILayout.EndVertical();
+
+                if (col == cols - 1)
+                {
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+
+            if (Event.current.type == EventType.Repaint)
+            {
+                Repaint();
+            }
+        }
+
+        private Texture GetTilePreview(TileBase tile)
+        {
+            if (tile == null)
+            {
+                return null;
+            }
+
+            Texture preview = AssetPreview.GetAssetPreview(tile);
+            if (preview != null)
+            {
+                return preview;
+            }
+
+            return EditorGUIUtility.ObjectContent(tile, typeof(TileBase)).image;
+        }
+
+        private Color GetTilePreviewBackground(int key)
+        {
+            bool isSelectedFloor = currentPaintValue == 0 && key == 0;
+            bool isSelectedWall = currentPaintValue != 0 && key == 15;
+            if (isSelectedFloor)
+            {
+                return new Color(0.16f, 0.28f, 0.45f, 0.5f);
+            }
+
+            if (isSelectedWall)
+            {
+                return new Color(0.45f, 0.28f, 0.16f, 0.5f);
+            }
+
+            if (key == 0)
+            {
+                return new Color(0.16f, 0.28f, 0.45f, 0.28f);
+            }
+
+            if (key == 15)
+            {
+                return new Color(0.45f, 0.28f, 0.16f, 0.28f);
+            }
+
+            return key < 8 ? new Color(0.16f, 0.28f, 0.45f, 0.2f) : new Color(0.45f, 0.28f, 0.16f, 0.2f);
+        }
+
+        private static string GetCornerTooltip(int key, int spriteIdx, string layerName, string lowerLabel, string upperLabel)
+        {
+            return string.Format(
+                "{0}: NW {1}, NE {2}, SW {3}, SE {4}\nLayer: {5}\nLower: {6}\nUpper: {7}\nSprite Index: {8}",
+                CornerKeyNames[key],
+                (key & 8) != 0 ? "upper" : "lower",
+                (key & 4) != 0 ? "upper" : "lower",
+                (key & 2) != 0 ? "upper" : "lower",
+                (key & 1) != 0 ? "upper" : "lower",
+                layerName,
+                lowerLabel,
+                upperLabel,
+                spriteIdx);
         }
 
         private void DrawGridCanvas(Rect viewRect)

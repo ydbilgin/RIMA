@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9aa369bb6ab2a284fab77a45ed0fde39, type: 3}
   m_Name: FloorWall_CornerWangTileSet
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.CornerWangTileSetSO
+  lowerTerrainLabel: Rubble Floor
+  upperTerrainLabel: Broken Stone Wall
   tiles:
   - {fileID: 11400000, guid: dc617d2bdefe3ec4f99bc5f05c495a04, type: 2}
   - {fileID: 11400000, guid: 6b3fcd19e4339584ba2cbedec7b9950a, type: 2}
