@@ -32,11 +32,21 @@ namespace RIMA.MapDesigner
             int created = 0;
             int width = room.walkable.GetLength(0);
             int height = room.walkable.GetLength(1);
+            float centerReduction = Mathf.Clamp01(atlas.centerPathDensityReduction);
+            float avoidRadiusSq = atlas.encounterAvoidRadius * atlas.encounterAvoidRadius;
+            var placedPerEntry = new List<List<Vector2>>(atlas.patches.Count);
+            for (int i = 0; i < atlas.patches.Count; i++) placedPerEntry.Add(new List<Vector2>());
+
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
                     if (!room.walkable[x, y])
+                    {
+                        continue;
+                    }
+
+                    if (IsNearEncounter(x, y, room.encounters, avoidRadiusSq))
                     {
                         continue;
                     }
@@ -51,7 +61,7 @@ namespace RIMA.MapDesigner
 
                         Vector2Int cell = new Vector2Int(x, y);
                         float density = atlas.edgeBiased
-                            ? DensityForCell(cell, room, entry.density * Mathf.Max(0f, atlas.wallProximityFactor), distances, atlas.featureMask, atlas.featureMaskWeight)
+                            ? DensityForCell(cell, room, entry.density * Mathf.Max(0f, atlas.wallProximityFactor), distances, atlas.featureMask, atlas.featureMaskWeight, centerReduction)
                             : ApplyFeatureDensity(cell, room, entry.density, atlas.featureMask, atlas.featureMaskWeight);
 
                         if (Hash01(seed, x, y, i) > Mathf.Clamp01(density))
@@ -59,10 +69,39 @@ namespace RIMA.MapDesigner
                             continue;
                         }
 
-                        CreatePatch(root, baseTilemap, new Vector2Int(x, y), entry, seed, i, created++, layerName, order, offsetJitter);
+                        Vector2 cellCenter = new Vector2(x + 0.5f, y + 0.5f);
+                        if (entry.minDistance > 0f && IsTooClose(cellCenter, placedPerEntry[i], entry.minDistance))
+                        {
+                            continue;
+                        }
+
+                        CreatePatch(root, baseTilemap, cell, entry, seed, i, created++, layerName, order, offsetJitter);
+                        placedPerEntry[i].Add(cellCenter);
                     }
                 }
             }
+        }
+
+        private static bool IsNearEncounter(int x, int y, List<EncounterPlacement> encounters, float avoidRadiusSq)
+        {
+            if (avoidRadiusSq <= 0f || encounters == null || encounters.Count == 0) return false;
+            for (int i = 0; i < encounters.Count; i++)
+            {
+                int dx = encounters[i].gridPos.x - x;
+                int dy = encounters[i].gridPos.y - y;
+                if (dx * dx + dy * dy <= avoidRadiusSq) return true;
+            }
+            return false;
+        }
+
+        private static bool IsTooClose(Vector2 cell, List<Vector2> placed, float minDistance)
+        {
+            float minSq = minDistance * minDistance;
+            for (int i = 0; i < placed.Count; i++)
+            {
+                if ((placed[i] - cell).sqrMagnitude < minSq) return true;
+            }
+            return false;
         }
 
         public static float DensityForCell(Vector2Int cell, RoomData room, float baseDensity)
@@ -77,6 +116,11 @@ namespace RIMA.MapDesigner
 
         public static float DensityForCell(Vector2Int cell, RoomData room, float baseDensity, int[,] distanceMap, FeatureMaskSO featureMask, float featureMaskWeight)
         {
+            return DensityForCell(cell, room, baseDensity, distanceMap, featureMask, featureMaskWeight, 0.1f);
+        }
+
+        public static float DensityForCell(Vector2Int cell, RoomData room, float baseDensity, int[,] distanceMap, FeatureMaskSO featureMask, float featureMaskWeight, float centerPathReduction)
+        {
             if (!IsWalkable(room, cell.x, cell.y))
             {
                 return 0f;
@@ -86,7 +130,7 @@ namespace RIMA.MapDesigner
             float factor = distToWall <= 1 ? 1.0f
                 : distToWall == 2 ? 0.6f
                 : distToWall == 3 ? 0.3f
-                : 0.1f;
+                : Mathf.Clamp01(centerPathReduction);
             return ApplyFeatureDensity(cell, room, baseDensity * factor, featureMask, featureMaskWeight);
         }
 
@@ -218,14 +262,31 @@ namespace RIMA.MapDesigner
             float offsetX = (Hash01(seed + 17, cell.x, cell.y, entryIndex) * 2f - 1f) * offsetJitter;
             float offsetY = (Hash01(seed + 29, cell.x, cell.y, entryIndex) * 2f - 1f) * offsetJitter;
             patch.transform.position = basePosition + new Vector3(offsetX, offsetY, 0f);
-            patch.transform.localScale = new Vector3(entry.size == Vector2.zero ? 1f : entry.size.x, entry.size == Vector2.zero ? 1f : entry.size.y, 1f);
+
+            float scaleX = entry.size == Vector2.zero ? 1f : entry.size.x;
+            float scaleY = entry.size == Vector2.zero ? 1f : entry.size.y;
+            if (entry.allowFlipX && Hash01(seed + 71, cell.x, cell.y, entryIndex) < 0.5f) scaleX = -scaleX;
+            if (entry.allowFlipY && Hash01(seed + 83, cell.x, cell.y, entryIndex) < 0.5f) scaleY = -scaleY;
+            patch.transform.localScale = new Vector3(scaleX, scaleY, 1f);
             patch.transform.rotation = Quaternion.Euler(0f, 0f, (Hash01(seed + 43, cell.x, cell.y, entryIndex) * 2f - 1f) * Mathf.Max(0f, entry.rotationJitter));
 
             SpriteRenderer renderer = patch.AddComponent<SpriteRenderer>();
             renderer.sprite = entry.sprite;
             renderer.color = LerpColor(entry.tintMin, entry.tintMax, Hash01(seed + 61, cell.x, cell.y, entryIndex));
             renderer.sortingLayerName = layerName;
-            renderer.sortingOrder = order;
+
+            int orderMin = entry.sortingOrderRange.x;
+            int orderMax = entry.sortingOrderRange.y;
+            if (orderMax > orderMin)
+            {
+                int range = orderMax - orderMin + 1;
+                int orderOffset = Mathf.FloorToInt(Hash01(seed + 97, cell.x, cell.y, entryIndex) * range);
+                renderer.sortingOrder = order + orderMin + Mathf.Clamp(orderOffset, 0, range - 1);
+            }
+            else
+            {
+                renderer.sortingOrder = order;
+            }
         }
 
         private Transform EnsureRoot(string rootName)

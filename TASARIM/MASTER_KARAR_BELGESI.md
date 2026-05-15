@@ -288,11 +288,19 @@ Ronin:       LightPulse.Emit(new Color(0.9f, 0.9f, 1.0f), 2.0f, 0.06f);  // shar
 | 143-J | Aşama 2 pipeline: `NaturalFeatureGraph → RasterMask → Wang semantic boundary → L4/L5 smoothing/detail mask` | Voronoi/jittered nearest-site rasterizer dependency-free; site mode uniform+jitter; 64-256 site/oda |
 | 143-K | L5 detail density = wall proximity × feature proximity × Perlin × manual mask | `FeatureMaskSO` (Texture2D alpha + AnimationCurve remap + invert) |
 | 143-L | Cliff smoothing seçimi: tile-based Wang semantic + sprite-based L4/L5 overlay | Shader-based SDF Faz 1.5+ defer |
+| 143-M | PatchEntry.allowFlipX / allowFlipY random flip varyasyon | ChatGPT spec entegrasyon (2026-05-16) |
+| 143-N | PatchEntry.minDistance tile-arası clumping önleme | Aynı entry tipinin yığılmasını engeller |
+| 143-O | PatchEntry.sortingOrderRange (Vector2Int) random sorting order | Aynı katman içi z-order varyasyon |
+| 143-P | PatchAtlasSO.encounterAvoidRadius encounter slot etrafı density=0 | Gameplay readability — combat path clean |
+| 143-Q | PatchAtlasSO.centerPathDensityReduction explicit tunable | Eskiden hardcoded 0.1f, şimdi atlas-level override |
+| 143-R | 8 PixelLab prompt template kanonik (A-H): base floor / floor variation / wall (Hades 16:9 / 2:3 / square corner) / transition oval / large biome 512 / crack / rubble / rift | `STAGING/asset_gen_asama1_batch.md` referans |
 
-**Aşama 2 Codex implementation task'ları (her biri 4-8 saat):**
-- Task A — NaturalFeatureGraph + VoronoiWaterFeatureGenerator + NaturalFeatureSettingsSO
-- Task B — FeatureEdgeSmoothingPass (Pair E/F) + FeatureEdgeSmoothingProfileSO
-- Task C — FeatureMaskSO + DetailDecalPainter density integration
+**Aşama 2 Codex implementation task'ları (LOCK 2026-05-15, ~17 dk):**
+- Task A — NaturalFeatureGraph + VoronoiWaterFeatureGenerator + NaturalFeatureSettingsSO ✓
+- Task B — FeatureEdgeSmoothingPass (Pair E/F) + FeatureEdgeSmoothingProfileSO ✓
+- Task C — FeatureMaskSO + DetailDecalPainter density integration ✓
+
+**ChatGPT 5-layer spec ile karşılaştırma (2026-05-16):** RIMA L1/L2/L4/L5/L6 ChatGPT 1-5 ile 1:1 match. **L3 Wall Overlay (Hades cap) RIMA-spesifik EXTRA.** ChatGPT'den entegre edilen 6 madde: 143-M..R. Detay: `F:\LaurethStudio\01_PIPELINE\layered_environment_pipeline.md` Bölüm 13-14.
 
 **Bağlantılı STUDIO_KARAR:** [STUDIO_KARAR_010 Natural Feature Placement Pipeline](../../../LaurethStudio/00_RULES/STUDIO_CONSTITUTION.md) — RIMA/CB/Caterpillar (Wingspan) universal pattern.
 

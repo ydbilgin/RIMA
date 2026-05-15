@@ -19,15 +19,31 @@ MonoBehaviour:
     rotationJitter: 15
     tintMin: {r: 0.45, g: 0.62, b: 0.31, a: 0.72}
     tintMax: {r: 0.72, g: 0.9, b: 0.48, a: 0.88}
+    allowFlipX: 1
+    allowFlipY: 0
+    minDistance: 4
+    sortingOrderRange: {x: 0, y: 2}
   - sprite: {fileID: 21300000, guid: 508dbb8dc12491f43bae5097131416d2, type: 3}
     size: {x: 0.99, y: 0.93}
     density: 0.08
     rotationJitter: 15
     tintMin: {r: 0.45, g: 0.62, b: 0.31, a: 0.72}
     tintMax: {r: 0.72, g: 0.9, b: 0.48, a: 0.88}
+    allowFlipX: 1
+    allowFlipY: 0
+    minDistance: 4
+    sortingOrderRange: {x: 0, y: 2}
   - sprite: {fileID: 21300000, guid: 446e00dbf3ca1294c81ab0eddcb8f521, type: 3}
     size: {x: 1.2, y: 1.05}
     density: 0.08
     rotationJitter: 15
     tintMin: {r: 0.45, g: 0.62, b: 0.31, a: 0.72}
     tintMax: {r: 0.72, g: 0.9, b: 0.48, a: 0.88}
+    allowFlipX: 1
+    allowFlipY: 0
+    minDistance: 5
+    sortingOrderRange: {x: 0, y: 2}
+  edgeBiased: 1
+  wallProximityFactor: 1.5
+  encounterAvoidRadius: 2
+  centerPathDensityReduction: 0.05

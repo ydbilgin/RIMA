@@ -29,5 +29,9 @@ MonoBehaviour:
     prefabHint: {fileID: 0}
   biome: {fileID: 11400000, guid: c4a33d56caad43d69213dec52ab7e5a7, type: 2}
   patchAtlas: {fileID: 11400000, guid: 17238907f8b04df4aa095496b5bcf3f1, type: 2}
+  wallBrushSet: {fileID: 0}
+  transitionAtlas: {fileID: 11400000, guid: 17238907f8b04df4aa095496b5bcf3f1, type: 2}
+  decalAtlas: {fileID: 11400000, guid: f4b2c7d8a1e95326b08c4a7f51d92e63, type: 2}
+  accentAtlas: {fileID: 11400000, guid: c2a13416ea214df5a25c71c330a1a690, type: 2}
   scatterBrush: {fileID: 11400000, guid: f2d9fcdff33a4e2f94df70d8696399b8, type: 2}
   seed: 78101
