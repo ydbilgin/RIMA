@@ -247,3 +247,86 @@ Same as previous sprint CODEX_DONE.md structure.
 
 **Blocked by:** Sprints 1, 2, 4 complete.
 **Blocks:** Sprint 6 (composite brush selectable via UI), Sprint 7 (automation buttons functional), Sprint 8 (Skin dropdown live).
+
+---
+
+## 9. Research-Backed Implementation Notes (Gemini S85)
+
+Full research: `STAGING/research_hades_brushux_softalpha.md` (Q3 brush UX + Q4 Unity EditorWindow patterns).
+
+### 9.1 Reference projects (study before implementation)
+- **Polybrush** — `github.com/Unity-Technologies/com.unity.polybrush` — brush settings panel + SceneView raycasting + paint stroke. Directly matches our 3-panel + scene paint requirement.
+- **ProBuilder** — `github.com/Unity-Technologies/com.unity.probuilder` — custom toolbar pattern + `OnSceneGUI` for viewport manipulation
+- **Chisel** — `github.com/chisel-gui/Chisel` — deep nested multi-panel UI
+
+### 9.2 SceneView painting canonical pattern (Polybrush-derived)
+
+```csharp
+private void OnSceneGUI(SceneView sceneView) {
+    Event e = Event.current;
+    int controlID = GUIUtility.GetControlID(FocusType.Passive);
+
+    // Block Unity's default selection behavior in paint mode:
+    HandleUtility.AddDefaultControl(controlID);
+
+    if (e.type == EventType.MouseDown && e.button == 0) {
+        GUIUtility.hotControl = controlID;
+        StartStroke(e.mousePosition);
+        e.Use();
+    } else if (e.type == EventType.MouseDrag && GUIUtility.hotControl == controlID) {
+        ContinueStroke(e.mousePosition);
+        e.Use();
+    } else if (e.type == EventType.MouseUp && GUIUtility.hotControl == controlID) {
+        EndStroke(e.mousePosition);
+        GUIUtility.hotControl = 0;
+        e.Use();
+    }
+}
+```
+
+**Critical:** call `Event.Use()` ONLY after you actually handle the event. Always use `HandleUtility.AddDefaultControl(controlID)` in paint mode to prevent Unity from picking SceneView objects under the brush cursor.
+
+### 9.3 Global hotkey pattern — `[Shortcut]` attribute (preferred over OnGUI key events)
+
+```csharp
+using UnityEditor.ShortcutManagement;
+
+[Shortcut("RIMA/Brush/SwitchToBrushMode", KeyCode.B)]
+public static void HotkeyBrush() { MapDesignerBrushWindow.GetCurrent()?.SetMode(ToolMode.Brush); }
+
+[Shortcut("RIMA/Brush/SwitchToEraseMode", KeyCode.E)]
+public static void HotkeyErase() { MapDesignerBrushWindow.GetCurrent()?.SetMode(ToolMode.Erase); }
+```
+
+Advantages:
+- User-rebindable via Edit → Shortcuts
+- Doesn't conflict with text input fields
+- Cleaner than `Event.current.keyCode` matching in OnGUI
+
+For `1`-`9` brush slot hotkeys, use Krita pattern: `Alt+1` through `Alt+9` (not raw `1`-`9`). Reason: raw number keys often conflict with Unity's scene gizmo / view-tool shortcuts.
+
+```csharp
+[Shortcut("RIMA/Brush/SlotBrush1", KeyCode.Alpha1, ShortcutModifiers.Alt)]
+public static void HotkeySlot1() => MapDesignerBrushWindow.GetCurrent()?.SelectBrushBySlot(1);
+// ... repeat for 2-9
+```
+
+### 9.4 Brush palette UX pattern (Krita-derived)
+
+The 2-column thumbnail grid in `BrushPalettePanel` should support:
+- **Resizable thumbnails** — slider in panel header (32px / 48px / 64px / 80px / 96px), persisted in `SessionState`
+- **Multi-tag filter** (not folder hierarchy) — `BrushPackSO` brushes can declare tags as a `List<string>` field; the palette filter is a comma-separated tag query
+- **Right-click radial pop-up** (optional V1 stretch goal) — most-recently-used 6 brushes in a radial menu at cursor; deferable to V2 if time-constrained
+- **Universal erase** — `E` key activates Erase mode for ANY active brush, not a separate "Erase Brush" preset (Krita pattern)
+
+Add `tags: List<string>` field to `MapDesignerBrushPresetSO` IF not already present (Sprint 1 may have omitted; verify before extending).
+
+### 9.5 Layout — UI Toolkit vs IMGUI
+
+Modern Unity prefers UI Toolkit `TwoPaneSplitView` over IMGUI horizontal/vertical scopes for resizable panels. However: existing `RimaMapDesignerWindow` is IMGUI-based, and refactor cost may not be justified.
+
+**Decision:** Stay with IMGUI for V1 (consistent with existing window). UI Toolkit migration is a V2 candidate. Use simple `EditorGUILayout.BeginHorizontal/Vertical` scopes with `GUILayout.Width()` for fixed panel widths (260 left / flex center / 280 right).
+
+### 9.6 Hades workflow NOT directly applicable
+
+Research found Hades uses pre-rendered 3D-to-2D sprite layers (V-Ray Toon, Bink video, custom C++ engine). This is not portable to our pure 2D pixel-art Unity stack. Our composite brush + executor router achieves the same artistic goal (layered organic environment) through different means. No Hades-specific implementation borrowing.

@@ -52,18 +52,74 @@
 - 6-criteria QC gate her sprite type sonrası
 
 ### 6. 8-Sprint plan locked (revize — L3 wall priority)
-| # | Sprint | Effort | Paralel |
-|---|---|---|---|
-| 1 | Data Layer (V1 min) | 1 gün Codex | — |
-| 2 | Executor Router + L3 Wall + Brush Along Edges | 1.5 gün Codex | Sprint 3 ile |
-| 3 | PixelLab 29 sprite gen (L3 öncelik) | 1.5 gün gen+QC | Sprint 2 ile |
-| 4 | L4+L5+L6 Executors + Karar #143 enforcement | 1.5 gün Codex | — |
-| 5 | Editor UI Refactor (3-panel + hotkeys + ghost) | 1.5 gün Codex | — |
-| 6 | Default Brush Pack (8-12) + Composite Executor | 1 gün | — |
-| 7 | Automation (Auto-Dress + Regenerate + Smart Fill) | 1 gün | — |
-| 8 | BiomeSkin + Render Rules (subtle alpha) | 1 gün | V1 close |
+| # | Sprint | Effort | Paralel | Status |
+|---|---|---|---|---|
+| 1 | Data Layer (V1 min) | 1 gün Codex | — | ✅ PASS (commit d0cd49c, tag brush-sprint-1-pass, 8/8 test) |
+| 2 | Executor Router + L3 Wall + Brush Along Edges | 1.5 gün Codex | Sprint 3 ile | 🟢 BG dispatch bsp34jayu |
+| 3 | PixelLab 29 sprite gen (L3 öncelik) | 1.5 gün gen+QC | Sprint 2 ile | ⏸ Kullanıcı sabah dispatch |
+| 4 | L4+L5+L6 Executors + Karar #143 enforcement | 1.5 gün Codex | — | ⏸ Sprint 2 PASS bekliyor |
+| 5 | Editor UI Refactor (3-panel + hotkeys + ghost) | 1.5 gün **Opus** | — | ⏸ Sprint 4 PASS bekliyor |
+| 6 | Default Brush Pack (8-12) + Composite Executor | 1 gün **Opus+Codex karma** | — | ⏸ Sprint 4 PASS bekliyor |
+| 7 | Automation (Auto-Dress + Regenerate + Smart Fill) | 1 gün Codex | — | ⏸ Sprint 6 PASS bekliyor |
+| 8 | BiomeSkin + Render Rules (subtle alpha) | 1 gün **Opus** | — | ⏸ V1 close |
 
-**Toplam:** ~8-9 gün Codex + paralel asset gen. **Deadline YOK** (kullanıcı LOCK).
+**Routing kararı (S85 user feedback):** Sprint 5 UI / Sprint 6 content tuning / Sprint 8 shader = **Opus** (judgment iş). Sprint 1/2/4/7 = Codex (spec iş). Bkz: `feedback_codex_vs_opus_split.md`.
+
+**Toplam:** ~8-9 gün Codex + paralel asset gen + Opus UI/shader. **Deadline YOK** (kullanıcı LOCK).
+
+---
+
+### 7. Sprint 1 PASS (handoff için kayıt)
+- **Commit:** `d0cd49c [Brush Sprint 1] Data layer — 7 SOs + JSON round-trip + 3 sample assets + 8/8 tests PASS`
+- **Tag:** `brush-sprint-1-pass`
+- Files: 9 source (Enums, BrushLayerOperation, AssetPoolSO, MapDesignerBrushPresetSO, BrushPackSO, BiomeSkinSO, BrushJsonSerializer, BrushDataTests, RIMA.Brush.Tests.asmdef) + 3 sample .asset
+- `dotnet build` RIMA.Runtime + RIMA.Editor + Brush.Tests = ALL PASS
+- 8/8 EditMode test PASS (DefaultValues, JSON round-trip, AnimationCurve serialize, sprite path resolution, composite ops, BrushPack order)
+- Karar #143-D respectsWalkableMask default true ✓
+- Karar #143-E wallProximityCurve default 2-key linear ✓
+- Karar #143-K featureMaskMultiplier nullable ✓
+- schemaVersion=1 her DTO root ✓
+- Duplicate GUID scan PASS
+- Codex Unity zaten açıkken MCP bridge ile çalıştı, Sprint 2 dispatch'inde aynı yöntemi kullanır
+
+### 8. Sprint 2 dispatch (BG)
+- Dispatch ID: **bsp34jayu**
+- Scope: IBrushExecutor + BrushExecutorRouter + GridTileExecutor + WallStampExecutor + BrushAlongEdgesAutomation + BrushStroke struct + 6-7 EditMode test
+- Karar #143-D walkable filter test (TEST 3) zorunlu
+- WallOverlayPainter delegation (yeniden yazma yasak)
+- ~10-12 saat tahmini, BG notify gelince işle
+
+### 9. Class Skill Gap Analysis (S85 gece extra iş)
+- **Dosya:** `STAGING/class_skill_gap_analysis_s85.md`
+- **Mevcut state:** 4/10 class implement (Warblade .cs+.asset, Shadowblade/Elementalist/Ranger .cs yok .asset)
+- **Eksik 6 class:** Brawler (Tier S), Ronin (Tier S), Gunslinger (Tier A), Hexer (Tier A), Ravager (Tier C complex), Summoner (Tier C complex)
+- **48 yeni skill önerisi** (her class için 8 skill mekanik tanımı, color palette + balance v3 memory'sinden türetilmiş)
+- **NLM auth gerek** Chrome login → sabah kullanıcı halleder
+- **Sabah onay soruları:** Q1-Q5 dosyada listeli
+- **Map V1 öncelikli, class skill paralel/sonra**
+
+### 10. Gemini Research BG dispatch
+- **Agent ID:** ad896dddb4e25719e
+- **Topic:** Hades brush UX + Death's Door soft-edge technique + Photoshop brush palette UX + Unity EditorWindow patterns + pixel art soft alpha shader
+- **Output:** `STAGING/research_hades_brushux_softalpha.md`
+- **Kullanım:** Sprint 5 UI (Opus implement) + Sprint 8 shader (Opus implement) için referans
+- ~5-10 dk tahmini, notify gelince işle
+
+### 11. Tüm STAGING dosyaları (S85 gece üretildi, commit edildi 1073b99 + d0cd49c)
+- `STAGING/map_designer_unified_brush_design.md` — 21-section V1 design + ChatGPT addendum
+- `STAGING/codex_brush_sprint1_data_layer.md` — DISPATCHED + PASS
+- `STAGING/codex_brush_sprint2_executor_l3wall.md` — DISPATCHED (bsp34jayu in flight)
+- `STAGING/codex_brush_sprint4_decorative_executors.md` — Sprint 4 ready
+- `STAGING/codex_brush_sprint5_editor_ui.md` — Sprint 5 ready (Opus implement)
+- `STAGING/codex_brush_sprint6_brushpack_composite.md` — Sprint 6 ready (Opus+Codex)
+- `STAGING/codex_brush_sprint7_automation.md` — Sprint 7 ready
+- `STAGING/codex_brush_sprint8_biomeskin_render.md` — Sprint 8 ready (Opus implement)
+- `STAGING/codex_unity_safety_review.md` — safety review task spec
+- `STAGING/codex_safety_review_output.md` — safety review Codex output (21 risk matrix + 8 reco)
+- `STAGING/pixellab_l3_wall_batch.md` — 7 sprite types, ~14-21 credit
+- `STAGING/pixellab_l4_l5_l6_batch.md` — 5 sprite types, ~15 credit
+- `STAGING/class_skill_gap_analysis_s85.md` — class skill audit + 48 skill proposal
+- `STAGING/brush_sprint_1_base.txt` — pre-flight base commit (c36425fea029)
 
 ---
 

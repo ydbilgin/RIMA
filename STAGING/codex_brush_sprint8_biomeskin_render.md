@@ -249,3 +249,139 @@ Orchestrator post-V1 actions:
 
 **Blocked by:** Sprints 1-7 complete.
 **Blocks:** V1 close.
+
+---
+
+## 9. Research-Backed Shader (Gemini S85, production-ready)
+
+Full research: `STAGING/research_hades_brushux_softalpha.md` (Q5 — Pixel art soft-alpha shader).
+
+**Verdict:** the soft-edge shader described in §2.2.1 is now LOCKED to use **Screen-Space Ordered Dithering with Bayer Matrix** (no blur, no bilinear filter). This technique is used in *Return of the Obra Dinn* and *Super Mario Odyssey* — proven shipped-game pattern.
+
+**Why this works for our LOCK constraints (ChatGPT §17):**
+- NO Gaussian blur
+- NO bilinear filtering on sprite (sampler stays at Point)
+- Pixel-honest dithering (each output pixel either fully opaque or `clip()`'d — no semi-transparency)
+- Runs in `AlphaTest` queue (not `Transparent`) → Z-buffer writes correct, no sort issues
+- Screen-aligned 4x4 Bayer matrix → pattern stable at sub-pixel sprite movement
+
+**Critical input requirement:** source PNGs MUST have semi-transparent (0.0-1.0 alpha gradient) baked in at edges. The shader does NOT create softness from hard-edge PNGs — it converts existing alpha gradients into honest dithered pixels. This matches our PixelLab batch (Sprint 3) which already produces soft-edged decals for L4/L5/L6.
+
+### 9.1 Built-in RP shader (USE AS-IS for V1)
+
+Save to `Assets/Art/Shaders/RIMA_DitheredSoftEdge.shader`:
+
+```hlsl
+Shader "RIMA/DitheredSoftEdge"
+{
+    Properties
+    {
+        _MainTex ("Sprite Texture", 2D) = "white" {}
+        _Color ("Tint", Color) = (1,1,1,1)
+        _DitherSpread ("Dither Spread", Range(0, 1)) = 1.0
+    }
+    SubShader
+    {
+        Tags { "Queue"="AlphaTest" "RenderType"="TransparentCutout" "PreviewType"="Plane" }
+        Cull Off
+        Lighting Off
+        ZWrite On
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+                float4 color : COLOR;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                float4 color : COLOR;
+                float4 screenPos : TEXCOORD1;
+            };
+
+            sampler2D _MainTex;
+            float4 _Color;
+            float _DitherSpread;
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.uv = v.uv;
+                o.color = v.color * _Color;
+                o.screenPos = ComputeScreenPos(o.pos);
+                return o;
+            }
+
+            static const float4x4 bayerMatrix = float4x4(
+                 0.0000, 0.5000, 0.1250, 0.6250,
+                 0.7500, 0.2500, 0.8750, 0.3750,
+                 0.1875, 0.6875, 0.0625, 0.5625,
+                 0.9375, 0.4375, 0.8125, 0.3125
+            );
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                fixed4 texColor = tex2D(_MainTex, i.uv) * i.color;
+                float2 screenUV = i.screenPos.xy / i.screenPos.w;
+                float2 screenPixelPos = screenUV * _ScreenParams.xy;
+                uint x = (uint)fmod(screenPixelPos.x, 4);
+                uint y = (uint)fmod(screenPixelPos.y, 4);
+                float ditherThreshold = bayerMatrix[x][y];
+                float clipVal = texColor.a - (ditherThreshold * _DitherSpread);
+                clip(clipVal - 0.001);
+                return texColor;
+            }
+            ENDCG
+        }
+    }
+}
+```
+
+### 9.2 URP port (if URP 2D Renderer requires it)
+
+RIMA uses URP 2D. The above shader is Built-in RP CGPROGRAM. If it doesn't render correctly in URP 2D, port required:
+
+**Minimal port steps:**
+1. Replace `CGPROGRAM`/`ENDCG` with `HLSLPROGRAM`/`ENDHLSL`
+2. Replace `#include "UnityCG.cginc"` with:
+   ```
+   #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+   ```
+3. Add `Tags { "RenderPipeline"="UniversalPipeline" }` to SubShader
+4. Replace `UnityObjectToClipPos` with `TransformObjectToHClip`
+5. Replace `_ScreenParams` with built-in `_ScreenParams` (still works in URP)
+6. Keep the Bayer matrix and `clip()` logic identical
+
+**Verification:** Place a known soft-edge sprite (e.g., a moss patch from PixelLab L4 batch) on a quad in Phase1 test scene; toggle between hard alpha material and dithered material — expect dithered to show scattered hard pixels at the edges where alpha gradient existed.
+
+### 9.3 Three material instances Sprint 8 must create
+
+`Assets/Art/Materials/Sprite_HardDefault.mat` — Sprites/Default shader (no dither)
+`Assets/Art/Materials/Sprite_SoftAlpha8.mat` — `RIMA/DitheredSoftEdge` shader, `_DitherSpread = 0.5` (subtle)
+`Assets/Art/Materials/Sprite_SoftAlpha16.mat` — `RIMA/DitheredSoftEdge` shader, `_DitherSpread = 1.0` (full)
+
+V1 NO `MultiplyBlend` material — deferred to V2 (the design spec mentions it as enum value but per ChatGPT §17 conservatism, defer).
+
+### 9.4 BiomeSkin AlphaMode mapping (revised)
+
+| AlphaMode | Material | Visual Effect |
+|---|---|---|
+| Hard | Sprite_HardDefault | Sharp pixel edges (default) |
+| SoftAlpha8 | Sprite_SoftAlpha8 | Light dither at edges (DitherSpread=0.5) |
+| SoftAlpha16 | Sprite_SoftAlpha16 | Heavy dither at edges (DitherSpread=1.0) |
+| MultiplyBlend | (defer to V2) | Not implemented in V1 |
+
+### 9.5 Implementation note for Codex / Opus
+
+The shader file is straightforward — copy as-is. The complexity is in the **material creation** + **BiomeSkin asset wiring** + **Apply pipeline** (§2.1.1). Verify visually after applying — eyeball test for "is this still pixel-honest" is the human gate (Opus orchestrator review). If the dither pattern looks like blur on any biome skin, reduce `_DitherSpread` or revert that layer to `Hard`.

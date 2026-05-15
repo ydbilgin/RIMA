@@ -38,7 +38,7 @@ namespace RIMA.MapDesigner
                     continue;
                 }
 
-                CreateWall(root, baseTilemap, segment, sprite, created++);
+                PlaceWallSprite(segment, sprite, root, baseTilemap, created++);
             }
         }
 
@@ -62,16 +62,22 @@ namespace RIMA.MapDesigner
             }
         }
 
-        private void CreateWall(Transform root, Tilemap tilemap, WallSegment segment, Sprite sprite, int index)
+        public GameObject PlaceWallSprite(WallSegment segment, Sprite sprite, Transform parent, Tilemap tilemap = null, int index = 0)
         {
+            if (sprite == null || parent == null)
+            {
+                return null;
+            }
+
             GameObject wall = new GameObject("Wall_" + index.ToString("0000"));
-            wall.transform.SetParent(root, false);
+            wall.transform.SetParent(parent, false);
             wall.transform.position = CellToWorld(tilemap, GetOutwardAnchor(segment));
 
             SpriteRenderer renderer = wall.AddComponent<SpriteRenderer>();
             renderer.sprite = sprite;
             renderer.sortingLayerName = sortingLayerName;
             renderer.sortingOrder = sortingOrder;
+            return wall;
         }
 
         private static Sprite PickSprite(WallBrushSetSO brushSet, WallSegment segment, int seed, int index)

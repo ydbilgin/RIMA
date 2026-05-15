@@ -512,3 +512,90 @@ Duplicate GUID scan result: PASS, no duplicate GUIDs found under Assets/.
 
 ## Files Modified Outside Scope
 None for Sprint 1 implementation, excluding this mandated CODEX_DONE_laurethgame.md report.
+# Sprint 2 - Executor Router + L3 Wall + Brush Along Edges - Codex Report
+
+## Files Created
+- `Assets/Scripts/MapDesigner/Brush/Stroke/BrushStroke.cs` - 20 lines
+- `Assets/Scripts/MapDesigner/Brush/Executors/IBrushExecutor.cs` - 22 lines
+- `Assets/Scripts/MapDesigner/Brush/Executors/Editor/BrushExecutorRouter.cs` - 63 lines
+- `Assets/Scripts/MapDesigner/Brush/Executors/Editor/GridTileExecutor.cs` - 158 lines
+- `Assets/Scripts/MapDesigner/Brush/Executors/Editor/WallStampExecutor.cs` - 161 lines
+- `Assets/Scripts/MapDesigner/Brush/Automation/Editor/BrushAlongEdgesAutomation.cs` - 79 lines
+- `Assets/Tests/EditMode/Brush/BrushExecutorTests.cs` - 245 lines
+
+## WallOverlayPainter Changes
+- Added one public method:
+  - `public GameObject PlaceWallSprite(WallSegment segment, Sprite sprite, Transform parent, Tilemap tilemap = null, int index = 0)`
+- Existing `PaintWalls(...)` now calls this method instead of the former private `CreateWall(...)`.
+- Logic change scope: placement logic was exposed for delegation; no sorting, anchor, or sprite selection rules were changed.
+
+## New .meta Files (GUID scan)
+- `Assets/Scripts/MapDesigner/Brush/Automation.meta` - `036ff258c04adeb408923fb89f0ffe62`
+- `Assets/Scripts/MapDesigner/Brush/Automation/Editor.meta` - `97742ba8406a34b42935ee8689742920`
+- `Assets/Scripts/MapDesigner/Brush/Automation/Editor/BrushAlongEdgesAutomation.cs.meta` - `22843cbd012ebf048a91d1c05a992dba`
+- `Assets/Scripts/MapDesigner/Brush/Executors.meta` - `b3e01f0f17b06864c9242eb3e59691e6`
+- `Assets/Scripts/MapDesigner/Brush/Executors/IBrushExecutor.cs.meta` - `f9e94b49a67fb13418bb04a75b7ca902`
+- `Assets/Scripts/MapDesigner/Brush/Executors/Editor.meta` - `c035314df35c22041b85cba023147714`
+- `Assets/Scripts/MapDesigner/Brush/Executors/Editor/BrushExecutorRouter.cs.meta` - `16fef848c9278584f95245ed0c3fe51c`
+- `Assets/Scripts/MapDesigner/Brush/Executors/Editor/GridTileExecutor.cs.meta` - `807e705da94a4df48a24adbe46fbec29`
+- `Assets/Scripts/MapDesigner/Brush/Executors/Editor/WallStampExecutor.cs.meta` - `9e1aa2ec7c45cc344a93e322c27d74a1`
+- `Assets/Scripts/MapDesigner/Brush/Stroke.meta` - `fe2a8a70f627a9a4cb730c77356349aa`
+- `Assets/Scripts/MapDesigner/Brush/Stroke/BrushStroke.cs.meta` - `7c5b0076fbc3b8540b6b34358ed3f180`
+- `Assets/Tests/EditMode/Brush/BrushExecutorTests.cs.meta` - `f46bc4c04b14e3c45a05b8b7ccfb6650`
+- Unity refresh also generated missing folder metas for pre-existing folders:
+  - `Assets/Data/Brush.meta` - `429424f669ac00c4691b495a88acbdc3`
+  - `Assets/Scripts/MapDesigner/Brush.meta` - `8fc5c288171a1cf49abb066a5277a0c6`
+  - `Assets/Tests/EditMode/Brush.meta` - `823307614bab11b48a456b11c14806cb`
+- Duplicate GUID scan under `Assets/`: PASS, no duplicate GUIDs found.
+
+## Self-Review Checklist (1-15)
+1. Yes - read all 5 MUST READ files in section 0.
+2. Yes - `WallStampExecutor` delegates placement to `WallOverlayPainter.PlaceWallSprite(...)`.
+3. Yes - added exactly one public method to `WallOverlayPainter`.
+4. Yes - `IBrushExecutor` has no `UnityEditor` dependency.
+5. No - concrete executor files are in the requested `Editor/` folder and namespace, but Unity regenerated them into `RIMA.Runtime.csproj` because the requested path is under the existing `Assets/Scripts/RIMA.Runtime.asmdef` tree. I did not modify or create asmdefs.
+6. Yes - `BrushExecutorRouter.Dispatch` checks `op.respectsWalkableMask` before executor dispatch.
+7. Yes - `BrushAlongEdgesAutomation` skips `isDoorway=true`.
+8. Yes - `GridTileExecutor` uses `Undo.RegisterCompleteObjectUndo`; `WallStampExecutor` uses `Undo.RegisterCreatedObjectUndo`.
+9. Yes - `BrushAlongEdgesAutomation` uses one `Undo.IncrementCurrentGroup` and `Undo.CollapseUndoOperations`.
+10. Yes - both required dotnet builds returned 0 errors.
+11. No - Unity EditMode execution could not complete because MCP timed out and direct batchmode refused while the project was already open in another Unity instance. The test assembly itself builds with 0 errors.
+12. Yes - all generated `.meta` files and GUIDs are listed above.
+13. No - executed as one direct implementation pass: 7 new source/test files plus one allowed existing painter change. No sub-agent dispatch was used.
+14. Yes - no existing `.asmdef` was modified.
+15. Yes - no Sprint 1 data layer files were modified.
+
+## Build Result
+- `dotnet build RIMA.Runtime.csproj`: PASS, 0 warnings, 0 errors on sequential rerun.
+- `dotnet build RIMA.Editor.csproj`: PASS, 0 warnings, 0 errors on sequential rerun.
+- `dotnet build RIMA.Brush.Tests.csproj`: PASS, 0 warnings, 0 errors.
+
+## Test Results
+- EditMode tests: NOT EXECUTED to completion.
+- Attempted MCP run: `run_tests(EditMode, assembly_names=["RIMA.Brush.Tests"])` timed out waiting for Unity response.
+- Attempted shell runner: Unity batchmode aborted with "another Unity instance is running with this project open."
+- Compile coverage: `RIMA.Brush.Tests.csproj` builds successfully with the new executor tests included.
+
+## Sub-dispatch Strategy
+- Single direct implementation pass.
+- Boundaries:
+  - Runtime contracts: `BrushStroke.cs`, `IBrushExecutor.cs`
+  - Editor executors and automation: router, grid tile executor, wall stamp executor, brush-along-edges automation
+  - Tests: `BrushExecutorTests.cs`
+  - Existing painter change: one public delegation method in `WallOverlayPainter.cs`
+
+## Open Questions / Deviations
+- Asmdef deviation: the task requested editor files under `Assets/Scripts/MapDesigner/Brush/.../Editor/` while also saying they should compile in `RIMA.Editor`. In this project, the existing `RIMA.Editor.asmdef` is under `Assets/Scripts/Editor`, so Unity includes the requested files in `RIMA.Runtime.csproj`. I did not edit asmdefs per the binding rule.
+- `GridTileRandom` weighted tile selection: `AssetPoolSO` has `spriteWeights` but no `tileWeights`. I reused `spriteWeights` as optional parallel weights for tiles; empty or mismatched weights fall back to deterministic uniform selection.
+- Wall layer context: Sprint 2 data does not provide an explicit active wall parent or tilemap in `BrushStroke`/`BrushLayerOperation`. `WallStampExecutor` resolves or creates a `WallOverlayPainter` host and `WallOverlay` child, then delegates placement to the painter.
+
+## Files Modified Outside Scope
+- `CODEX_DONE_laurethgame.md` - required final report.
+- `Assets/Data/Brush.meta` - generated by Unity refresh for a pre-existing Sprint 1 folder.
+- Existing unrelated working-tree modifications were present and not touched by this task:
+  - `Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset`
+  - `CODEX_TASK_laurethgame.md`
+  - `CURRENT_STATUS.md`
+  - `STAGING/3games_lateral_ideation.md`
+  - `STAGING/3games_synthesis_s84.md`
+  - untracked `STAGING/*` research/status files
