@@ -1,9 +1,31 @@
 # Karar #143 — 6-Aşamalı Map Mimarisi (Karar #135 REVIZE)
 
-**Date:** 2026-05-15 S82 gece
+**Date:** 2026-05-15 S82 gece (S82+ ek netleştirme: production sırası + tileset rolü daraltma + Hades-style wall)
 **Status:** LOCK adayı (kullanici onayi sonrasi MASTER_KARAR'a yazilir)
 **Supersedes:** Karar #135 (Procedural+Paint+Organic Hybrid — 5 katman)
 **Reason:** Wang tileset her şeyi basinca grid-evident "bayağı" görünüm; duvar/zemin semantic farkı yok; patch'ler duvar üstüne düşüyor
+
+---
+
+## S82+ Production Sırası (kullanıcı LOCK)
+
+**Faz sırası — kesin:**
+
+1. **AŞAMA 1 — 6-katman düz floor pipeline LOCK** (tileset YOK, sadece L1-L6 düz floor)
+   - L1+L2 düz floor base + variation
+   - L3 wall overlay (Hades-style perimeter cap)
+   - L4+L5+L6 patch / detail / accent
+   - **Bu aşama tek başına "doğal görünümlü oda" hedefine ulaşmalı.** Tileset olmadan çalışsın.
+
+2. **AŞAMA 2 — Tileset (derinlik için)** Aşama 1 sonrası
+   - Tileset = sadece **floor→water** + **floor→yükseklik (elevation up/down, cliff)** transition için
+   - "Biome boundary" / "iç biome variation" tileset için KULLANILMAZ
+   - Pair E (rubble↔cliff_drop) + Pair F (rubble↔rift_pool) + benzeri ihtiyaca göre üretilir
+
+3. **AŞAMA 3 — Wall karakterizasyonu (kapalı dungeon hissi)**
+   - Hades dungeon kenarı kapanması mantığı: map'in çevresindeki "boşluk" siyah/karanlık değil, **wall sprite cluster** ile doldurulur
+   - Wall = tileset değil, SpriteRenderer overlay brush (Karar #143-C zaten bunu söylüyor)
+   - Perimeter polyline boyunca büyük organik brush sprite'ları
 
 ---
 
@@ -32,13 +54,15 @@ L2 — Floor Variation (Tilemap, 32x32, aynı veya farklı tilemap)
           Multi-variant pick within terrain ID
           Subtle stone changes only
 
-L3 — Wall Overlay (SpriteRenderer, 128-512px)
+L3 — Wall Overlay (SpriteRenderer, 128-512px) — HADES-STYLE PERİMETER CAP
        │
        └─ Room perimeter polyline boyunca yerleştirilir
           Büyük organik brush sprites
           256x128 horizontal, 128x256 vertical, 128x128 corners
           IRREGULAR EDGES — grid görünmez
           Doorway = gap (boşluk)
+          MAP DIŞI BOŞLUK = bu wall cluster'lar ile doldurulur (Hades dungeon hissi)
+          Wall = TILESET DEĞİL (S82+ LOCK), her zaman SpriteRenderer overlay
 
 L4 — Transition Brush (SpriteRenderer, 256x256 / 512x512)
        │
@@ -68,24 +92,29 @@ L6 — Rift Accent (SpriteRenderer, 64-128px)
 
 ---
 
-## Wang Tileset Yeni Rolü — Sadece Özel Edge Feature
+## Wang Tileset Yeni Rolü — Sadece Derinlik Transition (S82+ DARALTILDI)
 
-**Wang KULLANILACAK:**
-- ✓ Cliff edge / drop-off boundary
-- ✓ Water/hazard pool kenari (rubble ↔ water transition)
-- ✓ Ledge transition (elevation 0 ↔ elevation 1)
-- ✓ Biome boundary (yalniz mevcut tilesetlerin %10-15'i bu kategoride)
+**Wang KULLANILACAK (sadece 2 kategori):**
+- ✓ **Floor → Water** transition (floor ile water pool kenarı arasında)
+- ✓ **Floor → Yükseklik (elevation up/down)** transition (cliff drop, ledge)
 
 **Wang KULLANILMAYACAK:**
 - ✗ Floor base (L1 simple tile yeter)
-- ✗ Wall (L3 overlay brush yeter)
-- ✗ Iç biome variation (L2 multi-variant yeter)
+- ✗ Wall (L3 overlay brush yeter — Hades-style cap, tileset değil)
+- ✗ İç biome variation (L2 multi-variant yeter)
+- ✗ Biome boundary (S82+ kararı — biome geçişleri L4 transition brush ile, tileset YOK)
+- ✗ Cross-style same-family pair (rubble↔moss gibi — L4/L5 patch yeter)
 
-Mevcut 11 Wang tileset'ten Faz 1'de aktif kalacaklar:
-- `RubbleMoss_CornerWangTileSet` — Eğer moss = ayrı zemin alanı olarak kullanılırsa
-- `DebrisRift_CornerWangTileSet` — Rift_pool yan transition
-- `PathRift_CornerWangTileSet` — Special rift corridor
-- Diğer 8 tileset → ARSIVLENIR (rejected/) Faz 2+'ya saklanir
+**Mevcut 11 Wang tileset'ten Faz 1'de aktif kalacaklar (DARALTILDI):**
+- `DebrisRift_CornerWangTileSet` — Floor→rift_pool (water-type derinlik) — Pair F için referans
+- `PathRift_CornerWangTileSet` — Special elevation/path için
+- (Cliff_drop için yeni tileset üretilecek — Pair E queue'da)
+- **Kalan 8-9 tileset → `_archive_faz1/` Faz 2+ değerlendirme**
+
+**Tileset üretim sırası (Aşama 2):**
+- Floor→Water pair: rubble↔water_pool veya benzeri (Pair F revize)
+- Floor→Elevation pair: rubble↔cliff_drop (Pair E)
+- Sonraki Faz: biome-specific water/elevation varyantları
 
 ---
 
@@ -220,25 +249,58 @@ Center 4x4 zone (gameplay arena) effective density = 0.008 (neredeyse temiz). Wa
 
 ---
 
-## Faz 1 MVP Roadmap (Karar #143 sonrası)
+## Faz 1 MVP Roadmap (Karar #143 sonrası, S82+ revize)
 
-1. **Asset gen (gece, otonom, PixelLab MCP dispatch):** 14 wall + 9 detail + 3 accent = 26 sprite
-2. **Web UI 512x512 patch (sabah, kullanici eli):** 2-3 large biome blend
-3. **Codex refactor (gece, dispatch):** 6-layer orchestrator + WallOverlayPainter + edge-biased density
-4. **Asset import + biome wire (sabah):** WallBrushSetSO + atlas update + map designer 6-layer test
-5. **5-10 yeni map gallery (sabah/öğlen):** her biome için organik test
-6. **LOCK (öğleden sonra):** Karar #143 MASTER_KARAR'a yazılır, Karar #135 archived
+### AŞAMA 1 — 6-katman düz floor pipeline (tileset YOK)
+
+1. **Asset gen (PixelLab MCP dispatch):** 14 wall + 9 detail + 3 accent = 26 sprite
+2. **Web UI 512x512 patch (kullanıcı eli):** 2-3 large biome blend (L4)
+3. **Codex refactor:** 6-layer orchestrator + WallOverlayPainter + DetailDecalPainter + AccentPainter + edge-biased density (walkable mask zorunlu)
+4. **Asset import + biome wire:** WallBrushSetSO + atlas update + map designer 6-layer test
+5. **5-10 yeni map gallery (tileset KAPALI):** her biome için organik test
+6. **LOCK Aşama 1:** Düz floor pipeline doğal görünüm doğrulandı
+
+### AŞAMA 2 — Tileset (sadece floor→water + floor→elevation)
+
+7. **Pair E (rubble↔cliff_drop):** PixelLab Pro tileset gen
+8. **Pair F (rubble↔water_pool):** PixelLab Pro tileset gen
+9. **Tileset import + Wang painter integration:** Map'in özel zone'larında aktif
+10. **Test:** 3-5 map'te tileset zone (cliff/water) ile birlikte gallery
+
+### AŞAMA 3 — LOCK + MASTER_KARAR
+
+11. **Karar #143 MASTER_KARAR'a yazılır**, Karar #135 archived
+12. **Production demo (2026-05-18):** Aşama 1+2 ile çalışan map
 
 ---
 
 ## Lockable Karar Maddeleri
 
 **Karar #143-A:** 6-katman map mimarisi LIVE, Karar #135 5-katman archived
-**Karar #143-B:** Wang tileset = sadece özel edge feature (cliff/water/ledge), %85 archived
-**Karar #143-C:** Wall = SpriteRenderer overlay brush (256x128 / 128x256 / 128x128), not Tilemap
-**Karar #143-D:** Decoration painter'ları walkable=true cell filter zorunlu
+**Karar #143-B:** Wang tileset = SADECE floor→water + floor→elevation transition (S82+ DARALTILDI), %90 mevcut tileset archived
+**Karar #143-C:** Wall = SpriteRenderer overlay brush, Hades-style perimeter cap (256x128 / 128x256 / 128x128), tileset DEĞİL
+**Karar #143-D:** Decoration painter'ları walkable=true cell filter zorunlu (L4/L5/L6 hep)
 **Karar #143-E:** Edge-biased density: wall yakını 10x, center 0.1x (gameplay readability)
 **Karar #143-F:** L4 transition brush 256x256 MCP, L5 detail 32-128px MCP, L6 rift sparse 64-128px MCP
 **Karar #143-G:** 512x512 large biome patch Web UI manuel (MCP max 256 kısıt)
+**Karar #143-H:** Production sırası: Aşama 1 (düz floor pipeline LOCK) → Aşama 2 (tileset entegre) → Aşama 3 (production demo). Tileset Aşama 1 öncesi YOK.
+**Karar #143-I:** "Biome boundary" / iç biome variation Wang tileset KULLANMAZ — L2 multi-variant + L4 patch yeterli (S82+ kararı)
+**Karar #143-J:** Aşama 2 water/elevation feature zone'ları için pipeline: `NaturalFeatureGraph → RasterMask → Wang semantic boundary → L4/L5 smoothing/detail mask`. Voronoi/jittered nearest-site rasterizer (dependency-free, Burst gerekmez, 200x200 grid 1-5ms editor) sadece feature skeleton üretir. Temel combat grid ve walkable semantic L1-L2'de kalır. Site mode: uniform grid + jitter; pure random REJECT (combat readability bozar). Site sayısı 64-256 oda başına.
+**Karar #143-K:** L5 detail density sadece wall proximity ile değil, **feature proximity** (river bank, cliff rim, rift crack, vb.) ile de çarpılır. Map Designer'da manuel paint + procedural Perlin mask kombinasyonu desteklenir. `FeatureMaskSO` (Texture2D alpha + AnimationCurve remap + invert flag) asset tip.
+**Karar #143-L:** Cliff smoothing tekniği seçimi: **Tile-based Wang semantic boundary + Sprite-based L4/L5 overlay smoothing** kombinasyonu. Shader-based SDF approach Faz 1.5+ polish için defer. Sebep: pixel-perfect readability + Map Designer manuel düzeltme kolay + asset üretim makul.
 
-Kullanici onayindan sonra MASTER_KARAR_BELGESI'ne #143-A..G eklenir, Karar #135 archive bölümüne.
+### Aşama 2 Codex Implementation Task'ları (her biri 4-8 saat)
+
+| Task | Scope | Files |
+|---|---|---|
+| **A** — NaturalFeatureGraph + Voronoi Water Mask | Feature generator | `Scripts/MapDesigner/NaturalFeatureGraph.cs`, `VoronoiWaterFeatureGenerator.cs`, `Data/NaturalFeatureSettingsSO.cs`, `Tests/...Tests.cs` |
+| **B** — FeatureEdgeSmoothingPass (Pair E/F) | Wang overlay smoothing pass | `Scripts/MapDesigner/FeatureEdgeSmoothingPass.cs`, `Data/FeatureEdgeSmoothingProfileSO.cs`, `Editor/RimaMapDesignerWindow.cs` |
+| **C** — FeatureMaskSO + DetailDecalPainter Integration | Vertex paint analog | `Data/FeatureMaskSO.cs`, `Scripts/MapDesigner/DetailDecalPainter.cs`, `PatchOverlayPainter.cs`, `Editor/RimaMapDesignerWindow.cs` |
+
+**Acceptance kriterleri (tüm task'lar):**
+- `walkable == false` cell'e asla decal/mask yazılmaz (Karar #143-D zorunlu)
+- Deterministic seed: aynı seed = aynı output
+- Map Designer'da seed lock + manuel erase/paint desteği
+- 200x200 grid editor gen ≤ 20ms
+
+Kullanici onayindan sonra MASTER_KARAR_BELGESI'ne #143-A..L eklenir, Karar #135 archive bölümüne.

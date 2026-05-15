@@ -1,4 +1,111 @@
 # CURRENT_STATUS
+**2026-05-15 S83 — KARAR #143 LOCK + STUDIO_KARAR 009/010 + CATERPILLAR IDEA + AŞAMA 1 CODEX DISPATCH | Yeni session handoff**
+
+> Onceki: S82+ LaurethStudio + 11 STUDIO_KARAR + wall tests + interpolate brainstorm.
+
+---
+
+## S83 — Bu session yapilanlar (handoff yeni session)
+
+### 1. NLM sync (157 dosya)
+- TASARIM + MEMORY + STAGING bulk push, çoğunluk başarılı, CURRENT_STATUS + MASTER_KARAR_BELGESI + ~18 başarısız (rate limit, retry gerek)
+
+### 2. Twitter research derin analiz (3 link)
+- **BanditKnightG** 2055256885637374172 → Codex vizyon analizi (`STAGING/banditknightg_vision_analysis_codex.md`): 8 BORROW + 5 REJECT + **6 karar adayı (#144 Room Density Formula, #145 Combat Feedback Hierarchy, #75 revision Prop Role Tags Faz 1; #146 Corner HUD + #147 Accent Budget Faz 1.5; #148 Stealth Negative Space Faz 2)**
+- **artofsully** 2055082714559029683 → Codex Voronoi/cliff/grass-mask analizi (`STAGING/artofsully_voronoi_analysis_codex.md`) + ChatGPT takeaways (`F:\LaurethStudio\05_RESEARCH\artofsully_chatgpt_takeaways.md`) sentez
+- **buzzicra** 2054973989911478711 → Codex Agent View + Obsidian _ops/ analizi (`STAGING/buzzicra_agent_ops_codex.md`) — **verdict: DEFER post-Faz-1**
+
+### 3. Karar #143 LOCK — 6-Aşamalı Map Mimarisi (Karar #135 REVIZE)
+- Spec: `STAGING/karar_143_six_layer_map_architecture.md` revize (S82+ ek netleştirme)
+- MASTER_KARAR_BELGESI'ne Karar #143-A..L yazıldı (12 madde)
+- **Production sırası:** Aşama 1 (düz floor, tileset YOK) → Aşama 2 (tileset water/elevation) → Aşama 3 (production)
+- **Tileset rolü daraltıldı:** SADECE floor→water + floor→elevation transition
+- **Wall = Hades-style SpriteRenderer overlay** (tileset değil)
+- **Aşama 2:** Voronoi NaturalFeatureGraph (#143-J) + FeatureMaskSO L5 density multiplier (#143-K) + tile-based Wang + sprite overlay smoothing (#143-L)
+- Eski sprite library archive: `Assets/Art/_archive_faz1/` (Scatter + Decals)
+
+### 4. STUDIO_KARAR_010 LOCK — Natural Feature Placement Pipeline
+- `F:\LaurethStudio\00_RULES\STUDIO_CONSTITUTION.md` güncel
+- Universal pattern: `Sites → Organic Graph → Raster Mask → Semantic Boundary → Visual Smoothing → Detail Density`
+- RIMA + CircuitBreaker + Caterpillar(Wingspan) cross-game transfer matrisi
+- Karar #143-J/K bu Studio karar'ın RIMA spesifik uygulaması
+
+### 5. STUDIO_KARAR_009 ADAY — AI Ops Layer (DEFER post-Faz-1)
+- Agent View + Obsidian _ops/ klasör (agents/logs/plans/dashboards)
+- Claude Code 2.1.142 yerelde, Agent View ≥2.1.139 destekli ✓
+- RIMA Obsidian Dataview/Templater hazır
+- Faz 1 close sonrası kurulur, şimdi taslak duruyor
+
+### 6. Caterpillar IDEA BACKLOG — Wingspan pitch
+- `F:\LaurethStudio\03_IDEAS\Caterpillar\` (BRAINSTORM_OPUS.md + CODEX_ANALYSIS.md)
+- Pitch verdict: **Wingspan** (cozy survival roguelite) — Codex + Opus aynı #1
+- Scope: 3 ay MVP / 6 ay Demo / 12-18 ay Full ($11.99-14.99 indie)
+- RIMA Faz 1 close sonrası prototype start
+
+### 7. Aşama 1 Codex implementation dispatched
+- Task: `STAGING/codex_asama1_implementation.md`
+- Background dispatch ID: **btywkeb7m**
+- Scope: MapLayerOrchestrator + WallOverlayPainter + TransitionBrushPainter + DetailDecalPainter + AccentPainter + WallSegment + WallBrushSetSO + edge-biased density + walkable mask filter + EditMode tests + RimaMapDesignerWindow 6-layer UI
+- Bekleyen: 2-4 saat, sonra asset gen prompt batch (PixelLab 14 wall + 9 detail + 3 accent)
+
+### 8. CCS yasinderyabilgin profil kontrol
+- `@kaitranntt/ccs` npm package — Claude Code Switch v13 config
+- 4 paralel profile: yasinderyabilgin (shared) / laurethgame / ydbilgin / ydbilginn (isolated)
+- Eksik somut yok; mcp-needs-auth-cache "claude.ai Google Drive" auth bekliyor (sadece o MCP çağrılırsa, normal)
+- `claude --version` 2.1.142 ✓, `claude agents --help` çalışıyor ✓
+- **Recursive sandbox:** Claude Code agent ortamı içinden `claude agents` (list) çalışmaz — kullanıcı manual terminal'den test
+- Yeni session için: direkt `claude` (CCS'siz) veya CCS terminal içinden — her ikisi de çalışır
+
+### 9. Git commits (6 commit, S82+ work)
+- `7e06276` Codex BanditKnightG vision + webm ignore
+- `28d3a08` RoomDesigner test archive — Karar #134 pivot
+- `a9cf19e` Map cleanup PatchAtlas + screenshots
+- `1163480` Class/Mob data + sprite base + tag manager
+- `a795ea6` Codex pipeline staging (47 file)
+- `cab6933` Pipeline docs + Twitter research bulk + Karar #143 staging (91 file)
+- Bekleyen LiberationSans SDF Fallback.asset 536KB→9KB anomalisi kullanıcıya soruldu, henüz kararlanmadı
+
+---
+
+## Yeni Session İlk Adımlar (S84)
+
+**KESINLIKLE ZORUNLU:**
+1. **Codex Aşama 1 sonucunu oku** (btywkeb7m bittiğinde): MapLayerOrchestrator + 4 painter + walkable mask. Compile/test PASS doğrula.
+2. **Asset gen prompt batch** (PixelLab): 14 wall (256x128/128x256/128x128) + 9 detail (32-128px) + 3 accent (64-128px). Karar #143 yeni asset library.
+3. **NLM sync retry** — başarısız 18-20 dosya tekrar push (CURRENT_STATUS + MASTER_KARAR_BELGESI + ...)
+4. **LiberationSans SDF Fallback.asset karar** — 536KB→9KB kasıtlı mı? (Kullanıcı yanıtlamadı)
+
+**SONRA (Aşama 2):**
+- Pair E (rubble↔cliff_drop) + Pair F (rubble↔water_pool) PixelLab Pro tileset gen
+- Codex Task A/B/C dispatch (NaturalFeatureGraph + FeatureEdgeSmoothingPass + FeatureMaskSO)
+
+**Production deadline:** 2026-05-18 (3 gün).
+
+---
+
+## Active state (yeni session basinda)
+
+| Sistem | Durum |
+|---|---|
+| Unity Editor | Acik, Phase1_ProceduralMap_Test scene saved |
+| F:\LaurethStudio\ | LIVE — 9 doc + CB + ideas + template + Caterpillar |
+| RIMA Karar # | Master Karar Belgesi Karar #143-A..L LOCK 2026-05-15 |
+| STUDIO_KARAR | 001-008 + 010 LOCK, 009 DEFER, 011 LOCK (animasyon-ağır yasak) |
+| Caterpillar | IDEA BACKLOG, Wingspan pitch, RIMA Faz 1 close sonrası |
+| NLM sync | Karar #119-#143 SYNC EDILMEMIS bazıları (rate limit retry) |
+| Codex background | btywkeb7m — Aşama 1 implementation (2-4 saat) |
+| Sprite library | Archive `Assets/Art/_archive_faz1/` — yeni asset Aşama 1 ile gelir |
+| Karar #143 spec | LIVE — A..L tüm maddeler |
+| Aşama 2 task | A/B/C tanımlı (her biri 4-8 saat), Aşama 1 LOCK sonrası dispatch |
+
+---
+
+## Onceki S82+ — LAURETHSTUDIO + 11 STUDIO_KARAR (degismedi)
+
+> S82+ icerigi asagida korundu.
+
+---
+
 **2026-05-15 S82+ — LAURETHSTUDIO + 11 STUDIO_KARAR + WALL TESTS + INTERPOLATE BRAINSTORM | Yeni session handoff**
 
 > Onceki: Map Designer validated, VFX scaffold (commit `433631e`), 7 silah seçildi, S81 oyun_fikirleri sentez.

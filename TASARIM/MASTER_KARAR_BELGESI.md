@@ -270,6 +270,34 @@ Ronin:       LightPulse.Emit(new Color(0.9f, 0.9f, 1.0f), 2.0f, 0.06f);  // shar
 
 ---
 
+## MAP MİMARİSİ KARARLARI (S82+ LOCK 2026-05-15)
+
+**Karar #143 — 6-Aşamalı Map Mimarisi (Karar #135 REVIZE).** Detay spec: `STAGING/karar_143_six_layer_map_architecture.md`.
+
+| # | Madde | Sonuç |
+|---|---|---|
+| 143-A | 6-katman map mimarisi LIVE | Karar #135 5-katman archive |
+| 143-B | Wang tileset rolü daraltıldı | SADECE floor→water + floor→elevation transition; biome boundary / iç biome variation YOK |
+| 143-C | Wall = SpriteRenderer overlay (Hades-style cap) | Tileset DEĞİL, perimeter polyline boyunca büyük organik brush sprite |
+| 143-D | Decoration painter walkable=true filter | L4/L5/L6 hep walkable mask zorunlu |
+| 143-E | Edge-biased density: wall yakını 10x, center 0.1x | Gameplay readability + combat clarity |
+| 143-F | L4 transition 256x256 MCP, L5 detail 32-128, L6 rift 64-128 MCP | PixelLab create_object |
+| 143-G | 512x512 large biome patch Web UI manuel | MCP max 256 kısıt |
+| 143-H | Production sırası: Aşama 1 (düz floor LOCK) → Aşama 2 (tileset entegre) → Aşama 3 (production) | Tileset Aşama 1 öncesi YOK |
+| 143-I | "Biome boundary" / iç biome variation Wang KULLANMAZ | L2 multi-variant + L4 patch yeterli |
+| 143-J | Aşama 2 pipeline: `NaturalFeatureGraph → RasterMask → Wang semantic boundary → L4/L5 smoothing/detail mask` | Voronoi/jittered nearest-site rasterizer dependency-free; site mode uniform+jitter; 64-256 site/oda |
+| 143-K | L5 detail density = wall proximity × feature proximity × Perlin × manual mask | `FeatureMaskSO` (Texture2D alpha + AnimationCurve remap + invert) |
+| 143-L | Cliff smoothing seçimi: tile-based Wang semantic + sprite-based L4/L5 overlay | Shader-based SDF Faz 1.5+ defer |
+
+**Aşama 2 Codex implementation task'ları (her biri 4-8 saat):**
+- Task A — NaturalFeatureGraph + VoronoiWaterFeatureGenerator + NaturalFeatureSettingsSO
+- Task B — FeatureEdgeSmoothingPass (Pair E/F) + FeatureEdgeSmoothingProfileSO
+- Task C — FeatureMaskSO + DetailDecalPainter density integration
+
+**Bağlantılı STUDIO_KARAR:** [STUDIO_KARAR_010 Natural Feature Placement Pipeline](../../../LaurethStudio/00_RULES/STUDIO_CONSTITUTION.md) — RIMA/CB/Caterpillar (Wingspan) universal pattern.
+
+---
+
 ## HENÜZ TASARLANMAMIŞ (Claude: gelecek session'da tamamla)
 
 - [ ] ~~Lancer~~ → POST-LAUNCH DLC (skip)
