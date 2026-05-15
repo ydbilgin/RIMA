@@ -67,6 +67,7 @@ CODEX_DONE_history_backup.md
 *.psd
 *.mp4
 *.mov
+*.webm
 *.wav
 *.mp3
 *.ogg
