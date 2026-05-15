@@ -30,19 +30,23 @@ def get_profiles():
 
 
 def _parse_accounts(output):
+    # cx accounts emits a fixed-width column table. Variable-width Name/Profile
+    # columns can collide with single-space-separated neighbors, so regex split
+    # on whitespace is unreliable. Anchor on the trailing ISO-8601 timestamp
+    # (the LastRefresh column) and treat the rest as best-effort.
     profiles = []
+    iso_re = re.compile(r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z?)\s*$")
     for line in output.strip().split("\n")[2:]:
-        if not line.strip():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("-"):
             continue
-        parts = re.split(r"\s{2,}", line.strip())
-        if not parts:
-            continue
-        name = parts[0]
+        name = stripped.split(None, 1)[0]
         logged_in = "logged in" in line and "not logged in" not in line
         last_refresh = None
-        if logged_in and len(parts) >= 6:
+        m = iso_re.search(stripped)
+        if logged_in and m:
             try:
-                last_refresh = datetime.fromisoformat(parts[-1].strip().replace("Z", "+00:00"))
+                last_refresh = datetime.fromisoformat(m.group(1).replace("Z", "+00:00"))
             except ValueError:
                 pass
         profiles.append({"name": name, "logged_in": logged_in, "last_refresh": last_refresh})

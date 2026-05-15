@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
-
 # Task: CodexAuthManager — Add Active-Profile Shim Feature
 
 ## Goal
@@ -263,7 +261,3 @@ The shim at `%USERPROFILE%\.codex-profiles\bin\codex.cmd` intercepts `codex` cal
 - Commit message: `[CodexAuthManager] Add active-profile shim — cx switch/clear/active commands`
 - Include all 5 file modifications in single commit (or split logically if cleaner)
 - No tests required (Windows-specific, manual acceptance only)
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.

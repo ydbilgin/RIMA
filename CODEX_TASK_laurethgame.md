@@ -1,167 +1,116 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
 
-# S75-C — Object Layer (Faz 1.5 Stub Impl)
+# Codex Task: BanditKnightG Stealth Indie — Vizyon Analizi (RIMA'ya Aktarım)
 
-**Effort:** medium
-**Prereq:** S75-B merged
+**Sorumlu:** Codex (gpt-5.5, high effort)
+**Çıktı:** `STAGING/banditknightg_vision_analysis_codex.md`
+**Süre tahmini:** 25-40 dk
 
----
+## Bağlam
 
-## GOAL
+Kullanıcı şu twitter postunu inceledi: https://x.com/BanditKnightG/status/2055256885637374172
+Tweet: "THIS IS WHAT AN INDIE GAME LOOKS LIKE" — yüksek polish 2.5D pixel/HD hybrid stealth thief action RPG.
 
-PixelLab Map Tool'un `objects/manifest.json` katmanına karşılık gelen NPC/prop/spawn placement sistemi. Map Designer'da [Objects] toolbar butonu şu an placeholder; gerçek panel + save/load + apply-to-scene.
+Önceki Codex twitter research (`STAGING/twitter_research/2055256885637374172/notes.md`) **yüzeysel** — RIMA katki paragrafı 3 cümle, vizyon perspektifi yok. Bu görev mevcut notu **derinleştirip RIMA'ya somut karar adayları çıkarır**.
 
----
+## Görsel materyal
 
-## DATA MODEL
+- `STAGING/twitter_research/2055256885637374172/contact_sheet.jpg` — 3-frame özet
+- `STAGING/twitter_research/2055256885637374172/frames/frame_001.png` — iç mekân taverna/saloon, "119 SEVER" damage, yellow keyword, white/blue sparkle VFX, gold counter 77,666g, HP/MP bars top-left, skill hotbar bottom-left
+- `STAGING/twitter_research/2055256885637374172/frames/frame_002.png` — dış mekân orman/glade, merkez hero prop (büyük ağaç) + mid props (kayalar/çiçek), 2 karakter (player + ally/mob)
+- `STAGING/twitter_research/2055256885637374172/frames/frame_003.png` — iç mekân kale/noble house, kırmızı perde + mumlar + mor lavabo, damage "106" gold 76,701g, mob sağda
+- `STAGING/twitter_research/2055256885637374172/twitter/BanditKnightG/2055256885637374172_1.mp4` — orijinal video
 
-### MapObjectPlacement
-**Yeni dosya:** `Assets/Scripts/Systems/Map/MapObjectPlacement.cs`
+## Analiz isterleri (per frame + bütün)
 
-```csharp
-using System;
-using UnityEngine;
+Her frame için:
+1. **Kompozisyon kuralı** — hero prop yerleşimi, mid prop dağılımı, walkable path/clutter zone ayrımı, edge-biased density tespit
+2. **Palet ve atmosfer** — accent renkler, mood light source sayısı/yeri, karakter vs background saturation kontrastı
+3. **UI yerleşimi** — HP/MP, gold/loot, skill hotbar, damage feedback konumu ve oran
+4. **Damage number stili** — sarı bold + "SEVER" keyword, font size hiyerarşisi, crit vs trash differentiation
+5. **VFX overlay** — sparkle/parlama tipi (spark / star / radial burst), opacity, duration, "crit emphasis" timing
+6. **Karakter silüet** — rim light/outline, saturation, environment'tan ayrışma teknigi
+7. **Prop density** — "hero + N mid + M accent" formülü çıkar
+8. **Animation read** — videodan görülen attack timing, telegraph, hit pause feedback
 
-namespace RIMA.Systems.Map
-{
-    [Serializable]
-    public class MapObjectPlacement
-    {
-        public string id = Guid.NewGuid().ToString();
-        public string prefabPath;     // "Assets/Prefabs/Mobs/Knight.prefab"
-        public Vector2 positionPx;    // canvas pixel coords (relative to bounding box)
-        public int layer = 0;         // sort order
-        public bool visible = true;
-        public string displayName;    // e.g., "Knight Patrol A"
-    }
-}
+Bütün için:
+- **Stilin tek-cümle özeti** ("ne yapıyor, neden okunabilir")
+- **RIMA'ya transferable 5-8 somut kural** (her biri: kural / nereye / bedel)
+- **RIMA'ya REJECT 3-5 unsur** (neden uymaz)
+
+## RIMA mevcut karar haritası (bağlam)
+
+- **Karar #80 Silhouette Bible** — 10 class siluet kanonik
+- **Karar #100 Chibi 64x64 + ~35° camera** — Hades-match top-down
+- **Karar #100b Wide Arena FOV (ÖNERİ)** — 640x360 ref res, 35° korunur
+- **Karar #118 Hybrid Tile Composition 4-layer** — NLM canon tile pipeline
+- **Karar #135 Procedural+Paint Hybrid** — Codex generator + Map Designer paint + 5 organic layer
+- **Karar #137 VFX Router** — CombatEventBus + tag-based prefab routing + ProcLimiter
+- **Karar #138 2-layer draw order** — body+head birleşik, weapon ayrı, north weapon -1
+- **Karar #143 (ADAY)** — 6-Layer Map Architecture (L1 floor + L2 var + L3 wall overlay + L4 transition + L5 detail + L6 accent)
+- **Karar #75 (REVISION ADAYI)** — create_map_object kullanım kuralı
+
+Her karar adayında "şu mevcut karara bağlanıyor / şunu genişletiyor / yeni karar # gerekir mi" diye işaret koy.
+
+## Çıktı şablonu
+
+```markdown
+# BanditKnightG Vizyon Analizi — RIMA Transfer
+
+## Tek-cümle stil özeti
+
+[X yapıyor, çünkü Y]
+
+## Frame 1 Analiz
+**Kompozisyon:** ...
+**Palet:** ...
+**UI:** ...
+**Damage:** ...
+**VFX:** ...
+**Silüet:** ...
+**Prop density:** ...
+**Anim read:** ...
+
+## Frame 2 Analiz
+[aynı format]
+
+## Frame 3 Analiz
+[aynı format]
+
+## RIMA Transfer Kuralları (BORROW)
+
+### TR-1: [kural başlığı]
+- **Ne:** ...
+- **Nereye uygular:** Karar #X'e bağlanır / yeni karar adayı
+- **Bedel:** ... (kod / asset / tasarım eforu)
+- **Risk:** ...
+
+### TR-2 ... TR-8
+
+## REJECT (RIMA için uymayan)
+
+### RJ-1: [unsur]
+- **Neden uymaz:** ...
+- **Yerine:** ... (RIMA'nın mevcut çözümü)
+
+## Karar Adayı Önerileri (önemli sıra ile)
+
+1. **Karar #X-aday — [başlık]** — TR-N referansı, Faz 1 / 1.5 / 2 öneri, kullanıcı LOCK için 1-paragraph rationale
+2. ...
+
+## Codex'in QC önerisi
+
+Bu vizyon kurallarından hangileri **3 günlük production'da (deadline 2026-05-18)** prototip yapılabilir, hangileri **Faz 1.5'a defer** edilmeli? Karar # ile listele.
 ```
 
-### MapSaveData extend
-**File:** `Assets/Editor/RimaMapDesignerWindow.cs`
+## Kısıtlar
 
-```csharp
-[Serializable]
-public class MapSaveData
-{
-    public int width;
-    public int height;
-    public int[] terrainGrid;
-    public string biomePresetGuid;
-    public LayerSaveData[] layers;
-    public int[] vertexData;
-    public string[] layerNames;
-    public RIMA.Systems.Map.MapObjectPlacement[] objects; // NEW
-}
-```
-
-Save/Load roundtrip objects array.
-
----
-
-## UI: ObjectsPanel (slide-out right panel)
-
-**Yeni dosya:** `Assets/Editor/ObjectsPanelDrawer.cs`
-
-```csharp
-namespace RIMA.Editor {
-    public class ObjectsPanelDrawer {
-        public bool isOpen = false;
-        public string activePrefabFolder = "Assets/Prefabs/Mobs";
-        public GameObject selectedPrefab;
-        public bool placeMode = false;
-        
-        public void Draw(Rect panelRect, List<MapObjectPlacement> objects, Action<MapObjectPlacement> onAdd, Action<MapObjectPlacement> onRemove) {
-            // Header
-            // Folder selector: Mobs / Props / SpawnPoints
-            // Prefab list (scrollable, with preview thumbnail via AssetPreview)
-            // [Place Mode] toggle
-            // List of placed objects (id, prefab name, position) with [Remove] button
-        }
-    }
-}
-```
-
-**Map Designer integration:**
-- Toolbar [Objects] button (currently placeholder) → toggle `objectsPanel.isOpen`
-- Right panel'in width'ini ObjectsPanel açıkken 200 → 360'a genişlet
-- ObjectsPanelDrawer.Draw(rightPanelRect, ...) çağır
-
-**Place mode behavior:**
-- `placeMode && objectsPanel.isOpen && hover canvas && selectedPrefab != null` ise:
-  - Cursor altında prefab AssetPreview yarı şeffaf overlay
-  - Mouse click → new MapObjectPlacement { prefabPath, positionPx, displayName } add
-- Esc / [Place Mode] toggle off → cancel
-
-**Render placed objects on canvas:**
-- DrawGridCanvas içinde objects loop:
-  - Her object için AssetPreview.GetAssetPreview(prefab) sprite
-  - Position px / cellSize → canvas coords
-  - Draw with GUI.DrawTexture
-  - Click on object (when NOT in place mode) → select, show object id + [Remove] in panel
-
----
-
-## ApplyToScene with objects
-
-`ApplyToScene()` mevcut tilemap paint. **EKLE:**
-- After tilemap paint, instantiate objects:
-  ```csharp
-  foreach (var obj in mapObjects) {
-      var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(obj.prefabPath);
-      if (prefab == null) continue;
-      var instance = PrefabUtility.InstantiatePrefab(prefab, output.tilemap.transform.parent) as GameObject;
-      Vector3 worldPos = output.tilemap.CellToWorld(new Vector3Int(...)) + offset based on positionPx;
-      instance.transform.position = worldPos;
-      instance.name = obj.displayName ?? prefab.name;
-      Undo.RegisterCreatedObjectUndo(instance, "Place RIMA Object");
-  }
-  ```
-
----
-
-## EXAMPLES FOLDERS
-
-Eğer henüz yoksa oluştur:
-- `Assets/Prefabs/Mobs/` (varsa kullan)
-- `Assets/Prefabs/Props/` 
-- `Assets/Prefabs/SpawnPoints/`
-
-İçinde **placeholder prefab** koy (TR named):
-- `PlayerSpawnPoint.prefab` (empty GameObject + Gizmos.DrawWireSphere)
-- `MobSpawnPoint.prefab` 
-
----
-
-## VALIDATION
-
-1. `dotnet build` PASS
-2. Map Designer aç → [Objects] toolbar → ObjectsPanel açılır
-3. Folder dropdown → Mobs seç → prefab list yüklenir
-4. Bir prefab tıkla → selected
-5. [Place Mode] toggle → canvas üstünde cursor preview
-6. Canvas tıkla → MapObjectPlacement add edilir, canvas'ta visible
-7. Save map → JSON objects array contains entry
-8. Load map → object re-rendered
-9. Apply to Scene → instance Hierarchy'de görünür
-10. Console error 0
-
-**Screenshot:** STAGING/s75c_objects_panel.png
-
----
-
-## COMMIT MESAJI
-
-```
-[S75-C] Object Layer (Faz 1.5 stub impl)
-
-- MapObjectPlacement class (id, prefabPath, position, layer, displayName)
-- MapSaveData.objects[] (JSON roundtrip)
-- ObjectsPanelDrawer slide-out right panel: folder + prefab list + place mode
-- Map Designer canvas renders placed objects with AssetPreview
-- ApplyToScene instantiates prefabs at world positions
-- Placeholder prefabs: PlayerSpawnPoint, MobSpawnPoint
-```
+- Bütün frame'leri Read tool ile aç, görsel kanıt al
+- Mevcut `notes.md`'yi tekrarlamak yerine **derinleştir** (Codex önceki Sonnet notunu bilir)
+- Türkçe yaz, teknik terimler İngilizce kalsın
+- Code yazma, sadece analiz + karar adayı önerisi
+- contact_sheet.jpg + 3 frame.png + video MP4 erişilebilir; MP4 timeline incelemesi opsiyonel (frame'lerden çıkarsam yeter)
+- **Önceki notes.md'yi de cite et** ama tekrarlama
 
 
 ---

@@ -1,0 +1,141 @@
+{
+  "version": "1.0.0",
+  "name": "Untitled Map",
+  "exportDate": "2026-05-14T16:40:01.578353Z",
+  "engine": "pixellab-map-editor",
+  "mapConfig": {
+    "tileSize": 32,
+    "dimensions": {
+      "width": 77,
+      "height": 46,
+      "pixelWidth": 2464,
+      "pixelHeight": 1472
+    },
+    "boundingBox": {
+      "maxX": 83,
+      "maxY": 48,
+      "minX": 7,
+      "minY": 3
+    }
+  },
+  "terrains": [
+    {
+      "id": 1,
+      "name": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable.",
+      "color": "#9ca3af",
+      "baseTileId": "2165fb86-6bb6-4ff1-83e5-74e1611332a2"
+    },
+    {
+      "id": 3,
+      "name": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable.",
+      "color": "#a16207",
+      "baseTileId": "7f5b8f02-e410-4466-bbb9-59453eb8bab1"
+    },
+    {
+      "id": 2,
+      "name": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.",
+      "color": "#bfdbfe",
+      "baseTileId": "02586a60-25e7-4b89-aeef-6b9dc274c531"
+    },
+    {
+      "id": 4,
+      "name": "Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood",
+      "color": "#9ca3af",
+      "baseTileId": "6e5e6639-9fcf-494e-b927-7f5f452fc672"
+    },
+    {
+      "id": 5,
+      "name": "dark debris stone floor tile, pixel art top-down view, very dark warm charcoal-grey RGB(44,42,42) dominant tone, weathered ruined keep floor, slightly warm brown undertone NOT cold blue, matte desaturated stone with subtle hairline cracks, intimate fractured keep atmosphere, Salt and Sanctuary chibi-but-serious mood, dark gritty serious palette, NO purple, NO blue, NO mauve, neutral warm-gray stone",
+      "color": "#9ca3af",
+      "baseTileId": "c40bfd20-a7e8-4a91-80ef-12f9fa8357a4"
+    },
+    {
+      "id": 6,
+      "name": "dark debris stone floor tile, pixel art top-down view, very dark warm charcoal-grey RGB(44,42,42) dominant tone, weathered ruined keep floor, slightly warm brown undertone NOT cold blue, matte desaturated stone with subtle hairline cracks, intimate fractured keep atmosphere, Salt and Sanctuary chibi-but-serious mood, dark gritty serious palette, NO purple, NO blue, NO mauve, neutral warm-gray stone \u2194 Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood",
+      "color": "#858b95",
+      "baseTileId": "transition-4c962284-90f4-43ee-8192-2b108a77b6ca"
+    }
+  ],
+  "tilesets": [
+    {
+      "id": "49913501-fd93-41df-8a9f-f24e97a7b76c",
+      "filename": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable.-Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable..png",
+      "lowerTerrain": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable.",
+      "upperTerrain": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable.",
+      "lowerTerrainId": 1,
+      "upperTerrainId": 3,
+      "transitionSize": 0.25,
+      "transitionDescription": "Sparse stone fragments and dust scattered at the path edge where worn walkway meets rubble floor, occasional cracked flagstone chips, hairline cyan rift dust very rare, natural worn fade from polished path stones to surrounding broken stone. Mat painterly pixel, dark gritty palette, asymmetric weathering, no characters.",
+      "tileSize": 32,
+      "gridLayout": "4x4",
+      "wangIndexMapping": "standard"
+    },
+    {
+      "id": "9ffbb4d1-79d0-441d-8c23-e1df62e25644",
+      "filename": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable.-Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering..png",
+      "lowerTerrain": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable.",
+      "upperTerrain": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.",
+      "lowerTerrainId": 1,
+      "upperTerrainId": 2,
+      "transitionSize": 0.1,
+      "transitionDescription": "Broken rubble seam between floor and wall: loose dark stones, cracked mortar, small debris piles, chipped flagstone edges, a few pale lichen flecks, very subtle cyan-violet rift dust only in tiny accents. Keep the transition narrow and readable so room walkable space remains clear.",
+      "tileSize": 32,
+      "gridLayout": "4x4",
+      "wangIndexMapping": "standard"
+    },
+    {
+      "id": "8c154e37-8c0a-450a-82fd-126cc8b35c97",
+      "filename": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.-Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable..png",
+      "lowerTerrain": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.",
+      "upperTerrain": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable.",
+      "lowerTerrainId": 2,
+      "upperTerrainId": 3,
+      "transitionSize": 0.25,
+      "transitionDescription": "Broken stone debris where wall masonry meets worn walkway, fallen blocks at the boundary, dust accumulation in the crevice between raised wall and polished path stones, occasional hairline cyan rift trace, asymmetric organic boundary, no straight line",
+      "tileSize": 32,
+      "gridLayout": "4x4",
+      "wangIndexMapping": "standard"
+    },
+    {
+      "id": "02a5a97b-9475-4bdb-b2e4-cde475068f4d",
+      "filename": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.-Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood.png",
+      "lowerTerrain": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.",
+      "upperTerrain": "Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood",
+      "lowerTerrainId": 2,
+      "upperTerrainId": 4,
+      "transitionSize": 0.25,
+      "transitionDescription": "Cold blue cyan rift cracks splitting through ancient wall masonry, fractured stone with magical seam where rift overlay meets wall block surface, hairline cyan fracture pattern, dust accumulation in crevices, asymmetric organic boundary",
+      "tileSize": 32,
+      "gridLayout": "4x4",
+      "wangIndexMapping": "standard"
+    },
+    {
+      "id": "ecfee0a0-a5ec-4992-b435-1f1d3ae2dfdb",
+      "filename": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable.-Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood.png",
+      "lowerTerrain": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable.",
+      "upperTerrain": "Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood",
+      "lowerTerrainId": 3,
+      "upperTerrainId": 4,
+      "transitionSize": 0.25,
+      "transitionDescription": "Rift crack overlay seeping onto worn walkway, hairline cyan fracture trace through polished path stones, very subtle blue accent at boundary, organic asymmetric fade between path slab texture and rift-touched debris",
+      "tileSize": 32,
+      "gridLayout": "4x4",
+      "wangIndexMapping": "standard"
+    },
+    {
+      "id": "4c962284-90f4-43ee-8192-2b108a77b6ca",
+      "filename": "dark debris stone floor tile, pixel art top-down view, very dark warm charcoal-grey RGB(44,42,42) dominant tone, weathered ruined keep floor, slightly warm brown undertone NOT cold blue, matte desaturated stone with subtle hairline cracks, intimate fractured keep atmosphere, Salt and Sanctuary chibi-but-serious mood, dark gritty serious palette, NO purple, NO blue, NO mauve, neutral warm-gray stone-Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood.png",
+      "lowerTerrain": "dark debris stone floor tile, pixel art top-down view, very dark warm charcoal-grey RGB(44,42,42) dominant tone, weathered ruined keep floor, slightly warm brown undertone NOT cold blue, matte desaturated stone with subtle hairline cracks, intimate fractured keep atmosphere, Salt and Sanctuary chibi-but-serious mood, dark gritty serious palette, NO purple, NO blue, NO mauve, neutral warm-gray stone",
+      "upperTerrain": "Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood",
+      "lowerTerrainId": 5,
+      "upperTerrainId": 4,
+      "transitionSize": 1,
+      "transitionDescription": "ragged organic blend between charcoal debris stone and rift-cracked stone variant, raggedness 40 percent or higher, soft irregular boundary with natural fracture pattern, no harsh edges, both stones share dark warm-gray base, faint cold blue cyan hairline rift trace through transition only",
+      "tileSize": 32,
+      "gridLayout": "4x8",
+      "wangIndexMapping": "transition"
+    }
+  ],
+  "overlays": [],
+  "background": null
+}

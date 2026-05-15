@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "totalObjects": 1,
+  "objects": [
+    {
+      "id": "90f9627c-7882-4da1-a88a-a372b2779d6b",
+      "name": "warblade",
+      "filename": "90f9627c-7882-4da1-a88a-a372b2779d6b.png",
+      "boundingBox": {
+        "x": 891,
+        "y": 932.6666641235352,
+        "width": 120,
+        "height": 120
+      },
+      "layer": 1,
+      "visible": true,
+      "locked": false,
+      "description": "Character: warblade (south)",
+      "metadata": {
+        "generatedAt": "2026-05-13T12:54:14.318Z"
+      },
+      "isProgress": false
+    }
+  ]
+}
