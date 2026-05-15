@@ -13,7 +13,13 @@ namespace RIMA.Data
         public List<EncounterSlot> encounters = new List<EncounterSlot>();
         public RimaBiomePreset biome;
         public PatchAtlasSO patchAtlas;
+        public WallBrushSetSO wallBrushSet;
+        public PatchAtlasSO transitionAtlas;
+        public PatchAtlasSO decalAtlas;
+        public PatchAtlasSO accentAtlas;
         public ScatterBrushSO scatterBrush;
+        public NaturalFeatureSettingsSO featureSettings;
+        public FeatureEdgeSmoothingProfileSO featureEdgeSmoothingProfile;
         public int seed = 12345;
     }
 }

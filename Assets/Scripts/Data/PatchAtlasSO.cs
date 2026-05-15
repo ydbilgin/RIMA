@@ -19,5 +19,9 @@ namespace RIMA.Data
     public class PatchAtlasSO : ScriptableObject
     {
         public List<PatchEntry> patches = new List<PatchEntry>();
+        public bool edgeBiased;
+        [Min(0f)] public float wallProximityFactor = 1f;
+        public FeatureMaskSO featureMask;
+        [Range(0f, 1f)] public float featureMaskWeight = 0.5f;
     }
 }

@@ -11,6 +11,9 @@ namespace RIMA.Systems.Map
         public int upperTerrainId;
         public CornerWangTileSetSO tileSet;
 
+        [Tooltip("Phase 1 keeps Wang disabled unless this pairing is a water/elevation feature edge.")]
+        public bool isFeatureEdge;
+
         [Range(0f, 1f)]
         [Tooltip("PixelLab transition size: 0.0 = zemin<->zemin (no elevation), 0.1 = dar seam, 0.25 = organik wide blend, 0.5+ = cok genis")]
         public float transitionSize = 0.25f;

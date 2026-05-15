@@ -1,6 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using RIMA.Combat.Juice;
 using UnityEngine;
 
 namespace RIMA.Combat
@@ -9,10 +8,15 @@ namespace RIMA.Combat
     {
         [SerializeField] private float hitMagnitude = 0.05f;
         [SerializeField] private float hitDuration = 0.1f;
+        [SerializeField] private float critMagnitude = 0.12f;
+        [SerializeField] private float critDuration = 0.18f;
         [SerializeField] private float commitBeat3Magnitude = 0.15f;
         [SerializeField] private float commitBeat3Duration = 0.2f;
         [SerializeField] private float killMagnitude = 0.1f;
         [SerializeField] private float killDuration = 0.15f;
+        [SerializeField] private float dashMagnitude = 0.04f;
+        [SerializeField] private float dashDuration = 0.08f;
+        [SerializeField] private float minIcdSeconds = 0.04f;
 
         private Camera targetCamera;
         private Coroutine shakeCoroutine;
@@ -23,6 +27,7 @@ namespace RIMA.Combat
             CombatEventBus.OnHit += HandleHit;
             CombatEventBus.OnCommitBeat += HandleCommitBeat;
             CombatEventBus.OnKill += HandleKill;
+            CombatEventBus.OnDash += HandleDash;
         }
 
         private void OnDisable()
@@ -30,17 +35,30 @@ namespace RIMA.Combat
             CombatEventBus.OnHit -= HandleHit;
             CombatEventBus.OnCommitBeat -= HandleCommitBeat;
             CombatEventBus.OnKill -= HandleKill;
+            CombatEventBus.OnDash -= HandleDash;
             ResetCameraPosition();
         }
 
         private void HandleHit(HitEvent e)
         {
-            Shake(hitMagnitude, hitDuration);
+            if (!FeelToggleSettings.ShakeEnabled || !ProcLimiter.TryProc("shake_hit", minIcdSeconds))
+            {
+                return;
+            }
+
+            if (e.isCrit)
+            {
+                Shake(critMagnitude, critDuration);
+            }
+            else
+            {
+                Shake(hitMagnitude, hitDuration);
+            }
         }
 
         private void HandleCommitBeat(CommitBeatEvent e)
         {
-            if (e.beatIndex == 3)
+            if (e.beatIndex == 3 && FeelToggleSettings.ShakeEnabled && ProcLimiter.TryProc("shake_commit3", minIcdSeconds))
             {
                 Shake(commitBeat3Magnitude, commitBeat3Duration);
             }
@@ -48,7 +66,22 @@ namespace RIMA.Combat
 
         private void HandleKill(KillEvent e)
         {
+            if (!FeelToggleSettings.ShakeEnabled || !ProcLimiter.TryProc("shake_kill", minIcdSeconds))
+            {
+                return;
+            }
+
             Shake(killMagnitude, killDuration);
+        }
+
+        private void HandleDash(DashEvent e)
+        {
+            if (!FeelToggleSettings.ShakeEnabled || !ProcLimiter.TryProc("shake_dash", minIcdSeconds))
+            {
+                return;
+            }
+
+            Shake(dashMagnitude, dashDuration);
         }
 
         public void Shake(float magnitude, float duration)

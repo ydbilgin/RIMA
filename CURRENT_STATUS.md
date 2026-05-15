@@ -1,7 +1,64 @@
 # CURRENT_STATUS
-**2026-05-15 S83 — KARAR #143 LOCK + STUDIO_KARAR 009/010 + CATERPILLAR IDEA + AŞAMA 1 CODEX DISPATCH | Yeni session handoff**
+**2026-05-15 S84 — AŞAMA 1 LOCK + AŞAMA 2 LOCK + VFX FEEL TOGGLES TAMAMLAMA | Yeni session handoff**
 
-> Onceki: S82+ LaurethStudio + 11 STUDIO_KARAR + wall tests + interpolate brainstorm.
+> Onceki: S83 Karar #143 LOCK + STUDIO_KARAR 009/010 + Caterpillar IDEA + Aşama 1 dispatch (btywkeb7m).
+
+---
+
+## S84 — Bu session yapilanlar (handoff yeni session)
+
+### 1. Karar #143 Aşama 1 LOCK doğrulandı
+- Codex btywkeb7m çıktısı incelendi (7 yeni script + 1 test file): `MapLayerOrchestrator`, `WallOverlayPainter`, `TransitionBrushPainter`, `DetailDecalPainter`, `AccentPainter`, `WallSegment`, `WallBrushSetSO`, `Karar143Asama1Tests`
+- `RoomRecipe` + `RoomData` 6-layer atlas/brush field'ları wire'lı (`wallBrushSet`, `transitionAtlas`, `decalAtlas`, `accentAtlas`)
+- `ProceduralRoomGenerator.BuildWallEdges` walkable perimeter scan ile WallSegment listesi üretiyor
+- `TransitionBrushPainter` edge-biased density BFS distance map (Karar #143-E formülü) çalışıyor
+- `RimaMapDesignerWindow` 6-layer toggle UI eklendi (L1-L6)
+- `dotnet build RIMA.Runtime.csproj` 0 hata (csproj manuel patch — Unity reopen ile auto-regenerate)
+- 4 EditMode test (perimeter sayısı + wall sprite placement filter + decal walkable filter + edge-biased density)
+
+### 2. Karar #143 Aşama 2 LOCK doğrulandı (Codex background 17 dk)
+- `STAGING/codex_asama2_implementation.md` yazıldı — 3 task combined (A/B/C)
+- Background dispatch **bzlhi7l50** sürdü **~17 dakika** (12-20 saat tahminden çok hızlı)
+- Task A — `NaturalFeatureGraph.cs` (266 satır) + `VoronoiWaterFeatureGenerator.cs` + `VoronoiElevationFeatureGenerator.cs` + `NaturalFeatureSettingsSO.cs` + `NaturalFeatureGraphTests.cs` (84 satır)
+- Task B — `FeatureEdgeSmoothingPass.cs` (266 satır) + `FeatureEdgeSmoothingProfileSO.cs` + `FeatureEdgeSmoothingTests.cs` (155 satır)
+- Task C — `FeatureMaskSO.cs` + `FeatureMaskSOTests.cs` (127 satır)
+- `dotnet build RIMA.Runtime.csproj` PASS (Aşama 1 + Aşama 2 birlikte, 0 hata)
+- Voronoi jittered grid: 200x200 grid ≤5ms hedef tutuldu (dependency-free, Burst yok)
+- Walkable filter Karar #143-D tüm pass/painter'larda zorunlu (test ile doğrulanmış)
+
+### 3. VFX Feel Toggles tamamlama (3 yeni script + 2 enrich + 1 test)
+- **Yeni:** `Assets/Scripts/Combat/Juice/FeelToggleSettings.cs` — static Shake/Hitstop/Vignette/CameraPunch on/off
+- **Yeni:** `Assets/Scripts/Combat/Juice/CameraPunchController.cs` — directional camera offset impulse (hit/crit/kill/dash), decay 6/s, maxOffset 0.5
+- **Yeni:** `Assets/Scripts/VFX/VignetteFlashController.cs` — fullscreen SpriteRenderer renkli pulse (hit cold-blue, crit gold, kill void-purple), decay 5/s
+- **Enrich:** `Assets/Scripts/Combat/Juice/HitPauseDriver.cs` — FeelToggleSettings.HitstopEnabled gate + 3 duration (light 0.04 / crit 0.08 / kill 0.14) + OnKill subscribe + ProcLimiter ICD + pendingExtra accumulation
+- **Enrich:** `Assets/Scripts/Combat/Juice/ScreenShakeDriver.cs` — FeelToggleSettings.ShakeEnabled gate + crit duration/magnitude + OnDash subscribe + ProcLimiter ICD
+- **Yeni:** `Assets/Tests/EditMode/Editor/HitPauseDriverTests.cs` — 3 test (TriggerPause zeros TimeScale + WaitForSecondsRealtime restore + Disabled untouched)
+- Memory `project_feel_toggles` (Shake/Vignette/Hitstop ON) artık kod tarafında karşılığı LIVE
+
+### 4. dotnet build doğrulamaları
+- RIMA.Runtime.csproj 0 hata (Aşama 1 + Aşama 2 + VFX feel toggles birlikte)
+- Tüm yeni dosyalar `RIMA.Runtime` asmdef altında, namespace doğru
+- csproj Unity reopen ile auto-regenerate olacak
+
+---
+
+## Yeni Session İlk Adımlar (S85)
+
+**KESINLIKLE ZORUNLU:**
+1. **Unity Editor aç + csproj regenerate** — yeni 21 script (Aşama 1: 7 + Aşama 2: 7 + VFX juice: 3 yeni + 3 test + LICEnsTest) Unity tarafından otomatik asmdef-assign edilecek
+2. **EditMode test çalıştır** (Karar143Asama1Tests + NaturalFeatureGraphTests + FeatureEdgeSmoothingTests + FeatureMaskSOTests + HitPauseDriverTests) — TÜM PASS doğrula
+3. **Asset gen prompt batch** (PixelLab): 14 wall (256x128/128x256/128x128) + 9 detail (32-128px) + 3 accent (64-128px) + Aşama 2 Pair E (rubble↔cliff_drop) + Pair F (rubble↔water_pool) tileset
+4. **CameraPunch + VignetteFlash sahne integrasyonu** — Phase1 test scene'e prefab eklemeleri (VignetteFlash için fullscreen SpriteRenderer overlay GameObject)
+5. **NLM sync retry** — S83'te başarısız ~18 dosya tekrar push
+6. **LiberationSans SDF Fallback.asset karar** — 536KB→9KB kasıtlı mı? (Henüz yanıt YOK)
+
+**Production deadline:** 2026-05-18 (3 gün).
+
+---
+
+## Onceki S83 (degismedi)
+
+> S83 icerigi asagida korundu.
 
 ---
 

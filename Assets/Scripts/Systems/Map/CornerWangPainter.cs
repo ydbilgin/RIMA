@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using RIMA.Data;
+using RIMA.MapDesigner;
 using RIMA.Systems.Map;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -7,7 +9,7 @@ namespace RIMA
 {
     public static class CornerWangPainter
     {
-        public static void Paint(Tilemap tilemap, RimaBiomePreset biome, int[,] terrainGrid, int width, int height, Vector3Int origin = default, int variantSeed = 0)
+        public static void Paint(Tilemap tilemap, RimaBiomePreset biome, int[,] terrainGrid, int width, int height, Vector3Int origin = default, int variantSeed = 0, bool allowFeatureEdges = false)
         {
             if (tilemap == null || biome == null || terrainGrid == null)
             {
@@ -28,7 +30,7 @@ namespace RIMA
                     int sw = terrainGrid[x, y];
                     int se = terrainGrid[x + 1, y];
 
-                    TileBase tile = ResolveTile(biome, nw, ne, sw, se, x, y, variantSeed);
+                    TileBase tile = ResolveTile(biome, nw, ne, sw, se, x, y, variantSeed, allowFeatureEdges);
                     if (tile == null)
                     {
                         continue;
@@ -43,7 +45,18 @@ namespace RIMA
             tilemap.RefreshAllTiles();
         }
 
-        public static TileBase ResolveTile(RimaBiomePreset biome, int nw, int ne, int sw, int se, int x = 0, int y = 0, int variantSeed = 0)
+        public static FeatureEdgeSmoothingPass.PaintResult Paint(Tilemap tilemap, RimaBiomePreset biome, RoomData room, FeatureEdgeSmoothingProfileSO smoothingProfile, Vector3Int origin = default, int variantSeed = 0)
+        {
+            if (tilemap == null || room.vertexGrid == null)
+            {
+                return default;
+            }
+
+            Paint(tilemap, biome, room.vertexGrid, room.size.x, room.size.y, origin, variantSeed, false);
+            return FeatureEdgeSmoothingPass.PaintFeatureEdges(tilemap.transform.parent != null ? tilemap.transform.parent : tilemap.transform, tilemap, biome, room, smoothingProfile, variantSeed);
+        }
+
+        public static TileBase ResolveTile(RimaBiomePreset biome, int nw, int ne, int sw, int se, int x = 0, int y = 0, int variantSeed = 0, bool allowFeatureEdges = false)
         {
             if (biome == null)
             {
@@ -56,6 +69,11 @@ namespace RIMA
                 int id = nw;
                 MapTerrain terrain = biome.terrains != null ? biome.terrains.Find(t => t != null && t.id == id) : null;
                 if (terrain == null)
+                {
+                    return null;
+                }
+
+                if (!terrain.walkable && !allowFeatureEdges)
                 {
                     return null;
                 }
@@ -88,9 +106,9 @@ namespace RIMA
             }
 
             TilesetPairing pairing = biome.FindPairing(lower, upper);
-            if (pairing == null || pairing.tileSet == null)
+            if (pairing == null || pairing.tileSet == null || !pairing.isFeatureEdge || !allowFeatureEdges)
             {
-                return null;
+                return ResolvePhaseOneFallbackTile(biome, lower, upper, x, y, variantSeed);
             }
 
             int nwBit = nw == upper ? 1 : 0;
@@ -99,6 +117,30 @@ namespace RIMA
             int seBit = se == upper ? 1 : 0;
             int seed = (x * 73856093) ^ (y * 19349663);
             return pairing.tileSet.GetTile(nwBit, neBit, swBit, seBit, seed);
+        }
+
+        private static TileBase ResolvePhaseOneFallbackTile(RimaBiomePreset biome, int lower, int upper, int x, int y, int variantSeed)
+        {
+            MapTerrain lowerTerrain = biome.terrains != null ? biome.terrains.Find(t => t != null && t.id == lower) : null;
+            MapTerrain upperTerrain = biome.terrains != null ? biome.terrains.Find(t => t != null && t.id == upper) : null;
+            MapTerrain selected = lowerTerrain != null && lowerTerrain.walkable ? lowerTerrain : upperTerrain != null && upperTerrain.walkable ? upperTerrain : lowerTerrain;
+            if (selected == null || !selected.walkable)
+            {
+                return null;
+            }
+
+            TileBase variant = ResolveVariantTile(selected, x, y, variantSeed);
+            if (variant != null)
+            {
+                return variant;
+            }
+
+            if (selected.baseTile != null)
+            {
+                return selected.baseTile;
+            }
+
+            return selected.baseTileSource != null ? selected.baseTileSource.GetTile(0, 0, 0, 0) : null;
         }
 
         private static TileBase ResolveVariantTile(MapTerrain terrain, int x, int y, int variantSeed)

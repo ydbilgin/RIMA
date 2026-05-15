@@ -115,6 +115,28 @@ namespace RIMA.Editor
         [SerializeField] private int roomRecipeSeed = 78101;
         [SerializeField] private bool applyPatchAtlas = true;
         [SerializeField] private bool applyScatterBrush = true;
+        [SerializeField] private bool enableLayer1FloorBase = true;
+        [SerializeField] private bool enableLayer2FloorVariation = true;
+        [SerializeField] private bool enableLayer3WallOverlay = true;
+        [SerializeField] private bool enableLayer4TransitionBrush;
+        [SerializeField] private bool enableLayer5DetailDecal;
+        [SerializeField] private bool enableLayer6Accent;
+        [SerializeField] private bool enableWangTileset;
+        [SerializeField] private WallBrushSetSO wallBrushSet;
+        [SerializeField] private PatchAtlasSO transitionBrushAtlas;
+        [SerializeField] private PatchAtlasSO detailDecalAtlas;
+        [SerializeField] private PatchAtlasSO accentAtlas;
+        [SerializeField] private NaturalFeatureSettingsSO naturalFeatureSettings;
+        [SerializeField] private FeatureEdgeSmoothingProfileSO featureEdgeSmoothingProfile;
+        [SerializeField] private FeatureMaskSO featureMaskPreview;
+        [SerializeField] private bool naturalFeaturesFoldout;
+        [SerializeField] private bool showNaturalFeaturePreview = true;
+        [SerializeField] private bool featureMaskPaintMode;
+        [SerializeField] private int naturalFeatureSiteCount = 64;
+        [SerializeField] private FeatureType naturalFeatureType = FeatureType.Water;
+        [SerializeField] private int naturalFeatureSeed = 143;
+        [SerializeField] private int featureMaskBrushRadius = 2;
+        [SerializeField, Range(0f, 1f)] private float featureMaskBrushAlpha = 1f;
         [SerializeField] private bool advancedFoldout;
         [SerializeField] private bool proceduralFoldout;
         [SerializeField] private bool showTilePreview = true;
@@ -129,6 +151,7 @@ namespace RIMA.Editor
         private readonly BrushInputHandler brushInput = new BrushInputHandler();
         [NonSerialized] private int[,] terrainGrid;
         [SerializeField, HideInInspector] private int[] flatTerrainData;
+        private NaturalFeatureGraphResult designerNaturalFeatures;
         private Vector2 gridScroll;
         private Vector2 leftScroll;
         private Vector2 lastMousePosition;
@@ -538,6 +561,9 @@ namespace RIMA.Editor
 
             EditorGUILayout.Space(6f);
             DrawSeparator();
+            DrawLayerTogglePanel();
+            DrawNaturalFeaturesPanel();
+            DrawSeparator();
 
             advancedFoldout = EditorGUILayout.Foldout(advancedFoldout, "Advanced", true);
             if (advancedFoldout)
@@ -614,6 +640,81 @@ namespace RIMA.Editor
             EditorGUI.DrawRect(new Rect(rect.x, rect.y + 4f, rect.width, 1f), new Color(0.28f, 0.28f, 0.28f, 1f));
         }
 
+        private void DrawLayerTogglePanel()
+        {
+            EditorGUILayout.LabelField("6-Layer Pipeline", EditorStyles.boldLabel);
+            enableLayer1FloorBase = EditorGUILayout.ToggleLeft("L1 Floor Base", enableLayer1FloorBase);
+            enableLayer2FloorVariation = EditorGUILayout.ToggleLeft("L2 Floor Variation", enableLayer2FloorVariation);
+            enableLayer3WallOverlay = EditorGUILayout.ToggleLeft("L3 Wall Overlay", enableLayer3WallOverlay);
+            wallBrushSet = (WallBrushSetSO)EditorGUILayout.ObjectField("Wall Brush", wallBrushSet, typeof(WallBrushSetSO), false);
+
+            transitionBrushAtlas = (PatchAtlasSO)EditorGUILayout.ObjectField("L4 Atlas", transitionBrushAtlas, typeof(PatchAtlasSO), false);
+            EditorGUI.BeginDisabledGroup(GetTransitionAtlas() == null);
+            enableLayer4TransitionBrush = EditorGUILayout.ToggleLeft("L4 Transition Brush", enableLayer4TransitionBrush);
+            EditorGUI.EndDisabledGroup();
+
+            detailDecalAtlas = (PatchAtlasSO)EditorGUILayout.ObjectField("L5 Atlas", detailDecalAtlas, typeof(PatchAtlasSO), false);
+            EditorGUI.BeginDisabledGroup(GetDetailAtlas() == null);
+            enableLayer5DetailDecal = EditorGUILayout.ToggleLeft("L5 Detail Decal", enableLayer5DetailDecal);
+            EditorGUI.EndDisabledGroup();
+
+            accentAtlas = (PatchAtlasSO)EditorGUILayout.ObjectField("L6 Atlas", accentAtlas, typeof(PatchAtlasSO), false);
+            EditorGUI.BeginDisabledGroup(GetAccentAtlas() == null);
+            enableLayer6Accent = EditorGUILayout.ToggleLeft("L6 Accent", enableLayer6Accent);
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginDisabledGroup(true);
+            enableWangTileset = EditorGUILayout.ToggleLeft("Wang Tileset (Asama 2)", enableWangTileset);
+            EditorGUI.EndDisabledGroup();
+        }
+
+        private void DrawNaturalFeaturesPanel()
+        {
+            naturalFeaturesFoldout = EditorGUILayout.Foldout(naturalFeaturesFoldout, "Natural Features", true);
+            if (!naturalFeaturesFoldout)
+            {
+                return;
+            }
+
+            naturalFeatureSettings = (NaturalFeatureSettingsSO)EditorGUILayout.ObjectField("Settings", naturalFeatureSettings, typeof(NaturalFeatureSettingsSO), false);
+            featureEdgeSmoothingProfile = (FeatureEdgeSmoothingProfileSO)EditorGUILayout.ObjectField("Smoothing", featureEdgeSmoothingProfile, typeof(FeatureEdgeSmoothingProfileSO), false);
+            featureMaskPreview = (FeatureMaskSO)EditorGUILayout.ObjectField("Mask", featureMaskPreview, typeof(FeatureMaskSO), false);
+
+            EditorGUI.BeginChangeCheck();
+            naturalFeatureSiteCount = EditorGUILayout.IntSlider("Sites", naturalFeatureSettings != null ? naturalFeatureSettings.siteCount : naturalFeatureSiteCount, 64, 256);
+            naturalFeatureType = (FeatureType)EditorGUILayout.EnumPopup("Type", naturalFeatureSettings != null ? naturalFeatureSettings.featureType : naturalFeatureType);
+            naturalFeatureSeed = EditorGUILayout.IntField("Seed", naturalFeatureSettings != null && naturalFeatureSettings.seed != 0 ? naturalFeatureSettings.seed : naturalFeatureSeed);
+            if (EditorGUI.EndChangeCheck() && naturalFeatureSettings != null)
+            {
+                naturalFeatureSettings.siteCount = naturalFeatureSiteCount;
+                naturalFeatureSettings.featureType = naturalFeatureType;
+                naturalFeatureSettings.seed = naturalFeatureSeed;
+                EditorUtility.SetDirty(naturalFeatureSettings);
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Generate"))
+            {
+                GenerateNaturalFeaturesFromCurrentGrid();
+            }
+
+            if (GUILayout.Button("Clear"))
+            {
+                designerNaturalFeatures = default;
+                Repaint();
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            showNaturalFeaturePreview = EditorGUILayout.ToggleLeft("Preview", showNaturalFeaturePreview);
+            featureMaskPaintMode = EditorGUILayout.ToggleLeft("Paint Mask", featureMaskPaintMode);
+            if (featureMaskPaintMode)
+            {
+                featureMaskBrushRadius = EditorGUILayout.IntSlider("Brush", featureMaskBrushRadius, 1, 8);
+                featureMaskBrushAlpha = EditorGUILayout.Slider("Alpha", featureMaskBrushAlpha, 0f, 1f);
+            }
+        }
+
         private void DrawGridCanvas(Rect viewRect)
         {
             EditorGUI.DrawRect(viewRect, new Color(0.12f, 0.12f, 0.12f, 1f));
@@ -648,6 +749,8 @@ namespace RIMA.Editor
                     }
                 }
             }
+
+            DrawNaturalFeaturePreview();
 
             if (paintMode == PaintMode.Vertex && IsValidVertex(hoveredVertex))
             {
@@ -773,6 +876,127 @@ namespace RIMA.Editor
                     }
                 }
             }
+        }
+
+        private void DrawNaturalFeaturePreview()
+        {
+            if (!showNaturalFeaturePreview)
+            {
+                return;
+            }
+
+            if (NaturalFeatureGraph.HasFeatureData(designerNaturalFeatures))
+            {
+                bool[,] mask = designerNaturalFeatures.featureMask;
+                int width = Mathf.Min(roomWidth, mask.GetLength(0));
+                int height = Mathf.Min(roomHeight, mask.GetLength(1));
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        if (!mask[x, y])
+                        {
+                            continue;
+                        }
+
+                        FeatureType type = FeatureTypeForDesignerCell(x, y);
+                        Color color = type == FeatureType.Water ? new Color(0.1f, 0.45f, 1f, 0.32f)
+                            : type == FeatureType.Rift ? new Color(0.7f, 0.2f, 1f, 0.32f)
+                            : new Color(0.95f, 0.62f, 0.12f, 0.32f);
+                        EditorGUI.DrawRect(CellToCanvasRect(new Vector2Int(x, y)), color);
+                    }
+                }
+
+                Handles.color = Color.cyan;
+                for (int i = 0; i < designerNaturalFeatures.sites.Length; i++)
+                {
+                    if (designerNaturalFeatures.siteTypes[i] == FeatureType.None)
+                    {
+                        continue;
+                    }
+
+                    Vector2 site = designerNaturalFeatures.sites[i];
+                    Handles.DrawSolidDisc(CellToCanvasPosition(site), Vector3.forward, Mathf.Max(2f, VertexRadius * 0.6f));
+                }
+            }
+
+            if (featureMaskPreview != null && featureMaskPreview.alphaMask != null)
+            {
+                for (int y = 0; y < roomHeight; y++)
+                {
+                    for (int x = 0; x < roomWidth; x++)
+                    {
+                        float alpha = featureMaskPreview.Sample(new Vector2Int(x, y), new Vector2Int(roomWidth, roomHeight));
+                        if (alpha <= 0.01f)
+                        {
+                            continue;
+                        }
+
+                        EditorGUI.DrawRect(CellToCanvasRect(new Vector2Int(x, y)), new Color(0.2f, 1f, 0.35f, Mathf.Clamp01(alpha) * 0.2f));
+                    }
+                }
+            }
+        }
+
+        private void GenerateNaturalFeaturesFromCurrentGrid()
+        {
+            EnsureTerrainGrid(roomWidth, roomHeight, false);
+            bool[,] walkable = BuildWalkableCellsFromGrid(terrainGrid, roomWidth, roomHeight);
+            int count = naturalFeatureSettings != null ? naturalFeatureSettings.siteCount : naturalFeatureSiteCount;
+            int seed = naturalFeatureSettings != null && naturalFeatureSettings.seed != 0 ? naturalFeatureSettings.seed : naturalFeatureSeed;
+            FeatureType type = naturalFeatureSettings != null ? naturalFeatureSettings.featureType : naturalFeatureType;
+            float ratio = naturalFeatureSettings != null ? naturalFeatureSettings.featureSiteRatio : 0.18f;
+            designerNaturalFeatures = NaturalFeatureGraph.Generate(new Vector2Int(roomWidth, roomHeight), walkable, count, seed, type, ratio);
+            Repaint();
+        }
+
+        private void PaintFeatureMask(Vector2Int cell, float alpha)
+        {
+            Texture2D texture = featureMaskPreview != null ? featureMaskPreview.alphaMask : null;
+            if (texture == null || roomWidth <= 0 || roomHeight <= 0)
+            {
+                return;
+            }
+
+            Undo.RegisterCompleteObjectUndo(texture, "Paint Feature Mask");
+            int radius = Mathf.Max(1, featureMaskBrushRadius);
+            for (int y = cell.y - radius + 1; y <= cell.y + radius - 1; y++)
+            {
+                for (int x = cell.x - radius + 1; x <= cell.x + radius - 1; x++)
+                {
+                    if (x < 0 || y < 0 || x >= roomWidth || y >= roomHeight)
+                    {
+                        continue;
+                    }
+
+                    float u = (x + 0.5f) / roomWidth;
+                    float v = (y + 0.5f) / roomHeight;
+                    int px = Mathf.Clamp(Mathf.FloorToInt(u * texture.width), 0, texture.width - 1);
+                    int py = Mathf.Clamp(Mathf.FloorToInt(v * texture.height), 0, texture.height - 1);
+                    Color color = texture.GetPixel(px, py);
+                    color.a = Mathf.Clamp01(alpha);
+                    texture.SetPixel(px, py, color);
+                }
+            }
+
+            texture.Apply();
+            EditorUtility.SetDirty(texture);
+            EditorUtility.SetDirty(featureMaskPreview);
+        }
+
+        private FeatureType FeatureTypeForDesignerCell(int x, int y)
+        {
+            if (!NaturalFeatureGraph.HasFeatureData(designerNaturalFeatures) ||
+                x < 0 ||
+                y < 0 ||
+                x >= designerNaturalFeatures.siteIndex.GetLength(0) ||
+                y >= designerNaturalFeatures.siteIndex.GetLength(1))
+            {
+                return FeatureType.None;
+            }
+
+            int site = designerNaturalFeatures.siteIndex[x, y];
+            return site >= 0 && site < designerNaturalFeatures.siteTypes.Length ? designerNaturalFeatures.siteTypes[site] : FeatureType.None;
         }
 
         private Texture GetCanvasTileTexture(TileBase tile)
@@ -919,6 +1143,34 @@ namespace RIMA.Editor
                 }
 
                 return;
+            }
+
+            if (featureMaskPaintMode && paintMode == PaintMode.Cell && featureMaskPreview != null && featureMaskPreview.alphaMask != null)
+            {
+                if (evt.type == EventType.MouseDown && (evt.button == 0 || evt.button == 1))
+                {
+                    PaintFeatureMask(hoveredCell, evt.button == 1 ? 0f : featureMaskBrushAlpha);
+                    isPainting = true;
+                    evt.Use();
+                    Repaint();
+                    return;
+                }
+
+                if (evt.type == EventType.MouseDrag && isPainting && (evt.button == 0 || evt.button == 1))
+                {
+                    PaintFeatureMask(hoveredCell, evt.button == 1 ? 0f : featureMaskBrushAlpha);
+                    evt.Use();
+                    Repaint();
+                    return;
+                }
+
+                if (evt.type == EventType.MouseUp && (evt.button == 0 || evt.button == 1))
+                {
+                    isPainting = false;
+                    evt.Use();
+                    Repaint();
+                    return;
+                }
             }
 
             if (evt.type == EventType.MouseDown && (evt.button == 0 || evt.button == 1))
@@ -1200,6 +1452,13 @@ namespace RIMA.Editor
             return new Vector2(
                 Mathf.Round(CanvasPadding + x * cellSize),
                 Mathf.Round(CanvasPadding + (roomHeight - y) * cellSize));
+        }
+
+        private Vector2 CellToCanvasPosition(Vector2 cell)
+        {
+            return new Vector2(
+                Mathf.Round(CanvasPadding + cell.x * cellSize),
+                Mathf.Round(CanvasPadding + (roomHeight - cell.y) * cellSize));
         }
 
         private Rect CellToCanvasRect(Vector2Int cell)
@@ -2020,8 +2279,9 @@ namespace RIMA.Editor
 
             RoomData roomData = ProceduralRoomGenerator.Generate(selectedRoomRecipe, roomRecipeSeed);
             LoadFromGenerator(ToMapSaveData(roomData, selectedRoomRecipe));
+            designerNaturalFeatures = roomData.naturalFeatures;
             ApplyToScene();
-            ApplyRecipeDressing(selectedRoomRecipe);
+            ApplyRecipeDressing(selectedRoomRecipe, roomData);
         }
 
         private MapSaveData ToMapSaveData(RoomData roomData, RoomRecipe recipe)
@@ -2201,7 +2461,15 @@ namespace RIMA.Editor
             if (outputTilemap != null && activeBiome != null && terrainGrid != null)
             {
                 Undo.RegisterCompleteObjectUndo(outputTilemap, "Apply RIMA Map");
-                CornerWangPainter.Paint(outputTilemap, activeBiome, terrainGrid, roomWidth, roomHeight, default, variantSeed);
+                if (enableLayer1FloorBase || enableLayer2FloorVariation)
+                {
+                    CornerWangPainter.Paint(outputTilemap, activeBiome, terrainGrid, roomWidth, roomHeight, default, variantSeed, enableWangTileset);
+                }
+                else
+                {
+                    outputTilemap.ClearAllTiles();
+                }
+
                 EditorUtility.SetDirty(outputTilemap);
                 applied = 1;
 
@@ -2212,6 +2480,8 @@ namespace RIMA.Editor
                 }
             }
 
+            ApplyDesignerLayers(BuildRoomDataFromCurrentGrid(selectedRoomRecipe));
+
             int placedObjects = ApplyObjectsToScene();
             Debug.Log("[MapDesigner] Applied " + roomWidth + "x" + roomHeight + " map to " + applied + " tilemap(s).");
             if (placedObjects > 0)
@@ -2220,27 +2490,169 @@ namespace RIMA.Editor
             }
         }
 
-        private void ApplyRecipeDressing(RoomRecipe recipe)
+        private void ApplyRecipeDressing(RoomRecipe recipe, RoomData roomData)
         {
             if (recipe == null || outputTilemap == null)
             {
                 return;
             }
 
-            Transform host = outputTilemap.transform.parent != null ? outputTilemap.transform.parent : outputTilemap.transform;
-            if (applyPatchAtlas && recipe.patchAtlas != null)
-            {
-                PatchOverlayPainter patchPainter = EnsureSceneComponent<PatchOverlayPainter>(host, "PatchOverlayPainter");
-                patchPainter.PaintPatches(outputTilemap, recipe.patchAtlas, roomRecipeSeed);
-                EditorUtility.SetDirty(patchPainter);
-            }
+            ApplyDesignerLayers(roomData);
 
+            Transform host = outputTilemap.transform.parent != null ? outputTilemap.transform.parent : outputTilemap.transform;
             if (applyScatterBrush && recipe.scatterBrush != null)
             {
                 ScatterBrushPainter scatterPainter = EnsureSceneComponent<ScatterBrushPainter>(host, "ScatterBrushPainter");
                 scatterPainter.PaintScatter(outputTilemap, recipe.scatterBrush, roomRecipeSeed);
                 EditorUtility.SetDirty(scatterPainter);
             }
+        }
+
+        private void ApplyDesignerLayers(RoomData roomData)
+        {
+            if (outputTilemap == null || !HasWalkableMask(roomData))
+            {
+                return;
+            }
+
+            Transform host = outputTilemap.transform.parent != null ? outputTilemap.transform.parent : outputTilemap.transform;
+            if (NaturalFeatureGraph.HasFeatureData(roomData.naturalFeatures))
+            {
+                FeatureEdgeSmoothingPass featurePass = EnsureSceneComponent<FeatureEdgeSmoothingPass>(host, "FeatureEdgeSmoothingPass");
+                featurePass.Paint(outputTilemap, activeBiome, roomData, roomData.featureEdgeSmoothingProfile, roomRecipeSeed);
+                EditorUtility.SetDirty(featurePass);
+            }
+
+            if (enableLayer3WallOverlay && roomData.wallBrushSet != null)
+            {
+                WallOverlayPainter wallPainter = EnsureSceneComponent<WallOverlayPainter>(host, "WallOverlayPainter");
+                wallPainter.PaintWalls(roomData, roomData.wallBrushSet, outputTilemap, roomRecipeSeed);
+                EditorUtility.SetDirty(wallPainter);
+            }
+
+            if (enableLayer4TransitionBrush && roomData.transitionAtlas != null)
+            {
+                TransitionBrushPainter transitionPainter = EnsureSceneComponent<TransitionBrushPainter>(host, "TransitionBrushPainter");
+                transitionPainter.PaintTransitions(outputTilemap, roomData, roomData.transitionAtlas, roomRecipeSeed);
+                EditorUtility.SetDirty(transitionPainter);
+            }
+
+            if (enableLayer5DetailDecal && roomData.decalAtlas != null)
+            {
+                DetailDecalPainter detailPainter = EnsureSceneComponent<DetailDecalPainter>(host, "DetailDecalPainter");
+                detailPainter.PaintDetails(outputTilemap, roomData, roomData.decalAtlas, roomRecipeSeed);
+                EditorUtility.SetDirty(detailPainter);
+            }
+
+            if (enableLayer6Accent && roomData.accentAtlas != null)
+            {
+                AccentPainter accentPainter = EnsureSceneComponent<AccentPainter>(host, "AccentPainter");
+                accentPainter.PaintAccents(outputTilemap, roomData, roomData.accentAtlas, roomRecipeSeed);
+                EditorUtility.SetDirty(accentPainter);
+            }
+        }
+
+        private RoomData BuildRoomDataFromCurrentGrid(RoomRecipe recipe)
+        {
+            bool[,] walkable = BuildWalkableCellsFromGrid(terrainGrid, roomWidth, roomHeight);
+            return new RoomData
+            {
+                size = new Vector2Int(roomWidth, roomHeight),
+                seed = roomRecipeSeed,
+                vertexGrid = terrainGrid,
+                terrainGrid = BuildCellTerrainGridFromGrid(terrainGrid, walkable, roomWidth, roomHeight),
+                walkable = walkable,
+                wallEdges = ProceduralRoomGenerator.BuildWallEdges(walkable, roomWidth, roomHeight),
+                wallBrushSet = recipe != null && recipe.wallBrushSet != null ? recipe.wallBrushSet : wallBrushSet,
+                patchAtlas = recipe != null && recipe.patchAtlas != null ? recipe.patchAtlas : transitionBrushAtlas,
+                transitionAtlas = recipe != null && recipe.transitionAtlas != null ? recipe.transitionAtlas : GetTransitionAtlas(),
+                decalAtlas = recipe != null && recipe.decalAtlas != null ? recipe.decalAtlas : GetDetailAtlas(),
+                accentAtlas = recipe != null && recipe.accentAtlas != null ? recipe.accentAtlas : GetAccentAtlas(),
+                scatterBrush = recipe != null ? recipe.scatterBrush : null,
+                naturalFeatures = NaturalFeatureGraph.HasFeatureData(designerNaturalFeatures) ? designerNaturalFeatures : default,
+                featureEdgeSmoothingProfile = recipe != null && recipe.featureEdgeSmoothingProfile != null ? recipe.featureEdgeSmoothingProfile : featureEdgeSmoothingProfile
+            };
+        }
+
+        private bool[,] BuildWalkableCellsFromGrid(int[,] grid, int width, int height)
+        {
+            bool[,] walkable = new bool[width, height];
+            if (grid == null)
+            {
+                return walkable;
+            }
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    walkable[x, y] = IsTerrainWalkable(grid[x, y]) &&
+                        IsTerrainWalkable(grid[x + 1, y]) &&
+                        IsTerrainWalkable(grid[x, y + 1]) &&
+                        IsTerrainWalkable(grid[x + 1, y + 1]);
+                }
+            }
+
+            return walkable;
+        }
+
+        private int[,] BuildCellTerrainGridFromGrid(int[,] grid, bool[,] walkable, int width, int height)
+        {
+            int[,] cellGrid = new int[width, height];
+            if (grid == null)
+            {
+                return cellGrid;
+            }
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    cellGrid[x, y] = walkable[x, y] ? grid[x, y] : 0;
+                }
+            }
+
+            return cellGrid;
+        }
+
+        private bool IsTerrainWalkable(int terrainId)
+        {
+            MapTerrain terrain = GetTerrain(terrainId);
+            return terrain != null && terrain.walkable;
+        }
+
+        private static bool HasWalkableMask(RoomData roomData)
+        {
+            return roomData.walkable != null &&
+                roomData.size.x > 0 &&
+                roomData.size.y > 0 &&
+                roomData.walkable.GetLength(0) == roomData.size.x &&
+                roomData.walkable.GetLength(1) == roomData.size.y;
+        }
+
+        private PatchAtlasSO GetTransitionAtlas()
+        {
+            if (selectedRoomRecipe != null && selectedRoomRecipe.transitionAtlas != null)
+            {
+                return selectedRoomRecipe.transitionAtlas;
+            }
+
+            if (transitionBrushAtlas != null)
+            {
+                return transitionBrushAtlas;
+            }
+
+            return selectedRoomRecipe != null ? selectedRoomRecipe.patchAtlas : null;
+        }
+
+        private PatchAtlasSO GetDetailAtlas()
+        {
+            return selectedRoomRecipe != null && selectedRoomRecipe.decalAtlas != null ? selectedRoomRecipe.decalAtlas : detailDecalAtlas;
+        }
+
+        private PatchAtlasSO GetAccentAtlas()
+        {
+            return selectedRoomRecipe != null && selectedRoomRecipe.accentAtlas != null ? selectedRoomRecipe.accentAtlas : accentAtlas;
         }
 
         private static T EnsureSceneComponent<T>(Transform parent, string objectName) where T : Component
