@@ -139,6 +139,8 @@ namespace RIMA.Editor
         [SerializeField, Range(0f, 1f)] private float featureMaskBrushAlpha = 1f;
         [SerializeField] private bool advancedFoldout;
         [SerializeField] private bool proceduralFoldout;
+        private bool advancedFoldoutLayoutCache;
+        private bool proceduralFoldoutLayoutCache;
         [SerializeField] private bool showTilePreview = true;
         [SerializeField] private bool showMouseDebug;
         [SerializeField] private PaintTool activeTool = PaintTool.Brush;
@@ -565,8 +567,15 @@ namespace RIMA.Editor
             DrawNaturalFeaturesPanel();
             DrawSeparator();
 
+            // Cache foldout state at Layout to keep Layout/Repaint control counts identical.
+            if (Event.current.type == EventType.Layout)
+            {
+                advancedFoldoutLayoutCache = advancedFoldout;
+                proceduralFoldoutLayoutCache = proceduralFoldout;
+            }
+
             advancedFoldout = EditorGUILayout.Foldout(advancedFoldout, "Advanced", true);
-            if (advancedFoldout)
+            if (advancedFoldoutLayoutCache)
             {
                 bool vertexMode = paintMode == PaintMode.Vertex;
                 vertexMode = EditorGUILayout.ToggleLeft("Vertex mode", vertexMode);
@@ -597,7 +606,7 @@ namespace RIMA.Editor
             DrawSeparator();
 
             proceduralFoldout = EditorGUILayout.Foldout(proceduralFoldout, "Procedural", true);
-            if (proceduralFoldout)
+            if (proceduralFoldoutLayoutCache)
             {
                 if (GUILayout.Button("Rectangular"))
                 {
@@ -668,10 +677,18 @@ namespace RIMA.Editor
             EditorGUI.EndDisabledGroup();
         }
 
+        private bool naturalFeaturesFoldoutLayoutCache;
+
         private void DrawNaturalFeaturesPanel()
         {
+            // Cache foldout state at Layout to prevent control-count divergence between Layout and Repaint events.
+            if (Event.current.type == EventType.Layout)
+            {
+                naturalFeaturesFoldoutLayoutCache = naturalFeaturesFoldout;
+            }
+
             naturalFeaturesFoldout = EditorGUILayout.Foldout(naturalFeaturesFoldout, "Natural Features", true);
-            if (!naturalFeaturesFoldout)
+            if (!naturalFeaturesFoldoutLayoutCache)
             {
                 return;
             }
@@ -708,11 +725,12 @@ namespace RIMA.Editor
 
             showNaturalFeaturePreview = EditorGUILayout.ToggleLeft("Preview", showNaturalFeaturePreview);
             featureMaskPaintMode = EditorGUILayout.ToggleLeft("Paint Mask", featureMaskPaintMode);
-            if (featureMaskPaintMode)
-            {
-                featureMaskBrushRadius = EditorGUILayout.IntSlider("Brush", featureMaskBrushRadius, 1, 8);
-                featureMaskBrushAlpha = EditorGUILayout.Slider("Alpha", featureMaskBrushAlpha, 0f, 1f);
-            }
+            // Always draw brush/alpha controls; disable them when paint mode is off.
+            // This keeps Layout/Repaint control counts identical even when the user toggles paint mode mid-event.
+            EditorGUI.BeginDisabledGroup(!featureMaskPaintMode);
+            featureMaskBrushRadius = EditorGUILayout.IntSlider("Brush", featureMaskBrushRadius, 1, 8);
+            featureMaskBrushAlpha = EditorGUILayout.Slider("Alpha", featureMaskBrushAlpha, 0f, 1f);
+            EditorGUI.EndDisabledGroup();
         }
 
         private void DrawGridCanvas(Rect viewRect)
