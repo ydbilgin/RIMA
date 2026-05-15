@@ -215,8 +215,13 @@ Narrative direction:
 | #128 | Tile Metadata SO + WangResolver | Faz 1 P0 |
 | #129 | Biome Preset SO (F1 Shattered Keep MVP) | Faz 1 P0 |
 | #130 | Naturalness Validator + Path Readability | Faz 1.5 P1 |
+| #131 | Corner Wang Pipeline | Faz 1+ |
+| #132 | Map Designer EditorWindow | Faz 1+ |
+| #133 | Game UI — MainMenu + CharacterSelect | Faz 1 |
+| #134 | Procedural Room Designer Pivot | Faz 1+ |
+| #135 | Phase 1 Map Workflow — Procedural+Paint Hybrid | Faz 1 P0: Codex 6-deliverable dispatch + Paralel Pro UI Pair A/B gen |
 
-**Durum: FAZ_MASTER tablosu sadece Faz-impact özet. #72-#123 canonical kararlar için `../MASTER_KARAR_BELGESI.md` referans. Son güncelleme 2026-05-14 S70.**
+**Durum: FAZ_MASTER tablosu sadece Faz-impact özet. #72-#135 canonical kararlar icin `../MASTER_KARAR_BELGESI.md` referans. Son guncelleme 2026-05-15 S77.**
 
 ---
 

@@ -47,6 +47,16 @@ ARCHIVE/RESEARCH_RAW/
 .claude/scheduled_tasks.lock
 .playwright-cli/
 
+# Python tooling
+__pycache__/
+*.pyc
+
+# Package manager backups
+Packages/*.bak
+
+# Local history backups
+CODEX_DONE_history_backup.md
+
 # Binary assets — versioned in PixelLab, not git
 *.png
 *.jpg

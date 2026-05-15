@@ -1,7 +1,141 @@
 # CURRENT_STATUS
-**2026-05-15 S82 — MAP DESIGNER VALIDATED + VFX SCAFFOLD LIVE + 7 SILAH SECILDI | Kullanici uyandiginda hazir**
+**2026-05-15 S82+ — LAURETHSTUDIO + 11 STUDIO_KARAR + WALL TESTS + INTERPOLATE BRAINSTORM | Yeni session handoff**
 
-> Onceki: S81 oyun_fikirleri sentez (RIMA kendi kimligi LOCK, CB ayri proje Sezon 2). S80 asmdef fix. S78 Karar #135 LOCK.
+> Onceki: Map Designer validated, VFX scaffold (commit `433631e`), 7 silah seçildi, S81 oyun_fikirleri sentez.
+
+---
+
+## S82+ — Bu session yapilanlar (yeni session icin handoff)
+
+### 1. LaurethStudio kuruldu (F:\LaurethStudio\)
+- 9 doc yazildi: STUDIO_GUIDE + STUDIO_CONSTITUTION + 5 pipeline doc + STUDIO_PITCH_BACKLOG + research sentez
+- CB + oyun_fikirleri + _CLAUDE_TEMPLATE kopyalandi
+- 11 STUDIO_KARAR (001-011) prefix yapisi
+- RIMA Faz 1 close sonrasi tasima plani
+
+### 2. STUDIO_KARAR_001-011 LOCK adaylari
+- 001 Anchor Pose Pipeline (interpolate first+end frame drift-free)
+- 002 Asset Index Standard (canonical JSON)
+- 003 Layered Environment Pipeline (6-layer universal)
+- 004 Candidate-First Visual Pipeline (4-candidate review)
+- 005 AI Asset QA Gate (5-kriter check)
+- 006 Studio Signature (form-changer interpolate)
+- 007 Portfolio Mix (4 interpolate + 1 cleanser)
+- 008 Solo Dev Single-Genre (LOCK)
+- 011 Animasyon-agir oyun YASAK (VFX juice + ozgün mekanik yatirim)
+
+### 3. RIMA Karar #143 ADAY — 6-Layer Map Architecture
+- Karar #135 revize: 6 katman (L1 floor + L2 variation + L3 wall overlay + L4 transition + L5 detail + L6 accent)
+- Wang sadece ozel edge feature (cliff/water/ledge) — %85 zaman L1-L6 yeter
+- Decoration walkable filter zorunlu (patch wall ustune dusmez)
+- Edge-biased density (10x wall/center ratio)
+- Karar #143 NLM'e sync edilmemis (NLM Karar #118'de bitiyor — onemli not!)
+- **Karar #143 spec NLM Karar #118 uzerine insa olarak revize gerek (sabah)**
+
+### 4. NLM Act 1 visual identity sorgulandi (LOCK kanonik)
+- **Palet:** #1A1C20 / #2A2D34 / #3A3D48 / #4E5260 / #606575 + accent ice-blue #7BA7BC
+- **Wall doku:** vertical masonry (dikey, yatay DEGIL), angular dark stone brick
+- **Variation oranlari (64-cell batch):** %30-35 clean / %25-30 collapsed / %25-30 rune-etched / %15-20 blended
+- **Pozitif kurallar:** Raggedness ≥%40, per terrain 3+ variant Perlin asymmetric
+- **Baked light YASAK** (URP 2D Light runtime)
+- **Decal placement:** Center area dusuk, edge zones yuksek (combat clarity)
+- **Karar #118 LIVE canonical tools:** create_topdown_tileset Pro + create_tiles_pro + create_object
+- **Karar #75 LIVE:** create_map_object YASAK (revision adayi — Test 02-03 kalite iyi cikti)
+
+### 5. Wall tests sonuc (create_map_object)
+- Test 01 (basic, 384x384): block-stack pattern, gridli, basarisiz
+- Test 02 (NLM-spec, 192x128, clean masonry): ÇOK İYİ silüet, palette dogru, archway hint
+- Test 03 (NLM-spec, 192x128, ruined): GERCEK harabe silueti, palet drift (mor) sorunu
+- **Verdict:** create_map_object NLM-spec ile yeterince guzel, palette drift icin style anchor (Karar #116) zorunlu
+- Karar #75 revize adayi — limited use icin (large hero prop + chunk wall)
+- Batch primary tool Karar #118 (create_tiles_pro + create_topdown_tileset Pro)
+
+### 6. Interpolate brainstorm + compound growth tezi
+- 20 mekanik 4 kategoride (form/trail/weapon/environment)
+- RIMA Karar #141 Phantom Stride (dash afterimage hibrit) — anchor pose pipeline ile drift-free
+- RIMA Karar #142 Echo Resonance Tier 3 (past-clone aynası)
+- CB v2 brainstorm 9 LOCK adayı (CB-1..9, F:\LaurethStudio\02_GAMES\CircuitBreaker\STAGING\)
+- Compound growth: 5. oyundan sonra mekanik eleme sorunu var, bulma DEGIL
+
+### 7. Codex twitter research (background dispatch tamamlandi)
+- 11/11 link analiz (RIMA\STAGING\twitter_research\)
+- 7 Karar #14X önerisi (Karar #144-150 adaylari)
+- 5 oyun pitch (Gossip Farm / Spell Duel / Bridgewright / Island Fishing / Desert Caravan)
+- chongdashu uzun video transcript
+
+### 8. Map cleanup (mevcut scene)
+- PatchAtlas_Moss 6→3 entry (saçma decal'ler silindi, density 0.16→0.08)
+- ScatterBrushPainter + ScatterLayer komple silindi (pembe/mor palette ihlali)
+- Repaint: 187→54 sprite scatter 0
+- Screenshot: s82_map_cleaned_no_scatter_3patches.png
+
+### 9. Multi-account CCS LOCK (yeni feedback)
+- 4 instance: yasinderyabilgin / laurethgame / ydbilgin / ydbilginn + laurethayday cx
+- Memory: feedback_multi_account_ccs_usage.md LOCK
+- Büyük paralel batch'lerde Opus high/max model uzeride paralel session ac
+
+---
+
+## Yeni Session İlk Adımlar (S83)
+
+**KESINLIKLE ZORUNLU:**
+1. **RIMA Master Karar Belgesi → NLM sync:** Karar #119-#143 NLM'e push (lockable kararlar sync icin Karar #144-150 + STUDIO_KARAR de hazirlanmali ama studio'da kalir)
+2. **Karar #143 spec REVIZE:** NLM Karar #118 (Hybrid Tile Composition 4-katman) uzerine insa et — sifirdan 6-layer DEGIL
+3. **Wall test sentezi:** Test 02 (clean) + Test 03 (ruined) goster, kullanici onay → create_map_object Karar #75 REVISION adayi LOCK
+4. **Production'a 3 gun var (ayin 18'i):** Bu test/karar fazi, asset bulk gen 18'inde
+
+**OYUNA UYUM KRITIK:**
+- Wall sprite native 32x64 → Unity 2x upscale 64x128 final (Karar #118 LIVE)
+- Karakter 64x64 PPU 64 = 1 world unit, wall 64x128 final = 1x2 unit (NLM kanonik)
+- Test 02 192x128 = oversized, ya scale-down ya da 64x128'e regen gerek
+
+**STUDIO_KARAR LOCK pending:** Yeni session'da kullanici STUDIO_KARAR_001-011 LOCK reviewu yapacak
+
+**Pending tasks (sabah icin):**
+- Karar #143 spec revize (Karar #118 ile uyumlu, 6-layer studio universal + RIMA implementation 4-katman concrete)
+- Test 02-03 wall sentez + Karar #75 revision adayi
+- Fractured Farm pitch (ChatGPT'den) → STUDIO_PITCH_BACKLOG'a ekle (henuz yazilmadi)
+- V8 sprite slice errors fix
+- Wall walkable=false fix BiomePreset
+- Pink blob teyit (Game window)
+
+---
+
+## Active state (yeni session basinda)
+
+| Sistem | Durum |
+|---|---|
+| Unity Editor | Acik, Phase1_ProceduralMap_Test scene saved (cleaned) |
+| F:\LaurethStudio\ | LIVE 9 doc + CB + ideas + template |
+| RIMA Karar # | Master Karar Belgesi Karar #142'ye kadar (Karar #143 staging) |
+| NLM sync | Karar #119-#142 SYNC EDILMEMIS — sabah `/nlm-sync` zorunlu |
+| Codex Phase 1 (S78 D1-D7) | LIVE |
+| Codex Phase 2 (S79 D1-D5) | LIVE |
+| Codex Phase 3 (S82 VFX) | LIVE commit `433631e` |
+| Map Designer 5-layer | L1-L4 validated, L5 URP Light deferred |
+| Weapon batch | 8/8 unique sprite hazir (1 import done, 7 pending) |
+| Wall tests | Test 01 fail, Test 02-03 NLM-spec pass (palette drift uyari) |
+| Cleaned map | s82_map_cleaned_no_scatter_3patches.png LIVE |
+| Map gallery | 6 screenshot s82_map_iter* + map02-06 (commit `66eccdc`) |
+
+---
+
+## S82+ — Commits + Dispatch Tarihce
+
+- `433631e` [S82][Phase3-VFX] Codex VFX scaffold
+- `66eccdc` [S82] Map Designer validated + 6 map gallery + handoff
+- bwc19bws3 cx_dispatch.py Codex VFX (background)
+- b6gj615qf cx_dispatch.py Codex twitter research (background, 11 link)
+- Map cleanup execute_code (uncommitted, scene saved)
+- LaurethStudio org (uncommitted — F:\ ayri klasor, RIMA repo disi)
+
+---
+
+## Onceki S82 — MAP DESIGNER VALIDATED detay (degismedi)
+
+> Daha asagidaki S82 bolumu (S81 archive ustte) korundu.
+
+---
 
 ---
 
