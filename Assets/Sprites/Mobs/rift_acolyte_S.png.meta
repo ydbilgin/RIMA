@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8010888e033d1fd4fb3dd5a4571659f4
+guid: 2c96c2f305dac534781b4a2475c00c7c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5023967787587599408
-    second: gunslinger_S_0
+      213: -3503472341665279429
+    second: rift_acolyte_S_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: gunslinger_S_0
+      name: rift_acolyte_S_0
       rect:
         serializedVersion: 2
-        x: 61
-        y: 24
-        width: 55
-        height: 127
+        x: 9
+        y: 1
+        width: 47
+        height: 62
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0d306d15ae7474ab0800000000000000
-      internalID: -5023967787587599408
+      spriteID: b3292aaa77a216fc0800000000000000
+      internalID: -3503472341665279429
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      gunslinger_S_0: -5023967787587599408
+      rift_acolyte_S_0: -3503472341665279429
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

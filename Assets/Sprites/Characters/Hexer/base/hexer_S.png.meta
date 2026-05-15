@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8010888e033d1fd4fb3dd5a4571659f4
+guid: dbfa2923d6c62f04b9095cd10dd0e151
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5023967787587599408
-    second: gunslinger_S_0
+      213: -7986361975448214223
+    second: hexer_S_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: gunslinger_S_0
+      name: hexer_S_0
       rect:
         serializedVersion: 2
-        x: 61
-        y: 24
-        width: 55
-        height: 127
+        x: 15
+        y: 1
+        width: 34
+        height: 63
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0d306d15ae7474ab0800000000000000
-      internalID: -5023967787587599408
+      spriteID: 135e8bdc81eba2190800000000000000
+      internalID: -7986361975448214223
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      gunslinger_S_0: -5023967787587599408
+      hexer_S_0: -7986361975448214223
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
