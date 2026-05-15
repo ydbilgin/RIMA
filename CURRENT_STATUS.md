@@ -1,4 +1,130 @@
 # CURRENT_STATUS
+**2026-05-16 S85 — MAP DESIGNER BRUSH TOOL V1 DESIGN LOCK + Codex Safety Review + Sprint 1 hazır | Yeni session handoff**
+
+> Onceki: S84 Karar #143 Aşama 1+2 LOCK + VFX Feel Toggles tamamlama (btywkeb7m + bzlhi7l50 commit'lendi).
+
+---
+
+## S85 — Bu session yapilanlar (handoff yeni session)
+
+### 1. Map Designer Brush Tool Unified Design — LOCK
+- **Design spec:** `STAGING/map_designer_unified_brush_design.md` (700+ satır + 6 addendum, ChatGPT cross-review işli)
+- **Mimari karar:** Unity-host EditorWindow + JSON-portable data hibrit (B yolu — kullanıcı LOCK)
+- **Kural:** existing Karar #143 painters (MapLayerOrchestrator, WallOverlayPainter, TransitionBrushPainter, DetailDecalPainter, AccentPainter, NaturalFeatureGraph, FeatureEdgeSmoothingPass) YENİDEN YAZILMAZ — brush tool ÜSTÜNE Executor Router katmanı olarak oturur
+- Composite brush (flat, NO nesting) = primary "painter feel" mechanism
+- BiomeSkin separation: subtle alpha only, NO Gaussian blur (pixel breakup tercih)
+- Karar #143-D/E/K enforcement → BrushLayerOperation veri seviyesinde + executor seviyesinde çift kuşak (`respectsWalkableMask`, `wallProximityCurve`, `featureMaskMultiplier` field'ları)
+
+### 2. ChatGPT cross-review tamamlandı (V1/V2 scope LOCK)
+- Q1-Q8 LOCK: NO nested, click=point/drag=stroke, AnimationCurve+presets, per-room seed default, weighted picks YES, live re-render+cache, folder canonical+zip optional, manual+auto wall (auto default)
+- V1 = RIMA shipping (SO-first, minimal JSON, 8-12 brushes, composite flat, BiomeSkin subtle alpha)
+- V2 = ecosystem (marketplace, namespace prefix, conflict resolution, biome brush, standalone migration)
+- **L3 Wall = production gate** — Sprint sıralaması ChatGPT önerisi ile revize
+- Strategic principle LOCK: "tool oyundan önemli olmasın"
+
+### 3. Codex Unity Safety Review tamamlandı (BG dispatch `bniwygye2`, verdict: **Approve with additions**)
+- **Output:** `STAGING/codex_safety_review_output.md` (kopya), orijinal `CODEX_DONE.md` (Sprint 1 dispatch üstüne yazacak)
+- 5 plan section validation + Q1-Q8 detayli cevaplar (kanonik kod örnekleri dahil) + **21 risk matrix entry** + 8 additional recommendations
+- Kritik kurallar:
+  - Canonical asset creation order (`StartAssetEditing` / `try` create+SetDirty / `finally StopAssetEditing` / `SaveAssets` / `Refresh` only-on-external-IO)
+  - `schemaVersion` field her JSON DTO root (V1 store, V2 migration)
+  - **Sprint 1'de asmdef değişikliği YASAK**
+  - `RIMA.Editor` compile gate (sadece Runtime değil)
+  - Duplicate GUID scan zorunlu
+  - Max **5 file per dispatch** (asset/SO work için, 8-10 değil)
+  - Console error/warning gate Unity open sonrası
+  - JsonUtility V1 → Newtonsoft V2
+
+### 4. Sprint 1 task spec hazır — dispatch'e bekleniyor
+- **Dosya:** `STAGING/codex_brush_sprint1_data_layer.md` (V1 minimum + §9 Codex safety addendum entegre)
+- Scope: 7 source files + 6-7 EditMode test cases + 3 sample .asset (AssetPool_Floor + Brush_CleanStone + Brush_MossyCorner_Composite)
+- Tüm Karar #143 fields enforced (respectsWalkableMask default true, wallProximityCurve AnimationCurve, featureMaskMultiplier nullable)
+- V1 EXCLUSIONS net (nested composite YOK, marketplace YOK, soft alpha shader YOK, editor UI YOK)
+- Codex self-review checklist 20 madde
+- Codex'in seçimi: tek dispatch veya 2 sub-dispatch (5-file limit nedeniyle)
+
+### 5. PixelLab L3 Wall batch hazır — Sprint 2 ile paralel dispatch için
+- **Dosya:** `STAGING/pixellab_l3_wall_batch.md`
+- 7 sprite type × n=16 = 112 image, 14 pick (4 horizontal + 4 vertical + 4 corner + 2 doorway)
+- Tahmini ~21 credit (3/call)
+- Style: Hades painter pixel art, palette LOCK (#1A1C20 / #2A2D34 / #3A3D48 / #4E5260 / #606575 + #7BA7BC), IRREGULAR silhouette, NO blur, subtle ice-blue mineral hint
+- Production order: horizontal → vertical → corners → doorway
+- 6-criteria QC gate her sprite type sonrası
+
+### 6. 8-Sprint plan locked (revize — L3 wall priority)
+| # | Sprint | Effort | Paralel |
+|---|---|---|---|
+| 1 | Data Layer (V1 min) | 1 gün Codex | — |
+| 2 | Executor Router + L3 Wall + Brush Along Edges | 1.5 gün Codex | Sprint 3 ile |
+| 3 | PixelLab 29 sprite gen (L3 öncelik) | 1.5 gün gen+QC | Sprint 2 ile |
+| 4 | L4+L5+L6 Executors + Karar #143 enforcement | 1.5 gün Codex | — |
+| 5 | Editor UI Refactor (3-panel + hotkeys + ghost) | 1.5 gün Codex | — |
+| 6 | Default Brush Pack (8-12) + Composite Executor | 1 gün | — |
+| 7 | Automation (Auto-Dress + Regenerate + Smart Fill) | 1 gün | — |
+| 8 | BiomeSkin + Render Rules (subtle alpha) | 1 gün | V1 close |
+
+**Toplam:** ~8-9 gün Codex + paralel asset gen. **Deadline YOK** (kullanıcı LOCK).
+
+---
+
+## Yeni Session İlk Adımlar (S86)
+
+**Kullanıcı diğer session'da devam edecek — yapılacaklar sırayla:**
+
+1. **Pre-flight snapshot:**
+   ```bash
+   git rev-parse HEAD > STAGING/brush_sprint_1_base.txt
+   git status --short   # empty olmalı
+   ```
+   Unity Editor **KAPALI** olmalı (Codex script gen edecek).
+
+2. **Sprint 1 dispatch (BG):**
+   ```bash
+   python cx_dispatch.py --task-file STAGING/codex_brush_sprint1_data_layer.md --effort high
+   ```
+   `run_in_background: true`. ~6-8 saat. Tamamlanınca notify gelir.
+
+3. **Codex BG çalışırken paralel:** PixelLab L3 wall batch dispatch (`STAGING/pixellab_l3_wall_batch.md` rehberinde MCP create_object). Önce Sprite 1 horizontal, QC PASS sonrası diğerleri. Toplam ~21 credit. Bu Sprint 3'ün başlangıcı — kod track ile aynı anda yürür.
+
+4. **Codex Sprint 1 PASS gelince:**
+   - `CODEX_DONE.md` oku
+   - Unity Editor aç → csproj regenerate → Test Runner EditMode çalıştır → all PASS doğrula
+   - Console error/warning yok kontrolü
+   - Inspector'da 3 sample .asset aç → null ref yok
+   - `git commit` + `git tag brush-sprint-1-pass`
+
+5. **Sprint 2 task spec yaz** (Executor Router + L3 Wall Executor + Brush Along Edges):
+   - Mevcut `WallOverlayPainter.cs` delegation (yeniden yazma YASAK)
+   - `IBrushExecutor` interface + `BrushExecutorRouter` + `GridTileExecutor` + `WallStampExecutor`
+   - `BrushAlongEdgesAutomation` (perimeter polyline walk auto-place)
+   - Karar #143-D walkable mask enforcement test
+   - Aynı safety review addendum kuralları (§9.1-9.9)
+   - Pre-flight snapshot → dispatch BG
+
+6. **Sprint 2 dispatch** Codex BG. Sprint 3 PixelLab asset gen ile paralel.
+
+**Açık kararlar/bekleyenler (S84'ten taşınan):**
+- LiberationSans SDF Fallback.asset 536KB→9KB karar (henüz yanıt YOK)
+- Karar #143 Aşama 1/2 EditMode test çalıştırılmadı (Unity açılınca)
+- VignetteFlash + CameraPunch sahne integrasyonu bekliyor
+- NLM sync retry — S83 başarısız ~18 dosya
+
+**V1 close kapanışı (post-Sprint 8):**
+- Map Designer brush tool LIVE
+- 29 PixelLab sprite imported + AssetPool'lara bound
+- 8-12 default brush + 4 BiomeSkin preset
+- Karar #143 Aşama 1+2+3 (yeni brush tool ile production gate close)
+
+RIMA Faz 1 close + karakter + mob entegrasyonu Sprint 8 sonrası başlar.
+
+---
+
+## Onceki S84 (degismedi)
+
+> S84 icerigi asagida korundu.
+
+---
+
 **2026-05-15 S84 — AŞAMA 1 LOCK + AŞAMA 2 LOCK + VFX FEEL TOGGLES TAMAMLAMA | Yeni session handoff**
 
 > Onceki: S83 Karar #143 LOCK + STUDIO_KARAR 009/010 + Caterpillar IDEA + Aşama 1 dispatch (btywkeb7m).
