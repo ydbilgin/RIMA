@@ -36,7 +36,16 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
                 return new BrushExecutorResult { success = true, spawnedCount = 0 };
             }
 
-            Sprite sprite = PickSprite(op.assetPool, stroke.seed, salt);
+            Sprite sprite = null;
+            if (op != null && op.useNativeBucketVariantPath && op.assetPool != null && op.assetPool.variants != null && op.assetPool.variants.Count > 0)
+            {
+                var variant = PickVariant(op.assetPool, null, op.radiusForBucketPick, stroke.seed, salt);
+                sprite = variant != null ? variant.sprite : null;
+            }
+            if (sprite == null)
+            {
+                sprite = PickSprite(op.assetPool, stroke.seed, salt);
+            }
             if (sprite == null)
             {
                 return Error("Decorative sprite asset pool is empty");
@@ -75,7 +84,25 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
 
         public static Sprite PickSprite(AssetPoolSO pool, int seed, int salt)
         {
-            if (pool == null || pool.sprites == null || pool.sprites.Count == 0)
+            if (pool == null)
+            {
+                return null;
+            }
+
+            if (pool.variants != null && pool.variants.Count > 0)
+            {
+                int vIndex = PickWeightedIndex(pool.variants.Count, null, seed, salt);
+                for (int i = 0; i < pool.variants.Count; i++)
+                {
+                    var variant = pool.variants[(vIndex + i) % pool.variants.Count];
+                    if (variant != null && variant.sprite != null)
+                    {
+                        return variant.sprite;
+                    }
+                }
+            }
+
+            if (pool.sprites == null || pool.sprites.Count == 0)
             {
                 return null;
             }
@@ -91,6 +118,66 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
             }
 
             return null;
+        }
+
+        public static BrushAssetVariant PickVariant(AssetPoolSO pool, BrushRadiusProfileSO profile, int radius, int seed, int salt)
+        {
+            if (pool == null || pool.variants == null || pool.variants.Count == 0)
+            {
+                return null;
+            }
+
+            if (profile == null)
+            {
+                int idx = PositiveModulo(Mix(seed, salt, 313), pool.variants.Count);
+                return pool.variants[idx];
+            }
+
+            var weights = profile.ResolveWeights(radius);
+            if (weights == null || weights.Count == 0)
+            {
+                int idx = PositiveModulo(Mix(seed, salt, 313), pool.variants.Count);
+                return pool.variants[idx];
+            }
+
+            float total = 0f;
+            for (int i = 0; i < pool.variants.Count; i++)
+            {
+                var v = pool.variants[i];
+                if (v == null) continue;
+                if (!weights.TryGetValue(v.bucket, out float bw)) continue;
+                total += Mathf.Max(0f, v.weight) * Mathf.Max(0f, bw);
+            }
+
+            if (total <= 0f)
+            {
+                int idx = PositiveModulo(Mix(seed, salt, 313), pool.variants.Count);
+                return pool.variants[idx];
+            }
+
+            float roll = Hash01(seed, salt, pool.variants.Count, 911) * total;
+            float acc = 0f;
+            for (int i = 0; i < pool.variants.Count; i++)
+            {
+                var v = pool.variants[i];
+                if (v == null) continue;
+                if (!weights.TryGetValue(v.bucket, out float bw)) continue;
+                acc += Mathf.Max(0f, v.weight) * Mathf.Max(0f, bw);
+                if (roll < acc) return v;
+            }
+            return pool.variants[pool.variants.Count - 1];
+        }
+
+        private static readonly System.Collections.Generic.HashSet<string> WarnedLegacyPools = new System.Collections.Generic.HashSet<string>();
+
+        private static void WarnLegacyScale(BrushLayerOperation op)
+        {
+            if (op == null || op.assetPool == null) return;
+            string key = string.IsNullOrEmpty(op.assetPool.poolName) ? op.assetPool.GetInstanceID().ToString() : op.assetPool.poolName;
+            if (WarnedLegacyPools.Add(key))
+            {
+                Debug.LogWarning($"[Brush V1 LEGACY] scaleRange applied for pool '{key}'. Set useNativeBucketVariantPath=true on the BrushLayerOperation to switch to native size variant path.");
+            }
         }
 
         public static int PickWeightedIndex(int count, IList<float> weights, int seed, int salt)
@@ -141,7 +228,19 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
             float offsetY = jitter.y == 0f ? 0f : (Hash01(seed + 17, salt, 0, 0) * 2f - 1f) * jitter.y;
             decal.transform.position = new Vector3(worldPos.x + offsetX, worldPos.y + offsetY, 0f);
 
-            float scale = op != null ? Mathf.Lerp(op.scaleRange.x, op.scaleRange.y, Hash01(seed + 23, salt, 0, 0)) : 1f;
+            float scale;
+            if (op != null && op.useNativeBucketVariantPath)
+            {
+                scale = 1f;
+            }
+            else
+            {
+                scale = op != null ? Mathf.Lerp(op.scaleRange.x, op.scaleRange.y, Hash01(seed + 23, salt, 0, 0)) : 1f;
+                if (op != null)
+                {
+                    WarnLegacyScale(op);
+                }
+            }
             float scaleX = scale;
             float scaleY = scale;
             if (op != null && op.allowFlipX && Hash01(seed + 29, salt, 0, 0) < 0.5f)

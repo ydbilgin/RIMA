@@ -25,5 +25,8 @@ namespace RIMA.MapDesigner.Brush.Data
         public bool respectsWalkableMask = true;
         public AnimationCurve wallProximityCurve = AnimationCurve.Linear(0f, 1f, 1f, 1f);
         public FeatureMaskSO featureMaskMultiplier;
+
+        public bool useNativeBucketVariantPath = true;
+        public int radiusForBucketPick = 4;
     }
 }

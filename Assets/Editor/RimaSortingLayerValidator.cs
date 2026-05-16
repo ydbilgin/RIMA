@@ -9,6 +9,10 @@ namespace RIMA.Editor
     {
         private const string PatchLayerName = "Patch";
         private const string ScatterLayerName = "Scatter";
+        private const string DetailLayerName = "Detail";
+        private const string AccentLayerName = "Accent";
+        private const string PropsLayerName = "Props";
+        private const string EntitiesLayerName = "Entities";
         private const string TagManagerPath = "ProjectSettings/TagManager.asset";
 
         static RimaSortingLayerValidator()
@@ -16,7 +20,7 @@ namespace RIMA.Editor
             EnsureSortingLayers();
         }
 
-        private static void EnsureSortingLayers()
+        public static void EnsureSortingLayers()
         {
             var assets = AssetDatabase.LoadAllAssetsAtPath(TagManagerPath);
             if (assets == null || assets.Length == 0)
@@ -36,6 +40,10 @@ namespace RIMA.Editor
             var changed = false;
             changed |= EnsureLayerAfter(sortingLayers, PatchLayerName, "Default");
             changed |= EnsureLayerAfter(sortingLayers, ScatterLayerName, PatchLayerName);
+            changed |= EnsureLayerAfter(sortingLayers, DetailLayerName, ScatterLayerName);
+            changed |= EnsureLayerAfter(sortingLayers, AccentLayerName, DetailLayerName);
+            changed |= EnsureLayerAfter(sortingLayers, PropsLayerName, AccentLayerName);
+            changed |= EnsureLayerAfter(sortingLayers, EntitiesLayerName, PropsLayerName);
 
             if (!changed)
             {
@@ -44,7 +52,7 @@ namespace RIMA.Editor
 
             tagManager.ApplyModifiedProperties();
             AssetDatabase.SaveAssets();
-            Debug.Log("RIMA: Created sorting layers 'Patch' and 'Scatter' (Karar #135 organic render hierarchy)");
+            Debug.Log("RIMA: Sorting layers ensured — Patch / Scatter / Detail / Accent / Props / Entities (Karar #135 + S86 Sprint 9 R2 retrofit)");
         }
 
         private static bool EnsureLayerAfter(SerializedProperty sortingLayers, string layerName, string previousLayerName)

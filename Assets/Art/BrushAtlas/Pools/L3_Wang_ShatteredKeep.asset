@@ -1,0 +1,618 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09bd9fbf8ec301241a60babe6bf52f21, type: 3}
+  m_Name: L3_Wang_ShatteredKeep
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Brush.Data.AssetPoolSO
+  poolName: L3_Wang_ShatteredKeep
+  category: 0
+  sprites: []
+  spriteWeights: []
+  tiles: []
+  prefabs: []
+  nativeSize: {x: 64, y: 64}
+  supportsRotation: 1
+  supportsFlip: 1
+  isSoftEdge: 0
+  variants:
+  - sprite: {fileID: 3833705662814510812, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0010_t1_1_r2_c1
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 96
+      y: 32
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0010
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 1489636097533897960, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0011_t1_2_r2_c2
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 32
+      y: 64
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0011
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -61163976572021899, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0001_t1_3_r2_c3
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 64
+      y: 64
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0001
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 2598452676668550127, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1010_t1_10_r3_c1
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 96
+      y: 64
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1010
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 6075204881758486795, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1010_t1_4_r4_c1
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 96
+      y: 64
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1010
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -4162858869166431864, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1111_t1_5_r5_c2
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 0
+      y: 96
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1111
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 1843877071950988421, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0101_t1_6_r3_c6
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 32
+      y: 0
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0101
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -315498991085293720, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0101_t1_14_r4_c6
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 32
+      y: 0
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0101
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -4925395752578297936, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0111_t1_8_r4_c3
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 0
+      y: 64
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0111
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 3406086879699437116, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1011_t1_9_r4_c4
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 96
+      y: 96
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1011
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 2294966559779075611, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1101_t1_16_r6_c4
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 32
+      y: 96
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1101
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -8992684927218386690, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1100_t1_17_r6_c5
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 96
+      y: 0
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1100
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -9053584792918212633, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0100_t1_18_r6_c6
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 32
+      y: 32
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0100
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -7321063132635834993, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0101_t1_19_r7_c4
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 32
+      y: 0
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0101
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 1101602030353056881, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1000_t1_22_r8_c1
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 64
+      y: 0
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1000
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 5924532651054248798, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1110_t1_23_r8_c2
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 0
+      y: 0
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1110
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -8059915477964046496, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0110_t1_24_r8_c4
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 64
+      y: 96
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0110
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: -2342971295751530548, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1010_t1_26_r9_c2
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 96
+      y: 64
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1010
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 2181905016027355034, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1010_t1_27_r9_c4
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 96
+      y: 64
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1010
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 4649035530440154214, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_1001_t1_28_r10_c2
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 0
+      y: 32
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_1001
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  - sprite: {fileID: 9168504792889024387, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+    variantId: L3_Wang_ShatteredKeep_wang_0101_t1_30_r11_c2
+    bucket: 0
+    weight: 1
+    targetLayer: 2
+    nativeSize: {x: 32, y: 32}
+    sourceRect:
+      x: 32
+      y: 0
+      width: 32
+      height: 32
+    pivot: {x: 0.5, y: 0.5}
+    footprintRadius: 0.5
+    allowFlipX: 0
+    allowFlipY: 0
+    allowRotation: 0
+    rotationSnapDegrees: 0
+    tags:
+    - wang_0101
+    - wang_wall
+    respectsWalkableMask: 1
+    minDistance: 32
+    encounterAvoidRadius: 0
+    edgeBiased: 0
+    wallProximityFactor: 1
+    featureMaskMultiplier: {fileID: 0}
+    heroAllowed: 0
+    schemaVersion: 1.0
+  sourceMasterTexture: {fileID: 2800000, guid: eb0c9a7862e87e44b962f683a8710508, type: 3}
+  importTemplate: {fileID: 11400000, guid: 3f7da2a180b8bac408340fd82ae182cd, type: 2}
+  namespacePrefix: 
+  defaultTargetLayer: 2
+  heroLayerWhitelist: 000000000000

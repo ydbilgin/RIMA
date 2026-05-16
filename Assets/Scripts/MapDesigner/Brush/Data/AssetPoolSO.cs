@@ -17,5 +17,12 @@ namespace RIMA.MapDesigner.Brush.Data
         public bool supportsRotation = true;
         public bool supportsFlip = true;
         public bool isSoftEdge = false;
+
+        public List<BrushAssetVariant> variants = new List<BrushAssetVariant>();
+        public Texture2D sourceMasterTexture;
+        public SliceLayoutTemplateSO importTemplate;
+        public string namespacePrefix;
+        public TargetLayer defaultTargetLayer = TargetLayer.L4;
+        public bool[] heroLayerWhitelist = new bool[6];
     }
 }

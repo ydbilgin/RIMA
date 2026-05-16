@@ -49,6 +49,15 @@ TagManager:
   - name: Scatter
     uniqueID: 27625511
     locked: 0
+  - name: Detail
+    uniqueID: 351335743
+    locked: 0
+  - name: Accent
+    uniqueID: 1570199623
+    locked: 0
+  - name: Props
+    uniqueID: 399489520
+    locked: 0
   - name: Ground
     uniqueID: 2024493761
     locked: 0

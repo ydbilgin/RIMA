@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73fa861d1728624cb30d169a8b09561, type: 3}
+  m_Name: L6_Accent_512
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Brush.Data.SliceLayoutTemplateSO
+  templateName: L6_Accent_512
+  masterSize: {x: 512, y: 512}
+  cells:
+  - cellName: rift_hero
+    rect:
+      x: 96
+      y: 96
+      width: 320
+      height: 320
+    bucket: 4
+    tags:
+    - rift_hero
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 1
+  - cellName: rift_medium_1
+    rect:
+      x: 0
+      y: 0
+      width: 96
+      height: 96
+    bucket: 2
+    tags:
+    - rift_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_medium_2
+    rect:
+      x: 416
+      y: 0
+      width: 96
+      height: 96
+    bucket: 2
+    tags:
+    - rift_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_medium_3
+    rect:
+      x: 0
+      y: 416
+      width: 96
+      height: 96
+    bucket: 2
+    tags:
+    - rift_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_medium_4
+    rect:
+      x: 416
+      y: 416
+      width: 96
+      height: 96
+    bucket: 2
+    tags:
+    - rift_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_spark_1
+    rect:
+      x: 96
+      y: 48
+      width: 48
+      height: 48
+    bucket: 1
+    tags:
+    - rift_spark
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_spark_2
+    rect:
+      x: 192
+      y: 48
+      width: 48
+      height: 48
+    bucket: 1
+    tags:
+    - rift_spark
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_spark_3
+    rect:
+      x: 288
+      y: 48
+      width: 48
+      height: 48
+    bucket: 1
+    tags:
+    - rift_spark
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_spark_4
+    rect:
+      x: 96
+      y: 464
+      width: 48
+      height: 48
+    bucket: 1
+    tags:
+    - rift_spark
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_spark_5
+    rect:
+      x: 192
+      y: 464
+      width: 48
+      height: 48
+    bucket: 1
+    tags:
+    - rift_spark
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: rift_spark_6
+    rect:
+      x: 288
+      y: 464
+      width: 48
+      height: 48
+    bucket: 1
+    tags:
+    - rift_spark
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  gutterSize: 24
+  defaultPivot: {x: 0.5, y: 0.5}
+  wangAware: 0

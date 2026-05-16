@@ -169,8 +169,9 @@ namespace RIMA.Tests.Brush
             GameObject tilemapObject = new GameObject(name);
             cleanup.Add(tilemapObject);
             tilemapObject.transform.SetParent(gridObject.transform, false);
+            Tilemap tilemap = tilemapObject.AddComponent<Tilemap>();
             tilemapObject.AddComponent<TilemapRenderer>();
-            return tilemapObject.AddComponent<Tilemap>();
+            return tilemap;
         }
 
         private static BrushStroke CreateStroke(Vector2Int cell, RoomData room)

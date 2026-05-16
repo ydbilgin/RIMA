@@ -39,4 +39,8 @@ namespace RIMA.MapDesigner.Brush.Data
         RiftCorruption,
         MagicalMark
     }
+
+    public enum SizeBucket { Micro, Small, Medium, Large, Hero }
+
+    public enum ValidationIssueSeverity { Error, Warning, Info }
 }

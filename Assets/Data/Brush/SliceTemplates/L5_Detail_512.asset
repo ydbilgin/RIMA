@@ -1,0 +1,404 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73fa861d1728624cb30d169a8b09561, type: 3}
+  m_Name: L5_Detail_512
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Brush.Data.SliceLayoutTemplateSO
+  templateName: L5_Detail_512
+  masterSize: {x: 512, y: 512}
+  cells:
+  - cellName: detail_medium_1
+    rect:
+      x: 0
+      y: 0
+      width: 128
+      height: 128
+    bucket: 2
+    tags:
+    - detail_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_medium_2
+    rect:
+      x: 128
+      y: 0
+      width: 128
+      height: 128
+    bucket: 2
+    tags:
+    - detail_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_medium_3
+    rect:
+      x: 256
+      y: 0
+      width: 128
+      height: 128
+    bucket: 2
+    tags:
+    - detail_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_medium_4
+    rect:
+      x: 384
+      y: 0
+      width: 128
+      height: 128
+    bucket: 2
+    tags:
+    - detail_medium
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_1
+    rect:
+      x: 0
+      y: 128
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_2
+    rect:
+      x: 64
+      y: 128
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_3
+    rect:
+      x: 128
+      y: 128
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_4
+    rect:
+      x: 192
+      y: 128
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_5
+    rect:
+      x: 0
+      y: 192
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_6
+    rect:
+      x: 64
+      y: 192
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_7
+    rect:
+      x: 128
+      y: 192
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_8
+    rect:
+      x: 192
+      y: 192
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_9
+    rect:
+      x: 0
+      y: 256
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_10
+    rect:
+      x: 64
+      y: 256
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_11
+    rect:
+      x: 128
+      y: 256
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_small_12
+    rect:
+      x: 192
+      y: 256
+      width: 64
+      height: 64
+    bucket: 1
+    tags:
+    - detail_small
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_1
+    rect:
+      x: 0
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_2
+    rect:
+      x: 32
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_3
+    rect:
+      x: 64
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_4
+    rect:
+      x: 96
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_5
+    rect:
+      x: 128
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_6
+    rect:
+      x: 160
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_7
+    rect:
+      x: 192
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_8
+    rect:
+      x: 224
+      y: 320
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_9
+    rect:
+      x: 0
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_10
+    rect:
+      x: 32
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_11
+    rect:
+      x: 64
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_12
+    rect:
+      x: 96
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_13
+    rect:
+      x: 128
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_14
+    rect:
+      x: 160
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_15
+    rect:
+      x: 192
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  - cellName: detail_micro_16
+    rect:
+      x: 224
+      y: 352
+      width: 32
+      height: 32
+    bucket: 0
+    tags:
+    - detail_micro
+    pivotOverride: {x: 0.5, y: 0.5}
+    usePivotOverride: 0
+    heroAllowed: 0
+  gutterSize: 8
+  defaultPivot: {x: 0.5, y: 0.5}
+  wangAware: 0

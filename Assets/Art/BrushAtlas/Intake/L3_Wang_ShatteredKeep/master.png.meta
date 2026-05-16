@@ -1,0 +1,1036 @@
+fileFormatVersion: 2
+guid: eb0c9a7862e87e44b962f683a8710508
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4843460787145592052
+    second: master_0
+  - first:
+      213: -7520466869721654120
+    second: cell_0_0
+  - first:
+      213: 3930104902040956457
+    second: cell_1_0
+  - first:
+      213: 3907985204239565601
+    second: cell_2_0
+  - first:
+      213: 234199951818665750
+    second: cell_3_0
+  - first:
+      213: -5487310232412146428
+    second: cell_0_1
+  - first:
+      213: 1974512785748074565
+    second: cell_1_1
+  - first:
+      213: -8402806873343208690
+    second: cell_2_1
+  - first:
+      213: 3021386958834790352
+    second: cell_3_1
+  - first:
+      213: -3733845333048158775
+    second: cell_0_2
+  - first:
+      213: 5621383398243325884
+    second: cell_1_2
+  - first:
+      213: 8585792531916574365
+    second: cell_2_2
+  - first:
+      213: -5877611839698641822
+    second: cell_3_2
+  - first:
+      213: 1980048049518965780
+    second: cell_0_3
+  - first:
+      213: 2860895665913601722
+    second: cell_1_3
+  - first:
+      213: 6568949945595114489
+    second: cell_2_3
+  - first:
+      213: 4627130523315375219
+    second: cell_3_3
+  - first:
+      213: 7219912142988472570
+    second: cell_0_4
+  - first:
+      213: -1095586729560656984
+    second: cell_1_4
+  - first:
+      213: 1394321593886673243
+    second: cell_2_4
+  - first:
+      213: 5783490735885261128
+    second: cell_3_4
+  - first:
+      213: -9041582788837168982
+    second: cell_0_5
+  - first:
+      213: 1007655938863700426
+    second: cell_1_5
+  - first:
+      213: -4858732456433051964
+    second: cell_2_5
+  - first:
+      213: 2156284404397876840
+    second: cell_3_5
+  - first:
+      213: 7047908133594630203
+    second: cell_0_6
+  - first:
+      213: -1380665938583903983
+    second: cell_1_6
+  - first:
+      213: 4932855753300009429
+    second: cell_2_6
+  - first:
+      213: 2187325743263538426
+    second: cell_3_6
+  - first:
+      213: -4247552172925267962
+    second: cell_0_7
+  - first:
+      213: 8083720020673942950
+    second: cell_1_7
+  - first:
+      213: 6672537487635980956
+    second: cell_2_7
+  - first:
+      213: 1053531109948819247
+    second: cell_3_7
+  - first:
+      213: 4745750986856524281
+    second: all_floor_reference
+  - first:
+      213: 4597336878232975114
+    second: wang_0010
+  - first:
+      213: -2039554699828058218
+    second: wang_0011
+  - first:
+      213: 6406852879095727051
+    second: wang_0001
+  - first:
+      213: 787883177982882308
+    second: wang_1010
+  - first:
+      213: -6319622972493131843
+    second: wang_1111
+  - first:
+      213: -6338987859838451773
+    second: wang_0101
+  - first:
+      213: 1482140815019770372
+    second: wang_0111
+  - first:
+      213: -5763148048504444740
+    second: wang_1011
+  - first:
+      213: 4630002781217163852
+    second: wang_1101
+  - first:
+      213: -3434931927925094739
+    second: wang_1100
+  - first:
+      213: -2137599662293649865
+    second: wang_0100
+  - first:
+      213: 5749239151205295420
+    second: wang_1000
+  - first:
+      213: -7661956701396009009
+    second: wang_1110
+  - first:
+      213: 4707772980524165073
+    second: wang_0110
+  - first:
+      213: 4376681766038435028
+    second: wang_1001
+  - first:
+      213: 5652139030405844992
+    second: wang_0010_x96_y32
+  - first:
+      213: -399480145096219335
+    second: wang_0011_x32_y64
+  - first:
+      213: 3418439700786778698
+    second: wang_0001_x64_y64
+  - first:
+      213: 2401482737658222661
+    second: wang_1010_x96_y64
+  - first:
+      213: 940474358690551643
+    second: wang_1111_x0_y96
+  - first:
+      213: 4363848774484784890
+    second: wang_0101_x32_y0
+  - first:
+      213: 7458125823494498515
+    second: wang_0111_x0_y64
+  - first:
+      213: -6413910786525567583
+    second: wang_1011_x96_y96
+  - first:
+      213: 3796603534394062019
+    second: wang_1101_x32_y96
+  - first:
+      213: 3459944629752564809
+    second: wang_1100_x96_y0
+  - first:
+      213: -7502719305602847794
+    second: wang_0100_x32_y32
+  - first:
+      213: -3791451053620863351
+    second: wang_1000_x64_y0
+  - first:
+      213: 8377799367372808911
+    second: wang_1110_x0_y0
+  - first:
+      213: -592396511581563638
+    second: wang_0110_x64_y96
+  - first:
+      213: 7332844372459850719
+    second: wang_1001_x0_y32
+  - first:
+      213: 5228247709310496117
+    second: all_floor_reference_t1_0_r1_c0
+  - first:
+      213: 3833705662814510812
+    second: wang_0010_t1_1_r2_c1
+  - first:
+      213: 1489636097533897960
+    second: wang_0011_t1_2_r2_c2
+  - first:
+      213: -61163976572021899
+    second: wang_0001_t1_3_r2_c3
+  - first:
+      213: 2598452676668550127
+    second: wang_1010_t1_10_r3_c1
+  - first:
+      213: 6075204881758486795
+    second: wang_1010_t1_4_r4_c1
+  - first:
+      213: -4162858869166431864
+    second: wang_1111_t1_5_r5_c2
+  - first:
+      213: 1843877071950988421
+    second: wang_0101_t1_6_r3_c6
+  - first:
+      213: -315498991085293720
+    second: wang_0101_t1_14_r4_c6
+  - first:
+      213: -4925395752578297936
+    second: wang_0111_t1_8_r4_c3
+  - first:
+      213: 3406086879699437116
+    second: wang_1011_t1_9_r4_c4
+  - first:
+      213: 2294966559779075611
+    second: wang_1101_t1_16_r6_c4
+  - first:
+      213: -8992684927218386690
+    second: wang_1100_t1_17_r6_c5
+  - first:
+      213: -9053584792918212633
+    second: wang_0100_t1_18_r6_c6
+  - first:
+      213: -7321063132635834993
+    second: wang_0101_t1_19_r7_c4
+  - first:
+      213: -9018914903992451571
+    second: all_floor_reference_t1_20_r7_c5
+  - first:
+      213: 8566931415278826427
+    second: all_floor_reference_t1_21_r7_c6
+  - first:
+      213: 1101602030353056881
+    second: wang_1000_t1_22_r8_c1
+  - first:
+      213: 5924532651054248798
+    second: wang_1110_t1_23_r8_c2
+  - first:
+      213: -8059915477964046496
+    second: wang_0110_t1_24_r8_c4
+  - first:
+      213: -7738014874748525233
+    second: all_floor_reference_t1_25_r9_c1
+  - first:
+      213: -2342971295751530548
+    second: wang_1010_t1_26_r9_c2
+  - first:
+      213: 2181905016027355034
+    second: wang_1010_t1_27_r9_c4
+  - first:
+      213: 4649035530440154214
+    second: wang_1001_t1_28_r10_c2
+  - first:
+      213: 9168504792889024387
+    second: wang_0101_t1_30_r11_c2
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: all_floor_reference_t1_0_r1_c0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57da33757977e8840800000000000000
+      internalID: 5228247709310496117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0010_t1_1_r2_c1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cde567d0dfe043530800000000000000
+      internalID: 3833705662814510812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0011_t1_2_r2_c2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ec6b1663204ca410800000000000000
+      internalID: 1489636097533897960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0001_t1_3_r2_c3
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 573df57ffa3b62ff0800000000000000
+      internalID: -61163976572021899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1010_t1_10_r3_c1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: febed7631fe8f0420800000000000000
+      internalID: 2598452676668550127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1010_t1_4_r4_c1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b010fe2f6a67f4450800000000000000
+      internalID: 6075204881758486795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1111_t1_5_r5_c2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 881204d0aed8a36c0800000000000000
+      internalID: -4162858869166431864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0101_t1_6_r3_c6
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 584402b7d64c69910800000000000000
+      internalID: 1843877071950988421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0101_t1_14_r4_c6
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86fed55d65f1f9bf0800000000000000
+      internalID: -315498991085293720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0111_t1_8_r4_c3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bf4a5da8aa75abb0800000000000000
+      internalID: -4925395752578297936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1011_t1_9_r4_c4
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c368a9a88f9d44f20800000000000000
+      internalID: 3406086879699437116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1101_t1_16_r6_c4
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1638074deb59df10800000000000000
+      internalID: 2294966559779075611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1100_t1_17_r6_c5
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef8732834b0933380800000000000000
+      internalID: -8992684927218386690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0100_t1_18_r6_c6
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ef3b3a49943b5280800000000000000
+      internalID: -9053584792918212633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0101_t1_19_r7_c4
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8558099edb566a90800000000000000
+      internalID: -7321063132635834993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: all_floor_reference_t1_20_r7_c5
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0ebd08dda066d280800000000000000
+      internalID: -9018914903992451571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: all_floor_reference_t1_21_r7_c6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb334de8bbad3e670800000000000000
+      internalID: 8566931415278826427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1000_t1_22_r8_c1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1740b07c53da94f00800000000000000
+      internalID: 1101602030353056881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1110_t1_23_r8_c2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e53ba4e7e0b283250800000000000000
+      internalID: 5924532651054248798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0110_t1_24_r8_c4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06fb748739d652090800000000000000
+      internalID: -8059915477964046496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: all_floor_reference_t1_25_r9_c1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f45eceb187c0d9490800000000000000
+      internalID: -7738014874748525233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1010_t1_26_r9_c2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc71bc525081c7fd0800000000000000
+      internalID: -2342971295751530548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1010_t1_27_r9_c4
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9714f54d0fa74e10800000000000000
+      internalID: 2181905016027355034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_1001_t1_28_r10_c2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66c1e0cee21b48040800000000000000
+      internalID: 4649035530440154214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wang_0101_t1_30_r11_c2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38fdd9548821d3f70800000000000000
+      internalID: 9168504792889024387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      all_floor_reference: 4745750986856524281
+      all_floor_reference_t1_0_r1_c0: 5228247709310496117
+      all_floor_reference_t1_20_r7_c5: -9018914903992451571
+      all_floor_reference_t1_21_r7_c6: 8566931415278826427
+      all_floor_reference_t1_25_r9_c1: -7738014874748525233
+      cell_0_0: -7520466869721654120
+      cell_0_1: -5487310232412146428
+      cell_0_2: -3733845333048158775
+      cell_0_3: 1980048049518965780
+      cell_0_4: 7219912142988472570
+      cell_0_5: -9041582788837168982
+      cell_0_6: 7047908133594630203
+      cell_0_7: -4247552172925267962
+      cell_1_0: 3930104902040956457
+      cell_1_1: 1974512785748074565
+      cell_1_2: 5621383398243325884
+      cell_1_3: 2860895665913601722
+      cell_1_4: -1095586729560656984
+      cell_1_5: 1007655938863700426
+      cell_1_6: -1380665938583903983
+      cell_1_7: 8083720020673942950
+      cell_2_0: 3907985204239565601
+      cell_2_1: -8402806873343208690
+      cell_2_2: 8585792531916574365
+      cell_2_3: 6568949945595114489
+      cell_2_4: 1394321593886673243
+      cell_2_5: -4858732456433051964
+      cell_2_6: 4932855753300009429
+      cell_2_7: 6672537487635980956
+      cell_3_0: 234199951818665750
+      cell_3_1: 3021386958834790352
+      cell_3_2: -5877611839698641822
+      cell_3_3: 4627130523315375219
+      cell_3_4: 5783490735885261128
+      cell_3_5: 2156284404397876840
+      cell_3_6: 2187325743263538426
+      cell_3_7: 1053531109948819247
+      master_0: 4843460787145592052
+      wang_0001: 6406852879095727051
+      wang_0001_t1_3_r2_c3: -61163976572021899
+      wang_0001_x64_y64: 3418439700786778698
+      wang_0010: 4597336878232975114
+      wang_0010_t1_1_r2_c1: 3833705662814510812
+      wang_0010_x96_y32: 5652139030405844992
+      wang_0011: -2039554699828058218
+      wang_0011_t1_2_r2_c2: 1489636097533897960
+      wang_0011_x32_y64: -399480145096219335
+      wang_0100: -2137599662293649865
+      wang_0100_t1_18_r6_c6: -9053584792918212633
+      wang_0100_x32_y32: -7502719305602847794
+      wang_0101: -6338987859838451773
+      wang_0101_t1_14_r4_c6: -315498991085293720
+      wang_0101_t1_19_r7_c4: -7321063132635834993
+      wang_0101_t1_30_r11_c2: 9168504792889024387
+      wang_0101_t1_6_r3_c6: 1843877071950988421
+      wang_0101_x32_y0: 4363848774484784890
+      wang_0110: 4707772980524165073
+      wang_0110_t1_24_r8_c4: -8059915477964046496
+      wang_0110_x64_y96: -592396511581563638
+      wang_0111: 1482140815019770372
+      wang_0111_t1_8_r4_c3: -4925395752578297936
+      wang_0111_x0_y64: 7458125823494498515
+      wang_1000: 5749239151205295420
+      wang_1000_t1_22_r8_c1: 1101602030353056881
+      wang_1000_x64_y0: -3791451053620863351
+      wang_1001: 4376681766038435028
+      wang_1001_t1_28_r10_c2: 4649035530440154214
+      wang_1001_x0_y32: 7332844372459850719
+      wang_1010: 787883177982882308
+      wang_1010_t1_10_r3_c1: 2598452676668550127
+      wang_1010_t1_26_r9_c2: -2342971295751530548
+      wang_1010_t1_27_r9_c4: 2181905016027355034
+      wang_1010_t1_4_r4_c1: 6075204881758486795
+      wang_1010_x96_y64: 2401482737658222661
+      wang_1011: -5763148048504444740
+      wang_1011_t1_9_r4_c4: 3406086879699437116
+      wang_1011_x96_y96: -6413910786525567583
+      wang_1100: -3434931927925094739
+      wang_1100_t1_17_r6_c5: -8992684927218386690
+      wang_1100_x96_y0: 3459944629752564809
+      wang_1101: 4630002781217163852
+      wang_1101_t1_16_r6_c4: 2294966559779075611
+      wang_1101_x32_y96: 3796603534394062019
+      wang_1110: -7661956701396009009
+      wang_1110_t1_23_r8_c2: 5924532651054248798
+      wang_1110_x0_y0: 8377799367372808911
+      wang_1111: -6319622972493131843
+      wang_1111_t1_5_r5_c2: -4162858869166431864
+      wang_1111_x0_y96: 940474358690551643
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
