@@ -1,0 +1,105 @@
+using System.Collections.Generic;
+using RIMA.MapDesigner.Room.Validation;
+using UnityEngine;
+
+namespace RIMA.MapDesigner.Room.Data
+{
+    [CreateAssetMenu(menuName = "RIMA/Room/RoomBank", fileName = "RoomBank_New", order = 201)]
+    public class RoomBankSO : ScriptableObject
+    {
+        // V1 storage: direct ref lists. Stable consumer API = Pick(...) + AllRooms() + GetList(...).
+        // Sprint 11+ may swap these to Addressable AssetReference lists; callers that bypass Pick/AllRooms
+        // and read these fields directly will break on that swap.
+        public List<RoomTemplateSO> combatRooms = new List<RoomTemplateSO>();
+        public List<RoomTemplateSO> eliteRooms = new List<RoomTemplateSO>();
+        public List<RoomTemplateSO> bossRooms = new List<RoomTemplateSO>();
+        public List<RoomTemplateSO> merchantRooms = new List<RoomTemplateSO>();
+        public List<RoomTemplateSO> eventRooms = new List<RoomTemplateSO>();
+
+        public RoomTemplateSO Pick(RIMA.RoomType roomType, int seed)
+        {
+            List<RoomTemplateSO> list = GetList(roomType);
+            if (list == null || list.Count == 0)
+            {
+                return null;
+            }
+
+            int hashed = unchecked(seed * 1103515245 + 12345);
+            int index = (hashed & 0x7FFFFFFF) % list.Count;
+            return list[index];
+        }
+
+        public List<RoomTemplateSO> GetList(RIMA.RoomType roomType)
+        {
+            switch (roomType)
+            {
+                case RIMA.RoomType.Combat: return combatRooms;
+                case RIMA.RoomType.Elite: return eliteRooms;
+                case RIMA.RoomType.Boss: return bossRooms;
+                case RIMA.RoomType.Merchant: return merchantRooms;
+                case RIMA.RoomType.Event: return eventRooms;
+                default: return null;
+            }
+        }
+
+        public IEnumerable<RoomTemplateSO> AllRooms()
+        {
+            return Enumerate(combatRooms)
+                .ConcatSafe(eliteRooms)
+                .ConcatSafe(bossRooms)
+                .ConcatSafe(merchantRooms)
+                .ConcatSafe(eventRooms);
+        }
+
+        public List<RoomValidationIssue> ValidateAll()
+        {
+            var issues = new List<RoomValidationIssue>();
+            var seenIds = new HashSet<string>();
+
+            foreach (var room in AllRooms())
+            {
+                if (room == null)
+                {
+                    issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                        "ERR_NULL_ROOM_REF", "RoomBank contains a null RoomTemplateSO reference.", string.Empty));
+                    continue;
+                }
+
+                issues.AddRange(RoomTemplateValidator.Validate(room));
+
+                if (!string.IsNullOrEmpty(room.roomId))
+                {
+                    if (!seenIds.Add(room.roomId))
+                    {
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                            "ERR_DUPLICATE_ROOM_ID",
+                            $"Duplicate roomId '{room.roomId}' found in RoomBank.",
+                            room.roomId));
+                    }
+                }
+            }
+
+            return issues;
+        }
+
+        private static IEnumerable<RoomTemplateSO> Enumerate(List<RoomTemplateSO> list)
+        {
+            return list ?? new List<RoomTemplateSO>();
+        }
+    }
+
+    internal static class RoomBankEnumerableExtensions
+    {
+        public static IEnumerable<T> ConcatSafe<T>(this IEnumerable<T> head, IEnumerable<T> tail)
+        {
+            if (head != null)
+            {
+                foreach (var item in head) yield return item;
+            }
+            if (tail != null)
+            {
+                foreach (var item in tail) yield return item;
+            }
+        }
+    }
+}
