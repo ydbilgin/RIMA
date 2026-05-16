@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using RIMA.Data;
 using RIMA.MapDesigner;
 using RIMA.MapDesigner.Brush.Data;
 using RIMA.MapDesigner.Brush.Executors;

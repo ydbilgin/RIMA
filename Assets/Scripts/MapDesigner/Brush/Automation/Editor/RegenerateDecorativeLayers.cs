@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using RIMA.MapDesigner.Brush.Data;
+using RIMA.MapDesigner.Brush.Executors;
 
 namespace RIMA.MapDesigner.Brush.Automation.Editor
 {

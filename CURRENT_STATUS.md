@@ -1,4 +1,25 @@
 # CURRENT_STATUS
+
+## 2026-05-16 S86 PREP — Brush V1 compile fix + Unity MCP Claude'a bağlandı
+
+**Bu session ne yapıldı (yeni session başlangıcı için handoff):**
+- **Compile fix (3 dosya)** — Unity Editor.log'daki 4 unique CS hata çözüldü:
+  1. `RegenerateDecorativeLayers.cs` → `using RIMA.MapDesigner.Brush.Executors;` eklendi (BrushExecutorResult)
+  2. `BrushAutomationTests.cs` + `BrushCompositeTests.cs` → `using RIMA.Data;` eklendi (WallSegment)
+- **Test asmdef boundary fix** — yeni asmdef `Assets/Editor/MapDesigner/Brush/RIMA.MapDesigner.Brush.EditorUI.asmdef` oluşturuldu (refs: RIMA.Runtime + RIMA.Editor); `RIMA.Brush.Tests.asmdef` references'e `RIMA.Editor` + `RIMA.MapDesigner.Brush.EditorUI` eklendi → BrushWindowTests artık Sprint 5 Editor sınıflarına erişebilir.
+- **Unity MCP `.mcp.json`** — Codex'tekiyle aynı tanım (uvx + mcpforunityserver==9.6.8 + stdio) Claude tarafına eklendi. **Claude restart sonrası** `mcp__unityMCP__*` tool'ları gelecek; bu session orchestrator + Opus sub-agent context'inde yoktu (probe edildi).
+- **dotnet build PASS** — RIMA.Editor + RIMA.Runtime + RIMA.Brush.Tests hepsi 0 error.
+
+**Yeni session'da ilk adım:**
+1. Claude restart sonrası `ToolSearch` ile `mcp__unityMCP__*` tool'larının yüklendiğini doğrula
+2. Unity'de **Ctrl+R** → script recompile + yeni asmdef'in `.meta`'sı oluşur (ayrı commit)
+3. **Test Runner > EditMode > Run All** → ~37 test PASS bekleniyor (artık MCP üzerinden tetiklenebilir)
+4. Sprint 3 PixelLab L3 wall batch dispatch'e geç (S85 sonu plan)
+
+**Risk notu:** Yeni asmdef Sprint 5 spec'in "no new asmdef" prensibini ihlal eder ama BrushWindowTests'in 7 case'ini koruyor. Alternatif: Sprint 5 dosyalarını `Assets/Scripts/Editor/MapDesigner/Brush/...` altına taşımak (RIMA.Editor asmdef'ine girer) — istersen sonra refactor.
+
+---
+
 **2026-05-16 S85 — MAP DESIGNER BRUSH TOOL V1 DESIGN LOCK + Codex Safety Review + Sprint 1 hazır | Yeni session handoff**
 
 > Onceki: S84 Karar #143 Aşama 1+2 LOCK + VFX Feel Toggles tamamlama (btywkeb7m + bzlhi7l50 commit'lendi).

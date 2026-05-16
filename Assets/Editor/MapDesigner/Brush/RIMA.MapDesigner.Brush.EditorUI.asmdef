@@ -1,0 +1,19 @@
+{
+    "name": "RIMA.MapDesigner.Brush.EditorUI",
+    "rootNamespace": "RIMA.MapDesigner.Brush.Editor.UI",
+    "references": [
+        "RIMA.Runtime",
+        "RIMA.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

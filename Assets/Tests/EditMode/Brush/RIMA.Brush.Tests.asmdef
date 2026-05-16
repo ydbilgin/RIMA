@@ -3,6 +3,8 @@
     "rootNamespace": "RIMA.Tests.Brush",
     "references": [
         "RIMA.Runtime",
+        "RIMA.Editor",
+        "RIMA.MapDesigner.Brush.EditorUI",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],
