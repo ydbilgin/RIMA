@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using RIMA.Data;
+using RIMA.MapDesigner.Brush.Data;
+using RIMA.MapDesigner.Composition;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,6 +14,7 @@ namespace RIMA.MapDesigner
 
         [SerializeField] private string sortingLayerName = "Wall";
         [SerializeField] private int sortingOrder = 10;
+        [SerializeField] private AssetPoolSO l3WallVariantPool;
 
         public void PaintWalls(RoomData room, WallBrushSetSO brushSet, Tilemap baseTilemap, int seed)
         {
@@ -75,6 +78,62 @@ namespace RIMA.MapDesigner
 
             SpriteRenderer renderer = wall.AddComponent<SpriteRenderer>();
             renderer.sprite = sprite;
+            renderer.sortingLayerName = sortingLayerName;
+            renderer.sortingOrder = sortingOrder;
+            return wall;
+        }
+
+        public void PlaceWallSprite_ContextAware(
+            Vector2Int pos,
+            CompositionRoleMap compositionMap,
+            WangContextResolver wangResolver,
+            Tilemap walkableMask)
+        {
+            List<BrushAssetVariant> candidates = l3WallVariantPool != null ? l3WallVariantPool.variants : null;
+            PlaceWallSprite_ContextAware_WithCandidates(pos, compositionMap, wangResolver, walkableMask, candidates);
+        }
+
+        public GameObject PlaceWallSprite_ContextAware_WithCandidates(
+            Vector2Int pos,
+            CompositionRoleMap compositionMap,
+            WangContextResolver wangResolver,
+            Tilemap walkableMask,
+            List<BrushAssetVariant> candidates,
+            Tilemap baseTilemap = null)
+        {
+            if (candidates == null || candidates.Count == 0)
+            {
+                return null;
+            }
+
+            if (compositionMap != null && compositionMap.GetRoleAt(pos) != CompositionRole.WallBand)
+            {
+                return null;
+            }
+
+            BrushAssetVariant variant;
+            if (wangResolver != null && walkableMask != null)
+            {
+                string wangCase = wangResolver.ResolveCaseAt(pos, walkableMask);
+                variant = wangResolver.PickVariantForCase(wangCase, candidates);
+            }
+            else
+            {
+                variant = candidates[0];
+            }
+
+            if (variant == null || variant.sprite == null)
+            {
+                return null;
+            }
+
+            Transform root = EnsureRoot();
+            GameObject wall = new GameObject("Wall_Context_" + pos.x + "_" + pos.y);
+            wall.transform.SetParent(root, false);
+            wall.transform.position = CellToWorld(baseTilemap, new Vector2(pos.x + 0.5f, pos.y + 0.5f));
+
+            SpriteRenderer renderer = wall.AddComponent<SpriteRenderer>();
+            renderer.sprite = variant.sprite;
             renderer.sortingLayerName = sortingLayerName;
             renderer.sortingOrder = sortingOrder;
             return wall;
