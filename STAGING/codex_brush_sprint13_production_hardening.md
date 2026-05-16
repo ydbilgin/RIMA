@@ -158,14 +158,33 @@ Modify `Assets/Scripts/MapDesigner/Props/PropDefinitionSO.cs`:
 
 ```csharp
 [Header("Variant Pool (Sprint 13)")]
-public Sprite[] variantSprites;  // Empty = use worldSprite only. Populated = random pick per placement.
+public Sprite[] variantSprites;  // Empty = use worldSprite only. Populated = deterministic pick per placement seed.
 
 public Sprite PickVariant(int seed)
 {
-    if (variantSprites == null || variantSprites.Length == 0)
-        return worldSprite;
-    int idx = unchecked(seed * 1103515245 + 12345) & int.MaxValue;
-    return variantSprites[idx % variantSprites.Length];
+    int idx = PickVariantIndex(seed);
+    if (idx < 0) return worldSprite;
+    return variantSprites[idx] != null ? variantSprites[idx] : worldSprite;
+}
+
+public int PickVariantIndex(int seed)
+{
+    if (variantSprites == null || variantSprites.Length == 0) return -1;
+    int hashed = unchecked(seed * 1103515245 + 12345) & int.MaxValue;
+    return hashed % variantSprites.Length;
+}
+
+public int PickVariantIndexForTile(Vector2Int tilePos)
+{
+    return PickVariantIndex(StableTileSeed(tilePos));
+}
+
+public static int StableTileSeed(Vector2Int tilePos)
+{
+    unchecked
+    {
+        return (tilePos.x * 73856093) ^ (tilePos.y * 19349663);
+    }
 }
 ```
 
@@ -175,7 +194,7 @@ Modify `PropPlacementData`:
 public int variantIndex = -1;  // -1 = unpicked, use worldSprite; >=0 = use variantSprites[variantIndex]
 ```
 
-Update `PropPlacer.OnSceneClick`: set `variantIndex = (seed-based or random) % variantSprites.Length` if pool exists.
+Update `PropPlacer.OnSceneClick`: set `variantIndex = propDef.PickVariantIndexForTile(tilePos)` if pool exists. Deterministic per-tile via stable seed formula `x * 73856093 ^ y * 19349663` (cross-version stable, no GetHashCode() dependency).
 
 #### 2.5 Unity Collider2D integration
 

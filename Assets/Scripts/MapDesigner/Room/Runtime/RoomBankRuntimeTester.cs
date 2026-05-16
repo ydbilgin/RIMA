@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using RIMA.MapDesigner.Props;
+using RIMA.MapDesigner.Props.Runtime;
 using RIMA.MapDesigner.Room.Data;
 using UnityEngine;
 
@@ -12,6 +14,10 @@ namespace RIMA.MapDesigner.Room.Runtime
         public GameObject roomInstance;
         public GameObject playerInstance;
         public GameObject enemyInstance;
+        public List<GameObject> propInstances = new List<GameObject>();
+        public int propsRequested;
+        public int propsSpawned;
+        public int propsUnresolved;
         public bool hasExitSocket;
         public List<string> diagnostics = new List<string>();
     }
@@ -21,6 +27,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         public RoomBankSO bank;
         public GameObject playerPrefab;
         public GameObject enemyPlaceholderPrefab;
+        public PropRegistrySO propRegistry;
         public int testSeed = 42;
         public RIMA.RoomType roomTypeToTest = RIMA.RoomType.Combat;
 
@@ -87,6 +94,8 @@ namespace RIMA.MapDesigner.Room.Runtime
                 result.diagnostics.Add("enemyPlaceholderPrefab null or no enemy sockets.");
             }
 
+            SpawnProps(picked, result);
+
             result.hasExitSocket = HasExit(picked);
             if (!result.hasExitSocket)
             {
@@ -98,6 +107,29 @@ namespace RIMA.MapDesigner.Room.Runtime
             result.success = true;
             result.message = "OK";
             return result;
+        }
+
+        private void SpawnProps(RoomTemplateSO picked, RoomTestResult result)
+        {
+            if (picked.props == null || picked.props.Count == 0)
+            {
+                result.diagnostics.Add("No props on template; skipped prop spawn.");
+                return;
+            }
+            if (propRegistry == null)
+            {
+                result.diagnostics.Add($"propRegistry null; skipped {picked.props.Count} prop placements.");
+                return;
+            }
+
+            Transform parent = result.roomInstance != null ? result.roomInstance.transform : transform;
+            PropRuntimeSpawner spawner = new PropRuntimeSpawner();
+            PropRuntimeSpawner.SpawnResult spawn = spawner.Spawn(picked, propRegistry, parent);
+            result.propsRequested = spawn.requested;
+            result.propsSpawned = spawn.spawned;
+            result.propsUnresolved = spawn.unresolved;
+            if (spawn.instances != null) result.propInstances.AddRange(spawn.instances);
+            result.diagnostics.Add($"Props requested={spawn.requested} spawned={spawn.spawned} unresolved={spawn.unresolved}.");
         }
 
         public static Vector3 TileToWorld(Vector2Int tile)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using RIMA.MapDesigner.Props;
 using RIMA.MapDesigner.Room.Data;
 using RIMA.MapDesigner.Room.Runtime;
 using UnityEngine;
@@ -110,6 +111,78 @@ namespace RIMA.Tests.PlayMode.Room
 
             Assert.IsFalse(result.success, "RunTest must fail when no exit socket.");
             Assert.IsFalse(result.hasExitSocket);
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator RunTest_WithProps_SpawnsPropsViaRegistry()
+        {
+            PropDefinitionSO prop = ScriptableObject.CreateInstance<PropDefinitionSO>();
+            prop.propId = "playmode_prop";
+            prop.footprintSize = new Vector2Int(1, 1);
+            prop.blocksWalkable = true;
+            PropRegistrySO registry = ScriptableObject.CreateInstance<PropRegistrySO>();
+            registry.EditorAddProp(prop);
+            registry.RebuildIndex();
+
+            template.props = new List<PropPlacementData>
+            {
+                new PropPlacementData("playmode_prop", new Vector2Int(5, 5)),
+                new PropPlacementData("playmode_prop", new Vector2Int(2, 3))
+            };
+
+            var tester = testerGo.GetComponent<RoomBankRuntimeTester>();
+            tester.propRegistry = registry;
+            var result = tester.RunTest();
+
+            if (result.playerInstance != null) spawned.Add(result.playerInstance);
+            if (result.enemyInstance != null) spawned.Add(result.enemyInstance);
+            if (result.roomInstance != null) spawned.Add(result.roomInstance);
+            foreach (var p in result.propInstances) spawned.Add(p);
+
+            try
+            {
+                Assert.IsTrue(result.success, $"RunTest must succeed. Message: {result.message}");
+                Assert.AreEqual(2, result.propsRequested, "Props requested count.");
+                Assert.AreEqual(2, result.propsSpawned, "Props spawned count.");
+                Assert.AreEqual(0, result.propsUnresolved, "No unresolved props.");
+                Assert.AreEqual(2, result.propInstances.Count, "Two prop instances.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(registry);
+                Object.DestroyImmediate(prop);
+            }
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator RunTest_PropsButNullRegistry_LogsDiagnostic()
+        {
+            template.props = new List<PropPlacementData>
+            {
+                new PropPlacementData("dummy_guid", new Vector2Int(1, 1))
+            };
+            var tester = testerGo.GetComponent<RoomBankRuntimeTester>();
+            tester.propRegistry = null;
+            var result = tester.RunTest();
+
+            if (result.playerInstance != null) spawned.Add(result.playerInstance);
+            if (result.enemyInstance != null) spawned.Add(result.enemyInstance);
+            if (result.roomInstance != null) spawned.Add(result.roomInstance);
+
+            Assert.IsTrue(result.success, "RunTest succeeds even when registry is null (skipped, not blocked).");
+            Assert.AreEqual(0, result.propsSpawned, "No props spawned when registry null.");
+            bool hasRegistryDiagnostic = false;
+            foreach (string d in result.diagnostics)
+            {
+                if (d.Contains("propRegistry null"))
+                {
+                    hasRegistryDiagnostic = true;
+                    break;
+                }
+            }
+            Assert.IsTrue(hasRegistryDiagnostic, "Diagnostic should mention null propRegistry.");
             yield return null;
         }
     }
