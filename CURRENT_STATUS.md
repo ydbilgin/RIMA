@@ -1,5 +1,115 @@
 # CURRENT_STATUS
 
+## 2026-05-18 S87_NIGHT → user uyandığında handoff (Opus night session bitti)
+
+**TLDR — bu gece (S87 night, user uyurken Opus + Codex + agents):**
+- ✅ **Git commit hygiene tamamlandı** — 7 logical commit group (Sprint 9 / 10 / 11 / 12 / test fix / S86 cleanup / sprite meta cleanup). Tüm uncommitted iş worktree'de temizlendi.
+- ✅ **Sprint 13 Codex spec review** → FAIL (4 P0 + 5 P1 blocker). Tüm blocker resolutions spec v1.1'e işlendi + impl'a yansıtıldı.
+- ✅ **Sprint 13 implementation LIVE (commit cb4303b)** — 7 new source + 5 modifications + 9 test files = **39 yeni test PASS, 321/321 EditMode PASS**. Brush V1 SHIP-READY.
+- ✅ **Mekanik bank review** — `F:\LaurethStudio\03_IDEAS\MECHANIC_BANK\_MEKANIK_BANKASI.md` analiz edildi, RIMA-adaptation proposal yazıldı (`STAGING/mechanic_bank_rima_adaptations.md`), master listeye 10 yeni mekanik (M59-M68) RIMA-anchored append edildi.
+- ⏳ **Sprint 13 impl Codex review** background'da çalışıyor (job `bd7gzobq1`). Sabah verdict.
+- ⏳ **NLM sync** — Sprint 13 yeni dosyalar için sabah retry.
+
+**Yeni session ilk 60 saniye:**
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` oku
+2. Bu bölümü oku
+3. **Karar #74/#100/#144/#145 LIVE LOCK** korunur (chibi 64×64 + chibi RESTORE + silahsız body + Character States)
+4. Test suite **321/321 EditMode PASS** (282 önceki + 39 Sprint 13 yeni)
+5. Brush V1 SHIP-READY — Sprint 14+ planning hazır (combat integration / boss room procgen / meta-progression)
+6. Memory: [[pixellab-character-states-workflow]] [[weaponless-animation-v1]] [[brush-tool-v1-design]] [[sonnet-first-routing]] [[room-library-architecture]]
+
+### Bu session ne yapıldı — özet
+
+**1. Git commit hygiene (P0) ✅ — 7 logical commit:**
+| Commit | Hash | Scope | Files |
+|---|---|---|---|
+| Sprint 9 | `215d1b9` | BrushAtlasImporter + Wang variants + 2 P0 retrofit | 63 files |
+| Sprint 10 | `1dac57f` | RoomTemplateSO + RoomBank + Save/Load vertical slice | 43 files |
+| Sprint 11 | `7a91ab6` | Composition Roles + WangContextResolver + Natural Engine | 17 files |
+| Sprint 12 | `dd4d974` | Props Mode MVP (PropDefinitionSO + PropPlacer + PropsTab) | 28 files |
+| Test fix | `bc4360c` | 4 pre-existing brush/feature test failures (282/282 PASS) | 4 files |
+| S86 cleanup | `c7444cb` | Memory + STAGING archive + dispatch infra + Karar #144/#145 LOCK | 110 files |
+| Sprite cleanup | `262ba4e` | 64 stale sprite .meta delete + Warblade Karar #145 pilot scaffold | 71 files |
+
+**2. Sprint 13 Codex spec review cycle ✅:**
+- Spec v1.0 `STAGING/codex_brush_sprint13_production_hardening.md` Codex'e gönderildi
+- Verdict: **FAIL** with 4 P0 BLOCKERS + 5 P1 GAPS
+  - **P0-1:** PropRegistrySO runtime path empty in player builds
+  - **P0-2:** Missing PropDefinitionPostprocessor (propId GUID auto-populate)
+  - **P0-3:** Rotation-aware Validate API gap
+  - **P0-4:** Runtime collider/sorter components not wired (PropRuntimeSpawner missing)
+  - **P1-1:** Prop sortingLayer can default to Unity Default (violates Karar #143-E)
+  - **P1-2:** Variant seed not contract-stable (GetHashCode())
+  - **P1-3:** Variant pick text conflicts with OQ3
+  - **P1-4:** RoomBankSO_Library_v1.asset missing from §5
+  - **P1-5:** DependencyReportGenerator no test
+- Tüm fix'ler spec v1.1'e işlendi + impl'a yansıtıldı (`STAGING/codex_review_sprint13_spec_DONE.md`)
+
+**3. Sprint 13 implementation (commit cb4303b, 321/321 PASS) ✅:**
+
+Stream A — Sprint 12 forward path (7 items):
+- `RoomTemplateSO.walkableGrid` + `IsWalkable(Vector2Int)` (Condition 1 fix)
+- `PropDefinitionSO.variantSprites` + `PickVariant` + `PickVariantIndex` + `PickVariantIndexForTile` + static `StableTileSeed(x*73856093 ^ y*19349663)` — stable cross-version seed
+- `PropPlacementData.variantIndex` + `RotateClockwise()`
+- `PropFootprintValidator.Validate` 7-arg overload with rotation; rotation-aware footprint swap
+- `PropPlacer.CurrentRotation` + R hotkey wire (PropsTab.OnSceneGUI KeyDown)
+- `PropRegistrySO.cs` — runtime GUID lookup, editor+runtime population paths
+- `PropDefinitionPostprocessor.cs` — AssetPostprocessor auto-populate propId
+- `PropColliderAutoBuilder.cs` — Runtime MonoBehaviour, rotation-aware BoxCollider2D
+- `PropSorterRuntime.cs` — Default "Props" sortingLayer (Karar #143-E); FixedOrder/AboveAll/YPosition modes
+- `PropRuntimeSpawner.cs` — Wires registry + collider + sorter + variant pick at scene load
+
+Stream A extension:
+- `BridsonPoissonAutoPlacer.cs` — True Bridson Poisson disk sampling with role-aware density rejection
+
+Stream B — Batch Gate:
+- `DependencyReportGenerator.cs` — Menu `RIMA → MapDesigner → Brush → Generate Dependency Report`
+- `Assets/Data/Rooms/Library/.gitkeep` — 10-room library scaffold
+
+Tests (39 new):
+- RoomTemplateWalkableGridTests (3) + PropRotationTests (5) + PropVariantTests (5) + PropRegistryTests (4)
+- BridsonPoissonAutoPlacerTests (6) + PropColliderTests (3) + PropSorterTests (3) + PropRuntimeSpawnerTests (4)
+- DependencyReportGeneratorTests (3) + UndoStressTests (2) + PropFootprintValidatorTests (1 updated)
+
+**4. Mekanik bank review (user explicit request) ✅:**
+- `F:\LaurethStudio\03_IDEAS\MECHANIC_BANK\_MEKANIK_BANKASI.md` analiz edildi — 58 mekanik 9 kategori
+- RIMA-adaptation proposal: **6 Tier-S + 8 Tier-A + 5 Tier-B** mekanik RIMA combat-roguelite'a uyarlanabilir (`STAGING/mechanic_bank_rima_adaptations.md`)
+- Master listeye **M59-M68** RIMA-anchored combat/roguelite kategori (Combat/Roguelite/Action pillar adayı) append edildi: Combo Window, Parry, Dash i-Frame, Status Layer, Boss Phase, Hitstop, Encounter Choice, Meta Currency, Death Echo, Build Synergy Detection
+
+### Test durumu (S87_NIGHT)
+- **321/321 EditMode PASS** (önceki 282 + 39 yeni Sprint 13)
+- dotnet build 0 errors (Runtime + Editor + Brush.EditorUI + Brush.Tests + Tests.EditMode + Tests.PlayMode)
+- Unity refresh + compile clean (sadece pre-existing warning)
+
+### Git durumu
+- Tüm S86 + Sprint 9-13 work committed (8 commit toplam yeni)
+- Branch: master, 8 commit ahead of `338d773` (önceki HEAD)
+- Sadece orphan `Assets/TempTests.meta` untracked (Unity artifact, ignore safe)
+
+### Pending iş (yarın)
+1. **Sprint 13 impl Codex review verdict** (background `bd7gzobq1`) → fix cycle gerekirse
+2. **NLM sync** — Sprint 13 yeni dosyalar (codex_brush_sprint13_*, mechanic_bank_rima_adaptations.md, STAGING/codex_review_sprint13_*)
+3. **Sprint 14+ planning** — kullanıcı kararı: Combat integration veya Boss room procgen önceliği?
+4. **Karakter Batch 1 verdict** (USER) — Image #12 7/10 PASS, 3 drift fix bekliyor
+5. **M8 Phase 2 vertical slice manual test** (USER, Unity)
+6. **User onayı:** Sprint 14 yeni Karar #146 = "Weapon Component Swap" (M20 mekanik bank S4 tier)?
+7. **16-18 May Opus implement override** — bugün (May 17 night) son gün, yarın Sonnet'e döner
+
+### Yeni Karar Adayları (user onayı bekliyor)
+
+**Karar #146 candidate (BACKLOG):**
+- **Weapon Component Swap** (M20 mekanik bank S4 tier) — Karar #144 weaponless body + WeaponSR child SR direkt enabler
+- 10 sınıf × 5 weapon × 3 component slot × 4 option = 600 combo runtime
+- Phase 2 (build diversity) sprint candidate
+
+### Workflow notları
+- 16-18 May Opus implement override AKTIF (son gün, sonra Sonnet'e döner)
+- cx_dispatch.py CONDA fix LIVE — review/impl dispatch'leri tutarlı çalışıyor
+- Karar #146 önerisi (mature 5-6 head + 60°) reddedildi — chibi LOCK doğrudur (önceki session, S86)
+- Memory drift hierarchy: NLM > local memory > prompt iteration (PROJECT_RULES.md LIVE)
+
+---
+
 ## 2026-05-17 S86_NIGHT_END → S87 MORNING handoff (user yeni session başlatacak)
 
 **EN SON DURUM (bu session sonu):**

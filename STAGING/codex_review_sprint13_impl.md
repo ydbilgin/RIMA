@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
-
 # Sprint 13 Impl Review Request
 **Date:** 2026-05-17 S87 night
 **Reviewer:** Codex (GPT-5.5, profile auto-select)
@@ -134,7 +132,3 @@ Then 1-paragraph "Next action" summary.
 ---
 
 End of Sprint 13 impl review task.
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
