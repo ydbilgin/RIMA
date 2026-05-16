@@ -82,12 +82,25 @@
 - Duplicate GUID scan PASS
 - Codex Unity zaten açıkken MCP bridge ile çalıştı, Sprint 2 dispatch'inde aynı yöntemi kullanır
 
-### 8. Sprint 2 dispatch (BG)
-- Dispatch ID: **bsp34jayu**
-- Scope: IBrushExecutor + BrushExecutorRouter + GridTileExecutor + WallStampExecutor + BrushAlongEdgesAutomation + BrushStroke struct + 6-7 EditMode test
-- Karar #143-D walkable filter test (TEST 3) zorunlu
-- WallOverlayPainter delegation (yeniden yazma yasak)
-- ~10-12 saat tahmini, BG notify gelince işle
+### 8. Sprint 2 PASS (commit 187ec12, tag brush-sprint-2-pass)
+- **Dispatch ID:** bsp34jayu — bitti ~2-3 saat (beklenenden hızlı)
+- 7 source files + WallOverlayPainter +1 method (PlaceWallSprite, spec allowed)
+- BrushStroke, IBrushExecutor, BrushExecutorRouter, GridTileExecutor, WallStampExecutor, BrushAlongEdgesAutomation, BrushExecutorTests (7 test cases)
+- dotnet build RIMA.Runtime + RIMA.Editor + Brush.Tests = ALL PASS 0 errors
+- 12 .meta GUID listed, duplicate scan PASS
+- Karar #143-D walkable mask check at router level (double-belt)
+- Undo discipline: RegisterCompleteObjectUndo + RegisterCreatedObjectUndo + CollapseUndoOperations
+- BrushAlongEdges: doorway skip, single Undo group
+- **KNOWN GAP:** EditMode test runner could not execute (Unity instance lock — MCP timeout + batchmode reddetti). Test assembly compile PASS, sabah Unity restart + Test Runner GUI gerekli.
+
+### 9. Sprint 4 dispatch (BG, in flight)
+- **Dispatch ID:** buifgemo5
+- Scope: Karar143Enforcement utility + FreeformDecalExecutor + ScatterAlongStrokeExecutor + StampExecutor + EraseByLayerExecutor + EraseAllDecorativeExecutor + 8 EditMode test
+- Karar #143-D walkable + 143-E edge-bias + 143-K FeatureMask in one helper (Karar143Enforcement.EffectiveDensity)
+- TransitionBrushPainter / DetailDecalPainter / AccentPainter delegation (yeniden yazma yasak)
+- ~3-5 saat tahmini
+
+### 10. Gemini research (S85, completed)
 
 ### 9. Class Skill Gap Analysis (S85 gece extra iş)
 - **Dosya:** `STAGING/class_skill_gap_analysis_s85.md`
@@ -98,12 +111,16 @@
 - **Sabah onay soruları:** Q1-Q5 dosyada listeli
 - **Map V1 öncelikli, class skill paralel/sonra**
 
-### 10. Gemini Research BG dispatch
+### 10b. Gemini Research COMPLETED (S85)
 - **Agent ID:** ad896dddb4e25719e
-- **Topic:** Hades brush UX + Death's Door soft-edge technique + Photoshop brush palette UX + Unity EditorWindow patterns + pixel art soft alpha shader
 - **Output:** `STAGING/research_hades_brushux_softalpha.md`
-- **Kullanım:** Sprint 5 UI (Opus implement) + Sprint 8 shader (Opus implement) için referans
-- ~5-10 dk tahmini, notify gelince işle
+- **5 yanıt:**
+  - Q1 Hades = proprietary World Editor (C++ + Lua), pre-rendered 3D→2D (V-Ray Toon, Bink video). RIMA için doğrudan kullanılmaz.
+  - Q2 Death's Door = **fully 3D Unity**, alpha-clipped HARD-EDGE decals + hand-painted Procreate texture + stepped lighting shader. **Blur YOK.** ChatGPT §17 LOCK doğrulandı.
+  - Q3 Brush UX = **Krita kazanır** (multi-tag filter + radial popup + Alt+1-9 hotkey). Aseprite 1:1 thumbnail.
+  - Q4 Unity EditorWindow = **Polybrush + ProBuilder reference**. SceneView.duringSceneGui + HandleUtility.AddDefaultControl() + e.Use(). [Shortcut] attribute global rebindable. UI Toolkit TwoPaneSplitView opsiyonel.
+  - Q5 Soft alpha shader = **Screen-Space Ordered Dithering with 4x4 Bayer Matrix** (production-ready CGPROGRAM kod sağlandı). Return of Obra Dinn + Mario Odyssey'de kullanılmış. AlphaTest queue, ZWrite On, zero blur. URP port 1-line include swap.
+- **Entegre:** Sprint 5 spec §9 + Sprint 8 spec §9 addendum'larına eklendi (Bayer dither shader hazır kod dahil)
 
 ### 11. Tüm STAGING dosyaları (S85 gece üretildi, commit edildi 1073b99 + d0cd49c)
 - `STAGING/map_designer_unified_brush_design.md` — 21-section V1 design + ChatGPT addendum

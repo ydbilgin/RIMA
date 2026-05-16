@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using RIMA.MapDesigner.Brush.Data;
 using RIMA.MapDesigner.Brush.Stroke;
@@ -14,6 +15,11 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
             Register(new GridTileExecutor(PaintMode.GridTile));
             Register(new GridTileExecutor(PaintMode.GridTileRandom));
             Register(new WallStampExecutor());
+            RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.FreeformDecalExecutor");
+            RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.ScatterAlongStrokeExecutor");
+            RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.StampExecutor");
+            RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.EraseByLayerExecutor");
+            RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.EraseAllDecorativeExecutor");
         }
 
         public void Register(IBrushExecutor exec)
@@ -38,12 +44,17 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
                 return Error("BrushLayerOperation is null");
             }
 
-            if (op.assetPool == null)
+            bool requiresAssetPool = preset.paintMode != PaintMode.EraseByLayer &&
+                preset.paintMode != PaintMode.EraseAllDecorative;
+            if (requiresAssetPool && op.assetPool == null)
             {
                 return Error("AssetPool is null");
             }
 
-            if (op.respectsWalkableMask && !IsCellWalkable(stroke.currentCell, stroke.room))
+            if (op.respectsWalkableMask &&
+                preset.paintMode != PaintMode.EraseByLayer &&
+                preset.paintMode != PaintMode.EraseAllDecorative &&
+                !IsCellWalkable(stroke.currentCell, stroke.room))
             {
                 return new BrushExecutorResult { success = true, spawnedCount = 0 };
             }
@@ -57,14 +68,32 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
             return exec.Apply(stroke, op);
         }
 
+        private void RegisterIfAvailable(string typeName)
+        {
+            Type type = Type.GetType(typeName);
+            if (type == null || !typeof(IBrushExecutor).IsAssignableFrom(type))
+            {
+                return;
+            }
+
+            IBrushExecutor executor = Activator.CreateInstance(type) as IBrushExecutor;
+            Register(executor);
+        }
+
         private static bool IsCellWalkable(UnityEngine.Vector2Int cell, RoomData room)
         {
-            if (room.walkable == null || cell.x < 0 || cell.y < 0 || cell.x >= room.size.x || cell.y >= room.size.y)
+            if (room.walkable == null)
             {
                 return false;
             }
 
-            return room.walkable[cell.x, cell.y];
+            int width = room.walkable.GetLength(0);
+            int height = room.walkable.GetLength(1);
+            return cell.x >= 0 &&
+                cell.y >= 0 &&
+                cell.x < width &&
+                cell.y < height &&
+                room.walkable[cell.x, cell.y];
         }
 
         private static BrushExecutorResult Error(string message)
