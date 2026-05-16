@@ -6,8 +6,8 @@
 - ✅ **Git commit hygiene tamamlandı** — 7 logical commit group (Sprint 9 / 10 / 11 / 12 / test fix / S86 cleanup / sprite meta cleanup). Tüm uncommitted iş worktree'de temizlendi.
 - ✅ **Sprint 13 Codex spec review** → FAIL (4 P0 + 5 P1 blocker). Tüm blocker resolutions spec v1.1'e işlendi + impl'a yansıtıldı.
 - ✅ **Sprint 13 implementation LIVE (commit cb4303b)** — 7 new source + 5 modifications + 9 test files = **39 yeni test PASS, 321/321 EditMode PASS**. Brush V1 SHIP-READY.
+- ✅ **Sprint 13 impl Codex review** → FAIL (1 P0 + 2 P1). **P0 fix (commit dc4fe8f):** PropRuntimeSpawner wired into RoomBankRuntimeTester + 2 new PlayMode tests (RoomBankRuntimeSpawnTests 4/4 PASS). P1-1 fix: spec §2.4 wording updated. P1-2 (env build profile / _IsoGame scene): pre-existing.
 - ✅ **Mekanik bank review** — `F:\LaurethStudio\03_IDEAS\MECHANIC_BANK\_MEKANIK_BANKASI.md` analiz edildi, RIMA-adaptation proposal yazıldı (`STAGING/mechanic_bank_rima_adaptations.md`), master listeye 10 yeni mekanik (M59-M68) RIMA-anchored append edildi.
-- ⏳ **Sprint 13 impl Codex review** background'da çalışıyor (job `bd7gzobq1`). Sabah verdict.
 - ⏳ **NLM sync** — Sprint 13 yeni dosyalar için sabah retry.
 
 **Yeni session ilk 60 saniye:**
