@@ -208,9 +208,32 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
         {
             using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
             {
-                GUILayout.Label($"Mode: {toolMode}", GUILayout.Width(120));
-                GUILayout.Label($"Seed: {activeSeed}", GUILayout.Width(100));
-                GUILayout.Label($"Size: {brushSize:F0}px", GUILayout.Width(100));
+                if (GUILayout.Button("Auto-Dress", EditorStyles.toolbarButton, GUILayout.Width(90)))
+                {
+                    if (activePack != null)
+                    {
+                        var room = TryGetCurrentRoom();
+                        if (room.HasValue)
+                            RIMA.MapDesigner.Brush.Automation.Editor.AutoDressRoom.Run(activePack, room.Value, activeSkin, activeSeed);
+                    }
+                }
+                if (GUILayout.Button("Regenerate Decor", EditorStyles.toolbarButton, GUILayout.Width(120)))
+                {
+                    if (activePack != null)
+                    {
+                        var room = TryGetCurrentRoom();
+                        if (room.HasValue)
+                            RIMA.MapDesigner.Brush.Automation.Editor.RegenerateDecorativeLayers.Run(activePack, room.Value, activeSkin, activeSeed + 1);
+                    }
+                }
+                if (GUILayout.Button("Clear Decor", EditorStyles.toolbarButton, GUILayout.Width(85)))
+                {
+                    RIMA.MapDesigner.Brush.Automation.Editor.RegenerateDecorativeLayers.ClearLayerContainers();
+                }
+                GUILayout.Space(8);
+                GUILayout.Label($"Mode: {toolMode}", GUILayout.Width(110));
+                GUILayout.Label($"Seed: {activeSeed}", GUILayout.Width(90));
+                GUILayout.Label($"Size: {brushSize:F0}px", GUILayout.Width(80));
                 GUILayout.FlexibleSpace();
                 if (selectedBrush != null)
                 {
@@ -221,6 +244,13 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
                     GUILayout.Label("No brush selected");
                 }
             }
+        }
+
+        private RIMA.MapDesigner.RoomData? TryGetCurrentRoom()
+        {
+            // For V1: fallback — let user populate Layer_L1 manually; full RoomData wiring is Sprint 8 polish.
+            // Returning null means Auto-Dress quietly no-ops if scene context not available.
+            return null;
         }
     }
 }
