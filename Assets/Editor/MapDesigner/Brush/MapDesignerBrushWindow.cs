@@ -5,10 +5,11 @@ using UnityEngine;
 using RIMA.MapDesigner.Brush.Data;
 using RIMA.MapDesigner.Brush.Editor.UI.Panels;
 using RIMA.MapDesigner.Brush.Editor.UI.Hotkeys;
+using RIMA.MapDesigner.Props.Editor;
 
 namespace RIMA.MapDesigner.Brush.Editor.UI
 {
-    public enum BrushToolMode { Pick, Brush, Erase, Composite, SmartFill }
+    public enum BrushToolMode { Pick, Brush, Erase, Composite, SmartFill, Props }
 
     public class MapDesignerBrushWindow : EditorWindow
     {
@@ -29,6 +30,7 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
         private BrushSettingsPanel settingsPanel;
         private LayerVisibilityPanel layerPanel;
         private BrushSceneTooling sceneTooling;
+        private PropsTab propsTab;
         private static MapDesignerBrushWindow current;
 
         public MapDesignerBrushPresetSO SelectedBrush => selectedBrush;
@@ -55,8 +57,11 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
             settingsPanel = new BrushSettingsPanel(this);
             layerPanel = new LayerVisibilityPanel();
             sceneTooling = new BrushSceneTooling(this);
+            propsTab = new PropsTab(this);
             SceneView.duringSceneGui -= sceneTooling.OnSceneGUI;
             SceneView.duringSceneGui += sceneTooling.OnSceneGUI;
+            SceneView.duringSceneGui -= propsTab.OnSceneGUI;
+            SceneView.duringSceneGui += propsTab.OnSceneGUI;
         }
 
         private void OnDisable()
@@ -64,6 +69,10 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
             if (sceneTooling != null)
             {
                 SceneView.duringSceneGui -= sceneTooling.OnSceneGUI;
+            }
+            if (propsTab != null)
+            {
+                SceneView.duringSceneGui -= propsTab.OnSceneGUI;
             }
             if (current == this)
             {
@@ -74,6 +83,10 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
         public void SetMode(BrushToolMode mode)
         {
             toolMode = mode;
+            if (propsTab != null)
+            {
+                propsTab.IsActive = mode == BrushToolMode.Props;
+            }
             Repaint();
             SceneView.RepaintAll();
         }
@@ -110,23 +123,34 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
             try
             {
                 EnsureInitialized();
+                if (propsTab != null)
+                {
+                    propsTab.IsActive = toolMode == BrushToolMode.Props;
+                }
                 DrawTopBar();
                 DrawToolbar();
-                using (new EditorGUILayout.HorizontalScope())
+                if (toolMode == BrushToolMode.Props)
                 {
-                    using (new EditorGUILayout.VerticalScope(GUILayout.Width(LeftPanelWidth)))
+                    propsTab.Draw();
+                }
+                else
+                {
+                    using (new EditorGUILayout.HorizontalScope())
                     {
-                        palettePanel.Draw(ref selectedBrush, activePack, ref searchFilter, ref categoryFilter, ref categoryFilterAll);
-                    }
-                    using (new EditorGUILayout.VerticalScope())
-                    {
-                        DrawCenterHint();
-                    }
-                    using (new EditorGUILayout.VerticalScope(GUILayout.Width(RightPanelWidth)))
-                    {
-                        settingsPanel.Draw(selectedBrush, ref brushSize, ref activeSeed);
-                        EditorGUILayout.Space(6);
-                        layerPanel.Draw();
+                        using (new EditorGUILayout.VerticalScope(GUILayout.Width(LeftPanelWidth)))
+                        {
+                            palettePanel.Draw(ref selectedBrush, activePack, ref searchFilter, ref categoryFilter, ref categoryFilterAll);
+                        }
+                        using (new EditorGUILayout.VerticalScope())
+                        {
+                            DrawCenterHint();
+                        }
+                        using (new EditorGUILayout.VerticalScope(GUILayout.Width(RightPanelWidth)))
+                        {
+                            settingsPanel.Draw(selectedBrush, ref brushSize, ref activeSeed);
+                            EditorGUILayout.Space(6);
+                            layerPanel.Draw();
+                        }
                     }
                 }
                 DrawBottomBar();
@@ -145,6 +169,7 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
             if (settingsPanel == null) settingsPanel = new BrushSettingsPanel(this);
             if (layerPanel == null) layerPanel = new LayerVisibilityPanel();
             if (sceneTooling == null) sceneTooling = new BrushSceneTooling(this);
+            if (propsTab == null) propsTab = new PropsTab(this);
         }
 
         private void DrawTopBar()
@@ -173,6 +198,7 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
                 DrawToolToggle("Erase (E)", BrushToolMode.Erase);
                 DrawToolToggle("Composite", BrushToolMode.Composite);
                 DrawToolToggle("Smart Fill", BrushToolMode.SmartFill);
+                DrawToolToggle("Props", BrushToolMode.Props);
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("↶ Undo", EditorStyles.toolbarButton, GUILayout.Width(60)))
                 {
@@ -235,7 +261,11 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
                 GUILayout.Label($"Seed: {activeSeed}", GUILayout.Width(90));
                 GUILayout.Label($"Size: {brushSize:F0}px", GUILayout.Width(80));
                 GUILayout.FlexibleSpace();
-                if (selectedBrush != null)
+                if (toolMode == BrushToolMode.Props)
+                {
+                    GUILayout.Label("Props placement active");
+                }
+                else if (selectedBrush != null)
                 {
                     GUILayout.Label($"Brush: {selectedBrush.brushName} → {(selectedBrush.operations != null && selectedBrush.operations.Count > 0 ? selectedBrush.operations[0].targetLayer.ToString() : "?")}");
                 }
