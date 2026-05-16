@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad35ea03e7fe7646be5af27af1dcc34, type: 3}
+  m_Name: Brush_MossyBrokenEdge
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Brush.Data.MapDesignerBrushPresetSO
+  brushName: Mossy Broken Edge
+  category: 6
+  paintMode: 5
+  operations:
+  - targetLayer: 1
+    assetPool: {fileID: 11400000, guid: c38f2b8b468545a9b8c0d2cd2833351e, type: 2}
+    density: 0.35
+    probability: 1
+    minDistance: 32
+    scaleRange: {x: 0.85, y: 1.15}
+    allowRotation: 1
+    allowFlipX: 1
+    allowFlipY: 0
+    rotationSnapDegrees: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    positionJitter: {x: 0, y: 0}
+    sortingOrderOffset: 0
+    affectsCollision: 0
+    respectsWalkableMask: 1
+    wallProximityCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    featureMaskMultiplier: {fileID: 0}
+  - targetLayer: 3
+    assetPool: {fileID: 11400000, guid: c94b8ac9b8a54863a80dfaad6b626ef3, type: 2}
+    density: 0.45
+    probability: 0.85
+    minDistance: 32
+    scaleRange: {x: 0.85, y: 1.15}
+    allowRotation: 1
+    allowFlipX: 1
+    allowFlipY: 0
+    rotationSnapDegrees: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    positionJitter: {x: 0, y: 0}
+    sortingOrderOffset: 0
+    affectsCollision: 0
+    respectsWalkableMask: 1
+    wallProximityCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0.6
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 2
+        value: 0.3
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 3
+        value: 0.1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    featureMaskMultiplier: {fileID: 0}
+  - targetLayer: 4
+    assetPool: {fileID: 11400000, guid: 064e2ed37b9d4efebd7a4cfe75de9122, type: 2}
+    density: 0.2
+    probability: 0.6
+    minDistance: 32
+    scaleRange: {x: 0.85, y: 1.15}
+    allowRotation: 1
+    allowFlipX: 1
+    allowFlipY: 0
+    rotationSnapDegrees: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    positionJitter: {x: 0, y: 0}
+    sortingOrderOffset: 0
+    affectsCollision: 0
+    respectsWalkableMask: 1
+    wallProximityCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0.6
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 2
+        value: 0.3
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 3
+        value: 0.1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    featureMaskMultiplier: {fileID: 0}
+  previewIcon: {fileID: 21300000, guid: 8f70ce090d6e18f40864b4639878bb01, type: 3}
+  showInPalette: 1
+  description: L2 dark variation plus moss and cracks.
+  hotkeyIndex: 9

@@ -57,17 +57,19 @@ namespace RIMA.Tests.Brush
         }
 
         [Test]
-        public void RouterReturnsErrorForUnregisteredMode()
+        public void RouterReturnsErrorForCompositeWithNoOperations()
         {
             var router = new BrushExecutorRouter();
+            MapDesignerBrushPresetSO preset = CreatePreset(BrushCategory.Composite, PaintMode.CompositeStroke);
+            preset.operations.Clear();
 
             BrushExecutorResult result = router.Dispatch(
                 CreateStroke(new Vector2Int(1, 1), CreateRoomWithWalkableCell(3, 3, new Vector2Int(1, 1))),
                 CreateOperation(TargetLayer.L1, false),
-                CreatePreset(BrushCategory.Composite, PaintMode.CompositeStroke));
+                preset);
 
             Assert.IsFalse(result.success);
-            StringAssert.Contains("No executor", result.errorMessage);
+            StringAssert.Contains("No operations", result.errorMessage);
         }
 
         [Test]
