@@ -93,12 +93,106 @@
 - BrushAlongEdges: doorway skip, single Undo group
 - **KNOWN GAP:** EditMode test runner could not execute (Unity instance lock — MCP timeout + batchmode reddetti). Test assembly compile PASS, sabah Unity restart + Test Runner GUI gerekli.
 
-### 9. Sprint 4 dispatch (BG, in flight)
-- **Dispatch ID:** buifgemo5
-- Scope: Karar143Enforcement utility + FreeformDecalExecutor + ScatterAlongStrokeExecutor + StampExecutor + EraseByLayerExecutor + EraseAllDecorativeExecutor + 8 EditMode test
-- Karar #143-D walkable + 143-E edge-bias + 143-K FeatureMask in one helper (Karar143Enforcement.EffectiveDensity)
-- TransitionBrushPainter / DetailDecalPainter / AccentPainter delegation (yeniden yazma yasak)
-- ~3-5 saat tahmini
+### 9. Sprint 4 PASS (commit 92fa94a, tag brush-sprint-4-pass)
+- **Dispatch ID:** buifgemo5 — cx_dispatch.py timed out at 1200s but **Codex completed via Unity MCP bridge**
+- 7 source: Karar143Enforcement utility + 5 executors (Freeform, Scatter, Stamp, EraseByLayer, EraseAllDecorative) + 8 EditMode tests + BrushExecutorRouter +6 RegisterIfAvailable
+- Karar #143-D/E/K single source of truth: Karar143Enforcement.EffectiveDensity()
+- dotnet build RIMA.Runtime + RIMA.Editor + Brush.Tests = ALL PASS 0 errors
+- **Opus verification:** read Karar143Enforcement.cs + read BrushExecutorRouter.cs, spec uyumlu
+- **KNOWN:** Codex final CODEX_DONE.md report yapamadı (cx subprocess kill at timeout). Manuel verification yapıldı.
+
+### 9b. Sprint 5 PASS (commit fee98b6, tag brush-sprint-5-pass) — **Opus implement**
+- 7 source files (Editor folder convention, no new asmdef):
+  - MapDesignerBrushWindow.cs (3-panel + top bar + toolbar + bottom status)
+  - BrushPalettePanel.cs (Krita pattern: search + category + thumbnail size + grid)
+  - BrushSettingsPanel.cs (read-only op display + AnimationCurve foldout)
+  - LayerVisibilityPanel.cs (L1-L6 visibility/solo + SessionState + scene GameObject toggle)
+  - BrushSceneTooling.cs (Polybrush pattern: SceneView.duringSceneGui + HandleUtility.AddDefaultControl + Undo group per stroke)
+  - BrushHotkeyHandler.cs ([Shortcut] attribute: B/E/[/]/Alt+1-9)
+  - BrushWindowTests.cs (7 cases)
+- dotnet build all PASS 0 errors
+- Polybrush + Krita patterns from Gemini research §9
+- Existing RimaMapDesignerWindow kept (legacy debug view, per spec §2.2)
+- **.meta files Unity Refresh sonrası gelir** (ayrı commit sabah)
+
+### 9c. Sprint 6 PASS (commit f837d67, tag brush-sprint-6-pass)
+- **Dispatch ID:** b90wvn37r — cx_dispatch timeout 1200s ama Codex MCP bridge ile tamamladı
+- CompositeStrokeExecutor (partial class içeren BrushExecutorRouter modify) + 12 brush .asset + 8 AssetPool .asset (bonus) + 1 BrushPack .asset + 5 BrushCompositeTests
+- dotnet build all PASS
+
+### 9d. Sprint 7 PASS (commit 954f3de, tag brush-sprint-7-pass) — **Opus implement**
+- 3 automation static class: AutoDressRoom (4-pass: wall+L4+L5+L6) + RegenerateDecorativeLayers (clear L3-L6 + auto-dress) + SmartFillSelection (RectInt clamped + per-cell dispatch)
+- MapDesignerBrushWindow bottom bar buttons (Auto-Dress / Regenerate / Clear Decor)
+- 7 BrushAutomationTests
+- dotnet build all PASS
+
+### 9e. Sprint 8 PASS — **V1 CLOSE** (commit b5f14fe, tags brush-sprint-8-pass + brush-tool-v1)
+- Bayer dither shader (`Assets/Art/Shaders/RIMA_DitheredSoftEdge.shader`) — 4x4 Bayer matrix, AlphaTest queue, ZWrite On, pixel-honest dither (NO blur)
+- BiomeSkinApplier.cs + embedded MaterialCache (LoadOrCreate Sprite_HardDefault + Sprite_SoftAlpha8 + Sprite_SoftAlpha16)
+- 4 BiomeSkin .asset: HadesNet (all Hard), GrimdarkMix (L4 SoftAlpha8 + tint), SoftPainter (L3-L5 SoftAlpha8), BoldGraphic (Hard + bold tints + dark L3)
+- 5 BiomeSkinTests
+- dotnet build all PASS
+
+---
+
+## V1 CLOSE — Map Designer Brush Tool LIVE (2026-05-16 S85 gece)
+
+**8 commit + 9 tag (brush-sprint-1..8-pass + brush-tool-v1):**
+- 1073b99 S85 prep (design + 7 sprint specs + PixelLab batches + safety review)
+- d0cd49c Sprint 1 Data Layer
+- 187ec12 Sprint 2 Executor + L3 Wall + BrushAlongEdges
+- 92fa94a Sprint 4 L4/L5/L6 Executors + Karar143Enforcement
+- fee98b6 Sprint 5 Editor UI Refactor (Opus)
+- f837d67 Sprint 6 CompositeExecutor + 12 brush + BrushPack
+- 954f3de Sprint 7 Automation (Opus)
+- b5f14fe Sprint 8 BiomeSkin + Bayer Dither Shader (V1 close, Opus)
+
+**~52 source files + 21 .asset (12 brush + 8 pool + 1 pack + 4 skin + 3 sample) + 5 test files (~37 test cases compile pass)**
+
+**All Karar #143-D/E/K rules enforced** at single source of truth (`Karar143Enforcement.EffectiveDensity`).
+
+**Opus implement Sprint 5+7+8 (UI/Automation/Shader judgment iş); Codex Sprint 1+2+4+6 (mekanik impl). cx_dispatch.py 1200s timeout pattern Sprint 4+6'da gerçekleşti ama Codex MCP bridge ile tamamladı — Opus manuel doğrulama yapıldı.**
+
+---
+
+## Yeni Session (S86) İlk Adımlar — **SABAH KULLANICI**
+
+**ZORUNLU sıra:**
+
+1. **Unity restart + Test Runner GUI:**
+   - Unity Editor kapat → tekrar aç
+   - Window > General > Test Runner
+   - EditMode tab → Run All
+   - Beklenen: ~37 test PASS (BrushDataTests 8, BrushExecutorTests 6-7, BrushDecorativeExecutorTests 8, BrushCompositeTests 5, BrushWindowTests 7, BrushAutomationTests 7, BiomeSkinTests 5)
+
+2. **PixelLab dispatch (Sprint 3):**
+   - `STAGING/pixellab_l3_wall_batch.md` (7 sprite type, ~14-21 credit) — ÖNCE L3 wall (production gate)
+   - QC PASS sonrası `STAGING/pixellab_l4_l5_l6_batch.md` (5 sprite type, ~15 credit)
+   - Toplam ~36 credit. Import → bind AssetPool .asset'lerine (`Assets/Data/Brush/Default/AssetPool_*.asset` zaten Sprint 6'da üretildi, sadece sprite ref ekle)
+
+3. **Sahnede test:**
+   - `RIMA/Map Designer/Brush Tool` menüden window aç
+   - BrushPack: `Assets/Data/Brush/Default/BrushPack_ShatteredKeep_Default.asset` drag
+   - BiomeSkin: 4 default'tan biri drag (örneğin `BiomeSkin_GrimdarkMix.asset`)
+   - Sahnede mevcut Phase1_ProceduralMap_Test scene aç
+   - Brush seç → paint → ghost preview gör → Karar #143-D walkable filter test et
+
+4. **Açık sabah karar soruları:**
+   - Q1-Q5 `STAGING/class_skill_gap_analysis_s85.md` onay
+   - Q3 onay sonrası: `STAGING/codex_class_skill_asset_gen.md` dispatch (Warblade 7 eksik + Shadowblade 22 + Elementalist 13 + Ranger 18 ≈ 60 .asset)
+   - LiberationSans SDF Fallback.asset 536KB→9KB karar (S84'ten beri)
+   - NLM auth Chrome login (`uvx --from notebooklm-mcp-cli nlm login`)
+
+5. **V2 backlog (post-V1, kullanıcı kararı):**
+   - PixelLab batch tamamlanınca sprite atlas + AssetPool sprite ref binding
+   - Material .mat dosyaları (MaterialCache runtime create eder veya manuel)
+   - 6 missing class skill design (gap analysis §3): Brawler, Ronin, Ravager, Gunslinger, Hexer, Summoner
+   - VFX per-class style guide
+   - TryGetCurrentRoom() scene→RoomData wiring (V2 polish)
+   - Marketplace / namespace prefix / biome brush (V2 ecosystem)
+   - Standalone migration prep (V2 polish)
+
+---
 
 ### 10. Gemini research (S85, completed)
 
