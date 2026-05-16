@@ -58,9 +58,9 @@ namespace RIMA.Tests.Editor
             };
             float fallback = DetailDecalPainter.DensityForCell(new Vector2Int(10, 10), room, 1f);
 
-            room.naturalFeatures = NaturalFeatureGraph.Generate(room.size, room.walkable, 64, 99, FeatureType.Water, 1f);
-            Vector2Int featureCell = FindFeatureCell(room.naturalFeatures.featureMask);
-            Vector2Int farCell = FindNonFeatureCellFarFrom(room.naturalFeatures.featureMask, featureCell);
+            Vector2Int featureCell = new Vector2Int(5, 5);
+            Vector2Int farCell = new Vector2Int(14, 14);
+            room.naturalFeatures = CreateSingleFeature(room.size, featureCell);
 
             float near = DetailDecalPainter.DensityForCell(featureCell, room, 1f, null, 0f);
             float far = DetailDecalPainter.DensityForCell(farCell, room, 1f, null, 0f);
@@ -83,45 +83,26 @@ namespace RIMA.Tests.Editor
             return walkable;
         }
 
-        private static Vector2Int FindFeatureCell(bool[,] mask)
+        private static NaturalFeatureGraphResult CreateSingleFeature(Vector2Int size, Vector2Int featureCell)
         {
-            for (int y = 0; y < mask.GetLength(1); y++)
+            bool[,] featureMask = new bool[size.x, size.y];
+            int[,] siteIndex = new int[size.x, size.y];
+            for (int y = 0; y < size.y; y++)
             {
-                for (int x = 0; x < mask.GetLength(0); x++)
+                for (int x = 0; x < size.x; x++)
                 {
-                    if (mask[x, y])
-                    {
-                        return new Vector2Int(x, y);
-                    }
+                    siteIndex[x, y] = 0;
                 }
             }
 
-            return Vector2Int.zero;
-        }
-
-        private static Vector2Int FindNonFeatureCellFarFrom(bool[,] mask, Vector2Int featureCell)
-        {
-            Vector2Int best = Vector2Int.zero;
-            int bestDist = -1;
-            for (int y = 0; y < mask.GetLength(1); y++)
+            featureMask[featureCell.x, featureCell.y] = true;
+            return new NaturalFeatureGraphResult
             {
-                for (int x = 0; x < mask.GetLength(0); x++)
-                {
-                    if (mask[x, y])
-                    {
-                        continue;
-                    }
-
-                    int dist = Mathf.Abs(x - featureCell.x) + Mathf.Abs(y - featureCell.y);
-                    if (dist > bestDist)
-                    {
-                        bestDist = dist;
-                        best = new Vector2Int(x, y);
-                    }
-                }
-            }
-
-            return best;
+                sites = new[] { new Vector2(featureCell.x + 0.5f, featureCell.y + 0.5f) },
+                siteIndex = siteIndex,
+                featureMask = featureMask,
+                siteTypes = new[] { FeatureType.Water }
+            };
         }
     }
 }

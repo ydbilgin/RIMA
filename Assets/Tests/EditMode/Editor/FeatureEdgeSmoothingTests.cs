@@ -53,7 +53,7 @@ namespace RIMA.Tests.Editor
             FeatureEdgeSmoothingPass.PaintResult result = FeatureEdgeSmoothingPass.PaintFeatureEdges(tilemap.transform, tilemap, biome, room, null, 42);
 
             Assert.AreEqual(result.boundaryCellCount, result.wangTilePlacements);
-            Assert.AreEqual(result.boundaryCellCount, tilemap.GetUsedTilesCount());
+            Assert.AreEqual(result.boundaryCellCount, CountOccupiedCells(tilemap));
         }
 
         private RoomData CreateRoom()
@@ -142,7 +142,9 @@ namespace RIMA.Tests.Editor
             GameObject child = new GameObject("Tilemap");
             cleanup.Add(child);
             child.transform.SetParent(go.transform, false);
-            return child.AddComponent<Tilemap>();
+            Tilemap tilemap = child.AddComponent<Tilemap>();
+            child.AddComponent<TilemapRenderer>();
+            return tilemap;
         }
 
         private Tile CreateTile()
@@ -150,6 +152,21 @@ namespace RIMA.Tests.Editor
             Tile tile = ScriptableObject.CreateInstance<Tile>();
             cleanup.Add(tile);
             return tile;
+        }
+
+        private static int CountOccupiedCells(Tilemap tilemap)
+        {
+            int count = 0;
+            BoundsInt bounds = tilemap.cellBounds;
+            foreach (Vector3Int position in bounds.allPositionsWithin)
+            {
+                if (tilemap.HasTile(position))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 }

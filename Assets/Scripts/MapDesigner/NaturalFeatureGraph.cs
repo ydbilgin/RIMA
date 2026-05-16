@@ -70,7 +70,15 @@ namespace RIMA.MapDesigner
                 return indices;
             }
 
-            Vector2[] siteArray = sites.ToArray();
+            int siteCount = sites.Count;
+            float[] siteXs = new float[siteCount];
+            float[] siteYs = new float[siteCount];
+            for (int i = 0; i < siteCount; i++)
+            {
+                siteXs[i] = sites[i].x;
+                siteYs[i] = sites[i].y;
+            }
+
             for (int y = 0; y < height; y++)
             {
                 float cy = y + 0.5f;
@@ -79,10 +87,10 @@ namespace RIMA.MapDesigner
                     float cx = x + 0.5f;
                     float bestDistSq = float.MaxValue;
                     int bestIndex = 0;
-                    for (int i = 0; i < siteArray.Length; i++)
+                    for (int i = 0; i < siteCount; i++)
                     {
-                        float dx = siteArray[i].x - cx;
-                        float dy = siteArray[i].y - cy;
+                        float dx = siteXs[i] - cx;
+                        float dy = siteYs[i] - cy;
                         float distSq = dx * dx + dy * dy;
                         if (distSq < bestDistSq)
                         {
@@ -101,7 +109,8 @@ namespace RIMA.MapDesigner
         public static NaturalFeatureGraphResult Generate(Vector2Int roomSize, bool[,] walkable, int siteCount, int seed, FeatureType featureType, float featureSiteRatio = 0.18f)
         {
             List<Vector2> sites = GenerateSites(roomSize, siteCount, seed);
-            int[,] siteIndex = RasterizeVoronoi(roomSize, sites);
+            int gridN = Mathf.Max(2, Mathf.RoundToInt(Mathf.Sqrt(Mathf.Max(1, siteCount))));
+            int[,] siteIndex = RasterizeGeneratedSiteGrid(roomSize, sites, gridN);
             FeatureType[] siteTypes = AssignFeatureTypes(sites.Count, seed, featureType, featureSiteRatio);
             bool[,] featureMask = BuildFeatureMask(roomSize, walkable, siteIndex, siteTypes);
 
@@ -255,6 +264,72 @@ namespace RIMA.MapDesigner
             }
 
             return mask;
+        }
+
+        private static int[,] RasterizeGeneratedSiteGrid(Vector2Int size, List<Vector2> sites, int gridN)
+        {
+            int width = Mathf.Max(1, size.x);
+            int height = Mathf.Max(1, size.y);
+            int[,] indices = new int[width, height];
+            if (sites == null || sites.Count == 0)
+            {
+                return indices;
+            }
+
+            int siteCount = sites.Count;
+            float[] siteXs = new float[siteCount];
+            float[] siteYs = new float[siteCount];
+            for (int i = 0; i < siteCount; i++)
+            {
+                siteXs[i] = sites[i].x;
+                siteYs[i] = sites[i].y;
+            }
+
+            float cellW = width / (float)gridN;
+            float cellH = height / (float)gridN;
+            const int SearchRadius = 2;
+            for (int y = 0; y < height; y++)
+            {
+                float cy = y + 0.5f;
+                int centerGy = Mathf.Clamp(Mathf.FloorToInt(cy / cellH), 0, gridN - 1);
+                int minGy = Mathf.Max(0, centerGy - SearchRadius);
+                int maxGy = Mathf.Min(gridN - 1, centerGy + SearchRadius);
+                for (int x = 0; x < width; x++)
+                {
+                    float cx = x + 0.5f;
+                    int centerGx = Mathf.Clamp(Mathf.FloorToInt(cx / cellW), 0, gridN - 1);
+                    int minGx = Mathf.Max(0, centerGx - SearchRadius);
+                    int maxGx = Mathf.Min(gridN - 1, centerGx + SearchRadius);
+                    float bestDistSq = float.MaxValue;
+                    int bestIndex = 0;
+
+                    for (int gy = minGy; gy <= maxGy; gy++)
+                    {
+                        int rowOffset = gy * gridN;
+                        for (int gx = minGx; gx <= maxGx; gx++)
+                        {
+                            int site = rowOffset + gx;
+                            if (site >= siteCount)
+                            {
+                                continue;
+                            }
+
+                            float dx = siteXs[site] - cx;
+                            float dy = siteYs[site] - cy;
+                            float distSq = dx * dx + dy * dy;
+                            if (distSq < bestDistSq)
+                            {
+                                bestDistSq = distSq;
+                                bestIndex = site;
+                            }
+                        }
+                    }
+
+                    indices[x, y] = bestIndex;
+                }
+            }
+
+            return indices;
         }
 
         private static int PositiveModulo(int value, int modulo)

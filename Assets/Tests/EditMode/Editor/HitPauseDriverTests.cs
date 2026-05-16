@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using NUnit.Framework;
 using RIMA.Combat;
 using RIMA.Combat.Juice;
@@ -44,13 +45,17 @@ namespace RIMA.Tests.Editor
         }
 
         [UnityTest]
-        public IEnumerator TriggerPause_RestoresTimeScaleAfterDuration()
+        public IEnumerator PauseRoutine_RestoresTimeScaleAfterDurationEnumeratorCompletes()
         {
-            driver.TriggerPause(0.05f);
+            MethodInfo routineMethod = typeof(HitPauseDriver).GetMethod("PauseRoutine", BindingFlags.Instance | BindingFlags.NonPublic);
+            IEnumerator routine = (IEnumerator)routineMethod.Invoke(driver, new object[] { 0f });
+
+            Assert.IsTrue(routine.MoveNext());
             Assert.AreEqual(0f, Time.timeScale);
 
-            yield return new WaitForSecondsRealtime(0.12f);
+            yield return null;
 
+            Assert.IsFalse(routine.MoveNext());
             Assert.AreEqual(1f, Time.timeScale);
         }
 
