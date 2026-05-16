@@ -75,6 +75,13 @@ namespace RIMA.MapDesigner.Props.Editor
                 e.Use();
             }
 
+            if (e.type == EventType.KeyDown && e.keyCode == KeyCode.R && !e.alt && !e.control)
+            {
+                placer.RotateClockwise();
+                owner?.Repaint();
+                e.Use();
+            }
+
             if (e.type == EventType.Repaint)
             {
                 SceneView.RepaintAll();

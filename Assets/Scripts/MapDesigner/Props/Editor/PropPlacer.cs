@@ -14,6 +14,17 @@ namespace RIMA.MapDesigner.Props.Editor
         public string LastFailureDetail { get; private set; } = string.Empty;
         public Vector2Int LastHoveredTile { get; private set; }
         public bool HasHover { get; private set; }
+        public int CurrentRotation { get; private set; }
+
+        public void RotateClockwise()
+        {
+            CurrentRotation = (CurrentRotation + 1) & 3;
+        }
+
+        public void ResetRotation()
+        {
+            CurrentRotation = 0;
+        }
 
         public void OnSceneClick(
             Vector2Int tilePos,
@@ -24,6 +35,7 @@ namespace RIMA.MapDesigner.Props.Editor
             PropFootprintValidator.ValidationResult result = PropFootprintValidator.Validate(
                 selectedProp,
                 tilePos,
+                CurrentRotation,
                 targetTemplate,
                 roleMap,
                 targetTemplate != null ? targetTemplate.props : null,
@@ -45,10 +57,12 @@ namespace RIMA.MapDesigner.Props.Editor
             }
 
             Undo.RecordObject(targetTemplate, "Place Prop");
+            int variantIdx = PickVariantIndex(selectedProp, tilePos);
             var placement = new PropPlacementData(ResolveGuid(selectedProp), tilePos)
             {
-                rotationSteps = 0,
-                placedByUser = global::System.Environment.UserName ?? string.Empty
+                rotationSteps = CurrentRotation,
+                placedByUser = global::System.Environment.UserName ?? string.Empty,
+                variantIndex = variantIdx
             };
             targetTemplate.props.Add(placement);
             EditorUtility.SetDirty(targetTemplate);
@@ -63,6 +77,7 @@ namespace RIMA.MapDesigner.Props.Editor
             LastValidationResult = PropFootprintValidator.Validate(
                 selectedProp,
                 tilePos,
+                CurrentRotation,
                 targetTemplate,
                 roleMap,
                 targetTemplate != null ? targetTemplate.props : null,
@@ -81,7 +96,7 @@ namespace RIMA.MapDesigner.Props.Editor
         {
             if (!IsActive || selectedProp == null) return;
 
-            Vector2Int size = selectedProp.footprintSize;
+            Vector2Int size = PropFootprintValidator.GetRotatedFootprint(selectedProp, CurrentRotation);
             if (size.x <= 0 || size.y <= 0) size = Vector2Int.one;
 
             Color fill = isValid ? validColor : invalidColor;
@@ -107,6 +122,11 @@ namespace RIMA.MapDesigner.Props.Editor
             string guid = string.IsNullOrEmpty(path) ? string.Empty : AssetDatabase.AssetPathToGUID(path);
             if (!string.IsNullOrEmpty(guid)) return guid;
             return string.IsNullOrEmpty(propDef.propId) ? propDef.name : propDef.propId;
+        }
+
+        public static int PickVariantIndex(PropDefinitionSO propDef, Vector2Int tilePos)
+        {
+            return propDef != null ? propDef.PickVariantIndexForTile(tilePos) : -1;
         }
     }
 }

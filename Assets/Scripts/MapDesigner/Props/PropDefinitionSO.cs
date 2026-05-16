@@ -36,6 +36,37 @@ namespace RIMA.MapDesigner.Props
         public int sortingLayerOverride = 0;
         public int sortingOrder = 0;
 
+        [Header("Variant Pool (Sprint 13)")]
+        [Tooltip("Optional alternative sprites. Empty = use worldSprite only. Populated = deterministic pick per placement seed.")]
+        public Sprite[] variantSprites;
+
+        public Sprite PickVariant(int seed)
+        {
+            int idx = PickVariantIndex(seed);
+            if (idx < 0) return worldSprite;
+            return variantSprites[idx] != null ? variantSprites[idx] : worldSprite;
+        }
+
+        public int PickVariantIndex(int seed)
+        {
+            if (variantSprites == null || variantSprites.Length == 0) return -1;
+            int hashed = unchecked(seed * 1103515245 + 12345) & int.MaxValue;
+            return hashed % variantSprites.Length;
+        }
+
+        public int PickVariantIndexForTile(Vector2Int tilePos)
+        {
+            return PickVariantIndex(StableTileSeed(tilePos));
+        }
+
+        public static int StableTileSeed(Vector2Int tilePos)
+        {
+            unchecked
+            {
+                return (tilePos.x * 73856093) ^ (tilePos.y * 19349663);
+            }
+        }
+
         public enum PropSortingMode
         {
             YPosition,

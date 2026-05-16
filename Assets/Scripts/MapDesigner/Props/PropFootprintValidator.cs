@@ -26,6 +26,18 @@ namespace RIMA.MapDesigner.Props
             IReadOnlyList<PropPlacementData> existingProps,
             out string failureDetail)
         {
+            return Validate(propDef, tilePosition, 0, template, roleMap, existingProps, out failureDetail);
+        }
+
+        public static ValidationResult Validate(
+            PropDefinitionSO propDef,
+            Vector2Int tilePosition,
+            int rotationSteps,
+            RoomTemplateSO template,
+            CompositionRoleMap roleMap,
+            IReadOnlyList<PropPlacementData> existingProps,
+            out string failureDetail)
+        {
             failureDetail = string.Empty;
 
             if (propDef == null)
@@ -40,7 +52,7 @@ namespace RIMA.MapDesigner.Props
                 return ValidationResult.InvalidArgument;
             }
 
-            Vector2Int footprintSize = GetSafeFootprint(propDef);
+            Vector2Int footprintSize = GetSafeFootprint(propDef, rotationSteps);
             if (footprintSize.x <= 0 || footprintSize.y <= 0)
             {
                 failureDetail = "Prop footprint must be at least 1x1.";
@@ -121,10 +133,26 @@ namespace RIMA.MapDesigner.Props
             return ValidationResult.Valid;
         }
 
+        public static Vector2Int GetRotatedFootprint(PropDefinitionSO propDef, int rotationSteps)
+        {
+            return GetSafeFootprint(propDef, rotationSteps);
+        }
+
         private static Vector2Int GetSafeFootprint(PropDefinitionSO propDef)
         {
+            return GetSafeFootprint(propDef, 0);
+        }
+
+        private static Vector2Int GetSafeFootprint(PropDefinitionSO propDef, int rotationSteps)
+        {
             if (propDef == null) return Vector2Int.zero;
-            return new Vector2Int(propDef.footprintSize.x, propDef.footprintSize.y);
+            Vector2Int size = new Vector2Int(propDef.footprintSize.x, propDef.footprintSize.y);
+            int normalized = ((rotationSteps % 4) + 4) % 4;
+            if (normalized == 1 || normalized == 3)
+            {
+                return new Vector2Int(size.y, size.x);
+            }
+            return size;
         }
 
         private static bool FootprintInside(RectInt bounds, RectInt footprint)
@@ -148,14 +176,8 @@ namespace RIMA.MapDesigner.Props
 
         private static bool IsWalkableTile(RoomTemplateSO template, Vector2Int tile)
         {
-            RectInt walkableRect = template.cameraBounds.tileRect;
-            if (walkableRect.width <= 0 || walkableRect.height <= 0)
-            {
-                walkableRect = template.bounds;
-            }
-
-            return tile.x >= walkableRect.xMin && tile.x < walkableRect.xMax &&
-                tile.y >= walkableRect.yMin && tile.y < walkableRect.yMax;
+            if (template == null) return false;
+            return template.IsWalkable(tile);
         }
 
         private static bool ContainsRole(CompositionRole[] roles, CompositionRole role)
@@ -185,9 +207,10 @@ namespace RIMA.MapDesigner.Props
 
         private static Vector2Int GetExistingFootprintSize(PropPlacementData existing, PropDefinitionSO currentProp)
         {
+            int rot = existing != null ? existing.rotationSteps : 0;
             if (existing != null && currentProp != null && existing.propDefinitionGuid == GetPropIdentity(currentProp))
             {
-                return GetSafeFootprint(currentProp);
+                return GetSafeFootprint(currentProp, rot);
             }
 
 #if UNITY_EDITOR
@@ -199,7 +222,7 @@ namespace RIMA.MapDesigner.Props
                     : UnityEditor.AssetDatabase.LoadAssetAtPath<PropDefinitionSO>(assetPath);
                 if (loaded != null)
                 {
-                    return GetSafeFootprint(loaded);
+                    return GetSafeFootprint(loaded, rot);
                 }
             }
 #endif

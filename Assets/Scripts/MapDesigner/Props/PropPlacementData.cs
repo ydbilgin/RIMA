@@ -10,6 +10,7 @@ namespace RIMA.MapDesigner.Props
         public Vector2Int tilePosition;
         public int rotationSteps = 0;
         public string placedByUser;
+        public int variantIndex = -1;
 
         public PropPlacementData() { }
 
@@ -18,6 +19,12 @@ namespace RIMA.MapDesigner.Props
             propDefinitionGuid = guid;
             tilePosition = pos;
             rotationSteps = 0;
+            variantIndex = -1;
+        }
+
+        public void RotateClockwise()
+        {
+            rotationSteps = (rotationSteps + 1) & 3;
         }
     }
 }

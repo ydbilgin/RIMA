@@ -1,5 +1,17 @@
 # Sprint 13 — Production Hardening + Batch Gate
-**Codex Task Spec v1.0 | 2026-05-17 S87_PREP**
+**Codex Task Spec v1.1 | 2026-05-17 S87_NIGHT (spec review delta fix)**
+
+> **Spec review delta (v1.0 → v1.1):** Codex review verdict FAIL with 4 P0 + 5 P1 issues. v1.1 incorporates the resolutions:
+> - **P0-1 fix:** §2.6 `PropRegistrySO` runtime path populates from `prop.propId` (no AssetDatabase at runtime). `RebuildIndex()` always iterates `allProps`; editor branch also writes/repairs `propId` from AssetDatabase GUID.
+> - **P0-2 fix:** Added §2.8 `PropDefinitionPostprocessor.cs` (UNITY_EDITOR `AssetPostprocessor`) to auto-populate `propId` with GUID on import/save.
+> - **P0-3 fix:** §2.3 + §6 OQ2 now require `Validate(propDef, tilePos, rotationSteps, template, roleMap, existingProps, out failureDetail)` overload. Existing 5-arg `Validate` keeps for back-compat by calling overload with `rotationSteps = 0`. `PropPlacer` tracks `CurrentRotation` state, hover/click pass it.
+> - **P0-4 fix:** Added §2.9 `PropRuntimeSpawner.cs` (Runtime MonoBehaviour) — wires `PropRegistrySO` resolve + `PropColliderAutoBuilder` + `PropSorterRuntime` + variant sprite pick at scene load. `RoomBankRuntimeTester` modified to invoke spawner after room prefab instantiate.
+> - **P1-1 fix:** `PropSorterRuntime` default sortingLayer = `SortingLayer.NameToID("Props")` when `sortingLayerOverride == 0`. Validator-guaranteed layer name.
+> - **P1-2 fix:** Variant seed formula = `unchecked(tilePosition.x * 73856093 ^ tilePosition.y * 19349663 ^ (templateSeed != 0 ? templateSeed : 0))` — stable cross-version. `PickVariant` uses this instead of `GetHashCode()`.
+> - **P1-3 fix:** §2.4 text replaced "seed-based or random" with explicit deterministic formula.
+> - **P1-4 fix:** Added `Assets/Data/Rooms/Library/RoomBankSO_Library_v1.asset` to §5 asset files (starts empty `combatRooms = []`, user populates after authoring 10 rooms).
+> - **P1-5 fix:** Added `Assets/Tests/EditMode/Brush/DependencyReportGeneratorTests.cs` (3 tests) for dry-run validation.
+> - **Other:** Memory anchor `[[combat-feel-research-combined]]` removed (Sprint 13 doesn't touch combat).
 
 ---
 

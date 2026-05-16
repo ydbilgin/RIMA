@@ -59,7 +59,12 @@ namespace RIMA.Tests.Props
         {
             PropDefinitionSO prop = CreateProp();
             prop.requiresWalkableTile = true;
-            var result = PropFootprintValidator.Validate(prop, new Vector2Int(0, 0), CreateTemplate(), null, null, out _);
+            RoomTemplateSO template = CreateTemplate();
+            template.walkableGrid = new bool[template.bounds.width * template.bounds.height];
+            for (int i = 0; i < template.walkableGrid.Length; i++) template.walkableGrid[i] = true;
+            int idx = (0 * template.bounds.width) + 0;
+            template.walkableGrid[idx] = false;
+            var result = PropFootprintValidator.Validate(prop, new Vector2Int(0, 0), template, null, null, out _);
             Assert.AreEqual(PropFootprintValidator.ValidationResult.ViolatesWalkableConstraint, result);
         }
 

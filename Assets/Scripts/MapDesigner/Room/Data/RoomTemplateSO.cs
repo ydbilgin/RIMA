@@ -24,5 +24,25 @@ namespace RIMA.MapDesigner.Room.Data
 
         [Header("Props (Sprint 12)")]
         public List<RIMA.MapDesigner.Props.PropPlacementData> props = new List<RIMA.MapDesigner.Props.PropPlacementData>();
+
+        [Header("Walkable Grid (Sprint 13 — Condition 1 fix)")]
+        [Tooltip("Per-tile walkability map. Index = (y * bounds.width) + x. true = walkable, false = wall/blocked. Empty array = full bounds walkable (fallback).")]
+        public bool[] walkableGrid;
+
+        public bool IsWalkable(Vector2Int tilePos)
+        {
+            if (walkableGrid == null || walkableGrid.Length == 0)
+            {
+                return tilePos.x >= bounds.xMin && tilePos.x < bounds.xMax &&
+                       tilePos.y >= bounds.yMin && tilePos.y < bounds.yMax;
+            }
+
+            int lx = tilePos.x - bounds.xMin;
+            int ly = tilePos.y - bounds.yMin;
+            if (lx < 0 || lx >= bounds.width || ly < 0 || ly >= bounds.height) return false;
+
+            int idx = (ly * bounds.width) + lx;
+            return idx >= 0 && idx < walkableGrid.Length && walkableGrid[idx];
+        }
     }
 }
