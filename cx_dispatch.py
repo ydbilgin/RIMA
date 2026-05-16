@@ -20,12 +20,63 @@ PROFILE_ORDER = ["laurethayday", "laurethgame", "yasinderyabilgin"]
 CODEX_TASK_FILE = "CODEX_TASK.md"
 CODEX_DONE_FILE = "CODEX_DONE.md"
 
+# Variables that trigger the Conda shell hook inside cmd.exe.
+# Stripping them from the child env prevents the
+# "CONDA_SHLVL was unexpected at this time" parse error.
+_CONDA_VARS = {
+    "CONDA_SHLVL", "CONDA_DEFAULT_ENV", "CONDA_PREFIX",
+    "CONDA_EXE", "CONDA_PYTHON_EXE", "CONDA_PROMPT_MODIFIER",
+    "_CE_CONDA", "_CE_M",
+}
+
+
+def _clean_env():
+    """Return a copy of os.environ with all Conda hook variables removed."""
+    env = os.environ.copy()
+    for var in _CONDA_VARS:
+        env.pop(var, None)
+    return env
+
+
+def _ps_run(cx_args, timeout=30):
+    """Invoke cx.cmd via PowerShell to avoid cmd.exe Conda hook failures.
+
+    PowerShell is used because:
+    - ``cmd /c cx.cmd`` triggers ``CONDA_SHLVL was unexpected at this time``
+      which crashes the cx.cmd batch file before cx ever runs.
+    - The same invocation via PowerShell ``& 'cx.cmd' args`` works correctly
+      (confirmed in-session).
+    - ``-NoProfile`` skips the PS user profile (which may also source Conda
+      hooks) and keeps startup fast.
+    """
+    # Build the PowerShell -Command string: & 'cx.cmd' arg1 arg2 ...
+    # Single-quote each argument to handle spaces; escape embedded single
+    # quotes by doubling them.
+    def ps_quote(s):
+        return "'" + s.replace("'", "''") + "'"
+
+    ps_cmd = "& " + ps_quote(CX_CMD) + " " + " ".join(ps_quote(a) for a in cx_args)
+
+    return subprocess.run(
+        [
+            "powershell",
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            ps_cmd,
+        ],
+        stdin=subprocess.DEVNULL,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=timeout,
+        env=_clean_env(),
+    )
+
 
 def get_profiles():
-    result = subprocess.run(
-        ["cmd", "/c", CX_CMD, "accounts"],
-        capture_output=True, text=True, timeout=30,
-    )
+    result = _ps_run(["accounts"], timeout=30)
     return _parse_accounts(result.stdout)
 
 
@@ -82,15 +133,15 @@ def dispatch(profile, task_content, effort, task_file_path=None):
         f.write(task_content)
     open(done_file, "w").close()
 
-    cmd = [
-        "cmd", "/c", CX_CMD, "run", profile, "exec",
+    cx_args = [
+        "run", profile, "exec",
         "--skip-git-repo-check",
         "--color", "never",
         "--dangerously-bypass-approvals-and-sandbox",
         "--config", f"model_reasoning_effort={effort}",
         f"Read {task_file} and execute every step using shell commands. Do not describe — actually run them.",
     ]
-    result = subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1200)
+    result = _ps_run(cx_args, timeout=1200)
     if result.stdout:
         print(result.stdout, file=sys.stderr)
 

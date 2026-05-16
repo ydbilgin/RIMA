@@ -46,6 +46,29 @@ Routing details: `AGENTS.md`.
 5. **Konuşmayı bloklamadan çalış.** Background task'ları `run_in_background: true` ile çağır.
 6. **Sub-agent açmadan önce düşün.** Küçük iş için doğrudan tool call yap.
 
+### Iteration Cleanup — One LIVE Version Rule (S86_LATE LOCK 2026-05-17)
+
+**Kural:** Bir dosya iterasyon yapılırsa (v1 → v2 → ... → vN), **sadece son LIVE versiyon ana dosyada kalır**, eski versiyonlar archive'a taşınır.
+
+| Hedef | Kural |
+|---|---|
+| `STAGING/character_production_prompts.md` (örnek) | Tek LIVE versiyon kalır (v10). Eski v1-v9 → `STAGING/_archive/character_production_prompts_archive_v1-v9.md` |
+| Sprint spec dosyaları | Sprint kapanınca DONE.md + spec aynı dosyada kalır; sonraki sprint için yeni dosya |
+| Memory drift | NLM canonical > local memory > prompt iteration. Çakışmada NLM kazanır, local memory NLM'e uygun revize |
+
+**Drift Hierarchy (kim doğru):**
+1. **NLM canonical** (notebook 30ddffa5-292f-4248-8e77-68074af901be — RIMA design docs source)
+2. **Local memory** (MEMORY/ klasörü — point-in-time observations, 14+ days olunca stale risk)
+3. **Prompt iteration / STAGING draft** (en oynak, drift kaynağı)
+
+Çakışma → yukarıdan aşağıya geçerli kaynak kazanır. Local memory NLM'e drift gösterirse rima-doc dispatch ile sync edilir.
+
+**Cleanup Checkpoint:**
+- Her 5+ iterasyon sonunda `/lint` çalıştır
+- Phase transition sonunda `/phase-close` protokolü
+- Session sonunda büyük cleanup → `/nlm-sync push`
+- STAGING/_archive/ ve memory/_archive/ standart klasörler — eski iterasyonlar oraya, asla silinmez (konservatif)
+
 ## Role: Orchestra Conductor (PRIMARY)
 Claude dispatches work; does NOT do mechanical bulk itself.
 

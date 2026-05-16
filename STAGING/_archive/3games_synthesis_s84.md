@@ -14,9 +14,9 @@
 
 | # | Karar | Source | RIMA etki | Studio etki |
 |---|---|---|---|---|
-| **#149** | **Studio Signature Accent Color LOCK** — RIMA cyan rift / CB orange spark / Caterpillar mor butterfly. Her oyun 1 accent renk LOCK, palette değişse bile bu renk korunur (HLD pink/magenta pattern) | HLD | Cyan rift accent zaten LIVE — formal LOCK | Brand kuralı 3 oyun |
-| **#150** | **HLD 4-Layer Visual DNA** — flat fill + gradient overlay + vignette + soft glow Karar #143 L4-L6 stack için template | HLD | L4 transition brush + L5 detail + L6 accent shader/material guide | Pixel art genre default |
-| **#152** | **Day-1 Accessibility Slider Lock** — photosensitivity (shake/bloom/flash) + colorblind + audio cue toggles. Ship öncesi zorunlu, post-launch eklemek itibar kaybı (HLD case study) | HLD | RIMA `FeelToggleSettings` zaten Shake/Hitstop/Vignette/CameraPunch var → photosensitivity master toggle eklenmeli | Universal launch checklist |
+| **#149** | **Studio Recognizer Accent Color LOCK** — RIMA cyan rift (zaten L6 LIVE) / CB orange spark / Caterpillar mor butterfly. Her oyun 1 "primary recognizer accent" LOCK; palette diğer renkleri değişebilir, bu accent korunur. **Source:** HLD color-recognition pattern (pink/magenta + cyan glow stable accent), `STAGING/hyperlightdrifter_analysis.md:37-41` | HLD | L6 cyan zaten LIVE — formal Studio LOCK | Brand kuralı 3 oyun |
+| **#150** | **HLD Visual Treatment Pass for #143** — flat fill + gradient overlay + vignette + soft glow Karar #143 L4-L6 üstüne ART PASS (mimari değil, postprocess/material guide). 6-layer mimariyi REPLACE etmez. Glow sparse + L6/accent-bound (always-on bloom YASAK). **Source:** HLD raw `:43-50` | HLD | L4-L6 shader/material guide | Pixel art genre default |
+| **#152** | **Day-1 Accessibility Profile Lock** — Photosensitivity master + per-effect sliders (shake/bloom/flash intensity 0-100%) + colorblind LUT (3 mode) + min text size + audio cue visualizer + subtitle UI. Mevcut `FeelToggleSettings` 4 bool yetersiz — slider scope refactor gerekli. **Source:** HLD raw `:206-220, :234-237` | HLD | `FeelToggleSettings` + `SettingsMenuUI` slider audit (ayrı task) | Universal launch checklist |
 | **#161** | **4-Layer Meta Progression Separation** — per-run only / per-run convert / persistent / account-level explicit ayrı, "+5% bonus" pattern REJECT. HW2 sikayeti "multiple systems dilute impact" | HW2 | RIMA Rift Break tasarımı için kritik — şu an karışık | Universal roguelite progression |
 
 ### Tier 2 — Detaylı tasarım gerekli, DEFER (8 karar)
@@ -32,16 +32,16 @@
 | #163 | Floor-Specific Material Drop — biome'a özel resource type | HW2 | Karar #75 prop role tags ile bağlı, refactor gerek | Faz 2 |
 | #164 | Co-op 4-player drop-in design | HW2 | Solo-first lock korunmalı (HW2 multiplayer scaling sikayet hacmi) | Faz 4+ post-launch |
 
-### Tier 3 — REJECT (RIMA LOCK'larıyla çatışıyor, kaydet ama uygulama yok)
+### Tier 3 — REJECT veya PARTIAL ACCEPT
 
-| Karar | Source | Neden REJECT |
-|---|---|---|
-| Full silent narrative | HLD | RIMA 80 cross-class skill kart text gerektirir. Hibrit: pictographic dialog + text skill kart |
-| 2.5D isometric perspective | Cinderia | Karar #100/#101 LOCK 128px native 30-35° 3/4 ARPG view |
-| Non-pixel art style | Cinderia | RIMA chibi pixel + Studio LOCK |
-| Default run pacing (Cinderia "slow") | Cinderia | Beat3 + dash v2 hızlı combat tempo |
-| Inverse difficulty curve (HLD) | HLD | RIMA progression curve standart upward |
-| Sequel %85 asset reuse | HW2 | RIMA Faz 1 asset pipeline yeni başlıyor, irrelevant |
+| Karar | Verdict | Source | Neden / koşul |
+|---|---|---|---|
+| **Full silent narrative** | **PARTIAL ACCEPT** (Codex fix) | HLD | Skill kart = text-rich (LOCK). NPC/dialog = pictographic + 1-2 word hybrid OK. Karar #79 Tone Surfaces TEXT VOLUME değil TONE govern eder — çelişmez. |
+| 2.5D isometric perspective | REJECT | Cinderia | Karar #100/#101 LOCK 128px native 30-35° 3/4 ARPG view |
+| Non-pixel art style | REJECT | Cinderia | RIMA chibi pixel + Studio LOCK |
+| Default run pacing (Cinderia "slow") | REJECT | Cinderia | Beat3 + dash v2 hızlı combat tempo |
+| Inverse difficulty curve | REJECT (POSITIVE LESSON: scale by telegraph complexity, not numbers) | HLD | RIMA progression curve standart upward — ama boss tasarımında geç-act bosses telegraph karmaşıklığı ile zorlaşmalı, sadece numbers ile değil. Kullanılabilir lesson. |
+| Sequel %85 asset reuse | REJECT for v1 | HW2 | RIMA Faz 1 asset pipeline yeni başlıyor, irrelevant. STUDIO_KARAR_014 sequel reuse ceiling Studio-level kuralı korunur. |
 
 ---
 
@@ -79,6 +79,9 @@
 | Multiple progression systems dilute impact | HW2 | Karar #161 4-layer separation |
 | Photosensitive flash spam | HLD | Karar #152 toggle |
 | Co-op scaling sikayetleri (solo→multi) | HW2 | Solo-first lock — Faz 1-3 solo benchmark |
+| **Small +5% invisible upgrades** (Codex add) | HW2 | Her upgrade min %15 fark veya yeni mekanik açmalı, +%5 statbloat REJECT |
+| **Quest/timed objective without indicator** (Codex add) | HW2 | TAB map'te tüm aktif objective marker zorunlu, hidden timer YASAK |
+| **Combat feedback/sting missing** (Codex add) | HW2 | Önemli olay (boss phase, kill streak, low HP) ses+VFX sting zorunlu |
 
 ---
 
@@ -102,11 +105,13 @@
 ## 5. Karar numbering reconciliation
 
 Agent'lar #150 numarasını 3 ayrı maddeye atadı (conflict). Resolved:
-- **HLD #149-152:** signature accent / 4-layer DNA / dash-attack / accessibility
-- **Cinderia #153-160:** Erosion/Curse + 7 BORROW
-- **HW2 #161-170:** Town hub + Rift Break separation
+- **HLD #149-152:** Recognizer accent / Visual Treatment Pass / dash-attack / accessibility
+- **Cinderia #153-156 (4 promoted):** Erosion/Curse + Visual Clarity + Build-as-Identity + OST DLC. **#157-160 RESERVED** for future Cinderia BORROW from raw analysis (Ember Fusion / chapter-gated unlock / build agency / RNG curation).
+- **HW2 #161-164 (4 promoted):** 4-layer Meta Separation + Town Tier-Gate + Floor-specific Material + Co-op design. **#165-170 RESERVED** for future HW2 BORROW (blueprint discovery / free respec / run trinket / NG+ scaling cliff / quest UX / cloud persistence).
 
-Toplam yeni karar aday sayısı: 4 Tier1 LOCK + 8 Tier2 DEFER + 6 Tier3 REJECT = 18 madde.
+Toplam: 4 Tier1 LOCK + 8 Tier2 DEFER + 6 Tier3 REJECT = 18 promoted + 10 reserved range slots.
+
+**Codex review uyarısı (b70csrhr6, 2026-05-16):** Numbering ranges'leri MASTER_KARAR'a yazmadan önce reserved/promoted ayrımı net olmalı.
 
 ---
 

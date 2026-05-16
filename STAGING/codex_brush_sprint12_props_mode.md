@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
-
 # Sprint 12 — Props Mode MVP
 **Codex Task Spec v1.0 | 2026-05-16 S86 SPRINT12_PREP**
 
@@ -417,7 +415,3 @@ Sprint 12 must NOT pre-empt Sprint 13 work. If a deliverable bleeds into Sprint 
 ---
 
 End of Sprint 12 spec v1.0.
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.

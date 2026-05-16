@@ -1,0 +1,2424 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:02.310 align:start position:0%
+ 
+Pixelab's<00:00:00.840><c> character</c><00:00:01.400><c> creator</c><00:00:01.840><c> just</c><00:00:02.080><c> got</c><00:00:02.240><c> a</c>
+
+00:00:02.310 --> 00:00:02.320 align:start position:0%
+Pixelab's character creator just got a
+ 
+
+00:00:02.320 --> 00:00:05.230 align:start position:0%
+Pixelab's character creator just got a
+pretty<00:00:02.840><c> important</c><00:00:03.400><c> update.</c><00:00:04.200><c> Before</c><00:00:04.560><c> this,</c><00:00:05.040><c> if</c>
+
+00:00:05.230 --> 00:00:05.240 align:start position:0%
+pretty important update. Before this, if
+ 
+
+00:00:05.240 --> 00:00:07.310 align:start position:0%
+pretty important update. Before this, if
+you<00:00:05.360><c> wanted</c><00:00:05.640><c> to</c><00:00:05.760><c> animate</c><00:00:06.200><c> a</c><00:00:06.280><c> character,</c><00:00:07.000><c> most</c>
+
+00:00:07.310 --> 00:00:07.320 align:start position:0%
+you wanted to animate a character, most
+ 
+
+00:00:07.320 --> 00:00:09.510 align:start position:0%
+you wanted to animate a character, most
+workflows<00:00:07.840><c> started</c><00:00:08.240><c> from</c><00:00:08.440><c> the</c><00:00:08.560><c> default</c><00:00:09.200><c> idle</c>
+
+00:00:09.510 --> 00:00:09.520 align:start position:0%
+workflows started from the default idle
+ 
+
+00:00:09.520 --> 00:00:12.830 align:start position:0%
+workflows started from the default idle
+pose.<00:00:10.120><c> And</c><00:00:10.280><c> that</c><00:00:10.600><c> worked</c><00:00:11.400><c> sometimes,</c><00:00:12.600><c> but</c><00:00:12.720><c> the</c>
+
+00:00:12.830 --> 00:00:12.840 align:start position:0%
+pose. And that worked sometimes, but the
+ 
+
+00:00:12.840 --> 00:00:15.270 align:start position:0%
+pose. And that worked sometimes, but the
+problem<00:00:13.360><c> is</c><00:00:13.720><c> not</c><00:00:14.040><c> every</c><00:00:14.360><c> animation</c><00:00:15.000><c> should</c>
+
+00:00:15.270 --> 00:00:15.280 align:start position:0%
+problem is not every animation should
+ 
+
+00:00:15.280 --> 00:00:17.310 align:start position:0%
+problem is not every animation should
+start<00:00:15.640><c> from</c><00:00:15.920><c> idle.</c><00:00:16.360><c> If</c><00:00:16.520><c> you</c><00:00:16.640><c> want</c><00:00:16.800><c> a</c><00:00:16.880><c> character</c>
+
+00:00:17.310 --> 00:00:17.320 align:start position:0%
+start from idle. If you want a character
+ 
+
+00:00:17.320 --> 00:00:19.750 align:start position:0%
+start from idle. If you want a character
+to<00:00:17.440><c> move</c><00:00:17.720><c> in</c><00:00:17.840><c> a</c><00:00:17.880><c> very</c><00:00:18.200><c> specific</c><00:00:18.920><c> way,</c><00:00:19.320><c> it</c><00:00:19.480><c> helps</c>
+
+00:00:19.750 --> 00:00:19.760 align:start position:0%
+to move in a very specific way, it helps
+ 
+
+00:00:19.760 --> 00:00:21.710 align:start position:0%
+to move in a very specific way, it helps
+a<00:00:19.800><c> lot</c><00:00:20.160><c> if</c><00:00:20.320><c> the</c><00:00:20.440><c> first</c><00:00:20.800><c> frame</c><00:00:21.080><c> is</c><00:00:21.280><c> already</c>
+
+00:00:21.710 --> 00:00:21.720 align:start position:0%
+a lot if the first frame is already
+ 
+
+00:00:21.720 --> 00:00:23.550 align:start position:0%
+a lot if the first frame is already
+closer<00:00:22.200><c> to</c><00:00:22.360><c> the</c><00:00:22.480><c> action</c><00:00:22.920><c> you're</c><00:00:23.040><c> trying</c><00:00:23.400><c> to</c>
+
+00:00:23.550 --> 00:00:23.560 align:start position:0%
+closer to the action you're trying to
+ 
+
+00:00:23.560 --> 00:00:25.870 align:start position:0%
+closer to the action you're trying to
+animate.<00:00:24.080><c> So</c><00:00:24.280><c> now,</c><00:00:24.800><c> inside</c><00:00:25.280><c> the</c><00:00:25.400><c> character</c>
+
+00:00:25.870 --> 00:00:25.880 align:start position:0%
+animate. So now, inside the character
+ 
+
+00:00:25.880 --> 00:00:28.030 align:start position:0%
+animate. So now, inside the character
+creator,<00:00:26.480><c> we</c><00:00:26.600><c> can</c><00:00:26.760><c> create</c><00:00:27.280><c> states.</c>
+
+00:00:28.030 --> 00:00:28.040 align:start position:0%
+creator, we can create states.
+ 
+
+00:00:28.040 --> 00:00:29.790 align:start position:0%
+creator, we can create states.
+Basically,<00:00:28.680><c> we</c><00:00:28.840><c> can</c><00:00:29.000><c> take</c><00:00:29.240><c> the</c><00:00:29.360><c> same</c>
+
+00:00:29.790 --> 00:00:29.800 align:start position:0%
+Basically, we can take the same
+ 
+
+00:00:29.800 --> 00:00:32.070 align:start position:0%
+Basically, we can take the same
+character<00:00:30.080><c> and</c><00:00:30.640><c> generate</c><00:00:31.080><c> new</c><00:00:31.320><c> poses</c><00:00:31.920><c> or</c>
+
+00:00:32.070 --> 00:00:32.080 align:start position:0%
+character and generate new poses or
+ 
+
+00:00:32.080 --> 00:00:34.310 align:start position:0%
+character and generate new poses or
+variations<00:00:32.880><c> first</c><00:00:33.400><c> before</c><00:00:33.800><c> turning</c><00:00:34.160><c> them</c>
+
+00:00:34.310 --> 00:00:34.320 align:start position:0%
+variations first before turning them
+ 
+
+00:00:34.320 --> 00:00:36.590 align:start position:0%
+variations first before turning them
+into<00:00:34.640><c> animations.</c><00:00:35.560><c> That</c><00:00:35.720><c> means</c><00:00:36.080><c> instead</c><00:00:36.480><c> of</c>
+
+00:00:36.590 --> 00:00:36.600 align:start position:0%
+into animations. That means instead of
+ 
+
+00:00:36.600 --> 00:00:38.070 align:start position:0%
+into animations. That means instead of
+forcing<00:00:37.040><c> the</c><00:00:37.160><c> model</c><00:00:37.560><c> to</c><00:00:37.720><c> figure</c><00:00:37.990><c> [music]</c>
+
+00:00:38.070 --> 00:00:38.080 align:start position:0%
+forcing the model to figure [music]
+ 
+
+00:00:38.080 --> 00:00:40.070 align:start position:0%
+forcing the model to figure [music]
+everything<00:00:38.560><c> out</c><00:00:38.840><c> from</c><00:00:39.040><c> a</c><00:00:39.080><c> neutral</c><00:00:39.560><c> standing</c>
+
+00:00:40.070 --> 00:00:40.080 align:start position:0%
+everything out from a neutral standing
+ 
+
+00:00:40.080 --> 00:00:41.870 align:start position:0%
+everything out from a neutral standing
+pose,<00:00:40.640><c> we</c><00:00:40.720><c> can</c><00:00:40.880><c> give</c><00:00:41.040><c> it</c><00:00:41.160><c> a</c><00:00:41.240><c> much</c><00:00:41.600><c> better</c>
+
+00:00:41.870 --> 00:00:41.880 align:start position:0%
+pose, we can give it a much better
+ 
+
+00:00:41.880 --> 00:00:43.950 align:start position:0%
+pose, we can give it a much better
+starting<00:00:42.360><c> point.</c><00:00:42.720><c> And</c><00:00:42.840><c> that</c><00:00:43.040><c> opens</c><00:00:43.400><c> up</c><00:00:43.560><c> a</c><00:00:43.640><c> lot</c>
+
+00:00:43.950 --> 00:00:43.960 align:start position:0%
+starting point. And that opens up a lot
+ 
+
+00:00:43.960 --> 00:00:46.670 align:start position:0%
+starting point. And that opens up a lot
+of<00:00:44.120><c> workflows.</c><00:00:44.920><c> Better</c><00:00:45.200><c> animation</c><00:00:45.880><c> starts,</c>
+
+00:00:46.670 --> 00:00:46.680 align:start position:0%
+of workflows. Better animation starts,
+ 
+
+00:00:46.680 --> 00:00:49.030 align:start position:0%
+of workflows. Better animation starts,
+more<00:00:46.920><c> consistent</c><00:00:47.600><c> character</c><00:00:48.040><c> variations,</c>
+
+00:00:49.030 --> 00:00:49.040 align:start position:0%
+more consistent character variations,
+ 
+
+00:00:49.040 --> 00:00:51.080 align:start position:0%
+more consistent character variations,
+cleaner<00:00:49.440><c> transitions</c><00:00:50.240><c> between</c><00:00:50.640><c> poses,</c>
+
+00:00:51.080 --> 00:00:51.090 align:start position:0%
+cleaner transitions between poses,
+ 
+
+00:00:51.090 --> 00:00:53.630 align:start position:0%
+cleaner transitions between poses,
+[music]<00:00:51.400><c> and</c><00:00:51.680><c> way</c><00:00:51.960><c> less</c><00:00:52.360><c> manual</c><00:00:52.840><c> setup.</c><00:00:53.320><c> So</c><00:00:53.520><c> in</c>
+
+00:00:53.630 --> 00:00:53.640 align:start position:0%
+[music] and way less manual setup. So in
+ 
+
+00:00:53.640 --> 00:00:55.670 align:start position:0%
+[music] and way less manual setup. So in
+this<00:00:53.880><c> video,</c><00:00:54.320><c> I'm</c><00:00:54.520><c> going</c><00:00:54.760><c> to</c><00:00:54.840><c> show</c><00:00:55.080><c> the</c><00:00:55.280><c> full</c>
+
+00:00:55.670 --> 00:00:55.680 align:start position:0%
+this video, I'm going to show the full
+ 
+
+00:00:55.680 --> 00:00:57.990 align:start position:0%
+this video, I'm going to show the full
+workflow<00:00:56.280><c> from</c><00:00:56.520><c> a</c><00:00:56.600><c> regular</c><00:00:57.120><c> character</c><00:00:57.760><c> to</c>
+
+00:00:57.990 --> 00:00:58.000 align:start position:0%
+workflow from a regular character to
+ 
+
+00:00:58.000 --> 00:01:00.470 align:start position:0%
+workflow from a regular character to
+animals<00:00:58.680><c> to</c><00:00:58.880><c> larger</c><00:00:59.280><c> characters,</c><00:01:00.120><c> and</c><00:01:00.280><c> how</c>
+
+00:01:00.470 --> 00:01:00.480 align:start position:0%
+animals to larger characters, and how
+ 
+
+00:01:00.480 --> 00:01:02.750 align:start position:0%
+animals to larger characters, and how
+these<00:01:01.120><c> can</c><00:01:01.280><c> make</c><00:01:01.440><c> the</c><00:01:01.560><c> animation</c><00:01:02.120><c> process</c>
+
+00:01:02.750 --> 00:01:02.760 align:start position:0%
+these can make the animation process
+ 
+
+00:01:02.760 --> 00:01:04.869 align:start position:0%
+these can make the animation process
+much<00:01:03.200><c> easier.</c><00:01:03.840><c> So</c><00:01:04.000><c> let's</c><00:01:04.280><c> start</c><00:01:04.559><c> from</c><00:01:04.760><c> the</c>
+
+00:01:04.869 --> 00:01:04.879 align:start position:0%
+much easier. So let's start from the
+ 
+
+00:01:04.879 --> 00:01:06.990 align:start position:0%
+much easier. So let's start from the
+Pixelab<00:01:05.480><c> website.</c><00:01:06.040><c> First,</c><00:01:06.480><c> I'm</c><00:01:06.640><c> going</c><00:01:06.880><c> to</c>
+
+00:01:06.990 --> 00:01:07.000 align:start position:0%
+Pixelab website. First, I'm going to
+ 
+
+00:01:07.000 --> 00:01:08.910 align:start position:0%
+Pixelab website. First, I'm going to
+head<00:01:07.200><c> over</c><00:01:07.400><c> to</c><00:01:07.560><c> the</c><00:01:07.680><c> characters</c><00:01:08.280><c> page.</c><00:01:08.840><c> And</c>
+
+00:01:08.910 --> 00:01:08.920 align:start position:0%
+head over to the characters page. And
+ 
+
+00:01:08.920 --> 00:01:10.710 align:start position:0%
+head over to the characters page. And
+before<00:01:09.280><c> we</c><00:01:09.400><c> get</c><00:01:09.600><c> into</c><00:01:09.880><c> the</c><00:01:10.000><c> new</c><00:01:10.240><c> states</c>
+
+00:01:10.710 --> 00:01:10.720 align:start position:0%
+before we get into the new states
+ 
+
+00:01:10.720 --> 00:01:12.790 align:start position:0%
+before we get into the new states
+feature,<00:01:11.280><c> I'm</c><00:01:11.400><c> going</c><00:01:11.640><c> to</c><00:01:11.760><c> generate</c><00:01:12.280><c> a</c><00:01:12.360><c> fresh</c>
+
+00:01:12.790 --> 00:01:12.800 align:start position:0%
+feature, I'm going to generate a fresh
+ 
+
+00:01:12.800 --> 00:01:14.910 align:start position:0%
+feature, I'm going to generate a fresh
+character<00:01:13.320><c> so</c><00:01:13.480><c> you</c><00:01:13.600><c> can</c><00:01:13.760><c> also</c><00:01:14.120><c> see</c><00:01:14.360><c> the</c><00:01:14.520><c> newer</c>
+
+00:01:14.910 --> 00:01:14.920 align:start position:0%
+character so you can also see the newer
+ 
+
+00:01:14.920 --> 00:01:17.710 align:start position:0%
+character so you can also see the newer
+V3<00:01:15.560><c> generation</c><00:01:16.280><c> mode</c><00:01:16.600><c> in</c><00:01:16.760><c> action.</c><00:01:17.320><c> For</c><00:01:17.440><c> this</c>
+
+00:01:17.710 --> 00:01:17.720 align:start position:0%
+V3 generation mode in action. For this
+ 
+
+00:01:17.720 --> 00:01:19.790 align:start position:0%
+V3 generation mode in action. For this
+one,<00:01:18.040><c> I'm</c><00:01:18.160><c> prompting</c><00:01:18.920><c> an</c><00:01:19.040><c> adventurer</c><00:01:19.255><c> [music]</c>
+
+00:01:19.790 --> 00:01:19.800 align:start position:0%
+one, I'm prompting an adventurer [music]
+ 
+
+00:01:19.800 --> 00:01:21.950 align:start position:0%
+one, I'm prompting an adventurer [music]
+wearing<00:01:20.200><c> a</c><00:01:20.280><c> black</c><00:01:20.760><c> hood,</c><00:01:21.320><c> inner</c><00:01:21.640><c> white</c>
+
+00:01:21.950 --> 00:01:21.960 align:start position:0%
+wearing a black hood, inner white
+ 
+
+00:01:21.960 --> 00:01:24.790 align:start position:0%
+wearing a black hood, inner white
+clothing,<00:01:22.680><c> and</c><00:01:22.840><c> a</c><00:01:22.920><c> red</c><00:01:23.240><c> Japanese</c><00:01:23.960><c> mask.</c><00:01:24.600><c> Then</c>
+
+00:01:24.790 --> 00:01:24.800 align:start position:0%
+clothing, and a red Japanese mask. Then
+ 
+
+00:01:24.800 --> 00:01:27.110 align:start position:0%
+clothing, and a red Japanese mask. Then
+I'm<00:01:24.920><c> setting</c><00:01:25.280><c> the</c><00:01:25.400><c> camera</c><00:01:25.800><c> view</c><00:01:26.120><c> to</c><00:01:26.360><c> high</c><00:01:26.680><c> top</c>
+
+00:01:27.110 --> 00:01:27.120 align:start position:0%
+I'm setting the camera view to high top
+ 
+
+00:01:27.120 --> 00:01:28.950 align:start position:0%
+I'm setting the camera view to high top
+down<00:01:27.600><c> because</c><00:01:27.880><c> I</c><00:01:27.920><c> want</c><00:01:28.160><c> this</c><00:01:28.360><c> to</c><00:01:28.480><c> work</c><00:01:28.720><c> for</c><00:01:28.880><c> a</c>
+
+00:01:28.950 --> 00:01:28.960 align:start position:0%
+down because I want this to work for a
+ 
+
+00:01:28.960 --> 00:01:31.190 align:start position:0%
+down because I want this to work for a
+top-down<00:01:29.720><c> game</c><00:01:30.080><c> character.</c><00:01:30.760><c> And</c><00:01:30.920><c> for</c><00:01:31.040><c> the</c>
+
+00:01:31.190 --> 00:01:31.200 align:start position:0%
+top-down game character. And for the
+ 
+
+00:01:31.200 --> 00:01:34.790 align:start position:0%
+top-down game character. And for the
+size,<00:01:31.800><c> I'm</c><00:01:31.960><c> going</c><00:01:32.280><c> custom,</c><00:01:32.960><c> 32</c><00:01:33.600><c> by</c><00:01:33.800><c> 44.</c><00:01:34.600><c> This</c>
+
+00:01:34.790 --> 00:01:34.800 align:start position:0%
+size, I'm going custom, 32 by 44. This
+ 
+
+00:01:34.800 --> 00:01:37.310 align:start position:0%
+size, I'm going custom, 32 by 44. This
+still<00:01:35.120><c> gets</c><00:01:35.400><c> placed</c><00:01:35.760><c> into</c><00:01:36.040><c> a</c><00:01:36.120><c> square</c><00:01:36.600><c> canvas,</c>
+
+00:01:37.310 --> 00:01:37.320 align:start position:0%
+still gets placed into a square canvas,
+ 
+
+00:01:37.320 --> 00:01:39.110 align:start position:0%
+still gets placed into a square canvas,
+but<00:01:37.480><c> giving</c><00:01:37.760><c> the</c><00:01:37.880><c> character</c><00:01:38.360><c> a</c><00:01:38.440><c> narrower</c>
+
+00:01:39.110 --> 00:01:39.120 align:start position:0%
+but giving the character a narrower
+ 
+
+00:01:39.120 --> 00:01:41.270 align:start position:0%
+but giving the character a narrower
+width<00:01:39.560><c> and</c><00:01:39.720><c> taller</c><00:01:40.160><c> height</c><00:01:40.520><c> helps</c><00:01:40.840><c> the</c><00:01:40.920><c> model</c>
+
+00:01:41.270 --> 00:01:41.280 align:start position:0%
+width and taller height helps the model
+ 
+
+00:01:41.280 --> 00:01:43.390 align:start position:0%
+width and taller height helps the model
+focus<00:01:41.760><c> on</c><00:01:41.880><c> the</c><00:01:42.000><c> actual</c><00:01:42.480><c> character</c><00:01:43.000><c> shape</c>
+
+00:01:43.390 --> 00:01:43.400 align:start position:0%
+focus on the actual character shape
+ 
+
+00:01:43.400 --> 00:01:45.750 align:start position:0%
+focus on the actual character shape
+instead<00:01:43.800><c> of</c><00:01:43.920><c> wasting</c><00:01:44.400><c> space</c><00:01:44.800><c> around</c><00:01:45.280><c> it.</c><00:01:45.440><c> Now</c>
+
+00:01:45.750 --> 00:01:45.760 align:start position:0%
+instead of wasting space around it. Now
+ 
+
+00:01:45.760 --> 00:01:47.510 align:start position:0%
+instead of wasting space around it. Now
+I'll<00:01:45.920><c> generate</c><00:01:46.440><c> it.</c><00:01:46.680><c> All</c><00:01:46.840><c> right,</c><00:01:47.200><c> there</c><00:01:47.400><c> we</c>
+
+00:01:47.510 --> 00:01:47.520 align:start position:0%
+I'll generate it. All right, there we
+ 
+
+00:01:47.520 --> 00:01:49.830 align:start position:0%
+I'll generate it. All right, there we
+go.<00:01:47.920><c> We've</c><00:01:48.080><c> got</c><00:01:48.320><c> our</c><00:01:48.440><c> masked</c><00:01:49.040><c> adventurer.</c>
+
+00:01:49.830 --> 00:01:49.840 align:start position:0%
+go. We've got our masked adventurer.
+ 
+
+00:01:49.840 --> 00:01:52.070 align:start position:0%
+go. We've got our masked adventurer.
+Before<00:01:50.200><c> this</c><00:01:50.480><c> update,</c><00:01:51.000><c> the</c><00:01:51.120><c> normal</c><00:01:51.600><c> workflow</c>
+
+00:01:52.070 --> 00:01:52.080 align:start position:0%
+Before this update, the normal workflow
+ 
+
+00:01:52.080 --> 00:01:54.110 align:start position:0%
+Before this update, the normal workflow
+would<00:01:52.240><c> be</c><00:01:52.360><c> something</c><00:01:52.840><c> like</c><00:01:53.080><c> this.</c><00:01:53.640><c> You'd</c><00:01:53.840><c> take</c>
+
+00:01:54.110 --> 00:01:54.120 align:start position:0%
+would be something like this. You'd take
+ 
+
+00:01:54.120 --> 00:01:56.670 align:start position:0%
+would be something like this. You'd take
+this<00:01:54.440><c> idle</c><00:01:54.680><c> pose,</c><00:01:55.320><c> go</c><00:01:55.480><c> straight</c><00:01:55.920><c> to</c><00:01:56.080><c> animate,</c>
+
+00:01:56.670 --> 00:01:56.680 align:start position:0%
+this idle pose, go straight to animate,
+ 
+
+00:01:56.680 --> 00:01:58.470 align:start position:0%
+this idle pose, go straight to animate,
+and<00:01:56.800><c> prompt</c><00:01:57.240><c> something</c><00:01:57.640><c> like</c><00:01:57.960><c> walking</c>
+
+00:01:58.470 --> 00:01:58.480 align:start position:0%
+and prompt something like walking
+ 
+
+00:01:58.480 --> 00:01:59.230 align:start position:0%
+and prompt something like walking
+animation,<00:01:58.556><c> [music]</c>
+
+00:01:59.230 --> 00:01:59.240 align:start position:0%
+animation, [music]
+ 
+
+00:01:59.240 --> 00:02:01.550 align:start position:0%
+animation, [music]
+and<00:01:59.400><c> it</c><00:01:59.560><c> could</c><00:01:59.920><c> work.</c><00:02:00.480><c> But</c><00:02:00.640><c> because</c><00:02:01.040><c> the</c><00:02:01.160><c> first</c>
+
+00:02:01.550 --> 00:02:01.560 align:start position:0%
+and it could work. But because the first
+ 
+
+00:02:01.560 --> 00:02:03.790 align:start position:0%
+and it could work. But because the first
+frame<00:02:01.880><c> is</c><00:02:02.000><c> just</c><00:02:02.240><c> standing</c><00:02:02.760><c> still,</c><00:02:03.320><c> the</c><00:02:03.440><c> model</c>
+
+00:02:03.790 --> 00:02:03.800 align:start position:0%
+frame is just standing still, the model
+ 
+
+00:02:03.800 --> 00:02:05.710 align:start position:0%
+frame is just standing still, the model
+has<00:02:04.040><c> to</c><00:02:04.160><c> invent</c><00:02:04.600><c> the</c><00:02:04.720><c> walking</c><00:02:05.160><c> pose</c><00:02:05.560><c> from</c>
+
+00:02:05.710 --> 00:02:05.720 align:start position:0%
+has to invent the walking pose from
+ 
+
+00:02:05.720 --> 00:02:08.109 align:start position:0%
+has to invent the walking pose from
+scratch.<00:02:06.520><c> So,</c><00:02:06.680><c> sometimes</c><00:02:07.360><c> the</c><00:02:07.440><c> result</c><00:02:07.920><c> is</c>
+
+00:02:08.109 --> 00:02:08.119 align:start position:0%
+scratch. So, sometimes the result is
+ 
+
+00:02:08.119 --> 00:02:10.550 align:start position:0%
+scratch. So, sometimes the result is
+usable,<00:02:08.800><c> but</c><00:02:08.920><c> it's</c><00:02:09.080><c> not</c><00:02:09.399><c> always</c><00:02:09.840><c> clean.</c><00:02:10.440><c> You</c>
+
+00:02:10.550 --> 00:02:10.560 align:start position:0%
+usable, but it's not always clean. You
+ 
+
+00:02:10.560 --> 00:02:12.470 align:start position:0%
+usable, but it's not always clean. You
+might<00:02:10.840><c> get</c><00:02:11.120><c> weird</c><00:02:11.520><c> light</c><00:02:11.760><c> motion,</c>
+
+00:02:12.470 --> 00:02:12.480 align:start position:0%
+might get weird light motion,
+ 
+
+00:02:12.480 --> 00:02:14.830 align:start position:0%
+might get weird light motion,
+inconsistent<00:02:13.360><c> posing,</c><00:02:14.040><c> or</c><00:02:14.160><c> an</c><00:02:14.280><c> animation</c>
+
+00:02:14.830 --> 00:02:14.840 align:start position:0%
+inconsistent posing, or an animation
+ 
+
+00:02:14.840 --> 00:02:16.790 align:start position:0%
+inconsistent posing, or an animation
+that<00:02:15.080><c> technically</c><00:02:15.720><c> walks,</c><00:02:16.280><c> but</c><00:02:16.440><c> doesn't</c>
+
+00:02:16.790 --> 00:02:16.800 align:start position:0%
+that technically walks, but doesn't
+ 
+
+00:02:16.800 --> 00:02:18.949 align:start position:0%
+that technically walks, but doesn't
+really<00:02:17.000><c> start</c><00:02:17.360><c> from</c><00:02:17.560><c> a</c><00:02:17.640><c> strong</c><00:02:18.200><c> walk</c><00:02:18.520><c> frame.</c>
+
+00:02:18.949 --> 00:02:18.959 align:start position:0%
+really start from a strong walk frame.
+ 
+
+00:02:18.959 --> 00:02:20.350 align:start position:0%
+really start from a strong walk frame.
+That's<00:02:19.160><c> exactly</c><00:02:19.720><c> what</c><00:02:19.880><c> this</c><00:02:20.120><c> new</c><00:02:20.171><c> [music]</c>
+
+00:02:20.350 --> 00:02:20.360 align:start position:0%
+That's exactly what this new [music]
+ 
+
+00:02:20.360 --> 00:02:22.510 align:start position:0%
+That's exactly what this new [music]
+states<00:02:20.880><c> update</c><00:02:21.320><c> helps</c><00:02:21.680><c> with.</c><00:02:21.959><c> Now,</c><00:02:22.240><c> we</c><00:02:22.360><c> can</c>
+
+00:02:22.510 --> 00:02:22.520 align:start position:0%
+states update helps with. Now, we can
+ 
+
+00:02:22.520 --> 00:02:25.110 align:start position:0%
+states update helps with. Now, we can
+create<00:02:22.880><c> the</c><00:02:23.000><c> pose</c><00:02:23.440><c> first</c><00:02:24.120><c> and</c><00:02:24.280><c> then</c><00:02:24.600><c> animate</c>
+
+00:02:25.110 --> 00:02:25.120 align:start position:0%
+create the pose first and then animate
+ 
+
+00:02:25.120 --> 00:02:27.150 align:start position:0%
+create the pose first and then animate
+from<00:02:25.280><c> that</c><00:02:25.520><c> pose.</c><00:02:26.160><c> So,</c><00:02:26.320><c> I'm</c><00:02:26.440><c> going</c><00:02:26.680><c> to</c><00:02:26.800><c> click</c>
+
+00:02:27.150 --> 00:02:27.160 align:start position:0%
+from that pose. So, I'm going to click
+ 
+
+00:02:27.160 --> 00:02:29.550 align:start position:0%
+from that pose. So, I'm going to click
+create<00:02:27.680><c> state,</c><00:02:28.120><c> and</c><00:02:28.240><c> the</c><00:02:28.400><c> idea</c><00:02:28.840><c> is</c><00:02:29.000><c> simple.</c>
+
+00:02:29.550 --> 00:02:29.560 align:start position:0%
+create state, and the idea is simple.
+ 
+
+00:02:29.560 --> 00:02:31.150 align:start position:0%
+create state, and the idea is simple.
+Describe<00:02:30.080><c> what</c><00:02:30.240><c> you</c><00:02:30.360><c> want</c><00:02:30.600><c> the</c><00:02:30.720><c> same</c>
+
+00:02:31.150 --> 00:02:31.160 align:start position:0%
+Describe what you want the same
+ 
+
+00:02:31.160 --> 00:02:32.670 align:start position:0%
+Describe what you want the same
+character<00:02:31.720><c> to</c><00:02:31.840><c> be</c><00:02:31.959><c> doing.</c><00:02:31.980><c> [music]</c><00:02:32.480><c> Let's</c>
+
+00:02:32.670 --> 00:02:32.680 align:start position:0%
+character to be doing. [music] Let's
+ 
+
+00:02:32.680 --> 00:02:34.590 align:start position:0%
+character to be doing. [music] Let's
+start<00:02:32.959><c> with</c><00:02:33.160><c> one</c><00:02:33.280><c> of</c><00:02:33.360><c> the</c><00:02:33.480><c> built-in</c><00:02:34.000><c> examples</c>
+
+00:02:34.590 --> 00:02:34.600 align:start position:0%
+start with one of the built-in examples
+ 
+
+00:02:34.600 --> 00:02:36.710 align:start position:0%
+start with one of the built-in examples
+here,<00:02:35.000><c> fighting</c><00:02:35.480><c> pose.</c><00:02:36.120><c> And</c><00:02:36.240><c> then</c><00:02:36.360><c> I'm</c><00:02:36.480><c> going</c>
+
+00:02:36.710 --> 00:02:36.720 align:start position:0%
+here, fighting pose. And then I'm going
+ 
+
+00:02:36.720 --> 00:02:39.150 align:start position:0%
+here, fighting pose. And then I'm going
+to<00:02:36.840><c> create</c><00:02:37.160><c> another</c><00:02:37.560><c> one,</c><00:02:38.000><c> mid-walk.</c><00:02:39.000><c> So,</c>
+
+00:02:39.150 --> 00:02:39.160 align:start position:0%
+to create another one, mid-walk. So,
+ 
+
+00:02:39.160 --> 00:02:41.390 align:start position:0%
+to create another one, mid-walk. So,
+instead<00:02:39.560><c> of</c><00:02:39.720><c> asking</c><00:02:40.120><c> the</c><00:02:40.240><c> animation</c><00:02:40.880><c> tool</c><00:02:41.240><c> to</c>
+
+00:02:41.390 --> 00:02:41.400 align:start position:0%
+instead of asking the animation tool to
+ 
+
+00:02:41.400 --> 00:02:43.590 align:start position:0%
+instead of asking the animation tool to
+figure<00:02:41.720><c> out</c><00:02:41.880><c> the</c><00:02:42.000><c> entire</c><00:02:42.560><c> walk</c><00:02:42.880><c> cycle</c><00:02:43.320><c> from</c><00:02:43.560><c> a</c>
+
+00:02:43.590 --> 00:02:43.600 align:start position:0%
+figure out the entire walk cycle from a
+ 
+
+00:02:43.600 --> 00:02:46.070 align:start position:0%
+figure out the entire walk cycle from a
+neutral<00:02:44.200><c> idle</c><00:02:44.520><c> pose,</c><00:02:45.120><c> we're</c><00:02:45.240><c> first</c><00:02:45.680><c> asking</c>
+
+00:02:46.070 --> 00:02:46.080 align:start position:0%
+neutral idle pose, we're first asking
+ 
+
+00:02:46.080 --> 00:02:47.870 align:start position:0%
+neutral idle pose, we're first asking
+Pixelaab<00:02:46.720><c> to</c><00:02:46.840><c> give</c><00:02:47.000><c> us</c><00:02:47.160><c> the</c><00:02:47.280><c> character</c>
+
+00:02:47.870 --> 00:02:47.880 align:start position:0%
+Pixelaab to give us the character
+ 
+
+00:02:47.880 --> 00:02:50.230 align:start position:0%
+Pixelaab to give us the character
+already<00:02:48.440><c> inside</c><00:02:48.959><c> the</c><00:02:49.120><c> action.</c><00:02:49.720><c> And</c><00:02:49.880><c> there</c><00:02:50.080><c> it</c>
+
+00:02:50.230 --> 00:02:50.240 align:start position:0%
+already inside the action. And there it
+ 
+
+00:02:50.240 --> 00:02:53.030 align:start position:0%
+already inside the action. And there it
+is.<00:02:50.640><c> That</c><00:02:50.840><c> is</c><00:02:51.000><c> a</c><00:02:51.080><c> mid-walk</c><00:02:51.920><c> state</c><00:02:52.360><c> of</c><00:02:52.480><c> the</c><00:02:52.600><c> same</c>
+
+00:02:53.030 --> 00:02:53.040 align:start position:0%
+is. That is a mid-walk state of the same
+ 
+
+00:02:53.040 --> 00:02:55.750 align:start position:0%
+is. That is a mid-walk state of the same
+character,<00:02:53.800><c> same</c><00:02:54.120><c> design,</c><00:02:54.959><c> same</c><00:02:55.280><c> general</c>
+
+00:02:55.750 --> 00:02:55.760 align:start position:0%
+character, same design, same general
+ 
+
+00:02:55.760 --> 00:02:58.750 align:start position:0%
+character, same design, same general
+proportions,<00:02:56.840><c> same</c><00:02:57.240><c> red</c><00:02:57.560><c> mask,</c><00:02:58.160><c> but</c><00:02:58.320><c> now</c><00:02:58.600><c> the</c>
+
+00:02:58.750 --> 00:02:58.760 align:start position:0%
+proportions, same red mask, but now the
+ 
+
+00:02:58.760 --> 00:03:00.710 align:start position:0%
+proportions, same red mask, but now the
+character<00:02:59.200><c> is</c><00:02:59.360><c> actually</c><00:02:59.840><c> posed</c><00:03:00.360><c> in</c><00:03:00.480><c> a</c><00:03:00.519><c> way</c>
+
+00:03:00.710 --> 00:03:00.720 align:start position:0%
+character is actually posed in a way
+ 
+
+00:03:00.720 --> 00:03:02.790 align:start position:0%
+character is actually posed in a way
+that<00:03:00.920><c> makes</c><00:03:01.200><c> sense</c><00:03:01.640><c> as</c><00:03:01.800><c> a</c><00:03:01.880><c> starting</c><00:03:02.320><c> point</c><00:03:02.640><c> for</c>
+
+00:03:02.790 --> 00:03:02.800 align:start position:0%
+that makes sense as a starting point for
+ 
+
+00:03:02.800 --> 00:03:05.030 align:start position:0%
+that makes sense as a starting point for
+a<00:03:02.880><c> walk</c><00:03:03.200><c> cycle.</c><00:03:03.720><c> That's</c><00:03:04.040><c> the</c><00:03:04.160><c> important</c><00:03:04.680><c> part.</c>
+
+00:03:05.030 --> 00:03:05.040 align:start position:0%
+a walk cycle. That's the important part.
+ 
+
+00:03:05.040 --> 00:03:06.990 align:start position:0%
+a walk cycle. That's the important part.
+Now,<00:03:05.320><c> I'm</c><00:03:05.440><c> going</c><00:03:05.680><c> to</c><00:03:05.800><c> use</c><00:03:06.080><c> this</c><00:03:06.280><c> state</c><00:03:06.680><c> to</c><00:03:06.800><c> make</c>
+
+00:03:06.990 --> 00:03:07.000 align:start position:0%
+Now, I'm going to use this state to make
+ 
+
+00:03:07.000 --> 00:03:09.390 align:start position:0%
+Now, I'm going to use this state to make
+an<00:03:07.120><c> animation.</c><00:03:07.920><c> I'll</c><00:03:08.080><c> click</c><00:03:08.560><c> add</c><00:03:08.840><c> your</c><00:03:09.000><c> first</c>
+
+00:03:09.390 --> 00:03:09.400 align:start position:0%
+an animation. I'll click add your first
+ 
+
+00:03:09.400 --> 00:03:11.150 align:start position:0%
+an animation. I'll click add your first
+animation,<00:03:10.200><c> choose</c><00:03:10.607><c> [music]</c><00:03:10.680><c> custom</c>
+
+00:03:11.150 --> 00:03:11.160 align:start position:0%
+animation, choose [music] custom
+ 
+
+00:03:11.160 --> 00:03:13.790 align:start position:0%
+animation, choose [music] custom
+animation<00:03:11.880><c> V3,</c><00:03:12.680><c> and</c><00:03:12.800><c> for</c><00:03:12.920><c> the</c><00:03:13.040><c> prompt,</c><00:03:13.640><c> I'll</c>
+
+00:03:13.790 --> 00:03:13.800 align:start position:0%
+animation V3, and for the prompt, I'll
+ 
+
+00:03:13.800 --> 00:03:16.310 align:start position:0%
+animation V3, and for the prompt, I'll
+keep<00:03:14.080><c> it</c><00:03:14.239><c> simple,</c><00:03:14.800><c> walk</c><00:03:15.280><c> loop.</c><00:03:15.800><c> I'm</c><00:03:15.920><c> going</c><00:03:16.200><c> to</c>
+
+00:03:16.310 --> 00:03:16.320 align:start position:0%
+keep it simple, walk loop. I'm going to
+ 
+
+00:03:16.320 --> 00:03:18.630 align:start position:0%
+keep it simple, walk loop. I'm going to
+enhance<00:03:16.840><c> the</c><00:03:16.959><c> prompt</c><00:03:17.400><c> just</c><00:03:17.640><c> to</c><00:03:17.720><c> be</c><00:03:17.880><c> safe.</c><00:03:18.440><c> Then</c>
+
+00:03:18.630 --> 00:03:18.640 align:start position:0%
+enhance the prompt just to be safe. Then
+ 
+
+00:03:18.640 --> 00:03:20.190 align:start position:0%
+enhance the prompt just to be safe. Then
+I'll<00:03:18.760><c> define</c><00:03:19.200><c> the</c><00:03:19.320><c> frame</c><00:03:19.680><c> count,</c><00:03:19.777><c> [music]</c><00:03:20.080><c> and</c>
+
+00:03:20.190 --> 00:03:20.200 align:start position:0%
+I'll define the frame count, [music] and
+ 
+
+00:03:20.200 --> 00:03:22.470 align:start position:0%
+I'll define the frame count, [music] and
+I'm<00:03:20.360><c> leaving</c><00:03:20.720><c> the</c><00:03:20.840><c> first</c><00:03:21.280><c> frame</c><00:03:21.680><c> on</c><00:03:22.160><c> because</c>
+
+00:03:22.470 --> 00:03:22.480 align:start position:0%
+I'm leaving the first frame on because
+ 
+
+00:03:22.480 --> 00:03:24.150 align:start position:0%
+I'm leaving the first frame on because
+the<00:03:22.600><c> state</c><00:03:22.959><c> we</c><00:03:23.080><c> just</c><00:03:23.320><c> created</c><00:03:23.880><c> is</c><00:03:24.040><c> the</c>
+
+00:03:24.150 --> 00:03:24.160 align:start position:0%
+the state we just created is the
+ 
+
+00:03:24.160 --> 00:03:26.070 align:start position:0%
+the state we just created is the
+starting<00:03:24.640><c> frame.</c><00:03:25.120><c> That's</c><00:03:25.360><c> the</c><00:03:25.480><c> whole</c><00:03:25.720><c> point</c>
+
+00:03:26.070 --> 00:03:26.080 align:start position:0%
+starting frame. That's the whole point
+ 
+
+00:03:26.080 --> 00:03:27.830 align:start position:0%
+starting frame. That's the whole point
+here.<00:03:26.440><c> We're</c><00:03:26.560><c> not</c><00:03:26.800><c> asking</c><00:03:27.200><c> the</c><00:03:27.320><c> model</c><00:03:27.680><c> to</c>
+
+00:03:27.830 --> 00:03:27.840 align:start position:0%
+here. We're not asking the model to
+ 
+
+00:03:27.840 --> 00:03:29.870 align:start position:0%
+here. We're not asking the model to
+invent<00:03:28.239><c> the</c><00:03:28.320><c> first</c><00:03:28.720><c> pose</c><00:03:29.120><c> anymore.</c><00:03:29.680><c> We</c>
+
+00:03:29.870 --> 00:03:29.880 align:start position:0%
+invent the first pose anymore. We
+ 
+
+00:03:29.880 --> 00:03:31.470 align:start position:0%
+invent the first pose anymore. We
+already<00:03:30.257><c> [music]</c><00:03:30.400><c> have</c><00:03:30.680><c> it.</c><00:03:30.880><c> Now,</c><00:03:31.160><c> let's</c>
+
+00:03:31.470 --> 00:03:31.480 align:start position:0%
+already [music] have it. Now, let's
+ 
+
+00:03:31.480 --> 00:03:33.310 align:start position:0%
+already [music] have it. Now, let's
+generate.<00:03:32.080><c> While</c><00:03:32.239><c> that's</c><00:03:32.600><c> running,</c><00:03:33.080><c> let's</c>
+
+00:03:33.310 --> 00:03:33.320 align:start position:0%
+generate. While that's running, let's
+ 
+
+00:03:33.320 --> 00:03:35.270 align:start position:0%
+generate. While that's running, let's
+check<00:03:33.600><c> the</c><00:03:33.720><c> fighting</c><00:03:34.160><c> pose.</c><00:03:34.760><c> Yeah,</c><00:03:35.000><c> that's</c>
+
+00:03:35.270 --> 00:03:35.280 align:start position:0%
+check the fighting pose. Yeah, that's
+ 
+
+00:03:35.280 --> 00:03:36.990 align:start position:0%
+check the fighting pose. Yeah, that's
+pretty<00:03:35.560><c> cool.</c><00:03:36.040><c> So,</c><00:03:36.160><c> I'm</c><00:03:36.280><c> going</c><00:03:36.519><c> to</c><00:03:36.640><c> add</c><00:03:36.840><c> an</c>
+
+00:03:36.990 --> 00:03:37.000 align:start position:0%
+pretty cool. So, I'm going to add an
+ 
+
+00:03:37.000 --> 00:03:39.350 align:start position:0%
+pretty cool. So, I'm going to add an
+animation<00:03:37.640><c> from</c><00:03:37.840><c> this</c><00:03:38.040><c> state,</c><00:03:38.440><c> too.</c><00:03:38.800><c> Again,</c>
+
+00:03:39.350 --> 00:03:39.360 align:start position:0%
+animation from this state, too. Again,
+ 
+
+00:03:39.360 --> 00:03:42.150 align:start position:0%
+animation from this state, too. Again,
+I'll<00:03:39.519><c> use</c><00:03:39.840><c> custom</c><00:03:40.280><c> animation</c><00:03:40.959><c> V3,</c><00:03:41.840><c> and</c><00:03:41.959><c> this</c>
+
+00:03:42.150 --> 00:03:42.160 align:start position:0%
+I'll use custom animation V3, and this
+ 
+
+00:03:42.160 --> 00:03:44.350 align:start position:0%
+I'll use custom animation V3, and this
+time<00:03:42.519><c> I'll</c><00:03:42.680><c> prompt</c><00:03:43.040><c> something</c><00:03:43.440><c> like</c><00:03:43.920><c> fighting</c>
+
+00:03:44.350 --> 00:03:44.360 align:start position:0%
+time I'll prompt something like fighting
+ 
+
+00:03:44.360 --> 00:03:46.670 align:start position:0%
+time I'll prompt something like fighting
+stance<00:03:44.920><c> idle,</c><00:03:45.440><c> ready</c><00:03:45.800><c> to</c><00:03:46.000><c> fight.</c><00:03:46.480><c> I'll</c>
+
+00:03:46.670 --> 00:03:46.680 align:start position:0%
+stance idle, ready to fight. I'll
+ 
+
+00:03:46.680 --> 00:03:48.229 align:start position:0%
+stance idle, ready to fight. I'll
+enhance<00:03:47.200><c> the</c><00:03:47.287><c> [music]</c><00:03:47.320><c> prompt,</c><00:03:48.000><c> and</c><00:03:48.120><c> I'm</c>
+
+00:03:48.229 --> 00:03:48.239 align:start position:0%
+enhance the [music] prompt, and I'm
+ 
+
+00:03:48.239 --> 00:03:50.790 align:start position:0%
+enhance the [music] prompt, and I'm
+going<00:03:48.480><c> to</c><00:03:48.600><c> reduce</c><00:03:49.080><c> it</c><00:03:49.239><c> to</c><00:03:49.360><c> six</c><00:03:49.840><c> frames.</c><00:03:50.560><c> One</c>
+
+00:03:50.790 --> 00:03:50.800 align:start position:0%
+going to reduce it to six frames. One
+ 
+
+00:03:50.800 --> 00:03:52.710 align:start position:0%
+going to reduce it to six frames. One
+thing<00:03:51.040><c> to</c><00:03:51.160><c> remember,</c><00:03:51.840><c> since</c><00:03:52.160><c> we're</c><00:03:52.320><c> keeping</c>
+
+00:03:52.710 --> 00:03:52.720 align:start position:0%
+thing to remember, since we're keeping
+ 
+
+00:03:52.720 --> 00:03:55.390 align:start position:0%
+thing to remember, since we're keeping
+the<00:03:52.840><c> first</c><00:03:53.200><c> frame,</c><00:03:53.800><c> six</c><00:03:54.280><c> generated</c><00:03:54.880><c> frames</c>
+
+00:03:55.390 --> 00:03:55.400 align:start position:0%
+the first frame, six generated frames
+ 
+
+00:03:55.400 --> 00:03:57.270 align:start position:0%
+the first frame, six generated frames
+means<00:03:55.720><c> the</c><00:03:55.840><c> final</c><00:03:56.280><c> animation</c><00:03:56.880><c> will</c><00:03:57.040><c> have</c>
+
+00:03:57.270 --> 00:03:57.280 align:start position:0%
+means the final animation will have
+ 
+
+00:03:57.280 --> 00:03:59.230 align:start position:0%
+means the final animation will have
+seven<00:03:57.760><c> frames</c><00:03:58.280><c> total.</c><00:03:58.422><c> [music]</c><00:03:58.800><c> Now,</c><00:03:58.960><c> let's</c>
+
+00:03:59.230 --> 00:03:59.240 align:start position:0%
+seven frames total. [music] Now, let's
+ 
+
+00:03:59.240 --> 00:04:01.430 align:start position:0%
+seven frames total. [music] Now, let's
+generate<00:03:59.760><c> that</c><00:04:00.000><c> one,</c><00:04:00.240><c> too.</c><00:04:00.680><c> All</c><00:04:00.840><c> right,</c><00:04:01.160><c> let's</c>
+
+00:04:01.430 --> 00:04:01.440 align:start position:0%
+generate that one, too. All right, let's
+ 
+
+00:04:01.440 --> 00:04:03.630 align:start position:0%
+generate that one, too. All right, let's
+check<00:04:01.720><c> if</c><00:04:01.880><c> the</c><00:04:02.000><c> walk</c><00:04:02.360><c> finished.</c><00:04:03.080><c> Here's</c><00:04:03.440><c> the</c>
+
+00:04:03.630 --> 00:04:03.640 align:start position:0%
+check if the walk finished. Here's the
+ 
+
+00:04:03.640 --> 00:04:05.270 align:start position:0%
+check if the walk finished. Here's the
+east<00:04:04.000><c> walk</c><00:04:04.360><c> animation,</c><00:04:04.972><c> [music]</c><00:04:05.080><c> and</c>
+
+00:04:05.270 --> 00:04:05.280 align:start position:0%
+east walk animation, [music] and
+ 
+
+00:04:05.280 --> 00:04:07.590 align:start position:0%
+east walk animation, [music] and
+honestly,<00:04:05.960><c> it's</c><00:04:06.200><c> already</c><00:04:06.600><c> pretty</c><00:04:06.920><c> decent.</c>
+
+00:04:07.590 --> 00:04:07.600 align:start position:0%
+honestly, it's already pretty decent.
+ 
+
+00:04:07.600 --> 00:04:09.550 align:start position:0%
+honestly, it's already pretty decent.
+The<00:04:07.720><c> only</c><00:04:08.000><c> weird</c><00:04:08.320><c> thing</c><00:04:08.720><c> is</c><00:04:08.920><c> that</c><00:04:09.080><c> the</c><00:04:09.200><c> mouth</c>
+
+00:04:09.550 --> 00:04:09.560 align:start position:0%
+The only weird thing is that the mouth
+ 
+
+00:04:09.560 --> 00:04:11.630 align:start position:0%
+The only weird thing is that the mouth
+is<00:04:09.720><c> opening</c><00:04:10.240><c> a</c><00:04:10.280><c> little,</c><00:04:10.800><c> like</c><00:04:11.000><c> he's</c><00:04:11.160><c> trying</c><00:04:11.520><c> to</c>
+
+00:04:11.630 --> 00:04:11.640 align:start position:0%
+is opening a little, like he's trying to
+ 
+
+00:04:11.640 --> 00:04:13.870 align:start position:0%
+is opening a little, like he's trying to
+explain<00:04:12.200><c> the</c><00:04:12.320><c> lore</c><00:04:12.720><c> while</c><00:04:13.000><c> walking,</c><00:04:13.720><c> but</c>
+
+00:04:13.870 --> 00:04:13.880 align:start position:0%
+explain the lore while walking, but
+ 
+
+00:04:13.880 --> 00:04:16.509 align:start position:0%
+explain the lore while walking, but
+that's<00:04:14.160><c> an</c><00:04:14.280><c> easy</c><00:04:14.560><c> fix.</c><00:04:15.280><c> I'll</c><00:04:15.480><c> click</c><00:04:15.880><c> edit</c><00:04:16.320><c> in</c>
+
+00:04:16.509 --> 00:04:16.519 align:start position:0%
+that's an easy fix. I'll click edit in
+ 
+
+00:04:16.519 --> 00:04:18.949 align:start position:0%
+that's an easy fix. I'll click edit in
+Pixelorama,<00:04:17.600><c> open</c><00:04:17.920><c> it</c><00:04:18.079><c> up,</c><00:04:18.480><c> and</c><00:04:18.640><c> I'm</c><00:04:18.760><c> just</c>
+
+00:04:18.949 --> 00:04:18.959 align:start position:0%
+Pixelorama, open it up, and I'm just
+ 
+
+00:04:18.959 --> 00:04:21.229 align:start position:0%
+Pixelorama, open it up, and I'm just
+going<00:04:19.160><c> to</c><00:04:19.280><c> copy</c><00:04:19.760><c> and</c><00:04:20.040><c> paste</c><00:04:20.280><c> the</c><00:04:20.400><c> face</c><00:04:20.799><c> across</c>
+
+00:04:21.229 --> 00:04:21.239 align:start position:0%
+going to copy and paste the face across
+ 
+
+00:04:21.239 --> 00:04:23.390 align:start position:0%
+going to copy and paste the face across
+the<00:04:21.359><c> frames.</c><00:04:22.160><c> This</c><00:04:22.360><c> is</c><00:04:22.480><c> the</c><00:04:22.600><c> kind</c><00:04:22.880><c> of</c><00:04:22.960><c> small</c>
+
+00:04:23.390 --> 00:04:23.400 align:start position:0%
+the frames. This is the kind of small
+ 
+
+00:04:23.400 --> 00:04:26.110 align:start position:0%
+the frames. This is the kind of small
+cleanup<00:04:23.960><c> that</c><00:04:24.160><c> usually</c><00:04:24.560><c> takes</c><00:04:24.919><c> way</c><00:04:25.280><c> less</c><00:04:25.600><c> time</c>
+
+00:04:26.110 --> 00:04:26.120 align:start position:0%
+cleanup that usually takes way less time
+ 
+
+00:04:26.120 --> 00:04:27.870 align:start position:0%
+cleanup that usually takes way less time
+than<00:04:26.280><c> trying</c><00:04:26.600><c> to</c><00:04:26.720><c> regenerate</c><00:04:27.360><c> the</c><00:04:27.480><c> whole</c>
+
+00:04:27.870 --> 00:04:27.880 align:start position:0%
+than trying to regenerate the whole
+ 
+
+00:04:27.880 --> 00:04:30.030 align:start position:0%
+than trying to regenerate the whole
+animation<00:04:28.553><c> [music]</c><00:04:28.560><c> again.</c><00:04:29.080><c> The</c><00:04:29.200><c> body</c><00:04:29.560><c> motion</c>
+
+00:04:30.030 --> 00:04:30.040 align:start position:0%
+animation [music] again. The body motion
+ 
+
+00:04:30.040 --> 00:04:32.230 align:start position:0%
+animation [music] again. The body motion
+is<00:04:30.200><c> good,</c><00:04:30.840><c> the</c><00:04:30.960><c> legs</c><00:04:31.320><c> are</c><00:04:31.400><c> moving,</c><00:04:32.120><c> the</c>
+
+00:04:32.230 --> 00:04:32.240 align:start position:0%
+is good, the legs are moving, the
+ 
+
+00:04:32.240 --> 00:04:34.550 align:start position:0%
+is good, the legs are moving, the
+direction<00:04:32.800><c> reads</c><00:04:33.080><c> correctly,</c><00:04:33.880><c> so</c><00:04:34.080><c> instead</c><00:04:34.440><c> of</c>
+
+00:04:34.550 --> 00:04:34.560 align:start position:0%
+direction reads correctly, so instead of
+ 
+
+00:04:34.560 --> 00:04:36.550 align:start position:0%
+direction reads correctly, so instead of
+throwing<00:04:34.919><c> it</c><00:04:35.000><c> away,</c><00:04:35.680><c> I'm</c><00:04:35.800><c> just</c><00:04:36.040><c> fixing</c><00:04:36.480><c> the</c>
+
+00:04:36.550 --> 00:04:36.560 align:start position:0%
+throwing it away, I'm just fixing the
+ 
+
+00:04:36.560 --> 00:04:38.909 align:start position:0%
+throwing it away, I'm just fixing the
+part<00:04:36.960><c> that's</c><00:04:37.160><c> distracting.</c><00:04:38.200><c> And</c><00:04:38.560><c> there</c><00:04:38.800><c> we</c>
+
+00:04:38.909 --> 00:04:38.919 align:start position:0%
+part that's distracting. And there we
+ 
+
+00:04:38.919 --> 00:04:41.510 align:start position:0%
+part that's distracting. And there we
+go.<00:04:39.480><c> That's</c><00:04:39.720><c> a</c><00:04:39.800><c> much</c><00:04:40.160><c> cleaner</c><00:04:40.600><c> walk.</c><00:04:41.320><c> Now,</c>
+
+00:04:41.510 --> 00:04:41.520 align:start position:0%
+go. That's a much cleaner walk. Now,
+ 
+
+00:04:41.520 --> 00:04:43.870 align:start position:0%
+go. That's a much cleaner walk. Now,
+here<00:04:41.760><c> we</c><00:04:41.919><c> have</c><00:04:42.160><c> the</c><00:04:42.240><c> southeast</c><00:04:43.120><c> and</c><00:04:43.280><c> northeast</c>
+
+00:04:43.870 --> 00:04:43.880 align:start position:0%
+here we have the southeast and northeast
+ 
+
+00:04:43.880 --> 00:04:46.430 align:start position:0%
+here we have the southeast and northeast
+versions.<00:04:44.720><c> These</c><00:04:44.919><c> are</c><00:04:45.040><c> also</c><00:04:45.440><c> usable,</c><00:04:46.120><c> so</c><00:04:46.280><c> I'd</c>
+
+00:04:46.430 --> 00:04:46.440 align:start position:0%
+versions. These are also usable, so I'd
+ 
+
+00:04:46.440 --> 00:04:48.790 align:start position:0%
+versions. These are also usable, so I'd
+probably<00:04:46.840><c> do</c><00:04:47.000><c> the</c><00:04:47.080><c> same</c><00:04:47.440><c> cleanup</c><00:04:47.880><c> pass</c><00:04:48.280><c> there.</c>
+
+00:04:48.790 --> 00:04:48.800 align:start position:0%
+probably do the same cleanup pass there.
+ 
+
+00:04:48.800 --> 00:04:50.990 align:start position:0%
+probably do the same cleanup pass there.
+The<00:04:48.919><c> south</c><00:04:49.360><c> one</c><00:04:49.640><c> is</c><00:04:49.800><c> a</c><00:04:49.880><c> little</c><00:04:50.200><c> too</c><00:04:50.400><c> quick</c>
+
+00:04:50.990 --> 00:04:51.000 align:start position:0%
+The south one is a little too quick
+ 
+
+00:04:51.000 --> 00:04:52.750 align:start position:0%
+The south one is a little too quick
+compared<00:04:51.280><c> to</c><00:04:51.400><c> the</c><00:04:51.560><c> others.</c><00:04:52.160><c> So,</c><00:04:52.320><c> for</c><00:04:52.480><c> that</c>
+
+00:04:52.750 --> 00:04:52.760 align:start position:0%
+compared to the others. So, for that
+ 
+
+00:04:52.760 --> 00:04:55.270 align:start position:0%
+compared to the others. So, for that
+one,<00:04:53.120><c> I'd</c><00:04:53.320><c> probably</c><00:04:53.919><c> regenerate</c><00:04:54.640><c> it.</c><00:04:55.040><c> That's</c>
+
+00:04:55.270 --> 00:04:55.280 align:start position:0%
+one, I'd probably regenerate it. That's
+ 
+
+00:04:55.280 --> 00:04:57.230 align:start position:0%
+one, I'd probably regenerate it. That's
+also<00:04:55.600><c> part</c><00:04:55.880><c> of</c><00:04:55.919><c> the</c><00:04:56.040><c> workflow.</c><00:04:56.880><c> You</c><00:04:56.960><c> don't</c>
+
+00:04:57.230 --> 00:04:57.240 align:start position:0%
+also part of the workflow. You don't
+ 
+
+00:04:57.240 --> 00:04:59.630 align:start position:0%
+also part of the workflow. You don't
+need<00:04:57.520><c> every</c><00:04:57.880><c> generation</c><00:04:58.640><c> to</c><00:04:58.760><c> be</c><00:04:58.919><c> final.</c>
+
+00:04:59.630 --> 00:04:59.640 align:start position:0%
+need every generation to be final.
+ 
+
+00:04:59.640 --> 00:05:01.990 align:start position:0%
+need every generation to be final.
+Sometimes<00:05:00.280><c> one</c><00:05:00.520><c> direction</c><00:05:01.040><c> is</c><00:05:01.160><c> great,</c><00:05:01.800><c> one</c>
+
+00:05:01.990 --> 00:05:02.000 align:start position:0%
+Sometimes one direction is great, one
+ 
+
+00:05:02.000 --> 00:05:04.230 align:start position:0%
+Sometimes one direction is great, one
+needs<00:05:02.280><c> a</c><00:05:02.360><c> tiny</c><00:05:02.800><c> cleanup,</c><00:05:03.480><c> and</c><00:05:03.640><c> one</c><00:05:03.800><c> is</c><00:05:03.919><c> better</c>
+
+00:05:04.230 --> 00:05:04.240 align:start position:0%
+needs a tiny cleanup, and one is better
+ 
+
+00:05:04.240 --> 00:05:05.230 align:start position:0%
+needs a tiny cleanup, and one is better
+to<00:05:04.440><c> reroll.</c><00:05:04.578><c> [music]</c>
+
+00:05:05.230 --> 00:05:05.240 align:start position:0%
+to reroll. [music]
+ 
+
+00:05:05.240 --> 00:05:06.750 align:start position:0%
+to reroll. [music]
+The<00:05:05.360><c> useful</c><00:05:05.800><c> thing</c><00:05:06.200><c> is</c><00:05:06.360><c> that</c><00:05:06.520><c> if</c><00:05:06.640><c> your</c>
+
+00:05:06.750 --> 00:05:06.760 align:start position:0%
+The useful thing is that if your
+ 
+
+00:05:06.760 --> 00:05:08.670 align:start position:0%
+The useful thing is that if your
+character<00:05:07.240><c> doesn't</c><00:05:07.600><c> have</c><00:05:07.760><c> different</c><00:05:08.160><c> details</c>
+
+00:05:08.670 --> 00:05:08.680 align:start position:0%
+character doesn't have different details
+ 
+
+00:05:08.680 --> 00:05:11.070 align:start position:0%
+character doesn't have different details
+on<00:05:08.840><c> each</c><00:05:09.040><c> side,</c><00:05:09.680><c> like</c><00:05:09.840><c> a</c><00:05:09.919><c> sword</c><00:05:10.400><c> only</c><00:05:10.680><c> on</c><00:05:10.840><c> one</c>
+
+00:05:11.070 --> 00:05:11.080 align:start position:0%
+on each side, like a sword only on one
+ 
+
+00:05:11.080 --> 00:05:13.870 align:start position:0%
+on each side, like a sword only on one
+hip<00:05:11.560><c> or</c><00:05:11.680><c> a</c><00:05:11.760><c> shoulder</c><00:05:12.200><c> pad</c><00:05:12.600><c> only</c><00:05:12.840><c> on</c><00:05:13.000><c> one</c><00:05:13.240><c> side,</c>
+
+00:05:13.870 --> 00:05:13.880 align:start position:0%
+hip or a shoulder pad only on one side,
+ 
+
+00:05:13.880 --> 00:05:16.150 align:start position:0%
+hip or a shoulder pad only on one side,
+you<00:05:14.000><c> can</c><00:05:14.200><c> mirror</c><00:05:14.600><c> some</c><00:05:14.800><c> of</c><00:05:14.919><c> these</c><00:05:15.120><c> animations.</c>
+
+00:05:16.150 --> 00:05:16.160 align:start position:0%
+you can mirror some of these animations.
+ 
+
+00:05:16.160 --> 00:05:18.150 align:start position:0%
+you can mirror some of these animations.
+So,<00:05:16.400><c> for</c><00:05:16.600><c> a</c><00:05:16.680><c> basic</c><00:05:17.120><c> character,</c><00:05:17.880><c> you</c><00:05:18.000><c> can</c>
+
+00:05:18.150 --> 00:05:18.160 align:start position:0%
+So, for a basic character, you can
+ 
+
+00:05:18.160 --> 00:05:21.230 align:start position:0%
+So, for a basic character, you can
+generate<00:05:18.680><c> southeast,</c><00:05:19.560><c> east,</c><00:05:20.120><c> and</c><00:05:20.280><c> northeast,</c>
+
+00:05:21.230 --> 00:05:21.240 align:start position:0%
+generate southeast, east, and northeast,
+ 
+
+00:05:21.240 --> 00:05:23.110 align:start position:0%
+generate southeast, east, and northeast,
+then<00:05:21.360><c> mirror</c><00:05:21.720><c> those</c><00:05:22.120><c> for</c><00:05:22.240><c> the</c><00:05:22.360><c> west-facing</c>
+
+00:05:23.110 --> 00:05:23.120 align:start position:0%
+then mirror those for the west-facing
+ 
+
+00:05:23.120 --> 00:05:25.510 align:start position:0%
+then mirror those for the west-facing
+directions.<00:05:24.080><c> After</c><00:05:24.400><c> that,</c><00:05:24.919><c> you</c><00:05:25.040><c> only</c><00:05:25.280><c> need</c>
+
+00:05:25.510 --> 00:05:25.520 align:start position:0%
+directions. After that, you only need
+ 
+
+00:05:25.520 --> 00:05:27.950 align:start position:0%
+directions. After that, you only need
+south<00:05:26.080><c> and</c><00:05:26.240><c> north.</c><00:05:26.880><c> That</c><00:05:27.040><c> makes</c><00:05:27.280><c> a</c><00:05:27.360><c> full</c>
+
+00:05:27.950 --> 00:05:27.960 align:start position:0%
+south and north. That makes a full
+ 
+
+00:05:27.960 --> 00:05:30.590 align:start position:0%
+south and north. That makes a full
+eight-direction<00:05:28.800><c> walk</c><00:05:29.120><c> cycle</c><00:05:29.640><c> way</c><00:05:29.960><c> faster</c><00:05:30.480><c> to</c>
+
+00:05:30.590 --> 00:05:30.600 align:start position:0%
+eight-direction walk cycle way faster to
+ 
+
+00:05:30.600 --> 00:05:32.790 align:start position:0%
+eight-direction walk cycle way faster to
+build.<00:05:31.240><c> And</c><00:05:31.360><c> here's</c><00:05:31.680><c> the</c><00:05:31.760><c> fighting</c><00:05:32.240><c> idle.</c>
+
+00:05:32.790 --> 00:05:32.800 align:start position:0%
+build. And here's the fighting idle.
+ 
+
+00:05:32.800 --> 00:05:34.750 align:start position:0%
+build. And here's the fighting idle.
+This<00:05:33.000><c> one</c><00:05:33.160><c> is</c><00:05:33.280><c> pretty</c><00:05:33.560><c> funny.</c><00:05:34.160><c> He's</c><00:05:34.440><c> really</c>
+
+00:05:34.750 --> 00:05:34.760 align:start position:0%
+This one is pretty funny. He's really
+ 
+
+00:05:34.760 --> 00:05:36.870 align:start position:0%
+This one is pretty funny. He's really
+ready<00:05:35.040><c> to</c><00:05:35.160><c> fight.</c><00:05:35.760><c> But</c><00:05:35.880><c> again,</c><00:05:36.280><c> the</c><00:05:36.400><c> important</c>
+
+00:05:36.870 --> 00:05:36.880 align:start position:0%
+ready to fight. But again, the important
+ 
+
+00:05:36.880 --> 00:05:38.510 align:start position:0%
+ready to fight. But again, the important
+thing<00:05:37.240><c> is</c><00:05:37.400><c> that</c><00:05:37.520><c> we</c><00:05:37.640><c> didn't</c><00:05:37.960><c> start</c><00:05:38.280><c> from</c><00:05:38.440><c> a</c>
+
+00:05:38.510 --> 00:05:38.520 align:start position:0%
+thing is that we didn't start from a
+ 
+
+00:05:38.520 --> 00:05:40.990 align:start position:0%
+thing is that we didn't start from a
+neutral<00:05:39.000><c> standing</c><00:05:39.520><c> pose.</c><00:05:40.240><c> We</c><00:05:40.360><c> started</c><00:05:40.760><c> from</c><00:05:40.960><c> a</c>
+
+00:05:40.990 --> 00:05:41.000 align:start position:0%
+neutral standing pose. We started from a
+ 
+
+00:05:41.000 --> 00:05:43.190 align:start position:0%
+neutral standing pose. We started from a
+fighting<00:05:41.440><c> pose,</c><00:05:42.040><c> so</c><00:05:42.200><c> the</c><00:05:42.360><c> animation</c><00:05:42.960><c> has</c><00:05:43.160><c> a</c>
+
+00:05:43.190 --> 00:05:43.200 align:start position:0%
+fighting pose, so the animation has a
+ 
+
+00:05:43.200 --> 00:05:45.550 align:start position:0%
+fighting pose, so the animation has a
+much<00:05:43.560><c> better</c><00:05:43.840><c> foundation.</c><00:05:44.840><c> All</c><00:05:45.040><c> right,</c>
+
+00:05:45.550 --> 00:05:45.560 align:start position:0%
+much better foundation. All right,
+ 
+
+00:05:45.560 --> 00:05:47.430 align:start position:0%
+much better foundation. All right,
+that's<00:05:45.800><c> enough</c><00:05:46.120><c> for</c><00:05:46.280><c> a</c><00:05:46.320><c> normal</c><00:05:46.840><c> humanoid</c>
+
+00:05:47.430 --> 00:05:47.440 align:start position:0%
+that's enough for a normal humanoid
+ 
+
+00:05:47.440 --> 00:05:49.630 align:start position:0%
+that's enough for a normal humanoid
+character.<00:05:48.200><c> Now,</c><00:05:48.400><c> let's</c><00:05:48.680><c> test</c><00:05:49.040><c> animals</c>
+
+00:05:49.630 --> 00:05:49.640 align:start position:0%
+character. Now, let's test animals
+ 
+
+00:05:49.640 --> 00:05:52.030 align:start position:0%
+character. Now, let's test animals
+because<00:05:50.000><c> yes,</c><00:05:50.680><c> states</c><00:05:51.160><c> work</c><00:05:51.360><c> with</c><00:05:51.520><c> animals,</c>
+
+00:05:52.030 --> 00:05:52.040 align:start position:0%
+because yes, states work with animals,
+ 
+
+00:05:52.040 --> 00:05:54.550 align:start position:0%
+because yes, states work with animals,
+too.<00:05:52.560><c> Here</c><00:05:52.840><c> I</c><00:05:52.920><c> have</c><00:05:53.120><c> this</c><00:05:53.320><c> cow</c><00:05:53.680><c> character.</c>
+
+00:05:54.550 --> 00:05:54.560 align:start position:0%
+too. Here I have this cow character.
+ 
+
+00:05:54.560 --> 00:05:56.510 align:start position:0%
+too. Here I have this cow character.
+These<00:05:54.800><c> older</c><00:05:55.160><c> walk</c><00:05:55.520><c> frames</c><00:05:56.000><c> were</c><00:05:56.120><c> made</c><00:05:56.360><c> with</c>
+
+00:05:56.510 --> 00:05:56.520 align:start position:0%
+These older walk frames were made with
+ 
+
+00:05:56.520 --> 00:05:58.750 align:start position:0%
+These older walk frames were made with
+skeletons,<00:05:57.400><c> and</c><00:05:57.520><c> they</c><00:05:57.640><c> still</c><00:05:58.000><c> work.</c><00:05:58.560><c> Don't</c>
+
+00:05:58.750 --> 00:05:58.760 align:start position:0%
+skeletons, and they still work. Don't
+ 
+
+00:05:58.760 --> 00:06:00.830 align:start position:0%
+skeletons, and they still work. Don't
+get<00:05:58.920><c> me</c><00:05:59.040><c> wrong,</c><00:05:59.600><c> but</c><00:05:59.760><c> states</c><00:06:00.160><c> give</c><00:06:00.360><c> us</c><00:06:00.480><c> another</c>
+
+00:06:00.830 --> 00:06:00.840 align:start position:0%
+get me wrong, but states give us another
+ 
+
+00:06:00.840 --> 00:06:03.110 align:start position:0%
+get me wrong, but states give us another
+way<00:06:01.000><c> to</c><00:06:01.160><c> approach</c><00:06:01.600><c> this,</c><00:06:02.160><c> especially</c><00:06:02.840><c> when</c><00:06:03.000><c> we</c>
+
+00:06:03.110 --> 00:06:03.120 align:start position:0%
+way to approach this, especially when we
+ 
+
+00:06:03.120 --> 00:06:05.470 align:start position:0%
+way to approach this, especially when we
+want<00:06:03.400><c> poses</c><00:06:03.960><c> that</c><00:06:04.120><c> aren't</c><00:06:04.360><c> just</c><00:06:04.600><c> walking.</c><00:06:05.320><c> So,</c>
+
+00:06:05.470 --> 00:06:05.480 align:start position:0%
+want poses that aren't just walking. So,
+ 
+
+00:06:05.480 --> 00:06:07.990 align:start position:0%
+want poses that aren't just walking. So,
+I'm<00:06:05.600><c> going</c><00:06:05.840><c> to</c><00:06:05.920><c> create</c><00:06:06.360><c> a</c><00:06:06.440><c> new</c><00:06:06.760><c> state.</c><00:06:07.440><c> First,</c>
+
+00:06:07.990 --> 00:06:08.000 align:start position:0%
+I'm going to create a new state. First,
+ 
+
+00:06:08.000 --> 00:06:09.990 align:start position:0%
+I'm going to create a new state. First,
+let's<00:06:08.240><c> try</c><00:06:08.440><c> something</c><00:06:08.880><c> more</c><00:06:09.080><c> specific,</c>
+
+00:06:09.990 --> 00:06:10.000 align:start position:0%
+let's try something more specific,
+ 
+
+00:06:10.000 --> 00:06:12.350 align:start position:0%
+let's try something more specific,
+eating<00:06:10.400><c> from</c><00:06:10.600><c> the</c><00:06:10.720><c> floor.</c><00:06:11.440><c> Next,</c><00:06:11.800><c> of</c><00:06:11.920><c> course,</c>
+
+00:06:12.350 --> 00:06:12.360 align:start position:0%
+eating from the floor. Next, of course,
+ 
+
+00:06:12.360 --> 00:06:14.190 align:start position:0%
+eating from the floor. Next, of course,
+let's<00:06:12.600><c> do</c><00:06:13.200><c> mid-walk,</c><00:06:13.354><c> [music]</c>
+
+00:06:14.190 --> 00:06:14.200 align:start position:0%
+let's do mid-walk, [music]
+ 
+
+00:06:14.200 --> 00:06:16.550 align:start position:0%
+let's do mid-walk, [music]
+and<00:06:14.320><c> then</c><00:06:14.520><c> one</c><00:06:14.720><c> more,</c><00:06:15.360><c> laying</c><00:06:15.720><c> down.</c><00:06:16.360><c> Now,</c>
+
+00:06:16.550 --> 00:06:16.560 align:start position:0%
+and then one more, laying down. Now,
+ 
+
+00:06:16.560 --> 00:06:18.470 align:start position:0%
+and then one more, laying down. Now,
+let's<00:06:16.800><c> check</c><00:06:17.040><c> them</c><00:06:17.240><c> out.</c><00:06:17.680><c> Here's</c><00:06:17.960><c> the</c><00:06:18.080><c> cow</c>
+
+00:06:18.470 --> 00:06:18.480 align:start position:0%
+let's check them out. Here's the cow
+ 
+
+00:06:18.480 --> 00:06:20.430 align:start position:0%
+let's check them out. Here's the cow
+eating<00:06:18.760><c> from</c><00:06:18.919><c> the</c><00:06:19.040><c> floor,</c><00:06:19.720><c> and</c><00:06:19.880><c> yeah,</c><00:06:20.200><c> it's</c>
+
+00:06:20.430 --> 00:06:20.440 align:start position:0%
+eating from the floor, and yeah, it's
+ 
+
+00:06:20.440 --> 00:06:22.830 align:start position:0%
+eating from the floor, and yeah, it's
+eating<00:06:20.680><c> grass,</c><00:06:21.320><c> which</c><00:06:21.520><c> is</c><00:06:21.640><c> pretty</c><00:06:21.919><c> nice.</c><00:06:22.640><c> This</c>
+
+00:06:22.830 --> 00:06:22.840 align:start position:0%
+eating grass, which is pretty nice. This
+ 
+
+00:06:22.840 --> 00:06:25.150 align:start position:0%
+eating grass, which is pretty nice. This
+is<00:06:23.000><c> definitely</c><00:06:23.600><c> usable.</c><00:06:24.320><c> I'd</c><00:06:24.520><c> probably</c><00:06:24.880><c> clean</c>
+
+00:06:25.150 --> 00:06:25.160 align:start position:0%
+is definitely usable. I'd probably clean
+ 
+
+00:06:25.160 --> 00:06:27.270 align:start position:0%
+is definitely usable. I'd probably clean
+up<00:06:25.280><c> the</c><00:06:25.400><c> north-facing</c><00:06:26.160><c> one,</c><00:06:26.680><c> and</c><00:06:26.840><c> I'd</c><00:06:26.960><c> get</c><00:06:27.120><c> rid</c>
+
+00:06:27.270 --> 00:06:27.280 align:start position:0%
+up the north-facing one, and I'd get rid
+ 
+
+00:06:27.280 --> 00:06:29.270 align:start position:0%
+up the north-facing one, and I'd get rid
+of<00:06:27.400><c> the</c><00:06:27.520><c> extra</c><00:06:27.840><c> grass</c><00:06:28.400><c> if</c><00:06:28.600><c> I</c><00:06:28.680><c> wanted</c><00:06:28.960><c> this</c><00:06:29.160><c> to</c>
+
+00:06:29.270 --> 00:06:29.280 align:start position:0%
+of the extra grass if I wanted this to
+ 
+
+00:06:29.280 --> 00:06:31.430 align:start position:0%
+of the extra grass if I wanted this to
+work<00:06:29.560><c> as</c><00:06:29.680><c> a</c><00:06:29.760><c> clean</c><00:06:30.160><c> game</c><00:06:30.480><c> sprite,</c><00:06:31.120><c> but</c><00:06:31.240><c> as</c><00:06:31.400><c> a</c>
+
+00:06:31.430 --> 00:06:31.440 align:start position:0%
+work as a clean game sprite, but as a
+ 
+
+00:06:31.440 --> 00:06:33.790 align:start position:0%
+work as a clean game sprite, but as a
+state,<00:06:32.080><c> this</c><00:06:32.240><c> is</c><00:06:32.400><c> already</c><00:06:32.720><c> doing</c><00:06:33.000><c> the</c><00:06:33.080><c> job.</c>
+
+00:06:33.790 --> 00:06:33.800 align:start position:0%
+state, this is already doing the job.
+ 
+
+00:06:33.800 --> 00:06:35.590 align:start position:0%
+state, this is already doing the job.
+Here's<00:06:34.080><c> the</c><00:06:34.160><c> mid-walk</c><00:06:34.760><c> state.</c><00:06:35.320><c> This</c><00:06:35.480><c> is</c>
+
+00:06:35.590 --> 00:06:35.600 align:start position:0%
+Here's the mid-walk state. This is
+ 
+
+00:06:35.600 --> 00:06:37.390 align:start position:0%
+Here's the mid-walk state. This is
+exactly<00:06:36.240><c> the</c><00:06:36.360><c> kind</c><00:06:36.600><c> of</c><00:06:36.680><c> thing</c><00:06:36.919><c> I'd</c><00:06:37.080><c> want</c>
+
+00:06:37.390 --> 00:06:37.400 align:start position:0%
+exactly the kind of thing I'd want
+ 
+
+00:06:37.400 --> 00:06:39.544 align:start position:0%
+exactly the kind of thing I'd want
+before<00:06:37.720><c> generating</c><00:06:38.280><c> a</c><00:06:38.360><c> walking</c><00:06:38.840><c> animation.</c>
+
+00:06:39.544 --> 00:06:39.554 align:start position:0%
+before generating a walking animation.
+ 
+
+00:06:39.554 --> 00:06:41.750 align:start position:0%
+before generating a walking animation.
+[music]<00:06:39.760><c> The</c><00:06:39.880><c> legs</c><00:06:40.320><c> already</c><00:06:40.680><c> have</c><00:06:40.880><c> motion,</c><00:06:41.600><c> so</c>
+
+00:06:41.750 --> 00:06:41.760 align:start position:0%
+[music] The legs already have motion, so
+ 
+
+00:06:41.760 --> 00:06:43.750 align:start position:0%
+[music] The legs already have motion, so
+the<00:06:41.919><c> animation</c><00:06:42.520><c> tool</c><00:06:42.840><c> has</c><00:06:43.040><c> a</c><00:06:43.080><c> much</c><00:06:43.480><c> better</c>
+
+00:06:43.750 --> 00:06:43.760 align:start position:0%
+the animation tool has a much better
+ 
+
+00:06:43.760 --> 00:06:45.550 align:start position:0%
+the animation tool has a much better
+first<00:06:44.120><c> frame</c><00:06:44.139><c> [music]</c><00:06:44.440><c> to</c><00:06:44.560><c> work</c><00:06:44.840><c> from.</c><00:06:45.440><c> And</c>
+
+00:06:45.550 --> 00:06:45.560 align:start position:0%
+first frame [music] to work from. And
+ 
+
+00:06:45.560 --> 00:06:47.510 align:start position:0%
+first frame [music] to work from. And
+here's<00:06:45.840><c> the</c><00:06:45.960><c> laying</c><00:06:46.240><c> down</c><00:06:46.600><c> one.</c><00:06:47.080><c> This</c><00:06:47.320><c> might</c>
+
+00:06:47.510 --> 00:06:47.520 align:start position:0%
+here's the laying down one. This might
+ 
+
+00:06:47.520 --> 00:06:49.790 align:start position:0%
+here's the laying down one. This might
+be<00:06:47.640><c> my</c><00:06:47.800><c> favorite.</c><00:06:48.560><c> Look</c><00:06:48.720><c> at</c><00:06:48.840><c> that.</c><00:06:49.360><c> It's</c><00:06:49.520><c> still</c>
+
+00:06:49.790 --> 00:06:49.800 align:start position:0%
+be my favorite. Look at that. It's still
+ 
+
+00:06:49.800 --> 00:06:52.030 align:start position:0%
+be my favorite. Look at that. It's still
+clearly<00:06:50.240><c> the</c><00:06:50.360><c> same</c><00:06:50.720><c> cow,</c><00:06:51.320><c> but</c><00:06:51.480><c> now</c><00:06:51.680><c> we</c><00:06:51.840><c> have</c><00:06:51.960><c> a</c>
+
+00:06:52.030 --> 00:06:52.040 align:start position:0%
+clearly the same cow, but now we have a
+ 
+
+00:06:52.040 --> 00:06:54.150 align:start position:0%
+clearly the same cow, but now we have a
+completely<00:06:52.640><c> different</c><00:06:53.000><c> pose,</c><00:06:53.760><c> and</c><00:06:53.919><c> that</c>
+
+00:06:54.150 --> 00:06:54.160 align:start position:0%
+completely different pose, and that
+ 
+
+00:06:54.160 --> 00:06:56.750 align:start position:0%
+completely different pose, and that
+opens<00:06:54.520><c> up</c><00:06:54.680><c> some</c><00:06:54.960><c> really</c><00:06:55.280><c> useful</c><00:06:55.760><c> workflows.</c>
+
+00:06:56.750 --> 00:06:56.760 align:start position:0%
+opens up some really useful workflows.
+ 
+
+00:06:56.760 --> 00:06:59.110 align:start position:0%
+opens up some really useful workflows.
+Now,<00:06:57.160><c> let's</c><00:06:57.440><c> get</c><00:06:57.640><c> a</c><00:06:57.680><c> little</c><00:06:57.919><c> more</c><00:06:58.160><c> creative.</c>
+
+00:06:59.110 --> 00:06:59.120 align:start position:0%
+Now, let's get a little more creative.
+ 
+
+00:06:59.120 --> 00:07:01.150 align:start position:0%
+Now, let's get a little more creative.
+With<00:06:59.280><c> this</c><00:06:59.520><c> laying</c><00:06:59.840><c> down</c><00:07:00.160><c> frame,</c><00:07:00.800><c> I'm</c><00:07:00.919><c> going</c>
+
+00:07:01.150 --> 00:07:01.160 align:start position:0%
+With this laying down frame, I'm going
+ 
+
+00:07:01.160 --> 00:07:03.670 align:start position:0%
+With this laying down frame, I'm going
+to<00:07:01.280><c> click</c><00:07:01.800><c> add</c><00:07:02.080><c> your</c><00:07:02.240><c> first</c><00:07:02.640><c> animation.</c><00:07:03.480><c> I'll</c>
+
+00:07:03.670 --> 00:07:03.680 align:start position:0%
+to click add your first animation. I'll
+ 
+
+00:07:03.680 --> 00:07:06.430 align:start position:0%
+to click add your first animation. I'll
+choose<00:07:04.120><c> custom</c><00:07:04.444><c> [music]</c><00:07:04.680><c> animation</c><00:07:05.360><c> V3,</c><00:07:06.280><c> and</c>
+
+00:07:06.430 --> 00:07:06.440 align:start position:0%
+choose custom [music] animation V3, and
+ 
+
+00:07:06.440 --> 00:07:08.230 align:start position:0%
+choose custom [music] animation V3, and
+then<00:07:06.560><c> I'm</c><00:07:06.680><c> going</c><00:07:06.919><c> to</c><00:07:07.040><c> open</c><00:07:07.400><c> the</c><00:07:07.560><c> advanced</c>
+
+00:07:08.230 --> 00:07:08.240 align:start position:0%
+then I'm going to open the advanced
+ 
+
+00:07:08.240 --> 00:07:11.430 align:start position:0%
+then I'm going to open the advanced
+options.<00:07:09.120><c> Here,</c><00:07:09.440><c> we</c><00:07:09.600><c> can</c><00:07:09.800><c> use</c><00:07:10.160><c> interpolation.</c>
+
+00:07:11.430 --> 00:07:11.440 align:start position:0%
+options. Here, we can use interpolation.
+ 
+
+00:07:11.440 --> 00:07:13.670 align:start position:0%
+options. Here, we can use interpolation.
+Interpolation<00:07:12.360><c> basically</c><00:07:12.880><c> means</c><00:07:13.360><c> we</c><00:07:13.480><c> give</c>
+
+00:07:13.670 --> 00:07:13.680 align:start position:0%
+Interpolation basically means we give
+ 
+
+00:07:13.680 --> 00:07:15.670 align:start position:0%
+Interpolation basically means we give
+the<00:07:13.840><c> tool</c><00:07:14.240><c> a</c><00:07:14.320><c> start</c><00:07:14.800><c> frame</c><00:07:14.924><c> [music]</c><00:07:15.360><c> and</c><00:07:15.520><c> an</c>
+
+00:07:15.670 --> 00:07:15.680 align:start position:0%
+the tool a start frame [music] and an
+ 
+
+00:07:15.680 --> 00:07:18.030 align:start position:0%
+the tool a start frame [music] and an
+end<00:07:15.919><c> frame,</c><00:07:16.440><c> and</c><00:07:16.560><c> it</c><00:07:16.680><c> generates</c><00:07:17.240><c> the</c><00:07:17.360><c> movement</c>
+
+00:07:18.030 --> 00:07:18.040 align:start position:0%
+end frame, and it generates the movement
+ 
+
+00:07:18.040 --> 00:07:20.470 align:start position:0%
+end frame, and it generates the movement
+in<00:07:18.160><c> between.</c><00:07:18.919><c> So,</c><00:07:19.080><c> in</c><00:07:19.200><c> this</c><00:07:19.440><c> case,</c><00:07:19.960><c> the</c><00:07:20.120><c> laying</c>
+
+00:07:20.470 --> 00:07:20.480 align:start position:0%
+in between. So, in this case, the laying
+ 
+
+00:07:20.480 --> 00:07:22.909 align:start position:0%
+in between. So, in this case, the laying
+down<00:07:20.800><c> state</c><00:07:21.360><c> is</c><00:07:21.560><c> the</c><00:07:21.680><c> start</c><00:07:22.120><c> frame,</c><00:07:22.680><c> and</c><00:07:22.840><c> the</c>
+
+00:07:22.909 --> 00:07:22.919 align:start position:0%
+down state is the start frame, and the
+ 
+
+00:07:22.919 --> 00:07:25.409 align:start position:0%
+down state is the start frame, and the
+normal<00:07:23.440><c> standing</c><00:07:24.120><c> idle</c><00:07:24.440><c> frame</c><00:07:24.960><c> is</c><00:07:25.160><c> the</c><00:07:25.400><c> end</c>
+
+00:07:25.409 --> 00:07:25.419 align:start position:0%
+normal standing idle frame is the end
+ 
+
+00:07:25.419 --> 00:07:28.470 align:start position:0%
+normal standing idle frame is the end
+[music]<00:07:25.640><c> frame.</c><00:07:26.200><c> Then,</c><00:07:26.600><c> I'll</c><00:07:26.800><c> prompt,</c><00:07:27.880><c> "Stand</c>
+
+00:07:28.470 --> 00:07:28.480 align:start position:0%
+[music] frame. Then, I'll prompt, "Stand
+ 
+
+00:07:28.480 --> 00:07:31.070 align:start position:0%
+[music] frame. Then, I'll prompt, "Stand
+up."<00:07:29.000><c> I'll</c><00:07:29.160><c> enhance</c><00:07:29.640><c> the</c><00:07:29.760><c> prompt,</c><00:07:30.520><c> generate</c>
+
+00:07:31.070 --> 00:07:31.080 align:start position:0%
+up." I'll enhance the prompt, generate
+ 
+
+00:07:31.080 --> 00:07:33.190 align:start position:0%
+up." I'll enhance the prompt, generate
+it,<00:07:31.400><c> and</c><00:07:31.560><c> now</c><00:07:31.840><c> we</c><00:07:32.000><c> have</c><00:07:32.160><c> a</c><00:07:32.240><c> standing</c><00:07:32.880><c> up</c>
+
+00:07:33.190 --> 00:07:33.200 align:start position:0%
+it, and now we have a standing up
+ 
+
+00:07:33.200 --> 00:07:35.909 align:start position:0%
+it, and now we have a standing up
+animation.<00:07:34.120><c> Look</c><00:07:34.360><c> at</c><00:07:34.520><c> that.</c><00:07:35.080><c> That's</c><00:07:35.280><c> exactly</c>
+
+00:07:35.909 --> 00:07:35.919 align:start position:0%
+animation. Look at that. That's exactly
+ 
+
+00:07:35.919 --> 00:07:38.470 align:start position:0%
+animation. Look at that. That's exactly
+why<00:07:36.120><c> states</c><00:07:36.680><c> are</c><00:07:36.840><c> so</c><00:07:37.160><c> useful.</c><00:07:37.840><c> We're</c><00:07:37.960><c> not</c><00:07:38.240><c> just</c>
+
+00:07:38.470 --> 00:07:38.480 align:start position:0%
+why states are so useful. We're not just
+ 
+
+00:07:38.480 --> 00:07:41.230 align:start position:0%
+why states are so useful. We're not just
+making<00:07:38.919><c> loops.</c><00:07:39.720><c> We</c><00:07:39.840><c> can</c><00:07:40.000><c> and</c><00:07:40.240><c> transitions</c>
+
+00:07:41.230 --> 00:07:41.240 align:start position:0%
+making loops. We can and transitions
+ 
+
+00:07:41.240 --> 00:07:42.710 align:start position:0%
+making loops. We can and transitions
+between<00:07:41.760><c> poses.</c><00:07:41.780><c> [music]</c>
+
+00:07:42.710 --> 00:07:42.720 align:start position:0%
+between poses. [music]
+ 
+
+00:07:42.720 --> 00:07:45.430 align:start position:0%
+between poses. [music]
+The<00:07:42.840><c> character</c><00:07:43.320><c> can</c><00:07:43.560><c> lay</c><00:07:43.760><c> down,</c><00:07:44.440><c> stand</c><00:07:44.960><c> up,</c>
+
+00:07:45.430 --> 00:07:45.440 align:start position:0%
+The character can lay down, stand up,
+ 
+
+00:07:45.440 --> 00:07:49.870 align:start position:0%
+The character can lay down, stand up,
+sit,<00:07:46.200><c> attack,</c><00:07:47.040><c> recover,</c><00:07:47.960><c> react,</c><00:07:48.840><c> transform,</c>
+
+00:07:49.870 --> 00:07:49.880 align:start position:0%
+sit, attack, recover, react, transform,
+ 
+
+00:07:49.880 --> 00:07:51.870 align:start position:0%
+sit, attack, recover, react, transform,
+whatever<00:07:50.240><c> makes</c><00:07:50.560><c> sense</c><00:07:50.880><c> for</c><00:07:51.000><c> your</c><00:07:51.200><c> game.</c><00:07:51.760><c> I'm</c>
+
+00:07:51.870 --> 00:07:51.880 align:start position:0%
+whatever makes sense for your game. I'm
+ 
+
+00:07:51.880 --> 00:07:53.470 align:start position:0%
+whatever makes sense for your game. I'm
+going<00:07:52.080><c> to</c><00:07:52.160><c> try</c><00:07:52.400><c> the</c><00:07:52.520><c> same</c><00:07:52.840><c> thing</c><00:07:53.200><c> with</c><00:07:53.360><c> the</c>
+
+00:07:53.470 --> 00:07:53.480 align:start position:0%
+going to try the same thing with the
+ 
+
+00:07:53.480 --> 00:07:54.870 align:start position:0%
+going to try the same thing with the
+southeast<00:07:54.120><c> direction,</c><00:07:54.225><c> [music]</c>
+
+00:07:54.870 --> 00:07:54.880 align:start position:0%
+southeast direction, [music]
+ 
+
+00:07:54.880 --> 00:07:57.150 align:start position:0%
+southeast direction, [music]
+just<00:07:55.120><c> for</c><00:07:55.240><c> fun.</c><00:07:55.800><c> While</c><00:07:55.960><c> that's</c><00:07:56.320><c> generating,</c>
+
+00:07:57.150 --> 00:07:57.160 align:start position:0%
+just for fun. While that's generating,
+ 
+
+00:07:57.160 --> 00:07:58.800 align:start position:0%
+just for fun. While that's generating,
+let's<00:07:57.400><c> go</c><00:07:57.560><c> back</c><00:07:57.920><c> to</c><00:07:58.040><c> the</c><00:07:58.200><c> eating</c><00:07:58.520><c> state</c>
+
+00:07:58.800 --> 00:07:58.810 align:start position:0%
+let's go back to the eating state
+ 
+
+00:07:58.810 --> 00:08:00.470 align:start position:0%
+let's go back to the eating state
+[music]<00:07:59.040><c> and</c><00:07:59.200><c> clean</c><00:07:59.520><c> it</c><00:07:59.680><c> up</c><00:07:59.840><c> a</c><00:07:59.880><c> little.</c><00:08:00.360><c> I'll</c>
+
+00:08:00.470 --> 00:08:00.480 align:start position:0%
+[music] and clean it up a little. I'll
+ 
+
+00:08:00.480 --> 00:08:02.630 align:start position:0%
+[music] and clean it up a little. I'll
+get<00:08:00.720><c> rid</c><00:08:00.880><c> of</c><00:08:00.960><c> the</c><00:08:01.080><c> grass</c><00:08:01.720><c> and</c><00:08:01.880><c> do</c><00:08:02.040><c> a</c><00:08:02.120><c> small</c>
+
+00:08:02.630 --> 00:08:02.640 align:start position:0%
+get rid of the grass and do a small
+ 
+
+00:08:02.640 --> 00:08:04.430 align:start position:0%
+get rid of the grass and do a small
+cleanup<00:08:03.200><c> pass.</c><00:08:03.395><c> [music]</c><00:08:03.880><c> I'll</c><00:08:04.040><c> probably</c>
+
+00:08:04.430 --> 00:08:04.440 align:start position:0%
+cleanup pass. [music] I'll probably
+ 
+
+00:08:04.440 --> 00:08:06.470 align:start position:0%
+cleanup pass. [music] I'll probably
+leave<00:08:04.760><c> the</c><00:08:04.880><c> north</c><00:08:05.200><c> facing</c><00:08:05.680><c> one</c><00:08:05.920><c> for</c><00:08:06.080><c> another</c>
+
+00:08:06.470 --> 00:08:06.480 align:start position:0%
+leave the north facing one for another
+ 
+
+00:08:06.480 --> 00:08:08.710 align:start position:0%
+leave the north facing one for another
+time<00:08:07.080><c> because</c><00:08:07.400><c> the</c><00:08:07.520><c> main</c><00:08:07.840><c> point</c><00:08:08.240><c> here</c><00:08:08.520><c> is</c>
+
+00:08:08.710 --> 00:08:08.720 align:start position:0%
+time because the main point here is
+ 
+
+00:08:08.720 --> 00:08:11.070 align:start position:0%
+time because the main point here is
+showing<00:08:09.120><c> the</c><00:08:09.200><c> states</c><00:08:09.760><c> feature.</c><00:08:10.360><c> Not</c><00:08:10.680><c> doing</c><00:08:11.000><c> a</c>
+
+00:08:11.070 --> 00:08:11.080 align:start position:0%
+showing the states feature. Not doing a
+ 
+
+00:08:11.080 --> 00:08:13.870 align:start position:0%
+showing the states feature. Not doing a
+full<00:08:11.440><c> polish</c><00:08:11.920><c> pass</c><00:08:12.400><c> on</c><00:08:12.600><c> every</c><00:08:12.880><c> direction,</c><00:08:13.640><c> but</c>
+
+00:08:13.870 --> 00:08:13.880 align:start position:0%
+full polish pass on every direction, but
+ 
+
+00:08:13.880 --> 00:08:16.070 align:start position:0%
+full polish pass on every direction, but
+look<00:08:14.080><c> at</c><00:08:14.240><c> this.</c><00:08:14.919><c> That's</c><00:08:15.185><c> [music]</c><00:08:15.240><c> beautiful.</c>
+
+00:08:16.070 --> 00:08:16.080 align:start position:0%
+look at this. That's [music] beautiful.
+ 
+
+00:08:16.080 --> 00:08:18.070 align:start position:0%
+look at this. That's [music] beautiful.
+And<00:08:16.240><c> now,</c><00:08:16.760><c> back</c><00:08:17.040><c> to</c><00:08:17.200><c> the</c><00:08:17.320><c> standing</c><00:08:17.840><c> up</c>
+
+00:08:18.070 --> 00:08:18.080 align:start position:0%
+And now, back to the standing up
+ 
+
+00:08:18.080 --> 00:08:20.430 align:start position:0%
+And now, back to the standing up
+animation.<00:08:18.960><c> Here's</c><00:08:19.280><c> the</c><00:08:19.400><c> southeast</c><00:08:20.080><c> one.</c>
+
+00:08:20.430 --> 00:08:20.440 align:start position:0%
+animation. Here's the southeast one.
+ 
+
+00:08:20.440 --> 00:08:23.230 align:start position:0%
+animation. Here's the southeast one.
+That's<00:08:20.800><c> basically</c><00:08:21.440><c> perfect.</c><00:08:22.320><c> So,</c><00:08:22.520><c> yes,</c><00:08:23.120><c> you</c>
+
+00:08:23.230 --> 00:08:23.240 align:start position:0%
+That's basically perfect. So, yes, you
+ 
+
+00:08:23.240 --> 00:08:25.655 align:start position:0%
+That's basically perfect. So, yes, you
+can<00:08:23.400><c> do</c><00:08:23.560><c> this</c><00:08:23.760><c> across</c><00:08:24.240><c> all</c><00:08:24.560><c> directions</c><00:08:25.400><c> if</c><00:08:25.560><c> you</c>
+
+00:08:25.655 --> 00:08:25.665 align:start position:0%
+can do this across all directions if you
+ 
+
+00:08:25.665 --> 00:08:27.830 align:start position:0%
+can do this across all directions if you
+[music]<00:08:25.680><c> want</c><00:08:25.840><c> a</c><00:08:25.880><c> complete</c><00:08:26.520><c> directional</c><00:08:27.200><c> set.</c>
+
+00:08:27.830 --> 00:08:27.840 align:start position:0%
+[music] want a complete directional set.
+ 
+
+00:08:27.840 --> 00:08:30.110 align:start position:0%
+[music] want a complete directional set.
+Now,<00:08:28.200><c> let's</c><00:08:28.480><c> move</c><00:08:28.760><c> on</c><00:08:28.919><c> to</c><00:08:29.120><c> walking.</c><00:08:29.800><c> I'll</c><00:08:29.919><c> go</c>
+
+00:08:30.110 --> 00:08:30.120 align:start position:0%
+Now, let's move on to walking. I'll go
+ 
+
+00:08:30.120 --> 00:08:32.469 align:start position:0%
+Now, let's move on to walking. I'll go
+to<00:08:30.280><c> the</c><00:08:30.400><c> mid</c><00:08:30.720><c> walk</c><00:08:31.040><c> state</c><00:08:31.640><c> and</c><00:08:31.760><c> let's</c><00:08:32.000><c> try</c><00:08:32.240><c> the</c>
+
+00:08:32.469 --> 00:08:32.479 align:start position:0%
+to the mid walk state and let's try the
+ 
+
+00:08:32.479 --> 00:08:34.630 align:start position:0%
+to the mid walk state and let's try the
+east<00:08:32.800><c> direction</c><00:08:33.360><c> first.</c><00:08:34.120><c> I'll</c><00:08:34.280><c> add</c><00:08:34.479><c> an</c>
+
+00:08:34.630 --> 00:08:34.640 align:start position:0%
+east direction first. I'll add an
+ 
+
+00:08:34.640 --> 00:08:38.670 align:start position:0%
+east direction first. I'll add an
+animation<00:08:35.599><c> prompt</c><00:08:36.400><c> walk</c><00:08:36.919><c> loop,</c><00:08:37.599><c> then</c><00:08:38.080><c> enhance</c>
+
+00:08:38.670 --> 00:08:38.680 align:start position:0%
+animation prompt walk loop, then enhance
+ 
+
+00:08:38.680 --> 00:08:40.469 align:start position:0%
+animation prompt walk loop, then enhance
+the<00:08:38.800><c> prompt.</c><00:08:39.560><c> I'll</c><00:08:39.680><c> leave</c><00:08:39.880><c> it</c><00:08:40.039><c> at</c><00:08:40.240><c> eight</c>
+
+00:08:40.469 --> 00:08:40.479 align:start position:0%
+the prompt. I'll leave it at eight
+ 
+
+00:08:40.479 --> 00:08:42.830 align:start position:0%
+the prompt. I'll leave it at eight
+frames<00:08:41.120><c> just</c><00:08:41.400><c> to</c><00:08:41.479><c> give</c><00:08:41.640><c> the</c><00:08:41.760><c> animation</c><00:08:42.440><c> enough</c>
+
+00:08:42.830 --> 00:08:42.840 align:start position:0%
+frames just to give the animation enough
+ 
+
+00:08:42.840 --> 00:08:45.390 align:start position:0%
+frames just to give the animation enough
+room<00:08:43.159><c> to</c><00:08:43.360><c> move.</c><00:08:44.000><c> While</c><00:08:44.200><c> that's</c><00:08:44.560><c> generating,</c>
+
+00:08:45.390 --> 00:08:45.400 align:start position:0%
+room to move. While that's generating,
+ 
+
+00:08:45.400 --> 00:08:47.430 align:start position:0%
+room to move. While that's generating,
+I'm<00:08:45.520><c> going</c><00:08:45.760><c> to</c><00:08:45.880><c> fix</c><00:08:46.200><c> up</c><00:08:46.360><c> the</c><00:08:46.480><c> rotations</c><00:08:47.200><c> of</c><00:08:47.320><c> the</c>
+
+00:08:47.430 --> 00:08:47.440 align:start position:0%
+I'm going to fix up the rotations of the
+ 
+
+00:08:47.440 --> 00:08:48.990 align:start position:0%
+I'm going to fix up the rotations of the
+state<00:08:48.040><c> and</c><00:08:48.240><c> edit</c><00:08:48.520><c> them</c><00:08:48.591><c> [music]</c><00:08:48.839><c> in</c>
+
+00:08:48.990 --> 00:08:49.000 align:start position:0%
+state and edit them [music] in
+ 
+
+00:08:49.000 --> 00:08:51.790 align:start position:0%
+state and edit them [music] in
+Pixelorama,<00:08:50.080><c> just</c><00:08:50.320><c> so</c><00:08:50.560><c> each</c><00:08:50.839><c> direction</c><00:08:51.480><c> has</c><00:08:51.720><c> a</c>
+
+00:08:51.790 --> 00:08:51.800 align:start position:0%
+Pixelorama, just so each direction has a
+ 
+
+00:08:51.800 --> 00:08:54.310 align:start position:0%
+Pixelorama, just so each direction has a
+cleaner<00:08:52.280><c> starting</c><00:08:52.800><c> frame.</c><00:08:53.360><c> The</c><00:08:53.520><c> east</c><00:08:53.880><c> one</c><00:08:54.120><c> was</c>
+
+00:08:54.310 --> 00:08:54.320 align:start position:0%
+cleaner starting frame. The east one was
+ 
+
+00:08:54.320 --> 00:08:56.270 align:start position:0%
+cleaner starting frame. The east one was
+already<00:08:54.720><c> clean,</c><00:08:55.320><c> so</c><00:08:55.440><c> I</c><00:08:55.520><c> didn't</c><00:08:55.760><c> bother</c><00:08:56.120><c> with</c>
+
+00:08:56.270 --> 00:08:56.280 align:start position:0%
+already clean, so I didn't bother with
+ 
+
+00:08:56.280 --> 00:08:58.310 align:start position:0%
+already clean, so I didn't bother with
+that<00:08:56.560><c> one.</c><00:08:56.960><c> And</c><00:08:57.200><c> look</c><00:08:57.440><c> at</c><00:08:57.560><c> that</c><00:08:57.839><c> walking</c>
+
+00:08:58.310 --> 00:08:58.320 align:start position:0%
+that one. And look at that walking
+ 
+
+00:08:58.320 --> 00:09:00.790 align:start position:0%
+that one. And look at that walking
+animation.<00:08:59.200><c> That's</c><00:08:59.560><c> really</c><00:08:59.920><c> nice.</c><00:09:00.640><c> And</c>
+
+00:09:00.790 --> 00:09:00.800 align:start position:0%
+animation. That's really nice. And
+ 
+
+00:09:00.800 --> 00:09:02.950 align:start position:0%
+animation. That's really nice. And
+again,<00:09:01.400><c> if</c><00:09:01.560><c> the</c><00:09:01.680><c> design</c><00:09:02.120><c> is</c><00:09:02.280><c> symmetrical</c>
+
+00:09:02.950 --> 00:09:02.960 align:start position:0%
+again, if the design is symmetrical
+ 
+
+00:09:02.960 --> 00:09:05.030 align:start position:0%
+again, if the design is symmetrical
+enough,<00:09:03.560><c> you</c><00:09:03.680><c> can</c><00:09:03.839><c> mirror</c><00:09:04.160><c> the</c><00:09:04.280><c> directions</c>
+
+00:09:05.030 --> 00:09:05.040 align:start position:0%
+enough, you can mirror the directions
+ 
+
+00:09:05.040 --> 00:09:07.430 align:start position:0%
+enough, you can mirror the directions
+and<00:09:05.200><c> build</c><00:09:05.440><c> a</c><00:09:05.520><c> full</c><00:09:06.160><c> eight</c><00:09:06.400><c> direction</c><00:09:06.960><c> walking</c>
+
+00:09:07.430 --> 00:09:07.440 align:start position:0%
+and build a full eight direction walking
+ 
+
+00:09:07.440 --> 00:09:09.829 align:start position:0%
+and build a full eight direction walking
+set<00:09:07.920><c> and</c><00:09:08.080><c> under</c><00:09:08.400><c> five</c><00:09:08.880><c> minutes.</c><00:09:09.680><c> That's</c><00:09:09.760><c> a</c>
+
+00:09:09.829 --> 00:09:09.839 align:start position:0%
+set and under five minutes. That's a
+ 
+
+00:09:09.839 --> 00:09:11.790 align:start position:0%
+set and under five minutes. That's a
+very<00:09:10.200><c> different</c><00:09:10.640><c> workflow</c><00:09:11.240><c> compared</c><00:09:11.680><c> to</c>
+
+00:09:11.790 --> 00:09:11.800 align:start position:0%
+very different workflow compared to
+ 
+
+00:09:11.800 --> 00:09:14.270 align:start position:0%
+very different workflow compared to
+trying<00:09:12.120><c> to</c><00:09:12.280><c> brute</c><00:09:12.680><c> force</c><00:09:13.240><c> every</c><00:09:13.600><c> animation</c>
+
+00:09:14.270 --> 00:09:14.280 align:start position:0%
+trying to brute force every animation
+ 
+
+00:09:14.280 --> 00:09:16.990 align:start position:0%
+trying to brute force every animation
+from<00:09:14.560><c> idle.</c><00:09:15.080><c> Another</c><00:09:15.520><c> cool</c><00:09:15.880><c> use</c><00:09:16.200><c> for</c><00:09:16.360><c> states</c>
+
+00:09:16.990 --> 00:09:17.000 align:start position:0%
+from idle. Another cool use for states
+ 
+
+00:09:17.000 --> 00:09:19.390 align:start position:0%
+from idle. Another cool use for states
+is<00:09:17.200><c> character</c><00:09:17.720><c> variants.</c><00:09:18.600><c> So,</c><00:09:18.800><c> here</c><00:09:19.080><c> I</c><00:09:19.160><c> have</c>
+
+00:09:19.390 --> 00:09:19.400 align:start position:0%
+is character variants. So, here I have
+ 
+
+00:09:19.400 --> 00:09:21.950 align:start position:0%
+is character variants. So, here I have
+this<00:09:19.640><c> goblin</c><00:09:20.360><c> or</c><00:09:20.680><c> ogre</c><00:09:21.040><c> character.</c><00:09:21.800><c> I'll</c>
+
+00:09:21.950 --> 00:09:21.960 align:start position:0%
+this goblin or ogre character. I'll
+ 
+
+00:09:21.960 --> 00:09:24.510 align:start position:0%
+this goblin or ogre character. I'll
+create<00:09:22.280><c> a</c><00:09:22.320><c> new</c><00:09:22.600><c> state</c><00:09:23.200><c> and</c><00:09:23.360><c> prompt</c><00:09:24.080><c> same</c>
+
+00:09:24.510 --> 00:09:24.520 align:start position:0%
+create a new state and prompt same
+ 
+
+00:09:24.520 --> 00:09:27.510 align:start position:0%
+create a new state and prompt same
+goblin<00:09:25.320><c> red</c><00:09:25.720><c> outfit.</c><00:09:26.560><c> Then</c><00:09:26.760><c> I'll</c><00:09:26.880><c> try</c><00:09:27.120><c> another</c>
+
+00:09:27.510 --> 00:09:27.520 align:start position:0%
+goblin red outfit. Then I'll try another
+ 
+
+00:09:27.520 --> 00:09:30.190 align:start position:0%
+goblin red outfit. Then I'll try another
+one.<00:09:27.960><c> Same</c><00:09:28.360><c> goblin</c><00:09:29.160><c> wearing</c><00:09:29.480><c> a</c><00:09:29.560><c> Christmas</c>
+
+00:09:30.190 --> 00:09:30.200 align:start position:0%
+one. Same goblin wearing a Christmas
+ 
+
+00:09:30.200 --> 00:09:32.510 align:start position:0%
+one. Same goblin wearing a Christmas
+outfit.<00:09:30.839><c> And</c><00:09:31.000><c> there</c><00:09:31.200><c> we</c><00:09:31.360><c> go.</c><00:09:32.000><c> Look</c><00:09:32.200><c> at</c><00:09:32.280><c> that</c>
+
+00:09:32.510 --> 00:09:32.520 align:start position:0%
+outfit. And there we go. Look at that
+ 
+
+00:09:32.520 --> 00:09:33.670 align:start position:0%
+outfit. And there we go. Look at that
+Christmas<00:09:33.040><c> outfit.</c><00:09:33.131><c> [music]</c>
+
+00:09:33.670 --> 00:09:33.680 align:start position:0%
+Christmas outfit. [music]
+ 
+
+00:09:33.680 --> 00:09:36.070 align:start position:0%
+Christmas outfit. [music]
+It's<00:09:33.880><c> the</c><00:09:34.000><c> same</c><00:09:34.440><c> character,</c><00:09:35.240><c> but</c><00:09:35.440><c> now</c><00:09:35.720><c> he</c><00:09:35.880><c> has</c>
+
+00:09:36.070 --> 00:09:36.080 align:start position:0%
+It's the same character, but now he has
+ 
+
+00:09:36.080 --> 00:09:38.350 align:start position:0%
+It's the same character, but now he has
+a<00:09:36.160><c> completely</c><00:09:36.960><c> different</c><00:09:37.400><c> costume.</c><00:09:38.200><c> And</c>
+
+00:09:38.350 --> 00:09:38.360 align:start position:0%
+a completely different costume. And
+ 
+
+00:09:38.360 --> 00:09:40.110 align:start position:0%
+a completely different costume. And
+here's<00:09:38.380><c> [music]</c><00:09:38.720><c> the</c><00:09:38.880><c> red</c><00:09:39.200><c> clothing</c><00:09:39.640><c> version,</c>
+
+00:09:40.110 --> 00:09:40.120 align:start position:0%
+here's [music] the red clothing version,
+ 
+
+00:09:40.120 --> 00:09:42.550 align:start position:0%
+here's [music] the red clothing version,
+too.<00:09:40.640><c> So,</c><00:09:40.800><c> now</c><00:09:41.040><c> we</c><00:09:41.160><c> have</c><00:09:41.400><c> three</c><00:09:41.800><c> variants</c><00:09:42.440><c> of</c>
+
+00:09:42.550 --> 00:09:42.560 align:start position:0%
+too. So, now we have three variants of
+ 
+
+00:09:42.560 --> 00:09:44.830 align:start position:0%
+too. So, now we have three variants of
+the<00:09:42.680><c> same</c><00:09:43.040><c> character,</c><00:09:43.800><c> created</c><00:09:44.280><c> directly</c>
+
+00:09:44.830 --> 00:09:44.840 align:start position:0%
+the same character, created directly
+ 
+
+00:09:44.840 --> 00:09:46.830 align:start position:0%
+the same character, created directly
+from<00:09:45.080><c> the</c><00:09:45.160><c> states</c><00:09:45.680><c> feature.</c><00:09:46.280><c> That</c><00:09:46.480><c> means</c>
+
+00:09:46.830 --> 00:09:46.840 align:start position:0%
+from the states feature. That means
+ 
+
+00:09:46.840 --> 00:09:49.470 align:start position:0%
+from the states feature. That means
+states<00:09:47.320><c> aren't</c><00:09:47.600><c> only</c><00:09:47.960><c> useful</c><00:09:48.440><c> for</c><00:09:48.640><c> animation.</c>
+
+00:09:49.470 --> 00:09:49.480 align:start position:0%
+states aren't only useful for animation.
+ 
+
+00:09:49.480 --> 00:09:51.510 align:start position:0%
+states aren't only useful for animation.
+You<00:09:49.600><c> can</c><00:09:49.760><c> also</c><00:09:50.120><c> use</c><00:09:50.440><c> them</c><00:09:50.680><c> for</c><00:09:50.960><c> alternate</c>
+
+00:09:51.510 --> 00:09:51.520 align:start position:0%
+You can also use them for alternate
+ 
+
+00:09:51.520 --> 00:09:54.430 align:start position:0%
+You can also use them for alternate
+outfits,<00:09:52.400><c> damaged</c><00:09:52.960><c> versions,</c><00:09:53.760><c> powered</c><00:09:54.240><c> up</c>
+
+00:09:54.430 --> 00:09:54.440 align:start position:0%
+outfits, damaged versions, powered up
+ 
+
+00:09:54.440 --> 00:09:57.470 align:start position:0%
+outfits, damaged versions, powered up
+versions,<00:09:55.280><c> seasonal</c><00:09:55.840><c> versions,</c><00:09:56.680><c> NPC</c><00:09:56.711><c> [music]</c>
+
+00:09:57.470 --> 00:09:57.480 align:start position:0%
+versions, seasonal versions, NPC [music]
+ 
+
+00:09:57.480 --> 00:10:00.110 align:start position:0%
+versions, seasonal versions, NPC [music]
+variants,<00:09:58.400><c> enemies</c><00:09:58.960><c> with</c><00:09:59.120><c> different</c><00:09:59.520><c> armor,</c>
+
+00:10:00.110 --> 00:10:00.120 align:start position:0%
+variants, enemies with different armor,
+ 
+
+00:10:00.120 --> 00:10:02.070 align:start position:0%
+variants, enemies with different armor,
+anything<00:10:00.720><c> where</c><00:10:00.880><c> you</c><00:10:01.000><c> want</c><00:10:01.200><c> to</c><00:10:01.280><c> keep</c><00:10:01.520><c> the</c><00:10:01.640><c> same</c>
+
+00:10:02.070 --> 00:10:02.080 align:start position:0%
+anything where you want to keep the same
+ 
+
+00:10:02.080 --> 00:10:04.590 align:start position:0%
+anything where you want to keep the same
+base<00:10:02.400><c> character,</c><00:10:03.200><c> but</c><00:10:03.400><c> change</c><00:10:03.800><c> the</c><00:10:03.920><c> pose</c><00:10:04.480><c> or</c>
+
+00:10:04.590 --> 00:10:04.600 align:start position:0%
+base character, but change the pose or
+ 
+
+00:10:04.600 --> 00:10:07.390 align:start position:0%
+base character, but change the pose or
+design.<00:10:05.400><c> For</c><00:10:05.560><c> one</c><00:10:05.880><c> last</c><00:10:06.200><c> test,</c><00:10:06.960><c> let's</c><00:10:07.200><c> try</c>
+
+00:10:07.390 --> 00:10:07.400 align:start position:0%
+design. For one last test, let's try
+ 
+
+00:10:07.400 --> 00:10:09.510 align:start position:0%
+design. For one last test, let's try
+something<00:10:07.800><c> bigger.</c><00:10:08.400><c> Here's</c><00:10:08.760><c> this</c><00:10:09.040><c> very</c>
+
+00:10:09.510 --> 00:10:09.520 align:start position:0%
+something bigger. Here's this very
+ 
+
+00:10:09.520 --> 00:10:11.870 align:start position:0%
+something bigger. Here's this very
+cursed<00:10:10.160><c> monster</c><00:10:10.720><c> boss.</c><00:10:11.121><c> [music]</c><00:10:11.480><c> It's</c><00:10:11.640><c> on</c><00:10:11.800><c> a</c>
+
+00:10:11.870 --> 00:10:11.880 align:start position:0%
+cursed monster boss. [music] It's on a
+ 
+
+00:10:11.880 --> 00:10:13.510 align:start position:0%
+cursed monster boss. [music] It's on a
+176
+
+00:10:13.510 --> 00:10:13.520 align:start position:0%
+176
+ 
+
+00:10:13.520 --> 00:10:16.990 align:start position:0%
+176
+by<00:10:13.720><c> 176</c><00:10:15.200><c> canvas,</c><00:10:15.960><c> so</c><00:10:16.120><c> it's</c><00:10:16.280><c> a</c><00:10:16.320><c> good</c><00:10:16.600><c> stress</c>
+
+00:10:16.990 --> 00:10:17.000 align:start position:0%
+by 176 canvas, so it's a good stress
+ 
+
+00:10:17.000 --> 00:10:18.710 align:start position:0%
+by 176 canvas, so it's a good stress
+test<00:10:17.360><c> for</c><00:10:17.480><c> the</c><00:10:17.600><c> feature.</c><00:10:18.280><c> I'm</c><00:10:18.400><c> going</c><00:10:18.640><c> to</c>
+
+00:10:18.710 --> 00:10:18.720 align:start position:0%
+test for the feature. I'm going to
+ 
+
+00:10:18.720 --> 00:10:21.750 align:start position:0%
+test for the feature. I'm going to
+create<00:10:19.080><c> a</c><00:10:19.120><c> new</c><00:10:19.400><c> state</c><00:10:19.880><c> and</c><00:10:20.040><c> prompt</c><00:10:20.720><c> mid-grab,</c>
+
+00:10:21.750 --> 00:10:21.760 align:start position:0%
+create a new state and prompt mid-grab,
+ 
+
+00:10:21.760 --> 00:10:23.710 align:start position:0%
+create a new state and prompt mid-grab,
+grabbing<00:10:22.240><c> what's</c><00:10:22.440><c> in</c><00:10:22.560><c> front</c><00:10:22.840><c> of</c><00:10:22.920><c> it.</c><00:10:23.360><c> And</c><00:10:23.520><c> then</c>
+
+00:10:23.710 --> 00:10:23.720 align:start position:0%
+grabbing what's in front of it. And then
+ 
+
+00:10:23.720 --> 00:10:26.390 align:start position:0%
+grabbing what's in front of it. And then
+one<00:10:23.960><c> more,</c><00:10:24.560><c> on</c><00:10:24.960><c> fire.</c><00:10:25.720><c> Let's</c><00:10:25.960><c> see</c><00:10:26.080><c> what</c><00:10:26.280><c> we</c>
+
+00:10:26.390 --> 00:10:26.400 align:start position:0%
+one more, on fire. Let's see what we
+ 
+
+00:10:26.400 --> 00:10:28.910 align:start position:0%
+one more, on fire. Let's see what we
+get.<00:10:26.880><c> So,</c><00:10:27.040><c> here's</c><00:10:27.400><c> the</c><00:10:27.520><c> original</c><00:10:28.120><c> idle</c><00:10:28.480><c> one.</c>
+
+00:10:28.910 --> 00:10:28.920 align:start position:0%
+get. So, here's the original idle one.
+ 
+
+00:10:28.920 --> 00:10:30.670 align:start position:0%
+get. So, here's the original idle one.
+Here's<00:10:29.200><c> the</c><00:10:29.320><c> version</c><00:10:29.760><c> with</c><00:10:30.000><c> two</c><00:10:30.240><c> arms</c>
+
+00:10:30.670 --> 00:10:30.680 align:start position:0%
+Here's the version with two arms
+ 
+
+00:10:30.680 --> 00:10:32.430 align:start position:0%
+Here's the version with two arms
+reaching<00:10:31.080><c> forward</c><00:10:31.720><c> like</c><00:10:31.920><c> it's</c><00:10:32.040><c> about</c><00:10:32.320><c> to</c>
+
+00:10:32.430 --> 00:10:32.440 align:start position:0%
+reaching forward like it's about to
+ 
+
+00:10:32.440 --> 00:10:34.510 align:start position:0%
+reaching forward like it's about to
+chase<00:10:32.840><c> the</c><00:10:32.960><c> player</c><00:10:33.480><c> or</c><00:10:33.680><c> grab</c><00:10:34.040><c> something</c><00:10:34.400><c> in</c>
+
+00:10:34.510 --> 00:10:34.520 align:start position:0%
+chase the player or grab something in
+ 
+
+00:10:34.520 --> 00:10:36.870 align:start position:0%
+chase the player or grab something in
+front<00:10:34.760><c> of</c><00:10:34.880><c> it.</c><00:10:35.320><c> And</c><00:10:35.360><c> here's</c><00:10:35.680><c> the</c><00:10:35.800><c> one</c><00:10:36.000><c> on</c><00:10:36.200><c> fire.</c>
+
+00:10:36.870 --> 00:10:36.880 align:start position:0%
+front of it. And here's the one on fire.
+ 
+
+00:10:36.880 --> 00:10:39.230 align:start position:0%
+front of it. And here's the one on fire.
+That's<00:10:37.160><c> pretty</c><00:10:37.440><c> cool.</c><00:10:38.000><c> For</c><00:10:38.160><c> a</c><00:10:38.240><c> boss,</c><00:10:38.840><c> this</c><00:10:39.120><c> is</c>
+
+00:10:39.230 --> 00:10:39.240 align:start position:0%
+That's pretty cool. For a boss, this is
+ 
+
+00:10:39.240 --> 00:10:41.790 align:start position:0%
+That's pretty cool. For a boss, this is
+especially<00:10:39.880><c> useful</c><00:10:40.400><c> because</c><00:10:40.800><c> bosses</c><00:10:41.360><c> usually</c>
+
+00:10:41.790 --> 00:10:41.800 align:start position:0%
+especially useful because bosses usually
+ 
+
+00:10:41.800 --> 00:10:44.310 align:start position:0%
+especially useful because bosses usually
+need<00:10:42.120><c> more</c><00:10:42.480><c> than</c><00:10:42.680><c> just</c><00:10:43.000><c> walk</c><00:10:43.320><c> cycles.</c><00:10:44.160><c> So,</c>
+
+00:10:44.310 --> 00:10:44.320 align:start position:0%
+need more than just walk cycles. So,
+ 
+
+00:10:44.320 --> 00:10:46.630 align:start position:0%
+need more than just walk cycles. So,
+that's<00:10:44.680><c> the</c><00:10:44.800><c> new</c><00:10:45.040><c> states</c><00:10:45.480><c> workflow</c><00:10:46.080><c> in</c><00:10:46.280><c> Pixel</c>
+
+00:10:46.630 --> 00:10:46.640 align:start position:0%
+that's the new states workflow in Pixel
+ 
+
+00:10:46.640 --> 00:10:48.670 align:start position:0%
+that's the new states workflow in Pixel
+Lab's<00:10:47.080><c> character</c><00:10:47.640><c> creator.</c><00:10:48.320><c> Instead</c><00:10:48.457><c> [music]</c>
+
+00:10:48.670 --> 00:10:48.680 align:start position:0%
+Lab's character creator. Instead [music]
+ 
+
+00:10:48.680 --> 00:10:50.990 align:start position:0%
+Lab's character creator. Instead [music]
+of<00:10:48.800><c> forcing</c><00:10:49.320><c> every</c><00:10:49.640><c> animation</c><00:10:50.320><c> to</c><00:10:50.440><c> start</c><00:10:50.839><c> from</c>
+
+00:10:50.990 --> 00:10:51.000 align:start position:0%
+of forcing every animation to start from
+ 
+
+00:10:51.000 --> 00:10:53.310 align:start position:0%
+of forcing every animation to start from
+the<00:10:51.120><c> default</c><00:10:51.720><c> idle</c><00:10:52.040><c> pose,</c><00:10:52.760><c> you</c><00:10:52.880><c> can</c><00:10:53.040><c> now</c>
+
+00:10:53.310 --> 00:10:53.320 align:start position:0%
+the default idle pose, you can now
+ 
+
+00:10:53.320 --> 00:10:55.990 align:start position:0%
+the default idle pose, you can now
+generate<00:10:53.800><c> the</c><00:10:53.920><c> pose</c><00:10:54.400><c> first,</c><00:10:55.200><c> then</c><00:10:55.480><c> animate</c>
+
+00:10:55.990 --> 00:10:56.000 align:start position:0%
+generate the pose first, then animate
+ 
+
+00:10:56.000 --> 00:10:58.110 align:start position:0%
+generate the pose first, then animate
+from<00:10:56.200><c> that</c><00:10:56.480><c> pose.</c><00:10:57.320><c> So,</c><00:10:57.520><c> try</c><00:10:57.720><c> making</c><00:10:58.080><c> a</c>
+
+00:10:58.110 --> 00:10:58.120 align:start position:0%
+from that pose. So, try making a
+ 
+
+00:10:58.120 --> 00:11:00.110 align:start position:0%
+from that pose. So, try making a
+character,<00:10:58.800><c> create</c><00:10:59.080><c> a</c><00:10:59.120><c> few</c><00:10:59.360><c> states</c><00:10:59.760><c> before</c>
+
+00:11:00.110 --> 00:11:00.120 align:start position:0%
+character, create a few states before
+ 
+
+00:11:00.120 --> 00:11:02.110 align:start position:0%
+character, create a few states before
+animating,<00:11:00.839><c> and</c><00:11:01.000><c> see</c><00:11:01.200><c> how</c><00:11:01.360><c> much</c><00:11:01.600><c> cleaner</c><00:11:02.000><c> the</c>
+
+00:11:02.110 --> 00:11:02.120 align:start position:0%
+animating, and see how much cleaner the
+ 
+
+00:11:02.120 --> 00:11:04.110 align:start position:0%
+animating, and see how much cleaner the
+animation<00:11:02.212><c> [music]</c><00:11:02.680><c> workflow</c><00:11:03.160><c> feels.</c><00:11:03.839><c> And</c><00:11:04.000><c> if</c>
+
+00:11:04.110 --> 00:11:04.120 align:start position:0%
+animation [music] workflow feels. And if
+ 
+
+00:11:04.120 --> 00:11:05.990 align:start position:0%
+animation [music] workflow feels. And if
+you<00:11:04.200><c> make</c><00:11:04.360><c> something</c><00:11:05.000><c> with</c><00:11:05.160><c> it,</c><00:11:05.440><c> especially</c>
+
+00:11:05.990 --> 00:11:06.000 align:start position:0%
+you make something with it, especially
+ 
+
+00:11:06.000 --> 00:11:07.790 align:start position:0%
+you make something with it, especially
+cursed<00:11:06.400><c> boss</c><00:11:06.680><c> states,</c><00:11:07.200><c> please</c><00:11:07.480><c> share</c><00:11:07.640><c> it</c><00:11:07.720><c> in</c>
+
+00:11:07.790 --> 00:11:07.800 align:start position:0%
+cursed boss states, please share it in
+ 
+
+00:11:07.800 --> 00:11:09.790 align:start position:0%
+cursed boss states, please share it in
+the<00:11:07.880><c> Discord.</c><00:11:08.680><c> That's</c><00:11:08.960><c> it</c><00:11:09.080><c> for</c><00:11:09.200><c> this</c><00:11:09.400><c> one.</c>
+
+00:11:09.790 --> 00:11:09.800 align:start position:0%
+the Discord. That's it for this one.
+ 
+
+00:11:09.800 --> 00:11:11.710 align:start position:0%
+the Discord. That's it for this one.
+Like<00:11:10.040><c> the</c><00:11:10.160><c> video</c><00:11:10.440><c> if</c><00:11:10.520><c> it</c><00:11:10.640><c> helped,</c><00:11:11.200><c> subscribe</c>
+
+00:11:11.710 --> 00:11:11.720 align:start position:0%
+Like the video if it helped, subscribe
+ 
+
+00:11:11.720 --> 00:11:13.430 align:start position:0%
+Like the video if it helped, subscribe
+for<00:11:11.839><c> more</c><00:11:12.037><c> [music]</c><00:11:12.040><c> Pixel</c><00:11:12.360><c> Lab</c><00:11:12.640><c> tutorials,</c>
+
+00:11:13.430 --> 00:11:13.440 align:start position:0%
+for more [music] Pixel Lab tutorials,
+ 
+
+00:11:13.440 --> 00:11:17.000 align:start position:0%
+for more [music] Pixel Lab tutorials,
+and<00:11:13.560><c> I'll</c><00:11:13.680><c> see</c><00:11:13.920><c> you</c><00:11:14.160><c> in</c><00:11:14.280><c> the</c><00:11:14.360><c> next</c><00:11:14.680><c> one.</c>
+

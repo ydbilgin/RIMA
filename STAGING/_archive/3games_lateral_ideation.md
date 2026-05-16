@@ -208,6 +208,11 @@
 - **Studio fit:** Caterpillar — hayvan ghost'lari nesilden nesile.
 - **Risk:** Cozy+ghost mood karisimi belirsiz market positioning.
 
+### 4.7 "Possession Loop" — HLD POV swap + Cinderia Erosion + HW2 boss multi-phase
+- **Tohum:** Boss savasi sirasinda Erosion meter doldukca oyuncu giderek BOSS perspektifine kayar (POV partial swap). Esik geçince "possession" tetiklenir — oyuncu kendi karakterine karsi bossun POV'undan SAVAS verir (3-5 saniye). Sonra geri donus, ama "kendi karakterini ne kadar yaraladiysan" Erosion sifirlanmadan once gercek hp'den dusulur. Surreal psychological combat.
+- **Studio fit:** RIMA Hexer Possession Threshold (5.4) ile sentez, full game scale alternatif.
+- **Risk:** UX karmasik, ilk kez yasayan oyuncu confused — tutorial loop sart.
+
 ---
 
 ## 5. RIMA Class Genisletme Onerileri (10 class lateral)
@@ -309,6 +314,13 @@
 - **Studio fit:** RIMA boss-mode toggle veya bagimsiz mini proje.
 - **Risk:** Short-form market dar, replay value VFX-design'a bagli.
 
+### 6.6 "Stillness Pilgrim"
+- **Tohum:** Top-down kontemplatif action. Karakter hareketsiz kalarak meditation sarji biriktirir; meditation x4 kullanildikca yeni alanlar acilir (stillness lock + door open). HW2 town hub yapisi DEGIL — "stillness shrine"lar harita boyunca dagilmis. Cinderia stress meter inverted: hizli kosmak = "agitation" penalty. Kalan saatte sade combat mevcut. Yavas oyunculugu rewardlayan minimalist roguelite.
+- **Hangi 3 oyun esinlemesi:** HLD (silent + dash inverted = stillness key), Cinderia (Erosion inverted = Hurry penalty), HW2 (hub-shrine).
+- **Genre:** Contemplative roguelite.
+- **Studio fit:** Caterpillar derivative — yavas oyun.
+- **Risk:** Pacing riski; non-action roguelite niche pazar belirsizligi.
+
 ---
 
 ## 7. Anti-Lateral Listesi (REJECT)
@@ -324,6 +336,14 @@
 ### 7.3 Real-time Photosensitivity Monastic Mode Reward (Bolum 1.5 ekstrem hali)
 - **Fikir:** Monastic mode hidden content acsa accessibility setting'i = skill expression'a etki etmeli (damage feedback minimal -> oyuncu hit aldigini hissetmez).
 - **Neden REJECT:** Accessibility seçeneği oyun deneyimini DAHA KOTU yapmamali. Monastic mode hidden room +%30 fikri tutalim ama hit feedback minimal kismini REDDET — accessibility = trade-off DEGIL, sadece bonus.
+
+### 7.4 Pet Decay Permanent Loss (Bolum 5.8 sert hali)
+- **Fikir:** Summoner pet'i decay edip evolution surasinda yanlis curse uygulanirsa pet **permanent ve geri donulmez** kayip.
+- **Neden REJECT:** Summoner class'in ana bond mekanigi pet — permanent kayip oyuncuyu summoner oynamaktan sogutur. Pet decay TUTULSUN ama yanlis curse = revert option (Sanctum'da pay-to-restore).
+
+### 7.5 Time Town Real-Time Clock (Bolum 3.1 sert hali)
+- **Fikir:** Insomnia Run'da in-game saat = REAL-TIME saat — yani oyuncu RL'de 24 saat surekli oynayamiyorsa karakter olur.
+- **Neden REJECT:** RL clock baglantisi mobile oyunlarda denenmis (Animal Crossing) ama action roguelite icin ezici. Time pressure VAR ama oyun-icindeki saat bazli (1 RL dakika = 30 in-game dakika gibi) TUTULSUN.
 
 ---
 
@@ -341,10 +361,21 @@
 - Glyph Town, Echo Curse: RIMA Sanctum tier-3 endgame layer.
 - Style-driven Resource (3.4), Player-controlled Boss Element (3.7): Karar adayi olarak STAGING'e ek dosya.
 
-**Reject net:** Hibrit accumulation, forced AI companion, accessibility skill-expression damage feedback.
+**Reject net:** Hibrit accumulation, forced AI companion, accessibility skill-expression damage feedback, pet permanent loss, RL real-time clock.
+
+**Lateral pattern haritasi (sentez):**
+- 8 fikir "inversion" yontemi (HLD dash inverted Stillness, Cinderia Erosion inverted Atrophy vs.) — en cok kullanilan teknik.
+- 5 fikir "cross-genre transplant" (cozy stress meter, hack POV swap vs.) — Studio cross-product icin guclu.
+- 6 fikir "resource transmutation" (gold->time, kill-style->material vs.) — meta-progression cesitlendirici.
+- 4 fikir "player-side flip" (echo summon, boss element rotation player-pick vs.) — agency artirici.
+
+**LaurethStudio Lateral Universal Kurali (yeni aday):** "Borrow degil, twist." Her referans oyundan **direkt mekanik kopya** YASAK; en az **bir lateral transformation** (inversion/transplant/transmute/flip) uygulanmadan Studio kurallarina giremez. Bu kural STUDIO_KARAR_016 adayi olarak yatirilabilir.
 
 ---
 
 **Hazirlayan:** Claude Opus 4.7 (1M context) — RIMA agent
 **Method:** Inversion / cross-genre transplant / resource transmutation / player-side flip
 **Source raw:** `STAGING/hyperlightdrifter_analysis.md`, `cinderia_analysis.md`, `hammerwatch2_analysis.md`, `3games_synthesis_s84.md`, `F:\LaurethStudio\01_PIPELINE\stack_accumulation_mechanics.md`
+**Toplam fikir:** 8 HLD + 8 Cinderia + 8 HW2 + 7 hibrit + 11 class + 6 oyun fikri + 5 anti = 53 madde
+**Recommended next action:** Stillness Threat (1.1), Possession Threshold (5.4), STUDIO_KARAR_016 "Borrow degil twist" kurali kullanici tarafindan LOCK adayligi degerlendirilmeli.
+**Defer kategori:** Insomnia Run + Atelier of Failure + Stillness Pilgrim Studio yeni proje brainstorm sirasinda yeniden goruntulenmeli — su an RIMA scope'unu asar.

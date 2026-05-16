@@ -1,5 +1,659 @@
 # CURRENT_STATUS
 
+## 2026-05-17 S86_NIGHT_END → S87 MORNING handoff (user yeni session başlatacak)
+
+**EN SON DURUM (bu session sonu):**
+- ✅ **chibi agresif v10 prompt LIVE ve çalışıyor** — Image #12 çıktısında chibi 3-4 head + yüz okunur + açı 30-35° + silahsız body hepsi PASS
+- ⏳ **3 sınıf identity drift** Image #12'de — düzeltilecek (tek-prompt regen):
+  - Warblade: beard yok, bald drift → canonical "dark short messy hair + dark masculine beard + dark brown leather armor + brass buckle"
+  - Elementalist: dark robe + red hair drift → canonical "honey-blonde low bun + dusty indigo crop top + cream sash + deep teal skirt"
+  - Ravager: shirtless drift → canonical "dark blood-red armor + leather harness + iron studs"
+- ✅ **7 sınıf kabul edilecek** Image #12'den: Ronin, Hexer, Brawler, Shadowblade, Ranger, Summoner, Gunslinger
+- ⚠️ **NLM sync 53/75** başarılı (1 retry başarılı: character_production_prompts.md). Sprint 13 spec sabah retry
+- ✅ **Sprint 13 spec yazıldı:** `STAGING/codex_brush_sprint13_production_hardening.md` (walkableGrid + Bridson + rotation + variant + Collider + Registry + Sorting + Batch Gate)
+
+**Yeni session başladığında ilk 60 saniye:**
+
+**Yeni session başladığında ilk 60 saniye:**
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` oku
+2. Bu dosyanın bu bölümünü oku
+3. **Karar #74/#100/#144/#145 LIVE LOCK** korunur (chibi 64×64 + chibi RESTORE + silahsız body + Character States)
+4. **Karar #146 önerisi REDDEDİLDİ** — Image #10 visual analiz gerçek = chibi family (4-5 head), prompt etiketleri yanlıştı
+5. Test suite **282/282 PASS** (Brush V1 12/13 sprint LIVE)
+6. **Sprint 13 spec yazımı bekliyor** — sıralama aşağıda
+7. Memory teyit: [[pixellab-character-states-workflow]] [[weaponless-animation-v1]] [[brush-tool-v1-design]] [[sonnet-first-routing]]
+
+### S86_NIGHT_END session ne yapıldı — özet (büyük cleanup)
+
+**1. Karakter prompt iterasyonu v6→v11→v10 LIVE ✅**
+- Image #7 (single chibi Warblade) → Image #8 (v10 batch, 3 drift) → Image #10 visual analiz → v10 chibi NLM canonical LIVE
+- v11 mature 5-6 head + 60° alternative iptal (chibi LOCK doğru)
+- v10 LIVE: style ref YOK (direkt Create Image Pro), açı 5-katmanlı agresif sinyal, chibi 3-4 head + 30-35°
+
+**2. NLM canonical drift fix (rima-doc, 6 memory) ✅**
+- 8/10 sınıfta local memory drift düzeltildi (Warblade leather not plate, Ronin dark navy not sage, Ranger bleached-ivory not auburn, Summoner dark hair not silver, Gunslinger grey-purple trench not burgundy, vd.)
+- `project_character_visual_identity.md` + `project_class_colors.md` NLM canonical hex codes
+- 4 STALE memory deprecate: `project_character_system`, `project_animation_notes`, `project_visual_quality`, `project_128px_pivot_s43`
+
+**3. 67 untracked memory triyaj (rima-sonnet → rima-doc apply) ✅**
+- 13 KEEP MEMORY.md'ye eklendi (12 Active + 1 Reference)
+- 44 ARCHIVE → `memory/_archive/`
+- 16 DELETE silindi
+- ⚠️ `feedback_pixellab_angle_descriptor.md` DELETE (Karar #100 ihlal eden 75-80° mandate)
+
+**4. STAGING cleanup ✅**
+- STAGING/_archive/ 43+ dosya (batch16/17, alabaster, S66 task'leri, vd.)
+- character_production_prompts.md v6-v9 archive'a (386 satır), v10 LIVE (135 satır clean)
+
+**5. PROJECT_RULES.md "Iteration Cleanup" rule eklendi ✅**
+- One-LIVE-version-per-file
+- Drift hierarchy: NLM > local memory > prompt iteration
+- Cleanup checkpoint her 5+ iterasyon
+
+**6. Sprint 12 Props Mode LIVE ✅** (Codex impl direkt, rima-qc PASS-WITH-CONDITIONS)
+- PropDefinitionSO + PropPlacementData + PropFootprintValidator + PropsTab + PropPlacer + RoomTemplateSO.props + sample barrel_001.asset + 21 EditMode test
+- Suite 282/282 PASS
+- 2 follow-up condition Sprint 13'e taşındı
+
+### Memory + STAGING durumu (S86 sonu)
+- MEMORY.md: 13 yeni KEEP entry eklendi (toplam ~70 entry)
+- memory/_archive/: 44 dosya
+- memory/: 16 DELETE sonrası temiz
+- STAGING/_archive/: 43+ dosya
+- STAGING root: ~210 dosya (256'dan azaldı)
+
+### Git durumu (uncommitted, yarın commit)
+- 22 modified C# + memory + STAGING + TASARIM
+- 111+ untracked (Sprint 9 importer + Sprint 10 editor + Sprint 11 Composition + Sprint 12 Props + bu session cleanup)
+- 64 deleted .meta (eski sprite path'leri)
+- **6-7 logical commit group** ayrılabilir
+
+### Kullanıcı tarafı durum (uyuyor)
+- Karakter üretim v10 prompt LIVE, style ref YOK (direkt Create Image Pro)
+- Sırada: 10 silahsız body sprite üretim (Image #10 style sevdi, açı + chibi proportions doğru sinyal verilmiş prompt'ta)
+- Sonra: Unity child SR weapon takılır → runtime Image #10 görüntüsü
+
+### Sıradaki — yeni session sıralama (S87 MORNING)
+
+**Map Designer + Sprint 13 öncelik sırası:**
+
+| # | Öncelik | İş | Owner | Detay |
+|---|---|---|---|---|
+| 1 | **P0** | Git commit hygiene (Sprint 9-12 LIVE files) | Opus + USER onay | 6-7 logical commit group (S9 atlas / S10 RoomBank / S11 Natural Engine / S12 Props / test fix / S86 cleanup / S86 memory triyaj). User onayında /commit skill ile preview. |
+| 2 | **P0** | Sprint 13 spec yazımı (Production Hardening) | Opus | Scope: walkableGrid field (rima-qc Condition 1), Bridson Poisson auto-place, prop rotation (0/90/180/270), prop variant pool, Unity Collider2D integration, PropRegistry runtime GUID lookup, Tilemap sorting integration. STAGING/codex_brush_sprint13_production_hardening.md |
+| 3 | **P1** | Sprint 13 Codex review dispatch | Opus orchestrator (cx_dispatch.py) | Sprint 11/12 cadence: spec → Codex review → fix → re-review → impl |
+| 4 | **P1** | M8 Phase 2 vertical slice checklist user-ready | Opus | STAGING/m8_phase2_vertical_slice_checklist.md zaten LIVE, user uyandığında yapabilir |
+| 5 | **P2** | Sprint 14+ backlog planning | Opus | Sprint 14: Combat integration? Sprint 15: Boss room procgen? Define after Sprint 13 PASS |
+| 6 | **P2** | Karakter Batch 1 verdict bekleme (kullanıcı üretirken) | USER | Image #10 stilinde 10 silahsız sprite, drift fix tek-prompt regen |
+| 7 | **P3** | rima-doc: 4 STALE memory dosyalarındaki içeriği güncel canonical referans şekline çevirme | rima-doc background | "DEPRECATED block + redirect" yapıldı, ama içerik hala kalıyor. Optional cleanup. |
+
+**Hemen Opus'un yapabileceği (user uyurken, yarın sabah sunmak için):**
+- Sprint 13 spec yazımı (P0 #2) — yarın sabah ready olur
+- Git commit önerisi hazırlığı (P0 #1) — logical group draft + commit message taslakları
+
+**User uyandığında Opus'u "/sprint 13 spec yazdın mı?" diye sorabilir.**
+
+### Workflow notları
+- 16-18 May Opus implement override **AKTIF** (1 gün kaldı, sonra Sonnet'e döner)
+- cx_dispatch.py CONDA fix LIVE — review/impl dispatch'leri tutarlı çalışıyor
+- Karar #146 önerisi (mature 5-6 head + 60°) reddedildi — chibi LOCK doğrudur
+- Memory drift hierarchy: NLM > local memory > prompt iteration (PROJECT_RULES.md'de LIVE)
+
+---
+
+## 2026-05-16 S86_LATE — Karar #145 LOCK + 261/261 PASS + Warblade pilot LIVE (önceki bölüm — referans)
+
+**Yeni session başladığında ilk 60 saniye:**
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` oku
+2. Bu dosyanın bu bölümünü oku
+3. **Karar #145 (PixelLab Character States Multi-Use Augment) LOCK** — `TASARIM/MASTER_KARAR_BELGESI.md` line 145, memory [[pixellab-character-states-workflow]] (RIMA local) + [[pixellab-character-states-animation-workflow]] (Lauret Studio global)
+4. **Test suite 261/261 PASS** — Codex 4 pre-existing failure fix LIVE (`STAGING/codex_test_fix_4_brush_failures_DONE.md`); `NaturalFeatureGraph.cs:112+269+290` SUT optimization, kalan 3 test fix
+5. **Warblade pilot LIVE** — User PixelLab Web UI V3'te üretim başladı (`STAGING/character_production_prompts.md` §E.1 state-first 7-step rehber)
+6. **Sprint 12 Props Mode spec yazıldı** — Codex spec review background dispatch (`STAGING/codex_brush_sprint12_props_mode.md` → review verdict bekleniyor)
+7. Memory teyit: [[pixellab-character-states-workflow]] [[weaponless-animation-v1]] [[sonnet-first-routing]] [[brush-tool-v1-design]] [[room-library-architecture]]
+
+### S86_LATE session ne yapıldı — paralel multi-stream
+
+**1. PixelLab Character States deep-dive (Codex + Gemini + transcript) ✅**
+- Codex web research → `STAGING/pixellab_new_feature_analysis_CODEX.md`
+- Gemini multimodal video → `STAGING/pixellab_new_feature_analysis_GEMINI.md`
+- yt-dlp transcript download → `STAGING/pixellab_states_video.en.vtt` + parse → `pixellab_states_video_transcript_clean.txt` (303 dedup line)
+- User vurgu: "outfit/costume variant" detayını ilk iki agent yetersiz raporladı — transcript'ten tam çıkarım yapıldı
+
+**2. Karar #145 LOCK — Multi-Use Augment ✅**
+- 5 use case LIVE: (1) Animation anchor (2) Enemy variant matrix (3) Boss multi-phase (4) Class skin variants (5) State-to-state interpolation
+- Karar #74/#100/#144/#47 ile uyumlu, hiçbiri override etmez
+- Pilot 4 sınıf: **Warblade → Ranger → Shadowblade → Elementalist**
+- `TASARIM/MASTER_KARAR_BELGESI.md` line 145 LIVE
+
+**3. Memory writes (Lauret Studio global + RIMA local) ✅**
+- **Global canonical:** `~/.claude/projects/F--LaurethStudio/memory/reference_pixellab_character_states_animation_workflow.md` (studio-wide, tüm proje takip eder)
+- **RIMA local:** `~/.claude/projects/F--Antigravity-...-RIMA/memory/project_pixellab_character_states_workflow.md` (project-specific implementation)
+- `feedback_pixellab_character_via_web_ui_v3.md` → S86 state-first update
+- MEMORY.md index sync (Active kategorisi tepe)
+
+**4. character_production_prompts.md tam revize ✅**
+- §A Reference Image Description basitleştirildi ("match only direction and angle")
+- §C Pose Contract → positive shape language (eski FORBIDDEN listesi → "bare empty hands holding nothing")
+- §E.1 WARBLADE → state-first 7-step detail (Karar #145 pilot template)
+- §F BATCH 1/2 state-first ile entegre (Pilot 4 + Hexer Batch 1; Ravager/Ronin/Brawler/Gunslinger/Summoner Batch 2)
+- §G klasör konvansiyonu pilot vs idle-only
+- §H QC checklist iki ayrı set
+
+**5. Warblade asset folder hazır ✅**
+- `Assets/Sprites/Characters/Warblade/{states/, anim/{idle,run,attack,hit,death}/}` LIVE
+
+**6. Codex test failure fix → 261/261 PASS ✅** (cx_dispatch bd3kua3go)
+- FeatureEdgeSmoothingTests TEST fix (GetUsedTilesCount asset-count → cell-count)
+- FeatureMaskSOTests TEST fix (deterministic near/far fixture)
+- HitPauseDriverTests TEST fix (reflection-driven coroutine)
+- NaturalFeatureGraphTests SUT fix (NaturalFeatureGraph.cs:112+269+290 local grid neighbor radius=2, 57ms→<20ms)
+- Suite: **261/261 PASS** (Sprint 11 LIVE files unchanged, Karar #143-D/E/K unchanged)
+
+**7. Sprint 12 Props Mode LIVE ✅** (Opus spec → Codex implement direkt → Codex self-verify PASS → rima-qc Sonnet QC background)
+- `STAGING/codex_brush_sprint12_props_mode.md` spec LIVE
+- `STAGING/codex_brush_sprint12_props_mode_DONE.md` Codex impl summary LIVE
+- Files: `PropDefinitionSO` + `PropPlacementData` + `PropFootprintValidator` + `PropsTab` + `PropPlacer` + `RoomTemplateSO.props` extension + `MapDesignerBrushWindow` Props mode + sample `barrel_001.asset` + 21 EditMode test
+- **4 OQ resolutions:** sorting=editor-only, footprint=bottom-left, GUID=AssetDatabase editor-only, null forbiddenRoles=empty
+- **Codex-invented OQ:** Walkable region fallback `cameraBounds.tileRect → bounds` (Sprint 13 hardening flag)
+- **Suite: 282/282 PASS** (önceki 261 + 21 yeni Props)
+- **rima-qc Sonnet review verdict: PASS-WITH-CONDITIONS** (2 follow-up)
+  - **Condition 1 (Sprint 13 backlog):** `PropFootprintValidator.IsWalkableTile` `cameraBounds.tileRect` fallback kullanıyor; bu **walkability map değil**, camera framing rect — wall tiles içeri pas ediyor yanlış. Sprint 13'e: `RoomTemplateSO.walkableGrid` field ekle + validator güncelle.
+  - **Condition 2 (pre-Sprint-12 cleanup):** `WallOverlayPainter.cs` (Sprint 11 +62 line uncommitted) + `Composition/` (untracked) — Sprint 12 koda dokunmadı, ama merge öncesi commit/revert lazım.
+  - Forbidden list 8/8 PASS, Karar #143-D/E/K 4/4 PASS, file path lock 11/11 PASS, 4 OQ resolutions 4/4 verified, acceptance criteria all PASS.
+
+**8. Karar #144 + #145 birlikte LIVE confirm ✅**
+- User sorusu: "yeni state durumuna göre animasyonu silahlı yapmayalım yine?" — onaylandı
+- State özelliği silah hallucination'ı çözmez; Karar #144 (silahsız body + Unity child SR weapon) **LIVE LOCK kalır**
+
+### Test durumu (S86_LATE)
+- **282/282 EditMode PASS** (önceki 261 + 21 yeni Sprint 12 Props)
+- 4 pre-existing failure → **CLOSED** (test taraf yanlış 3, SUT taraf 1)
+- Sprint 9-12 hepsi PASS
+
+### Git worktree durumu (uncommitted)
+- 22 modified C# + memory + STAGING + TASARIM
+- 111 untracked (Sprint 9 importer + Sprint 10 editor + Sprint 11 data + bu session memory + Warblade asset folder)
+- 64 deleted .meta (eski sprite path'leri)
+- **5-6 logical commit group** ayrılabilir; user kararı bekleniyor (hemen / Sprint 12 sonrası / Warblade tamamlanınca)
+
+### Sıradaki — öncelik sırası
+
+| Öncelik | İş | Owner | Notlar |
+|---|---|---|---|
+| **P0** | Warblade pilot LIVE üretim | USER (PixelLab Web UI V3) | `STAGING/character_production_prompts.md` §E.1 Step 0-7 takip |
+| P0 | Sprint 12 impl QC review verdict | rima-qc Sonnet (background a7c047fce60c42071) | Codex direkt impl ettiği için 2. göz |
+| P1 | Karakter pilot PASS sonrası Ranger/Shadowblade/Elementalist üretim | USER | Aynı state-first pattern (§E.1) |
+| P1 | M8 Phase 2 vertical slice loop test | USER (Unity manuel) | `STAGING/m8_phase2_vertical_slice_checklist.md` |
+| P2 | Git commit logical groups | Opus + USER | 5-6 group, user onayı |
+| P2 | Sprint 12 Props Mode impl (review PASS sonrası) | Opus 16-18 May / Codex 19+ | Spec ready |
+| P3 | 6 idle-only sınıf Batch 2 (Ravager/Ronin/Brawler/Gunslinger/Summoner) | USER | Pilot 4 PASS sonrası |
+| P3 | Pilot 4 PASS sonrası 6 sınıfa state-first rollout (animasyon) | USER | Batch 2 idle bittiğinde |
+
+### Workflow notları
+- 16-18 May Opus implement override **aktif** (2 gün kaldı, sonra Sonnet'e döner)
+- cx_dispatch.py CONDA fix LIVE — review dispatch'leri tutarlı çalışıyor
+- `feedback_sonnet_first_routing` ([[sonnet-first-routing]]): Opus orchestrator BULK İŞ YAPMAZ — paralel iş Codex/Sonnet sub-agent'a delegate
+- Karar #145 + #144 birlikte: silahsız body, Unity child SR weapon, state-first animation
+
+---
+
+## 2026-05-16 S86 SPRINT11_CLOSED → /clear handoff (önceki bölüm — referans)
+
+**Yeni session başladığında ilk 60 saniye:**
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` oku
+2. Bu dosyanın bu bölümünü oku
+3. `STAGING/pixellab_new_feature_analysis_GEMINI.md` + `STAGING/pixellab_new_feature_analysis_CODEX.md` oku — **PixelLab "Character States" yeni özelliği** (video: https://youtu.be/oCJWxfEwX-o "PixelLab Character States: The New Way to Animate Sprites"). Bu özellik karakter üretim pipeline'ını değiştirebilir, kullanıcı integrate kararı bekliyor.
+4. Memory teyit: [[weaponless-animation-v1]] [[combat-feel-research-combined]] [[brush-tool-v1-design]] [[sonnet-first-routing]] [[room-library-architecture]]
+5. Karakter Batch 1 üretim hazır: `STAGING/character_production_prompts.md` (KARAR: Character States video analizi sonrası prompts revize olabilir)
+
+### Geçen session ne yapıldı — özet (8 paralel stream)
+
+**1. Memory cleanup (rima-doc Sonnet) ✅**
+- 5 stale memory güncellendi (128px→64×64, anim notes, char system, visual quality, mob roster)
+- **Karar #144** MASTER_KARAR_BELGESI'ne eklendi (silahsız body + WeaponSR child)
+- Karar #71 + #73 REVOKED işaretlendi
+
+**2. Sprint 11 spec — full cycle (Opus → Codex → Opus → Codex) ✅**
+- Spec: `STAGING/codex_brush_sprint11_natural_engine.md`
+- Codex review #1 → PASS-WITH-CONDITIONS 85% (3 issue)
+- Opus fix
+- Codex re-review → PASS no issue
+
+**3. Sprint 11 IMPL — full cycle (Opus → Codex → Opus → Codex) ✅**
+- 4 yeni source (CompositionRole/Map/Generator/WangContextResolver) + WallOverlayPainter modify + 3 test (15 test PASS)
+- Codex review FAIL — 4 blocker (signature drift, fallback eksik, WangResolver null check yok, FreeformDecal worktree pollution)
+- Opus 3 blocker fix (4. — Sprint 9 residue, scope dışı)
+- Codex re-review delta → **PASS**
+
+**4. Pre-existing 3 Brush test failure fix ✅**
+- Root cause: `CreateTilemap` test helper'ında AddComponent sırası yanlış (TilemapRenderer önce → auto-add Tilemap → AddComponent<Tilemap> null döndürüyor)
+- Fix: 2 dosyada swap + Karar143K tolerance 0.001→0.01
+- **65/65 Brush PASS**
+
+**5. cx_dispatch.py CONDA fix ✅**
+- Hybrid B+C: PowerShell wrapper + env scrub
+- Sanity test PASS + Sprint 11 review live-tested
+- rima-codex fallback artık gerekli değil
+
+**6. ReBlade + Bandit Knight research ✅**
+- Hitstop/screenshake/slow-mo tuning matrix yazıldı
+- Combat feel decisions Phase 2 sprint'e hazır
+- Memory: `project_combat_feel_research_combined.md`
+
+**7. Karakter production prep ✅**
+- `STAGING/character_production_prompts.md` — 10 sınıf × 5 base direction (S, SE, E, NE, N) + 3 mirror, 64×64 native, weapon-less, pose contract
+- `STAGING/animation_spec_weaponless.md` — Karar #144 full spec
+- 5 yeni memory + MEMORY.md index sync
+
+**8. PixelLab Character States video analizi (BU SESSION'DA DİSPATCH) 🔄**
+- Video URL: https://youtu.be/oCJWxfEwX-o ("PixelLab Character States: The New Way to Animate Sprites")
+- Dispatched: rima-research (Gemini, multimodal video analysis) + cx_dispatch (Codex web research)
+- Output dosyaları: `STAGING/pixellab_new_feature_analysis_GEMINI.md` + `STAGING/pixellab_new_feature_analysis_CODEX.md`
+- **Önemli:** Bu özellik bizim 10-sınıf üretim pipeline'ını değiştirebilir. Yeni session bu analizleri okuyup karar verecek (integrate / defer / skip). Karakter Batch 1 üretimi bu kararı bekliyor.
+
+### Sprint 11 LIVE files (Sprint 1-10 LIVE'a EK)
+- Data: `Assets/Scripts/MapDesigner/Composition/{CompositionRole, CompositionRoleMap, CompositionRoleMapGenerator, WangContextResolver}.cs`
+- Modified: `Assets/Scripts/MapDesigner/WallOverlayPainter.cs` (added 4-arg `PlaceWallSprite_ContextAware` + 6-arg `_WithCandidates` helper + `[SerializeField] AssetPoolSO l3WallVariantPool` field; existing methods + `sealed` keyword UNCHANGED)
+- Tests: `Assets/Tests/EditMode/Composition/{CompositionRoleMapGeneratorTests, WangContextResolverTests, CompositionPainterIntegrationTests}.cs` (15 test PASS)
+
+### Test durumu (S86 sonu)
+- **193/197 PASS** (EditMode full)
+- 65/65 Brush PASS
+- 15/15 Composition PASS
+- 11/11 Room PASS
+- **4 pre-existing failure** (Sprint 11 scope dışı): `FeatureEdgeSmoothingTests` / `FeatureMaskSOTests` / `HitPauseDriverTests` / `NaturalFeatureGraphTests`
+
+### Sıradaki — yeni session karar verecek
+
+| Öncelik | İş | Owner | Notlar |
+|---|---|---|---|
+| **P0** | PixelLab Character States analizini oku → integrate/defer/skip karar | Opus (yeni session) | Karakter pipeline'ı değiştirebilir |
+| P1 | Karakter Batch 1 üretimi | USER (PixelLab Web UI) | Character States kararı sonrası |
+| P1 | M8 Phase 2 vertical slice loop test | USER (Unity manuel) | `STAGING/m8_phase2_vertical_slice_checklist.md` |
+| P2 | Sprint 9 worktree commit | Opus + USER | FreeformDecalExecutor + diğer M dosyaları, git hygiene |
+| P2 | 4 pre-existing test failure fix | Codex / rima-codex | FeatureEdgeSmoothing + 3 diğer |
+| P3 | Sprint 12 spec yazımı | Opus | Props Mode + Bridson Poisson + density-aware |
+| P3 | Karar #144 LOCK (memory + master karar belgesi consistency check) | rima-doc | Karar #71+#73 REVOKE durumu çapraz doğrula |
+
+### Workflow override durumu
+- 16-18 May Opus implement override **aktif** (2 gün kaldı, sonra Sonnet'e döner)
+- cx_dispatch.py CONDA fix sonrası Codex dispatch live — `python cx_dispatch.py --task-file STAGING/codex_review_*.md --effort high`
+- `feedback_sonnet_first_routing` ([[sonnet-first-routing]]): Opus orchestrator BULK İŞ YAPMAZ, Sonnet sub-agent öncelik
+
+---
+
+## 2026-05-16 S86 — Multi-stream parallel work pass (Sprint 11 spec + test fixes + memory cleanup)
+
+**Yeni session başladığında ilk 30 saniye:**
+1. CLAUDE.md + .claude/PROJECT_RULES.md oku
+2. Bu dosyanın ilk bölümünü oku
+3. `STAGING/codex_brush_sprint11_natural_engine.md` (next sprint impl spec) + `STAGING/codex_review_sprint11_spec_DONE.md` + `STAGING/codex_review_sprint11_spec_delta_DONE.md`
+4. Memory teyit: [[weaponless-animation-v1]] [[combat-feel-research-combined]] [[juice-features-v1]] [[music-production-pipeline]] [[sonnet-first-routing]] [[room-library-architecture]]
+5. Karakter üretim hazır (Batch 1 user-side beklemede): `STAGING/character_production_prompts.md`
+
+**Bu session orchestrator (Opus) ne yaptı — parallel streams:**
+
+### Stream A: Memory + decision hygiene (rima-doc Sonnet)
+- 5 stale memory dosyası güncellendi (128px→64×64, anim notes, char system, visual quality, mob roster)
+- MASTER_KARAR_BELGESI.md **Karar #144** eklendi (silahsız body + WeaponSR child; #71+#73 REVOKED işaretlendi)
+
+### Stream B: Sprint 11 spec yazımı (Opus impl → Codex review → Opus fix)
+- `STAGING/codex_brush_sprint11_natural_engine.md` LIVE
+- Scope: CompositionRoleMap + WangContextResolver + WallOverlayPainter context-aware (V1 minimum)
+- Forbidden list explicit (Sprint 12 Props + Bridson Poisson + AI tag suggestion)
+- Codex review verdict: PASS-WITH-CONDITIONS 85% → 3 fix uygulandı (sealed sınıf partial yerine direct method, OQ RESOLVED, BrushAssetVariant read-only file)
+- Delta re-review background'da
+
+### Stream C: Pre-existing 3 Brush test failure fix (Opus impl + Unity verify)
+- Root cause: `CreateTilemap` helper'ında `TilemapRenderer.AddComponent` önce çağrıldığı için auto-add `Tilemap` oluşturuyor → sonraki `AddComponent<Tilemap>` `null` döndürüyor (DisallowMultipleComponent)
+- Fix: 2 test dosyasında component sırası swap (Tilemap önce, TilemapRenderer sonra) + Karar143K tolerance 0.001→0.01 (8-bit Color alpha precision)
+- **65/65 Brush test PASS** (önceki 62 PASS + 3 fixed)
+
+### Stream D: cx_dispatch.py CONDA fix (rima-codex background)
+- Bug: `cmd /c cx.cmd` triggers `CONDA_SHLVL was unexpected at this time.` parse error → silent dispatch fail
+- Approach C/B/A çözüm sırası (env scrub → PowerShell wrapper → direct invocation)
+- Background dispatch (verdict bekleniyor)
+
+### Yeni memory dosyaları (5)
+- `project_combat_feel_research_combined.md` — Bandit Knight + ReBlade combined hitstop/shake/slow-mo tuning matrix
+- `project_juice_features_v1.md` — Top 10 polish features (footprints, embers, coin bounce)
+- `project_music_production_pipeline.md` — Stable Audio Open + REAPER + 2-state dynamic music
+- `project_weaponless_animation_v1.md` — Karar #144 full spec
+- `feedback_sonnet_first_routing.md` — Opus tasarruf, Sonnet sub-agent öncelikli
+
+### Karakter production hazır (USER tarafı)
+- `STAGING/character_production_prompts.md` — 10 sınıf × 5 base direction (S, SE, E, NE, N) + 3 mirror = 80 sprite paste-ready prompts
+- 64×64 native LOCK (Karar #74 confirm)
+- Reference image description + style anchor + pose contract + 5-5 batch plan
+- `STAGING/animation_spec_weaponless.md` — Karar #144 anim spec (hand anchors, weapon child SR sync, per-class attack motion)
+
+### Sprint 11 IMPL durumu (cycle CLOSED)
+- Codex review #1 (cx_dispatch ile, CONDA fix sonrası ilk gerçek dispatch): **FAIL** — 4 blocker
+  1. WallOverlayPainter signature drift (spec 4-arg, ben 6-arg yapmıştım)
+  2. Fallback behavior eksikti
+  3. WangContextResolver pos-not-wall null check yoktu
+  4. FreeformDecalExecutor worktree pollution (Sprint 9 residue, Sprint 11 sorunu değil)
+- Opus fix uygulandı: 4-arg void overload + `[SerializeField] AssetPoolSO l3WallVariantPool` + null check + 6-arg helper renamed to `_WithCandidates`
+- Codex re-review (delta): **PASS** — "Remaining blockers: none for the 3-fix delta scope"
+- Tests: 193/197 PASS (Composition + Brush + Room hepsi temiz; 4 pre-existing failure: FeatureEdgeSmoothing/FeatureMaskSO/HitPauseDriver/NaturalFeatureGraph — Sprint 11 scope dışı)
+
+### Sıradaki (user'ın geri dönüşüne göre)
+1. Karakter Batch 1 üretimi (user PixelLab Web UI V3'te) — prompts ready
+2. M8 Phase 2 vertical slice loop test (Unity manuel) — checklist ready
+3. Sprint 9 worktree commit (FreeformDecalExecutor + diğer M residue) — git hygiene task
+4. 4 pre-existing test failure fix (FeatureEdgeSmoothing 2 vs 8, FeatureMaskSO density, HitPauseDriver timing flake, NaturalFeatureGraph 57ms vs 20ms perf budget)
+5. Sprint 12 spec yazımı (Props Mode + Bridson Poisson + density-aware) — Sprint 11 forward-compat path açık
+
+---
+
+## 2026-05-16 S86 SPRINT10_IMPL — Sprint 10 implementation LIVE (Opus impl, Codex review pending)
+
+**Yeni session başladığında ilk 30 saniye:**
+1. CLAUDE.md + .claude/PROJECT_RULES.md oku
+2. Bu dosyanın ilk bölümünü (SPRINT10_IMPL) oku
+3. `STAGING/codex_review_sprint10_impl.md` oku (review task spec)
+4. `STAGING/codex_review_sprint10_impl_DONE.md` veya `CODEX_DONE.md` son section oku (Codex verdict yazıldıysa)
+5. Memory teyit: [[room-library-architecture]] [[s86-opus-signoff-decisions]] [[brush-tool-v1-design]] [[codex-as-reviewer-until-may18]]
+6. Verdict'e göre: PASS → M8 Phase 2 vertical slice loop test; FAIL → Codex blocker fix
+
+**Bu session orchestrator (Opus) ne yaptı — özet:**
+- Sprint 10 spec (`STAGING/codex_brush_sprint10_room_template_bank.md`) full impl
+- 11 yeni source + 3 test + RoomTemplateSO extend (Sprint 9 5-field stub korundu, sadece eklendi)
+- 4 OQ resolution: DoorDirection enum reuse (RIMA.DoorDirection), CameraBounds RectInt tile-space, RoomBank direct ref, EnemySpawn tierHint string
+- dotnet build PASS — RIMA.Runtime + RIMA.Editor + RIMA.Brush.Tests + RIMA.Tests.EditMode + RIMA.Tests.PlayMode hepsi 0 error
+- Codex review dispatch background — `STAGING/codex_review_sprint10_impl.md` cx_dispatch.py'a verildi
+
+**Sprint 10 LIVE files (Sprint 1-9 LIVE'a EK):**
+- Data: `Assets/Scripts/MapDesigner/Room/Data/` — DoorSocket, PlayerSpawnSocket, EnemySpawnSocket, CameraBounds, RoomBankSO, RoomTemplateSO (extended)
+- Validation: `Assets/Scripts/MapDesigner/Room/Validation/` — RoomValidationIssue (+ ValidationSeverity), RoomTemplateValidator
+- Editor: `Assets/Scripts/MapDesigner/Room/Editor/` — SaveLoadResults, RoomTemplateSaver (GUID-preserving + rootDirOverride for tests), RoomTemplateLoader (all `#if UNITY_EDITOR`)
+- Runtime: `Assets/Scripts/MapDesigner/Room/Runtime/RoomBankRuntimeTester.cs` (+ RoomTestResult)
+- Tests EditMode: `Assets/Tests/EditMode/Room/RoomTemplateSaveLoadTests.cs` (3) + `RoomBankPickTests.cs` (6)
+- Tests PlayMode: `Assets/Tests/PlayMode/Room/RoomBankRuntimeSpawnTests.cs` (2)
+
+**Önemli design decisions:**
+- `RIMA.DoorDirection` (mevcut, DoorTrigger.cs) REUSE — yeni enum oluşturulmadı
+- `ERR_ENEMY_IN_PROP_FOOTPRINT` Sprint 10'da DEFER (prop data §4 forbidden) → yerine `ERR_ENEMY_OUT_OF_BOUNDS` impl (bounds containment check)
+- Pick determinism: `unchecked(seed * 1103515245 + 12345)` LCG + mask + modulo — negative seed safe
+- RoomTemplateSaver `EditorUtility.CopySerialized` in-place update → GUID stability test PASS
+
+**Codex review verdict (rima-codex agent üzerinden):** `STAGING/codex_review_sprint10_impl_DONE.md` LIVE.
+- **PASS-WITH-CONDITIONS 90%** (profile: laurethgame).
+- EC matrix 9/10 VERIFIED; EC-3 PARTIAL.
+- Forbidden-list: ALL CLEAR (§4 hiçbir madde ihlal yok).
+- R1 (P1) EC-3 test coverage gap → **FIXED** bu session (SaveRoom_PopulatesAllFields_ReloadsIdentical artık tüm field'ları assert ediyor: nested socket ID'ler/facing/direction/widthInTiles, enemy positions + tierHint, cameraBounds.tileRect, difficultyTags, blockerTags).
+- R3 (P2) RoomBankSO public list exposure → doc comment eklendi (callers must use Pick/AllRooms for Sprint 11 Addressables compat).
+- R2 (P2) signoff path lookup → traceability issue, kod değişmedi (file gerçek memory'de var, Codex relative path resolve edemedi).
+
+**Dispatch infrastructure notu:** İlk `cx_dispatch.py` cmd /c shell üzerinden CONDA_SHLVL env hook hatası nedeniyle sessizce başarısız oldu. **rima-codex sub-agent başarıyla dispatch etti** — bu pencerede tercih edilen route. PROJECT_RULES.md'de `rima-codex KALDIRILDI` yazıyor ama cx_dispatch CONDA fix yapılana kadar rima-codex aktif fallback.
+
+**M9 GO (loop): Sprint 10 PASS verdict + P1 fix → M8 Phase 2 (vertical slice loop test) green-light.** Checklist: `STAGING/m8_phase2_vertical_slice_checklist.md`.
+
+**Sonraki adım — verdict'e göre:**
+- **PASS:** M8 Phase 2 vertical slice loop test (PixelLab Wang import → BrushAtlasImporter → manuel room author → SaveRoom → reload → RoomBank.Pick → PlayMode tester run)
+- **FAIL:** Codex blocker'ları fix → re-review → tekrar
+
+---
+
+## 2026-05-16 S86 SPRINT9_LIVE — Sprint 9 LIVE + M8 Phase 1 PASS + M9 GO Sprint 10
+
+**Yeni session başladığında ilk 30 saniye:**
+1. CLAUDE.md + .claude/PROJECT_RULES.md oku
+2. Bu dosyanın ilk bölümünü (SPRINT9_LIVE) oku
+3. `STAGING/sprint9_m8_phase1_PASS_report.md` oku (önceki session full summary)
+4. Memory teyit: [[s86-opus-signoff-decisions]] [[brush-tool-v1-design]] [[room-library-architecture]] [[karar-143-layered-pipeline]] [[codex-as-reviewer-until-may18]] [[natural-paint-integration]]
+5. Sprint 10 implementation başla — spec hazır: `STAGING/codex_brush_sprint10_room_template_bank.md` (patched)
+
+**Agent çalışma felsefesi (S86 LOCK):**
+- Codex / Opus / Claude RIMA-spesifik doğal yerleşim ve Hades-tone okunabilirlik gözetir — mekanik spec uygulamaz ([[natural-paint-integration]]).
+- Composition roles (clean center / decorated edge / focal cluster) yerleşim için primary model.
+- Wang context-aware paint Sprint 11 hedefi: komşu tile-grid hücrelerine bakarak case auto-select.
+- 2+ sistem kesen aesthetic karar → rima-design (Opus sub-agent).
+- Mekanik impl → Codex / rima-codex (16-18 May arası Opus implement, Codex review override aktif).
+
+**Bu session orchestrator (Opus) ne yaptı — özet:**
+- M1-M5 9-madde plan tüm dokümantasyonu kapsandı (4 STAGING spec + 4 memory)
+- M6 PixelLab Wang tileset üretildi (tileset_id `7b34aa6b-2031-455d-94e5-4322579c984e`, ShatteredKeep biome, 128×256 PNG, tileset15 format)
+- M7 Sprint 9 implementation: 25 source + 4 test (18 yeni test PASS) — compile clean
+- M8 Phase 1 PASS: PixelLab → BrushAtlasImporter → 21 Wang variant → FreeformDecalExecutor paint → `localScale=±1.0` (R1 retrofit verified) + sortingLayer "Patch" (R2 verified)
+- M9 GO karar: Sprint 10 implementation green-light
+
+**Sprint 9 LIVE files (Sprint 1-8 LIVE'a EK):**
+- Data: BrushAssetVariant, BrushRadiusProfileSO, SliceLayoutTemplateSO (+ SliceCell), ValidationIssue, ImportResult, Enums.cs EXTEND (SizeBucket + ValidationIssueSeverity), AssetPoolSO EXTEND (variants list), BrushLayerOperation EXTEND (useNativeBucketVariantPath + radiusForBucketPick)
+- Editor: WangSliceGenerator (tileset_data.tiles nested parse), BrushAtlasImporter (texture lock + variant build + GUID preserve), BrushAtlasValidator (severity-typed), BrushVariantPreviewWindow, SliceTemplateFactory, BrushAtlasImportMenu
+- 2 P0 retrofits: FreeformDecalExecutor (PickVariant wired + scale 1.0 if useNativeBucketVariantPath + WarnLegacyScale), RimaSortingLayerValidator (Detail/Accent/Props/Entities EnsureLayerAfter)
+- Stub: RoomTemplateSO (thin 5 field, RIMA.RoomType global)
+- 4 SliceLayoutTemplate .asset: L3_Wang16_Topdown (wangAware), L4_Organic_512 (17 cells), L5_Detail_512 (32 cells), L6_Accent_512 (11 cells) + BrushRadiusProfile_Default.asset
+
+**Live Assets:**
+- `Assets/Art/BrushAtlas/Intake/L3_Wang_ShatteredKeep/master.png` (Wang tileset, 128×256)
+- `Assets/Art/BrushAtlas/Pools/L3_Wang_ShatteredKeep.asset` (21 variants, 16 unique Wang cases)
+- `Assets/Data/Brush/SliceTemplates/*.asset` (5 templates)
+
+**Sprint 10 scope (next session):**
+- ~12 yeni dosya: RoomTemplateSO full + helper types (DoorSocket / PlayerSpawnSocket / EnemySpawnSocket / CameraBounds / DoorDirection enum) + RoomBankSO + Saver/Loader/Validator + PlayMode runtime tester + 3 test files
+- Estimate: 1-1.5 day
+- Spec: `STAGING/codex_brush_sprint10_room_template_bank.md` (patched per Codex blocker round)
+- Output: M8 Phase 2 (save/load/PlayMode) complete → vertical slice loop FULL
+
+**Codex review verdicts:**
+- M1+M3+M4+M5 batch (cx_dispatch.py): PASS-WITH-CONDITIONS 78% — 6 blocker hepsi fixed inline ✅
+- Sprint 9 impl (cx_dispatch.py): FAIL 86% — 3 blocker hepsi fixed + 2 polish iteration ✅
+  - Fix 1: Wang `tileset_data.tiles` nested class hierarchy
+  - Fix 2: PickVariant wired into PlaceSingle (not just helper)
+  - Fix 3: Wang import test added (real PixelLab nested JSON fixture)
+  - Polish 4: variantId uses tile.name (5 duplicate fix)
+  - Polish 5: BrushAtlasImporter all_floor_reference skip via tag (StartsWith fix)
+
+**Pre-existing 3 test failures (NOT Sprint 9-caused — Codex confirmed):**
+- `BrushDecorativeExecutorTests.Karar143K_FeatureMaskMultiplier` — 8-bit Color alpha precision (tolerance 0.001 vs 0.50196)
+- `BrushDecorativeExecutorTests.EraseAllDecorative_PreservesL1L2` — NRE (EraseAllDecorativeExecutor untouched)
+- `BrushExecutorTests.GridTileExecutor_SetsTileOnTilemap` — NRE (GridTileExecutor untouched)
+- Follow-up tasks, not Sprint 9 dependency.
+
+**Workflow override (16-18 May, 2 gün kaldı):** Opus implement → Codex review. 18 May sonrası eski routing'e dön ([[codex-vs-opus-split]]).
+
+**Opus signoff (6 Codex blocker resolutions):** [[s86-opus-signoff-decisions]]
+
+---
+
+## 2026-05-16 S86 PREP-3 — Map Designer Architecture LOCK + 9-Madde Plan (CLEAR-READY)
+
+**Yeni session başladığında ilk 30 saniye:**
+1. CLAUDE.md + .claude/PROJECT_RULES.md oku
+2. Bu dosyanın ilk bölümünü (S86 PREP-3) oku
+3. `STAGING/sprite_strategy_FINAL_PLAN.md` + `STAGING/codex_meta_review.md` + `STAGING/codex_sprite_strategy_review.md` oku (3 perspektif harmanlamasının kaynak dokümanları)
+4. Memory'den şunları teyit et: [[brush-tool-v1-design]] [[karar-143-layered-pipeline]] [[camera-angle-revisit-s43]] [[8dir-mirror-production-strategy]] [[codex-as-reviewer-until-may18]] [[pixellab-tool-inventory]] [[pixellab-create-image-pro]] [[pixellab-character-via-web-ui-v3]]
+5. Aşağıdaki 9 maddeyi paralel/sıralı yapıla göre uygula
+
+**Özet karar:**
+- **Hybrid Auto-Slice strategy LOCK** (Strategy A L3 wall semantic + Strategy B L4-L6 atlas slice)
+- **Wang Full 16 corner set** L3 wall için (eski semantic 7-type plan iptal)
+- **Lower-upper Wang chain** PixelLab MCP `create_topdown_tileset` ile (5 tileset biome chain — ama vertical slice'ta sadece 1)
+- **8-direction LOCK** karakter sprite (önceden 4-dir lock'tu, S86 flip)
+  - Production: 5 sprite üret (S, N, E, SE, NE), 3 yön Unity'de mirror (W, SW, NW = E/SE/NE flipX)
+  - Body simetrik (asymmetric features YASAK), silahlar ayrı child SpriteRenderer attach
+- **Composition Roles primary model** Natural Engine için (clean center / decorated edge / focal cluster / wall band / door safety)
+- **Editor-only RoomBank** (NO runtime procedural) — 20-30 oda/tip MVP, sonra artır
+- **Markov clustering DEFER** (Spelunky sub-templates yeterli)
+- **AI tag suggestion DEFER** (template-based + Preview override)
+- **SpriteAtlas DEFER** (V2 polish)
+- **2 P0 retrofit mevcut kodda:** scaleRange runtime non-integer scale + sorting layer mismatch (Patch+Scatter only, Detail/Accent eksik)
+
+**Workflow override (16-18 May 2026 only):** Opus/Sonnet implement, Codex review. Claude Code limit aşırı yüksek, Codex idle. Limit normal döndüğünde [[codex-vs-opus-split]] eski routing'e dön.
+
+---
+
+## 9 MADDE PLAN — Paralel/Sıralı Akış
+
+### TRACK A — Documentation + Spec (Opus implement, Codex review)
+
+**Madde 1.** `STAGING/sprite_strategy_FINAL_LOCK.md` yaz (3 perspektif son hali, tek yetki dokümanı)
+- Owner: Opus
+- Bağımlılık: yok (paralel başlayabilir)
+- Output: STAGING dosyası
+- Codex review: gerekli (PASS gerekiyor sonraki madde için)
+
+**Madde 2.** Memory consolidation
+- Owner: Opus
+- Bağımlılık: yok (Madde 1 ile paralel)
+- Yapılacak: `project_brush_tool_v1.md` Sprint 9-13 + 2 retrofit; `project_karar_143_layered_pipeline.md` Wang 16; yeni `project_room_library_architecture.md`; mevcut `project_camera_angle_revisit_s43.md` (✅ S86 update yapıldı); `feedback_8dir_mirror_production_strategy.md` (✅ yazıldı); `feedback_codex_as_reviewer_until_may18.md` (✅ yazıldı); MEMORY.md index (✅ güncellendi)
+- Output: Memory güncellemeleri
+- Codex review: opsiyonel (consistency check)
+
+**Madde 3.** `STAGING/codex_brush_sprint9_atlas_importer.md` task spec yaz
+- Owner: Opus
+- Bağımlılık: Madde 1 PASS
+- İçerik: SizeBucket + BrushAssetVariant + BrushRadiusProfileSO + SliceLayoutTemplateSO + BrushAtlasImporter + BrushAtlasValidator (Error/Warning/Info severity) + BrushVariantPreviewWindow + RoomTemplateV1 contract stub + scaleRange retrofit + sorting layer retrofit + tests
+- **Yasak:** RoomBank implementation (Sprint 10'a)
+- Output: STAGING task spec
+- Codex review: gerekli (PASS gerekiyor implementation için)
+
+**Madde 4.** `STAGING/codex_brush_sprint10_room_template_bank.md` task spec yaz
+- Owner: Opus
+- Bağımlılık: Madde 1 PASS (Madde 3 ile paralel yazılabilir)
+- İçerik: RoomTemplateSO V1 + RoomBankSO + save/load + runtime test loader + validation (player spawn + exit + camera + dependencies)
+- Output: STAGING task spec
+- Codex review: gerekli
+
+### TRACK B — Asset Pipeline Spec + Production (Opus spec, User produce)
+
+**Madde 5.** `STAGING/pixellab_l3_wang_chain.md` yaz (sadece 1 tileset spec — Floor→Wall basic)
+- Owner: Opus
+- Bağımlılık: Madde 1 PASS (Madde 3/4 ile paralel)
+- İçerik: PixelLab MCP `create_topdown_tileset` parametreleri, Floor (lower) → Wall (upper), transition_size 1.0 (full wall transition), tile_size 32, biome ShatteredKeep palette, Hades style descriptions
+- Output: STAGING tileset spec
+- Codex review: opsiyonel
+
+**Madde 6.** Sen 1 Wang tileset üret
+- Owner: USER
+- Bağımlılık: Madde 5 PASS
+- Yapılacak: PixelLab MCP `create_topdown_tileset` çağır (Madde 5 spec'iyle), 16 veya 23 tile çıkacak, PNG indir
+- Output: PNG tileset asset (`STAGING/TILESET_OUTPUT/L3_Wang_Floor_Wall_v1.png`)
+
+### TRACK C — Implementation + Loop Test (SIRALI — bu kritik)
+
+**Madde 7.** Sprint 9 implementation
+- Owner: Opus implement → Codex review
+- Bağımlılık: Madde 3 PASS
+- Yapılacak: BrushAtlasImporter + Validator + Preview + bucket data model + RoomTemplate stub + 2 retrofit kod yaz, test'leri çalıştır, dotnet build PASS
+- Output: ~10-15 source dosya + 5-7 EditMode test
+- Codex review: gerekli (bu pencerede Opus kod yazar, Codex onaylar)
+
+**Madde 8.** Vertical slice loop test
+- Owner: Opus + USER
+- Bağımlılık: Madde 6 PASS + Madde 7 PASS
+- Yapılacak:
+  - Tileset PNG'yi BrushAtlasImporter ile import et → AssetPool variant'ları oluşur
+  - Brush window'da 1 test odası boya (sadece bu 1 tileset)
+  - Save current room as RoomTemplate (Sprint 9 stub'ıyla)
+  - Sprint 10 henüz yoksa: minimum runtime loader stub yaz, RoomBank.Pick test
+  - PlayMode'da player spawn + 1 placeholder enemy + exit valid
+- Output: Loop PASS/FAIL raporu
+
+**Madde 9.** GO/NO-GO karar (sadece Madde 8 sonucuna göre)
+- Owner: Opus + USER
+- Bağımlılık: Madde 8 PASS
+- **Loop GEÇERSE:**
+  - Sprint 10 implementation başla (RoomBank tam)
+  - 4 Wang tileset daha üret (biome chain)
+  - 6 master atlas üret (L4-L6)
+  - Sprint 11 task spec yaz + dispatch
+  - Karakter regen audit başla (5 batch × ~9 sprite)
+- **Loop FAILSE:**
+  - Architecture düzelt — yeni asset üretme
+  - Sprint 9 retrofit
+  - Loop tekrar test
+
+---
+
+## Paralelleştirme Diyagramı
+
+```
+ZAMAN →
+
+Madde 1 ──┐
+Madde 2 ──┤ (paralel başlar)
+          │
+          ▼ Madde 1 PASS
+Madde 3 ──┐
+Madde 4 ──┤ (paralel)
+Madde 5 ──┘
+          │
+          ▼ Madde 5 PASS
+Madde 6 ──┐ (USER üretir, paralel)
+          │
+Madde 3 PASS
+          ▼
+Madde 7 ──── (Opus implement → Codex review)
+          │
+          ▼ Madde 6 PASS + Madde 7 PASS
+Madde 8 ──── Vertical slice loop test
+          │
+          ▼ Madde 8 sonucu
+Madde 9 ──── GO/NO-GO karar
+```
+
+**İlk gün hedef:** Madde 1, 2, 3, 4, 5 tamamlanır + Madde 6 user dispatch → 24h içinde Madde 7 başlar
+**İkinci gün hedef:** Madde 7 + 8 + 9 tamamlanır → loop GO ise Sprint 10 + ek üretim
+
+---
+
+## Daha önce locked olan kararlar (S86 öncesi, hâlâ geçerli)
+
+- Karar #143 6-layer pipeline LIVE (L1+L2 sahnede)
+- Brush V1 8-sprint LIVE (~52 source + 5 test, 37 test pass)
+- PixelLab MCP HTTP transport bağlı (32 endpoint deferred listede)
+- Unity MCP bağlı (40+ tool)
+- Sahnede 60 patch + 7 scatter — Aşama 1+2 procedural test çıktısı (silinebilir veya korunabilir, V1 vertical slice'tan önce karar verilmeli)
+- 12 default brush BrushPack'te (sprite reference'ları boş — atlas import sonrası bind)
+- Karakter durumu (Glob audit S86): Warblade/Elementalist/Ranger/Shadowblade 4-yön idle var (legacy, 8-yön regen için işaretli); Gunslinger 8-yön zaten var (KEEP); Ravager/Brawler/Ronin/Summoner/Hexer sprite eksik (üretim listesinde)
+
+---
+
+## Risk Reminders (Codex meta-review)
+
+- **R1:** scaleRange P0 bug — yeni variant path scale uygulamamalı
+- **R2:** Sorting layer mismatch — Patch + Scatter + Detail + Accent + Props + Entities hepsini valide et
+- **R3:** L3 wall master ilk dispatch'tir (1 tileset), full batch DEĞİL — vertical slice geçmeden 4 tileset daha üretme
+- **R4:** Markov clustering YASAK V1'de (composition roles + Poisson + anti-repeat yeter)
+- **R5:** Asset GUID stability — importer existing asset update etmeli, delete/recreate değil
+- **R6:** EditMode test isolation — `Assets/TempTests/...` altında, shared `Assets/Data/Brush`'a yazma
+
+---
+
+## 2026-05-16 S86 PREP-2 — PixelLab MCP Claude'a eklendi (restart gerekli)
+
+**Bu mini-session ne yapıldı:**
+- **PixelLab MCP server eklendi** — `claude mcp add pixellab https://api.pixellab.ai/mcp -t http -H "Authorization: Bearer <token>"` çalıştırıldı, local config'e (`.claude.json` proje scope) yazıldı.
+- **CLI doğrulama:** `claude mcp list` → `pixellab: ✓ Connected` (HTTP transport sağlıklı).
+- **Bu session'da tool YÜKLENMEDİ:** `ToolSearch "pixellab"` → no matches. Çalışan session retroactive enjekte almıyor — restart şart.
+- **Unity MCP confirmed working:** `mcp__unityMCP__*` 40+ tool aktif, sahne `Phase1_ProceduralMap_Test` yüklü, MapRoot altında Aşama 1+2 canlı (60 patch + 7 scatter), `MapLayerOrchestrator` sahnede YOK.
+- **6-katman map durumu tespit edildi:** L1+L2 sahnede çizili. L3-L6 için sprite YOK (Sprint 3 PixelLab batch dispatch'i bekliyor). Placeholder ile çizmek istemedik, kullanıcı gerçek sprite üretecek.
+
+**Restart sonrası ilk session adımları (önce ben kontrol):**
+1. `ToolSearch "pixellab"` çağır → `mcp__pixellab__*` tool'larının deferred listede olduğunu doğrula
+2. Onaylama mesajını kullanıcıya ver
+3. Kullanıcı Sprite 1 üretimine başlar (`STAGING/pixellab_l3_wall_batch.md` satır 73-85 JSON)
+4. Pick 4 → `STAGING/TILESET_OUTPUT/L3_Wall_Horiz/wall_horiz_{A,B,C,D}.png`
+5. QC PASS → Sprite 2; FAIL → style_strength 0.65 veya 0.80 ile regen
+
+**Sprint 3 sprite üretim sırası (özet, detay batch dosyalarında):**
+- L3 wall = 7 call ~21 credit, 14 pick (Sprite 1 horiz → 2 vert → 3-6 corners → 7 doorway)
+- L4/L5/L6 = 5 call ~15 credit, 15 pick (moss + dirt + crack + rubble + rift fracture + rift corruption)
+- Toplam ~36 credit, 29 sprite. `create_object` only (tiles YOK — L3 perimeter cap, L4-L6 decal).
+
+**Üretim tamamlanınca Claude'un yapacakları:**
+- PNG import (`mcp__unityMCP__manage_asset`) — Point filter, PPU=32, compression=None
+- AssetPool .asset'lerinin `sprites[]` array'ini güncelle (Sprint 6'da pool'lar oluşturuldu, ref bind kaldı)
+- Sahnede `MapLayerOrchestrator` GameObject + child painter'lar oluştur
+- BrushPack + BiomeSkin bind, 6 katman Paint çağrısı → görsel sonuç
+
+**Güvenlik:** PixelLab Bearer token transcript'e düştü. Üretim bitince rotate önerisi.
+
+---
+
 ## 2026-05-16 S86 PREP — Brush V1 compile fix + Unity MCP Claude'a bağlandı
 
 **Bu session ne yapıldı (yeni session başlangıcı için handoff):**
