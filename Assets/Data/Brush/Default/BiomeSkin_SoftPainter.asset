@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 505523cab4085134d80683e82283b59c, type: 3}
+  m_Name: BiomeSkin_SoftPainter
+  m_EditorClassIdentifier:
+  skinName: Soft-Painter
+  defaultBrushPack: {fileID: 0}
+  layerRenderRules:
+  - layer: 0
+    alphaMode: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    overrideMaterial: {fileID: 0}
+    sortingOrder: 0
+  - layer: 1
+    alphaMode: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    overrideMaterial: {fileID: 0}
+    sortingOrder: 10
+  - layer: 2
+    alphaMode: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    overrideMaterial: {fileID: 0}
+    sortingOrder: 100
+  - layer: 3
+    alphaMode: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    overrideMaterial: {fileID: 0}
+    sortingOrder: 200
+  - layer: 4
+    alphaMode: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    overrideMaterial: {fileID: 0}
+    sortingOrder: 300
+  - layer: 5
+    alphaMode: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    overrideMaterial: {fileID: 0}
+    sortingOrder: 400
+  globalTint: {r: 1, g: 1, b: 1, a: 1}
+  ambientLightIntensity: 0.40
