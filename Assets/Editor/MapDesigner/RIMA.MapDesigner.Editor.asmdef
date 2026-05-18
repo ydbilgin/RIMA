@@ -1,0 +1,19 @@
+{
+    "name": "RIMA.MapDesigner.Editor",
+    "rootNamespace": "RIMA.MapDesigner.Editor",
+    "references": [
+        "RIMA.Runtime",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

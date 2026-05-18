@@ -1,7 +1,22 @@
-Sprint 13 implementation review completed.
+# CODEX DONE laurethgame
 
-Verdict: FAIL
+Task: Phase B-2 Click-to-Place + Auto-Collider implementation
+Status: DONE_FOR_ORCHESTRATOR_REVIEW
+Date: 2026-05-18
 
-Required report written to STAGING/codex_review_sprint13_impl_DONE.md.
+Files changed:
+- Assets/Editor/MapDesigner/AssetPackBrowserWindow.cs
+- Assets/Scripts/Rima/MapDesigner/SO/PropDefinitionSO.cs
+- Assets/Scripts/MapDesigner/Props/PropDefinitionSO.cs
+- Assets/Data/Brush/Props/Barrel/barrel_001.asset
+- Assets/Tests/EditMode/MapDesigner/AssetPackBrowserPlacementTests.cs
+- STAGING/CODEX_TASK_PHASE_B2_IMPLEMENT_DONE.md
 
-Key result: EditMode passed through the live Unity editor (321/321 progress, 0 failed), and the dependency report was generated. The review still fails because PropRuntimeSpawner is not wired into the live runtime room-load path; it is only a callable service covered by direct tests. Additional gaps: v1.1 spec text still contains the old "seed-based or random" variant wording, dotnet build is blocked by a missing local Microsoft.Unity.Analyzers.dll reference for RoomDesigner editor projects, and full PlayMode is blocked by _IsoGame missing from the active build profile/shared scene list.
+Verification:
+- AssetPackBrowserPlacementTests: 10/10 PASS
+- AssetPackBrowserTests + AssetPackBrowserPlacementTests: 18/18 PASS
+- Full EditMode suite: 352 discovered, blocked by unrelated MCP-FOR-UNITY transport log assertion in PlayerAnimatorDirectionTests
+- Screenshot: Assets/Screenshots/phase_b2_scene_view_ghost_and_placement.png
+
+Verdict:
+PASS_FOR_ORCHESTRATOR_REVIEW. Phase B-2 click-to-place, active target binding, ghost preview, auto-collider attachment, placed-object inspector edits, tests, and DONE marker are implemented.

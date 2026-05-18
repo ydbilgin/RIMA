@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db5c3fe6d4353749bf4fdf2ffb1285a, type: 3}
+  m_Name: RIMA_v2_Pack
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.AssetPackManifestSO
+  packId: rima_assetparts_v2
+  displayName: RIMA AssetParts v2
+  atlases:
+  - {fileID: 11400000, guid: 7ca5ae44e27dbbf46b8a3c01f92f33f9, type: 2}
+  - {fileID: 11400000, guid: d026caf3ce35c7444a399059a62b1f64, type: 2}
+  - {fileID: 11400000, guid: 968dcf9d1a1ee78428dfb007f11822a3, type: 2}
+  - {fileID: 11400000, guid: a96eac2e407871947add312385b2a723, type: 2}
+  - {fileID: 11400000, guid: aa171063505c77e479619152bb61c6ea, type: 2}
+  - {fileID: 11400000, guid: 064501fd291fedb478dd043d2f7fbb44, type: 2}
+  - {fileID: 11400000, guid: 2b0629369cc49e140902a7acf6e268af, type: 2}
+  props: []
+  categories:
+  - categoryName: BaseFloor
+    atlasNames:
+    - BaseFloor
+    - assetparts_v2_base_floor
+    categoryIcon: {fileID: 0}
+  - categoryName: Moss
+    atlasNames:
+    - OrganicDecal_Moss
+    - assetparts_v2_moss
+    categoryIcon: {fileID: 0}
+  - categoryName: Dirt
+    atlasNames:
+    - OrganicDecal_Dirt
+    - assetparts_v2_dirt
+    categoryIcon: {fileID: 0}
+  - categoryName: Pebbles
+    atlasNames:
+    - DetailScatter_Pebbles
+    - assetparts_v2_pebbles
+    categoryIcon: {fileID: 0}
+  - categoryName: Cracks
+    atlasNames:
+    - DetailScatter_CracksBones
+    - assetparts_v2_cracks_bones
+    categoryIcon: {fileID: 0}
+  - categoryName: Rift
+    atlasNames:
+    - Accent_Rift
+    - assetparts_v2_rift
+    categoryIcon: {fileID: 0}
+  - categoryName: Ritual
+    atlasNames:
+    - Accent_Ritual
+    - assetparts_v2_ritual
+    categoryIcon: {fileID: 0}

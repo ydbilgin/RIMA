@@ -31,6 +31,14 @@ namespace RIMA.MapDesigner.Props
         [Header("Karar #143 Compliance (Sprint 12 V1 LOCK)")]
         public bool respectsWalkableMask = true;
 
+        [Header("Auto Collider (Phase B-2)")]
+        public bool blocksMovement = false;
+        public ColliderShape colliderShape = ColliderShape.None;
+        [Range(0.3f, 1.0f)] public float colliderFootprintRatio = 0.7f;
+        public Vector2 colliderOffset = Vector2.zero;
+        public bool isTrigger = false;
+        public string colliderLayer = "Walls";
+
         [Header("Visual Sorting")]
         public PropSortingMode sortingMode = PropSortingMode.YPosition;
         public int sortingLayerOverride = 0;
@@ -72,6 +80,15 @@ namespace RIMA.MapDesigner.Props
             YPosition,
             FixedOrder,
             AboveAll
+        }
+
+        public enum ColliderShape
+        {
+            None,
+            Box,
+            Circle,
+            Capsule,
+            PolygonAutoTrace
         }
     }
 }

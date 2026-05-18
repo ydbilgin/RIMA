@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f23466e85ce4503b8122ed7fd82e622, type: 3}
   m_Name: barrel_001
   m_EditorClassIdentifier: 
-  propId: barrel_001
+  propId: b50be24c830a450ba0ccd36625e57c31
   displayName: Wooden Barrel
   description: 
   icon: {fileID: 0}
@@ -21,12 +21,11 @@ MonoBehaviour:
   spriteAnchor: {x: 0, y: 0}
   blocksWalkable: 1
   requiresWalkableTile: 0
-  preferredRoles: []
-  forbiddenRoles:
-  - 2
-  - 1
+  preferredRoles: 
+  forbiddenRoles: 0200000001000000
   distanceFromOtherProps: 1
   respectsWalkableMask: 1
   sortingMode: 0
   sortingLayerOverride: 0
   sortingOrder: 0
+  variantSprites: []

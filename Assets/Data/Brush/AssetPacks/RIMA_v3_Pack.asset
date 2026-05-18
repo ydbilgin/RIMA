@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db5c3fe6d4353749bf4fdf2ffb1285a, type: 3}
+  m_Name: RIMA_v3_Pack
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.AssetPackManifestSO
+  packId: rima_assetparts_v3
+  displayName: RIMA AssetParts v3
+  atlases:
+  - {fileID: 11400000, guid: e637e3c19ac21b943bef9afeb2c404e1, type: 2}
+  - {fileID: 11400000, guid: 5b258ec7e695b9941afec8295ffa2bb6, type: 2}
+  - {fileID: 11400000, guid: c7e3e3d289215b04b962a8b43068bf3c, type: 2}
+  - {fileID: 11400000, guid: 9f0ec35a1cc93b44eae31b00971696b3, type: 2}
+  - {fileID: 11400000, guid: f6b2e5436a655bf499bc47a3b828507a, type: 2}
+  - {fileID: 11400000, guid: 64aa415328ab0a04da0ca9d081219266, type: 2}
+  - {fileID: 11400000, guid: 80f58a8e4e8719241b15c2a1c8d84b27, type: 2}
+  props: []
+  categories:
+  - categoryName: Walls
+    atlasNames:
+    - Walls
+    - assetparts_v3_walls
+    categoryIcon: {fileID: 0}
+  - categoryName: VerticalProps
+    atlasNames:
+    - VerticalProps
+    - assetparts_v3_vertical_props
+    categoryIcon: {fileID: 0}
+  - categoryName: BiomeFloor_Mossy
+    atlasNames:
+    - BiomeFloor_Mossy
+    - assetparts_v3_biome_floor_mossy
+    categoryIcon: {fileID: 0}
+  - categoryName: BiomeFloor_Sandy
+    atlasNames:
+    - BiomeFloor_Sandy
+    - assetparts_v3_biome_floor_sandy
+    categoryIcon: {fileID: 0}
+  - categoryName: BiomeFloor_Blood
+    atlasNames:
+    - BiomeFloor_Blood
+    - assetparts_v3_biome_floor_blood
+    categoryIcon: {fileID: 0}
+  - categoryName: BiomeFloor_Cave
+    atlasNames:
+    - BiomeFloor_Cave
+    - assetparts_v3_biome_floor_cave
+    categoryIcon: {fileID: 0}
+  - categoryName: AtmosphericAccents
+    atlasNames:
+    - AtmosphericAccents
+    - assetparts_v3_atmospheric_accents
+    categoryIcon: {fileID: 0}
