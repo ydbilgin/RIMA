@@ -1,27 +1,33 @@
-# Codex Done - laurethgame
 
-Task: Phase B-3 Blueprint Painter (Semantic Zone Brush + Auto-Populate)
+# Phase A v15 Blueprint-First Redesign Done
 Status: DONE_FOR_ORCHESTRATOR_REVIEW
 Date: 2026-05-18
+Executor: Codex laurethgame
 
-Implemented:
-- Blueprint SO contracts, editor canvas/window, auto-populator, and shared PropPlacementService.
-- AssetPackBrowserWindow now routes placement through PropPlacementService and has an Open Blueprint Painter toolbar button.
-- 6-zone default Blueprint profile, prop pools, adjacency rules, and generated PropDefinition wrappers from existing RIMA_v2/RIMA_v3 atlas categories.
-- 13 new EditMode tests for BlueprintCanvas and AutoPopulator.
-- Screenshots saved:
-  - Assets/Screenshots/phase_b3_blueprint_painted.png
-  - Assets/Screenshots/phase_b3_auto_populated.png
-  - Assets/Screenshots/phase_b3_adjacency_pass.png
+## Files modified
+- Assets/Scenes/Demo/RoomPipelineTest.unity (Pro_Redesign_v14_CombatRoom inactive; Pro_Redesign_v15_BlueprintFirst_CombatRoom active)
 
-Verification:
-- Full EditMode: 364/364 PASS
-- AssetPackBrowserTests: 8/8 PASS
-- AssetPackBrowserPlacementTests: 10/10 PASS
-- BlueprintCanvasTests: 6/6 PASS
-- AutoPopulatorTests: 7/7 PASS
+## Files added
+- Assets/Screenshots/PlayableRoom_combat_v15_blueprint_first.png
+- Assets/Screenshots/PlayableRoom_combat_v15_blueprint_first.png.meta
+- STAGING/CODEX_TASK_PHASE_A_v15_BLUEPRINT_FIRST_REDESIGN_DONE.md
 
-Notes:
-- pool_water is intentionally empty due missing source category.
-- Missing/placeholder transition art is documented in STAGING/CODEX_TASK_PHASE_B3_IMPLEMENT_DONE.md.
-- Final deliverable verdict: PASS_FOR_ORCHESTRATOR_REVIEW
+## Composition stats
+- Zones painted: 5 active zones (path, grass, stone, wall, feature; water skipped per spec)
+- Cells painted: 640
+- Props placed by AutoPopulator: 378
+- Transition decals placed by AdjacencyPass: 5
+- Blueprint children total: 383
+- Feature anchors placed: NW=2, NE=2
+
+## EditMode regression
+- Unity TestRunner API result: Passed
+- 364 passed, 0 failed, 0 skipped, 1 inconclusive
+- Expected 364 passing tests preserved
+
+## Console errors
+- None from final scene generation or test execution.
+- Unity batch emitted a licensing access-token update message; license resolution succeeded and execution completed.
+
+## Phase A v15 deliverable verdict
+PASS_FOR_ORCHESTRATOR_REVIEW
