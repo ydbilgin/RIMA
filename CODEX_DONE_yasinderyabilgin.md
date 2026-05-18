@@ -1,16 +1,28 @@
-DONE: YouTube Shorts video analysis completed.
+# Phase A v15b Re-populate Done
+Status: DONE_FOR_ORCHESTRATOR_REVIEW
+Date: 2026-05-18
+Executor: Codex yasinderyabilgin
 
-Actions run:
-- Read CODEX_TASK_yasinderyabilgin.md.
-- Attempted to read ANTIGRAVITY.md; file was absent in repo root.
-- Downloaded the YouTube Short with yt-dlp.
-- Extracted metadata with ffprobe.
-- Extracted representative frames/contact sheet with ffmpeg.
-- Downloaded auto-subtitles with yt-dlp.
-- Visually inspected extracted frames.
-- Wrote result file: STAGING/codex_youtube_video_analysis_result.md
+## Composition stats
+- Props placed: 375
+- Transition decals: 20 (target > 10, better than v15's 5)
+- Water zone props: 3 (target > 0)
+- Total children: 395
 
-Key result:
-- Video was accessible.
-- Analysis is based on downloaded video frames and subtitles, not oEmbed-only metadata.
-- Main RIMA takeaway: keep Karar #100 35-degree high top-down; video supports weapon decouple/draw-order layering more than combat VFX intensity.
+## v15 vs v15b diff
+- v15 transitions: 5
+- v15b transitions: 20
+- Improvement factor: 4x
+
+## EditMode regression
+- 364/364 PASS
+- Unity result XML: total 365, passed 364, failed 0, skipped 0, inconclusive 1, overall Passed
+
+## Sample screenshot
+- Assets/Screenshots/PlayableRoom_combat_v15b_full_adjacency.png
+
+## Console errors
+- none from project execution; batch logs include Unity licensing access-token noise outside the scene/task logic
+
+## Phase A v15b deliverable verdict
+PASS_FOR_ORCHESTRATOR_REVIEW
