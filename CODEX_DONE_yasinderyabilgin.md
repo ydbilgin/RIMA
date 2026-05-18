@@ -1,28 +1,19 @@
-# Phase A v15b Re-populate Done
+# Phase B-4 Save/Load + Variant + Layer Toggle + Persistent Binding Done
 Status: DONE_FOR_ORCHESTRATOR_REVIEW
 Date: 2026-05-18
 Executor: Codex yasinderyabilgin
 
-## Composition stats
-- Props placed: 375
-- Transition decals: 20 (target > 10, better than v15's 5)
-- Water zone props: 3 (target > 0)
-- Total children: 395
+Implemented RoomBlueprintSO save/load persistence, shared IntentMapEntry/runtime-visible BlueprintCanvas, RoomSaveLoadService, Blueprint Painter Rooms/Variant/Layer Visibility/Persistent Root UI, v15b reference room asset, screenshot artifact, and 12 new EditMode tests.
 
-## v15 vs v15b diff
-- v15 transitions: 5
-- v15b transitions: 20
-- Improvement factor: 4x
+Verification:
+- New RoomSaveLoadServiceTests: 7/7 PASS
+- New BlueprintPainterWindowTests: 5/5 PASS
+- Baseline suites preserved: BlueprintCanvas 6/6, AutoPopulator 7/7, AssetPackBrowser 8/8, AssetPackBrowserPlacement 10/10
+- Full EditMode: 376 PASS / 377 total, 0 failed, 1 pre-existing inconclusive (`_IsoGame scene bulunamadi.`)
+- Reference asset: Assets/Data/Blueprint/Rooms/combat_room_v15b.asset
+- Screenshot: Assets/Screenshots/phase_b4_save_load_demo.png
+- DONE marker: STAGING/CODEX_TASK_PHASE_B4_SAVE_LOAD_VARIANT_LAYER_DONE.md
 
-## EditMode regression
-- 364/364 PASS
-- Unity result XML: total 365, passed 364, failed 0, skipped 0, inconclusive 1, overall Passed
-
-## Sample screenshot
-- Assets/Screenshots/PlayableRoom_combat_v15b_full_adjacency.png
-
-## Console errors
-- none from project execution; batch logs include Unity licensing access-token noise outside the scene/task logic
-
-## Phase A v15b deliverable verdict
-PASS_FOR_ORCHESTRATOR_REVIEW
+Notes:
+- v15b extraction logged matched=375, eligiblePlacedChildren=375, totalChildren=395, canvasCells=375.
+- B-4 compile logs contain no `error CS` or `warning CS`.
