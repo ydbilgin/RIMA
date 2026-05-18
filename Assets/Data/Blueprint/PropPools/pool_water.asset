@@ -13,4 +13,20 @@ MonoBehaviour:
   m_Name: pool_water
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
   poolId: pool_water
-  entries: []
+  entries:
+  - prop: {fileID: 11400000, guid: 545d1e1cef2ac17383091d5fc2b25289, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 0910634dcfd182b3382edd83cb58a4fd, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 82f9a96629b9fd0e08d0c0092a98c919, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 1e4b6200cd3aaf675268705236027118, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 15dd97a92278ec1369f5ee73b0305ed2, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 19ff2098cb1f7f01fe32aa7ae9b95ec0, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: ef7e089a3217d6ef1e829d266720c1f1, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: e9bcb440e0ae283eb205b9c32e6ebde1, type: 2}
+    weight: 1

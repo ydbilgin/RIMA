@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_transition_water_grass
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_transition_water_grass
+  entries:
+  - prop: {fileID: 11400000, guid: 38f76cf872f06f27e96d563d4f725b7c, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 8245c7c8d11ece1edc27879406101efd, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: a3aaef7748aa02b38ed97cd6cf42ec76, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 685ab3a6b26119f111fe35d684c0c794, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 1ae961e66f3d14e29ad7bf9e5484031e, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 7e6a2a8b8032ee97dcb43e3707b6095d, type: 2}
+    weight: 1

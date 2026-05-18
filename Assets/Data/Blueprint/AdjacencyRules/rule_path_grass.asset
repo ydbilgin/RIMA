@@ -15,5 +15,5 @@ MonoBehaviour:
   ruleId: rule_path_grass
   zoneIdA: path
   zoneIdB: grass
-  transitionPool: {fileID: 11400000, guid: 71ac848db8e25624fb4db1d6ed762912, type: 2}
+  transitionPool: {fileID: 11400000, guid: 72f46993433841cd6cada55dfcce0d0e, type: 2}
   density: 0.5

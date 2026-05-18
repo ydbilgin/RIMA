@@ -15,5 +15,5 @@ MonoBehaviour:
   ruleId: rule_water_grass
   zoneIdA: water
   zoneIdB: grass
-  transitionPool: {fileID: 11400000, guid: 8f05d7c44a3a65049a1c7542dbfd2b0b, type: 2}
+  transitionPool: {fileID: 11400000, guid: fae0b077d68d6c5ac262a52ff01d9b6e, type: 2}
   density: 0.5
