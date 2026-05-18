@@ -15,6 +15,23 @@ MonoBehaviour:
   zoneId: path
   displayName: Path
   brushColor: {r: 0.7882353, g: 0.65882355, b: 0.45882353, a: 1}
-  propPool: {fileID: 11400000, guid: 71ac848db8e25624fb4db1d6ed762912, type: 2}
   defaultDensity: 0.65
   maxFeatureProps: 99
+  macroFillSprites: []
+  baseFloorSprites:
+  - {fileID: 21300000, guid: 271ae1bb1ed9c874d87fc8e57fb306bb, type: 3}
+  - {fileID: 21300000, guid: 78376b98fa363c14eb7a1bfcc232cf3e, type: 3}
+  - {fileID: 21300000, guid: 7a3ee75cdc5fa7d43816004fe3b45e07, type: 3}
+  - {fileID: 21300000, guid: f18710d81afb54d45a351b076ef14fce, type: 3}
+  midToneOverlayPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
+  midToneDensity: 0.4
+  detailTexturePool: {fileID: 11400000, guid: 380a28d1dc4da3a48b193a89d9f22266, type: 2}
+  detailDensity: 0.3
+  smallScatterPool: {fileID: 11400000, guid: c0eadc849fdfb2243ad41255dc155b55, type: 2}
+  smallScatterDensity: 0.4
+  mediumPropPool: {fileID: 11400000, guid: 71ac848db8e25624fb4db1d6ed762912, type: 2}
+  mediumPropDensity: 0.15
+  tallFocalPool: {fileID: 0}
+  maxTallFocalPerRegion: 0
+  atmosphericPool: {fileID: 0}
+  atmosphericDensity: 0.2

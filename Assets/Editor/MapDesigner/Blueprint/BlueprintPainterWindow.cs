@@ -17,7 +17,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         private const float BottomHeight = 40f;
         private const float CellSize = 16f;
         private const float VisibleZoneAlpha = 1f;
-        private const float HiddenZoneAlpha = 0.2f;
+        private const float HiddenLayerAlpha = 0.2f;
         private const string DefaultProfilePath = "Assets/Data/Blueprint/Profiles/profile_combat_room_default.asset";
         private const string MissingRootStatus = "Previous Active Room Root no longer exists, please re-bind";
 
@@ -29,7 +29,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         [SerializeField] private int seed = 1337;
         [SerializeField] private string statusText = "Set Active Profile first";
         [SerializeField] private bool layerVisibilityFoldout = true;
-        [SerializeField] private List<string> hiddenZoneIds = new List<string>();
+        [SerializeField] private List<int> hiddenLayerNumbers = new List<int>();
         [SerializeField] private Vector2 leftPanelScroll;
         [SerializeField] private Vector2 rightPanelScroll;
 
@@ -70,14 +70,14 @@ namespace RIMA.MapDesigner.Editor.Blueprint
             SetActiveRoomRoot(root);
         }
 
-        public void SetLayerVisibleForTesting(string zoneId, bool visible)
+        public void SetLayerVisibleForTesting(int layer, bool visible)
         {
-            SetZoneVisible(zoneId, visible);
+            SetLayerVisible(layer, visible);
         }
 
-        public float GetZonePaintAlphaForTesting(string zoneId)
+        public float GetLayerAlphaForTesting(int layer)
         {
-            return GetZonePaintAlpha(zoneId);
+            return GetLayerAlpha(layer);
         }
 
         public void RandomizeSeedForTesting()
@@ -98,6 +98,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
             SyncCanvasGrid();
             EnsureSelectedZone();
             SyncLayerVisibility();
+            ApplyLayerVisibilityToPlacedObjects();
             UpdateStatusForProfile();
             if (missingRoot || preserveMissingRootStatus)
             {
@@ -185,26 +186,19 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         {
             EditorGUILayout.Space(8f);
             layerVisibilityFoldout = EditorGUILayout.Foldout(layerVisibilityFoldout, "Layer Visibility", true);
-            if (!layerVisibilityFoldout || activeProfile == null || activeProfile.zones == null)
+            if (!layerVisibilityFoldout)
             {
                 return;
             }
 
             EditorGUI.indentLevel++;
-            for (int i = 0; i < activeProfile.zones.Length; i++)
+            for (int layer = 1; layer <= 8; layer++)
             {
-                BlueprintZoneTypeSO zone = activeProfile.zones[i];
-                if (zone == null || string.IsNullOrEmpty(zone.zoneId))
-                {
-                    continue;
-                }
-
-                string label = string.IsNullOrEmpty(zone.displayName) ? zone.zoneId : zone.displayName;
-                bool visible = IsZoneVisible(zone.zoneId);
-                bool nextVisible = EditorGUILayout.ToggleLeft(label, visible);
+                bool visible = IsLayerVisible(layer);
+                bool nextVisible = EditorGUILayout.ToggleLeft(LayerLabel(layer), visible);
                 if (nextVisible != visible)
                 {
-                    SetZoneVisible(zone.zoneId, nextVisible);
+                    SetLayerVisible(layer, nextVisible);
                     Repaint();
                 }
             }
@@ -232,7 +226,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
                     if (zone != null)
                     {
                         color = zone.brushColor;
-                        color.a = GetZonePaintAlpha(zone.zoneId);
+                        color.a = VisibleZoneAlpha;
                     }
 
                     EditorGUI.DrawRect(cellRect, color);
@@ -264,6 +258,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
                 SyncCanvasGrid();
                 EnsureSelectedZone();
                 SyncLayerVisibility();
+                ApplyLayerVisibilityToPlacedObjects();
                 UpdateStatusForProfile();
             }
 
@@ -281,6 +276,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
                 if (GUILayout.Button("Auto-Populate", GUILayout.Height(28f)))
                 {
                     int placed = AutoPopulator.PopulateZones(canvas, activeProfile, activeRoomRoot, seed);
+                    ApplyLayerVisibilityToPlacedObjects();
                     statusText = canvas.Count == 0 ? "No zones painted" : $"Auto-Populate placed {placed}";
                 }
             }
@@ -412,6 +408,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
             CopyCanvas(loadedCanvas);
             EnsureSelectedZone();
             SyncLayerVisibility();
+            ApplyLayerVisibilityToPlacedObjects();
             statusText = $"Loaded {activeRoom.displayName}";
             Repaint();
         }
@@ -523,6 +520,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
             }
 
             UpdateStatusForProfile();
+            ApplyLayerVisibilityToPlacedObjects();
         }
 
         private void SyncCanvasGrid()
@@ -558,57 +556,109 @@ namespace RIMA.MapDesigner.Editor.Blueprint
 
         private void SyncLayerVisibility()
         {
-            hiddenZoneIds ??= new List<string>();
-            if (activeProfile == null || activeProfile.zones == null)
+            hiddenLayerNumbers ??= new List<int>();
+            for (int i = hiddenLayerNumbers.Count - 1; i >= 0; i--)
             {
-                hiddenZoneIds.Clear();
-                return;
-            }
-
-            var validZoneIds = new HashSet<string>();
-            for (int i = 0; i < activeProfile.zones.Length; i++)
-            {
-                if (activeProfile.zones[i] != null && !string.IsNullOrEmpty(activeProfile.zones[i].zoneId))
+                if (hiddenLayerNumbers[i] < 1 || hiddenLayerNumbers[i] > 8)
                 {
-                    validZoneIds.Add(activeProfile.zones[i].zoneId);
-                }
-            }
-
-            for (int i = hiddenZoneIds.Count - 1; i >= 0; i--)
-            {
-                if (string.IsNullOrEmpty(hiddenZoneIds[i]) || !validZoneIds.Contains(hiddenZoneIds[i]))
-                {
-                    hiddenZoneIds.RemoveAt(i);
+                    hiddenLayerNumbers.RemoveAt(i);
                 }
             }
         }
 
-        private bool IsZoneVisible(string zoneId)
+        private bool IsLayerVisible(int layer)
         {
-            return string.IsNullOrEmpty(zoneId) || hiddenZoneIds == null || !hiddenZoneIds.Contains(zoneId);
+            return layer < 1 || layer > 8 || hiddenLayerNumbers == null || !hiddenLayerNumbers.Contains(layer);
         }
 
-        private void SetZoneVisible(string zoneId, bool visible)
+        private void SetLayerVisible(int layer, bool visible)
         {
-            if (string.IsNullOrEmpty(zoneId))
+            if (layer < 1 || layer > 8)
             {
                 return;
             }
 
-            hiddenZoneIds ??= new List<string>();
+            hiddenLayerNumbers ??= new List<int>();
             if (visible)
             {
-                hiddenZoneIds.Remove(zoneId);
+                hiddenLayerNumbers.Remove(layer);
             }
-            else if (!hiddenZoneIds.Contains(zoneId))
+            else if (!hiddenLayerNumbers.Contains(layer))
             {
-                hiddenZoneIds.Add(zoneId);
+                hiddenLayerNumbers.Add(layer);
+            }
+
+            ApplyLayerVisibilityToPlacedObjects();
+        }
+
+        private float GetLayerAlpha(int layer)
+        {
+            return IsLayerVisible(layer) ? VisibleZoneAlpha : HiddenLayerAlpha;
+        }
+
+        private void ApplyLayerVisibilityToPlacedObjects()
+        {
+            if (activeRoomRoot == null)
+            {
+                return;
+            }
+
+            SpriteRenderer[] renderers = activeRoomRoot.GetComponentsInChildren<SpriteRenderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                SpriteRenderer renderer = renderers[i];
+                if (renderer == null || !TryGetPlacedLayer(renderer.gameObject.name, out int layer))
+                {
+                    continue;
+                }
+
+                Color color = renderer.color;
+                color.a = GetLayerAlpha(layer);
+                renderer.color = color;
             }
         }
 
-        private float GetZonePaintAlpha(string zoneId)
+        private static bool TryGetPlacedLayer(string objectName, out int layer)
         {
-            return IsZoneVisible(zoneId) ? VisibleZoneAlpha : HiddenZoneAlpha;
+            layer = 0;
+            if (string.IsNullOrEmpty(objectName) || !objectName.StartsWith(AutoPopulator.PlacedPrefix + "L", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            int start = AutoPopulator.PlacedPrefix.Length + 1;
+            int end = objectName.IndexOf('_', start);
+            if (end <= start)
+            {
+                return false;
+            }
+
+            return int.TryParse(objectName.Substring(start, end - start), out layer) && layer >= 1 && layer <= 8;
+        }
+
+        private static string LayerLabel(int layer)
+        {
+            switch (layer)
+            {
+                case 1:
+                    return "L1 Macro Ambient Fill";
+                case 2:
+                    return "L2 Base Floor Tile";
+                case 3:
+                    return "L3 Mid-tone Overlay";
+                case 4:
+                    return "L4 Detail Texture";
+                case 5:
+                    return "L5 Small Scatter";
+                case 6:
+                    return "L6 Medium Props";
+                case 7:
+                    return "L7 Tall Focal";
+                case 8:
+                    return "L8 Atmospheric Overlay";
+                default:
+                    return $"L{layer}";
+            }
         }
 
         private void UpdateStatusForProfile()

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_layer4_feature_detail
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_layer4_feature_detail
+  entries:
+  - prop: {fileID: 11400000, guid: d3f3f0b1a6678fc4a83af02dc41109a4, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 1b6eabb65af8b8f49b7c98237f3fb259, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 47e9c29066a0e1d479b0879024eed087, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 93b2d3d9ab9d1254db00e3c1faed10f3, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: c760a326f6d933d4fb55e9d540f7e5b6, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 8edf62bb371b0444e8f10a4bd2291869, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 0ba22700326eaaa49ae220af3414c995, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 2093528e2f6de9849a4bab09e8064cc7, type: 2}
+    weight: 1

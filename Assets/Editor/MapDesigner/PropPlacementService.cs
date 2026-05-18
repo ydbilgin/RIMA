@@ -54,6 +54,23 @@ namespace RIMA.MapDesigner.Editor
             return placedObject;
         }
 
+        public static GameObject PlaceSprite(Sprite sprite, Transform parent, Vector3 worldPos, string name, int sortingOrder)
+        {
+            if (sprite == null || parent == null)
+            {
+                return null;
+            }
+
+            string objectName = string.IsNullOrEmpty(name) ? sprite.name : name;
+            GameObject placedObject = CreatePlacedObject(objectName, parent, worldPos, true, "Blueprint Layer Place");
+
+            SpriteRenderer renderer = placedObject.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.sortingOrder = sortingOrder;
+
+            return placedObject;
+        }
+
         private static GameObject CreatePlacedObject(string objectName, Transform parent, Vector3 worldPos, bool registerUndo, string undoName)
         {
             var placedObject = new GameObject(objectName);

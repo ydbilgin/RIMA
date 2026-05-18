@@ -43,22 +43,47 @@ namespace RIMA.MapDesigner.Tests
         }
 
         [Test]
-        public void LayerVisibility_AllOn_NoCellsDimmed()
+        public void LayerVisibility_AllOn_NoLayersDimmed()
         {
             BlueprintPainterWindow window = CreateWindow();
 
-            Assert.AreEqual(1f, window.GetZonePaintAlphaForTesting("path"));
+            Assert.AreEqual(1f, window.GetLayerAlphaForTesting(1));
+            Assert.AreEqual(1f, window.GetLayerAlphaForTesting(8));
         }
 
         [Test]
-        public void LayerVisibility_PathOff_PathCellsDimmed()
+        public void LayerVisibility_L3Off_OnlyL3Dimmed()
         {
             BlueprintPainterWindow window = CreateWindow();
 
-            window.SetLayerVisibleForTesting("path", false);
+            window.SetLayerVisibleForTesting(3, false);
 
-            Assert.AreEqual(0.2f, window.GetZonePaintAlphaForTesting("path"));
-            Assert.AreEqual(1f, window.GetZonePaintAlphaForTesting("grass"));
+            Assert.AreEqual(0.2f, window.GetLayerAlphaForTesting(3));
+            Assert.AreEqual(1f, window.GetLayerAlphaForTesting(4));
+        }
+
+        [Test]
+        public void LayerVisibility_L1Off_DimsMacroLayer()
+        {
+            BlueprintPainterWindow window = CreateWindow();
+            SpriteRenderer renderer = CreatePlacedLayerRenderer(1);
+            window.SetActiveRoomRootForTesting(renderer.transform.parent);
+
+            window.SetLayerVisibleForTesting(1, false);
+
+            Assert.AreEqual(0.2f, renderer.color.a);
+        }
+
+        [Test]
+        public void LayerVisibility_L8Off_DimsAtmospheric()
+        {
+            BlueprintPainterWindow window = CreateWindow();
+            SpriteRenderer renderer = CreatePlacedLayerRenderer(8);
+            window.SetActiveRoomRootForTesting(renderer.transform.parent);
+
+            window.SetLayerVisibleForTesting(8, false);
+
+            Assert.AreEqual(0.2f, renderer.color.a);
         }
 
         [Test]
@@ -97,6 +122,16 @@ namespace RIMA.MapDesigner.Tests
             BlueprintPainterWindow window = ScriptableObject.CreateInstance<BlueprintPainterWindow>();
             createdObjects.Add(window);
             return window;
+        }
+
+        private SpriteRenderer CreatePlacedLayerRenderer(int layer)
+        {
+            Transform root = new GameObject("LayerVisibilityRoot").transform;
+            createdObjects.Add(root.gameObject);
+
+            GameObject placed = new GameObject($"_BlueprintPlaced_L{layer}_path_0_0");
+            placed.transform.SetParent(root);
+            return placed.AddComponent<SpriteRenderer>();
         }
     }
 }

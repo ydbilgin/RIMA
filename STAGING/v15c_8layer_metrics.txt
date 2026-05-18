@@ -1,0 +1,18 @@
+v15c 8-layer metrics
+cells=375
+zonePlaced=841
+adjacencyPlaced=1
+totalChildren=842
+L1=0
+L2=375
+L3=149
+L4=101
+L5=150
+L6=55
+L7=11
+L8=0
+L1Coverage=0,000
+L2Coverage=1,000
+Layer1Gaps=path,grass,stone,wall,water,feature
+Layer8Gaps=path,grass,stone,wall,water,feature
+Screenshot=Assets/Screenshots/PlayableRoom_combat_v15c_8layer.png

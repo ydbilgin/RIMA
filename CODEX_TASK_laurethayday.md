@@ -1,268 +1,180 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
 
-# Task: CodexAuthManager — Add Active-Profile Shim Feature
+# Codex Task C: Cross-Genre Vision Mechanic Bank Extension + Studio Tarz Matrisi
 
-## Goal
-Mevcut `cx` workflow'unu **BOZMADAN** ekstra özellik: kullanıcı `cx switch <profile>` deyince, **sonraki tüm `codex` çağrıları** (codex-plugin-cc'nin slash command'leri dahil) o profili kullansın. Plugin tek-account kısıtı aşılır.
+**Date:** 2026-05-18
+**Dispatcher:** Orchestrator (Opus 4.7)
+**Effort:** high
+**Output target:** `F:/LaurethStudio/STAGING/codex_output_cross_genre_vision_mechanics.md`
+**Background:** YES
 
-## Hard constraints
-- ❌ `cx run <profile> exec ...` davranışı değişmemeli (mevcut tek-shot çalıştırma)
-- ❌ `~/.codex/` dizini olan ama profile manager kullanmayan kullanıcılar etkilenmemeli
-- ❌ `npm install -g @openai/codex` yeniden çalıştırılınca shim bozulmamalı
-- ❌ Mevcut `codex_profile.ps1` fonksiyon imzaları değişmemeli
-- ✓ Backward-compat 100%
+---
 
-## Architecture
+## CONTEXT (inline)
 
-### Active-profile file
-- Path: `%USERPROFILE%\.codex-active-profile`
-- Content: tek satır profile adı (örn: `laurethayday`) veya boş/missing = default
-- Yazılınca: sonraki tüm `codex` çağrıları bu profile'ı kullanır
-- Silinince: default davranış (system `~/.codex/`)
+LaurethStudio 2026-05-18 net yeni primary vizyon (kullanıcı):
+> **"AŞIRI MANTIKSIZ OLMADIKÇA başka tür oyunlardan alınan mekanikleri farklı türe entegre edebilmek. Aynı türde başka oyunda olan mekaniği alıp değiştirip geliştirmek = secondary. Cross-genre lateral transplant = PRIMARY vision."**
 
-### Shim binary
-- Path: `%USERPROFILE%\.codex-profiles\bin\codex.cmd`
-- Behavior:
-  ```batch
-  @echo off
-  setlocal
-  if exist "%USERPROFILE%\.codex-active-profile" (
-    set /p ACTIVE_PROFILE=<"%USERPROFILE%\.codex-active-profile"
-    if defined ACTIVE_PROFILE (
-      set "CODEX_HOME=%USERPROFILE%\.codex-profiles\%ACTIVE_PROFILE%"
-    )
-  )
-  REM Real codex still at npm location
-  "%USERPROFILE%\AppData\Roaming\npm\codex.cmd" %*
-  endlocal
-  ```
-- PATH precedence: `%USERPROFILE%\.codex-profiles\bin` must come **BEFORE** `%USERPROFILE%\AppData\Roaming\npm` in user PATH
-- Result: `codex` çağrısı → shim → CODEX_HOME set (varsa) → real codex.cmd
+Mevcut MECHANIC_BANK 12 kategori (M01-M103) + Codex pruned KATEGORI 13 (M104-M110) = 13 kategori. Hepsi **intra-genre veya sentez**. Yeni vizyon **cross-genre transplant'i** primary mekanik bank kategorisi yapacak.
 
-### New cx commands
-- `cx switch <profile>` → `.codex-active-profile` dosyasına yazar
-- `cx switch` (no arg) → mevcut aktif profile'ı gösterir (read)
-- `cx clear` → `.codex-active-profile`'ı siler (default'a döner)
-- `cx active` → alias for `cx switch` (no arg)
+**Senin görevin Codex olarak:**
+- Tür × Tür **cross-genre transplant matrix** kurman (en az 12 kaynak tür × 8 hedef tür)
+- Her hücreye 2-3 örnek transplant mekaniği yaz
+- Bu matrisin **Studio MEKANIK_BANKASI'na KATEGORI 14 olarak append edilebilecek 20-30 yeni primitif** çıkar
+- "Aşırı mantıksız mı?" filter her hücrede aktif (drop yapılan kombinasyonları işaretle)
 
-## Files to modify
+---
 
-### 1. `F:\Antigravity Projeler\CodexAuthManager\codex_profile.ps1`
+## READ FILES
 
-ADD functions (after `Get-CodexProfileInfo`):
+1. `F:/LaurethStudio/MEMORY/feedback_cross_genre_transplant_vision.md` — PRIMARY VISION (yeni 2026-05-18)
+2. `F:/LaurethStudio/MEMORY/feedback_easy_entry_deep_master.md` — Studio brand
+3. `F:/LaurethStudio/MEMORY/pixellab_capability_map.md` — LOCK
+4. `F:/LaurethStudio/MEMORY/borrow_degil_twist.md` — KARAR_017
+5. `F:/LaurethStudio/MEMORY/anti_patterns_universal.md`
+6. `F:/LaurethStudio/03_IDEAS/MECHANIC_BANK/_MEKANIK_BANKASI.md` — M01-M103 (mevcut 12 kategori)
+7. `F:/LaurethStudio/03_IDEAS/MECHANIC_BANK/_GENEL_MEKANIK_PRIMITIVELERI_LOCK.md` — abstract primitif
+8. `F:/LaurethStudio/00_RULES/STUDIO_CONSTITUTION.md` — KARAR yapısı
+9. `F:/LaurethStudio/03_IDEAS/TIER_v4_GLOBAL/_OVERVIEW.md` — yeni tier
+10. `F:/LaurethStudio/03_IDEAS/TIER_v4_GLOBAL/MECHANICS_M104_M118.md` — Codex pruned KATEGORI 13
 
-```powershell
-function Get-CodexActiveProfileFile {
-    return Join-Path $env:USERPROFILE ".codex-active-profile"
-}
+---
 
-function Get-CodexActiveProfile {
-    $path = Get-CodexActiveProfileFile
-    if (Test-Path $path) {
-        $content = (Get-Content $path -Raw -ErrorAction SilentlyContinue).Trim()
-        if ($content) { return $content }
-    }
-    return $null
-}
+## GÖREV — Net 5 Çıktı
 
-function Set-CodexActiveProfile {
-    param([Parameter(Mandatory)][string]$ProfileName)
-    $safeName = Get-SafeProfileName -Name $ProfileName
-    $profileDir = Join-Path (Get-CodexProfileHome) $safeName
-    if (-not (Test-Path $profileDir)) {
-        Write-Error "Profile '$ProfileName' does not exist at $profileDir"
-        return
-    }
-    $path = Get-CodexActiveProfileFile
-    Set-Content -Path $path -Value $safeName -NoNewline
-    Write-Host "Active codex profile set to: $safeName"
-    Write-Host "Subsequent 'codex' invocations (incl. plugin) will use this profile."
-}
+### Çıktı 1: Cross-Genre Transplant Matrix (12 × 8 = 96 hücre)
 
-function Clear-CodexActiveProfile {
-    $path = Get-CodexActiveProfileFile
-    if (Test-Path $path) {
-        Remove-Item $path -Force
-        Write-Host "Active codex profile cleared. Subsequent calls use default ~/.codex/"
-    } else {
-        Write-Host "No active profile was set."
-    }
-}
+**Kaynak türler (12, satır):**
+1. Action-roguelite (Hades, Dead Cells, Cult of the Lamb)
+2. Bullet-hell (Vampire Survivors, Nova Drift, Boss Rush)
+3. Deck-builder (Slay the Spire, Balatro, Monster Train 2)
+4. Autobattler (Super Auto Pets, Wildfrost, Hearthstone Battlegrounds)
+5. Soulslike (Dark Souls, Hollow Knight, Death's Door)
+6. Rhythm (Crypt of the Necrodancer, Beatblock, Hi-Fi Rush)
+7. Tactical (Into the Breach, Wildermyth, FTL)
+8. Idle / Incremental (Cookie Clicker, Rusty's Retirement, Universal Paperclips)
+9. Factory-sim (Factorio, Mindustry, Mini Motorways)
+10. Walking-sim / Exploration (Outer Wilds, A Short Hike, Tunic)
+11. Immersive-sim (Dishonored, Prey, Deus Ex)
+12. Racing / Momentum (Burnout, Distance, Trackmania)
 
-function Show-CodexActiveProfile {
-    $active = Get-CodexActiveProfile
-    if ($active) {
-        $profileDir = Join-Path (Get-CodexProfileHome) $active
-        Write-Host "Active codex profile: $active"
-        Write-Host "  CODEX_HOME: $profileDir"
-        Write-Host "  exists: $(Test-Path $profileDir)"
-    } else {
-        Write-Host "No active profile. Using default ~/.codex/"
-    }
-}
-```
+**Hedef Studio türler (8, sütun):**
+1. Cozy farm sim
+2. Cozy production / atelier
+3. Vehicle compound / cabin
+4. Action roguelite (RIMA family)
+5. Composition / deck-build
+6. Management cozy (Caterpillar family)
+7. Drawing input / glyph (KARAR_016 family)
+8. Memory + ritual narrative (Compost Heir / Almanac family)
 
-### 2. `F:\Antigravity Projeler\CodexAuthManager\codex_profile.ps1` — cx command dispatcher
+**Her hücrede:** 2-3 örnek transplant mekanik (her biri 2-3 satır açıklama + "aşırı mantıksız mı?" filter).
 
-Find the `switch ($Command)` block (or equivalent — should be the main param dispatcher near top of file). Add 3 cases:
+**Drop kombinasyon işareti:** Eğer hücre aşırı mantıksızsa "✗ — [neden]" yaz.
 
-```powershell
-"switch" {
-    if ($Arguments.Count -ge 1) {
-        Set-CodexActiveProfile -ProfileName $Arguments[0]
-    } else {
-        Show-CodexActiveProfile
-    }
-    return
-}
-"clear" {
-    Clear-CodexActiveProfile
-    return
-}
-"active" {
-    Show-CodexActiveProfile
-    return
-}
-```
+### Çıktı 2: 20-30 Yeni MECHANIC_BANK Primitif Aday (M111-M140 aday)
 
-### 3. NEW FILE: `F:\Antigravity Projeler\CodexAuthManager\codex_shim_install.ps1`
-
-```powershell
-# Installs the codex shim at %USERPROFILE%\.codex-profiles\bin\codex.cmd
-# and ensures PATH precedence.
-
-$ErrorActionPreference = "Stop"
-
-$shimDir = Join-Path $env:USERPROFILE ".codex-profiles\bin"
-if (-not (Test-Path $shimDir)) {
-    New-Item -ItemType Directory -Path $shimDir -Force | Out-Null
-}
-
-$shimPath = Join-Path $shimDir "codex.cmd"
-$shimContent = @'
-@echo off
-setlocal
-if exist "%USERPROFILE%\.codex-active-profile" (
-  set /p ACTIVE_PROFILE=<"%USERPROFILE%\.codex-active-profile"
-  if defined ACTIVE_PROFILE (
-    set "CODEX_HOME=%USERPROFILE%\.codex-profiles\%ACTIVE_PROFILE%"
-  )
-)
-"%USERPROFILE%\AppData\Roaming\npm\codex.cmd" %*
-endlocal
-'@
-
-Set-Content -Path $shimPath -Value $shimContent -Encoding ASCII -NoNewline
-Write-Host "Shim installed at: $shimPath"
-
-# Ensure PATH precedence
-$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-$npmPath = "$env:USERPROFILE\AppData\Roaming\npm"
-$shimPathDir = $shimDir
-
-if ($userPath -notlike "*$shimPathDir*") {
-    # Prepend shim dir to user PATH
-    $newPath = "$shimPathDir;$userPath"
-    [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
-    Write-Host "Added $shimPathDir to user PATH (prepended)"
-} else {
-    # Ensure shim dir comes before npm dir
-    $parts = $userPath -split ';'
-    $shimIdx = [Array]::IndexOf($parts, $shimPathDir)
-    $npmIdx = [Array]::IndexOf($parts, $npmPath)
-    if ($shimIdx -gt $npmIdx -and $npmIdx -ge 0) {
-        # Move shim before npm
-        $cleanedParts = $parts | Where-Object { $_ -ne $shimPathDir }
-        $newPath = ($cleanedParts | ForEach-Object {
-            if ($_ -eq $npmPath) { "$shimPathDir;$_" } else { $_ }
-        }) -join ';'
-        [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
-        Write-Host "Reordered PATH: shim dir now precedes npm dir"
-    } else {
-        Write-Host "PATH already correct (shim precedes npm)"
-    }
-}
-
-Write-Host ""
-Write-Host "IMPORTANT: Open a new terminal for PATH changes to take effect."
-Write-Host "Test with: where codex"
-Write-Host "  - First result should be: $shimPath"
-Write-Host "  - Second result should be: $npmPath\codex.cmd"
-```
-
-### 4. `F:\Antigravity Projeler\CodexAuthManager\install_global.ps1`
-
-Append at the end (after existing install logic):
-
-```powershell
-Write-Host ""
-Write-Host "Installing codex shim for active-profile support..."
-& (Join-Path $PSScriptRoot "codex_shim_install.ps1")
-```
-
-### 5. `F:\Antigravity Projeler\CodexAuthManager\README.md`
-
-Append section after `## Install`:
+Çıktı 1'in matrisinden **en yüksek değerli + en mantıklı** 20-30 cross-genre transplant mekaniğini Studio MEKANIK_BANKASI primitif formatında yaz:
 
 ```markdown
-## Active Profile Mode (codex CLI shim)
+### M[NN] — [Mekanik Adı] [emoji]
 
-After installing the codex shim, you can set an "active profile" that all `codex` invocations will use — including plugin slash commands (e.g. `/codex:rescue` in Claude Code).
+**Tanım:** 2-3 cümle.
 
-### Usage
+**Klasik:** [3 oyun referans + mekanik 1 cümle].
 
-```powershell
-# Set active profile — all subsequent codex calls use it
-cx switch laurethayday
+**Cross-genre source:** [Kaynak tür + neden bu tür'de iyi]
 
-# Show current active profile
-cx switch
-# (or)
-cx active
+**Studio target tür(ler):** [hangi Studio aileleri kullanabilir]
 
-# Clear active profile — return to default ~/.codex/
-cx clear
+**Studio entegrasyon:** [hangi mevcut/yeni Studio oyununa enjekte edilebilir, 3-4 örnek]
+
+**Mevcut M-kontrast:** [M01-M110 ile farkı net açıkla]
+
+**Twist (KARAR_017):** [referans → lateral değişim]
+
+**"Aşırı mantıksız mı?" filter:** [hayır + neden]
+
+**PixelLab uyum:** [1-5 + kısa]
+
+**Chill / AI / Complexity skoru:** [tablo]
+
+**Cross-link:** [[KARAR_017]], [[ilgili memory]], [[ilgili pitch]]
 ```
 
-### How it works
+### Çıktı 3: KATEGORI 14 Tanımı + Studio MEKANIK_BANKASI Append Draft
 
-The shim at `%USERPROFILE%\.codex-profiles\bin\codex.cmd` intercepts `codex` calls. If `%USERPROFILE%\.codex-active-profile` exists, it sets `CODEX_HOME` to the corresponding profile directory before invoking the real codex binary.
+Yeni KATEGORI 14 başlangıç:
+```markdown
+# KATEGORI 14 — CROSS-GENRE TRANSPLANT (M111-M[NN]) 🔀
 
-### Compatibility
+LaurethStudio'nun PRIMARY VISION mekaniği. Başka türlerden alınan mekaniklerin Studio hedef türlerine "aşırı mantıksız olmadıkça" transplant edildiği primitifler. KATEGORI 13 (Companion/Weather/Habitat) ve önceki 12 kategoriye dik bir kategori — kaynak türü etiketleyerek primitif identitysini değiştirir.
 
-- `cx run <profile> exec ...` still works unchanged (one-shot inline profile)
-- If no active profile is set, behavior is identical to vanilla codex (uses ~/.codex/)
-- Reinstalling codex via npm does NOT overwrite the shim (different location, PATH precedence)
-- The shim is transparent — `codex --version` etc. all forward to the real binary
+**KARAR_017 (Borrow Değil Twist)** extension'ı — twist zorunlu ama transplant primary.
+
+[20-30 primitif Çıktı 2 formatında]
 ```
 
-## Tests / acceptance
+### Çıktı 4: Studio'nun "Kendi Tarzı" Sentezi
 
-1. After install, `where codex` shows shim FIRST, npm SECOND.
-2. Without `.codex-active-profile`, `codex auth` shows current default account.
-3. `cx switch laurethayday` → `.codex-active-profile` file created with content `laurethayday`.
-4. `codex auth` after switch → shows laurethayday account info.
-5. Open new Claude Code session, `/codex:setup` → shows laurethayday auth.
-6. `cx switch laurethgame` → next `/codex:rescue` uses laurethgame.
-7. `cx clear` → `codex auth` returns to original default.
-8. `cx run yasinderyabilgin exec "echo test"` STILL WORKS (existing path).
-9. Uninstall test: delete shim dir, PATH still valid (codex still works via npm).
+Cross-genre transplant'ten Studio brand kimliğine kazanılacak **8-10 işaret prensibi**:
+- Hangi cross-genre transplant pattern Studio brand kimliğini en çok güçlendirir
+- Hangi tür çiftleri Studio için "magnum opus rotası" hissini verir
+- Studio'nun signature "lateral transplant DNA"sı nasıl tanımlanmalı (KARAR adayı potansiyeli)
 
-## Don't do
-- Do NOT modify `~/.codex/auth.json` directly (CodexAuthManager's strength is CODEX_HOME isolation)
-- Do NOT remove existing functions or change signatures in `codex_profile.ps1`
-- Do NOT touch `~/.codex/` for users without profiles
-- Do NOT require admin permission (user-level PATH + user-level shim dir only)
+### Çıktı 5: Anti-Pattern + Risk Filter
 
-## Style
-- PowerShell: 4-space indent, brace style follows existing `codex_profile.ps1`
-- Batch shim: ASCII encoding, no BOM, CRLF line endings (Windows convention)
-- README markdown: existing voice / formatting
+- Hangi cross-genre transplant kombinasyonları Studio anti-pattern listesini tetikler? (anti_patterns_universal.md cross-check)
+- Hangi kombinasyonlar PixelLab kapasitesini aşar? (pixellab_capability_map.md cross-check)
+- Hangi kombinasyonlar Easy Entry + Deep Master prensibini bozar?
+- Drop liste (en az 8-10 kombinasyon — "yapma" işareti)
 
-## Output
-- Commit message: `[CodexAuthManager] Add active-profile shim — cx switch/clear/active commands`
-- Include all 5 file modifications in single commit (or split logically if cleaner)
-- No tests required (Windows-specific, manual acceptance only)
+---
+
+## OUTPUT FORMAT
+
+`F:/LaurethStudio/STAGING/codex_output_cross_genre_vision_mechanics.md`:
+
+```markdown
+# Codex Output: Cross-Genre Vision Mechanic Bank Extension
+
+## 0. Executive summary
+
+## 1. Cross-Genre Transplant Matrix (12 × 8 = 96 hücre)
+(table format)
+
+## 2. M111-M[NN] Yeni Primitif Aday (20-30)
+(standardize MEKANIK_BANKASI format)
+
+## 3. KATEGORI 14 Append Draft
+(_MEKANIK_BANKASI.md'ye eklenebilir format)
+
+## 4. Studio Kendi Tarzı Sentezi (8-10 işaret prensibi)
+
+## 5. Anti-Pattern / Risk Filter + Drop Liste
+
+## 6. KARAR Adayı Önerisi
+(KARAR_046 "Cross-Genre Transplant LOCK" aday gerekçe)
+```
+
+---
+
+## QUALITY BAR
+
+- **Matrix 96 hücreyi doldur** — drop olanları işaretle ama atlama
+- **PixelLab uyum her primitif için** — Studio'nun temel kısıtı
+- **"Aşırı mantıksız mı?" filter aktif** — her hücrede + her primitif
+- **KARAR_017 twist zorunlu** — referans → lateral transformation
+- **Steam reference ham veri** — kaynak oyun + mekanik bağlamı net
+- 4000-6000 kelime, tablolar zorunlu
+
+---
+
+## NOT
+
+Bu task **Task C** (en büyük). Paralel dispatch'te Task A (CB V4 fight/VFX) + Task B (FourLeaf + LRL transplant). Separate task file race condition avoid.
+
+Çıktı: `F:/LaurethStudio/STAGING/codex_output_cross_genre_vision_mechanics.md`
 
 
 ---

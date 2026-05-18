@@ -79,9 +79,9 @@ namespace RIMA.MapDesigner.Tests
 
             int placed = AutoPopulator.PopulateZones(canvas, profile, root, 7);
 
-            Assert.AreEqual(2, placed);
-            Assert.AreEqual(grassProp.visual, root.Find("_BlueprintPlaced_grass_0_0").GetComponent<SpriteRenderer>().sprite);
-            Assert.AreEqual(stoneProp.visual, root.Find("_BlueprintPlaced_stone_1_0").GetComponent<SpriteRenderer>().sprite);
+            Assert.AreEqual(6, placed);
+            Assert.AreEqual(grassProp.visual, root.Find("_BlueprintPlaced_L6_grass_0_0").GetComponent<SpriteRenderer>().sprite);
+            Assert.AreEqual(stoneProp.visual, root.Find("_BlueprintPlaced_L6_stone_1_0").GetComponent<SpriteRenderer>().sprite);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace RIMA.MapDesigner.Tests
                 }
             }
 
-            int placed = AutoPopulator.PopulateZones(canvas, profile, root, 11);
+            int placed = AutoPopulator.PopulateLayer6Medium(canvas, profile, root, 11);
 
             Assert.That(placed, Is.InRange(40, 60));
         }
@@ -108,12 +108,13 @@ namespace RIMA.MapDesigner.Tests
         {
             BlueprintPropPoolSO pool = CreatePool("pool_feature", (CreateProp("feature"), 1f));
             BlueprintZoneTypeSO feature = CreateZone("feature", pool, 1f);
-            feature.maxFeatureProps = 2;
+            feature.tallFocalPool = pool;
+            feature.maxTallFocalPerRegion = 2;
             BlueprintProfileSO profile = CreateProfile(feature);
             var canvas = new BlueprintCanvas(new Vector2Int(36, 22));
-            canvas.Paint(new Vector2Int(5, 5), "feature", 3);
+            canvas.Paint(new Vector2Int(5, 5), "feature", 5);
 
-            int placed = AutoPopulator.PopulateZones(canvas, profile, root, 13);
+            int placed = AutoPopulator.PopulateLayer7TallFocal(canvas, profile, root, 13);
 
             Assert.AreEqual(2, placed);
         }
@@ -170,8 +171,11 @@ namespace RIMA.MapDesigner.Tests
             BlueprintZoneTypeSO zone = ScriptableObject.CreateInstance<BlueprintZoneTypeSO>();
             zone.zoneId = zoneId;
             zone.displayName = zoneId;
-            zone.propPool = pool;
             zone.defaultDensity = density;
+            zone.macroFillSprites = new[] { pool.entries[0].prop.visual };
+            zone.baseFloorSprites = new[] { pool.entries[0].prop.visual };
+            zone.mediumPropPool = pool;
+            zone.mediumPropDensity = density;
             createdObjects.Add(zone);
             return zone;
         }

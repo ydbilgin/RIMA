@@ -1,5 +1,321 @@
 # CURRENT_STATUS
 
+## 2026-05-18 S89_LATE → v15c 8-layer LIVE + UnityMCP modal bypass LIVE + autosprite MCP trial pending
+
+**TLDR (S89 late, yeni session pickup):**
+
+### Bu session DONE
+
+| Is | Status | Not |
+|---|---|---|
+| **UnityMCP modal bypass fix** | LIVE ✓ | 4/4 yeni test, 392/392 EditMode PASS. `Packages/com.coplaydev.unity-mcp/` override + `forceDiscard` param. "Save changes?" modal bypass edilebilir. |
+| **Phase A v15c 8-layer refactor** | LIVE ✓ | 392/392 EditMode PASS. BlueprintZoneTypeSO 8-pool schema + AutoPopulator 8-pass + 10 yeni test + 2 layer visibility test. Scene: `Pro_Redesign_v15c_8LayerPainted_CombatRoom`. Screenshot: `Assets/Screenshots/PlayableRoom_combat_v15c_8layer.png`. 375 painted cells, 842 children. L2=375 L3=149 L4=101 L5=150 L6=55 L7=11. |
+| **autosprite.io MCP registered** | PENDING Claude restart | `claude mcp add` LIVE, HTTP Bearer `vspk_a1735a0dd9_...`. Tool prefix: `mcp__autosprite__*`. Restart sonrasi dogrula. |
+| **autosprite vs PixelLab community verdict** | DONE | Hibrit kullanum yaygin, "kitlesel gecis" FAIL. RIMA verdict: PixelLab kalsın, autosprite nıs VFX pilot. Detay: `STAGING/autosprite_vs_pixellab_review.md`. |
+
+### Asset gap (tamamlanmamıs)
+
+- **L1=0, L8=0** — Layer 1 macro fill + Layer 8 atmospheric sprite arrays bos. 22 imagegen sprite DONE ama zone asset arrays'e push edilmedi. v15d wiring gorevi gerek.
+
+### Yeni session ilk 3 adim
+
+1. Claude Code restart sonrasi `ToolSearch "+autosprite"` ile `mcp__autosprite__*` tool'lar yuklu mu dogrula.
+2. **autosprite VFX pilot**: rima-asset agent ile dash trail VFX dispatch (cold blue, non-directional, 64x64 8-frame loop).
+3. **v15d wiring**: zone asset Layer1Sprites + Layer8Sprites arrays'e 22 sprite push + AutoPopulate rerun + screenshot `PlayableRoom_combat_v15d_8layer_complete.png` (Codex laurethgame veya yasinderyabilgin).
+
+### autosprite VFX pilot candidates (user direktifi: "deneme amacli VFX uretim")
+
+| Candidate | Aciklama | Oncelik |
+|---|---|---|
+| dash trail | cold blue, non-directional, 64x64 8-frame loop | 1 — PILOT |
+| hitspark | white→class-color, contact burst | 2 — PILOT |
+| rift portal | purple/void energy loop | 3 — backlog |
+| aura/buff loop | on-character glow ring | 4 — backlog |
+| coin pickup | golden burst | 5 — backlog |
+
+Pilot ilk ikisi: dash trail + hitspark. Production'a girmeden once kalite + cost A/B.
+
+### Commit instructions (v15c sonrasi)
+
+```
+[S89 LATE] Phase A v15c LIVE: 8-layer schema + UnityMCP modal bypass + autosprite MCP registered
+```
+
+---
+
+## 2026-05-18 S89_HANDOFF → yeni session pickup (Unity restart bekliyor, dispatch'ler hazır)
+
+**TLDR (11:30, user yeni terminal açıyor):**
+
+### Durum snapshot
+
+| İş | Status | Yer |
+|---|---|---|
+| **v15c 8-layer refactor** | KILLED (Codex tree öldü, DONE marker YOK) | Spec: `STAGING/CODEX_TASK_PHASE_A_v15c_8_LAYER_REFACTOR.md` |
+| **v15c Layer1+8 imagegen** | DONE ✓ (22 sprite + 6 atmospheric pool + zone assign) | `STAGING/CODEX_TASK_PHASE_A_v15c_LAYER1_LAYER8_IMAGEGEN_DONE.md` |
+| **UnityMCP modal bypass fix** | SPEC READY, dispatch öldürüldü | `STAGING/CODEX_TASK_UNITYMCP_SCENE_MODAL_BYPASS.md` |
+| **Unity Editor** | KAPALI (tasklist Unity.exe = 0) | User Hub'dan açacak |
+| **Codex süreçleri** | TEMİZ (44528 + 10 child öldü) | — |
+| **Quota (3 profile)** | laurethgame 55%, laurethayday 3%, yasinderyabilgin 1% — HEPSİ OK | — |
+
+### Bu session'da tamamlananlar (yeniden yapma)
+
+1. **PROJECT_RULES.md başına Karpathy 4 prensip eklendi** (Think/Min/Surgical/Goal-driven) + sub-agent inline rule
+2. **Karpathy entegrasyon planı** yazıldı: `STAGING/karpathy_integration_plan.md` (Adım 1 LIVE, Adım 2 cx_dispatch.py prompt header + Adım 3 TASK_TEMPLATE.md deferred)
+3. **autosprite.io vs PixelLab review** yazıldı: `STAGING/autosprite_vs_pixellab_review.md`
+4. **autosprite tile pilot inventory** yazıldı: `STAGING/autosprite_tile_inventory_pilot.md` (15 tile MVP: 6 floor + 6 wall + 3 transition, free plan'da denenecek)
+5. **3D portability strategy memory** MythicTile (UE5 plugin) notu eklendi — Diamond brush + Performance overlay + Map-link konsept + Cliff/Pillar 3D port için
+6. **Yeni feedback memory** — `feedback_research_delegate_to_agents.md` (orchestrator araştırma'yı agent'a delegasyon zorunlu)
+
+### Yeni session ilk 60 saniye
+
+1. `.claude/PROJECT_RULES.md` (Karpathy 4 prensip artık başta) + bu CURRENT_STATUS S89_HANDOFF bölümünü oku
+2. **Unity durumu check**: `tasklist //FI "IMAGENAME eq Unity.exe"` veya MCP `manage_scene get_active`
+3. **Eğer Unity KAPALI** → user'a "Hub'dan RIMA aç + MCP bridge connected mesajını bekle" de
+4. **Eğer Unity AÇIK + MCP bağlı** → dispatch chain'i başlat (aşağı bak)
+
+### Dispatch chain (Unity hazır olunca)
+
+**SIRAYLA, paralel DEĞİL** (Unity bridge tek instance'a hizmet eder):
+
+**Adım 1 — UnityMCP modal bypass fix:**
+```bash
+cd "/f/Antigravity Projeler/2d roguelite/RIMA"
+python cx_dispatch.py --task-file STAGING/CODEX_TASK_UNITYMCP_SCENE_MODAL_BYPASS.md --effort high --profile laurethayday
+```
+Background, ETA ~30-45 dk. DONE marker: `STAGING/CODEX_TASK_UNITYMCP_SCENE_MODAL_BYPASS_DONE.md`
+
+Spec özet: `Packages/com.coplaydev.unity-mcp/` override + `force_discard: bool = true` parameter + 4 EditMode test. "Save changes?" modal bir daha çıkmaz.
+
+**Adım 2 — UnityMCP fix DONE sonrası v15c 8-layer refactor re-dispatch:**
+```bash
+python cx_dispatch.py --task-file STAGING/CODEX_TASK_PHASE_A_v15c_8_LAYER_REFACTOR.md --effort xhigh --profile laurethgame
+```
+Background, ETA 2-3 saat. DONE marker: `STAGING/CODEX_TASK_PHASE_A_v15c_8_LAYER_REFACTOR_DONE.md`
+
+Spec özet: BlueprintZoneTypeSO 8-pool schema + AutoPopulator 8-pass + 10 yeni test + scene composition + zone .asset migration. 376/377 baseline → 386+ hedef.
+
+**Adım 3 — v15c refactor DONE sonrası v15d screenshot rebuild:**
+- Auto-Populate çalıştır (Blueprint Painter window)
+- Screenshot: `Assets/Screenshots/PlayableRoom_combat_v15d_8layer_complete.png`
+- 22 imagegen sprite + 8-layer Auto-Populate output kontrol
+- User'a feedback ver: "v15d 8-layer LIVE, X props placed, Y atmospheric ambient"
+
+### Backlog (sırasız, V15D LIVE sonrası)
+
+- **Tools/RIMA menu cleanup** — KEEP: Blueprint Painter + Asset Pack Browser. AUDIT: Scatter Brush. DEPRECATE: PrefabWiringSetup + Prefabs/Create* init scripts + Scene/Create Death Screen UI (file tut, MenuItem attr kaldır)
+- **Karpathy Adım 2** — `cx_dispatch.py` line 209 öncesi `surgical_header` inject (Codex prompt'una 4 satır kural ekle)
+- **Karpathy Adım 3** — `STAGING/CODEX_TASK_TEMPLATE.md` standard template (Pre-conditions + Acceptance + Out-of-scope + BLOCKED durumu)
+- **Autosprite pilot** — User free plan'da 15 tile manuel üretir → `Assets/Data/Brush/AssetParts_autosprite_pilot/` → orchestrator Unity QC grid
+
+### User feedback log (memnun olunca feedback)
+
+- **Research = Delegate** (yeni memory) — orchestrator WebFetch/yt-dlp/research kendisi yapmaz, rima-research/rima-sonnet/Codex'e ver
+- **autosprite tile pilot** — 5 değil, gerçek 15 tile MVP (sadece duvar + zemin, props hariç)
+- **MythicTile 3D port notu** — Designer ileride 3D'yi kapsayacak, MythicTile feature'ları (Diamond/Cliff/Pillar/Map-link) referans
+
+### Auth durumu (önemli)
+
+3 Codex profile token'ları LIVE. laurethgame quota %55'te ama OK (token revoked DEĞİL). Eğer 401/token_revoked çıkarsa: `cx login laurethgame` interactive (sadece user).
+
+### Eski S89_MORNING aynen aşağıda — referans için tut
+
+---
+
+## 2026-05-18 S89_MORNING → /clear öncesi snapshot (8-LAYER REFACTOR + IMAGEGEN paralel in-flight)
+
+**TLDR (11:05 user /clear atıyor):**
+
+### 2 paralel dispatch IN-FLIGHT (yeni session ilk iş bunları kontrol)
+
+| ID | Görev | Profile | ETA | DONE marker |
+|---|---|---|---|---|
+| `b7cq6s9a8` | **Phase A v15c 8-Layer Refactor** (BlueprintZoneTypeSO MAJOR schema 8-pool + AutoPopulator 8-pass + 10 yeni test + scene composition + zone .asset migration) | laurethgame xhigh | 2-3h | `STAGING/CODEX_TASK_PHASE_A_v15c_8_LAYER_REFACTOR_DONE.md` |
+| `bpajb0gjy` | **Phase A v15c Layer 1+8 Imagegen** (22 sprite: 12 macro fill + 10 atmospheric + Unity integration + pool assignments) | yasinderyabilgin high | 1-2h | `STAGING/CODEX_TASK_PHASE_A_v15c_LAYER1_LAYER8_IMAGEGEN_DONE.md` |
+
+### Bağlam: User'ın "PlayableRoom saçma duruyor" feedback'i + 8-layer yatırım kararı
+
+User 2026-05-18 sabah net feedback:
+1. "En altı kaplayacak bir şey olacak üstüne bir kaplama daha demek ki yerde siyah siyah görünmeyecek onun üstüne diğer kaplamalar olacak" — v15b screenshot dark cell sızıyor
+2. "Hades ve Alabaster Dawn tarzına uygun 6 layerlı 8 layerlı mantıklı boyamayı düşün tekrardan bu olmadı belli ki temelde bi hata yapıyoruz"
+3. "8 layer iyi olsun istiyorum bu sistemi oturtursak bütün mapleri daha rahat çizebileceğim"
+
+**Karar (user onayladı):** 8-layer FULL Hades + Alabaster Dawn canonical painted top-down. Tek-seferlik mimari yatırım — gelecek tüm map'ler bu sistem üzerine inşa edilecek.
+
+### 8-Layer canonical recipe (memory `[[layered-terrain-mandatory]]` LIVE)
+
+| # | Layer | Coverage | Sorting | Asset |
+|---|---|---|---|---|
+| 1 | Macro ambient fill (painterly room background sweeping shapes) | %100 | -100 | IMAGEGEN GAP (bpajb0gjy 12 sprite) |
+| 2 | Base floor tile (biome cell-aligned) | %100 | -90 | BiomeFloor_Sandy/Mossy/Cave/Blood (RIMA_v3) |
+| 3 | Mid-tone gradient overlay | %30-50 | -80 | AtmosphericAccents (kısmen) |
+| 4 | Detail texture (cracks/moss/dirt) | %30 | -70 | Moss, Dirt, Pebbles, Cracks (RIMA_v2) |
+| 5 | Small scatter (pebbles, tufts, leaves) | %40 | -60 | Phase B-3 imagegen yeni tufts + transitions |
+| 6 | Medium props (rocks, bushes, debris) | %15 | YPos | AssetParts_v2 medium |
+| 7 | Tall focal (statues, banners, columns, ritual circles) | %5 (cap 1-2/region) | YPos | Walls, VerticalProps, Ritual, Rift |
+| 8 | Atmospheric overlay (god rays, fog, embers) | %10-30 | +100 | IMAGEGEN GAP (bpajb0gjy 10 sprite) |
+
+### Yeni session ilk 60 saniye (CLEAR sonrası)
+
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` otomatik
+2. **Bu CURRENT_STATUS S89_MORNING bölümü** oku
+3. **2 dispatch DONE markers kontrol:**
+   - `STAGING/CODEX_TASK_PHASE_A_v15c_8_LAYER_REFACTOR_DONE.md` — varsa: test 386+ PASS verify + scene v15c verify + commit
+   - `STAGING/CODEX_TASK_PHASE_A_v15c_LAYER1_LAYER8_IMAGEGEN_DONE.md` — varsa: 22 sprite verify + pool assignments + commit
+4. **Memory pickup (en kritik):**
+   - `[[layered-terrain-mandatory]]` — 8-layer canonical recipe (memory expand edildi)
+   - `[[blueprint-first-map-design]]` — semantic zone blueprint mantığı
+   - `[[brush-v1-manual-composition-system]]` — S88 LIVE master
+5. **İkisi de DONE değilse**: ScheduleWakeup 30 dk fallback + bekle
+
+### Sırada (autonomous, sormadan)
+
+1. ✅ Bekle ikisi de DONE → verify + commit
+2. Eğer v15c DONE PASS + imagegen DONE PASS → **v15d screenshot rebuild**: tüm 8 layer asset assigned + Auto-Populate çalıştır + screenshot `PlayableRoom_combat_v15d_8layer_complete.png`
+3. User'a feedback ver: "v15d 8-layer LIVE, X props placed, Y atmospheric ambient, screenshot LIVE" (user "memnun olunca feedback ver" direktifi)
+4. **Tools/RIMA menu cleanup** (user istedi 11:00) — Aşağıdaki listede deprecated olanlar var:
+
+#### Tools/RIMA menüsü mevcut item'lar (cleanup için)
+
+**KEEP (LIVE):**
+- `Tools/RIMA/Map Designer/Blueprint Painter` — B-3 + B-4 LIVE master
+- `Tools/RIMA/Map Designer/Asset Pack Browser` — B-1 LIVE
+
+**KEEP veya DEPRECATE? (incele):**
+- `Tools/RIMA/Scatter Brush` — `Assets/Scripts/Editor/ScatterBrush/ScatterBrushWindow.cs` (eski Brush V1 öncesi muhtemelen, Brush V1 yerini aldı + B-3 Blueprint Painter yerini aldı)
+
+**LIKELY DEPRECATE (eski init script'leri, tek seferlik kullanılmış):**
+- `Tools/RIMA/Setup All Prefabs & UI` — `PrefabWiringSetup.cs`
+- `Tools/RIMA/Prefabs/Create HandGlowVFX Prefab` — VFX init
+- `Tools/RIMA/Prefabs/Create RiftGlowVFX Prefab` — VFX init
+- `Tools/RIMA/Prefabs/Create HollowMite Prefab` — mob init
+- `Tools/RIMA/Prefabs/Create TheWound Prefab` — boss init
+- `Tools/RIMA/Prefabs/Create BossAI_PenitentSovereign Prefab` — boss init
+- `Tools/RIMA/Scene/Create Death Screen UI` — UI init
+
+**Cleanup yöntem:** PrefabWiringSetup.cs'yi sil veya `[MenuItem]` attribute'larını kaldır (file'ı tut, history için). ScatterBrushWindow.cs için audit gerek — Brush V1 / B-3 ile çakışıyor mu kontrol et, çakışıyorsa kaldır.
+
+### 7 commit overnight chain (master)
+
+| Commit | İçerik |
+|---|---|
+| `20e88a6` | Phase B-1 + B-2 + Phase 1A SO (Asset Pack Browser + Click-to-Place + auto-collider) |
+| `005444e` | Combat v14 fix (cover-based intentional, "saçma scatter" kısmen) |
+| `f76c36e` | Phase B-3 Blueprint Painter (6 zone brush + AutoPopulator + Adjacency + PropPlacementService extraction) |
+| `7238130` | Phase A v15 Blueprint-First (programmatic, 640 cells / 378 props / 5 transitions) |
+| `34df4e1` | Phase B-3 Asset Gap imagegen (32 production sprite: water + grass + 3 transition pools) |
+| `d86532b` | Phase A v15b Full Adjacency (20 transitions vs 5, 4x improvement, water pool LIVE) |
+| `3f5a1b7` | Phase B-4 Save/Load + Variant + Layer Toggle + Persistent Binding (RoomBlueprintSO + EditorPrefs + 12 yeni test) |
+
+**Test suite: 376/377 EditMode PASS** (1 inconclusive baseline pre-existing — `PrefabHealthTests.RuntimeRoomManager_PrefabReferences_NotNull _IsoGame scene yok`).
+
+### Pro UI/UX Map Designer V1 = COMPLETE (Phase B-1 → B-4 LIVE)
+
+Window: `Tools/RIMA/Map Designer/Blueprint Painter`
+- 6 zone brush palette (path/grass/stone/wall/water/feature) — v15c'de 8-layer'a evrim
+- 36×22 intent map canvas + brush size + density
+- Active Profile + Active Room Root (EditorPrefs persistent)
+- Seed + Auto-Populate + Adjacency Pass + Clear (8-pass v15c sonrası)
+- **Rooms section**: Active Room + Load + Save Over + Save As New...
+- **Variant section**: Random Seed
+- **Layer Visibility foldout**: 6 → 8 toggle (v15c sonrası)
+- Reference room save: `Assets/Data/Blueprint/Rooms/combat_room_v15b.asset` (375 cells)
+
+### Authoritative documents
+
+| Doc | Content | Status |
+|---|---|---|
+| `STAGING/CODEX_TASK_PHASE_A_v15c_8_LAYER_REFACTOR.md` | 8-layer refactor spec | DISPATCHED b7cq6s9a8 |
+| `STAGING/CODEX_TASK_PHASE_A_v15c_LAYER1_LAYER8_IMAGEGEN.md` | 22 sprite imagegen spec | DISPATCHED bpajb0gjy |
+| `memory/feedback_layered_terrain_mandatory.md` | 8-layer canonical recipe LIVE | MEMORY |
+| `memory/feedback_blueprint_first_map_design.md` | Semantic zone blueprint mantığı | MEMORY |
+| `Assets/Screenshots/PlayableRoom_combat_v15b_full_adjacency.png` | v15b reference (DEPRECATED post-v15c) | LIVE |
+
+### Quota durumu (11:05)
+
+| Profile | 5h % | Reset | Status |
+|---|---|---|---|
+| laurethayday | 21% | 10:23 geçti (yenidense durmuş), şimdi ~%21 olmalı | OK boş |
+| laurethgame | ~30-40% (B-3 + v15c dispatch ekledi) | 14:33 | OK koşuyor |
+| yasinderyabilgin | ~30-50% (B-4 + imagegen dispatch ekledi) | 10:37 geçti | OK koşuyor |
+
+### Unity durum
+
+- Unity açık, MCP bridge bağlı ✓
+- Scene state: untitled boş scene (rootCount=1, isDirty=true) — v15c dispatch içinde "discard unsaved + load RoomPipelineTest" talimat var, Codex halleder
+- **User Unity'ye dokunmasın** — Codex çalışıyor, race condition riski
+
+### Tools/RIMA menu cleanup (next-session todo)
+
+User istedi 11:00. Yukarıdaki "Cleanup yöntem" rehberi takip edilsin. v15c DONE sonrası yapılabilir, acil değil.
+
+### Risk + mitigation
+
+- **v15c refactor schema migration breaking**: 364→386 test artışı + B-3 baseline (13/13) korunmalı. Codex spec'inde explicit "AutoPopulatorTests adapt assertions to 8-pass output" notu var.
+- **Imagegen + refactor race**: imagegen spec'te "zone asset assignment'ı v15c refactor sonrasına bırak veya migration script yaz" talimatı var.
+- **Auto-compact context loss**: bu CURRENT_STATUS S89_MORNING + 2 memory canonical pickup.
+
+---
+
+## 2026-05-18 S88_FINAL_OVERNIGHT_2 → 4 commit LANDED + Combat v15 Blueprint-First LIVE + imagegen sırada
+
+**TLDR (autonomous overnight progress, 05:10):**
+
+### Tamamlanan (bu autonomous session)
+
+- ✅ **4 commit landed** (master):
+  1. `20e88a6` Phase B-1 + B-2 + Phase 1A SO (Asset Pack Browser + Click-to-Place + auto-collider)
+  2. `005444e` Combat v14 fix (cover-based intentional layout, 351/351 PASS)
+  3. `f76c36e` Phase B-3 Blueprint Painter (semantic zone brush + AutoPopulator + Adjacency + PropPlacementService extraction, 364/364 PASS)
+  4. **`7238130` Phase A v15 Blueprint-First Combat Room** — programmatic Blueprint API run, 640 cells, 378 props, 5 transition decals, 383 children. v14 deactivated, v15 active. **"saçma scatter" tamamen ÇÖZÜLDÜ.**
+- ✅ **Blueprint-First Map Design feedback memory LIVE** + applied — 3-step process (semantic zone → rule-based placement → adjacency decals)
+- ✅ **rima-sonnet architecture critique applied** to B-3 spec (4 zorunlu değişiklik: PropDefinitionSO namespace + asmdef + test asmdef + **PropPlacementService extraction**)
+- ✅ **Codex DONE marker self-verification** working (PASS_FOR_ORCHESTRATOR_REVIEW pattern)
+
+### IN-FLIGHT / SIRADAKİ
+
+| Task | Status | Trigger |
+|---|---|---|
+| Phase B-3 Asset Gap imagegen | SPEC_READY (`STAGING/CODEX_TASK_PHASE_B3_ASSET_GAP_IMAGEGEN.md`) | yasinderyabilgin reset 05:28 (~15 dk) |
+| Combat v15 re-run with full adjacency | BLOCKED on imagegen DONE | imagegen DONE → re-dispatch |
+| Phase B-4 spec (save/load + variant + layer toggle) | TODO | imagegen + v15-re-run sonrası |
+| Phase B-5 spec (eyedropper + multi-select + duplicate) | BACKLOG | B-4 LIVE sonrası |
+| 5 indie action items | BACKLOG | Fırsat oldukça |
+| Warblade prompt | SKIP | User direktifi |
+
+### Quota durumu (05:07)
+
+| Profile | 5h % | 5h reset in | Status |
+|---|---|---|---|
+| laurethayday | 100% | ~5 dk (05:02 geçti) | BLOCKED reset window |
+| laurethgame | 69% | 3h 51m | OK (v15 sonrası, dinleniyor) |
+| yasinderyabilgin | 96% | ~20 dk (05:28) | DOLU, reset bekleniyor |
+
+### Sırada (otomatik, sormadan)
+
+1. yasinderyabilgin reset → imagegen dispatch (32 PNG: pool_water + grass enhancement + 3 transition pools)
+2. Imagegen DONE → Codex Unity integration (sprites + PropDefinitionSO wrappers + pool/rule updates) + Auto-Populate retest
+3. Re-dispatch Combat v15 with full adjacency (yeni transition pools dolduğu için zone boundaries daha belirgin)
+4. Phase B-4 spec yaz + dispatch (Map Designer Pro UI/UX devam)
+5. 5 indie action items rotate (LightingPreset SO, URP noise overlay, TerrainDataWriter atomic undo, chroma budget, collider audit)
+
+### Asset gap detayı (imagegen prompts hazır)
+
+- **pool_water** (8 sprite): puddles + flooded decals + ripples + dark pool
+- **pool_grass enhancement** (6 sprite): tufts + weeds + overgrowth
+- **transition grass/stone** (6 sprite): mossy boundaries
+- **transition path/grass** (6 sprite): pebble+grass scatter
+- **transition water/grass** (6 sprite): reeds + wet grass + algae
+- **Phase 2 deferred** (~14 sprite): stone/wall, wall/water, water/feature transitions
+
+### User feedback log
+
+- **Blueprint-First Map Design LOCK** — `feedback_blueprint_first_map_design.md`
+- **Sürekli iterate, memnun olunca feedback** — şu an memnun (4 commit + 364/364 PASS + v15 "tam map" hissi)
+- **3 Codex profile rotation** — cx_dispatch.py auto-quota LIVE, `cxs` PowerShell alias
+
+---
+
 ## 2026-05-18 S88_FINAL_OVERNIGHT → 2 commit LANDED + Phase B-3 Blueprint Painter dispatched
 
 **TLDR (autonomous overnight progress, 04:25):**

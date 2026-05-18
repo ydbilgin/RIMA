@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_layer4_water_detail
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_layer4_water_detail
+  entries:
+  - prop: {fileID: 11400000, guid: e9bcb440e0ae283eb205b9c32e6ebde1, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 15dd97a92278ec1369f5ee73b0305ed2, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 19ff2098cb1f7f01fe32aa7ae9b95ec0, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 82f9a96629b9fd0e08d0c0092a98c919, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 1e4b6200cd3aaf675268705236027118, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 545d1e1cef2ac17383091d5fc2b25289, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 0910634dcfd182b3382edd83cb58a4fd, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: ef7e089a3217d6ef1e829d266720c1f1, type: 2}
+    weight: 1

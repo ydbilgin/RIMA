@@ -15,6 +15,27 @@ MonoBehaviour:
   zoneId: water
   displayName: Water
   brushColor: {r: 0.2901961, g: 0.41960785, b: 0.54509807, a: 1}
-  propPool: {fileID: 11400000, guid: 189fec0bf7f11534eb6d437533789bdc, type: 2}
   defaultDensity: 0.3
   maxFeatureProps: 99
+  macroFillSprites: []
+  baseFloorSprites:
+  - {fileID: 21300000, guid: b4a80baa65b341b07011518ff00ccb2a, type: 3}
+  - {fileID: 21300000, guid: a9bd13fb24dadffb7e8c096ca7f57701, type: 3}
+  - {fileID: 21300000, guid: 34a81fee373172ae67656d84c7b61fd7, type: 3}
+  - {fileID: 21300000, guid: 5d99d4026decf554020b7b3388f2a897, type: 3}
+  - {fileID: 21300000, guid: 306e493d28bccbb0f76f493d92e501e5, type: 3}
+  - {fileID: 21300000, guid: 54a47c1ddca904174ddda547a5963664, type: 3}
+  - {fileID: 21300000, guid: 4840ae13307acd94fc3ddbd05d4353c7, type: 3}
+  - {fileID: 21300000, guid: c2bd59663514a96c8515615eb1d4f24b, type: 3}
+  midToneOverlayPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
+  midToneDensity: 0.4
+  detailTexturePool: {fileID: 11400000, guid: f34a31425c5b556469b1c6827ff582c9, type: 2}
+  detailDensity: 0.3
+  smallScatterPool: {fileID: 11400000, guid: 31fa34c195221f64e9e6382cb3cf154e, type: 2}
+  smallScatterDensity: 0.4
+  mediumPropPool: {fileID: 11400000, guid: 189fec0bf7f11534eb6d437533789bdc, type: 2}
+  mediumPropDensity: 0.15
+  tallFocalPool: {fileID: 0}
+  maxTallFocalPerRegion: 0
+  atmosphericPool: {fileID: 0}
+  atmosphericDensity: 0.2

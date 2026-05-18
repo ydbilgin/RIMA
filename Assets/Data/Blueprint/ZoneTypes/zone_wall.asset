@@ -15,6 +15,23 @@ MonoBehaviour:
   zoneId: wall
   displayName: Wall
   brushColor: {r: 0.22745098, g: 0.22745098, b: 0.22745098, a: 1}
-  propPool: {fileID: 11400000, guid: 0f2fc0712dfabf14b84ecfec7fed8069, type: 2}
   defaultDensity: 0.35
   maxFeatureProps: 99
+  macroFillSprites: []
+  baseFloorSprites:
+  - {fileID: 21300000, guid: a8cdcc27246ee1d4fac03a8541e19095, type: 3}
+  - {fileID: 21300000, guid: b718d91fa527d4c48aa72e61f6153ac5, type: 3}
+  - {fileID: 21300000, guid: e531a783207a2d7498b6ebb468ee1ae8, type: 3}
+  - {fileID: 21300000, guid: 0ffcf9e4639c0594ea6cb3d471a092b3, type: 3}
+  midToneOverlayPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
+  midToneDensity: 0.4
+  detailTexturePool: {fileID: 11400000, guid: be1f05b6912cb334994d98ab2af2afdd, type: 2}
+  detailDensity: 0.3
+  smallScatterPool: {fileID: 11400000, guid: cc5f82e00cabb52439572398529b325e, type: 2}
+  smallScatterDensity: 0.4
+  mediumPropPool: {fileID: 11400000, guid: 0f2fc0712dfabf14b84ecfec7fed8069, type: 2}
+  mediumPropDensity: 0.15
+  tallFocalPool: {fileID: 11400000, guid: e368270aa24222946bcea6a449e2dab7, type: 2}
+  maxTallFocalPerRegion: 2
+  atmosphericPool: {fileID: 0}
+  atmosphericDensity: 0.2

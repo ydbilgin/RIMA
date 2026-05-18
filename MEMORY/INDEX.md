@@ -69,5 +69,8 @@ Open a file ONLY when its keywords match the current task.
 ## Pivot — 2D Top-Down (S59 — 2026-05-12)
 - [project_pure_2d_topdown_pivot_2026-05-12.md](project_pure_2d_topdown_pivot_2026-05-12.md) -- WHEN: 2.5D vs 2D karar, chibi 64px, asset boyutları, sprite/tile/VFX spec, REVOKE listesi
 
+- [project_autosprite_trial_pending.md](project_autosprite_trial_pending.md) -- WHEN: autosprite, MCP VFX pilot, dash trail, hitspark, mcp__autosprite__
+- [feedback_autosprite_vs_pixellab_verdict.md](feedback_autosprite_vs_pixellab_verdict.md) -- WHEN: autosprite vs pixellab, VFX pipeline, non-directional VFX, production routing
+
 ## Add Memory
 Create MEMORY/<topic>.md with frontmatter, then add one line here.

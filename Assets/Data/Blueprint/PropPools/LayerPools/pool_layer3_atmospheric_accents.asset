@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_layer3_atmospheric_accents
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_layer3_atmospheric_accents
+  entries:
+  - prop: {fileID: 11400000, guid: 50a30130e71caf24cbc1f916c32881e0, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 729f881286657b74888896557b3db7f9, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 6473dbc65754da74ea7d22f6e29d3e1d, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 5cee548a6b275b140a7801b8e5704125, type: 2}
+    weight: 1

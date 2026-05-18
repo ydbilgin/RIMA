@@ -13,6 +13,9 @@ import sys
 import os
 import re
 import argparse
+import json
+import urllib.request
+import urllib.error
 from datetime import datetime, timezone
 
 CX_CMD = r"C:\Users\ydbil\AppData\Roaming\npm\cx.cmd"
@@ -119,7 +122,85 @@ def select_profile(profiles):
     return None
 
 
-def dispatch(profile, task_content, effort, task_file_path=None):
+def _fetch_live_limits(profile):
+    """Query the Codex backend usage endpoint for live rate-limit data.
+
+    Same endpoint Codex CLI's interactive TUI uses. Returns
+    (primary_pct, secondary_pct) or None on any failure (auth revoked,
+    network down, schema drift). Caller treats None as "skip this profile".
+    """
+    auth_path = os.path.expandvars(rf"%USERPROFILE%\.codex-profiles\{profile}\auth.json")
+    cap_path = os.path.expandvars(rf"%USERPROFILE%\.codex-profiles\{profile}\cap_sid")
+    try:
+        with open(auth_path) as f:
+            token = json.load(f)["tokens"]["access_token"]
+    except Exception:
+        return None
+
+    cap = ""
+    if os.path.exists(cap_path):
+        try:
+            with open(cap_path) as f:
+                cap = f.read().strip()
+        except Exception:
+            pass
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "User-Agent": "codex_cli_rs/0.0.0",
+        "Accept": "application/json",
+        "Origin": "https://chatgpt.com",
+        "Referer": "https://chatgpt.com/",
+    }
+    if cap:
+        headers["Cookie"] = f"cap_sid={cap}"
+
+    req = urllib.request.Request(
+        "https://chatgpt.com/backend-api/codex/usage", headers=headers
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=8) as r:
+            data = json.loads(r.read().decode())
+    except Exception:
+        return None
+
+    rl = data.get("rate_limit", {})
+    if not rl.get("allowed", True) or rl.get("limit_reached", False):
+        return None
+    pri = (rl.get("primary_window") or {}).get("used_percent")
+    sec = (rl.get("secondary_window") or {}).get("used_percent")
+    if pri is None or sec is None:
+        return None
+    return (pri, sec)
+
+
+def select_profile_quota_aware(profiles, primary_cap=85, secondary_cap=90):
+    """Pick the logged-in profile with the most remaining quota.
+
+    - Calls the live usage endpoint per profile.
+    - Skips profiles that return auth/network errors (None) or are over caps.
+    - Sorts surviving candidates by weekly% then primary% (lowest first).
+    - Returns None if no profile is usable — caller should fall back to
+      LastRefresh-based selection.
+    """
+    scored = []
+    for p in profiles:
+        if not p["logged_in"] or p["name"] not in PROFILE_ORDER:
+            continue
+        lim = _fetch_live_limits(p["name"])
+        if lim is None:
+            continue
+        pri, sec = lim
+        if pri >= primary_cap or sec >= secondary_cap:
+            continue
+        scored.append((p["name"], pri, sec))
+    if not scored:
+        return None
+    scored.sort(key=lambda x: (x[2], x[1]))
+    return scored[0][0]
+
+
+def dispatch(profile, task_content, effort, task_file_path=None, timeout=1200):
     # Use profile-specific task/done files to avoid parallel dispatch race condition
     safe_profile = re.sub(r"[^a-zA-Z0-9_-]", "_", profile)
     task_file = f"CODEX_TASK_{safe_profile}.md"
@@ -141,7 +222,7 @@ def dispatch(profile, task_content, effort, task_file_path=None):
         "--config", f"model_reasoning_effort={effort}",
         f"Read {task_file} and execute every step using shell commands. Do not describe — actually run them.",
     ]
-    result = _ps_run(cx_args, timeout=1200)
+    result = _ps_run(cx_args, timeout=timeout)
     if result.stdout:
         print(result.stdout, file=sys.stderr)
 
@@ -181,6 +262,7 @@ def main():
     parser.add_argument("--task-file", required=True)
     parser.add_argument("--effort", default="medium", choices=["low", "medium", "high", "xhigh"])
     parser.add_argument("--profile", default=None)
+    parser.add_argument("--timeout", type=int, default=1200, help="Subprocess timeout in seconds (default 1200=20min)")
     args = parser.parse_args()
 
     with open(args.task_file, encoding="utf-8") as f:
@@ -190,13 +272,17 @@ def main():
         profile = args.profile
     else:
         profiles = get_profiles()
-        profile = select_profile(profiles)
-        if not profile:
-            print("ERROR: no logged-in profile", file=sys.stderr)
-            sys.exit(1)
-        print(f"PROFILE_SELECTED: {profile}", file=sys.stderr)
+        profile = select_profile_quota_aware(profiles)
+        if profile:
+            print(f"PROFILE_SELECTED (quota-aware): {profile}", file=sys.stderr)
+        else:
+            profile = select_profile(profiles)
+            if not profile:
+                print("ERROR: no logged-in profile", file=sys.stderr)
+                sys.exit(1)
+            print(f"PROFILE_SELECTED (LastRefresh fallback): {profile}", file=sys.stderr)
 
-    result = dispatch(profile, task_content, args.effort)
+    result = dispatch(profile, task_content, args.effort, timeout=args.timeout)
 
     if result:
         print(result)

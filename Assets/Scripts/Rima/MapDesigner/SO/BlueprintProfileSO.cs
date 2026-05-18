@@ -57,5 +57,33 @@ namespace RIMA.MapDesigner.SO
 
             return null;
         }
+
+        private void OnValidate()
+        {
+            if (zones == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < zones.Length; i++)
+            {
+                BlueprintZoneTypeSO zone = zones[i];
+                if (zone == null)
+                {
+                    continue;
+                }
+
+                string id = string.IsNullOrEmpty(zone.zoneId) ? zone.name : zone.zoneId;
+                if (zone.macroFillSprites == null || zone.macroFillSprites.Length == 0)
+                {
+                    Debug.LogWarning($"[Blueprint] Zone '{id}' missing Layer 1 macro fill, will use solid fallback color");
+                }
+
+                if (zone.baseFloorSprites == null || zone.baseFloorSprites.Length == 0)
+                {
+                    Debug.LogWarning($"[Blueprint] Zone '{id}' missing Layer 2 base floor sprites");
+                }
+            }
+        }
     }
 }

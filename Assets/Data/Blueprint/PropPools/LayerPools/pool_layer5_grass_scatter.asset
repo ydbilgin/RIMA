@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_layer5_grass_scatter
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_layer5_grass_scatter
+  entries:
+  - prop: {fileID: 11400000, guid: 7cedaaf0241a4af8c1c963e2807477a3, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 86158ec5209c3ac91453ea6a5a573c72, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: db0f406b4a350d80c7fb7a9c23bb5854, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 95db51ff670ecc9963883a7132fc4bd4, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: b9ffa914838ac2521a5a6b52a3535259, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 07cad3a6b4b9dbedbdae6bbc04172883, type: 2}
+    weight: 1

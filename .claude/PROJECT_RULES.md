@@ -2,6 +2,16 @@
 **Universal project rules: see `RULES.md`.**
 Routing details: `AGENTS.md`.
 
+## Universal Coding Principles (Karpathy 4 — TÜM agent'lar için)
+
+1. **KOD YAZMADAN ÖNCE DÜŞÜN.** Varsayımlarını listele. Belirsizlik varsa flag at, körü körüne devam etme. Birden fazla yorum varsa hepsini sun, susarak seçim yapma.
+2. **MİNİMUM KOD.** Problemi çözen en az kod. Spekülatif feature, gereksiz abstraction, "olur ihtimaline karşı" error handling YOK. "Senior engineer bunu overcomplicate görür mü?" testi.
+3. **CERRAHİ DEĞİŞİKLİK.** Sadece görevin gerektirdiği dosyalara dokun. İlgisiz kodu refactor etme. Pre-existing dead code'u not düş, silme. Sadece kendi değişikliğinin oluşturduğu unused import'ları kaldır.
+4. **HEDEF ODAKLI ÇALIŞMA.** Her görevi doğrulanabilir başarı kriterine çevir. Multi-step işte plan + verification step. Muğlak kriter → orchestrator'a sor, tahmin etme. Başarısızsa BLOCKED yaz, sessizce partial implement etme.
+
+Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
+`ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.`
+
 ## HARD RULES (Always Active) — S58/S59 lessons
 
 ### Orchestrator Context Koruma (S63 UPDATED)

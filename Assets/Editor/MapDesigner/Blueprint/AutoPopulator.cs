@@ -12,21 +12,135 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         public const string PlacedPrefix = "_BlueprintPlaced_";
         private const string AdjacencyPrefix = "_BlueprintPlaced_adjacency_";
 
+        public const int Layer1SortingOrder = -100;
+        public const int Layer2SortingOrder = -90;
+        public const int Layer3SortingOrder = -80;
+        public const int Layer4SortingOrder = -70;
+        public const int Layer5SortingOrder = -60;
+        public const int Layer8SortingOrder = 100;
+
         public static int PopulateZones(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
         {
-            if (canvas == null || profile == null || roomRoot == null || canvas.Count == 0)
+            if (!CanPopulate(canvas, profile, roomRoot))
             {
                 return 0;
             }
 
             ClearPlacedProps(roomRoot);
 
+            int total = 0;
+            total += PopulateLayer1Macro(canvas, profile, roomRoot, seed);
+            total += PopulateLayer2BaseFloor(canvas, profile, roomRoot, seed + 1);
+            total += PopulateLayer3MidTone(canvas, profile, roomRoot, seed + 2);
+            total += PopulateLayer4Detail(canvas, profile, roomRoot, seed + 3);
+            total += PopulateLayer5SmallScatter(canvas, profile, roomRoot, seed + 4);
+            total += PopulateLayer6Medium(canvas, profile, roomRoot, seed + 5);
+            total += PopulateLayer7TallFocal(canvas, profile, roomRoot, seed + 6);
+            total += PopulateLayer8Atmospheric(canvas, profile, roomRoot, seed + 7);
+            return total;
+        }
+
+        public static int PopulateLayer1Macro(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            return PopulateSpriteLayer(
+                canvas,
+                profile,
+                roomRoot,
+                seed,
+                1,
+                zone => zone.macroFillSprites,
+                Layer1SortingOrder,
+                false,
+                "[Blueprint] Zone '{0}' missing Layer 1 macro fill, will use solid fallback color");
+        }
+
+        public static int PopulateLayer2BaseFloor(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            return PopulateSpriteLayer(
+                canvas,
+                profile,
+                roomRoot,
+                seed,
+                2,
+                zone => zone.baseFloorSprites,
+                Layer2SortingOrder,
+                true,
+                "[Blueprint] Zone '{0}' missing Layer 2 base floor sprites");
+        }
+
+        public static int PopulateLayer3MidTone(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            return PopulatePoolLayer(
+                canvas,
+                profile,
+                roomRoot,
+                seed,
+                3,
+                zone => zone.midToneOverlayPool,
+                zone => zone.midToneDensity,
+                _ => Layer3SortingOrder,
+                true,
+                false);
+        }
+
+        public static int PopulateLayer4Detail(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            return PopulatePoolLayer(
+                canvas,
+                profile,
+                roomRoot,
+                seed,
+                4,
+                zone => zone.detailTexturePool,
+                zone => zone.detailDensity,
+                _ => Layer4SortingOrder,
+                true,
+                false);
+        }
+
+        public static int PopulateLayer5SmallScatter(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            return PopulatePoolLayer(
+                canvas,
+                profile,
+                roomRoot,
+                seed,
+                5,
+                zone => zone.smallScatterPool,
+                zone => zone.smallScatterDensity,
+                _ => Layer5SortingOrder,
+                true,
+                false);
+        }
+
+        public static int PopulateLayer6Medium(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            return PopulatePoolLayer(
+                canvas,
+                profile,
+                roomRoot,
+                seed,
+                6,
+                zone => zone.mediumPropPool,
+                zone => zone.mediumPropDensity,
+                YSortingOrder,
+                true,
+                false);
+        }
+
+        public static int PopulateLayer7TallFocal(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            if (!CanPopulate(canvas, profile, roomRoot))
+            {
+                return 0;
+            }
+
             int placedCount = 0;
             BlueprintZoneTypeSO[] zones = profile.zones ?? Array.Empty<BlueprintZoneTypeSO>();
             for (int i = 0; i < zones.Length; i++)
             {
                 BlueprintZoneTypeSO zone = zones[i];
-                if (zone == null || string.IsNullOrEmpty(zone.zoneId))
+                if (zone == null || string.IsNullOrEmpty(zone.zoneId) || !HasEntries(zone.tallFocalPool))
                 {
                     continue;
                 }
@@ -37,29 +151,47 @@ namespace RIMA.MapDesigner.Editor.Blueprint
                     continue;
                 }
 
-                BlueprintPropPoolSO pool = zone.propPool;
-                if (pool == null || pool.entries == null || pool.entries.Length == 0 || pool.PickWeighted(seed) == null)
+                List<List<Vector2Int>> regions = BuildRegions(canvas, zone.zoneId, cells);
+                for (int regionIndex = 0; regionIndex < regions.Count; regionIndex++)
                 {
-                    Debug.LogWarning($"[Blueprint] Pool '{(pool != null ? pool.poolId : "null")}' is empty, skipping zone '{zone.zoneId}'");
-                    continue;
-                }
+                    List<Vector2Int> region = regions[regionIndex];
+                    region.Sort((a, b) => StableSeed(seed, a.x, a.y, regionIndex, 0, 701).CompareTo(StableSeed(seed, b.x, b.y, regionIndex, 0, 701)));
 
-                if (IsFeatureZone(zone))
-                {
-                    placedCount += PopulateFeatureZone(canvas, zone, pool, roomRoot, cells, seed);
-                }
-                else
-                {
-                    placedCount += PopulateRegularZone(zone, pool, roomRoot, cells, seed);
+                    int maxPerRegion = ResolveTallFocalCap(zone);
+                    int targetCount = Mathf.Min(maxPerRegion, region.Count / 8);
+                    for (int c = 0; c < targetCount; c++)
+                    {
+                        Vector2Int cell = region[c];
+                        Vector3 worldPos = CellWorldPosition(roomRoot, cell, seed, 7, true);
+                        if (PlacePoolProp(7, zone.zoneId, zone.tallFocalPool, roomRoot, cell, worldPos, seed, 702 + c + regionIndex * 31, YSortingOrder(worldPos), false))
+                        {
+                            placedCount++;
+                        }
+                    }
                 }
             }
 
             return placedCount;
         }
 
+        public static int PopulateLayer8Atmospheric(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
+        {
+            return PopulatePoolLayer(
+                canvas,
+                profile,
+                roomRoot,
+                seed,
+                8,
+                zone => zone.atmosphericPool,
+                zone => zone.atmosphericDensity,
+                _ => Layer8SortingOrder,
+                false,
+                true);
+        }
+
         public static int PopulateAdjacency(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot, int seed)
         {
-            if (canvas == null || profile == null || roomRoot == null || canvas.Count == 0)
+            if (!CanPopulate(canvas, profile, roomRoot))
             {
                 return 0;
             }
@@ -84,7 +216,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
                 }
 
                 BlueprintPropPoolSO pool = rule.transitionPool;
-                if (pool == null || pool.entries == null || pool.entries.Length == 0)
+                if (!HasEntries(pool))
                 {
                     Debug.LogWarning($"[Blueprint] Pool '{(pool != null ? pool.poolId : "null")}' is empty, skipping adjacency '{rule.ruleId}'");
                     continue;
@@ -114,19 +246,56 @@ namespace RIMA.MapDesigner.Editor.Blueprint
             return ClearPlacedPropsWithPrefix(roomRoot, PlacedPrefix);
         }
 
-        private static int PopulateRegularZone(BlueprintZoneTypeSO zone, BlueprintPropPoolSO pool, Transform roomRoot, List<Vector2Int> cells, int seed)
+        private static int PopulateSpriteLayer(
+            BlueprintCanvas canvas,
+            BlueprintProfileSO profile,
+            Transform roomRoot,
+            int seed,
+            int layer,
+            Func<BlueprintZoneTypeSO, Sprite[]> spriteSelector,
+            int sortingOrder,
+            bool criticalMissing,
+            string missingMessage)
         {
+            if (!CanPopulate(canvas, profile, roomRoot))
+            {
+                return 0;
+            }
+
             int placedCount = 0;
-            float density = Mathf.Clamp01(zone.defaultDensity);
+            var warnedZones = new HashSet<string>();
+            List<KeyValuePair<Vector2Int, string>> cells = SortedIntentCells(canvas);
             for (int i = 0; i < cells.Count; i++)
             {
-                Vector2Int cell = cells[i];
-                if (Stable01(seed, cell.x, cell.y, i, 0, 101) > density)
+                Vector2Int cell = cells[i].Key;
+                BlueprintZoneTypeSO zone = profile.GetZone(cells[i].Value);
+                if (zone == null)
                 {
                     continue;
                 }
 
-                if (PlaceCellProp(zone.zoneId, pool, roomRoot, cell, seed, 102 + i))
+                Sprite sprite = PickSprite(spriteSelector(zone), seed, cell.x, cell.y, layer, 501);
+                if (sprite == null)
+                {
+                    if (warnedZones.Add(zone.zoneId))
+                    {
+                        string message = string.Format(missingMessage, zone.zoneId);
+                        if (criticalMissing)
+                        {
+                            Debug.LogError(message);
+                        }
+                        else
+                        {
+                            Debug.LogWarning(message);
+                        }
+                    }
+
+                    continue;
+                }
+
+                Vector3 worldPos = CellWorldPosition(roomRoot, cell, seed, layer, false);
+                string name = PlacedName(layer, zone.zoneId, cell);
+                if (PropPlacementService.PlaceSprite(sprite, roomRoot, worldPos, name, sortingOrder) != null)
                 {
                     placedCount++;
                 }
@@ -135,45 +304,93 @@ namespace RIMA.MapDesigner.Editor.Blueprint
             return placedCount;
         }
 
-        private static int PopulateFeatureZone(BlueprintCanvas canvas, BlueprintZoneTypeSO zone, BlueprintPropPoolSO pool, Transform roomRoot, List<Vector2Int> cells, int seed)
+        private static int PopulatePoolLayer(
+            BlueprintCanvas canvas,
+            BlueprintProfileSO profile,
+            Transform roomRoot,
+            int seed,
+            int layer,
+            Func<BlueprintZoneTypeSO, BlueprintPropPoolSO> poolSelector,
+            Func<BlueprintZoneTypeSO, float> densitySelector,
+            Func<Vector3, int> sortingOrderSelector,
+            bool jitterPosition,
+            bool rotationJitter)
         {
-            int placedCount = 0;
-            int maxPerRegion = Mathf.Max(1, zone.maxFeatureProps);
-            List<List<Vector2Int>> regions = BuildRegions(canvas, zone.zoneId, cells);
-            for (int i = 0; i < regions.Count; i++)
+            if (!CanPopulate(canvas, profile, roomRoot))
             {
-                List<Vector2Int> region = regions[i];
-                region.Sort((a, b) => StableSeed(seed, a.x, a.y, i, 0, 301).CompareTo(StableSeed(seed, b.x, b.y, i, 0, 301)));
-                int densityTarget = Mathf.CeilToInt(region.Count * Mathf.Clamp01(zone.defaultDensity));
-                int targetCount = Mathf.Clamp(densityTarget, 0, Mathf.Min(maxPerRegion, region.Count));
-                if (targetCount == 0 && region.Count > 0 && zone.defaultDensity > 0f)
+                return 0;
+            }
+
+            int placedCount = 0;
+            List<KeyValuePair<Vector2Int, string>> cells = SortedIntentCells(canvas);
+            for (int i = 0; i < cells.Count; i++)
+            {
+                Vector2Int cell = cells[i].Key;
+                BlueprintZoneTypeSO zone = profile.GetZone(cells[i].Value);
+                if (zone == null)
                 {
-                    targetCount = 1;
+                    continue;
                 }
 
-                for (int c = 0; c < targetCount; c++)
+                BlueprintPropPoolSO pool = poolSelector(zone);
+                if (!HasEntries(pool))
                 {
-                    if (PlaceCellProp(zone.zoneId, pool, roomRoot, region[c], seed, 302 + c + i * 31))
-                    {
-                        placedCount++;
-                    }
+                    continue;
+                }
+
+                float density = Mathf.Clamp01(densitySelector(zone));
+                if (Stable01(seed, cell.x, cell.y, layer, i, 601) > density)
+                {
+                    continue;
+                }
+
+                Vector3 worldPos = CellWorldPosition(roomRoot, cell, seed, layer, jitterPosition);
+                if (PlacePoolProp(layer, zone.zoneId, pool, roomRoot, cell, worldPos, seed, 602 + i, sortingOrderSelector(worldPos), rotationJitter))
+                {
+                    placedCount++;
                 }
             }
 
             return placedCount;
         }
 
-        private static bool PlaceCellProp(string zoneId, BlueprintPropPoolSO pool, Transform roomRoot, Vector2Int cell, int seed, int salt)
+        private static bool PlacePoolProp(
+            int layer,
+            string zoneId,
+            BlueprintPropPoolSO pool,
+            Transform roomRoot,
+            Vector2Int cell,
+            Vector3 worldPos,
+            int seed,
+            int salt,
+            int sortingOrder,
+            bool rotationJitter)
         {
-            PropDefinitionSO prop = pool.PickWeighted(StableSeed(seed, cell.x, cell.y, salt, 0, 401));
+            PropDefinitionSO prop = pool.PickWeighted(StableSeed(seed, cell.x, cell.y, layer, salt, 801));
             if (prop == null)
             {
                 return false;
             }
 
-            Vector3 worldPos = roomRoot.position + new Vector3(cell.x + 0.5f, cell.y + 0.5f, 0f);
-            string name = $"{PlacedPrefix}{zoneId}_{cell.x}_{cell.y}";
-            return PropPlacementService.PlacePropDefinition(prop, roomRoot, worldPos, name, true) != null;
+            GameObject placed = PropPlacementService.PlacePropDefinition(prop, roomRoot, worldPos, PlacedName(layer, zoneId, cell), true);
+            if (placed == null)
+            {
+                return false;
+            }
+
+            SpriteRenderer renderer = placed.GetComponent<SpriteRenderer>();
+            if (renderer != null)
+            {
+                renderer.sortingOrder = sortingOrder;
+            }
+
+            if (rotationJitter)
+            {
+                float angle = Mathf.Lerp(0f, 360f, Stable01(seed, cell.x, cell.y, layer, salt, 802));
+                placed.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            }
+
+            return true;
         }
 
         private static List<List<Vector2Int>> BuildRegions(BlueprintCanvas canvas, string zoneId, List<Vector2Int> cells)
@@ -248,9 +465,92 @@ namespace RIMA.MapDesigner.Editor.Blueprint
             return toDestroy.Count;
         }
 
-        private static bool IsFeatureZone(BlueprintZoneTypeSO zone)
+        private static bool CanPopulate(BlueprintCanvas canvas, BlueprintProfileSO profile, Transform roomRoot)
         {
-            return string.Equals(zone.zoneId, "feature", StringComparison.OrdinalIgnoreCase) || zone.maxFeatureProps != 99;
+            return canvas != null && profile != null && roomRoot != null && canvas.Count > 0;
+        }
+
+        private static bool HasEntries(BlueprintPropPoolSO pool)
+        {
+            if (pool == null || pool.entries == null || pool.entries.Length == 0)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < pool.entries.Length; i++)
+            {
+                WeightedProp entry = pool.entries[i];
+                if (entry != null && entry.prop != null && entry.weight > 0f)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static Sprite PickSprite(Sprite[] sprites, int seed, int x, int y, int layer, int salt)
+        {
+            if (sprites == null || sprites.Length == 0)
+            {
+                return null;
+            }
+
+            int start = (int)(StableHash(seed, x, y, layer, salt, 901) % (uint)sprites.Length);
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                Sprite sprite = sprites[(start + i) % sprites.Length];
+                if (sprite != null)
+                {
+                    return sprite;
+                }
+            }
+
+            return null;
+        }
+
+        private static int ResolveTallFocalCap(BlueprintZoneTypeSO zone)
+        {
+            if (zone.maxTallFocalPerRegion > 0)
+            {
+                return zone.maxTallFocalPerRegion;
+            }
+
+            return zone.maxFeatureProps == 99 ? 2 : Mathf.Max(0, zone.maxFeatureProps);
+        }
+
+        private static int YSortingOrder(Vector3 worldPos)
+        {
+            return Mathf.RoundToInt(-worldPos.y);
+        }
+
+        private static string PlacedName(int layer, string zoneId, Vector2Int cell)
+        {
+            return $"{PlacedPrefix}L{layer}_{zoneId}_{cell.x}_{cell.y}";
+        }
+
+        private static Vector3 CellWorldPosition(Transform roomRoot, Vector2Int cell, int seed, int layer, bool jitter)
+        {
+            float x = cell.x + 0.5f;
+            float y = cell.y + 0.5f;
+            if (jitter)
+            {
+                x += Mathf.Lerp(-0.3f, 0.3f, Stable01(seed, cell.x, cell.y, layer, 0, 1001));
+                y += Mathf.Lerp(-0.3f, 0.3f, Stable01(seed, cell.x, cell.y, layer, 1, 1002));
+            }
+
+            return roomRoot.position + new Vector3(x, y, 0f);
+        }
+
+        private static List<KeyValuePair<Vector2Int, string>> SortedIntentCells(BlueprintCanvas canvas)
+        {
+            var result = new List<KeyValuePair<Vector2Int, string>>(canvas.IntentMap);
+            result.Sort((a, b) =>
+            {
+                int y = a.Key.y.CompareTo(b.Key.y);
+                return y != 0 ? y : a.Key.x.CompareTo(b.Key.x);
+            });
+            return result;
         }
 
         private static List<Vector2Int> SortedCells(IEnumerable<Vector2Int> cells)
