@@ -1,22 +1,27 @@
-# CODEX DONE laurethgame
+# Codex Done - laurethgame
 
-Task: Phase B-2 Click-to-Place + Auto-Collider implementation
+Task: Phase B-3 Blueprint Painter (Semantic Zone Brush + Auto-Populate)
 Status: DONE_FOR_ORCHESTRATOR_REVIEW
 Date: 2026-05-18
 
-Files changed:
-- Assets/Editor/MapDesigner/AssetPackBrowserWindow.cs
-- Assets/Scripts/Rima/MapDesigner/SO/PropDefinitionSO.cs
-- Assets/Scripts/MapDesigner/Props/PropDefinitionSO.cs
-- Assets/Data/Brush/Props/Barrel/barrel_001.asset
-- Assets/Tests/EditMode/MapDesigner/AssetPackBrowserPlacementTests.cs
-- STAGING/CODEX_TASK_PHASE_B2_IMPLEMENT_DONE.md
+Implemented:
+- Blueprint SO contracts, editor canvas/window, auto-populator, and shared PropPlacementService.
+- AssetPackBrowserWindow now routes placement through PropPlacementService and has an Open Blueprint Painter toolbar button.
+- 6-zone default Blueprint profile, prop pools, adjacency rules, and generated PropDefinition wrappers from existing RIMA_v2/RIMA_v3 atlas categories.
+- 13 new EditMode tests for BlueprintCanvas and AutoPopulator.
+- Screenshots saved:
+  - Assets/Screenshots/phase_b3_blueprint_painted.png
+  - Assets/Screenshots/phase_b3_auto_populated.png
+  - Assets/Screenshots/phase_b3_adjacency_pass.png
 
 Verification:
+- Full EditMode: 364/364 PASS
+- AssetPackBrowserTests: 8/8 PASS
 - AssetPackBrowserPlacementTests: 10/10 PASS
-- AssetPackBrowserTests + AssetPackBrowserPlacementTests: 18/18 PASS
-- Full EditMode suite: 352 discovered, blocked by unrelated MCP-FOR-UNITY transport log assertion in PlayerAnimatorDirectionTests
-- Screenshot: Assets/Screenshots/phase_b2_scene_view_ghost_and_placement.png
+- BlueprintCanvasTests: 6/6 PASS
+- AutoPopulatorTests: 7/7 PASS
 
-Verdict:
-PASS_FOR_ORCHESTRATOR_REVIEW. Phase B-2 click-to-place, active target binding, ghost preview, auto-collider attachment, placed-object inspector edits, tests, and DONE marker are implemented.
+Notes:
+- pool_water is intentionally empty due missing source category.
+- Missing/placeholder transition art is documented in STAGING/CODEX_TASK_PHASE_B3_IMPLEMENT_DONE.md.
+- Final deliverable verdict: PASS_FOR_ORCHESTRATOR_REVIEW

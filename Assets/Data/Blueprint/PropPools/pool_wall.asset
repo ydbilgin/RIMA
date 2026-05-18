@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_wall
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_wall
+  entries:
+  - prop: {fileID: 11400000, guid: 99cf597f66970b44d9c1ddd19431b8b8, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 4bd366bfcfe58144e9dab38e82506d28, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 9ad20901190f1284bb5d0a784eecb5ad, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: a9ba441142170cc4ab3e5c3ea44e8bbf, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 364082d5250e4b64f908fc9e8ff5bbe5, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 63c6a22493ce3544f8a761b6a7d24e34, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 62c6f4015d808dd478574da6c583f9b4, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 1e22b6d3a43bc7448aafa002addb48d8, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: b8384c9a8e4a1d94096ef700a8780437, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: d25fae75abac0054880f6f85bb804361, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 4724fc507e049ce4e93f541956162b28, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: eea118a4bc1ebeb49a04a95055c1f6d9, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: bde66a19403bcc7469d1899d64f18135, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: c7e99fa534a948543b73633bcc4822ea, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 171fa8fb2947fbf458cb174d3fdfd4f8, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: dd66f9478162cbd4fa7a18ca552b6c3a, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 29677bd2c87c81a40a0729eddae0c6d4, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: e89b5ee44b5a8a646b40b695c6931678, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 42f91c2a729f0c642b6f2757a08b5b85, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 66fdeabc0912a3b4bbcd4836dabbd620, type: 2}
+    weight: 1

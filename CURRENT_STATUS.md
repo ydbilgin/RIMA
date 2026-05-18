@@ -1,5 +1,427 @@
 # CURRENT_STATUS
 
+## 2026-05-18 S88_FINAL_OVERNIGHT → 2 commit LANDED + Phase B-3 Blueprint Painter dispatched
+
+**TLDR (autonomous overnight progress, 04:25):**
+
+### Tamamlanan bu turn
+
+- ✅ **Combat v14 fix LANDED** (commit 20e88a6 + 7ae... v14 fix, screenshot eviden): cover-based intentional layout (NW broken column, NE brazier+column, SW kneeling statue, SE debris stack, center lava crack focal) + multi-biome v14b floor + varied N walls. **351/351 EditMode PASS**. PASS_PARTIAL — major "saçma scatter" çözüldü ama side walls eksik + boş alan dressing eksik → Blueprint-First redesign hâlâ değerli.
+- ✅ **Phase B-1 + B-2 + Phase 1A SO LANDED** (commit 20e88a6, 4116 sat, 38 dosya): Asset Pack Browser LIVE + Click-to-Place + Auto-Collider + 4 Phase 1A SO contracts + 17/17 placement+browser test PASS + 7/7 SO contract test PASS.
+- ✅ **Blueprint-First feedback memory LIVE** (`feedback_blueprint_first_map_design.md`): 3-step process LOCK — semantic blueprint → rule-based placement → adjacency decals. Random scatter YASAK. **Re-design trigger**: Phase B-3 LIVE sonrası Combat v14 baştan yeniden, eksik asset için Codex imagegen.
+- ✅ **Phase B-3 Blueprint Painter spec REVISED post-rima-sonnet critique**: 4 zorunlu değişiklik uygulandı (PropDefinitionSO namespace clarify + asmdef inheritance + test asmdef + **PropPlacementService extraction** Phase B-2'den). Asset gap fallback: category-name matching (BiomeFloor_Sandy → path, Moss → grass, Walls → wall, Ritual → feature; pool_water EMPTY → imagegen dispatch).
+
+### IN-FLIGHT
+
+| ID | Görev | Profile | DONE marker |
+|---|---|---|---|
+| `bywrhfczk` | **Phase B-3 IMPLEMENT** (Blueprint Painter + AutoPopulator + PropPlacementService extraction + 13 test + 6 zone + 6 pool + 3 adjacency + profile asset) | laurethgame 24% | `STAGING/CODEX_TASK_PHASE_B3_IMPLEMENT_DONE.md` |
+
+### Sırada (autonomous, sormadan)
+
+1. `bywrhfczk` DONE notification + B-2 baseline 18/18 PASS preserved verify + Codex `PropPlacementService` refactor review + 13 new test verify
+2. PASS → commit "Phase B-3 LIVE: Blueprint Painter + PropPlacementService" + Asset Gaps imagegen dispatch (pool_water + mossy-stone transitions) yasinderyabilgin reset sonrası
+3. PASS + imagegen DONE → Combat v15 blueprint-first redesign dispatch (v14 atılır, 6-zone blueprint ile yeniden inşa)
+4. PASS → Phase B-4 spec (Room save/load + active target binding + random variant + layer toggle)
+5. 5 indie action items fırsat oldukça
+6. Warblade prompt SKIP (user direktifi)
+7. PixelLab 5000 gen — yarın subscription reset bekle
+
+### Quota durumu (04:25)
+
+| Profile | 5h % | 5h reset | Status |
+|---|---|---|---|
+| laurethayday | 94% | 0h 38m (05:02) | yorgun, B-2/v14 fix backlog'u |
+| laurethgame | 24% (now ~60% B-3 running) | 4h 20m | B-3 koşuyor |
+| yasinderyabilgin | 96% | 1h 0m (05:28) | DOLU, reset bekle |
+
+### Auto-compact safety
+
+- Bu CURRENT_STATUS + `memory/feedback_blueprint_first_map_design.md` + `memory/project_brush_v1_manual_composition_system.md` canonical pickup
+- Git log son 3 commit son durumu temsil eder
+- DONE marker dosyaları (`STAGING/CODEX_TASK_*_DONE.md`) verdict source
+
+---
+
+## 2026-05-18 S88_FINAL_LATE → /clear öncesi snapshot (2 dispatch çalışıyor, Phase A+B ortak iterasyon)
+
+**TLDR (S88 gece 04:00 civarı, user /clear ediyor):**
+
+### Aktif background dispatch'ler (yeni session bunları kontrol et)
+
+| ID | Görev | Profile | ETA | Output |
+|---|---|---|---|---|
+| `by0gt27oo` | **Combat v14 visual FIX** (grid + saçma obj + walls) | laurethayday (85%) | 60 dk | `STAGING/CODEX_TASK_COMBAT_v14_VISUAL_FIX_DONE.md` + `Assets/Screenshots/PlayableRoom_combat_v14_fixed.png` |
+| `baod53dno` | **Phase B-2 IMPLEMENT** (Click-to-Place + auto-collider + inspector edits) | laurethgame (5%) | <2h | `STAGING/CODEX_TASK_PHASE_B2_IMPLEMENT_DONE.md` + 351/351 PASS hedef |
+
+### Yeni session ilk 60 saniye
+
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` (otomatik)
+2. Bu CURRENT_STATUS bölümü
+3. **2 background dispatch DONE markers kontrol:**
+   - `STAGING/CODEX_TASK_COMBAT_v14_VISUAL_FIX_DONE.md` — varsa screenshot inspect → user'a göster
+   - `STAGING/CODEX_TASK_PHASE_B2_IMPLEMENT_DONE.md` — varsa test count + window screenshot → user'a göster
+4. **Memory pickup:** `[[brush-v1-manual-composition-system]]` (S88 LIVE master)
+
+### Tamamlanan bu session (S88)
+
+- ✅ **Phase A v13 ritual chamber PASS** (`PlayableRoom/Pro_Redesign_v13_RitualChamber` inactive korundu)
+- ✅ **Combat Room v14 ACTIVE** (`Pro_Redesign_v14_CombatRoom`) — user FIX istedi: grid floor + saçma obj + walls. **`by0gt27oo` ÇALIŞIYOR**
+- ✅ **Phase B-1 IMPLEMENT LIVE** — AssetPackBrowserWindow + AssetPackManifestSO + 2 manifest (RIMA_v2_Pack 84 + RIMA_v3_Pack 40 = 124 sprites browse-able). Menu: `Tools/RIMA/Map Designer/Asset Pack Browser`. 341/341 PASS.
+- ✅ **Hierarchy 4 fix DONE** (06_AtmosphericAccents container, WallsTilemap_Front sortingOrder, 5 walls sortingOrder, Floor sibling 0). 333/333 PASS preserved.
+- ✅ **cx_dispatch.py quota-aware** + `STAGING/cx_limits.py` standalone + **`cxs` PowerShell alias** (kullanıcı her terminal session'da `cxs` çalıştırır + `cxs -Watch` 60s auto-refresh)
+- ✅ **Indie 6-topic research DONE** + 5 RIMA action items kayıt + 2 LaurethStudio pipeline doc (painterly_unifying_noise_overlay + pixellab_anchor_inpaint_workflow)
+- ✅ **rima-design Phase B priority verdict** (9 V1 feature, 6 cut, MVP = B-1+B-2+B-3) + **rima-sonnet hierarchy audit** (4 fix flagged, uygulandı)
+- ✅ **Asset-swap mimari LOCK**: sistem sprite-source-agnostic — yarın PixelLab sprite gelince atlas içeriği swap edilir, Map Designer workflow aynı çalışır
+
+### Workflow LOCK (S88 night user direktifleri)
+
+- "siz tatmin olana kadar yapın" + "sorma" + "kararı sen ver Codex'e sorarak git"
+- "planları netleştir benden onay beklemeden geç direkt"
+- "memory + status güncelle auto-compact olmasın"
+- "3 Codex profile kullan, biri olmazsa diğeri, Codex'i asla devreden çıkarma"
+- "yöneticilik onayı: Opus + Codex + Gemini + Sonnet — bir oyun şirketi gibi yönet"
+- "PRO UI/UX Map Designer = asıl büyük iş" → Phase B priority
+- "yarın oynanabilir map" + "pixellabla aynı sistem kullanılacak sadece asset değişecek" → asset-swap mimari LOCK
+
+### Sırada (yeni session, otomatik — sormadan)
+
+1. 2 dispatch DONE notification + sonuç değerlendir
+2. v14 fix PASS → user playtest hazır; Phase B-2 PASS → Pro UI/UX işlevsellik LIVE
+3. Phase B-3 dispatch (Room save/load + active target binding + random variant + layer toggle + eyedropper)
+4. PixelLab 5000 gen reset bekle (yarın subscription cycle) → PixelLab MCP autonomous prop production
+5. 5 indie action items uygula:
+   - LightingPreset SO RoomBank field
+   - URP Multiply noise overlay shader
+   - TerrainDataWriter atomic undo verify
+   - Chroma budget (floor max 20% sat) discipline
+   - PropRuntimeSpawner sprite-accurate collider audit
+6. Warblade prompt (skip flag aktif — user "şimdilik atla")
+
+### Quota durumu (S88 son check, kullanıcı `cxs` ile her zaman tazeleyebilir)
+
+| Profile | 5h % | 5h reset at | Week % | Status |
+|---|---|---|---|---|
+| laurethayday | 85% | 05:02 today | 17% | Çalışıyor (`by0gt27oo`) |
+| laurethgame | 5% | 08:45 today | 36% | Çalışıyor (`baod53dno`) — fresh post-login |
+| yasinderyabilgin | 96% | 05:28 today | 15% | DOLU, dispatch atılmayacak reset'e kadar |
+
+### Authoritative documents (yeni session öncelik)
+
+| Doc | Content | Status |
+|---|---|---|
+| `memory/project_brush_v1_manual_composition_system.md` | S88 LIVE system map + lessons + S88_FINAL state | LIVE |
+| `STAGING/PLAN_FAKE3D_AND_UIUX.md` | Phase A+B roadmap, 9 V1 features, mutual QC workflow | LIVE |
+| `STAGING/cx_limits.py` | Live quota CLI (absolute reset times) + `cxs` PowerShell alias | LIVE |
+| `cx_dispatch.py` (patched) | quota-aware auto-rotation, skip revoked profiles | LIVE |
+| `STAGING/CODEX_TASK_PHASE_B2_IMPLEMENT.md` | Phase B-2 spec | DISPATCHED `baod53dno` |
+| `STAGING/CODEX_TASK_COMBAT_v14_VISUAL_FIX.md` | v14 fix spec | DISPATCHED `by0gt27oo` |
+| `STAGING/SPEC_PHASE_B1_ASSET_PACK_BROWSER.md` | Phase B-1 reference spec | DONE LIVE |
+| `STAGING/RIMA_DESIGN_PHASE_B_PRIORITY_VERDICT.md` | 9 V1 feature priority | LIVE |
+| `STAGING/RESEARCH_INDIE_DEV_APPROACHES.md` | 6-topic indie research + 5 action items | LIVE |
+| `F:/LaurethStudio/01_PIPELINE/multi_biome_blended_floor_technique.md` | Procedural floor pattern | LIVE |
+| `F:/LaurethStudio/01_PIPELINE/auto_collider_from_sprite_pipeline.md` | Map Designer B-2 spec | LIVE |
+| `F:/LaurethStudio/01_PIPELINE/painterly_unifying_noise_overlay.md` | Post-process unifying shader spec | LIVE |
+| `F:/LaurethStudio/01_PIPELINE/pixellab_anchor_inpaint_workflow.md` | Fresh-roll drift fix | LIVE |
+
+### Risk + mitigation
+
+- **`by0gt27oo` laurethayday 85% near limit** — dispatch içinde 100% hit ihtimali → fallback: laurethgame veya yasinderyabilgin sabah reset sonrası
+- **Auto-compact context loss** — bu CURRENT_STATUS + memory pickup yeterli
+- **PixelLab 5000 gen reset** — manual subscription cycle, user görür
+
+---
+
+## 2026-05-18 S88_NIGHT → Phase A Visual Map iterating (Codex autonomous), Phase B UX prepared
+
+**TLDR (S88 night final):**
+- ✅ **Phase 1A SO contracts + Phase 1.5 data-first decals LIVE** (333/333 EditMode PASS)
+- ✅ **Asset Parts v2 + v3 PRODUCTION COMPLETE** — 84 v2 (floor/macro/moss/dirt/pebbles/cracks/rift/ritual) + 40 v3 (walls/vertical props/biome floors/atmospheric accents). 14 PatchAtlasSO + 1 SpriteAtlas. Codex imagegen quality professional.
+- ✅ **PlayableRoom playable** — RoomPipelineTest.unity scene LIVE with Warblade + WASD (new Input System) + camera follow + Light2D atmospheric mood + 8 thematic zones + multi-biome blended floor (1 procedural big sprite 1152×704, gaussian-blended region tints). Game view test PASS R4 by Codex.
+- ✅ **Brush V1 + Manual MCP Composition system memory** LIVE — `memory/project_brush_v1_manual_composition_system.md`
+- ✅ **Multi-Biome Blended Floor technique** documented for LaurethStudio — `F:/LaurethStudio/01_PIPELINE/multi_biome_blended_floor_technique.md`
+- ✅ **Auto-collider from sprite pipeline spec** for Map Designer Phase B-2 — `F:/LaurethStudio/01_PIPELINE/auto_collider_from_sprite_pipeline.md`
+- ✅ **cx_dispatch.py quota-aware patch LIVE** — live HTTP `/backend-api/codex/usage` fetch, auto-skip revoked profiles, lowest weekly% wins. `STAGING/cx_limits.py` standalone live check.
+- ✅ **Plan doc LIVE** — `STAGING/PLAN_FAKE3D_AND_UIUX.md` Phase A (fake-3D) + Phase B (Asset Pack Browser, 15 features, 5 phased delivery, mutual QC workflow).
+- 🔄 **Codex pro-level-design autonomous redesign `bi9s1bxna`** dispatched (xhigh 2h, full authority) — user not satisfied with v11 8-zone map ("floor düz + bazı şeyler random + tam map gibi değil"). Codex iterating critique → plan → implement → self-verify, max 3 internal iterations. Awaiting DONE notification.
+- ⏳ **Multi-agent 4 X URL research BLOCKED** (`a112206...` rima-research Gemini) — X paywall HTTP 402 + Snowflake IDs May 2026 (no archive). User needs to paste tweet content manually.
+- ⏳ **laurethgame TOKEN_REVOKED** (HTTP 401) — schedule retry 03:33 (1.5h note from user). `cx login laurethgame` interactive re-auth required if still revoked after reset window.
+- ⏳ **Warblade prompt USER skip** — "şimdilik atla". Memory `[[character-state-tweaks-pending]]` LIVE for next "karakterleri üretecem" trigger.
+
+### Workflow LOCK (user delegation 2026-05-18 night)
+
+User directive: "siz tatmin olana kadar yapın", "sorma", "kararı sen ver codex'e sorarak git", "memory güncelle status güncelle auto-compact olunca sorun olmasın", "planları netleştir benden onay beklemeden geç direkt"
+
+**Mutual QC workflow LOCK:**
+1. Orchestrator drafts spec → 2. Codex consultation dispatch (read-only) → 3. Codex critique/approve/risks → 4. Orchestrator addresses risks + re-spec → 5. Codex approval before implement → 6. Implement → 7. Codex verify (read-only PASS/FAIL with evidence) → 8. User playtest → 9. Commit
+
+**Phase A** = autonomous Codex iteration until BOTH orchestrator + Codex satisfied with "real game map" quality. No user approval gate during iteration.
+**Phase B** = begins immediately after Phase A LOCK. NO user approval gate to start. Asset Pack Browser primary feature, 15 features in 5 phased delivery, each phase mutual QC.
+
+### Yeni session ilk 60 saniye
+
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` oku
+2. Bu bölümü oku (S88_NIGHT TLDR + Workflow LOCK)
+3. **Background jobs check:**
+   - `bi9s1bxna` (Codex pro redesign) — `STAGING/CODEX_TASK_PRO_LEVEL_DESIGN_REDESIGN_DONE.md` var mı?
+   - Eğer DONE → screenshot v12+ inspect, eğer PASS → Phase B implementation dispatch başlat
+   - Eğer FAIL veya partial → tekrar iterate (Codex'e yeni dispatch)
+4. **Memory pickup:**
+   - [[brush-v1-manual-composition-system]] (S88 LIVE)
+   - [[multi-projection-architecture-lock]] (architecture LOCK)
+   - [[character-state-tweaks-pending]] (Warblade pending)
+   - [[hybrid-asset-pipeline-lock]] (Karar #157 candidate)
+5. **Plan check:** `STAGING/PLAN_FAKE3D_AND_UIUX.md` Phase A + B roadmap
+
+### Sırada (otomatik, sormadan)
+
+1. Codex Phase A DONE bekle → screenshot inspect → karar (PASS → Phase B / FAIL → iterate)
+2. Phase B-1 dispatch (Asset Pack Browser read-only spec → Codex consultation → implement)
+3. Phase B-2 implement (Click-to-Place + auto-collider per `auto_collider_from_sprite_pipeline.md`)
+4. Phase B-3/4/5 sırayla, her phase mutual QC + test
+5. Yarın (2026-05-19) PixelLab 5000 gen → character anchor production (Antigravity 10) + props (12 P0-P2 per RIMA_MAP_PRODUCTION_SEQUENCE v6)
+
+### Authoritative documents
+
+| Doc | Content | Status |
+|---|---|---|
+| `memory/project_brush_v1_manual_composition_system.md` | S88 LIVE system map + lessons + PixelLab workflow | LIVE |
+| `STAGING/PLAN_FAKE3D_AND_UIUX.md` | Phase A+B roadmap, 15 features, mutual QC | LIVE |
+| `STAGING/cx_limits.py` | Live profile quota check (standalone CLI) | LIVE |
+| `cx_dispatch.py` (patched) | quota-aware select_profile auto-rotation | LIVE |
+| `STAGING/CODEX_TASK_PRO_LEVEL_DESIGN_REDESIGN.md` | Phase A autonomous iteration spec | DISPATCHED `bi9s1bxna` |
+| `F:/LaurethStudio/01_PIPELINE/multi_biome_blended_floor_technique.md` | Transferable proc gen pattern | LIVE |
+| `F:/LaurethStudio/01_PIPELINE/auto_collider_from_sprite_pipeline.md` | Map Designer B-2 spec | LIVE |
+| `Assets/Screenshots/PlayableRoom_8zone_biome_v11.png` | v11 baseline (user not satisfied) | LIVE |
+| `Assets/Screenshots/PlayableRoom_v3_real_props.png` | R4 PASS Codex verdict | LIVE |
+
+### Test suite
+
+- **Mevcut: 333/333 EditMode PASS** (321 V1 + 7 Phase 1A SO + 5 Phase 1.5 data-first executor)
+- **Phase B post-implement target:** 340+/340+ (Asset Pack Browser tests + auto-collider tests)
+
+### Risk + mitigation
+
+- **Codex `bi9s1bxna` 2h timeout might not finish in time:** mitigation = `TaskStop` + iterate with smaller scope
+- **laurethgame token revoked through 03:33 reset:** mitigation = quota-aware skip continues, user re-auth when convenient
+- **Auto-compact context loss during long iteration:** mitigation = THIS S88_NIGHT snapshot is the canonical pickup point
+
+---
+
+## 2026-05-18 S88 → /clear öncesi snapshot (Multi-projection LOCK + Phase 1.5 + asset parts v2 dispatched)
+
+**TLDR — bu session sonu:**
+- ✅ **3-verdict consensus LOCKED** — Codex narrow + Opus overnight + Codex multi-projection (415 sat). Tüm verdict'ler converge: RIMA = angled top-down (30-35°) ship, **HD-2D pivot YOK** (defer), multi-projection ARCHITECTURE prepared, IMPLEMENTATION deferred. Memory `[[multi-projection-architecture-lock]]` LIVE.
+- ✅ **Phase 1A SO Contracts landed** — Codex DONE: TerrainDefinitionSO + PatchAtlasSO + PropDefinitionSO + RoomVisualProfileSO + ImportAssetRole + 5 test. Renderer-agnostic. **328/328 EditMode PASS** (önceki 321 + 7).
+- ✅ **Codex imagegen verified working** — `STAGING/Phase1A_L2b_Source/codex_floor_source_v1.png` (1024×1024 painterly slate floor, QC PASS). Built-in imagegen skill (gpt-image-1) çalışıyor, OPENAI_API_KEY CLI yolu yok ama skill var.
+- ✅ **Breakthrough insight (Opus)** — "Doğal görünüm" projeksiyon problemi değil, **kompozisyon problemi**. Alabaster Dawn / CrossCode / Hades / Octopath = hepsi farklı kamera ama hepsi doğal. ChatGPT L0-L11 layered recipe zaten yeterli. **HD-2D over-engineering.**
+- ✅ **6 hard rule LOCKED** (V1 boyunca uygulanacak):
+  1. Brush executor `VisualPlacement` data emit (GameObject değil)
+  2. SO public API'de Unity render-stack type YOK
+  3. LightingProfile intent-language (warm/cold/pulse)
+  4. PPU=32 + cell=1 unit IMMUTABLE
+  5. CornerField encoding IMMUTABLE
+  6. RoomVisualMode enum → SO reference (gelecek oyun kendi mode'unu tanımlasın)
+- ✅ **Codex parallel-profile workflow LOCKED** — 3 logged-in profile: `laurethgame` / `laurethayday` / `yasinderyabilgin`. cx_dispatch.py `--profile` flag ile 3× throughput. Memory `[[codex-parallel-profile-workflow]]`.
+- ⏳ **Asset Parts v2 dispatch** (`b3beonimq`, laurethgame profile) — Codex imagegen 8 sheet (floor tiles, macro patches, moss, dirt, pebbles, cracks/bones, rift, ritual) → ~50-80 bağımsız transparent PNG parça. Output: `STAGING/RIMA_AssetParts_v2/`. **PARÇA PARÇA asset şart** (user lock).
+- ⏳ **Phase 1.5 dispatch** (`bq6o6y9ts`, laurethayday profile, paralel) — Data-first decal migration: `RoomDecalDataSO` + `FreeformDecalDataExecutor` + `ScatterAlongStrokeDataExecutor` + `RoomDecalChunkRenderer` + `BrushPipelineConfigSO` + 5 test. Field-additive, feature flag, **mevcut 328 yeşil kalır → 333+**.
+- 🔄 **yasinderyabilgin profile boş** — Asset'ler geldiğinde Python slice + Unity import + Brush V1 PatchAtlasSO setup için kullanılacak.
+
+**Yeni session ilk 60 saniye:**
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` oku
+2. Bu bölümü oku
+3. **`memory/project_multi_projection_architecture_lock.md`** kritik — 3-verdict consensus + 6 hard rule + Phase 1.5 critical path
+4. **Background job status kontrol et:**
+   - `b3beonimq` (Codex imagegen 8 sheet) → `C:\WINDOWS\TEMP\claude\...\tasks\b3beonimq.output`
+   - `bq6o6y9ts` (Phase 1.5 data-first) → `C:\WINDOWS\TEMP\claude\...\tasks\bq6o6y9ts.output`
+5. **Dispatched task file'lar:**
+   - `STAGING/CODEX_IMAGEGEN_RIMA_ASSET_PARTS_V2.md` — 8 sheet spec
+   - `STAGING/CODEX_TASK_PHASE_1_5_DATA_FIRST_DECALS.md` — 6 file + 5 test spec
+6. **Dispatched DONE marker'ları (varsa):**
+   - `STAGING/CODEX_IMAGEGEN_RIMA_ASSET_PARTS_V2_DONE.md`
+   - `STAGING/CODEX_TASK_PHASE_1_5_DATA_FIRST_DECALS_DONE.md`
+
+### Sırada (yeni session)
+
+**Step 1 — Background job verdict kontrol (5 dk):**
+- `b3beonimq` DONE mu? Asset sheet'leri `STAGING/RIMA_AssetParts_v2/sheet_01_*.png ... sheet_08_*.png` geldi mi?
+- `bq6o6y9ts` DONE mu? Phase 1.5 SO + Executor + Renderer dosyaları `Assets/Scripts/MapDesigner/Brush/Data/RoomDecalDataSO.cs` etc. var mı? `Phase1ASoContractsTests.cs` benzeri test 333+ PASS mı?
+
+**Step 2 — Asset sheet QC (varsa, 5 dk):**
+- 8 sheet'in her birini visual inspect: angled top-down 30-35° ✓, per-tile border YOK ✓, transparent background (sheet 2-8) ✓, palette muted slate-amber ✓
+- Kötü çıkan sheet'(ler)i regen — sadece o sheet, diğerleri tutmaz
+
+**Step 3 — Python slicer (10 dk):**
+- `yasinderyabilgin` profile ile Codex dispatch — sheet'leri bağımsız transparent PNG parçalara böl:
+  - Sheet 1 floor: 16 × 32×32 → `Assets/Sprites/Environment/RIMA_AssetParts_v2/floor/tile_01..16.png`
+  - Sheet 2 macro: 8 × 128×128 → `.../macro_patches/`
+  - Sheet 3-6 decals: each 12-16 × 64×64 → `.../decals/`
+  - Sheet 7-8 accents: each 4 × 256×256 → `.../accents/`
+
+**Step 4 — Unity import + PatchAtlasSO (15 dk, yasinderyabilgin profile):**
+- Per-asset PPU=32, FilterMode=Point, alpha=true
+- PatchAtlasSO.asset üret her kategori için (BaseFloor / MacroPatch / OrganicDecal / DetailScatter / Accent)
+- SpriteAtlas asset build (Phase 1.5 chunked renderer için)
+
+**Step 5 — Brush V1 paint test (30 dk):**
+- 1 sample RoomTemplateSO aç
+- BrushPipelineConfigSO.useDataFirstDecals = true
+- Manual paint: floor → macro patches → decals → scatter → accent
+- Output: composed angled top-down sample room
+
+**Step 6 — Visual gate verdict:**
+- **PASS** (doğal görünüyor, no grid leak) → V1 ship trajectory kilitli, ChatGPT FINAL plan continue
+- **FAIL** (hala gridli) → Codex HD-2D kill-criteria prototip escape hatch (`STAGING/CODEX_STRATEGIC_2D_vs_HD2D.md:39-66`)
+
+### Authoritative documents (yeni session öncelik)
+
+| Doc | Content | Status |
+|---|---|---|
+| `memory/project_multi_projection_architecture_lock.md` | 3-verdict consensus LOCK + 6 hard rule | LIVE |
+| `memory/project_room_composer_paint_intent_lock.md` | ChatGPT L0-L11 Phase 1A FINAL | LIVE |
+| `memory/project_3d_portability_strategy.md` | Renderer-agnostic discipline | LIVE |
+| `memory/feedback_codex_parallel_profile_workflow.md` | 3-profile paralel kullanım | LIVE |
+| `STAGING/CHATGPT_PHASE1_FINAL_DIRECTION.md` | L0-L11 14-dispatch plan | LIVE |
+| `STAGING/CODEX_TWEET_REVIEW_xhigh.md` | Phase 1.5 blueprint | LIVE |
+| `STAGING/CODEX_STRATEGIC_2D_vs_HD2D.md` | Yol C kill-criteria HD-2D prototip plan (escape hatch) | LIVE |
+| `STAGING/CODEX_OVERNIGHT_multi_projection.md` | 4-projection mimari (415 sat) | LIVE |
+| `STAGING/CODEX_IMAGEGEN_RIMA_ASSET_PARTS_V2.md` | 8 sheet imagegen spec | DISPATCHED |
+| `STAGING/CODEX_TASK_PHASE_1_5_DATA_FIRST_DECALS.md` | 6 file + 5 test refactor spec | DISPATCHED |
+
+### Karar registry update (KARAR #158 candidate)
+
+**KARAR #158 (candidate)** — RIMA = angled top-down ship, multi-projection architecture (renderer plug-in pattern) prepared but iso/HD-2D implementation deferred to future games. 3-verdict consensus (Codex narrow + Opus overnight + Codex multi-projection). LOCK 2026-05-18.
+
+**KARAR #157** (önceki, candidate kalır) — Hybrid asset pipeline (PixelLab characters + Codex imagegen tiles/decals/accents).
+
+### Risk + mitigation
+
+- **Asset imagegen style drift (8 sheet boyunca palette/angle drift):** Mitigation = sheet-by-sheet QC, kötü olanı regen (whole batch değil)
+- **Phase 1.5 test regression (5 yeni test 328'i bozar):** Mitigation = field-additive, mevcut executor dokunulmaz, feature flag default off
+- **Visual gate FAIL (doğal görünmüyor):** Mitigation = Codex HD-2D kill-criteria prototip planı `STAGING/CODEX_STRATEGIC_2D_vs_HD2D.md` hazır, 1 hafta validate
+- **Codex profile collision:** Mitigation = 3 profile `--profile` flag ile ayrıştırılmış, paralel collision yok
+
+### Test suite
+
+- **Mevcut: 328/328 EditMode PASS** (321 V1 + 7 Phase 1A SO contracts)
+- **Phase 1.5 sonrası hedef: 333/333 PASS** (+5 data-first executor + chunk renderer test)
+
+---
+
+## 2026-05-18 S87_LATE → /clear öncesi snapshot (user yarın imagegen skill research yapacak)
+
+**TLDR — bu session sonu (S87 late, asset pipeline + concept art validation session):**
+- ✅ **Karakter roster LOCKED:** 10 canonical anchor `ANCHORS/characters/` (Antigravity 10 Ana). Gunslinger USER FIX (dark hair, 06_Gunslinger_Ana2 canonical replacing red ponytail). 5M/5F lock korunur.
+- ✅ **10 sample room generated** (Codex Editor script) — `Assets/Data/Rooms/Library/` 10 RoomTemplateSO.asset (Spawn/Corridor×2/Combat×3/Elite/Treasure/Shrine/Boss_Intro). Test suite 323/323 EditMode PASS.
+- ✅ **Mobs/_archive_legacy_S86/** — 12 eski mob arşivlendi (10 humanoid REGEN front-view, 2 spider borderline). 4 candidate `ANCHORS/mobs/` (seam_crawler, plate_widow, fracture_imp, rift_hound).
+- ✅ **Map prop production guide v6 LIVE** — `STAGING/RIMA_MAP_PRODUCTION_SEQUENCE.md` Codex-reviewed clean prompts (12 prop, canvas/exact-size talimatları kaldırıldı, rune/sigil → abstract marks, statue humanoid çelişkisi düzeltildi).
+- ✅ **Karar #145 v2 — 6 Use Cases LOCK:** anim/enemy variant/boss phase/class skin/interp/**conditional variant via natural language** (user-discovered Ravager female swap proof). 5000 gen budget yarın geliyor.
+- ✅ **Concept art validation (Codex imagegen)** — v1 painterly + v2 sharper pixel art + 8-panel layer breakdown LIVE. v1/v2 farkları net, pipeline mantığı kanıtlandı.
+- ✅ **Hybrid pipeline KARAR #157 candidate:** PixelLab characters/mobs/props + Codex imagegen tiles/walls/decals. Memory + Laureth Studio pipeline note'a eklendi.
+- ⏳ **StoneDungeon_v2 tile set Codex dispatch çalışıyor** (background `bxtnqfrjl`) — 6 floor + 16 Wang16 wall + L4/L5/L6 decal pack üretim.
+- ⏳ **Yarın user task:** Codex'in imagegen DIŞINDA daha iyi image gen skill'i var mı araştırma. Eğer yoksa imagegen batch ile devam.
+
+**Yeni session ilk 60 saniye:**
+1. CLAUDE.md + `.claude/PROJECT_RULES.md` oku
+2. Bu bölümü oku
+3. **Karar #74/#100/#144/#145 LIVE LOCK** korunur
+4. **Karar #157 candidate (Hybrid Pipeline):** PixelLab + Codex imagegen split — `memory/project_hybrid_asset_pipeline_lock.md`
+5. **ANCHORS/characters/ LOCK** — 10 canonical anchor PixelLab create character bekliyor
+6. **Library/ 10 sample room** — barrel placeholder'lı, prop'lar üretildiğinde swap edilecek
+7. Memory: [[hybrid-asset-pipeline-lock]] [[character-state-tweaks-pending]] [[canonical-character-roster-lock]] [[pixellab-character-states-workflow]] [[pixellab-create-image-pro-format]]
+
+### Bu session ne yapıldı — özet (asset pipeline + concept art sentez)
+
+**1. NLM sync + design dosya araştırması ✅**
+- NLM Studio notebook query → 4 kategori tasarım dosyaları (Class/Skill, Combat/Boss/Room/Map, Hikaye/Lore, Visual Identity)
+- Sprint 13 spec + impl review sonuçları NLM'e push (1 başarılı / 7 Error, sabah retry gerekir)
+
+**2. Slormancer multi-agent research ✅**
+- Opus + Codex + Antigravity 3-agent consensus rapor (`STAGING/slormancer_research_report.md`)
+- 8 yeni karar adayı (#147 Per-Skill Mastery Tree, #148 Class Weapon Keystone, #149 Elite Affix, #150 Heat/Curse, #151 Loadout, #152 Cursor Camera, #153 UI Clutter, #154 Telegraph Decal)
+- Karar #155 Class Skin Variant + #156 Hub NPC eklendi (Antigravity'den)
+- Skill genişleme verdict: **Path B + sınırlı Path A** (10 weapon-bound skill total, 1/sınıf)
+
+**3. Antigravity karakter klasörü inceleme ✅**
+- 32 dosya (10 Ana + 5 Alternatif + 5 NPC + 1 Kullanilmayan + 10 Yedek + 1 Gunslinger_Ana2)
+- Opus + Codex consensus final verdict (`STAGING/OPUS_FINAL_VERDICT_antigravity_characters.md`)
+- (4,2) Frost Elementalist skin + (4,4) Brawler Female misclassified — Codex re-classify: Alt_Ranger_Yasli → Warblade Veteran skin, Alt_Shadowblade_Mor → Frost Elementalist skin
+- Sprint 17 Skin Pilot batch: Warblade Veteran + Brawler Monk + Druid Elementalist (Codex breadth strategy)
+
+**4. Karakter anchor LOCK ✅**
+- `ANCHORS/characters/01-10_*.png` LIVE — Antigravity 10 Ana clean naming
+- Gunslinger USER FIX: 06_Gunslinger_Ana (dark-skin teal cape — outfit canonical olarak state ile değişecek)
+- 5M / 5F gender lock doğrulandı
+
+**5. Brush V1 + Room Library ✅**
+- Codex Editor script `SampleRoomLibraryGenerator.cs` LIVE
+- 10 RoomTemplateSO.asset üretildi (Library/)
+- 3 yeni EditMode test PASS → 323/323 total
+
+**6. Mob klasörü temizlik + 4 candidate ✅**
+- 12 legacy mob → `Mobs/_archive_legacy_S86/`
+- 4 candidate → `ANCHORS/mobs/` (re-evaluation)
+- `Mobs/README.md` + verdict file LIVE
+
+**7. ANCHORS klasör yapısı ✅**
+- `ANCHORS/characters/` (10 LIVE)
+- `ANCHORS/mobs/` (4 candidate)
+- `ANCHORS/elites/` (boş, Phase 1.5+)
+- `ANCHORS/README.md` production standards
+
+**8. Map prop production guide iterasyonu ✅ (v1→v6)**
+- v1: 12 ayrı prompt (kullanışsız)
+- v2: 64×64 unified
+- v3: Batch 2×2 grid (PixelLab variant mantığı yanlış anlaşıldı)
+- v4: Negative inline (Create Image Pro format)
+- v5: Variant grid logic doğrulandı (64→16 variant, 128→4 variant)
+- **v6 LIVE:** Codex review applied (ABSOLUTE CANVAS satırı kaldırıldı, exact body size kaldırıldı, rune/sigil→abstract, statue humanoid conflict düzeltildi)
+
+**9. PixelLab gen budget netleştirme ✅**
+- 5000 gen yarın geliyor (2026-05-19)
+- Use #6 conditional variant SERBEST kullanım (önceki "sınırlı" kuralı revoked)
+- 256/512 downsample tekniği — sadece organic prop'lar için (Treasure Pile + Kneeling Statue MUTLAKA)
+- Custom Size Beta — 64×96 wall + 64×128 tall prop + 96×96 Mob T2 native
+
+**10. Concept art validation (Codex imagegen) ✅**
+- v1: `STAGING/concept_art_rima_sample_room.png` — painterly, atmospheric (Alabaster Dawn brief — yanlış cerceve)
+- v2: `STAGING/concept_art_rima_sample_room_v2.png` — pipeline-true sharper pixel art
+- Layer breakdown: `STAGING/concept_art_layer_breakdown.png` — 8 panel L1→Final progressive build, pipeline mantığı KANITLANDI
+- Real tileset render: `STAGING/RIMA_REAL_TILESET_ROOM.png` — eski StoneDungeon tile'lar drift'li (Karar #100 uyumsuz isometric), v2 tile set gerek
+
+**11. Hybrid pipeline strategy LOCK ✅ (Karar #157 candidate)**
+- PixelLab → characters / mobs / props
+- Codex imagegen → tiles / Wang16 walls / decals (L2-L6)
+- Codex CLI imagegen backend: gpt-image-1 (verified S87)
+- Memory + Laureth Studio pipeline note + INDEX güncellendi
+
+**12. Laureth Studio knowledge transfer ✅**
+- `F:/LaurethStudio/01_PIPELINE/pixellab_production_knowledge.md` — Section 10 Hybrid Pipeline eklendi
+- `F:/LaurethStudio/04_TEMPLATES/character_anchor_prompt_PROVEN.md` — RIMA v11 chibi anchor prompt (Image #16 success)
+- `F:/LaurethStudio/MEMORY/INDEX.md` — Pipeline + Templates kategori pointer'ları
+
+### Background tasks (yarın user kontrol etsin)
+- `bxtnqfrjl` — StoneDungeon_v2 tile set Codex imagegen dispatch (6 floor + 16 Wang16 + L4/L5/L6 packs)
+- Output beklenen: `Assets/Sprites/Environment/StoneDungeon_v2/` + `STAGING/concept_room_with_v2_tileset.png`
+- Codex'in DONE.md cevap verecek: hangi image model? quality assessment? tile cohesion?
+
+### Pending (yarın)
+1. **User research:** Codex imagegen DIŞINDA daha iyi image gen skill (web search / model docs)
+2. **Karakter PixelLab create** — 10 anchor PixelLab Web UI'a yükle → character ID al
+3. **State tweaks (Karar #145 v2 Use #6):** 5 mandatory + 1 optional (Warblade yaş yönü TBD)
+4. **PixelLab props üretim:** 4 P0 prop (bu gece başlanmadıysa) + 8 P1/P2
+5. **StoneDungeon_v2 wire-up:** Yeni tile set Brush V1'a + sample room re-compose
+6. **Sample room screenshot:** Unity'de yeni tile set + props + character ile compose
+7. **Sprint 14 spec yazımı:** Combat integration + #152 Camera + #153 UI Clutter
+
+### Workflow notları
+- 16-18 May Opus implement override SON GUN bugun — yarın Sonnet'e döner
+- Hybrid pipeline Karar #157 candidate — user onayında MASTER_KARAR_BELGESI.md'ye eklenir
+- Codex imagegen task brief'leri `STAGING/codex_imagegen_*.md` — reference olarak kalır
+- Background `bxtnqfrjl` bittiğinde StoneDungeon_v2 hazır olur
+
+---
+
 ## 2026-05-18 S87_NIGHT → user uyandığında handoff (Opus night session bitti)
 
 **TLDR — bu gece (S87 night, user uyurken Opus + Codex + agents):**

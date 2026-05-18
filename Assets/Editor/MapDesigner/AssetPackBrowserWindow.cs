@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using RIMA.MapDesigner.Editor.Blueprint;
 using RIMA.MapDesigner.SO;
 using UnityEditor;
 using UnityEngine;
@@ -135,6 +136,11 @@ namespace RIMA.MapDesigner.Editor
                 if (GUILayout.Button("Refresh", EditorStyles.toolbarButton, GUILayout.Width(70f)))
                 {
                     RefreshCatalog();
+                }
+
+                if (GUILayout.Button("Open Blueprint Painter", EditorStyles.toolbarButton, GUILayout.Width(145f)))
+                {
+                    BlueprintPainterWindow.ShowWindow();
                 }
             }
         }
@@ -600,29 +606,15 @@ namespace RIMA.MapDesigner.Editor
 
         private static GameObject PlaceEntry(AssetPackEntry entry, Transform parent, Vector3 worldPosition, bool selectAfterCreate)
         {
-            if (entry == null || entry.sprite == null || parent == null)
-            {
-                return null;
-            }
-
-            var placedObject = new GameObject(string.IsNullOrEmpty(entry.displayName) ? "PlacedSprite" : entry.displayName);
-            Undo.RegisterCreatedObjectUndo(placedObject, "Place Asset Pack Sprite");
-            placedObject.transform.SetParent(parent, true);
-            placedObject.transform.position = worldPosition;
-
-            SpriteRenderer renderer = placedObject.AddComponent<SpriteRenderer>();
-            renderer.sprite = entry.sprite;
-            renderer.sortingOrder = entry.defaultSortingOrder;
-
-            if (entry.collisionPreset.blocksMovement && entry.collisionPreset.colliderShape != ColliderShape.None)
-            {
-                AttachAutoCollider(placedObject, entry.sprite, entry.collisionPreset);
-            }
+            GameObject placedObject = PropPlacementService.PlaceEntry(entry, parent, worldPosition, true);
 
             if (selectAfterCreate)
             {
                 Selection.activeGameObject = placedObject;
-                EditorGUIUtility.PingObject(placedObject);
+                if (placedObject != null)
+                {
+                    EditorGUIUtility.PingObject(placedObject);
+                }
             }
 
             return placedObject;

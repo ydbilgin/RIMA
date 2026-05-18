@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb7c206316c6eb1488b4e54231e81745, type: 3}
+  m_Name: profile_combat_room_default
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintProfileSO
+  profileId: combat_room_default
+  zones:
+  - {fileID: 11400000, guid: 8421a5c2b829d634091e3640765df9c0, type: 2}
+  - {fileID: 11400000, guid: 2ff2a9616d90e044780c79432e27a7d0, type: 2}
+  - {fileID: 11400000, guid: 3f7648b33cabc8a45a32ba88ba58d6a4, type: 2}
+  - {fileID: 11400000, guid: 753f4468a6a4cb0489543a9533ab982b, type: 2}
+  - {fileID: 11400000, guid: c8e2340a2afa1574881163d419297d30, type: 2}
+  - {fileID: 11400000, guid: cec32e3e972a01f45b68fac94620b849, type: 2}
+  adjacencyRules:
+  - {fileID: 11400000, guid: 2ea6a18efc54cd546bfb771b6be64e16, type: 2}
+  - {fileID: 11400000, guid: 8bacd3715b301f841a348572c2aee9a0, type: 2}
+  - {fileID: 11400000, guid: fcc0b543a3cd82448984a6c720c765b6, type: 2}
+  gridSize: {x: 36, y: 22}

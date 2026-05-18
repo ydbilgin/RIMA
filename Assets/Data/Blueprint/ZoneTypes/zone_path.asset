@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b592aef2d0b0704e86b0734df617187, type: 3}
+  m_Name: zone_path
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintZoneTypeSO
+  zoneId: path
+  displayName: Path
+  brushColor: {r: 0.7882353, g: 0.65882355, b: 0.45882353, a: 1}
+  propPool: {fileID: 11400000, guid: 71ac848db8e25624fb4db1d6ed762912, type: 2}
+  defaultDensity: 0.65
+  maxFeatureProps: 99

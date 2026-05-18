@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_stone
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_stone
+  entries:
+  - prop: {fileID: 11400000, guid: 5029cd94147101042912eaf380230fc4, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 273fa9a51484dc14fad76dfe65576b80, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 015b145e0c2d40743beff0d4b83fb776, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: f6d8ee802dc5b2441856b298e0fda4f8, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 3e9b45759f266b04793b2d2b8fece93e, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 20b96aab52a29004d92ffdec4063da7c, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 69177f6ae8b199246b7c769c638e5d61, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: fb00250ca337cce438dc392b399f8835, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 938970741f96d924b8aae07aaf555737, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 2a343adb651a44a4884a2beb0a710ed3, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 80b5a5177e08a004e91e9033354dd7c2, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 92858b90e6997de4b911654eac3fbe4c, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 59b7997366d10fc4da963af9217cd5ba, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: be43871a61f51984192509bfccea6c85, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: e976ec3b854a4df4493769dd2936642c, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: c94ce10aa250e694e8fbb30f4cf1bb08, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 3cce6a9d1654afd459d5c43d448bae41, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 239585efa1f1e624f858b94c638e83e5, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 166f3c151577e3c40a3aa1dcecf1b09b, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: e285e96f7a2f2f549b284588d302de36, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: adfdcf08e8d14f64b8b389232879c34d, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 5825dcd428493f0408d315fefbe5fc84, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 7970766651625de4cb32caf6e0580729, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 347d90a97b8111046abc75f379d3519f, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 26628df80af97104e815a681a0bcb3ef, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: a586a043ad6672d4fa1209be319b5e4a, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 07f96ada8a6c5e142901abbc2d3be490, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: dfbf62ef4cee2db41a943b92b4a7adb1, type: 2}
+    weight: 1

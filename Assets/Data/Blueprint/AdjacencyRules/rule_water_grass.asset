@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c96e9e3b50f9740833ddfa062873bb, type: 3}
+  m_Name: rule_water_grass
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintAdjacencyRuleSO
+  ruleId: rule_water_grass
+  zoneIdA: water
+  zoneIdB: grass
+  transitionPool: {fileID: 11400000, guid: 8f05d7c44a3a65049a1c7542dbfd2b0b, type: 2}
+  density: 0.5

@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_path
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_path
+  entries:
+  - prop: {fileID: 11400000, guid: 184a4475bae067e47b8c000e70814d13, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 3b7d9a15eb5cda04ba103cd445f00a49, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 9d60b39fbd8426c489d7cc6c79400818, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 828e0ddd3bc39b54ba000d04406e106c, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: da5e1bbc41e14ee4b9b530f615735596, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 19945eaaa32c6f942af2130be1593262, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 64fb564dba5358f4386eb5d951ff39f3, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 1323325ce3104894d862f6636d9c972a, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 917ead0dfda0b654d8850487d525db48, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 9564d64db4f4396458258d405ad85b57, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 46601a216300df84abbe7624cffaf8b3, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 52d937395c8a0794b98d21744ea6b53e, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 75a6f3ba8325ea74fb6c40a4223254a8, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: d42cb796f51991c4b904e762d2d89471, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 535e2496974ec1f468be46337f6e1df0, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 1462f9e4899f82049b15aa1beee68120, type: 2}
+    weight: 1
