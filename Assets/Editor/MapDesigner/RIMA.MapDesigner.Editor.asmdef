@@ -3,7 +3,8 @@
     "rootNamespace": "RIMA.MapDesigner.Editor",
     "references": [
         "RIMA.Runtime",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Unity.2D.Tilemap.Extras"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace RIMA.MapDesigner.SO
 {
@@ -9,6 +10,7 @@ namespace RIMA.MapDesigner.SO
         public string profileId;
         public BlueprintZoneTypeSO[] zones;
         public BlueprintAdjacencyRuleSO[] adjacencyRules;
+        public TileBase wangRuleTileRef;
         public Vector2Int gridSize = new Vector2Int(36, 22);
 
         public BlueprintZoneTypeSO GetZone(string zoneId)

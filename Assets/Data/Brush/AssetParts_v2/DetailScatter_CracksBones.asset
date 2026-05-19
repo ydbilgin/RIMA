@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3d1e94e5a5dd4479a0a0ab8ad2d26a, type: 3}
+  m_Name: DetailScatter_CracksBones
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PatchAtlasSO
+  atlasId: assetparts_v2_detail_scatter_cracks_bones
+  role: 3
+  validTerrainIds:
+  - ShatteredKeep
+  variants:
+  - {fileID: 21300000, guid: 5a2e0eca274b9e040bf536d77f73319c, type: 3}
+  - {fileID: 21300000, guid: 6f0a95027a43a9c4faa226f4635d7e6a, type: 3}
+  - {fileID: 21300000, guid: 533f2a65ebb6da04aa5f35f12b1d8ed6, type: 3}
+  - {fileID: 21300000, guid: 29f411d32eee61846806365c7d7777b1, type: 3}
+  - {fileID: 21300000, guid: bef5b8decbbc86d43ab14c47f79883ab, type: 3}
+  - {fileID: 21300000, guid: 42291d142b5d0d244a1c1c18b0a8de38, type: 3}
+  - {fileID: 21300000, guid: 15ab8d69a73f1f9448a9c404b6fdccef, type: 3}
+  - {fileID: 21300000, guid: ff65be92b3d03d04b9dd303bd24683ff, type: 3}
+  - {fileID: 21300000, guid: ef1d4265e5e0e15448c9c8f27fa8d207, type: 3}
+  - {fileID: 21300000, guid: 93ac4f6e605a8414a9953c5f89695d88, type: 3}
+  - {fileID: 21300000, guid: 2273228155084df4b99b429845d4561a, type: 3}
+  - {fileID: 21300000, guid: 0cf0f7bdd36c1fe4cad9f36e3d75cfdf, type: 3}
+  density: 0.05
+  minDistance: 2
+  edgeBiased: 0
+  wallProximityBiased: 0
+  allowedTransforms:
+    flipX: 1
+    flipY: 1
+    rotate90: 1
+    rotate180: 1
+    rotate270: 1
+    scaleRange: {x: 0.9, y: 1.2}
+    alphaRange: {x: 0.78, y: 1}

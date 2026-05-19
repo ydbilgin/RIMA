@@ -17,7 +17,22 @@ MonoBehaviour:
   brushColor: {r: 0.2901961, g: 0.54509807, b: 0.22745098, a: 1}
   defaultDensity: 0.65
   maxFeatureProps: 99
-  macroFillSprites: []
+  negativeSpaceRatio: 0.2
+  floorWeights: {x: 0.7, y: 0.2, z: 0.1}
+  dominantFloorPool: {fileID: 11400000, guid: 8f05d7c44a3a65049a1c7542dbfd2b0b, type: 2}
+  secondaryFloorPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
+  accentFloorPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
+  pathProtect: 1
+  heroPropClusterCap: 3
+  heroPropClusterSize: {x: 2, y: 5}
+  heroPropClusterBuffer: 2
+  secondaryClusterCap: 3
+  pathCellRatio: 0.15
+  pathMinWidth: 2
+  atmosphericCap: 8
+  macroFillSprites:
+  - {fileID: 21300000, guid: bffeada3e9a03d5609e098e3126634ff, type: 3}
+  - {fileID: 21300000, guid: ffa5b71f457bea0c31e4f05a247f6a0c, type: 3}
   baseFloorSprites:
   - {fileID: 21300000, guid: b1bcdf8f2f8a8924799dc8131a418d0d, type: 3}
   - {fileID: 21300000, guid: 6c6f9dbfdecf49249a7fd29109d74922, type: 3}
@@ -33,5 +48,5 @@ MonoBehaviour:
   mediumPropDensity: 0.15
   tallFocalPool: {fileID: 11400000, guid: 93b21911eaeacdb4cb98cace99b2c5cf, type: 2}
   maxTallFocalPerRegion: 2
-  atmosphericPool: {fileID: 0}
+  atmosphericPool: {fileID: 11400000, guid: a7685c5b91d2e5054724049b3040e599, type: 2}
   atmosphericDensity: 0.2

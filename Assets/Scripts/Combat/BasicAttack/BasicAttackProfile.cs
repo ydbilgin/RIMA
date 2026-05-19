@@ -9,7 +9,8 @@ namespace RIMA
         ShotCadence,
         VeilStrike,
         HeatGauge,
-        MarkPulse
+        MarkPulse,
+        IaidoStance
     }
 
     /// <summary>
@@ -75,6 +76,7 @@ namespace RIMA
                 BasicAttackBehaviorType.VeilStrike => new VeilStrikeBehavior(),
                 BasicAttackBehaviorType.HeatGauge => new HeatGaugeBehavior(),
                 BasicAttackBehaviorType.MarkPulse => new MarkPulseBehavior(),
+                BasicAttackBehaviorType.IaidoStance => new MeleeChainBehavior(),
                 _ => new MeleeChainBehavior()
             };
         }

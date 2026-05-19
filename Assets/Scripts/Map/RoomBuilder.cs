@@ -323,9 +323,10 @@ namespace RIMA
 
             if (!go.TryGetComponent<Grid>(out var grid)) grid = go.AddComponent<Grid>();
 
-            // Isometric layout + RIMA cell size (1 × 0.5)
+            // Isometric layout + RIMA cell size (0.94 x 0.94) + scaled Y
             grid.cellLayout = GridLayout.CellLayout.Isometric;
-            grid.cellSize   = new Vector3(1f, 0.5f, 1f);
+            grid.cellSize   = new Vector3(0.94f, 0.94f, 1f);
+            go.transform.localScale = new Vector3(1f, 0.5f, 1f);
 
             return go;
         }

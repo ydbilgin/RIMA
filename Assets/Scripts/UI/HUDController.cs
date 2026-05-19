@@ -34,6 +34,7 @@ namespace RIMA
 
         // ── Cached systems ───────────────────────────────────────────────
         private RageSystem rageSystem;
+        private PlayerResourceBase resourceSystem;
         private Health     playerHealth;
         private ClassType  currentClass = ClassType.None;
 
@@ -68,13 +69,18 @@ namespace RIMA
             var player = GameObject.FindGameObjectWithTag("Player");
             if (player == null) return;
 
+            currentClass = PlayerClassManager.Instance != null
+                ? PlayerClassManager.Instance.PrimaryClass
+                : ClassType.Warblade;
+
             rageSystem   = player.GetComponent<RageSystem>();
+            resourceSystem = ResolveResource(player, currentClass);
             playerHealth = player.GetComponent<Health>();
 
-            if (rageSystem != null)
+            if (resourceSystem != null)
             {
-                rageSystem.OnRageChanged.AddListener(OnRageChanged);
-                OnRageChanged(rageSystem.Current, rageSystem.Max);
+                resourceSystem.OnResourceChanged.AddListener(OnResourceChanged);
+                OnResourceChanged(resourceSystem.Current, resourceSystem.Max);
             }
 
             if (playerHealth != null)
@@ -82,12 +88,16 @@ namespace RIMA
                 playerHealth.OnHealthChanged.AddListener(OnHPChanged);
                 OnHPChanged(playerHealth.CurrentHP, playerHealth.MaxHP);
             }
+
+            if (PlayerClassManager.Instance != null)
+                PlayerClassManager.Instance.OnPrimaryClassSet += OnClassChanged;
         }
 
         private void OnDestroy()
         {
-            if (rageSystem   != null) rageSystem.OnRageChanged.RemoveListener(OnRageChanged);
+            if (resourceSystem != null) resourceSystem.OnResourceChanged.RemoveListener(OnResourceChanged);
             if (playerHealth != null) playerHealth.OnHealthChanged.RemoveListener(OnHPChanged);
+            if (PlayerClassManager.Instance != null) PlayerClassManager.Instance.OnPrimaryClassSet -= OnClassChanged;
             if (Instance == this) Instance = null;
         }
 
@@ -141,7 +151,7 @@ namespace RIMA
 
         // ─── Resource (Rage) ────────────────────────────────────────────
 
-        private void OnRageChanged(int current, int max)
+        private void OnResourceChanged(int current, int max)
         {
             if (max <= 0)
             {
@@ -159,7 +169,9 @@ namespace RIMA
                 resourceFill.sizeDelta = new Vector2(ResBarWidth * pct, ResBarHeight);
 
             if (resourceFillImage != null)
-                resourceFillImage.color = pct >= 1f ? RimaUITheme.RageMax : RimaUITheme.RageDefault;
+                resourceFillImage.color = pct >= 1f
+                    ? Color.Lerp(RimaUITheme.ResourceFill(currentClass), Color.white, 0.35f)
+                    : RimaUITheme.ResourceFill(currentClass);
 
             // Pulse at max
             if (pct >= 1f && !isResPulsing)
@@ -174,7 +186,7 @@ namespace RIMA
             while (isResPulsing && resourceFillImage != null)
             {
                 float t = Mathf.PingPong(Time.unscaledTime * 3f, 1f);
-                resourceFillImage.color = Color.Lerp(RimaUITheme.RageMax, Color.white, t * 0.3f);
+                resourceFillImage.color = Color.Lerp(RimaUITheme.ResourceFill(currentClass), Color.white, t * 0.3f);
                 yield return null;
             }
         }
@@ -244,6 +256,19 @@ namespace RIMA
             currentClass = cls;
             Color fill = RimaUITheme.ResourceFill(cls);
             if (resourceFillImage != null) resourceFillImage.color = fill;
+
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+
+            if (resourceSystem != null)
+                resourceSystem.OnResourceChanged.RemoveListener(OnResourceChanged);
+
+            resourceSystem = ResolveResource(player, cls);
+            if (resourceSystem != null)
+            {
+                resourceSystem.OnResourceChanged.AddListener(OnResourceChanged);
+                OnResourceChanged(resourceSystem.Current, resourceSystem.Max);
+            }
         }
 
         // ─── Gold (preserved stub — no UI) ──────────────────────────────
@@ -347,6 +372,19 @@ namespace RIMA
             resourceFillImage = fillGo.AddComponent<Image>();
             resourceFillImage.color = RimaUITheme.RageDefault;
             resourceFillImage.raycastTarget = false;
+        }
+
+        private static PlayerResourceBase ResolveResource(GameObject player, ClassType cls)
+        {
+            return cls switch
+            {
+                ClassType.Warblade => player.GetComponent<RageSystem>(),
+                ClassType.Elementalist => player.GetComponent<ManaSystem>(),
+                ClassType.Shadowblade => player.GetComponent<EnergySystem>(),
+                ClassType.Ranger => player.GetComponent<FocusSystem>(),
+                ClassType.Ronin => player.GetComponent<TensionSystem>(),
+                _ => player.GetComponent<PlayerResourceBase>()
+            };
         }
 
         private void BuildRoomNameLabel(RectTransform root)

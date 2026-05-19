@@ -1,0 +1,28 @@
+{
+  "output_dir": "Assets/Art/Rooms/Backgrounds/Spawn_01",
+  "style_reference_path": "Assets/Art/Rooms/Backgrounds/Spawn_01/layer_00_floor_painted_granite.png",
+  "layers": [
+    {
+      "index": 11,
+      "name": "wall_edge_stone",
+      "endpoint": "/generate-with-style-v2",
+      "width": 384,
+      "height": 384,
+      "no_background": true,
+      "seed": 4304,
+      "description": "Transparent painted wall piece on transparent background: cracked stone brick wall section running horizontally across the middle of the frame, mossy edges, slight cyan rift hint in cracks, painterly hand-painted, top-down 30-35 degree angled view. Single wall edge piece for placement against room boundary, NO floor below, NO floor stones, transparent above and below the wall strip.",
+      "negative_description": "tile, grid, square edges, floor texture, full scene, character, person, rectangular floor base, stone floor"
+    },
+    {
+      "index": 12,
+      "name": "wall_decoration_vines",
+      "endpoint": "/generate-with-style-v2",
+      "width": 128,
+      "height": 128,
+      "no_background": true,
+      "seed": 4305,
+      "description": "Transparent decoration overlay on transparent background: hanging vines, moss tendrils, and a small tattered banner, painterly hand-painted, cool gray and green palette. Vertical hanging decoration suitable for placement on a stone wall, NO wall background, NO floor.",
+      "negative_description": "tile, grid, square edges, full scene, wall background, floor texture, character"
+    }
+  ]
+}

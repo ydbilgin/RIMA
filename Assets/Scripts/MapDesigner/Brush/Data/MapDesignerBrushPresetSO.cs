@@ -14,5 +14,6 @@ namespace RIMA.MapDesigner.Brush.Data
         public bool showInPalette = true;
         [TextArea(2, 5)] public string description;
         [Range(-1, 9)] public int hotkeyIndex = -1;
+        public BrushPipelineConfigSO pipelineConfig;
     }
 }

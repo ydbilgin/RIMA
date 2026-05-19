@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: pool_v15d_combat_transition_decals
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: pool_v15d_combat_transition_decals
+  entries:
+  - prop: {fileID: 11400000, guid: 9bde3947df3b4c58bcbc3a273a830bcf, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 5e69786f3ac240a5b25b144b40b64ce4, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: 8c1ab03597f447b2bece2a3ab24b6e76, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: edadcb7b81844c858663f9575c4aee5e, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: c1d8df288c80479c87c5ee42dadbdf82, type: 2}
+    weight: 1
+  - prop: {fileID: 11400000, guid: beca714bbb1d4d42b9ba14b86d5c232f, type: 2}
+    weight: 1

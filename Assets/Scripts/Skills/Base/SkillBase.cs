@@ -83,6 +83,9 @@ namespace RIMA
                 return GetComponentInParent<EnergySystem>();
             if (GetComponentInParent<Ranger_SkillController>() != null)
                 return GetComponentInParent<FocusSystem>();
+            if (this is RoninQuickdraw || this is RoninIaidoStance ||
+                this is RoninFinalDraw || this is RoninSakuraVeil)
+                return GetComponentInParent<TensionSystem>();
 
             return GetComponentInParent<PlayerResourceBase>();
         }

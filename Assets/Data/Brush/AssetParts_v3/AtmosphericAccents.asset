@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3d1e94e5a5dd4479a0a0ab8ad2d26a, type: 3}
+  m_Name: AtmosphericAccents
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PatchAtlasSO
+  atlasId: assetparts_v3_atmospheric_accents
+  role: 4
+  validTerrainIds:
+  - ShatteredKeep
+  variants:
+  - {fileID: 21300000, guid: dba64995e940d4a458f92eceab71d93c, type: 3}
+  - {fileID: 21300000, guid: a06e3e2eeba8a864192de371af3febb8, type: 3}
+  - {fileID: 21300000, guid: 5ea1240d47b006d4d88ff63320025bec, type: 3}
+  - {fileID: 21300000, guid: e31653a5efeccab4a8dafe06f6f0327b, type: 3}
+  density: 0.08
+  minDistance: 3
+  edgeBiased: 0
+  wallProximityBiased: 1
+  allowedTransforms:
+    flipX: 0
+    flipY: 0
+    rotate90: 0
+    rotate180: 0
+    rotate270: 0
+    scaleRange: {x: 1, y: 1}
+    alphaRange: {x: 1, y: 1}

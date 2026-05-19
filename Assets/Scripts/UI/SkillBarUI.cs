@@ -16,6 +16,7 @@ namespace RIMA
         private Elementalist_SkillController elemCtrl;
         private Ranger_SkillController       rangerCtrl;
         private Shadowblade_SkillController  shadowCtrl;
+        private RoninController              roninCtrl;
 
         // ── Layout constants (Ashen Glyph spec) ─────────────────────
         private const float PrimarySize   = 20f;
@@ -73,6 +74,7 @@ namespace RIMA
             elemCtrl = null;
             rangerCtrl = null;
             shadowCtrl = null;
+            roninCtrl = null;
             ResolveControllers();
             ScheduleLateResolveControllers();
         }
@@ -241,9 +243,11 @@ namespace RIMA
             if (elemCtrl == null)     elemCtrl     = cachedPlayer.GetComponent<Elementalist_SkillController>();
             if (rangerCtrl == null)   rangerCtrl   = cachedPlayer.GetComponent<Ranger_SkillController>();
             if (shadowCtrl == null)   shadowCtrl   = cachedPlayer.GetComponent<Shadowblade_SkillController>();
+            if (roninCtrl == null)    roninCtrl    = cachedPlayer.GetComponent<RoninController>();
 
             controllersResolved = warbladeCtrl != null || elemCtrl != null ||
-                                  rangerCtrl != null || shadowCtrl != null;
+                                  rangerCtrl != null || shadowCtrl != null ||
+                                  roninCtrl != null;
         }
 
         private void ScheduleLateResolveControllers()
@@ -279,11 +283,17 @@ namespace RIMA
             PlayerClassManager.Instance.PrimaryClass == ClassType.Shadowblade &&
             shadowCtrl != null && shadowCtrl.enabled;
 
+        private bool UseRonin() =>
+            PlayerClassManager.Instance != null &&
+            PlayerClassManager.Instance.PrimaryClass == ClassType.Ronin &&
+            roninCtrl != null && roninCtrl.enabled;
+
         private int GetActiveSlotCount()
         {
             if (UseElementalist()) return Mathf.Min(elemCtrl.SlotCount, SlotCount);
             if (UseRanger())       return Mathf.Min(rangerCtrl.SlotCount, SlotCount);
             if (UseShadowblade())  return Mathf.Min(shadowCtrl.SlotCount, SlotCount);
+            if (UseRonin())        return Mathf.Min(roninCtrl.SlotCount, SlotCount);
             return warbladeCtrl != null ? Mathf.Min(warbladeCtrl.SlotCount, SlotCount) : 0;
         }
 
@@ -292,6 +302,7 @@ namespace RIMA
             if (UseElementalist()) return elemCtrl.GetSlot(index);
             if (UseRanger())       return rangerCtrl.GetSlot(index);
             if (UseShadowblade())  return shadowCtrl.GetSlot(index);
+            if (UseRonin())        return roninCtrl.GetSlot(index);
             return warbladeCtrl != null ? warbladeCtrl.GetSlot(index) : null;
         }
 

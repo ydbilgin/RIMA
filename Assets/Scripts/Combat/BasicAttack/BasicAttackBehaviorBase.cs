@@ -1,4 +1,5 @@
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -69,12 +70,33 @@ namespace RIMA
                     : dmg;
 
                 hp.TakeDamage(finalDmg);
+                bool isFinisher = step == profile.comboLength - 1;
+                CombatEventBus.PublishHit(new HitEvent
+                {
+                    worldPos = col.transform.position,
+                    attacker = owner.gameObject,
+                    target = col.gameObject,
+                    damage = finalDmg,
+                    element = "physical",
+                    isCrit = isFinisher,
+                    hitDirection = facing
+                });
+                if (hp.IsDead)
+                {
+                    CombatEventBus.PublishKill(new KillEvent
+                    {
+                        worldPos = col.transform.position,
+                        killer = owner.gameObject,
+                        victim = col.gameObject,
+                        mobFamily = col.tag
+                    });
+                }
                 rage?.OnHitEnemy();
                 HitStop.Instance?.FreezeLight();
                 LightPulse.Emit(new Color(0.4f, 0.7f, 1f), 1.5f, 0.10f);
                 DamagePopup.Show(col.transform.position, finalDmg);
 
-                if (step == profile.comboLength - 1)
+                if (isFinisher)
                     CameraShake.Instance?.Shake(0.18f, 0.12f);
 
                 var kb = col.GetComponent<KnockbackReceiver>();

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a6cf33c225de74f8a6c2439bfc2280, type: 3}
+  m_Name: WeightedRandomTile_dominant_pool
+  m_EditorClassIdentifier: RIMA.Runtime::UnityEngine.Tilemaps.RandomTile
+  sprites:
+  - {fileID: 21300000, guid: 5e0af618a7178f649a11828a1e2a6342, type: 3}
+  - {fileID: 21300000, guid: 429800bdcedb57e42a345b86a5cf2cb6, type: 3}
+  - {fileID: 21300000, guid: aa880ada346de1547807fb58d2854792, type: 3}
+  - {fileID: 21300000, guid: 5c3fafb0b5e1dc247b88b4ffbffe8025, type: 3}
+  - {fileID: 21300000, guid: 648dd4845fc5a9940b27552508c90776, type: 3}
+  - {fileID: 21300000, guid: b29b33d237d152849bef87e169a2a6c3, type: 3}
+  - {fileID: 21300000, guid: 31400a7e608cccd4d96a26fe06583b7e, type: 3}
+  - {fileID: 21300000, guid: ec011e2a24f54cc48887a0f2e30caba9, type: 3}
+  weights:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  colliderType: 0

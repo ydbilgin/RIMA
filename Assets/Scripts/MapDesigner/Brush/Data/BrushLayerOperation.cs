@@ -28,5 +28,9 @@ namespace RIMA.MapDesigner.Brush.Data
 
         public bool useNativeBucketVariantPath = true;
         public int radiusForBucketPick = 4;
+
+        public BrushPipelineConfigSO pipelineConfig;
+        public RoomDecalDataSO roomDecalData;
+        public RIMA.MapDesigner.SO.PatchAtlasSO patchAtlas;
     }
 }

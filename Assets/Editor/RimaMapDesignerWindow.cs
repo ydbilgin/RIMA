@@ -148,6 +148,7 @@ namespace RIMA.Editor
         [SerializeField] private bool eraseMode;
         [SerializeField] private int brushRadius = 1;
         [SerializeField] private Tilemap outputTilemap;
+        [SerializeField] private bool livePreview;
         [SerializeField, HideInInspector] private bool hasFittedOnce;
 
         private readonly BrushInputHandler brushInput = new BrushInputHandler();
@@ -304,6 +305,11 @@ namespace RIMA.Editor
                 LoadMap();
             }
 
+            if (GUILayout.Button("Capture Scene", EditorStyles.toolbarButton, GUILayout.Width(92f)))
+            {
+                CaptureFromScene();
+            }
+
             GUILayout.Label("|", EditorStyles.miniLabel, GUILayout.Width(8f));
 
             if (GUILayout.Button("Apply", EditorStyles.toolbarButton, GUILayout.Width(54f)))
@@ -363,6 +369,8 @@ namespace RIMA.Editor
             cellSize = GUILayout.HorizontalSlider(cellSize, 10f, 80f, GUILayout.Width(112f));
             NormalizeCellSize();
             GUILayout.Label(Mathf.RoundToInt(cellSize) + "px", GUILayout.Width(34f));
+
+            livePreview = GUILayout.Toggle(livePreview, "Live", EditorStyles.toolbarButton, GUILayout.Width(42f));
 
             if (GUILayout.Button("Auto-Biome", EditorStyles.toolbarButton, GUILayout.Width(86f)))
             {
@@ -1185,6 +1193,7 @@ namespace RIMA.Editor
                 if (evt.type == EventType.MouseUp && (evt.button == 0 || evt.button == 1))
                 {
                     isPainting = false;
+                    TryLivePreviewApply();
                     evt.Use();
                     Repaint();
                     return;
@@ -1205,6 +1214,7 @@ namespace RIMA.Editor
                 else if (activeTool == PaintTool.Fill)
                 {
                     FloodFill(start, value);
+                    TryLivePreviewApply();
                 }
                 else
                 {
@@ -1260,6 +1270,7 @@ namespace RIMA.Editor
 
                 isPainting = false;
                 lastPaintedCell = new Vector2Int(-1, -1);
+                TryLivePreviewApply();
                 evt.Use();
                 Repaint();
             }
@@ -2231,6 +2242,219 @@ namespace RIMA.Editor
             Repaint();
         }
 
+        private void CaptureFromScene()
+        {
+            TryAutoAssignOutputTilemap();
+            if (outputTilemap == null)
+            {
+                Debug.LogError("[MapDesigner] Output tilemap is not assigned!");
+                return;
+            }
+
+            if (activeBiome == null)
+            {
+                Debug.LogError("[MapDesigner] Active Biome Preset is not assigned!");
+                return;
+            }
+
+            int[,] capturedGrid = new int[roomWidth + 1, roomHeight + 1];
+            int defaultTerrain = 0;
+            if (activeBiome.terrains != null && activeBiome.terrains.Count > 0)
+            {
+                var firstFloor = activeBiome.terrains.FirstOrDefault(t => t != null && t.walkable);
+                if (firstFloor != null) defaultTerrain = firstFloor.id;
+            }
+
+            for (int y = 0; y <= roomHeight; y++)
+            {
+                for (int x = 0; x <= roomWidth; x++)
+                {
+                    capturedGrid[x, y] = defaultTerrain;
+                }
+            }
+
+            for (int y = 0; y < roomHeight; y++)
+            {
+                for (int x = 0; x < roomWidth; x++)
+                {
+                    TileBase tile = outputTilemap.GetTile(new Vector3Int(x, y, 0));
+                    if (tile == null) continue;
+
+                    int matchedLower = -1;
+                    int matchedUpper = -1;
+                    int matchedKey = -1;
+
+                    foreach (var terrain in activeBiome.terrains)
+                    {
+                        if (terrain == null) continue;
+                        if (MatchesTile(tile, terrain.baseTile) || 
+                            MatchesTileInSource(tile, terrain.baseTileSource, out int key) ||
+                            MatchesTileInPool(tile, terrain.variantPool))
+                        {
+                            matchedLower = terrain.id;
+                            matchedUpper = terrain.id;
+                            matchedKey = 0;
+                            break;
+                        }
+                    }
+
+                    if (matchedLower == -1)
+                    {
+                        foreach (var pairing in activeBiome.tilesetPairings)
+                        {
+                            if (pairing == null || pairing.tileSet == null) continue;
+                            if (MatchesTileInSource(tile, pairing.tileSet, out int key))
+                            {
+                                matchedLower = pairing.lowerTerrainId;
+                                matchedUpper = pairing.upperTerrainId;
+                                matchedKey = key;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (matchedLower != -1 && matchedKey != -1)
+                    {
+                        int nwVal = ((matchedKey >> 3) & 1) == 1 ? matchedUpper : matchedLower;
+                        int neVal = ((matchedKey >> 2) & 1) == 1 ? matchedUpper : matchedLower;
+                        int swVal = ((matchedKey >> 1) & 1) == 1 ? matchedUpper : matchedLower;
+                        int seVal = (matchedKey & 1) == 1 ? matchedUpper : matchedLower;
+
+                        capturedGrid[x, y + 1] = nwVal;
+                        capturedGrid[x + 1, y + 1] = neVal;
+                        capturedGrid[x, y] = swVal;
+                        capturedGrid[x + 1, y] = seVal;
+                    }
+                }
+            }
+
+            terrainGrid = capturedGrid;
+            StoreTerrainGrid();
+
+            mapObjects.Clear();
+            Transform parent = outputTilemap.transform.parent != null ? outputTilemap.transform.parent : outputTilemap.transform;
+
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                Transform child = parent.GetChild(i);
+                if (child.gameObject == outputTilemap.gameObject) continue;
+
+                if (child.GetComponent<ScatterBrushPainter>() != null ||
+                    child.GetComponent<FeatureEdgeSmoothingPass>() != null ||
+                    child.GetComponent<WallOverlayPainter>() != null ||
+                    child.GetComponent<TransitionBrushPainter>() != null ||
+                    child.GetComponent<DetailDecalPainter>() != null ||
+                    child.GetComponent<AccentPainter>() != null ||
+                    child.GetComponent<Tilemap>() != null)
+                {
+                    continue;
+                }
+
+                GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(child.gameObject);
+                if (prefab == null)
+                {
+                    GameObject outermostRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(child.gameObject);
+                    if (outermostRoot != null)
+                    {
+                        prefab = PrefabUtility.GetCorrespondingObjectFromSource(outermostRoot);
+                    }
+                }
+
+                if (prefab != null)
+                {
+                    string path = AssetDatabase.GetAssetPath(prefab);
+                    Vector2 posPx = WorldToObjectPositionPx(child.position);
+                    int order = 0;
+                    var sr = child.GetComponentInChildren<SpriteRenderer>();
+                    if (sr != null) order = sr.sortingOrder;
+
+                    mapObjects.Add(new MapObjectPlacement
+                    {
+                        prefabPath = path,
+                        positionPx = posPx,
+                        displayName = child.name,
+                        visible = true,
+                        layer = order
+                    });
+                }
+            }
+
+            if (objectsPanel != null)
+            {
+                objectsPanel.selectedPlacement = null;
+            }
+
+            Repaint();
+            Debug.Log(string.Format("[MapDesigner] Captured from scene: {0} objects mapped.", mapObjects.Count));
+        }
+
+        private bool MatchesTile(TileBase a, TileBase b)
+        {
+            if (a == null || b == null) return false;
+            return a == b || a.name == b.name;
+        }
+
+        private bool MatchesTileInPool(TileBase tile, List<TileBase> pool)
+        {
+            if (tile == null || pool == null) return false;
+            foreach (var p in pool)
+            {
+                if (MatchesTile(tile, p)) return true;
+            }
+            return false;
+        }
+
+        private bool MatchesTileInSource(TileBase tile, CornerWangTileSetSO source, out int key)
+        {
+            key = -1;
+            if (tile == null || source == null) return false;
+
+            if (source.tiles != null)
+            {
+                for (int i = 0; i < source.tiles.Length; i++)
+                {
+                    if (MatchesTile(tile, source.tiles[i]))
+                    {
+                        key = i;
+                        return true;
+                    }
+                }
+            }
+
+            if (source.variantsByKey != null)
+            {
+                for (int i = 0; i < source.variantsByKey.Length; i++)
+                {
+                    var vb = source.variantsByKey[i];
+                    if (vb == null || vb.variants == null) continue;
+                    foreach (var v in vb.variants)
+                    {
+                        if (MatchesTile(tile, v))
+                        {
+                            key = i;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private Vector2 WorldToObjectPositionPx(Vector3 worldPos)
+        {
+            if (outputTilemap == null) return Vector2.zero;
+            Vector3 origin = outputTilemap.CellToWorld(Vector3Int.zero);
+            Vector3 unitX = outputTilemap.CellToWorld(Vector3Int.right) - origin;
+            Vector3 unitY = outputTilemap.CellToWorld(Vector3Int.up) - origin;
+
+            Vector3 relative = worldPos - origin;
+            float xCells = unitX.sqrMagnitude > 0f ? Vector3.Dot(relative, unitX) / unitX.sqrMagnitude : 0f;
+            float yCells = unitY.sqrMagnitude > 0f ? Vector3.Dot(relative, unitY) / unitY.sqrMagnitude : 0f;
+
+            return new Vector2(xCells * cellSize, yCells * cellSize);
+        }
+
         public void LoadFromGenerator(MapSaveData generated)
         {
             if (generated == null)
@@ -2469,6 +2693,53 @@ namespace RIMA.Editor
                     grid[x, y] = clampBinary ? Mathf.Clamp(value, 0, 1) : Mathf.Max(0, value);
                     index++;
                 }
+            }
+        }
+
+        private void TryLivePreviewApply()
+        {
+            if (!livePreview)
+            {
+                return;
+            }
+
+            TryAutoAssignOutputTilemap();
+            if (outputTilemap == null)
+            {
+                return;
+            }
+
+            StoreTerrainGrid();
+            if (activeBiome != null && terrainGrid != null)
+            {
+                Undo.RegisterCompleteObjectUndo(outputTilemap, "Live Preview");
+                CornerWangPainter.Paint(outputTilemap, activeBiome, terrainGrid, roomWidth, roomHeight, default, variantSeed, enableWangTileset);
+                EditorUtility.SetDirty(outputTilemap);
+            }
+
+            SceneView.RepaintAll();
+        }
+
+        private void TryAutoAssignOutputTilemap()
+        {
+            if (outputTilemap != null)
+            {
+                return;
+            }
+
+            Tilemap[] tilemaps = GameObject.FindObjectsOfType<Tilemap>();
+            foreach (Tilemap tm in tilemaps)
+            {
+                if (tm.name.Contains("Floor") || tm.name.Contains("Ground"))
+                {
+                    outputTilemap = tm;
+                    return;
+                }
+            }
+
+            if (tilemaps.Length > 0)
+            {
+                outputTilemap = tilemaps[0];
             }
         }
 

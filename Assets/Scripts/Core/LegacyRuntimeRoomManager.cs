@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
+using RIMA.Runtime.Encounter;
 using RIMA.Systems.Map;
 
 namespace RIMA
@@ -85,6 +86,9 @@ namespace RIMA
         [SerializeField] private int bossRoomNumber = 10;
         [SerializeField] private GameObject bossPrefab;
 
+        [Header("Encounter Runtime")]
+        [SerializeField] private EncounterBankStub encounterBankStub;
+
         // Events
         public UnityEvent OnRoomStarted = new UnityEvent();
         public UnityEvent OnRoomCleared = new UnityEvent();
@@ -101,6 +105,9 @@ namespace RIMA
         private List<GameObject> activeRewards  = new List<GameObject>();
         private Coroutine enemySpawnRoutine;
         private int roomRunId;
+        private IEncounterBank encounterBank;
+        private bool isEncounterContext;
+        private bool isFinalSubRoom;
 
         // Kuzey duvarındaki 3 kapı slotu (x başlangıcı), hepsi aynı y'de
         private int DoorYNorth  => roomHeight - wallThickness;      // 22
@@ -119,6 +126,7 @@ namespace RIMA
             // BoundaryCollider (layer=Boundary=12) duvar tilemap'ini (layer=Default=0) engellesin.
             // Bu ayar domain reload'da sıfırlanabileceğinden her Awake'te set edilir.
             Physics2D.IgnoreLayerCollision(12, 0, false);
+            encounterBank = encounterBankStub;
         }
 
         private void Start()
@@ -174,6 +182,9 @@ namespace RIMA
                 : (currentRoomIndex == bossRoomNumber);
             RoomType roomType = DungeonGraph.Instance?.CurrentNode.roomType ?? RoomType.Combat;
 
+            if (!isBossRoom && TryStartEncounterRoom(DungeonGraph.Instance?.CurrentNode, roomType))
+                return;
+
             if (largeMapPainter != null)
             {
                 largeMapPainter.PaintForRoom(currentRoomIndex, isBossRoom ? RoomType.Boss : roomType);
@@ -210,6 +221,49 @@ namespace RIMA
 
             OnRoomStarted?.Invoke();
             OnRoomChanged?.Invoke(currentRoomIndex);
+        }
+
+        private bool TryStartEncounterRoom(RoomNode node, RoomType roomType)
+        {
+            if (roomType != RoomType.Combat && roomType != RoomType.Elite) return false;
+
+            encounterBank ??= encounterBankStub != null
+                ? encounterBankStub
+                : FindAnyObjectByType<EncounterBankStub>();
+            if (encounterBank == null) return false;
+
+            if (!encounterBank.TryResolve(node, string.Empty, out var template) || template == null)
+                return false;
+
+            if (playerTransform != null)
+                playerTransform.position = GetRoomEntrancePosition();
+
+            CloseAllDoors();
+            SetAllDoorTriggersInactive();
+            HideAllGates();
+            ClearActiveEnemies();
+            ClearActiveRewards();
+            ApplyRoomTint(roomType);
+
+            EnsureControllerInstance().StartEncounter(template);
+            OnRoomStarted?.Invoke();
+            OnRoomChanged?.Invoke(currentRoomIndex);
+            hud?.SetRoomStatus($"Room {currentRoomIndex} - Encounter");
+            return true;
+        }
+
+        private SubRoomSequenceController EnsureControllerInstance()
+        {
+            if (SubRoomSequenceController.Active != null)
+                return SubRoomSequenceController.Active;
+
+            var existing = FindAnyObjectByType<SubRoomSequenceController>();
+            if (existing != null)
+                return existing;
+
+            var go = new GameObject("SubRoomSequenceController");
+            go.transform.SetParent(transform.parent != null ? transform.parent : transform, false);
+            return go.AddComponent<SubRoomSequenceController>();
         }
 
         private IEnumerator StartRoomByType(RoomType type)
@@ -579,7 +633,8 @@ namespace RIMA
             yield return new WaitForSecondsRealtime(Mathf.Max(0f, clearRewardSpawnDelay));
 
             var roomType = DungeonGraph.Instance?.CurrentNode.roomType ?? RoomType.Combat;
-            bool spawnReward = roomType == RoomType.Combat || roomType == RoomType.Elite;
+            bool spawnReward = (roomType == RoomType.Combat || roomType == RoomType.Elite)
+                               && (!isEncounterContext || isFinalSubRoom);
 
             // 1. Reward orb — oyuncunun baktığı yönde çıkar; G ile draft açılır.
             bool rewardSpawned = false;
@@ -599,7 +654,8 @@ namespace RIMA
             }
 
             // 2. Harita parçası — reward'dan ayrı, köşe tarafında ve reveal durumuna göre düşer.
-            TrySpawnMapFragment();
+            if (spawnReward)
+                TrySpawnMapFragment();
 
             float remainingSlowdown = Mathf.Max(0f, clearSlowdownDuration - clearRewardSpawnDelay);
             if (remainingSlowdown > 0f)
@@ -617,7 +673,18 @@ namespace RIMA
             }
 
             OnRoomCleared?.Invoke();
-            TrySpawnChest();
+            if (spawnReward)
+                TrySpawnChest();
+            isEncounterContext = false;
+            isFinalSubRoom = false;
+        }
+
+        public void OnEncounterFinalCleared()
+        {
+            isEncounterContext = true;
+            isFinalSubRoom = true;
+            roomCleared = true;
+            StartCoroutine(RoomClearedSequence());
         }
 
         /// <summary>Ödül toplandıktan sonra kapıları açar. RewardPickup tarafından çağrılır.</summary>

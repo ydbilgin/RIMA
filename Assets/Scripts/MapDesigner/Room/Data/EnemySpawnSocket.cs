@@ -9,5 +9,7 @@ namespace RIMA.MapDesigner.Room.Data
         public string socketId;
         public Vector2Int position;
         public string tierHint = "standard";
+        public float avoidRadius = 1.5f;
+        // TODO: MapLayerOrchestrator avoid-radius consumer - separate spec.
     }
 }

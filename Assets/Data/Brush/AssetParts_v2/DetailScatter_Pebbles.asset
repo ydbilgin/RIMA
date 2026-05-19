@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3d1e94e5a5dd4479a0a0ab8ad2d26a, type: 3}
+  m_Name: DetailScatter_Pebbles
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PatchAtlasSO
+  atlasId: assetparts_v2_detail_scatter_pebbles
+  role: 3
+  validTerrainIds:
+  - ShatteredKeep
+  variants:
+  - {fileID: 21300000, guid: 007605554f754a245a228f2a46c68b82, type: 3}
+  - {fileID: 21300000, guid: f4473f52ef6ddd74598251b0fab5a6c0, type: 3}
+  - {fileID: 21300000, guid: 291ca5172c9c94d4a8e131ff02a16fdc, type: 3}
+  - {fileID: 21300000, guid: 4b0c1613404d53a4ba1be778dfc39f41, type: 3}
+  - {fileID: 21300000, guid: 89e9149362e99dc468b918e294dfeb3c, type: 3}
+  - {fileID: 21300000, guid: 2b7b8c77b6b4b7b4ea83c06692c41867, type: 3}
+  - {fileID: 21300000, guid: 2fc82400d2adf4c46921c927d0ab9ff9, type: 3}
+  - {fileID: 21300000, guid: 8e81e0aa29100554596cef466f9812c6, type: 3}
+  - {fileID: 21300000, guid: 92438bc49938bbb4c910f61f0b68ae8a, type: 3}
+  - {fileID: 21300000, guid: 2870ade88d6d7ce40bb792dd7a0c560b, type: 3}
+  - {fileID: 21300000, guid: d51bd04630334d44a915a16bf0cadb3b, type: 3}
+  - {fileID: 21300000, guid: 90493e0ca449512469f179fd4361a0b1, type: 3}
+  density: 0.06
+  minDistance: 1
+  edgeBiased: 0
+  wallProximityBiased: 0
+  allowedTransforms:
+    flipX: 1
+    flipY: 1
+    rotate90: 1
+    rotate180: 1
+    rotate270: 1
+    scaleRange: {x: 0.8, y: 1.15}
+    alphaRange: {x: 0.75, y: 1}

@@ -3,6 +3,14 @@
 .claude/nlm_last_sync.txt
 .mcp.json
 
+# Secrets — auth cookies, tweet caches
+STAGING/cookies_*.txt
+STAGING/*_cookies.txt
+STAGING/boona_video.mp4
+STAGING/boona_frames/
+STAGING/boona_tweet.info.json
+STAGING/boona_thread.json
+
 # Unity generated — never commit
 Library/
 Temp/

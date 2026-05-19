@@ -1,0 +1,49 @@
+{
+  "output_dir": "Assets/Art/Rooms/Backgrounds/Spawn_01",
+  "style_reference_path": "Assets/Art/Rooms/Backgrounds/Spawn_01/layer_00_floor_painted_granite.png",
+  "layers": [
+    {
+      "index": 0,
+      "name": "floor_painted_granite",
+      "endpoint": "/generate-image-v2",
+      "width": 632,
+      "height": 424,
+      "no_background": true,
+      "seed": 4311,
+      "description": "Painted Hades-style cracked granite stone floor in cool gray, viewed from a 30-35 degree angled top-down perspective. The floor naturally occupies most of the frame but has ORGANIC IRREGULAR EDGES that fade to transparent background at the corners — broken stone fragments, jagged moss-covered edges, cliff-like cracked stone tapering off. The floor does NOT fill the entire rectangle uniformly; instead it has natural cliff-edge cutoffs that suggest the floor naturally ends. Painterly hand-painted texture, NO grid lines, NO rectangular boundary, NO straight cutoff edges. Cool gray palette, faint moss patches in cracks.\n\nNegative Prompt: rectangular border, straight edges, hard cutoff, tile grid, square boundary, full rectangle fill, walls, statue, vessel, pot, character, building."
+    },
+    {
+      "index": 20,
+      "name": "floor_patch_stone_path",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 4321,
+      "description": "Transparent decal: cracked darker gray cobblestone path patch with organic irregular winding shape on transparent background. Painterly hand-painted, slightly different shade (more weathered, darker) than the dominant floor stone. Natural rough boundary, tapering to transparent at frame edges. Designed to overlay on a stone floor as a different ground material region.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary"
+    },
+    {
+      "index": 21,
+      "name": "floor_patch_warm_soil",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 4322,
+      "description": "Transparent decal: warm brown soil and dirt patch with organic irregular blob shape on transparent background. Natural earthy boundary tapering to transparent at frame edges. Small scattered pebbles, hint of dried grass tufts. Painterly hand-painted, designed to overlay on top of a stone floor for ground material variation. Lower saturation, harmonious with cool gray palette.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary"
+    },
+    {
+      "index": 22,
+      "name": "floor_patch_grass",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 4323,
+      "description": "Transparent decal: muted green grass patch with organic irregular shape on transparent background. Small grass tufts, mossy clumps, hint of tiny flowers. Natural boundary tapering to transparent at frame edges. Painterly hand-painted, designed to overlay on stone floor as a grass ground variation. Cool muted green palette harmonious with cool gray floor.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary"
+    }
+  ]
+}

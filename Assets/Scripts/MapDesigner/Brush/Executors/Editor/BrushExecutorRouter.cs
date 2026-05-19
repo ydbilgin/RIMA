@@ -11,6 +11,7 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
     public class BrushExecutorRouter
     {
         private readonly Dictionary<PaintMode, IBrushExecutor> registry = new Dictionary<PaintMode, IBrushExecutor>();
+        private readonly Dictionary<PaintMode, IBrushExecutor> dataRegistry = new Dictionary<PaintMode, IBrushExecutor>();
 
         public BrushExecutorRouter()
         {
@@ -18,7 +19,9 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
             Register(new GridTileExecutor(PaintMode.GridTileRandom));
             Register(new WallStampExecutor());
             RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.FreeformDecalExecutor");
+            RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.FreeformDecalDataExecutor", true);
             RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.ScatterAlongStrokeExecutor");
+            RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.ScatterAlongStrokeDataExecutor", true);
             RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.StampExecutor");
             RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.CompositeStrokeExecutor");
             RegisterIfAvailable("RIMA.MapDesigner.Brush.Executors.Editor.EraseByLayerExecutor");
@@ -63,8 +66,8 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
                 return new BrushExecutorResult { success = true, spawnedCount = 0 };
             }
 
-            IBrushExecutor exec;
-            if (!registry.TryGetValue(preset.paintMode, out exec))
+            IBrushExecutor exec = ResolveExecutor(preset.paintMode, op, preset);
+            if (exec == null)
             {
                 return Error("No executor for " + preset.paintMode);
             }
@@ -94,8 +97,8 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
                 return new BrushExecutorResult { success = true, spawnedCount = 0 };
             }
 
-            IBrushExecutor exec;
-            if (!registry.TryGetValue(mode, out exec))
+            IBrushExecutor exec = ResolveExecutor(mode, op, null);
+            if (exec == null)
             {
                 return Error("No executor for " + mode);
             }
@@ -104,6 +107,11 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
         }
 
         private void RegisterIfAvailable(string typeName)
+        {
+            RegisterIfAvailable(typeName, false);
+        }
+
+        private void RegisterIfAvailable(string typeName, bool dataAlternative)
         {
             Type type = Type.GetType(typeName);
             if (type == null)
@@ -125,7 +133,60 @@ namespace RIMA.MapDesigner.Brush.Executors.Editor
             }
 
             IBrushExecutor executor = Activator.CreateInstance(type) as IBrushExecutor;
-            Register(executor);
+            if (dataAlternative)
+            {
+                RegisterDataAlternative(executor);
+            }
+            else
+            {
+                Register(executor);
+            }
+        }
+
+        private void RegisterDataAlternative(IBrushExecutor exec)
+        {
+            if (exec == null)
+            {
+                return;
+            }
+
+            dataRegistry[exec.SupportedMode] = exec;
+        }
+
+        private IBrushExecutor ResolveExecutor(PaintMode mode, BrushLayerOperation op, MapDesignerBrushPresetSO preset)
+        {
+            if (ShouldUseDataExecutor(mode, op, preset))
+            {
+                IBrushExecutor dataExec;
+                if (dataRegistry.TryGetValue(mode, out dataExec))
+                {
+                    return dataExec;
+                }
+            }
+
+            IBrushExecutor exec;
+            return registry.TryGetValue(mode, out exec) ? exec : null;
+        }
+
+        private static bool ShouldUseDataExecutor(PaintMode mode, BrushLayerOperation op, MapDesignerBrushPresetSO preset)
+        {
+            BrushPipelineConfigSO config = preset != null && preset.pipelineConfig != null
+                ? preset.pipelineConfig
+                : op != null ? op.pipelineConfig : null;
+            if (config == null)
+            {
+                return false;
+            }
+
+            switch (mode)
+            {
+                case PaintMode.FreeformDecal:
+                    return config.useDataFirstDecals;
+                case PaintMode.ScatterAlongStroke:
+                    return config.useDataFirstScatter || config.useDataFirstDecals;
+                default:
+                    return false;
+            }
         }
 
         private BrushExecutorResult InvokeComposite(

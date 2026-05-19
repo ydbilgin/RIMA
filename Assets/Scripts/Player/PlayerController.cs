@@ -31,6 +31,7 @@ namespace RIMA
         private Camera mainCam;
         private StatusEffectSystem statusEffects;
         private PlayerAttack attack;
+        private Health health;
         private InputBufferService inputBuffer;
         private Vector2 moveInput;
         private Vector2 lastMoveDir = new(1f, -1f);
@@ -42,6 +43,7 @@ namespace RIMA
         private float dashTimer;
         private float dashCooldownTimer;
         private Vector2 dashDir;
+        private bool dashWasImmune;
         private bool _mercifulDodgeActive;
         private float _mercifulDodgeExpiry;
 
@@ -89,7 +91,7 @@ namespace RIMA
             statusEffects = GetComponent<StatusEffectSystem>();
             attack = GetComponent<PlayerAttack>();
             inputBuffer = GetComponent<InputBufferService>();
-            var health = GetComponent<Health>();
+            health = GetComponent<Health>();
             if (health != null)
                 health.OnDamageTaken.AddListener(ActivateMercifulDodge);
             rb.gravityScale = 0f;
@@ -182,6 +184,8 @@ namespace RIMA
             isDashing = true;
             dashTimer = dashDuration;
             dashCooldownTimer = dashCooldown;
+            dashWasImmune = health != null && health.IsImmune;
+            health?.SetImmune(true);
 
             // OnDash passive proc
             CrossClassSkillManager.Instance?.OnDash();
@@ -219,6 +223,7 @@ namespace RIMA
                 if (dashTimer <= 0f)
                 {
                     isDashing = false;
+                    health?.SetImmune(dashWasImmune);
                     gameObject.layer = defaultLayer;
                 }
             }

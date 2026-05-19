@@ -1,0 +1,390 @@
+fileFormatVersion: 2
+guid: 4d34e62eb59990f47995b57959b667d9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3201342538417826182
+    second: layer_103_patch_cracked_rubble_area_0
+  - first:
+      213: -4577974529189414930
+    second: layer_103_patch_cracked_rubble_area_1
+  - first:
+      213: -1292762478009419862
+    second: layer_103_patch_cracked_rubble_area_2
+  - first:
+      213: -9177632767418673756
+    second: layer_103_patch_cracked_rubble_area_3
+  - first:
+      213: -2334406112170686555
+    second: layer_103_patch_cracked_rubble_area_4
+  - first:
+      213: -8194774283683814812
+    second: layer_103_patch_cracked_rubble_area_5
+  - first:
+      213: 5538906393828339667
+    second: layer_103_patch_cracked_rubble_area_6
+  - first:
+      213: 5449104862579610232
+    second: layer_103_patch_cracked_rubble_area_7
+  - first:
+      213: 8449329348773746894
+    second: layer_103_patch_cracked_rubble_area_8
+  - first:
+      213: -4451763262431753733
+    second: layer_103_patch_cracked_rubble_area_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_0
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 16
+        width: 236
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 689edb6c3147d6c20800000000000000
+      internalID: 3201342538417826182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_1
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 222
+        width: 22
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee7f0ecbb64c770c0800000000000000
+      internalID: -4577974529189414930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_2
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 222
+        width: 27
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa77b47206f2f0ee0800000000000000
+      internalID: -1292762478009419862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_3
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 220
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a5560b8f9f72a080800000000000000
+      internalID: -9177632767418673756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_4
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 133
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a7c09a52068a9fd0800000000000000
+      internalID: -2334406112170686555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_5
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 142
+        width: 28
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 462258ee430564e80800000000000000
+      internalID: -8194774283683814812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_6
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 88
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3df2740d4062edc40800000000000000
+      internalID: 5538906393828339667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_7
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 11
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87259ed700c1f9b40800000000000000
+      internalID: 5449104862579610232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_8
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 15
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec811f7b64c024570800000000000000
+      internalID: 8449329348773746894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_103_patch_cracked_rubble_area_9
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 7
+        width: 36
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf90f9636e82832c0800000000000000
+      internalID: -4451763262431753733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      layer_103_patch_cracked_rubble_area_0: 3201342538417826182
+      layer_103_patch_cracked_rubble_area_1: -4577974529189414930
+      layer_103_patch_cracked_rubble_area_2: -1292762478009419862
+      layer_103_patch_cracked_rubble_area_3: -9177632767418673756
+      layer_103_patch_cracked_rubble_area_4: -2334406112170686555
+      layer_103_patch_cracked_rubble_area_5: -8194774283683814812
+      layer_103_patch_cracked_rubble_area_6: 5538906393828339667
+      layer_103_patch_cracked_rubble_area_7: 5449104862579610232
+      layer_103_patch_cracked_rubble_area_8: 8449329348773746894
+      layer_103_patch_cracked_rubble_area_9: -4451763262431753733
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

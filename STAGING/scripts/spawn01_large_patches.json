@@ -1,0 +1,72 @@
+{
+  "output_dir": "Assets/Art/Rooms/AssetPack/LargePatches",
+  "style_reference_path": "Assets/Art/Rooms/Backgrounds/Spawn_01/layer_00_floor_painted_granite.png",
+  "layers": [
+    {
+      "index": 100,
+      "name": "patch_stone_cobble_path",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 7001,
+      "description": "Transparent decorative patch on transparent background: organic irregular winding stone cobble path region, painted darker cool grey stones forming a natural path shape. Soft alpha edges tapering to transparent. Painterly hand-painted 2D top-down, designed to overlay on a flat floor as a different ground material zone. Organic blob shape, NO straight edges, NO rectangular boundary.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary, raised edge, 3D platform"
+    },
+    {
+      "index": 101,
+      "name": "patch_moss_organic",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 7002,
+      "description": "Transparent decorative patch on transparent background: organic irregular moss patch, cool grey-green muted color, painterly hand-painted soft moss texture with subtle tufts. Soft alpha edges tapering to transparent. Designed to overlay on a stone floor as a different material zone. Organic blob shape, NO straight edges, NO border.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary, raised edge, vibrant green, swamp green"
+    },
+    {
+      "index": 102,
+      "name": "patch_dust_drift",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 7003,
+      "description": "Transparent decorative patch on transparent background: organic irregular dust drift smudge, cool grey-brown muted ash, painterly hand-painted soft particle texture with subtle accumulation. Soft alpha edges tapering to transparent. Designed to overlay on a stone floor as weathering. Organic blob shape, NO straight edges, NO border.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary, raised edge, warm brown"
+    },
+    {
+      "index": 103,
+      "name": "patch_cracked_rubble_area",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 7004,
+      "description": "Transparent decorative patch on transparent background: organic irregular cracked stone rubble area with scattered small chips and chunks, cool grey palette painterly hand-painted. Soft alpha edges tapering to transparent. Designed to overlay on a flat floor showing impact/destruction zone. Organic blob shape, NO straight edges.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary, raised edge, single rock"
+    },
+    {
+      "index": 104,
+      "name": "patch_rift_seepage",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 7005,
+      "description": "Transparent decorative patch on transparent background: organic irregular rift seepage zone with cyan glow tendrils and violet halo, painterly hand-painted magical residue. Soft alpha edges tapering to transparent. Designed to overlay on a stone floor as an anomaly zone. Organic blob shape, NO straight edges, sparse and subtle.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary, raised edge, dense, blood, horror"
+    },
+    {
+      "index": 105,
+      "name": "patch_worn_path_scuff",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 7006,
+      "description": "Transparent decorative patch on transparent background: organic worn path scuff zone showing where many feet have walked, lighter scuffed stone exposed beneath, painterly hand-painted weathered. Soft alpha edges tapering to transparent. Designed to overlay on a stone floor as natural wear. Organic blob shape, NO straight edges.",
+      "negative_description": "rectangular border, straight edges, tile grid, full rectangle fill, walls, character, square boundary, raised edge, bright"
+    }
+  ]
+}

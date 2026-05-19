@@ -17,12 +17,31 @@ MonoBehaviour:
   brushColor: {r: 0.7882353, g: 0.65882355, b: 0.45882353, a: 1}
   defaultDensity: 0.65
   maxFeatureProps: 99
-  macroFillSprites: []
+  negativeSpaceRatio: 0.2
+  floorWeights: {x: 0.7, y: 0.2, z: 0.1}
+  dominantFloorPool: {fileID: 11400000, guid: 71ac848db8e25624fb4db1d6ed762912, type: 2}
+  secondaryFloorPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
+  accentFloorPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
+  pathProtect: 1
+  heroPropClusterCap: 3
+  heroPropClusterSize: {x: 2, y: 5}
+  heroPropClusterBuffer: 2
+  secondaryClusterCap: 4
+  pathCellRatio: 0.15
+  pathMinWidth: 2
+  atmosphericCap: 8
+  macroFillSprites:
+  - {fileID: 21300000, guid: 343ad3b8b5885c8bd9fd95530c22e9e7, type: 3}
+  - {fileID: 21300000, guid: e0f3577d27bdc2288900767d4485dfb4, type: 3}
   baseFloorSprites:
-  - {fileID: 21300000, guid: 271ae1bb1ed9c874d87fc8e57fb306bb, type: 3}
-  - {fileID: 21300000, guid: 78376b98fa363c14eb7a1bfcc232cf3e, type: 3}
-  - {fileID: 21300000, guid: 7a3ee75cdc5fa7d43816004fe3b45e07, type: 3}
-  - {fileID: 21300000, guid: f18710d81afb54d45a351b076ef14fce, type: 3}
+  - {fileID: 21300000, guid: cc987ee043254575bcb518c5ad37daa3, type: 3}
+  - {fileID: 21300000, guid: e5de63c9024f4f6dbc17a908930ff320, type: 3}
+  - {fileID: 21300000, guid: 35af10e269d540a79d6481e70729bdc8, type: 3}
+  - {fileID: 21300000, guid: 127a12dffc2a4191bd6a303690ad35ba, type: 3}
+  - {fileID: 21300000, guid: bba232f65a4f49e5ae0f933761d6ab1e, type: 3}
+  - {fileID: 21300000, guid: 9261f5ba38be4dbfbc2e5db449893dc6, type: 3}
+  - {fileID: 21300000, guid: 77720687184d45f8969de4e26d2c810a, type: 3}
+  - {fileID: 21300000, guid: bb563fc3ea1740beb989517d7ba2c3e2, type: 3}
   midToneOverlayPool: {fileID: 11400000, guid: fb5fe4cffb004a84fa343c7946af40d6, type: 2}
   midToneDensity: 0.4
   detailTexturePool: {fileID: 11400000, guid: 380a28d1dc4da3a48b193a89d9f22266, type: 2}
@@ -33,5 +52,5 @@ MonoBehaviour:
   mediumPropDensity: 0.15
   tallFocalPool: {fileID: 0}
   maxTallFocalPerRegion: 0
-  atmosphericPool: {fileID: 0}
+  atmosphericPool: {fileID: 11400000, guid: 665897daded5054ecd4d37680398a970, type: 2}
   atmosphericDensity: 0.2

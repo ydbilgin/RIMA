@@ -1,8 +1,8 @@
 # RIMA Brush Tool Dependency Report
-Generated: 2026-05-16 22:59 UTC
+Generated: 2026-05-19 20:27 UTC
 
 ## PropDefinitionSO assets
-- `Assets/Data/Brush/Props/Barrel/barrel_001.asset`
+_No assets matched filter `t:PropDefinitionSO` under Assets/Data/Brush/Props._
 
 ## SliceLayoutTemplateSO assets
 - `Assets/Data/Brush/SliceTemplates/L3_Wang16_Topdown.asset`
@@ -14,7 +14,16 @@ Generated: 2026-05-16 22:59 UTC
 - `Assets/Art/BrushAtlas/Pools/L3_Wang_ShatteredKeep.asset`
 
 ## RoomTemplateSO assets
-_No assets matched filter `t:RoomTemplateSO` under Assets/Data/Rooms._
+- `Assets/Data/Rooms/Library/Boss_Intro_01.asset`
+- `Assets/Data/Rooms/Library/Combat_Large_01.asset`
+- `Assets/Data/Rooms/Library/Combat_Medium_01.asset`
+- `Assets/Data/Rooms/Library/Combat_Small_01.asset`
+- `Assets/Data/Rooms/Library/Corridor_Linear_01.asset`
+- `Assets/Data/Rooms/Library/Corridor_LShape_01.asset`
+- `Assets/Data/Rooms/Library/Elite_01.asset`
+- `Assets/Data/Rooms/Library/Shrine_01.asset`
+- `Assets/Data/Rooms/Library/Spawn_01.asset`
+- `Assets/Data/Rooms/Library/Treasure_01.asset`
 
 ## RoomBankSO assets
 _No assets matched filter `t:RoomBankSO` under Assets/Data/Rooms._
@@ -25,6 +34,7 @@ _No assets matched filter `t:RoomBankSO` under Assets/Data/Rooms._
 ## Assembly Definitions
 - `Assets/Editor/_archive_S73/RoomDesigner/RIMA.RoomDesigner.Editor.asmdef`
 - `Assets/Editor/MapDesigner/Brush/RIMA.MapDesigner.Brush.EditorUI.asmdef`
+- `Assets/Editor/MapDesigner/RIMA.MapDesigner.Editor.asmdef`
 - `Assets/RoomDesigner.Core/Editor/RIMA.RoomDesigner.Core.Editor.asmdef`
 - `Assets/RoomDesigner.Core/RIMA.RoomDesigner.Core.asmdef`
 - `Assets/Tests/EditMode/Brush/RIMA.Brush.Tests.asmdef`

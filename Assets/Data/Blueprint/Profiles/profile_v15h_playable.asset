@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb7c206316c6eb1488b4e54231e81745, type: 3}
+  m_Name: profile_v15h_playable
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintProfileSO
+  profileId: profile_v15h_playable
+  zones:
+  - {fileID: 11400000, guid: 5c9a8f512dddaab47bff1973ab3b3916, type: 2}
+  - {fileID: 11400000, guid: 44555046b956eee41abe73a3a088a1a9, type: 2}
+  - {fileID: 11400000, guid: 3ad1672c020f2174bb60ab9c01c25e1c, type: 2}
+  adjacencyRules:
+  - {fileID: 8933610720849650311}
+  - {fileID: 15824309872915480}
+  - {fileID: 6267681108218674804}
+  wangRuleTileRef: {fileID: 11400000, guid: 2cceb1ce101675a4790becd77f415053, type: 2}
+  gridSize: {x: 36, y: 22}
+--- !u!114 &15824309872915480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c96e9e3b50f9740833ddfa062873bb, type: 3}
+  m_Name: rule_stone_dirt_v15h
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintAdjacencyRuleSO
+  ruleId: rule_stone_dirt_v15h
+  zoneIdA: stone
+  zoneIdB: dirt
+  transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
+  density: 0.16
+  decalsPerRoomCap: 8
+--- !u!114 &6267681108218674804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c96e9e3b50f9740833ddfa062873bb, type: 3}
+  m_Name: rule_path_dirt_v15h
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintAdjacencyRuleSO
+  ruleId: rule_path_dirt_v15h
+  zoneIdA: path
+  zoneIdB: dirt
+  transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
+  density: 0.14
+  decalsPerRoomCap: 8
+--- !u!114 &8933610720849650311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c96e9e3b50f9740833ddfa062873bb, type: 3}
+  m_Name: rule_stone_path_v15h
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintAdjacencyRuleSO
+  ruleId: rule_stone_path_v15h
+  zoneIdA: stone
+  zoneIdB: path
+  transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
+  density: 0.18
+  decalsPerRoomCap: 8

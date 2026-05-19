@@ -1,0 +1,42 @@
+[
+  {
+    "num": 1,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_01.txt"
+  },
+  {
+    "num": 2,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_02.txt"
+  },
+  {
+    "num": 3,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_03.txt"
+  },
+  {
+    "num": 4,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_04.txt"
+  },
+  {
+    "num": 5,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_05.txt"
+  },
+  {
+    "num": 6,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_06.txt"
+  },
+  {
+    "num": 7,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_07.txt"
+  },
+  {
+    "num": 8,
+    "count": 22,
+    "path": ".graphify_chunks\\chunk_08.txt"
+  }
+]

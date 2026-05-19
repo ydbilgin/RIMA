@@ -1,180 +1,186 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
 
-# Codex Task C: Cross-Genre Vision Mechanic Bank Extension + Studio Tarz Matrisi
+# Codex Task — Unity Legacy Asset Cleanup Execute (Karar #150)
 
-**Date:** 2026-05-18
-**Dispatcher:** Orchestrator (Opus 4.7)
-**Effort:** high
-**Output target:** `F:/LaurethStudio/STAGING/codex_output_cross_genre_vision_mechanics.md`
-**Background:** YES
+**ACTIVE RULES:** (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
 
----
-
-## CONTEXT (inline)
-
-LaurethStudio 2026-05-18 net yeni primary vizyon (kullanıcı):
-> **"AŞIRI MANTIKSIZ OLMADIKÇA başka tür oyunlardan alınan mekanikleri farklı türe entegre edebilmek. Aynı türde başka oyunda olan mekaniği alıp değiştirip geliştirmek = secondary. Cross-genre lateral transplant = PRIMARY vision."**
-
-Mevcut MECHANIC_BANK 12 kategori (M01-M103) + Codex pruned KATEGORI 13 (M104-M110) = 13 kategori. Hepsi **intra-genre veya sentez**. Yeni vizyon **cross-genre transplant'i** primary mekanik bank kategorisi yapacak.
-
-**Senin görevin Codex olarak:**
-- Tür × Tür **cross-genre transplant matrix** kurman (en az 12 kaynak tür × 8 hedef tür)
-- Her hücreye 2-3 örnek transplant mekaniği yaz
-- Bu matrisin **Studio MEKANIK_BANKASI'na KATEGORI 14 olarak append edilebilecek 20-30 yeni primitif** çıkar
-- "Aşırı mantıksız mı?" filter her hücrede aktif (drop yapılan kombinasyonları işaretle)
+**NLM ACCESS:** If you need RIMA design context, query NLM first via:
+  `uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "<your question>"`
+NLM canonical artık güncel — Karar #150 LIVE doğru yanıtlanır.
 
 ---
 
-## READ FILES
+## Görev
 
-1. `F:/LaurethStudio/MEMORY/feedback_cross_genre_transplant_vision.md` — PRIMARY VISION (yeni 2026-05-18)
-2. `F:/LaurethStudio/MEMORY/feedback_easy_entry_deep_master.md` — Studio brand
-3. `F:/LaurethStudio/MEMORY/pixellab_capability_map.md` — LOCK
-4. `F:/LaurethStudio/MEMORY/borrow_degil_twist.md` — KARAR_017
-5. `F:/LaurethStudio/MEMORY/anti_patterns_universal.md`
-6. `F:/LaurethStudio/03_IDEAS/MECHANIC_BANK/_MEKANIK_BANKASI.md` — M01-M103 (mevcut 12 kategori)
-7. `F:/LaurethStudio/03_IDEAS/MECHANIC_BANK/_GENEL_MEKANIK_PRIMITIVELERI_LOCK.md` — abstract primitif
-8. `F:/LaurethStudio/00_RULES/STUDIO_CONSTITUTION.md` — KARAR yapısı
-9. `F:/LaurethStudio/03_IDEAS/TIER_v4_GLOBAL/_OVERVIEW.md` — yeni tier
-10. `F:/LaurethStudio/03_IDEAS/TIER_v4_GLOBAL/MECHANICS_M104_M118.md` — Codex pruned KATEGORI 13
+`STAGING/UNITY_LEGACY_CLEANUP_PLAN.md` plan dokümanını uygula. Sonnet analysis output, tüm GUID risk'leri flag'lendi. Codex pre-cleanup fixes (commit `d83d20d`) PASS — broken refs fixed, test paths migrated, Wang16 dead code removed. Cleanup execute artık unblocked.
+
+Bu **file batch operation** — mv/rm/mkdir. Kod düzenleme YOK.
 
 ---
 
-## GÖREV — Net 5 Çıktı
+## Bağlam (önce oku)
 
-### Çıktı 1: Cross-Genre Transplant Matrix (12 × 8 = 96 hücre)
+1. **`STAGING/UNITY_LEGACY_CLEANUP_PLAN.md`** — full cleanup plan (KEEP/ARCHIVE/DELETE listeleri + risk flags)
+2. **`STAGING/KARAR_150_LIVE_act_aware_dungeon_inside.md`** — Karar #150 stance (flat sprite YASAK, fake-iso depth required)
+3. Pre-cleanup PASS evidence: commit `d83d20d` — `LargeDungeonMapPainterBase.cs` gate ref nullsafe + `BrushDataTests.cs` Act1 paths + Wang16 editor scripts deleted
 
-**Kaynak türler (12, satır):**
-1. Action-roguelite (Hades, Dead Cells, Cult of the Lamb)
-2. Bullet-hell (Vampire Survivors, Nova Drift, Boss Rush)
-3. Deck-builder (Slay the Spire, Balatro, Monster Train 2)
-4. Autobattler (Super Auto Pets, Wildfrost, Hearthstone Battlegrounds)
-5. Soulslike (Dark Souls, Hollow Knight, Death's Door)
-6. Rhythm (Crypt of the Necrodancer, Beatblock, Hi-Fi Rush)
-7. Tactical (Into the Breach, Wildermyth, FTL)
-8. Idle / Incremental (Cookie Clicker, Rusty's Retirement, Universal Paperclips)
-9. Factory-sim (Factorio, Mindustry, Mini Motorways)
-10. Walking-sim / Exploration (Outer Wilds, A Short Hike, Tunic)
-11. Immersive-sim (Dishonored, Prey, Deus Ex)
-12. Racing / Momentum (Burnout, Distance, Trackmania)
+---
 
-**Hedef Studio türler (8, sütun):**
-1. Cozy farm sim
-2. Cozy production / atelier
-3. Vehicle compound / cabin
-4. Action roguelite (RIMA family)
-5. Composition / deck-build
-6. Management cozy (Caterpillar family)
-7. Drawing input / glyph (KARAR_016 family)
-8. Memory + ritual narrative (Compost Heir / Almanac family)
+## Execute steps
 
-**Her hücrede:** 2-3 örnek transplant mekanik (her biri 2-3 satır açıklama + "aşırı mantıksız mı?" filter).
+### STEP 1 — DELETE batch (outside Unity Assets, no GUID impact)
 
-**Drop kombinasyon işareti:** Eğer hücre aşırı mantıksızsa "✗ — [neden]" yaz.
+Tüm bu klasör/dosyaları **sil** (`rm -rf` veya `Remove-Item -Recurse -Force`):
 
-### Çıktı 2: 20-30 Yeni MECHANIC_BANK Primitif Aday (M111-M140 aday)
-
-Çıktı 1'in matrisinden **en yüksek değerli + en mantıklı** 20-30 cross-genre transplant mekaniğini Studio MEKANIK_BANKASI primitif formatında yaz:
-
-```markdown
-### M[NN] — [Mekanik Adı] [emoji]
-
-**Tanım:** 2-3 cümle.
-
-**Klasik:** [3 oyun referans + mekanik 1 cümle].
-
-**Cross-genre source:** [Kaynak tür + neden bu tür'de iyi]
-
-**Studio target tür(ler):** [hangi Studio aileleri kullanabilir]
-
-**Studio entegrasyon:** [hangi mevcut/yeni Studio oyununa enjekte edilebilir, 3-4 örnek]
-
-**Mevcut M-kontrast:** [M01-M110 ile farkı net açıkla]
-
-**Twist (KARAR_017):** [referans → lateral değişim]
-
-**"Aşırı mantıksız mı?" filter:** [hayır + neden]
-
-**PixelLab uyum:** [1-5 + kısa]
-
-**Chill / AI / Complexity skoru:** [tablo]
-
-**Cross-link:** [[KARAR_017]], [[ilgili memory]], [[ilgili pitch]]
+```
+STAGING/TILESET_OUTPUT/F1_FloorVariants_64batch/
+STAGING/TILESET_OUTPUT/F1_FloorVariants_16batch_MCP_v2/
+STAGING/TILESET_OUTPUT/F1_BaseClean_16_MCP_v3/
+STAGING/TILESET_OUTPUT/F1_Organic_16_MCP_v4/
+STAGING/TILESET_OUTPUT/F1_Base_Granite_PURE_16_v5/
+STAGING/TILESET_OUTPUT/F1_Microtexture_16_MCP_v6/
+STAGING/TILESET_OUTPUT/undercroft_connected/
+Assets/Sprites/Environment/RIMA_Painterly_Pack_v1/
 ```
 
-### Çıktı 3: KATEGORI 14 Tanımı + Studio MEKANIK_BANKASI Append Draft
+**Riski sıfır:** STAGING/ Unity Assets dışında, hiçbir scene/SO referansı yok. RIMA_Painterly_Pack_v1/ sadece 5 boş .meta stub — sprite içermez.
 
-Yeni KATEGORI 14 başlangıç:
-```markdown
-# KATEGORI 14 — CROSS-GENRE TRANSPLANT (M111-M[NN]) 🔀
+**Tahmini delete count:** ~120 PNG (STAGING) + 5 .meta stub = ~125 files
 
-LaurethStudio'nun PRIMARY VISION mekaniği. Başka türlerden alınan mekaniklerin Studio hedef türlerine "aşırı mantıksız olmadıkça" transplant edildiği primitifler. KATEGORI 13 (Companion/Weather/Habitat) ve önceki 12 kategoriye dik bir kategori — kaynak türü etiketleyerek primitif identitysini değiştirir.
+### STEP 2 — ARCHIVE batch (Unity Assets, move with .meta preserved)
 
-**KARAR_017 (Borrow Değil Twist)** extension'ı — twist zorunlu ama transplant primary.
+Hedef klasör: `Assets/Art/_archive_karar150/` (yoksa oluştur).
 
-[20-30 primitif Çıktı 2 formatında]
+Aşağıdaki 118 file'ı `Assets/Art/_archive_karar150/` altına **move** et. **Her sprite + .meta birlikte taşınmalı** (GUID preservation kritik):
+
+**ARCHIVE batch 1 — Flat walls (Karar #150 fake-iso ile uyumsuz):**
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/walls/painterly_wall_01.png` through `_12.png` (12 PNG + 12 .meta)
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/walls/wall_decoration_vines.png` + .meta
+
+**ARCHIVE batch 2 — Stranded gates (Resources versions deleted):**
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/gates/gate_arch.png` (no .meta, may need check)
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/gates/gate_spikes.png` + .meta
+
+**ARCHIVE batch 3 — Concept references v1-v3 (v4 production):**
+- `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v1.png` + .meta
+- `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v2_35deg.png` (.meta check)
+- `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v3_fakeiso.png` (.meta check)
+
+**ARCHIVE batch 4 — StoneDungeon pre-painterly:**
+- `Assets/Sprites/Environment/StoneDungeon/Tiles/stone_floor_pro_0.png` through `_15.png` (6 PNG + 6 .meta — count varies, glob actual)
+- `Assets/Sprites/Environment/StoneDungeon/Walls/stone_wall_pro_0.png` through `_15.png` (16 PNG + 16 .meta)
+- `Assets/Sprites/Environment/StoneDungeon/Rejected/` (all PNG + .meta ~11+11)
+
+**ARCHIVE batch 5 — Wang16 v2 iteration (RIMA Wang16 closed):**
+- `Assets/Sprites/Environment/StoneDungeon_v2/Walls/wang16_*.png` + .meta (17+17)
+- `Assets/Sprites/Environment/StoneDungeon_v2/Tiles/` (7+7)
+- `Assets/Sprites/Environment/StoneDungeon_v2/Decals_L4/` (1+1)
+- `Assets/Sprites/Environment/StoneDungeon_v2/Detail_L5/` (1+1)
+- `Assets/Sprites/Environment/StoneDungeon_v2/Accents_L6/` (1+1)
+
+**ARCHIVE batch 6 — Keep legacy:**
+- `Assets/Art/Tiles/Keep/Walls/wall_0.png` through `wall_3.png` + .asset tiles (4+4 PNG/.meta + 4+4 .asset/.meta)
+- `Assets/Art/Tiles/Keep/_old_purple_Walls/` (full folder content)
+- `Assets/Art/Tiles/Keep/_old_purple_Decals/` (full folder content)
+- `Assets/Art/Tiles/Keep/Floor/_old_blue_tileset.png` + `.json` + .meta
+- `Assets/Art/Tiles/Keep/Floor/floor_tileset.png` + `floor_tileset.json` + .meta
+- `Assets/Art/Tiles/Keep/Floor/floor_rift_tile.asset` + .meta
+- `Assets/Art/Tiles/Keep/Keep_Combat.asset.meta` (orphan .meta — verify .asset missing then delete)
+
+**ARCHIVE batch 7 — F1 staging loose / Wang16 ColdWall:**
+- `Assets/Art/Tiles/F1/FlatTileset_GraniteV2/` (folder .meta only — empty folder, just rm or archive)
+- `Assets/Art/Tiles/F1/SeamlessV1/` (folder .meta only — empty folder)
+- `Assets/Art/Tiles/F1/ColdWall/` (wang_cold_wall.png + metadata.json + .meta files)
+- `Assets/Art/Tiles/F1/wang_rubble_path.png` + .meta (root-level loose)
+- `Assets/Art/Tiles/F1/wang_floor_wall.png` + .meta (root-level loose)
+
+### STEP 3 — Critical KEEP verification (DO NOT TOUCH)
+
+Aşağıdakiler **KEEP** — taşımayın silmeyin:
+- `Assets/Resources/Environment/StoneDungeon/Walls/RIMA_*.png` (6 wall PNG runtime ref'd)
+- `Assets/Resources/Environment/StoneDungeon/Decor/RIMA_*.png` (4 decor PNG runtime ref'd)
+- `Assets/Art/Tiles/Keep/Floor/tile_*.png` (24 PNG — BrushDataTests artık Act1 paths kullanıyor ama Keep tiles bağımsız korunsun)
+- `Assets/Art/Tiles/F1/Tilesets/` (11 Wang tilesets active)
+- `Assets/Art/Tiles/F1/Generated/` (.asset Wang tiles — Codex Wang16 dead code removed editor scripts ama .asset'ler kalır, biome preset reference ediyor olabilir)
+- `Assets/Art/Tiles/F1/Shattered_Keep_F1_BiomePreset.asset`
+- `Assets/Art/Tiles/F1/Alabaster_Dawn_BiomePreset.asset`
+- `Assets/Art/BrushAtlas/Pools/L3_Wang_ShatteredKeep.asset`
+- Tüm `_Universal/` ve mevcut Act1 KEEP listesindeki (decals, accents, props, floor_tiles painterly_*)
+
+### STEP 4 — Post-cleanup validation
+
+1. **Compile check:** `dotnet build Assembly-CSharp.csproj` + `dotnet build RIMA.Tests.EditMode.csproj` → 0 error gerekli
+2. **Test run:** `dotnet test RIMA.Tests.EditMode.csproj --filter Brush` → PASS gerekli (BrushDataTests Act1 path doğrula)
+3. **Git status:** Tüm deleted/moved file'lar git'te tracked olarak görünmeli (D / R status)
+
+### STEP 5 — Commit
+
+Tek commit:
+
 ```
+[S94 LATE] Karar #150 cleanup — flat walls + legacy assets archived, STAGING intermediates deleted
 
-### Çıktı 4: Studio'nun "Kendi Tarzı" Sentezi
+Archived 118 legacy files to Assets/Art/_archive_karar150/:
+- 13 flat walls (painterly_wall_01-12 + wall_decoration_vines) — Karar #150 fake-iso uyumsuz
+- 3 stranded gate sprites (Resources versions D in git)
+- 3 concept references v1-v3 (v4 production reference kalır)
+- 50+ StoneDungeon/StoneDungeon_v2 pre-painterly + Wang16 v2 sprites
+- 16+ Keep legacy (purple walls/decals + old tilesets + Wang loose PNGs)
 
-Cross-genre transplant'ten Studio brand kimliğine kazanılacak **8-10 işaret prensibi**:
-- Hangi cross-genre transplant pattern Studio brand kimliğini en çok güçlendirir
-- Hangi tür çiftleri Studio için "magnum opus rotası" hissini verir
-- Studio'nun signature "lateral transplant DNA"sı nasıl tanımlanmalı (KARAR adayı potansiyeli)
+Deleted ~125 intermediate files:
+- STAGING/TILESET_OUTPUT/ all gen batch subfolders (6+ batches)
+- Assets/Sprites/Environment/RIMA_Painterly_Pack_v1/ empty folder + .meta stubs
 
-### Çıktı 5: Anti-Pattern + Risk Filter
+KEEP intact:
+- All Resources/Environment/StoneDungeon (active runtime refs)
+- All _Universal + Act1 painterly production assets
+- F1/Tilesets + F1/Generated (active biome preset refs)
+- All BrushAtlas pools + biome presets
 
-- Hangi cross-genre transplant kombinasyonları Studio anti-pattern listesini tetikler? (anti_patterns_universal.md cross-check)
-- Hangi kombinasyonlar PixelLab kapasitesini aşar? (pixellab_capability_map.md cross-check)
-- Hangi kombinasyonlar Easy Entry + Deep Master prensibini bozar?
-- Drop liste (en az 8-10 kombinasyon — "yapma" işareti)
+Compile: 0 errors. EditMode tests pass.
 
----
-
-## OUTPUT FORMAT
-
-`F:/LaurethStudio/STAGING/codex_output_cross_genre_vision_mechanics.md`:
-
-```markdown
-# Codex Output: Cross-Genre Vision Mechanic Bank Extension
-
-## 0. Executive summary
-
-## 1. Cross-Genre Transplant Matrix (12 × 8 = 96 hücre)
-(table format)
-
-## 2. M111-M[NN] Yeni Primitif Aday (20-30)
-(standardize MEKANIK_BANKASI format)
-
-## 3. KATEGORI 14 Append Draft
-(_MEKANIK_BANKASI.md'ye eklenebilir format)
-
-## 4. Studio Kendi Tarzı Sentezi (8-10 işaret prensibi)
-
-## 5. Anti-Pattern / Risk Filter + Drop Liste
-
-## 6. KARAR Adayı Önerisi
-(KARAR_046 "Cross-Genre Transplant LOCK" aday gerekçe)
+Refs: STAGING/UNITY_LEGACY_CLEANUP_PLAN.md, Karar #150 STAGING/KARAR_150_LIVE_act_aware_dungeon_inside.md
+Co-Authored-By: Codex
 ```
 
 ---
 
-## QUALITY BAR
+## Done report
 
-- **Matrix 96 hücreyi doldur** — drop olanları işaretle ama atlama
-- **PixelLab uyum her primitif için** — Studio'nun temel kısıtı
-- **"Aşırı mantıksız mı?" filter aktif** — her hücrede + her primitif
-- **KARAR_017 twist zorunlu** — referans → lateral transformation
-- **Steam reference ham veri** — kaynak oyun + mekanik bağlamı net
-- 4000-6000 kelime, tablolar zorunlu
+`STAGING/CODEX_DONE_unity_legacy_cleanup_execute.md` yaz:
 
----
+```
+STEP 1 DELETE: <success_count>/<expected_count>
+- Subfolders deleted: <list>
+- Notes: <any blockers or partial>
 
-## NOT
+STEP 2 ARCHIVE: <success_count>/<expected_count>
+- Archive folder created: <path>
+- File counts per batch:
+  - Batch 1 flat walls: X
+  - Batch 2 stranded gates: X
+  - Batch 3 concept v1-v3: X
+  - Batch 4 StoneDungeon pre-painterly: X
+  - Batch 5 Wang16 v2: X
+  - Batch 6 Keep legacy: X
+  - Batch 7 F1 loose: X
+- .meta preservation: <verified yes/no>
 
-Bu task **Task C** (en büyük). Paralel dispatch'te Task A (CB V4 fight/VFX) + Task B (FourLeaf + LRL transplant). Separate task file race condition avoid.
+STEP 3 KEEP verification: <PASS/FAIL>
+- All Resources files intact: <yes/no>
+- All KEEP list files intact: <yes/no>
 
-Çıktı: `F:/LaurethStudio/STAGING/codex_output_cross_genre_vision_mechanics.md`
+STEP 4 Validation:
+- Compile: <PASS/FAIL>
+- Tests: <PASS count>
+- Git status sane: <yes/no>
+
+STEP 5 Commit: <hash or PENDING>
+
+OVERALL: <DONE / NEEDS_REWORK / BLOCKED>
+```
+
+Effort: high. Profile: laurethayday.
 
 
 ---

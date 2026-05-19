@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2b0536f618a5a4a9723e3de8143fb4, type: 3}
+  m_Name: v15c_PostImagegen_Migration
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
+  poolId: v15c_PostImagegen_Migration_manifest_manual_apply
+  entries: []
+  # Manual migration manifest. Apply after v15c schema adds zone macroFillSprites and atmosphericPool fields.
+  # zone_path: macroFillSprites=[macro_path_v1.png guid=343ad3b8b5885c8bd9fd95530c22e9e7 propGuid=faf0bc9d88114b85436263c43b36285f, macro_path_v2.png guid=e0f3577d27bdc2288900767d4485dfb4 propGuid=14370c158b5055fe01c10d949e0ce934], atmosphericPool=pool_atmospheric_path.asset guid=665897daded5054ecd4d37680398a970
+  # zone_grass: macroFillSprites=[macro_grass_v1.png guid=bffeada3e9a03d5609e098e3126634ff propGuid=d1e68a257e0e9051d5b245a12227e82d, macro_grass_v2.png guid=ffa5b71f457bea0c31e4f05a247f6a0c propGuid=ee0f584cd4155f898d5d2e71d4d92f2e], atmosphericPool=pool_atmospheric_grass.asset guid=a7685c5b91d2e5054724049b3040e599
+  # zone_stone: macroFillSprites=[macro_stone_v1.png guid=6895a916026f2223d486b09fa4fa51a5 propGuid=eead422c237882a317857cd3928cffed, macro_stone_v2.png guid=480889a7519d673e32a6cc65ac34b339 propGuid=908096b21f0d95c663b0de2d3a6e9d4b], atmosphericPool=pool_atmospheric_stone.asset guid=41a30301929f556424545a53b4430481
+  # zone_wall: macroFillSprites=[macro_wall_v1.png guid=ba093eaaba39619e3ebaf3c3abd592c5 propGuid=a9f34d21176617292e0602e9479e4319, macro_wall_v2.png guid=c7dc910159382dc10783895e04332e78 propGuid=179d3bae9efddb98449aef79f2c13a1f], atmosphericPool=pool_atmospheric_wall.asset guid=614d6cfa2398bb6e38bd154fa379576f
+  # zone_water: macroFillSprites=[macro_water_v1.png guid=7decbbc91f26e8204e4eb6d315e1e8a6 propGuid=d6872242eb97c6bf21c5770881980ec8, macro_water_v2.png guid=646311cf45c105849c6ff26fb8e07ab6 propGuid=62740ecf8d74fa1d4db17abe035afb07], atmosphericPool=pool_atmospheric_water.asset guid=e3de07e5f0b5f9a5da7bb4b3affd3910
+  # zone_feature: macroFillSprites=[macro_feature_v1.png guid=717d5c56dad4eadc4e9bae270be42030 propGuid=d8fb90e2c3bc614dab25ad283bc00e40, macro_feature_v2.png guid=a1a09ebcd714f34f4a58890fe31bb075 propGuid=b03167f142fb8b640ba7f633855a1141], atmosphericPool=pool_atmospheric_feature.asset guid=a4df0d18225bf3bd632857f877de2bd5

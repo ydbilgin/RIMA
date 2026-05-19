@@ -60,6 +60,43 @@ namespace RIMA.MapDesigner.Room.Runtime
                 result.diagnostics.Add("Room prefabRef null; skipped room instantiation.");
             }
 
+            if (picked.backgroundLayers != null && picked.backgroundLayers.Count > 0)
+            {
+                GameObject bgRoot = new GameObject("PaintedBackground");
+                Transform parentTransform = result.roomInstance != null ? result.roomInstance.transform : transform;
+                bgRoot.transform.SetParent(parentTransform, false);
+
+                bgRoot.transform.localPosition = new Vector3(
+                    picked.bounds.xMin + picked.bounds.width * 0.5f,
+                    picked.bounds.yMin + picked.bounds.height * 0.5f,
+                    0f
+                );
+
+                int spawnedLayers = 0;
+                for (int i = 0; i < picked.backgroundLayers.Count; i++)
+                {
+                    var layer = picked.backgroundLayers[i];
+                    if (layer == null || !layer.visible || layer.sprite == null) continue;
+
+                    GameObject layerGO = new GameObject($"Layer_{i:D2}_{layer.layerName}");
+                    layerGO.transform.SetParent(bgRoot.transform, false);
+                    layerGO.transform.localPosition = new Vector3(layer.offset.x, layer.offset.y, 1f);
+                    layerGO.transform.localScale = new Vector3(layer.scale.x, layer.scale.y, 1f);
+
+                    var sr = layerGO.AddComponent<SpriteRenderer>();
+                    sr.sprite = layer.sprite;
+                    sr.sortingOrder = layer.sortingOrder;
+                    sr.color = layer.tint;
+                    sr.drawMode = SpriteDrawMode.Simple;
+                    spawnedLayers++;
+                }
+                result.diagnostics.Add($"Painted background: spawned {spawnedLayers}/{picked.backgroundLayers.Count} layers.");
+            }
+            else
+            {
+                result.diagnostics.Add("No painted background layers; skipped.");
+            }
+
             if (picked.playerSpawn == null)
             {
                 result.message = "PlayerSpawnSocket missing.";

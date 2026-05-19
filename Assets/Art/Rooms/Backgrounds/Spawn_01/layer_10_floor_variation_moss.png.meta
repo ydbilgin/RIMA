@@ -1,0 +1,572 @@
+fileFormatVersion: 2
+guid: 3bbe18d9a04cca844bd2aeb55802d34a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2442038126952281011
+    second: layer_10_floor_variation_moss_0
+  - first:
+      213: -4003568707298852310
+    second: layer_10_floor_variation_moss_1
+  - first:
+      213: -2308686398641246850
+    second: layer_10_floor_variation_moss_2
+  - first:
+      213: -7328107452972449384
+    second: layer_10_floor_variation_moss_3
+  - first:
+      213: -9173810319161679565
+    second: layer_10_floor_variation_moss_4
+  - first:
+      213: 4255461891962386292
+    second: layer_10_floor_variation_moss_5
+  - first:
+      213: 722355486722339827
+    second: layer_10_floor_variation_moss_6
+  - first:
+      213: -8686845776338392766
+    second: layer_10_floor_variation_moss_7
+  - first:
+      213: 4089358269340261675
+    second: layer_10_floor_variation_moss_8
+  - first:
+      213: 6983107413322649362
+    second: layer_10_floor_variation_moss_9
+  - first:
+      213: -1117385377041128528
+    second: layer_10_floor_variation_moss_10
+  - first:
+      213: 945493550821289230
+    second: layer_10_floor_variation_moss_11
+  - first:
+      213: -2493803216661138150
+    second: layer_10_floor_variation_moss_12
+  - first:
+      213: 3931950283868668010
+    second: layer_10_floor_variation_moss_13
+  - first:
+      213: -4945230528989908741
+    second: layer_10_floor_variation_moss_14
+  - first:
+      213: -3072115224405445874
+    second: layer_10_floor_variation_moss_15
+  - first:
+      213: 4902130290985209233
+    second: layer_10_floor_variation_moss_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_0
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 164
+        width: 116
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4c8c0313432c1ed0800000000000000
+      internalID: -2442038126952281011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_1
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 210
+        width: 22
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a220597f8777078c0800000000000000
+      internalID: -4003568707298852310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_2
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 171
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7d663fc3f5e5ffd0800000000000000
+      internalID: -2308686398641246850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_3
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 163
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8914fa5f8155d4a90800000000000000
+      internalID: -7328107452972449384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_4
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 147
+        width: 60
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3312e81ae1410b080800000000000000
+      internalID: -9173810319161679565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_5
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 172
+        width: 37
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47731a95b007e0b30800000000000000
+      internalID: 4255461891962386292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_6
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 133
+        width: 24
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f3b3abec72560a00800000000000000
+      internalID: 722355486722339827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_7
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 122
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2496fb29acf127780800000000000000
+      internalID: -8686845776338392766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_8
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 67
+        width: 52
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2d155bfda150c830800000000000000
+      internalID: 4089358269340261675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_9
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 35
+        width: 78
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21f4e7fb13bf8e060800000000000000
+      internalID: 6983107413322649362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_10
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 102
+        width: 38
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b36f347bef3e70f0800000000000000
+      internalID: -1117385377041128528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_11
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 73
+        width: 57
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0d202200611f1d00800000000000000
+      internalID: 945493550821289230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_12
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 60
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a15bf2bef2b346dd0800000000000000
+      internalID: -2493803216661138150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_13
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 67
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a600d7863f7119630800000000000000
+      internalID: 3931950283868668010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_14
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 56
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf0b32be8030f5bb0800000000000000
+      internalID: -4945230528989908741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_15
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 21
+        width: 28
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e037e3cea77ad55d0800000000000000
+      internalID: -3072115224405445874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: layer_10_floor_variation_moss_16
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 22
+        width: 59
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19d0bdce68dd70440800000000000000
+      internalID: 4902130290985209233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      layer_10_floor_variation_moss_0: -2442038126952281011
+      layer_10_floor_variation_moss_1: -4003568707298852310
+      layer_10_floor_variation_moss_10: -1117385377041128528
+      layer_10_floor_variation_moss_11: 945493550821289230
+      layer_10_floor_variation_moss_12: -2493803216661138150
+      layer_10_floor_variation_moss_13: 3931950283868668010
+      layer_10_floor_variation_moss_14: -4945230528989908741
+      layer_10_floor_variation_moss_15: -3072115224405445874
+      layer_10_floor_variation_moss_16: 4902130290985209233
+      layer_10_floor_variation_moss_2: -2308686398641246850
+      layer_10_floor_variation_moss_3: -7328107452972449384
+      layer_10_floor_variation_moss_4: -9173810319161679565
+      layer_10_floor_variation_moss_5: 4255461891962386292
+      layer_10_floor_variation_moss_6: 722355486722339827
+      layer_10_floor_variation_moss_7: -8686845776338392766
+      layer_10_floor_variation_moss_8: 4089358269340261675
+      layer_10_floor_variation_moss_9: 6983107413322649362
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

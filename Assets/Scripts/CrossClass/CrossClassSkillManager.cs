@@ -120,6 +120,18 @@ namespace RIMA
         public void OnCrit(GameObject target) => CheckPassive(CrossClassEffectType.OnCrit_Bleed, target);
         public void OnSkillUse(GameObject nearestEnemy) => CheckPassive(CrossClassEffectType.OnSkillUse_Debuff, nearestEnemy);
 
+        public void TriggerWarbladeBeat3RoninQuickdraw(Vector2 origin)
+        {
+            foreach (var ronin in FindObjectsByType<RoninController>(FindObjectsSortMode.None))
+            {
+                if (ronin == null || !ronin.enabled) continue;
+                if (Vector2.Distance(origin, ronin.transform.position) > 8f) continue;
+
+                ronin.TriggerQuickdrawGhost(origin);
+                SpawnGhost(new Color(0.42f, 0.95f, 1f, 0.55f), ronin.transform.position);
+            }
+        }
+
         // ─────────────────────────────────────────────
         // Internal
         // ─────────────────────────────────────────────
@@ -150,9 +162,15 @@ namespace RIMA
         private void SpawnGhost(CrossClassSkillData skill)
         {
             if (ghostEffectPrefab == null || playerTransform == null) return;
-            var go = Instantiate(ghostEffectPrefab, playerTransform.position, Quaternion.identity);
+            SpawnGhost(skill.ghostColor, playerTransform.position);
+        }
+
+        private void SpawnGhost(Color color, Vector3 position)
+        {
+            if (ghostEffectPrefab == null) return;
+            var go = Instantiate(ghostEffectPrefab, position, Quaternion.identity);
             var ghost = go.GetComponent<CrossClassGhostEffect>();
-            if (ghost != null) ghost.Play(skill.ghostColor);
+            if (ghost != null) ghost.Play(color);
         }
     }
 }

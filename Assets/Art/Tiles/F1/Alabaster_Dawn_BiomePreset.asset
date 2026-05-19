@@ -32,12 +32,76 @@ MonoBehaviour:
     paletteColor: {r: 0.71, g: 0.54, b: 0.55, a: 1}
     baseTile: {fileID: 11400000, guid: c189e726250ab434bb8139995aa9ca59, type: 2}
     baseTileSource: {fileID: 11400000, guid: 6ae579e61ec29c344a60d3b50d3ba1bd, type: 2}
+    walkable: 1
+    elevationLevel: 0
+    collisionType: 0
+    variantPool: []
   - id: 1
     name: Cream Sand
     paletteColor: {r: 0.86, g: 0.78, b: 0.67, a: 1}
     baseTile: {fileID: 11400000, guid: 2177002fa917c2345868c5eec645164f, type: 2}
     baseTileSource: {fileID: 11400000, guid: 6ae579e61ec29c344a60d3b50d3ba1bd, type: 2}
+    walkable: 1
+    elevationLevel: 0
+    collisionType: 0
+    variantPool: []
+  - id: 5
+    name: Cyan Floor
+    paletteColor: {r: 0, g: 1, b: 1, a: 1}
+    baseTile: {fileID: 11400000, guid: c5c3f9df4216f8344a6fcdb1deb5b7d8, type: 2}
+    baseTileSource: {fileID: 0}
+    walkable: 1
+    elevationLevel: 0
+    collisionType: 0
+    variantPool:
+    - {fileID: 11400000, guid: c5c3f9df4216f8344a6fcdb1deb5b7d8, type: 2}
+    - {fileID: 11400000, guid: 0259a04e8ee34eb42baf29cfe5baacba, type: 2}
+    - {fileID: 11400000, guid: 2df8a8265330f32469e2d9693a745141, type: 2}
+    - {fileID: 11400000, guid: bb6722ed0ffd3b14abba254959f415bd, type: 2}
+  - id: 6
+    name: Dirt Floor
+    paletteColor: {r: 0.6, g: 0.4, b: 0.2, a: 1}
+    baseTile: {fileID: 11400000, guid: 157102cb383c2de4f827e75f517a309f, type: 2}
+    baseTileSource: {fileID: 0}
+    walkable: 1
+    elevationLevel: 0
+    collisionType: 0
+    variantPool:
+    - {fileID: 11400000, guid: 157102cb383c2de4f827e75f517a309f, type: 2}
+    - {fileID: 11400000, guid: fa95a2ae5457ea84284622405b3f5636, type: 2}
+    - {fileID: 11400000, guid: 0a04f2bb9f77d3b4bbb570dae652e261, type: 2}
+    - {fileID: 11400000, guid: 721224cd63e3d3142a4c0c7f3ad118da, type: 2}
+  - id: 7
+    name: Granite Floor
+    paletteColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    baseTile: {fileID: 11400000, guid: f407e0c017696a14ebd412a4a6a61772, type: 2}
+    baseTileSource: {fileID: 0}
+    walkable: 1
+    elevationLevel: 0
+    collisionType: 0
+    variantPool:
+    - {fileID: 11400000, guid: f407e0c017696a14ebd412a4a6a61772, type: 2}
+    - {fileID: 11400000, guid: fdac536c8a182d8469a8e7a8a2bd8c7f, type: 2}
+    - {fileID: 11400000, guid: de05af2609dc2cc4e9cfa80c1b3d24c2, type: 2}
+    - {fileID: 11400000, guid: 5ef36e2f6cb7579449f401e5f243e2e1, type: 2}
+  - id: 8
+    name: Ritual Floor
+    paletteColor: {r: 0.8, g: 0.2, b: 0.8, a: 1}
+    baseTile: {fileID: 11400000, guid: aaf6fe3c3ea259746937737a2ec64fa6, type: 2}
+    baseTileSource: {fileID: 0}
+    walkable: 1
+    elevationLevel: 0
+    collisionType: 0
+    variantPool:
+    - {fileID: 11400000, guid: aaf6fe3c3ea259746937737a2ec64fa6, type: 2}
+    - {fileID: 11400000, guid: fa2af491eb8f843479beae17a976dc20, type: 2}
+    - {fileID: 11400000, guid: 5bd09c6c43b7ee24e83936473e317c8c, type: 2}
+    - {fileID: 11400000, guid: d5b301e1b18ddb4478fa1d7ad02d17cf, type: 2}
   tilesetPairings:
   - lowerTerrainId: 0
     upperTerrainId: 1
     tileSet: {fileID: 11400000, guid: 6ae579e61ec29c344a60d3b50d3ba1bd, type: 2}
+    isFeatureEdge: 0
+    transitionSize: 0.25
+    transitionDescription: 
+    patchAtlasRef: {fileID: 0}

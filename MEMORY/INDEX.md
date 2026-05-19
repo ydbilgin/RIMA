@@ -44,6 +44,12 @@ Open a file ONLY when its keywords match the current task.
 - [project_ui_state_blueprint.md](project_ui_state_blueprint.md) -- WHEN: HUD, skill bar, reward UI, gate choice
 - [project_dev_tool_rift_makeup.md](project_dev_tool_rift_makeup.md) -- WHEN: dev tool, building designer, rift portal, chaos gate, makeup VFX, buff visuals
 - [project_ui_qa_ai_skills.md](project_ui_qa_ai_skills.md) -- WHEN: UI concept, character menu, QA tester flow, Unity tests, shared AI skills
+- [project_path_c_hybrid_lock.md](project_path_c_hybrid_lock.md) -- WHEN: Act 1 production pipeline, Codex image_gen floor/wall, painted base + sprite overlay, layer architecture, Path A vs C, Hades formula (S95 HARD LOCK)
+- [project_karar_150_fake_isometric_lock.md](project_karar_150_fake_isometric_lock.md) -- WHEN: Karar #150, act-aware dungeon-inside, fake isometric, target visual spec, L1-L6 layer breakdown, per-Act material palette
+- [project_karar_150_act1_envanter_live.md](project_karar_150_act1_envanter_live.md) -- WHEN: Act 1 PixelLab envanter, 119 PNG breakdown (mounting/statue/ritual/mob/wall/decal), overlay sprite catalog
+- [project_karar_149_subroom_encounter_lock.md](project_karar_149_subroom_encounter_lock.md) -- WHEN: Karar #149, sub-room sequence, EncounterTemplateSO, 3-5 oda chain, archway exit, 32x22 sub-room canvas
+- [project_subroom_canonical_tags_lock.md](project_subroom_canonical_tags_lock.md) -- WHEN: sub-room tag, slot grammar, 5 canonical (entry_chamber/pillar_arena/collapse_corridor/ritual_hall/crypt_cell), mirror validator
+- [project_subroom_encounter_system_proposal.md](project_subroom_encounter_system_proposal.md) -- WHEN: sub-room encounter design proposal, slot grammar draft, runtime composer logic
 - TASARIM/dungeon_act1_map.md -- WHEN: Act 1 node layout, oda tipleri, depth band, mob butce, Rift Portal spawn, procedural per-run (LOCKED v1)
 - TASARIM/map_fragment_system.md -- WHEN: map fragment drop, reveal sistemi, build planning UX, MapPanel, MiniMap, StS2-style (LOCKED v1)
 
@@ -71,6 +77,13 @@ Open a file ONLY when its keywords match the current task.
 
 - [project_autosprite_trial_pending.md](project_autosprite_trial_pending.md) -- WHEN: autosprite, MCP VFX pilot, dash trail, hitspark, mcp__autosprite__
 - [feedback_autosprite_vs_pixellab_verdict.md](feedback_autosprite_vs_pixellab_verdict.md) -- WHEN: autosprite vs pixellab, VFX pipeline, non-directional VFX, production routing
+
+## S95 Session Audits (2026-05-20)
+- [project_mechanic_bank_audit_s95.md](project_mechanic_bank_audit_s95.md) -- WHEN: mekanik banka audit, M68/M73/M82/M81/M99 önerisi, M165-M167 yeni primitif, RIMA-uyumluluk filtreleri
+- STAGING/CLASS_BALANCE_REVIEW_S95.md -- WHEN: 10 sınıf balance review, 5 kritik karar, broken kombo + dead combo, cross-class Karar #122 uyumsuzluk
+- STAGING/CROSSCLASS_TIER_SPEC_S95.md -- WHEN: Cross-class T1-T4 mimari refactor spec, CrossClassEffectType replace, EnemyFamilyTagTracker, breaking refactor migration path
+- TASARIM/SUBROOM_TEMPLATES_ACT1.md -- WHEN: 5 canonical tag layout (entry_chamber, pillar_arena, collapse_corridor, ritual_hall, crypt_cell), Faz-1 lock önerisi
+- project_iso_seam_solution.md -- WHEN: isometric tile seam fix (cellSize 0.94 + SpriteAtlas padding 8 + sort axis), Gemini 3.5 çözümü
 
 ## Add Memory
 Create MEMORY/<topic>.md with frontmatter, then add one line here.

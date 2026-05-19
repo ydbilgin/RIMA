@@ -24,6 +24,7 @@ namespace RIMA.MapDesigner.Editor
         private const float PlacementSnapStep = 1f / 32f;
         private const string DefaultRoomRootPath = "PlayableRoom/Pro_Redesign_v14_CombatRoom";
         private const string GhostPreviewName = "_GhostPreview";
+        private const float HoverPopupSize = 256f;
 
         [SerializeField] private AssetPackManifestSO activePack;
         [SerializeField] private string searchQuery = string.Empty;
@@ -44,6 +45,9 @@ namespace RIMA.MapDesigner.Editor
         private SpriteRenderer ghostRenderer;
         private Vector3 lastGhostPosition;
         private bool lastGhostValid;
+        [SerializeField] private bool showWangPreview;
+        private double hoverStartedAt;
+        private AssetPackEntry hoverPopupEntry;
 
         public AssetPackCatalog Catalog => catalog;
         public AssetPackManifestSO ActivePack => activePack;
@@ -91,9 +95,13 @@ namespace RIMA.MapDesigner.Editor
             {
                 EnsureInitialized();
                 RefreshVisibleEntries();
+                AssetPackEntry previousHoverEntry = hoverEntry;
                 DrawTopBar();
                 DrawMainLayout();
+                hoverEntry = null;
                 DrawBottomSpriteGrid();
+                UpdateHoverPopupState(previousHoverEntry);
+                DrawHoverPopup();
             }
             catch (ExitGUIException)
             {
@@ -185,6 +193,8 @@ namespace RIMA.MapDesigner.Editor
             GUILayout.BeginArea(rightRect, EditorStyles.helpBox);
             inspectorScroll = EditorGUILayout.BeginScrollView(inspectorScroll);
             selectedSpriteInspector.Draw(selectedEntry);
+            EditorGUILayout.Space(8f);
+            DrawAdjacencyPreview();
             EditorGUILayout.EndScrollView();
             GUILayout.EndArea();
         }
@@ -204,16 +214,40 @@ namespace RIMA.MapDesigner.Editor
 
             EditorGUILayout.Space(8f);
             GUILayout.Label("Categories", EditorStyles.miniBoldLabel);
+            DrawCategoryCountSummary();
             categoryScroll = EditorGUILayout.BeginScrollView(categoryScroll);
-            DrawCategoryButton("All", AllCategoryId);
-            IReadOnlyList<AssetPackCategory> categories = catalog.GetCategories(activePack);
-            for (int i = 0; i < categories.Count; i++)
+            IReadOnlyList<AssetPackCategoryCount> categoryCounts = catalog.GetCategoryCounts(activePack);
+            int totalCount = 0;
+            for (int i = 0; i < categoryCounts.Count; i++)
             {
-                string categoryName = categories[i].categoryName;
+                totalCount += categoryCounts[i].count;
+            }
+
+            DrawCategoryButton($"All ({totalCount})", AllCategoryId);
+            for (int i = 0; i < categoryCounts.Count; i++)
+            {
+                string categoryName = categoryCounts[i].categoryName;
                 if (string.IsNullOrEmpty(categoryName)) continue;
-                DrawCategoryButton(categoryName, categoryName);
+                DrawCategoryButton($"{categoryName} ({categoryCounts[i].count})", categoryName);
             }
             EditorGUILayout.EndScrollView();
+        }
+
+        private void DrawCategoryCountSummary()
+        {
+            IReadOnlyList<AssetPackCategoryCount> categoryCounts = catalog.GetCategoryCounts(activePack);
+            if (categoryCounts.Count == 0)
+            {
+                return;
+            }
+
+            var labels = new List<string>();
+            for (int i = 0; i < categoryCounts.Count; i++)
+            {
+                labels.Add($"{categoryCounts[i].categoryName} ({categoryCounts[i].count})");
+            }
+
+            EditorGUILayout.LabelField(string.Join(" | ", labels), EditorStyles.wordWrappedMiniLabel);
         }
 
         private void DrawPackDropdown()
@@ -288,6 +322,29 @@ namespace RIMA.MapDesigner.Editor
             foreach (string line in SelectedSpriteInspector.BuildMetadataLines(entry))
             {
                 EditorGUILayout.LabelField(line, EditorStyles.miniLabel);
+            }
+        }
+
+        private void DrawAdjacencyPreview()
+        {
+            GUILayout.Label("Adjacency Preview", EditorStyles.boldLabel);
+            if (selectedEntry == null || selectedEntry.sprite == null)
+            {
+                EditorGUILayout.HelpBox("Select a tile to preview adjacency.", MessageType.Info);
+                return;
+            }
+
+            IReadOnlyList<AssetPackEntry> entries = catalog.Query(activePack, AllCategoryId, string.Empty);
+            AssetPackEntry[] neighbors = AssetPackBrowserAdjacency.BuildAdjacencyMatrix(selectedEntry, entries);
+            Sprite[] neighborSprites = EntriesToSprites(neighbors);
+            Rect rect = GUILayoutUtility.GetRect(256f, 256f, GUILayout.Width(256f), GUILayout.Height(256f));
+            AssetPackBrowserAdjacency.RenderAdjacency3x3(rect, selectedEntry.sprite, neighborSprites);
+
+            showWangPreview = EditorGUILayout.ToggleLeft("Show 2x2 Wang preview", showWangPreview);
+            if (showWangPreview)
+            {
+                Rect wangRect = GUILayoutUtility.GetRect(160f, 160f, GUILayout.Width(160f), GUILayout.Height(160f));
+                AssetPackBrowserAdjacency.RenderWang2x2(wangRect, FirstSprites(selectedEntry.sprite, neighborSprites, 4));
             }
         }
 
@@ -374,6 +431,55 @@ namespace RIMA.MapDesigner.Editor
                     Repaint();
                 }
             }
+        }
+
+        private void UpdateHoverPopupState(AssetPackEntry previousHoverEntry)
+        {
+            if (hoverEntry == null)
+            {
+                hoverStartedAt = 0d;
+                hoverPopupEntry = null;
+                return;
+            }
+
+            if (!ReferenceEquals(hoverEntry, previousHoverEntry))
+            {
+                hoverStartedAt = EditorApplication.timeSinceStartup;
+                hoverPopupEntry = null;
+            }
+
+            if (AssetPackBrowserAdjacency.ShouldShowHoverPopup(hoverStartedAt, EditorApplication.timeSinceStartup))
+            {
+                hoverPopupEntry = hoverEntry;
+            }
+
+            Repaint();
+        }
+
+        private void DrawHoverPopup()
+        {
+            if (hoverPopupEntry == null || Event.current.type != EventType.Repaint)
+            {
+                return;
+            }
+
+            Vector2 mouse = Event.current.mousePosition;
+            float width = HoverPopupSize;
+            float height = HoverPopupSize + 64f;
+            Rect panelRect = new Rect(mouse.x + 18f, mouse.y + 18f, width, height);
+            panelRect.x = Mathf.Min(panelRect.x, Mathf.Max(0f, position.width - panelRect.width - 8f));
+            panelRect.y = Mathf.Min(panelRect.y, Mathf.Max(0f, position.height - panelRect.height - 8f));
+
+            GUI.Box(panelRect, GUIContent.none, EditorStyles.helpBox);
+            Rect spriteRect = new Rect(panelRect.x, panelRect.y, HoverPopupSize, HoverPopupSize);
+            DrawChecker(spriteRect);
+            if (hoverPopupEntry.sprite != null)
+            {
+                DrawSprite(spriteRect, hoverPopupEntry.sprite, ScaleMode.ScaleToFit);
+            }
+
+            Rect infoRect = new Rect(panelRect.x + 6f, spriteRect.yMax + 4f, panelRect.width - 12f, 56f);
+            GUI.Label(infoRect, BuildHoverPopupText(hoverPopupEntry), EditorStyles.wordWrappedMiniLabel);
         }
 
         private void SelectPack(AssetPackManifestSO pack)
@@ -806,6 +912,50 @@ namespace RIMA.MapDesigner.Editor
             style.wordWrap = true;
             return style;
         }
+
+        private static Sprite[] EntriesToSprites(AssetPackEntry[] entries)
+        {
+            var sprites = new Sprite[entries != null ? entries.Length : 0];
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                sprites[i] = entries[i] != null ? entries[i].sprite : null;
+            }
+
+            return sprites;
+        }
+
+        private static Sprite[] FirstSprites(Sprite center, Sprite[] neighbors, int count)
+        {
+            var sprites = new Sprite[count];
+            sprites[0] = center;
+            for (int i = 1; i < count; i++)
+            {
+                sprites[i] = neighbors != null && i - 1 < neighbors.Length ? neighbors[i - 1] : center;
+            }
+
+            return sprites;
+        }
+
+        private static string BuildHoverPopupText(AssetPackEntry entry)
+        {
+            if (entry == null)
+            {
+                return string.Empty;
+            }
+
+            return $"{entry.displayName}\n{entry.pixelSize.x} x {entry.pixelSize.y} | {entry.sourcePack}\nVariant: {GetVariantIndex(entry)}";
+        }
+
+        private static string GetVariantIndex(AssetPackEntry entry)
+        {
+            if (entry == null || string.IsNullOrEmpty(entry.entryId))
+            {
+                return "n/a";
+            }
+
+            int slash = entry.entryId.LastIndexOf('/');
+            return slash >= 0 && slash + 1 < entry.entryId.Length ? entry.entryId.Substring(slash + 1) : "n/a";
+        }
     }
 
     public sealed class AssetPackBrowserPanel
@@ -1175,6 +1325,33 @@ namespace RIMA.MapDesigner.Editor
             return pack != null && pack.categories != null ? pack.categories : Array.Empty<AssetPackCategory>();
         }
 
+        public IReadOnlyList<AssetPackCategoryCount> GetCategoryCounts(AssetPackManifestSO pack)
+        {
+            IReadOnlyList<AssetPackEntry> entries = BuildEntries(pack);
+            var counts = new List<AssetPackCategoryCount>();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                string categoryName = entries[i].categoryName;
+                if (string.IsNullOrEmpty(categoryName))
+                {
+                    continue;
+                }
+
+                int index = IndexOfCategory(counts, categoryName);
+                if (index >= 0)
+                {
+                    counts[index] = new AssetPackCategoryCount(categoryName, counts[index].count + 1);
+                }
+                else
+                {
+                    counts.Add(new AssetPackCategoryCount(categoryName, 1));
+                }
+            }
+
+            counts.Sort((a, b) => string.Compare(a.categoryName, b.categoryName, StringComparison.OrdinalIgnoreCase));
+            return counts;
+        }
+
         public IReadOnlyList<AssetPackEntry> Query(AssetPackManifestSO pack, string categoryId, string searchQuery)
         {
             if (pack == null)
@@ -1275,7 +1452,8 @@ namespace RIMA.MapDesigner.Editor
 
             for (int i = 0; i < atlas.variants.Length; i++)
             {
-                entries.Add(BuildSpriteEntry(pack, atlas, atlas.variants[i], i, categoryName));
+                string resolvedCategory = AssetPackBrowserAdjacency.ResolveCategory(atlas.variants[i], atlas, categoryName);
+                entries.Add(BuildSpriteEntry(pack, atlas, atlas.variants[i], i, resolvedCategory));
             }
         }
 
@@ -1412,6 +1590,31 @@ namespace RIMA.MapDesigner.Editor
         private static bool EqualsIgnoreCase(string a, string b)
         {
             return string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static int IndexOfCategory(List<AssetPackCategoryCount> counts, string categoryName)
+        {
+            for (int i = 0; i < counts.Count; i++)
+            {
+                if (EqualsIgnoreCase(counts[i].categoryName, categoryName))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+    }
+
+    public readonly struct AssetPackCategoryCount
+    {
+        public readonly string categoryName;
+        public readonly int count;
+
+        public AssetPackCategoryCount(string categoryName, int count)
+        {
+            this.categoryName = categoryName;
+            this.count = count;
         }
     }
 

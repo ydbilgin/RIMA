@@ -29,6 +29,20 @@ namespace RIMA
 
         public void SetTarget(Transform t) => target = t;
 
+        public void SetBounds(Vector2 min, Vector2 max)
+        {
+            roomMin = min;
+            roomMax = max;
+            useBounds = true;
+        }
+
+        public void SetBounds(Bounds worldBounds)
+        {
+            roomMin = new Vector2(worldBounds.min.x + boundsPadding.x, worldBounds.min.y + boundsPadding.y);
+            roomMax = new Vector2(worldBounds.max.x - boundsPadding.x, worldBounds.max.y - boundsPadding.y);
+            useBounds = true;
+        }
+
         private void Awake()
         {
             cam = GetComponent<Camera>();

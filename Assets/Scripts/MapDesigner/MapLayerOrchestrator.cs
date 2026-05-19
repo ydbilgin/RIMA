@@ -3,6 +3,8 @@ using RIMA.Data;
 using RIMA.Systems.Map;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using RIMA.Systems.Map;
+
 
 namespace RIMA.MapDesigner
 {
@@ -31,6 +33,10 @@ namespace RIMA.MapDesigner
             accent = false
         };
 
+        [Header("Shader Blend")]
+        [SerializeField] private bool useShaderBlend = false;
+        [SerializeField] private TerrainBlendConfig blendConfig;
+
         public LayerToggles Layers
         {
             get => layers;
@@ -44,11 +50,19 @@ namespace RIMA.MapDesigner
                 room.walkable.GetLength(1) == room.size.y;
         }
 
-        public void Paint(Tilemap floorTilemap, RimaBiomePreset biome, RoomData room, int seed)
+public void Paint(Tilemap floorTilemap, RimaBiomePreset biome, RoomData room, int seed)
         {
-            if (floorTilemap != null && biome != null && room.vertexGrid != null && (layers.floorBase || layers.floorVariation))
+            if (room.vertexGrid != null && (layers.floorBase || layers.floorVariation))
             {
-                CornerWangPainter.Paint(floorTilemap, biome, room.vertexGrid, room.size.x, room.size.y, default, seed, false);
+                if (useShaderBlend && blendConfig != null && blendConfig.blendMaterial != null)
+                {
+                    var blendRenderer = EnsureComponent<RIMA.Systems.Map.TerrainBlendRenderer>(transform, "TerrainBlendRenderer");
+                    blendRenderer.Render(room, biome, blendConfig);
+                }
+                else if (floorTilemap != null && biome != null)
+                {
+                    CornerWangPainter.Paint(floorTilemap, biome, room.vertexGrid, room.size.x, room.size.y, default, seed, false);
+                }
             }
 
             if (!ValidateWalkableMask(room))

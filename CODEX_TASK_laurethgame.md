@@ -1,197 +1,97 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
 
-# Codex Task B: FourLeaf Fields + Little Rocket Lab Mekanik Mücevheri + Studio Cross-Genre Transplant
+# Codex Task — Spawn_01 Concept v4 "Inside the Dungeon" (image_gen)
 
-**Date:** 2026-05-18
-**Dispatcher:** Orchestrator (Opus 4.7)
-**Effort:** high
-**Output target:** `F:/LaurethStudio/STAGING/codex_output_fourleaf_lrl_transplant.md`
-**Background:** YES
+ACTIVE RULES: (1) think before generating (2) min code, no speculation (3) surgical — listed output only (4) BLOCKED if unclear.
 
----
+## Mission
 
-## CONTEXT (inline)
+Use built-in `image_gen` (gpt-image-1) to draw concept v4. Same fake-isometric technique from v3 (35° tilt, walls with depth, 4-dir compatible) BUT user feedback on v3:
 
-LaurethStudio'nun yeni primary vizyonu (kullanıcı 2026-05-18):
-> **"AŞIRI MANTIKSIZ OLMADIKÇA başka türlerden mekanik al, kendi türümüze entegre et."**
+> "şu an boş arena yukarıdan gibi hissediyorum, ben dungeon İÇİNDE gibi hissetmek istiyorum. Maps biraz daha büyük olacak. Ara duvarları (internal walls) göreceğim, arena perimeter duvarlarını sadece map limitine gidince göreceğim. Baklava dilimi (diamond shape) zorunlu değil."
 
-Kullanıcı net örnek verdi: **"FourLeaf Fields'te su atıyordu birbirine sekerek gidiyordu gibi basit ama güzel şeylerden bahsediyorum."**
+Single regen. No code, no analysis.
 
-İki referans oyun:
-1. **FourLeaf Fields** — Cozy farm sim + minyatür perspektif + bug ranch + gossip tech tree. BEHEMUTT 10-15 kişi.
-2. **Little Rocket Lab (LRL)** — Tactile production atelier + side-cutaway iso + multi-station chain.
+## References
 
-**Senin görevin Codex olarak:**
-- Bu iki oyunun **"mekanik mücevherlerini"** detaylı çıkar (basit ama güzel, satisfying, modular core mekanikler)
-- Her mücevheri Studio'nun **farklı türlerine cross-genre transplant** olarak öner (FourLeaf temasını almak değil, mekaniği farklı türde reuse)
-- Ek olarak **benzer tarz** (LRL DNA) oyunlardan da mekanik çekirdek çıkar (Litten with Friends, Smushi Come Home, Tinykin, Slime Rancher cozy production, A Game About Digging, Mini Motorways, Bullet Echo)
-- Cozy oyun yapmak için tactile production + cross-tür enjeksiyon ile Studio'nun kendi tarzını yaratma matrisi
+- v3 (CLOSEST candidate but feels arena-like): `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v3_fakeiso.png` — diamond walkable shape, ALL walls visible because room is small + arena-bounded
+- v2 (rejected, 0° Y rotation flat walls): `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v2_35deg.png`
+- v1 (rejected, 50° tilted): `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v1.png`
 
-**Studio brand uyum zorunlu:** Easy entry + deep master + lots content + roguelite genre LOCK + PixelLab constraint + global hedef (Türk DNA out default) + hoş anim Wildfrost target.
+v4 hedef: **fake iso BUT zoom-out + internal architecture + edge-only perimeter walls.**
 
----
+## Output
 
-## READ FILES
+`Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png`
 
-1. `F:/LaurethStudio/MEMORY/feedback_cross_genre_transplant_vision.md` — PRIMARY VISION
-2. `F:/LaurethStudio/MEMORY/feedback_easy_entry_deep_master.md` — Studio brand
-3. `F:/LaurethStudio/MEMORY/pixellab_capability_map.md` — LOCK
-4. `F:/LaurethStudio/MEMORY/feedback_faux_iso_pipeline.md` — KARAR_039 LRL teşhisi
-5. `F:/LaurethStudio/MEMORY/anti_patterns_universal.md`
-6. `F:/LaurethStudio/MEMORY/borrow_degil_twist.md` — KARAR_017
-7. `F:/LaurethStudio/03_IDEAS/MECHANIC_BANK/_MEKANIK_BANKASI.md` — M01-M103
-8. `F:/LaurethStudio/03_IDEAS/TIER_v4_GLOBAL/_OVERVIEW.md` — yeni tier yapısı
-9. `F:/LaurethStudio/03_IDEAS/TIER_v4_GLOBAL/S_cozy_farm_sim.md` — 7 yeni cozy farm pitch
-10. `F:/LaurethStudio/03_IDEAS/TIER_v4_GLOBAL/S_cozy_production.md` — 3 yeni production pitch
-11. `F:/LaurethStudio/05_RESEARCH/cozy_farm_sim_2026_analysis.md` — Gemini Agent 1 raw (FourLeaf + 7 peer)
-
----
-
-## WEB RESEARCH (Codex Steam/YouTube/dev blog tarama yetkisi)
-
-### FourLeaf Fields
-- Steam page (https://store.steampowered.com/app/...) — store description + gallery + tag
-- Latest trailer (YouTube)
-- Dev posts/blog (BEHEMUTT)
-- Gameplay clips (Twitch / YouTube)
-- Reddit/community feedback (preview impressions)
-
-**Hedef:** Oyunun **simple-but-beautiful mekanik mücevherlerini** çıkar — kullanıcı "su sekme" gibi örnek verdi.
-
-### Little Rocket Lab
-- Steam page + trailer + gameplay
-- Dev blog + community feedback
-
-### Benzer "tactile cozy production" cluster
-- Litten with Friends · Smushi Come Home · Tinykin · Slime Rancher cozy · A Game About Digging · Mini Motorways · Cosmic Express · A Little to the Left · Unpacking · Smile For Me · Donut County · Tiny Glade · Townscaper
-
----
-
-## GÖREV — Net 4 Çıktı
-
-### Çıktı 1: FourLeaf Fields Mekanik Mücevherleri (15-20)
-
-Her mücevher için:
-```
-FLF-NN: [Mekanik adı]
-- Açıklama: 2-3 cümle, ne yapıyor + neden güzel
-- Simple-but-beautiful niteliği: [oyuncu praise nedeni]
-- Verb taxonomy: [base verb + decorators]
-- Tactile feedback: [ses + görsel + kontrol hissi]
-- PixelLab uyum: [1-5]
-- Studio brand uyum: [easy entry / deep master / lots content axis]
-```
-
-**Minimum mücevher hedefi:**
-- Su sekme / cascading water bounce
-- Minyatür perspektif Z-axis scale
-- Gossip tech tree (sosyal upgrade ekonomisi)
-- Bug ranching variety (Love Language kin)
-- Giant crop chopping (Zelda sword cut feel)
-- 4-player co-op chemistry
-- Whimsical world prop scale
-- Dedikodu network NPC AI
-
-### Çıktı 2: 25-30 FourLeaf Cross-Genre Transplant Önerisi
-
-Yukarıdaki FLF mücevherlerinin her biri için **3-4 farklı tür** için transplant önerisi:
+## Prompt for image_gen
 
 ```
-FLF-NN [Mekanik] × [Hedef tür: composition / vehicle / atelier / action / etc.]
-- Studio target tür: [hangi tür]
-- Transplant açıklama: [3-4 cümle, mekanik nasıl reuse edilir]
-- Twist (KARAR_017 lateral): [değişiklik detay]
-- "Aşırı mantıksız mı?" filter: [hayır + neden]
-- Hangi Studio oyununa enjekte edilebilir (mevcut 10 yeni + v4 pitch'lerden):
-  - örn: "Honeymoth Hamlet'ta bug feeding bounce", "The Switchboard'da cable plug cascade"
-- Anim quality target: [Wildfrost cute / juicy / minimal]
-- Yeni mekanik primitif aday mı? (M111+ ya da KATEGORI 14 transplant için)
+2D pixel art, fake-isometric dungeon view in the style of classic Diablo dungeon levels, Dead Cells biomes, and Octopath Traveler underground sections. Camera tilted at 35 degrees high top-down, NO Y-axis rotation (top/bottom walls horizontal in screen space, left/right walls vertical). Walls drawn with isometric depth showing top cap + front face.
+
+CRITICAL framing — this is the most important part of the brief:
+- This is NOT a closed arena room. The player is INSIDE a larger dungeon and the camera frames a SECTION of it, not the whole footprint.
+- The visible map area should be roughly TWICE the size of v3 (think 32 wide x 22 tall world tiles instead of 18 wide x 12 tall).
+- PERIMETER walls (outer boundary of the level) are mostly OFF-SCREEN or visible only at one corner/edge of the frame. The player feels they could walk in multiple directions and find more dungeon.
+- INTERNAL walls are the primary visual element. Show 2-4 internal wall structures (interior pillars, dividing walls, sub-room partitions, broken collapsed sections, archway connectors between sub-rooms). These create gameplay obstacles and sight-line variety.
+- The walkable area should NOT be a diamond/lozenge silhouette. Irregular layout is preferred — some open spaces, some tight corridors, some pillared interior sections.
+
+Structural elements to include:
+- 2-3 INTERIOR free-standing pillars or wall stubs (rectangular block sections, isometric depth visible)
+- 1 archway connecting current section to a hint of another section visible beyond (dark passage with a cyan rift glow at the far end suggesting another room)
+- 1 broken/collapsed wall section (rubble pile spilling onto the floor, showing the dungeon has decayed)
+- 1 corner of the perimeter outer wall visible at one edge of the frame (the player can tell they are near the map edge in that direction but plenty of dungeon extends the other ways)
+- Banners hanging from interior walls (purple, torn)
+- Hanging chains (vertical, going up into off-screen ceiling darkness)
+- Wall-mounted warm candle sconces (orange flame) scattered along interior walls
+- Cyan rift cracks (#00FFCC) on 2-3 wall surfaces — interior walls
+
+Floor:
+- Paved stone tiles (gray-blue, mossy)
+- Larger and more varied — different floor sections separated by elevation hints (a single step down between sub-sections, or a different tile pattern marking "this is a different sub-room")
+- Scattered details: pebbles, rubble, bones, dropped weapons, broken pottery, moss patches
+- Some sections darker than others (lighting variation suggesting different rooms)
+
+Foreground (centered): male warblade with dark hair, ragged armor, slashing east at an imp enemy (crow-skull-faced cyan-glowing creature). A female elementalist with blonde bun + blue robe casting a purple-cyan spell. The combat scene is the focal point but does NOT dominate the entire frame — there is plenty of dungeon visible around them.
+
+Lighting: heavy vignette with combat sparks bright at center. Interior darker than v3 (this is deep dungeon, not entry hall). Cyan rift glows + warm candle accents are the only sources of color. Atmosphere: oppressive, ancient, MUCH BIGGER than v3, claustrophobic but not arena-bounded.
+
+Palette: dark slate gray-blue stone (#3a4050), cyan #00FFCC accent, warm orange candle accent, moss green patches, blood-red banner remnants, warblade brown leather, elementalist blue robe.
+
+Style: pixel art with painterly polish. Diablo 2 / Dead Cells / Octopath dungeon vibe — but at 35-degree fake iso angle with grid-aligned 4-dir character compatibility.
+
+CRITICAL anti-patterns to avoid:
+- Do NOT draw the whole room with all 4 perimeter walls visible (that's arena feel — v3 problem)
+- Do NOT make the diamond/lozenge silhouette dominant (allow irregular layouts)
+- Do NOT center the combat scene with empty floor padding (combat is central but environment is rich around it)
+- Do NOT make all walls the same height/style (vary internal walls from perimeter walls — interior ones can be lower stubs or half-height pillars)
+
+Camera: high top-down at 35 degrees from horizontal. Frame zooms out to show ~32x22 world tiles. Combat scene occupies center ~10x7 tiles of that. Surrounding ~75% of the frame shows dungeon architecture, internal walls, sub-sections.
 ```
 
-**Hedef:** "Su sekme" örneği gibi 25-30 cross-genre öneri.
+## Acceptance
 
-### Çıktı 3: Little Rocket Lab + Tactile Production Cluster Mekanik Mücevherleri (10-15)
+- Single PNG at `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png`
+- Scene shows MORE dungeon than v3 (zoomed out, less arena-bounded)
+- Internal walls / pillars / sub-sections as primary architecture
+- Perimeter outer walls visible only at one edge OR one corner OR off-screen entirely
+- NOT a diamond/lozenge shape — irregular layout
+- Same 35° fake-iso angle as v3
+- Same characters + same combat moment
 
-LRL + benzer cluster oyunlarından çıkan mekanik mücevherler:
-- Multi-station chain visibility
-- Side-cutaway depth hint
-- Conveyor satisfying flow
-- Tactile cable plug
-- Spatial routing puzzle
-- Output animation juice
-- Idle observation pleasure ("watch it work")
-- Tiny worker swarm (Pikmin/Junimo kin)
-- Procedural narrative emergent
-- Crafting recipe discovery
+## Done report
 
-Her biri için aynı standardize format (FLF Çıktı 1 ile).
+Append one line to `STAGING/CODEX_DONE_concept_v4_inside_dungeon.md`:
+- "Generated: Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png at <size>, image_gen cost: $0"
 
-### Çıktı 4: LRL Cross-Genre Cozy Transplant Matrix (15-25)
+If image_gen produces wrong framing (whole arena with all 4 perimeter walls, OR diamond shape, OR no internal walls), retry up to 2 times with emphasis on the off-screen perimeter + internal architecture.
 
-Kullanıcı net dedi: "LRL gibi türlere neler katarak kendi tarzımızı yaratarak cozy oyun yapabiliriz."
+## Hard rules
 
-LRL DNA mücevherlerini **farklı türlerle birleştirip cozy oyun yaratan** kombinasyon matrisi:
-- LRL multi-station + cozy farm = ?
-- LRL tactile cable + cozy companion = ?
-- LRL side-cutaway + cozy life-sim = ?
-- LRL output juice + cozy cooking = ?
-- LRL procedural narrative + cozy ritual = ?
-- vb.
-
-Her birinde:
-- Hibrit mekanik açıklama (3-4 cümle)
-- Hangi yeni oyun fikrine ilham olabilir (yeni pitch tohumu)
-- Studio brand uyum skoru
-- "Aşırı mantıksız mı?" check
-
----
-
-## OUTPUT FORMAT
-
-`F:/LaurethStudio/STAGING/codex_output_fourleaf_lrl_transplant.md`:
-
-```markdown
-# Codex Output: FourLeaf + LRL Mekanik Mücevheri + Cross-Genre Transplant
-
-## 0. Executive summary
-
-## 1. FourLeaf Fields Mekanik Mücevherleri (15-20)
-(standardize format her biri)
-
-## 2. FourLeaf Cross-Genre Transplant Matrisi (25-30)
-(tür × Studio oyun cross-table)
-
-## 3. LRL + Tactile Cozy Production Cluster Mücevherleri (10-15)
-(standardize format)
-
-## 4. LRL Cross-Genre Cozy Hibrit Matrisi (15-25)
-(hibrit kombinasyonlar + yeni pitch tohumu)
-
-## 5. Mekanik Bank Entegrasyon Önerisi
-(KATEGORI 14 — CROSS-GENRE TRANSPLANT için aday M111+ liste, M-bank append draft format)
-
-## 6. Studio'nun Kendi Tarzı (synthesis)
-(tüm bu mücevherlerden Studio'ya en uygun 8-10 mücevher seç + neden)
-```
-
----
-
-## QUALITY BAR
-
-- **Web research zorunlu** — Steam page + trailer + dev blog gerçek verisi
-- **Simple-but-beautiful odak** — karmaşık değil, oyuncu praise olan basit satisfying mekanikler
-- **Studio brand check her öneri** — easy entry + lots content + PixelLab + hoş anim
-- **"Aşırı mantıksız mı?" filter** her cross-genre transplant için zorunlu
-- **Twist (KARAR_017)** her transplant'ta belirt — referans → lateral
-- 3500-5000 kelime, tablo + liste rahat
-
----
-
-## NOT
-
-Bu task **Task B**. Paralel dispatch'te Task A (CB V4 fight/VFX) ve Task C (cross-genre vision matrix). Separate task file race condition avoid.
-
-Çıktı: `F:/LaurethStudio/STAGING/codex_output_fourleaf_lrl_transplant.md`
+- DO use `image_gen` (built-in gpt-image-1)
+- DO read v1+v2+v3 first
+- DO NOT modify any code/scene/.meta
+- DO NOT generate analysis docs
 
 
 ---

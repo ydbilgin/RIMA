@@ -1,0 +1,16 @@
+Generate a 256x256 PNG showing 8x8 tiled repetition of a SEAMLESS painterly cool granite ground texture.
+
+CRITICAL REQUIREMENTS:
+- Edge-to-edge SEAMLESS texture (top pixel row matches bottom pixel row, left column matches right column)
+- ZERO border, ZERO frame, ZERO outline at edges
+- Continuous ground surface — no individual stone shapes with dark gaps between them
+- Painterly hand-drawn look (NOT mosaic, NOT cobblestone, NOT brick)
+- Muted cool gray with subtle blue-violet undertones (#3A3D42 to #4E5260)
+- Hairline natural cracks scattered randomly (NOT one per 32x32 unit — sparse, distributed across the whole 256x256)
+- Chunky 32-pixel-scale grain
+- Top-down perfectly flat view, no shading from any direction
+- Worn ancient temple stone, monolithic, NOT tiled
+
+NEGATIVE: dark border, frame, outline, cobblestone, brick, mortar, grid pattern, individual tiles, mosaic, stone blocks, masonry, slab, paving
+
+OUTPUT: 256x256 PNG showing 8x8 tile repetition. The center 32x32 region (pixels 96-128 x 96-128) will be extracted as the canonical tile. Verify that this center patch can be tiled infinitely without any visible seam.

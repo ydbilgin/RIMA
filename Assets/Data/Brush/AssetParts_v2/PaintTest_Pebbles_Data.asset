@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c59e9e38cfbec4b86b3a1380d240c2, type: 3}
+  m_Name: PaintTest_Pebbles_Data
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Brush.Data.RoomDecalDataSO
+  roomId: Combat_Small_01
+  placements:
+  - worldPos: {x: 0.7248081, y: 0.4549442}
+    spriteId: 1
+    layer: 5
+    rotationStep: 1
+    flags: 1
+    tintPackedRGB: 0
+  - worldPos: {x: 1.2140473, y: 1.2008502}
+    spriteId: 0
+    layer: 5
+    rotationStep: 3
+    flags: 0
+    tintPackedRGB: 0
+  - worldPos: {x: 1.715196, y: 1.5793616}
+    spriteId: 3
+    layer: 5
+    rotationStep: 1
+    flags: 0
+    tintPackedRGB: 0
+  - worldPos: {x: 2.4073515, y: 2.2139065}
+    spriteId: 6
+    layer: 5
+    rotationStep: 0
+    flags: 1
+    tintPackedRGB: 0
+  - worldPos: {x: 2.8869784, y: 2.7813387}
+    spriteId: 9
+    layer: 5
+    rotationStep: 1
+    flags: 0
+    tintPackedRGB: 0
+  - worldPos: {x: 3.490868, y: 3.2121217}
+    spriteId: 4
+    layer: 5
+    rotationStep: 3
+    flags: 0
+    tintPackedRGB: 0
+  - worldPos: {x: 4.11594, y: 3.5269086}
+    spriteId: 3
+    layer: 5
+    rotationStep: 1
+    flags: 1
+    tintPackedRGB: 0
+  - worldPos: {x: 4.7945886, y: 4.0078096}
+    spriteId: 2
+    layer: 5
+    rotationStep: 0
+    flags: 1
+    tintPackedRGB: 0
+  - worldPos: {x: 5.1848173, y: 4.4797974}
+    spriteId: 1
+    layer: 5
+    rotationStep: 0
+    flags: 0
+    tintPackedRGB: 0
+  - worldPos: {x: 6.0634475, y: 4.7682104}
+    spriteId: 0
+    layer: 5
+    rotationStep: 2
+    flags: 0
+    tintPackedRGB: 0
+  - worldPos: {x: 6.5153346, y: 5.180997}
+    spriteId: 11
+    layer: 5
+    rotationStep: 2
+    flags: 1
+    tintPackedRGB: 0
+  - worldPos: {x: 7.449351, y: 5.499391}
+    spriteId: 6
+    layer: 5
+    rotationStep: 2
+    flags: 0
+    tintPackedRGB: 0

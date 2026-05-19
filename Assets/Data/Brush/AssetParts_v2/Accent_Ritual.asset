@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3d1e94e5a5dd4479a0a0ab8ad2d26a, type: 3}
+  m_Name: Accent_Ritual
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PatchAtlasSO
+  atlasId: assetparts_v2_accent_ritual
+  role: 4
+  validTerrainIds:
+  - ShatteredKeep
+  variants:
+  - {fileID: 21300000, guid: 5fb7f0f2ef5a6304e814c707f6e3402b, type: 3}
+  - {fileID: 21300000, guid: c64c19ca0b287dc4e84d5e347211c07c, type: 3}
+  - {fileID: 21300000, guid: b7e7fe699eea64344a1c60b7875f94cd, type: 3}
+  - {fileID: 21300000, guid: 37dce377c4eab23499c27ca48da4c836, type: 3}
+  density: 0.025
+  minDistance: 5
+  edgeBiased: 0
+  wallProximityBiased: 0
+  allowedTransforms:
+    flipX: 1
+    flipY: 1
+    rotate90: 1
+    rotate180: 1
+    rotate270: 1
+    scaleRange: {x: 0.9, y: 1.1}
+    alphaRange: {x: 0.85, y: 1}

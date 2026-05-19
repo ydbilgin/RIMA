@@ -18,6 +18,10 @@ namespace RIMA.MapDesigner.Room.Data
         public CameraBounds cameraBounds;
         public GameObject prefabRef;
 
+        [Header("Painted Background Layers (Map Plan v1 LOCK — S91, Multi-Layer Painter v1 LOCK — S92)")]
+        [Tooltip("Stacked painted background sprites, Hades-style. Render order = sortingOrder per layer. Empty list = no painted bg.")]
+        public List<BackgroundLayerData> backgroundLayers = new List<BackgroundLayerData>();
+
         public List<string> encounterTags = new List<string>();
         public List<string> difficultyTags = new List<string>();
         public List<string> blockerTags = new List<string>();

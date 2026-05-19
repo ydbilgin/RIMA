@@ -1,0 +1,2329 @@
+# Pixel Lab API - v2 API Documentation
+Version: dev
+Generated: 2026-05-13
+
+## Overview
+
+
+## Base URL
+http://localhost:8000/v2
+
+## Authentication
+All endpoints require Bearer token authentication:
+```
+Authorization: Bearer YOUR_API_TOKEN
+```
+
+Get your API token at: https://pixellab.ai/account
+
+## Response Format
+All responses follow this structure:
+```json
+{
+  "success": true,
+  "data": {},
+  "error": null,
+  "usage": {
+    "credits_used": 0,
+    "generations_used": 0,
+    "remaining_credits": 100,
+    "remaining_generations": 50
+  }
+}
+```
+
+## Available Endpoints
+
+# Account
+
+## GET /balance
+**Get balance**
+Tags: Account
+
+Returns the current balance for your account, including both USD credits and remaining subscription generations.
+
+### Responses
+- **200**: Successfully retrieved balance
+- **401**: Invalid API token
+
+# Animate
+
+## POST /edit-animation-v2
+**Edit animation (Pro)**
+Tags: Animate
+
+Edit multiple animation frames with a text description.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of the edit to apply (e.g., 'add a red cape', 'make it glow blue')
+- `frames`: array[object] (required)
+  Animation frames to edit (2-16 frames)
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=256.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=16.0, max=256.0) (required)
+  Image height in pixels
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from edited frames
+
+### Responses
+- **202**: Animation edit job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /interpolation-v2
+**Interpolate (Pro)**
+Tags: Animate
+
+Generate intermediate animation frames between two keyframe images.
+
+### Parameters
+
+### Request Body
+- `start_image`: object (required)
+  Keyframe image for interpolation.
+- `start_image.image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `start_image.size`: object (required)
+- `end_image`: object (required)
+  Keyframe image for interpolation.
+- `end_image.image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `end_image.size`: object (required)
+- `action`: string (minLen=1, maxLen=500) (required)
+  Description of the transition (e.g., 'morphing', 'transforming', 'powering up')
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=128.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=16.0, max=128.0) (required)
+  Image height in pixels
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from output frames
+
+### Responses
+- **202**: Interpolation job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /transfer-outfit-v2
+**Transfer outfit (Pro)**
+Tags: Animate
+
+Transfer an outfit/appearance from a reference image to animation frames.
+
+### Parameters
+
+### Request Body
+- `reference_image`: object (required)
+  Reference image with the outfit to transfer.
+- `reference_image.image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `reference_image.size`: object (required)
+- `frames`: array[object] (required)
+  Animation frames to apply the outfit to (2-16 frames)
+- `image_size`: object (required)
+- `image_size.width`: integer (min=32.0, max=256.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=32.0, max=256.0) (required)
+  Image height in pixels
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from output frames
+
+### Responses
+- **202**: Outfit transfer job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /animate-with-skeleton
+**Animate with skeleton**
+Tags: Animate
+
+Creates a pixel art animation based on the provided parameters. Called "Animate with skeleton" in the plugin.
+
+### Parameters
+
+### Request Body
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=256.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=16.0, max=256.0) (required)
+  Image height in pixels
+- `guidance_scale`: number (min=1.0, max=20.0, default=4.0) (optional)
+  How closely to follow the reference image and skeleton keypoints
+- `view`: enum[side, low top-down, high top-down] (optional)
+- `direction`: enum[north, north-east, east, ...] (optional)
+- `isometric`: boolean (default=False) (optional)
+  Generate in isometric view
+- `oblique_projection`: boolean (default=False) (optional)
+  Generate in oblique projection
+- `init_images`: array | null (optional)
+  Initial images to start the generation from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of the initial image influence
+- `skeleton_keypoints`: array[array] (optional)
+  Skeleton points
+- `reference_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `reference_image.type`: string (default=base64) (optional)
+  Image data type
+- `reference_image.base64`: string (required)
+  Base64 encoded image data
+- `reference_image.format`: string (default=png) (optional)
+  Image format
+- `inpainting_images`: array[any] (optional)
+  Images used for showing the model with connected skeleton
+- `mask_images`: array[any] (optional)
+  Inpainting / mask image (black and white image, where the white is where the model should inpaint)
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `seed`: integer | null (optional)
+  Seed decides the starting noise
+
+### Responses
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## POST /animate-with-text
+**Animate with text**
+Tags: Animate
+
+Creates a pixel art animation based on text description and parameters.
+
+### Parameters
+
+### Request Body
+- `image_size`: object (required)
+- `image_size.width`: integer (min=64.0, max=64.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=64.0, max=64.0) (required)
+  Image height in pixels
+- `description`: string (required)
+  Character description
+- `negative_description`: string | null (optional)
+  Negative prompt to guide what not to generate
+- `action`: string (required)
+  Action description
+- `text_guidance_scale`: number | null (optional)
+  How closely to follow the text prompts
+- `image_guidance_scale`: number | null (optional)
+  How closely to follow the reference image
+- `n_frames`: integer | null (optional)
+  Length of full animation (the model will always generate 4 frames)
+- `start_frame_index`: integer | null (optional)
+  Starting frame index of the full animation
+- `view`: enum[side, low top-down, high top-down] (optional)
+- `direction`: enum[north, north-east, east, ...] (optional)
+- `init_images`: array | null (optional)
+  Initial images to start the generation from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of the initial image influence
+- `reference_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `reference_image.type`: string (default=base64) (optional)
+  Image data type
+- `reference_image.base64`: string (required)
+  Base64 encoded image data
+- `reference_image.format`: string (default=png) (optional)
+  Image format
+- `inpainting_images`: array[any] (optional)
+  Existing animation frames to guide the generation
+- `mask_images`: array | null (optional)
+  Inpainting / mask image (black and white image, where the white is where the model should inpaint)
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `seed`: integer | null (optional)
+  Seed for reproducible results (0 for random)
+
+### Responses
+- **200**: Successfully generated animation
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## POST /animate-with-text-v2
+**Animate with text (pro)**
+Tags: Animate
+
+Generate pixel art animation from text.
+
+### Parameters
+
+### Request Body
+- `reference_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `reference_image.type`: string (default=base64) (optional)
+  Image data type
+- `reference_image.base64`: string (required)
+  Base64 encoded image data
+- `reference_image.format`: string (default=png) (optional)
+  Image format
+- `reference_image_size`: object (required)
+- `reference_image_size.width`: integer (min=32.0, max=256.0) (required)
+  Reference image width in pixels (32-256)
+- `reference_image_size.height`: integer (min=32.0, max=256.0) (required)
+  Reference image height in pixels (32-256)
+- `action`: string (minLen=1, maxLen=500) (required)
+  Action description (e.g., 'walk', 'jump', 'attack')
+- `image_size`: object (required)
+- `image_size.width`: integer (min=32.0, max=256.0) (required)
+  Image width in pixels (32-256)
+- `image_size.height`: integer (min=32.0, max=256.0) (required)
+  Image height in pixels (32-256)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation (0 for random)
+- `no_background`: boolean | null (optional)
+  Remove background from generated frames
+- `view`: enum[none, low top-down, high top-down, ...] (default=none) (optional)
+  Camera perspective angle. ('none', 'low top-down', 'high top-down', 'side')
+- `direction`: enum[none, south, east, ...] (default=none) (optional)
+  Direction the character faces during the animation.
+
+### Responses
+- **202**: Animation job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /animate-with-text-v3
+**Animate with text v3**
+Tags: Animate
+
+Generate an animation from a reference frame and a text action description.
+
+### Parameters
+
+### Request Body
+- `first_frame`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `first_frame.type`: string (default=base64) (optional)
+  Image data type
+- `first_frame.base64`: string (required)
+  Base64 encoded image data
+- `first_frame.format`: string (default=png) (optional)
+  Image format
+- `last_frame`: object | null (optional)
+  Optional last frame to guide the animation endpoint (PNG/JPEG base64, max 256x256 pixels)
+- `action`: string (minLen=1, maxLen=500) (required)
+  Action description (e.g., 'walking', 'jumping', 'attacking')
+- `frame_count`: integer (min=4.0, max=16.0, default=8) (optional)
+  Number of animation frames (4-16, must be even)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation (0 for random)
+- `no_background`: boolean | null (optional)
+  Remove background from generated frames
+
+### Responses
+- **200**: Background job accepted
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent background jobs
+
+## POST /estimate-skeleton
+**Estimate skeleton**
+Tags: Animate
+
+Estimates the skeleton of a character, returning a list of keypoints to use with the skeleton animation tool.
+
+### Parameters
+
+### Request Body
+- `image`: object (optional)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `image.type`: string (default=base64) (optional)
+  Image data type
+- `image.base64`: string (required)
+  Base64 encoded image data
+- `image.format`: string (default=png) (optional)
+  Image format
+
+### Responses
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+# Background Jobs
+
+## GET /background-jobs/{job_id}
+**Get background job status**
+Tags: Background Jobs
+
+Check the status and results of a background job.
+
+### Parameters
+- `job_id` [path]: string (required)
+
+### Responses
+- **200**: Successfully retrieved job status
+- **401**: Invalid API token
+- **404**: Job not found or doesn't belong to user
+- **429**: Too many requests
+- **422**: Validation Error
+
+# Character Management
+
+## GET /characters
+**List user's characters**
+Tags: Character Management
+
+List all characters created by the authenticated user.
+
+### Parameters
+- `limit` [query]: integer (min=1, max=100) (optional)
+  Maximum number of characters to return
+- `offset` [query]: integer (min=0) (optional)
+  Number of characters to skip
+
+### Responses
+- **200**: Successfully retrieved character list
+- **401**: Invalid API token
+- **422**: Invalid pagination parameters
+- **429**: Too many requests
+
+## GET /characters/{character_id}
+**Get character details**
+Tags: Character Management
+
+Get detailed information about a specific character.
+
+### Parameters
+- `character_id` [path]: string (required)
+
+### Responses
+- **200**: Successfully retrieved character details
+- **401**: Invalid API token
+- **403**: Character belongs to another user
+- **404**: Character not found
+- **429**: Too many requests
+- **422**: Validation Error
+
+## DELETE /characters/{character_id}
+**Delete a character and all associated data**
+Tags: Character Management
+
+Delete a character (v2 API for external customers).
+
+### Parameters
+- `character_id` [path]: string (required)
+
+### Responses
+- **200**: Successful Response
+- **422**: Validation Error
+
+## GET /characters/{character_id}/zip
+**Export character as ZIP**
+Tags: Character Management
+
+Download a character with all animations as a ZIP file.
+
+### Parameters
+- `character_id` [path]: string (required)
+
+### Responses
+- **200**: ZIP file download containing character data
+- **423**: Character or animations still being generated
+- **404**: Character not found
+- **422**: Validation Error
+
+## PATCH /characters/{character_id}/tags
+**Update character tags**
+Tags: Character Management
+
+Update the tags for a specific character.
+
+### Parameters
+- `character_id` [path]: string (required)
+
+### Request Body
+- `tags`: array[string] (required)
+  List of tags to assign to the character
+
+### Responses
+- **200**: Tags updated successfully
+- **400**: Invalid tag format or validation error
+- **401**: Invalid API token
+- **403**: Character belongs to another user
+- **404**: Character not found
+- **429**: Too many requests
+- **422**: Validation Error
+
+# Character from template
+
+## POST /create-character-with-4-directions
+**Create character with 4 directions**
+Tags: Character from template
+
+Generate a character or object facing 4 cardinal directions (south, west, east, north).
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of the character or object to generate
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=128.0) (required)
+  Character size in pixels. Canvas will be ~40% larger to make room for animations.
+- `image_size.height`: integer (min=16.0, max=128.0) (required)
+  Character size in pixels. Canvas will be ~40% larger to make room for animations.
+- `async_mode`: boolean | null (optional)
+  Process asynchronously (always true for character creation)
+- `text_guidance_scale`: number | null (optional)
+  How closely to follow the text description (higher = more faithful)
+- `outline`: string | null (optional)
+  Outline style (thin, medium, thick, none)
+- `shading`: string | null (optional)
+  Shading style (soft, hard, flat, none)
+- `detail`: string | null (optional)
+  Detail level (low, medium, high)
+- `view`: string | null (optional)
+  Camera view angle (side, low top-down, high top-down, perspective)
+- `isometric`: boolean | null (optional)
+  Generate in isometric view
+- `color_image`: object | null (optional)
+  Color palette reference image
+- `force_colors`: boolean | null (optional)
+  Force the use of colors from color_image
+- `proportions`: null (optional)
+  Character body proportions (preset or custom values). Only applies to humanoid characters.
+- `template_id`: string | null (optional)
+  Template ID to use (e.g., 'mannequin' for humanoid, 'bear'/'cat'/'dog'/'horse'/'lion' for quadrupeds). Defaults to 'mannequin'.
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `directions`: object | null (optional)
+  Optional reference images per direction. Allowed keys: 'south', 'east', 'north', 'west'. Missing directions are AI-generated; provided ones are used as-is. Each image's dimensions must match image_size. Bipedal templates require 'south' if any are provided; quadrupeds require both 'south' and 'east'; oblique view requires all 4 cardinals.
+- `output_type`: string | null (optional)
+  Output format (always dict for external API)
+
+### Responses
+- **200**: Successfully generated 4-rotation images
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+
+## POST /create-character-with-8-directions
+**Create character with 8 directions**
+Tags: Character from template
+
+Generate a character or object facing 8 directions (all cardinal and diagonal directions).
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of the character or object to generate
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=128.0) (required)
+  Character size in pixels. Canvas will be ~40% larger to make room for animations.
+- `image_size.height`: integer (min=16.0, max=128.0) (required)
+  Character size in pixels. Canvas will be ~40% larger to make room for animations.
+- `mode`: string | null (optional)
+  Generation mode. "standard" uses template-based skeleton generation (1 generation). "pro" uses AI reference-based generation for higher quality (costs 20-40 generations depending on size). Pro mode ignores outline, shading, detail, proportions, and text_guidance_scale.
+- `async_mode`: boolean | null (optional)
+  Process asynchronously (always true - no synchronous processing yet)
+- `text_guidance_scale`: number | null (optional)
+  How closely to follow the text description (higher = more faithful)
+- `outline`: string | null (optional)
+  Outline style (thin, medium, thick, none)
+- `shading`: string | null (optional)
+  Shading style (soft, hard, flat, none)
+- `detail`: string | null (optional)
+  Detail level (low, medium, high)
+- `view`: string | null (optional)
+  Camera view angle (side, low top-down, high top-down, perspective)
+- `isometric`: boolean | null (optional)
+  Generate in isometric view
+- `color_image`: object | null (optional)
+  Color palette reference image
+- `force_colors`: boolean | null (optional)
+  Force the use of colors from color_image
+- `proportions`: null (optional)
+  Character body proportions (preset or custom values). Only applies to humanoid characters.
+- `template_id`: string | null (optional)
+  Template ID to use (e.g., 'mannequin' for humanoid, 'bear'/'cat'/'dog'/'horse'/'lion' for quadrupeds). Defaults to 'mannequin'.
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `directions`: object | null (optional)
+  Optional reference images per direction. Allowed keys: 'south', 'south-east', 'east', 'north-east', 'north', 'north-west', 'west', 'south-west'. Missing directions are AI-generated; provided ones are used as-is. Each image's dimensions must match image_size. Bipedal templates require 'south' if any are provided; quadrupeds require both 'south' and 'east'.
+- `output_type`: string | null (optional)
+  Output format (always dict for external API)
+
+### Responses
+- **200**: Successfully generated 8-rotation images
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+
+## POST /create-character-pro
+**Create character with Pro mode (8 directions)**
+Tags: Character from template
+
+Create a character with 8 directional rotations using Pro mode.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of the character or object to generate.
+- `image_size`: object (required)
+- `image_size.width`: integer (min=32.0, max=168.0) (required)
+  Output frame width in pixels (32-168).
+- `image_size.height`: integer (min=32.0, max=168.0) (required)
+  Output frame height in pixels (32-168).
+- `method`: enum[create_with_style, create_from_concept, rotate_character] (default=create_with_style) (optional)
+  How the reference inputs are used:
+- `create_with_style`: text-driven generation; `reference_image` (if provided) is treated as a style reference. If omitted, a default style for the chosen `view` and template body type is used.
+- `create_from_concept`: `concept_image` (required) seeds the design; `reference_image` (optional) provides additional style guidance.
+- `rotate_character`: `reference_image` (required) is an existing character to rotate into 8 directions. `description` is still used as guidance.
+- `view`: enum[low top-down, high top-down, side] (default=low top-down) (optional)
+  Camera view angle.
+- `template_id`: string (default=mannequin) (optional)
+  Body type for skeleton reconstruction. Picks the 3D template the skeleton estimator fits to the generated frames so the character can be animated. Use `mannequin` for bipedal subjects or one of `bear`/`cat`/`dog`/`horse`/`lion` for quadrupeds. Quadruped templates also append ", on all fours" to the description so generated frames match the chosen skeleton.
+- `concept_image`: object | null (optional)
+  Optional concept image (max 1024x1024). Used with `method=create_from_concept`.
+- `reference_image`: object | null (optional)
+  Optional reference image (max 168x168). Used as style reference for `create_with_style` / `create_from_concept`, or as the character to rotate for `rotate_character`.
+- `style_description`: string | null (optional)
+  Free-text style hint to layer on top of the description.
+- `seed`: integer | null (optional)
+  Seed for reproducible generation.
+- `no_background`: boolean | null (optional)
+  Generate with transparent background.
+
+### Responses
+- **200**: Generation job submitted
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error (bad dimensions, missing required image)
+- **429**: Concurrency limit reached
+
+## POST /create-character-v3
+**Create character with v3 model (8 rotations)**
+Tags: Character from template
+
+Create a character with 8 directional rotations using the v3 model.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of the character (used as prompt + display name).
+- `reference_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `reference_image.type`: string (default=base64) (optional)
+  Image data type
+- `reference_image.base64`: string (required)
+  Base64 encoded image data
+- `reference_image.format`: string (default=png) (optional)
+  Image format
+- `image_size`: object | null (optional)
+  Advisory output frame size. The model picks its own output size; this is the initial canvas size recorded on the character row. The final canvas is padded ~2x by the persistence step for animation room (capped at 256).
+- `view`: enum[low top-down, high top-down, side] (default=low top-down) (optional)
+  Camera view angle. Used by skeleton reconstruction.
+- `template_id`: string (default=mannequin) (optional)
+  Body type for skeleton reconstruction. Picks the 3D template the skeleton estimator fits to the generated frames so the character can be animated. Use `mannequin` for bipedal subjects or one of `bear`/`cat`/`dog`/`horse`/`lion` for quadrupeds. Must match the body type in `reference_image`.
+- `name`: string | null (optional)
+  Display name. Defaults to first 50 chars of `description`.
+- `seed`: integer | null (optional)
+  Seed for reproducible generation.
+- `no_background`: boolean | null (optional)
+  Generate frames with transparent background.
+
+### Responses
+- **200**: Generation job submitted
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error (bad dimensions, invalid image)
+- **429**: Concurrency limit reached
+
+## POST /characters/animations
+**Create Character Animation**
+Tags: Character from template
+
+Animate an existing character (background processing).
+
+### Parameters
+
+### Request Body
+- `character_id`: string (required)
+  ID of existing character to animate
+- `animation_name`: string | null (optional)
+  Name for this animation (defaults to action_description if not provided)
+- `description`: string | null (optional)
+  Description of the character or object to animate (uses character's original if not specified)
+- `action_description`: string | null (optional)
+  Action description (e.g., 'walking', 'running', 'jumping'). Required for custom mode (when template_animation_id is omitted). For template mode, defaults to a description based on the template.
+- `async_mode`: boolean | null (optional)
+  Process in background (always true - no foreground processing yet)
+- `mode`: string | null (optional)
+  Animation mode. "template": skeleton-based from template_animation_id (1 gen/direction). "v3": custom animation from action_description with frame_count control. "pro": custom animation that generates directions sequentially, using completed sides as reference (20-40 gen/direction). Auto-detected: template if template_animation_id is provided, v3 otherwise.
+- `template_animation_id`: string | null (optional)
+  Animation template ID. Required for template mode. Available: `angry`, `attack`, `attack-back`, `attack-left`, `attack-right`, `backflip`, `bark`, `breathing-idle`, `cross-punch`, `crouched-walking`, ...
+- `frame_count`: integer | null (optional)
+  Number of animation frames (4-16, must be even). Only used in v3 mode.
+- `text_guidance_scale`: number | null (optional)
+  How closely to follow the text description (higher = more faithful). Template mode only.
+- `outline`: string | null (optional)
+  Outline style (uses character's original if not specified). Template mode only.
+- `shading`: string | null (optional)
+  Shading style (uses character's original if not specified). Template mode only.
+- `detail`: string | null (optional)
+  Detail level (uses character's original if not specified). Template mode only.
+- `directions`: array | null (optional)
+  List of directions to animate (south, north, east, west, etc.). Template mode: defaults to all character directions. Custom mode: defaults to south only.
+- `isometric`: boolean | null (optional)
+  Generate in isometric view
+- `color_image`: object | null (optional)
+  Color palette reference image
+- `force_colors`: boolean | null (optional)
+  Force the use of colors from color_image
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **200**: Successful Response
+- **422**: Validation Error
+
+## POST /animate-character
+**Animate character**
+Tags: Character from template
+
+Animate an existing character with multiple frames showing movement or action.
+
+### Parameters
+
+### Request Body
+- `character_id`: string (required)
+  ID of existing character to animate
+- `animation_name`: string | null (optional)
+  Name for this animation (defaults to action_description if not provided)
+- `description`: string | null (optional)
+  Description of the character or object to animate (uses character's original if not specified)
+- `action_description`: string | null (optional)
+  Action description (e.g., 'walking', 'running', 'jumping'). Required for custom mode (when template_animation_id is omitted). For template mode, defaults to a description based on the template.
+- `async_mode`: boolean | null (optional)
+  Process in background (always true - no foreground processing yet)
+- `mode`: string | null (optional)
+  Animation mode. "template": skeleton-based from template_animation_id (1 gen/direction). "v3": custom animation from action_description with frame_count control. "pro": custom animation that generates directions sequentially, using completed sides as reference (20-40 gen/direction). Auto-detected: template if template_animation_id is provided, v3 otherwise.
+- `template_animation_id`: string | null (optional)
+  Animation template ID. Required for template mode. Available: `angry`, `attack`, `attack-back`, `attack-left`, `attack-right`, `backflip`, `bark`, `breathing-idle`, `cross-punch`, `crouched-walking`, ...
+- `frame_count`: integer | null (optional)
+  Number of animation frames (4-16, must be even). Only used in v3 mode.
+- `text_guidance_scale`: number | null (optional)
+  How closely to follow the text description (higher = more faithful). Template mode only.
+- `outline`: string | null (optional)
+  Outline style (uses character's original if not specified). Template mode only.
+- `shading`: string | null (optional)
+  Shading style (uses character's original if not specified). Template mode only.
+- `detail`: string | null (optional)
+  Detail level (uses character's original if not specified). Template mode only.
+- `directions`: array | null (optional)
+  List of directions to animate (south, north, east, west, etc.). Template mode: defaults to all character directions. Custom mode: defaults to south only.
+- `isometric`: boolean | null (optional)
+  Generate in isometric view
+- `color_image`: object | null (optional)
+  Color palette reference image
+- `force_colors`: boolean | null (optional)
+  Force the use of colors from color_image
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **200**: Successfully started character animation in background
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **404**: Character not found
+- **422**: Validation error
+- **429**: Too many requests
+
+# Characters
+
+## POST /create-character-state
+**Create a state of an existing character**
+Tags: Characters
+
+Queues a generation job that applies a text edit to an existing character's rotations and saves the result as a new character grouped with the source via group_id. The same edit is applied consistently across all 4 or 8 directions.
+
+### Parameters
+
+### Request Body
+- `character_id`: string (required)
+  ID of the source character
+- `edit_description`: string (minLen=1, maxLen=1000) (required)
+- `no_background`: boolean (default=True) (optional)
+- `seed`: integer | null (optional)
+
+### Responses
+- **200**: State queued
+- **400**: Source character is not completed
+- **401**: Invalid API token
+- **402**: Insufficient generations
+- **404**: Source character not found
+- **429**: Concurrent job limit reached
+- **422**: Validation Error
+
+# Create Image
+
+## POST /generate-image-v2
+**Generate image (Pro)**
+Tags: Create Image
+
+Generate pixel art images from text description.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of the image to generate
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=792.0) (required)
+  Image width in pixels (16 to aspect-ratio max)
+- `image_size.height`: integer (min=16.0, max=688.0) (required)
+  Image height in pixels (16 to aspect-ratio max)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from generated images
+- `reference_images`: array | null (optional)
+  Optional reference images for subject guidance (up to 4)
+- `style_image`: object | null (optional)
+  Optional style image for pixel size and style reference
+- `style_options`: object (optional)
+  Options for what to copy from the style image.
+- `style_options.color_palette`: boolean (default=True) (optional)
+  Copy color palette from style image
+- `style_options.outline`: boolean (default=True) (optional)
+  Copy outline style
+- `style_options.detail`: boolean (default=True) (optional)
+  Copy detail level
+- `style_options.shading`: boolean (default=True) (optional)
+  Copy shading style
+
+### Responses
+- **202**: Image generation job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /generate-with-style-v2
+**Generate with style (Pro)**
+Tags: Create Image
+
+Generate new pixel art images that match the style of reference images.
+
+### Parameters
+
+### Request Body
+- `style_images`: array[object] (required)
+  Style reference images (1-4 images)
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of what to generate
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=512.0) (required)
+  Image width (16 to 512, matches model max)
+- `image_size.height`: integer (min=16.0, max=512.0) (required)
+  Image height (16 to 512, matches model max)
+- `style_description`: string | null (optional)
+  Description of the style to match
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from generated images
+
+### Responses
+- **202**: Style generation job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /generate-ui-v2
+**Generate UI (Pro)**
+Tags: Create Image
+
+Generate pixel art UI elements from text description.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of the UI element to generate (e.g., 'medieval stone button', 'sci-fi health bar')
+- `image_size`: object (optional)
+- `image_size.width`: integer (min=16.0, max=792.0, default=256) (optional)
+  Image width in pixels (16 to aspect-ratio max)
+- `image_size.height`: integer (min=16.0, max=688.0, default=256) (optional)
+  Image height in pixels (16 to aspect-ratio max)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from generated UI element
+- `concept_image`: object | null (optional)
+  Optional concept image to guide the UI design
+- `color_palette`: string | null (optional)
+  Optional color palette specification (e.g., 'brown and gold', 'blue and silver')
+
+### Responses
+- **202**: UI generation job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /create-image-pixflux
+**Create image (pixflux)**
+Tags: Create Image
+
+Creates a pixel art image based on the provided parameters. Called "Create image (new)" in the plugin.
+
+### Parameters
+
+### Request Body
+- `description`: string (required)
+  Text description of the image to generate
+- `negative_description`: string (default=) (optional)
+  (Deprecated)
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=400.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=16.0, max=400.0) (required)
+  Image height in pixels
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8) (optional)
+  How closely to follow the text description
+- `outline`: string | null (optional)
+  Outline style reference (weakly guiding)
+- `shading`: string | null (optional)
+  Shading style reference (weakly guiding)
+- `detail`: string | null (optional)
+  Detail style reference (weakly guiding)
+- `view`: string | null (optional)
+  Camera view angle (weakly guiding)
+- `direction`: string | null (optional)
+  Subject direction (weakly guiding)
+- `isometric`: boolean (default=False) (optional)
+  Generate in isometric view (weakly guiding)
+- `no_background`: boolean (default=False) (optional)
+  Generate with transparent background, (blank background over 200x200 area)
+- `background_removal_task`: enum[remove_simple_background, remove_complex_background] (default=remove_simple_background) (optional)
+  Background removal complexity. 'remove_simple_background' is faster, 'remove_complex_background' handles complex edges better
+- `init_image`: object | null (optional)
+  Initial image to start from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of the initial image influence
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `seed`: integer | null (optional)
+  Seed decides the starting noise
+
+### Responses
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## POST /create-image-pixen
+**Create image (pixen)**
+Tags: Create Image
+
+Generates a pixel art image using the Pixen model.
+
+### Parameters
+
+### Request Body
+- `description`: string (required)
+  Text description of the image to generate
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=768.0) (required)
+  Image width in pixels (max area 512x512, must be divisible by 4)
+- `image_size.height`: integer (min=16.0, max=768.0) (required)
+  Image height in pixels (max area 512x512, must be divisible by 4)
+- `outline`: string | null (optional)
+  Outline style
+- `detail`: string | null (optional)
+  Detail level (default: highly detailed)
+- `view`: string | null (optional)
+  Camera view angle
+- `direction`: string | null (optional)
+  Subject direction
+- `no_background`: boolean (default=False) (optional)
+  Generate with transparent background
+- `background_removal_task`: enum[remove_simple_background, remove_complex_background] (default=remove_simple_background) (optional)
+  Background removal complexity. 'remove_simple_background' is faster, 'remove_complex_background' handles complex edges better
+- `seed`: integer | null (optional)
+  Seed decides the starting noise
+
+### Responses
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## POST /create-image-bitforge
+**Create image (bitforge)**
+Tags: Create Image
+
+Generates a pixel art image based on the provided parameters. Called "Create S-M image" in the plugin.
+
+### Parameters
+
+### Request Body
+- `description`: string (required)
+  Text description of the image to generate
+- `negative_description`: string (default=) (optional)
+  Text description of what to avoid in the generated image
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=200.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=16.0, max=200.0) (required)
+  Image height in pixels
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8.0) (optional)
+  How closely to follow the text description
+- `extra_guidance_scale`: number (min=0.0, max=20.0, default=3.0) (optional)
+  (Deprecated)
+- `style_strength`: number (min=0.0, max=100.0, default=0.0) (optional)
+  Strength of the style transfer (0-100)
+- `outline`: string | null (optional)
+  Outline style reference
+- `shading`: string | null (optional)
+  Shading style reference
+- `detail`: string | null (optional)
+  Detail style reference
+- `view`: string | null (optional)
+  Camera view angle
+- `direction`: string | null (optional)
+  Subject direction
+- `isometric`: boolean (default=False) (optional)
+  Generate in isometric view
+- `oblique_projection`: boolean (default=False) (optional)
+  Generate in oblique projection
+- `no_background`: boolean (default=False) (optional)
+  Generate with transparent background
+- `coverage_percentage`: number | null (optional)
+  Percentage of the canvas to cover
+- `init_image`: object | null (optional)
+  Initial image to start from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of the initial image influence
+- `style_image`: object | null (optional)
+  Reference image for style transfer
+- `inpainting_image`: object | null (optional)
+  Reference image which is inpainted
+- `mask_image`: object | null (optional)
+  Inpainting / mask image (black and white image, where the white is where the model should inpaint)
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `skeleton_guidance_scale`: number (min=0.0, max=5.0, default=1.0) (optional)
+  How closely to follow the skeleton keypoints
+- `skeleton_keypoints`: array | null (optional)
+  Skeleton points. Warning! Sizes that are not 16x16, 32x32 and 64x64 can cause the generations to be lower quality
+- `seed`: integer | null (optional)
+  Seed decides the starting noise
+
+### Responses
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+# Create map
+
+## POST /tilesets
+**Create a tileset asynchronously**
+Tags: Create map
+
+Creates a Wang tileset (16 tiles for standard, 23 for transition_size=1.0) in the background and returns immediately with job ID
+
+### Parameters
+
+### Request Body
+- `lower_description`: string (minLen=1) (required)
+  Description of the lower/base terrain level (e.g., 'ocean', 'grass', 'lava')
+- `upper_description`: string (minLen=1) (required)
+  Description of the upper/elevated terrain level (e.g., 'sand', 'stone', 'snow')
+- `transition_description`: string (default=) (optional)
+  Optional description of transition area between lower and upper
+- `lower_base_tile_id`: string | null (optional)
+  Optional ID to identify the lower base tile in metadata
+- `upper_base_tile_id`: string | null (optional)
+  Optional ID to identify the upper base tile in metadata
+- `tile_size`: object (optional)
+- `tile_size.width`: enum[16, 32] (default=16) (optional)
+  Individual tile width in pixels (16 or 32)
+- `tile_size.height`: enum[16, 32] (default=16) (optional)
+  Individual tile height in pixels (16 or 32)
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8.0) (optional)
+  How closely to follow the text descriptions (default: 8.0)
+- `outline`: string | null (optional)
+  Outline style reference
+- `shading`: string | null (optional)
+  Shading style reference
+- `detail`: string | null (optional)
+  Detail style reference
+- `view`: enum[low top-down, high top-down] (optional)
+  Camera view options supported for tileset generation
+- `tile_strength`: number (min=0.1, max=2.0, default=1.0) (optional)
+  Strength of tile pattern adherence
+- `tileset_adherence_freedom`: number (min=0.0, max=900.0, default=500.0) (optional)
+  How flexible it will be when following tileset structure, higher values means more flexibility
+- `tileset_adherence`: number (min=0.0, max=500.0, default=100.0) (optional)
+  How much it will follow the reference/texture image and follow tileset structure
+- `transition_size`: enum[0.0, 0.25, 0.5, ...] (default=0.0) (optional)
+  Size of transition area (0 = no transition, 0.25 = quarter tile, 0.5 = half tile, 1.0 = full tile)
+- `lower_reference_image`: object | null (optional)
+  Reference image for lower terrain style
+- `upper_reference_image`: object | null (optional)
+  Reference image for upper terrain style
+- `transition_reference_image`: object | null (optional)
+  Reference image for transition area style
+- `color_image`: object | null (optional)
+  Reference image for color palette
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **202**: Tileset creation started, returns job ID
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## GET /tilesets
+**List user's tilesets**
+Tags: Create map
+
+List all tilesets (top-down and sidescroller) created by the authenticated user.
+
+### Parameters
+- `limit` [query]: integer (min=1, max=100) (optional)
+  Maximum number of tilesets to return
+- `offset` [query]: integer (min=0) (optional)
+  Number of tilesets to skip
+
+### Responses
+- **200**: Successfully retrieved tileset list
+- **401**: Invalid API token
+- **422**: Invalid pagination parameters
+
+## POST /create-tileset
+**Create top-down tileset (async processing)**
+Tags: Create map
+
+Creates a complete tileset for game development with seamlessly connecting tiles.
+
+### Parameters
+
+### Request Body
+- `lower_description`: string (minLen=1) (required)
+  Description of the lower/base terrain level (e.g., 'ocean', 'grass', 'lava')
+- `upper_description`: string (minLen=1) (required)
+  Description of the upper/elevated terrain level (e.g., 'sand', 'stone', 'snow')
+- `transition_description`: string (default=) (optional)
+  Optional description of transition area between lower and upper
+- `lower_base_tile_id`: string | null (optional)
+  Optional ID to identify the lower base tile in metadata
+- `upper_base_tile_id`: string | null (optional)
+  Optional ID to identify the upper base tile in metadata
+- `tile_size`: object (optional)
+- `tile_size.width`: enum[16, 32] (default=16) (optional)
+  Individual tile width in pixels (16 or 32)
+- `tile_size.height`: enum[16, 32] (default=16) (optional)
+  Individual tile height in pixels (16 or 32)
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8.0) (optional)
+  How closely to follow the text descriptions (default: 8.0)
+- `outline`: string | null (optional)
+  Outline style reference
+- `shading`: string | null (optional)
+  Shading style reference
+- `detail`: string | null (optional)
+  Detail style reference
+- `view`: enum[low top-down, high top-down] (optional)
+  Camera view options supported for tileset generation
+- `tile_strength`: number (min=0.1, max=2.0, default=1.0) (optional)
+  Strength of tile pattern adherence
+- `tileset_adherence_freedom`: number (min=0.0, max=900.0, default=500.0) (optional)
+  How flexible it will be when following tileset structure, higher values means more flexibility
+- `tileset_adherence`: number (min=0.0, max=500.0, default=100.0) (optional)
+  How much it will follow the reference/texture image and follow tileset structure
+- `transition_size`: enum[0.0, 0.25, 0.5, ...] (default=0.0) (optional)
+  Size of transition area (0 = no transition, 0.25 = quarter tile, 0.5 = half tile, 1.0 = full tile)
+- `lower_reference_image`: object | null (optional)
+  Reference image for lower terrain style
+- `upper_reference_image`: object | null (optional)
+  Reference image for upper terrain style
+- `transition_reference_image`: object | null (optional)
+  Reference image for transition area style
+- `color_image`: object | null (optional)
+  Reference image for color palette
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **202**: Successful Response
+- **200**: Successfully generated tileset
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## GET /tilesets/{tileset_id}
+**Get generated tileset by ID**
+Tags: Create map
+
+Retrieve a completed tileset by its UUID.
+
+### Parameters
+- `tileset_id` [path]: string (required)
+
+### Responses
+- **200**: Successfully retrieved tileset
+- **423**: Tileset is still being generated
+- **404**: Tileset not found
+- **401**: Invalid API token
+- **422**: Validation Error
+
+## POST /tilesets-sidescroller
+**Create a sidescroller tileset asynchronously**
+Tags: Create map
+
+Creates a sidescroller platform tileset in the background and returns immediately with job ID. Retrieve results with GET /tilesets/{tileset_id}.
+
+### Parameters
+
+### Request Body
+- `lower_description`: string (minLen=1) (required)
+  Description of the main terrain/platform material (e.g., 'stone bricks', 'grass ground', 'metal grating')
+- `transition_description`: string (default=) (optional)
+  Optional description of decorative layer on top of platform (e.g., 'moss and vines', 'snow cover', 'rust stains')
+- `lower_base_tile_id`: string | null (optional)
+  Optional ID to identify the lower base tile in metadata (for connected tilesets)
+- `tile_size`: object (optional)
+- `tile_size.width`: enum[16, 32] (default=16) (optional)
+  Individual tile width in pixels (16 or 32)
+- `tile_size.height`: enum[16, 32] (default=16) (optional)
+  Individual tile height in pixels (16 or 32)
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8.0) (optional)
+  How closely to follow the text descriptions (default: 8.0)
+- `outline`: string | null (optional)
+  Outline style reference
+- `shading`: string | null (optional)
+  Shading style reference
+- `detail`: string | null (optional)
+  Detail style reference
+- `tile_strength`: number (min=0.1, max=2.0, default=1.0) (optional)
+  Strength of tile pattern adherence
+- `tileset_adherence_freedom`: number (min=0.0, max=900.0, default=500.0) (optional)
+  How flexible it will be when following tileset structure, higher values means more flexibility
+- `tileset_adherence`: number (min=0.0, max=500.0, default=100.0) (optional)
+  How much it will follow the reference/texture image and follow tileset structure
+- `transition_size`: enum[0.0, 0.25, 0.5, ...] (default=0.0) (optional)
+  Size of transition area (0 = no transition, 0.25 = quarter tile, 0.5 = half tile, 1.0 = full tile)
+- `lower_reference_image`: object | null (optional)
+  Reference image for platform terrain style
+- `transition_reference_image`: object | null (optional)
+  Reference image for transition area style
+- `color_image`: object | null (optional)
+  Reference image for color palette
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **202**: Tileset creation started, returns job ID
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## POST /create-tileset-sidescroller
+**Create sidescroller tileset (async processing)**
+Tags: Create map
+
+Creates a complete sidescroller tileset for 2D platformer game development.
+
+### Parameters
+
+### Request Body
+- `lower_description`: string (minLen=1) (required)
+  Description of the main terrain/platform material (e.g., 'stone bricks', 'grass ground', 'metal grating')
+- `transition_description`: string (default=) (optional)
+  Optional description of decorative layer on top of platform (e.g., 'moss and vines', 'snow cover', 'rust stains')
+- `lower_base_tile_id`: string | null (optional)
+  Optional ID to identify the lower base tile in metadata (for connected tilesets)
+- `tile_size`: object (optional)
+- `tile_size.width`: enum[16, 32] (default=16) (optional)
+  Individual tile width in pixels (16 or 32)
+- `tile_size.height`: enum[16, 32] (default=16) (optional)
+  Individual tile height in pixels (16 or 32)
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8.0) (optional)
+  How closely to follow the text descriptions (default: 8.0)
+- `outline`: string | null (optional)
+  Outline style reference
+- `shading`: string | null (optional)
+  Shading style reference
+- `detail`: string | null (optional)
+  Detail style reference
+- `tile_strength`: number (min=0.1, max=2.0, default=1.0) (optional)
+  Strength of tile pattern adherence
+- `tileset_adherence_freedom`: number (min=0.0, max=900.0, default=500.0) (optional)
+  How flexible it will be when following tileset structure, higher values means more flexibility
+- `tileset_adherence`: number (min=0.0, max=500.0, default=100.0) (optional)
+  How much it will follow the reference/texture image and follow tileset structure
+- `transition_size`: enum[0.0, 0.25, 0.5, ...] (default=0.0) (optional)
+  Size of transition area (0 = no transition, 0.25 = quarter tile, 0.5 = half tile, 1.0 = full tile)
+- `lower_reference_image`: object | null (optional)
+  Reference image for platform terrain style
+- `transition_reference_image`: object | null (optional)
+  Reference image for transition area style
+- `color_image`: object | null (optional)
+  Reference image for color palette
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **202**: Tileset creation started, returns job ID
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## POST /create-isometric-tile
+**Create isometric tile (async processing)**
+Tags: Create map
+
+Creates a isometric tile based on the provided parameters.
+
+### Parameters
+
+### Request Body
+- `description`: string (required)
+  Text description of the image to generate
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=64.0) (required)
+  Image width in pixels. Sizes above 24px often give better results.
+- `image_size.height`: integer (min=16.0, max=64.0) (required)
+  Image height in pixels. Sizes above 24px often give better results.
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8) (optional)
+  How closely to follow the text description
+- `outline`: string | null (optional)
+  Outline style for the tile
+- `shading`: string | null (optional)
+  Shading complexity
+- `detail`: string | null (optional)
+  Level of detail in the tile
+- `init_image`: object | null (optional)
+  Initial image to start from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of the initial image influence
+- `isometric_tile_size`: integer | null (optional)
+  Size of the isometric tile. Recommended sizes: 16, 32. Can be omitted for default.
+- `isometric_tile_shape`: enum[thick tile, thin tile, block] (default=block) (optional)
+  Tile thickness. Thicker tiles allow more height variation in game maps. thin tile: ~15% canvas height, thick tile: ~25% height, block: ~50% height
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `seed`: integer | null (optional)
+  Seed decides the starting noise
+
+### Responses
+- **202**: Successful Response
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## GET /isometric-tiles/{tile_id}
+**Get generated isometric tile by ID**
+Tags: Create map
+
+Retrieve a completed isometric tile by its UUID.
+
+### Parameters
+- `tile_id` [path]: string (required)
+
+### Responses
+- **200**: Successfully retrieved tile
+- **404**: Tile not found
+- **401**: Invalid API token
+- **423**: Tile still processing
+- **422**: Validation Error
+
+## GET /isometric-tiles
+**List user's isometric tiles**
+Tags: Create map
+
+List all isometric tiles created by the authenticated user.
+
+### Parameters
+- `limit` [query]: integer (min=1, max=100) (optional)
+  Maximum number of tiles to return
+- `offset` [query]: integer (min=0) (optional)
+  Number of tiles to skip
+
+### Responses
+- **200**: Successfully retrieved isometric tile list
+- **401**: Invalid API token
+- **422**: Invalid pagination parameters
+
+## POST /create-tiles-pro
+**Create tiles pro (async processing)**
+Tags: Create map
+
+Creates pixel art tiles based on the provided parameters.
+
+### Parameters
+
+### Request Body
+- `description`: string (required)
+  Text description of the tiles. For best control, number each tile variation: '1). grass tile 2). stone tile 3). lava tile'.
+- `tile_type`: enum[hex, hex_pointy, isometric, ...] (default=isometric) (optional)
+  Shape of the tiles. hex: flat-top hexagonal, hex_pointy: pointy-top hexagonal, isometric: diamond/rhombus, octagon: 8-sided polygon, square_topdown: square at angle.
+- `tile_size`: integer (min=16.0, max=256.0, default=32) (optional)
+  Tile size in pixels (16-256). 32px is recommended for most use cases.
+- `tile_height`: integer | null (optional)
+  Tile height in pixels for non-square tiles (e.g., 128 for 64x128 tiles). When omitted, height is computed from tile_type geometry and view angle.
+- `tile_view`: enum[top-down, high top-down, low top-down, ...] (default=low top-down) (optional)
+  View angle controlling tile depth. top-down: no depth, high top-down: ~15%, low top-down: ~30%, side: ~50%.
+- `tile_view_angle`: number | null (optional)
+  Continuous view angle in degrees (0-90). Overrides tile_view when provided. 0=side, 90=top-down.
+- `tile_depth_ratio`: number | null (optional)
+  Tile depth/thickness ratio (0.0-1.0). Controls how much vertical depth the tile has. Overrides the default computed from tile_view.
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `style_images`: array | null (optional)
+  Style reference tiles. When provided, generated tiles will match these tiles' style and dimensions. The tile_type, tile_size, tile_view, tile_view_angle, and tile_depth_ratio are ignored - the style tiles define the shape.
+- `style_options`: object | null (optional)
+  Options for what to copy from the style images. Only used when style_images is provided.
+
+### Responses
+- **202**: Generation started successfully
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+
+## GET /tiles-pro/{tile_id}
+**Get generated tiles pro by ID**
+Tags: Create map
+
+Retrieve completed tiles pro by their UUID.
+
+### Parameters
+- `tile_id` [path]: string (required)
+
+### Responses
+- **200**: Successfully retrieved tiles
+- **404**: Tiles not found
+- **401**: Invalid API token
+- **423**: Tiles still processing
+- **422**: Validation Error
+
+# Documentation
+
+## GET /llms.txt
+**Get LLM-friendly API documentation**
+Tags: Documentation
+
+Returns API documentation formatted for Large Language Models (LLMs).
+
+### Responses
+- **200**: LLM-friendly API documentation
+
+# Edit
+
+## POST /edit-images-v2
+**Edit images (Pro)**
+Tags: Edit
+
+Edit pixel art images using text or reference image.
+
+### Parameters
+
+### Request Body
+- `method`: enum[edit_with_text, edit_with_reference] (default=edit_with_text) (optional)
+  Edit method: 'edit_with_text' or 'edit_with_reference'
+- `edit_images`: array[object] (required)
+  Images to edit (1-16 images depending on size)
+- `image_size`: object (required)
+- `image_size.width`: integer (min=32.0, max=512.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=32.0, max=512.0) (required)
+  Image height in pixels
+- `description`: string | null (optional)
+  Edit description (required for edit_with_text method)
+- `reference_image`: object | null (optional)
+  Reference image (required for edit_with_reference method)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from edited images
+
+### Responses
+- **202**: Image edit job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /edit-image
+**Edit image**
+Tags: Edit
+
+Edit an existing pixel art image based on a text description.
+
+### Parameters
+
+### Request Body
+- `image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `image.type`: string (default=base64) (optional)
+  Image data type
+- `image.base64`: string (required)
+  Base64 encoded image data
+- `image.format`: string (default=png) (optional)
+  Image format
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=400.0) (required)
+  Image width in pixels (16-400)
+- `image_size.height`: integer (min=16.0, max=400.0) (required)
+  Image height in pixels (16-400)
+- `description`: string (minLen=1, maxLen=500) (required)
+  Text description of the edit to apply
+- `width`: integer (min=16.0, max=400.0) (required)
+  Target canvas width in pixels (16-400)
+- `height`: integer (min=16.0, max=400.0) (required)
+  Target canvas height in pixels (16-400)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation (0 for random)
+- `no_background`: boolean | null (optional)
+  Generate with transparent background
+- `text_guidance_scale`: number | null (optional)
+  How closely to follow the text description (1.0-10.0)
+- `color_image`: object | null (optional)
+  Color reference image for style guidance
+
+### Responses
+- **202**: Edit image job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+# Image Operations
+
+## POST /image-to-pixelart
+**Convert image to pixel art**
+Tags: Image Operations
+
+Convert regular images to pixel art style.
+
+### Parameters
+
+### Request Body
+- `image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `image.type`: string (default=base64) (optional)
+  Image data type
+- `image.base64`: string (required)
+  Base64 encoded image data
+- `image.format`: string (default=png) (optional)
+  Image format
+- `image_size`: object (required)
+  Image dimensions
+- `image_size.width`: integer (min=16.0, max=1280.0) (required)
+  Width in pixels
+- `image_size.height`: integer (min=16.0, max=1280.0) (required)
+  Height in pixels
+- `output_size`: object (required)
+  Output dimensions
+- `output_size.width`: integer (min=16.0, max=320.0) (required)
+  Width in pixels
+- `output_size.height`: integer (min=16.0, max=320.0) (required)
+  Height in pixels
+- `text_guidance_scale`: number | null (optional)
+  How closely to follow pixel art style
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **200**: Successfully converted image
+- **400**: Invalid image size constraints
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+
+## POST /resize
+**Resize pixel art image**
+Tags: Image Operations
+
+Intelligently resize pixel art images while maintaining pixel art aesthetics.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of your character
+- `reference_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `reference_image.type`: string (default=base64) (optional)
+  Image data type
+- `reference_image.base64`: string (required)
+  Base64 encoded image data
+- `reference_image.format`: string (default=png) (optional)
+  Image format
+- `reference_image_size`: object (required)
+  Image dimensions
+- `reference_image_size.width`: integer (min=16.0, max=200.0) (required)
+  Width in pixels
+- `reference_image_size.height`: integer (min=16.0, max=200.0) (required)
+  Height in pixels
+- `target_size`: object (required)
+  Image dimensions
+- `target_size.width`: integer (min=16.0, max=200.0) (required)
+  Width in pixels
+- `target_size.height`: integer (min=16.0, max=200.0) (required)
+  Height in pixels
+- `view`: string | null (optional)
+  Camera view angle
+- `direction`: string | null (optional)
+  Directional view
+- `isometric`: boolean | null (optional)
+  Isometric perspective
+- `oblique_projection`: boolean | null (optional)
+  Oblique projection (beta)
+- `no_background`: boolean | null (optional)
+  Remove background
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `init_image`: object | null (optional)
+  Initial image to start from
+- `init_image_strength`: number | null (optional)
+  Strength of initial image influence
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **200**: Successfully resized image
+- **400**: Invalid image size constraints
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+
+## POST /remove-background
+**Remove background**
+Tags: Image Operations
+
+Remove the background from a pixel art image, producing a transparent PNG.
+
+### Parameters
+
+### Request Body
+- `image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `image.type`: string (default=base64) (optional)
+  Image data type
+- `image.base64`: string (required)
+  Base64 encoded image data
+- `image.format`: string (default=png) (optional)
+  Image format
+- `image_size`: object (required)
+- `image_size.width`: integer (min=1.0, max=400.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=1.0, max=400.0) (required)
+  Image height in pixels
+- `background_removal_task`: enum[remove_simple_background, remove_complex_background] (default=remove_simple_background) (optional)
+  Background removal complexity. 'remove_simple_background' is faster, 'remove_complex_background' handles complex edges better
+- `text`: string | null (optional)
+  Optional description of the foreground object to help with removal
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **200**: Successfully removed background
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+
+# Inpaint
+
+## POST /inpaint-v3
+**Inpaint image (Pro)**
+Tags: Inpaint
+
+Inpaint/edit pixel art images using AI.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Description of what to generate in the masked area
+- `inpainting_image`: object (required)
+  Image with size for inpainting.
+- `inpainting_image.image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `inpainting_image.size`: object (required)
+- `mask_image`: object (required)
+  Image with size for inpainting.
+- `mask_image.image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `mask_image.size`: object (required)
+- `context_image`: object | null (optional)
+  Context image (deprecated)
+- `bounding_box`: object | null (optional)
+  Bounding box (deprecated)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from generated content
+- `crop_to_mask`: boolean | null (optional)
+  Whether to crop generated content to mask boundary (ensures clean edges)
+
+### Responses
+- **202**: Inpainting job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /inpaint
+**Inpaint image**
+Tags: Inpaint
+
+Creates a pixel art image based on the provided parameters. Called "Inpaint" in the plugin.
+
+### Parameters
+
+### Request Body
+- `description`: string (required)
+  Text description of the image to generate
+- `negative_description`: string (default=) (optional)
+  Text description of what to avoid in the generated image
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=200.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=16.0, max=200.0) (required)
+  Image height in pixels
+- `text_guidance_scale`: number (min=1.0, max=10.0, default=3.0) (optional)
+  How closely to follow the text description
+- `extra_guidance_scale`: number (min=0.0, max=20.0, default=3.0) (optional)
+  (Deprecated)
+- `outline`: string | null (optional)
+  Outline style reference
+- `shading`: string | null (optional)
+  Shading style reference
+- `detail`: string | null (optional)
+  Detail style reference
+- `view`: string | null (optional)
+  Camera view angle
+- `direction`: string | null (optional)
+  Subject direction
+- `isometric`: boolean (default=False) (optional)
+  Generate in isometric view
+- `oblique_projection`: boolean (default=False) (optional)
+  Generate in oblique projection
+- `no_background`: boolean (default=False) (optional)
+  Generate with transparent background
+- `init_image`: object | null (optional)
+  Initial image to start from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of the initial image influence
+- `inpainting_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `inpainting_image.type`: string (default=base64) (optional)
+  Image data type
+- `inpainting_image.base64`: string (required)
+  Base64 encoded image data
+- `inpainting_image.format`: string (default=png) (optional)
+  Image format
+- `mask_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `mask_image.type`: string (default=base64) (optional)
+  Image data type
+- `mask_image.base64`: string (required)
+  Base64 encoded image data
+- `mask_image.format`: string (default=png) (optional)
+  Image format
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `seed`: integer | null (optional)
+  Seed decides the starting noise
+
+### Responses
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+# Map Objects
+
+## POST /map-objects
+**Create map object**
+Tags: Map Objects
+
+Creates a pixel art object with transparent background for game maps.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+  Object description (e.g., 'wooden barrel', 'stone fountain')
+- `image_size`: object (optional)
+  Image dimensions for map objects.
+
+Supports any aspect ratio:
+- Both width and height: 32px minimum, 400px maximum
+- Basic mode (no inpainting): max 400400 total area (160,000 pixels)
+- Inpainting mode: max 192192 total area (36,864 pixels)
+- Common sizes: 6464, 128128, 192192, 256128, 38496
+- `image_size.width`: integer (min=32.0, max=400.0) (required)
+  Width in pixels (32-400)
+- `image_size.height`: integer (min=32.0, max=400.0) (required)
+  Height in pixels (32-400)
+- `view`: enum[low top-down, high top-down, side] (default=high top-down) (optional)
+  Camera angle
+- `outline`: string | null (optional)
+  Outline style
+- `shading`: string | null (optional)
+  Shading complexity
+- `detail`: string | null (optional)
+  Level of detail
+- `text_guidance_scale`: number (min=1.0, max=20.0, default=8.0) (optional)
+  How closely to follow the description
+- `init_image`: object | null (optional)
+  Initial image to start from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of initial image influence
+- `color_image`: object | null (optional)
+  Image containing colors for forced palette
+- `background_image`: object | null (optional)
+  Background/map image for style matching. Required when using inpainting.
+- `inpainting`: object | object | object | null (optional)
+  Inpainting configuration for style matching. Options: mask (custom), oval (auto-generated), rectangle (auto-generated)
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+
+### Responses
+- **200**: Object generation queued
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+
+# Object Management
+
+## GET /objects
+**List user's objects**
+Tags: Object Management
+
+List all objects created by the authenticated user.
+
+### Parameters
+- `limit` [query]: integer (min=1, max=100) (optional)
+  Maximum number of objects to return
+- `offset` [query]: integer (min=0) (optional)
+  Number of objects to skip
+
+### Responses
+- **200**: Successfully retrieved object list
+- **401**: Invalid API token
+- **422**: Invalid pagination parameters
+
+## GET /objects/{object_id}
+**Get object details**
+Tags: Object Management
+
+Get detailed information about a specific object.
+
+### Parameters
+- `object_id` [path]: string (required)
+
+### Responses
+- **200**: Successfully retrieved object details
+- **401**: Invalid API token
+- **403**: Object belongs to another user
+- **404**: Object not found
+- **422**: Validation Error
+
+## DELETE /objects/{object_id}
+**Delete an object and all associated data**
+Tags: Object Management
+
+Delete an object and all its rotation images.
+
+### Parameters
+- `object_id` [path]: string (required)
+
+### Responses
+- **200**: Object deleted successfully
+- **401**: Invalid API token
+- **403**: Object belongs to another user
+- **404**: Object not found
+- **422**: Validation Error
+
+## PATCH /objects/{object_id}/tags
+**Update object tags**
+Tags: Object Management
+
+Update the tags for a specific object.
+
+### Parameters
+- `object_id` [path]: string (required)
+
+### Request Body
+- `tags`: array[string] (required)
+  List of tags to assign to the object
+
+### Responses
+- **200**: Tags updated successfully
+- **400**: Invalid tag format or validation error
+- **401**: Invalid API token
+- **403**: Object belongs to another user
+- **404**: Object not found
+- **422**: Validation Error
+
+# Objects
+
+## POST /objects
+**Create object (1-direction consistent-style or 8-direction)**
+Tags: Objects
+
+Queues an object generation job. Returns immediately with a background_job_id and object_id. Poll GET /v2/objects/{object_id} for status. 1-direction mode uses the consistent-style pipeline. 8-direction mode uses the rotations pipeline. The legacy pipeline lives at POST /v2/map-objects.
+
+### Parameters
+
+### Request Body
+- `description`: string (minLen=1, maxLen=2000) (required)
+- `directions`: enum[1, 8] (default=8) (optional)
+  Number of directional views. 1 routes to the consistent-style pipeline (useful for static map/decoration objects). 8 routes to the rotations pipeline (useful for items the player rotates around).
+- `image_size`: object (optional)
+  Square or rectangular image size for object generation.
+- `image_size.width`: integer (min=32.0, max=256.0) (required)
+  Width in pixels (32-256)
+- `image_size.height`: integer (min=32.0, max=256.0) (required)
+  Height in pixels (32-256)
+- `view`: enum[low top-down, high top-down, side] (default=low top-down) (optional)
+- `n_frames`: integer (default=1) (optional)
+  Only used when directions=1. Number of candidate frames to generate. Must be one of {1, 4, 16, 64}; the natural value depends on image_size (42px -> 64, 85px -> 16, 170px -> 4, else 1). n_frames=1 returns a completed single-direction object directly. n_frames>1 returns an object with status='review' for the caller to select frames via POST /v2/objects/{id}/select-frames.
+- `style_images`: array[object] (optional)
+  Style reference images (consistent-style mode only, max 8). When empty, the pipeline uses default style references for the chosen object_view.
+- `object_view`: string | null (optional)
+  Default-style category for consistent-style mode when style_images is empty.
+- `item_descriptions`: array | null (optional)
+  Per-frame descriptions for consistent-style multi-frame packs.
+- `reference_image`: object | null (optional)
+  Reference image for 8-direction generation. Used as the south view.
+- `no_background`: boolean (default=True) (optional)
+- `seed`: integer | null (optional)
+- `state_of`: string | null (optional)
+  Object ID this is a state of (groups them).
+- `group_id`: string | null (optional)
+  Group ID for related objects.
+
+### Responses
+- **200**: Object generation queued
+- **401**: Invalid API token
+- **402**: Insufficient generations or credits
+- **422**: Validation error
+- **429**: Concurrent job limit reached
+
+## POST /animate-object
+**Animate an existing object**
+Tags: Objects
+
+Queues an animation generation job. Returns immediately with a background_job_id and animation_id. If wait_for_source is True (default), polls up to 30s for the source object to complete generation before queueing.
+
+### Parameters
+
+### Request Body
+- `object_id`: string (required)
+  ID of a completed object to animate
+- `direction`: enum[south, south-west, west, ...] (required)
+  Direction to animate
+- `animation_description`: string (minLen=1, maxLen=1000) (required)
+- `frame_count`: integer (min=4.0, max=16.0, default=8) (optional)
+  Even number 4-16
+- `no_background`: boolean (default=True) (optional)
+- `animation_name`: string | null (optional)
+- `wait_for_source`: boolean (default=True) (optional)
+  When True, the API polls up to 30s waiting for the source object to reach status='completed'. When False, returns 400 immediately if the source object is not yet completed.
+
+### Responses
+- **200**: Animation queued
+- **400**: Source object not completed
+- **401**: Invalid API token
+- **402**: Insufficient generations
+- **404**: Source object not found
+- **429**: Concurrent job limit reached
+- **422**: Validation Error
+
+## POST /create-object-state
+**Create a state of an existing object**
+Tags: Objects
+
+Queues a generation job that applies a text edit to an existing object's image(s) and saves the result as a new object grouped with the source via group_id.
+
+### Parameters
+
+### Request Body
+- `object_id`: string (required)
+  ID of the source object
+- `edit_description`: string (minLen=1, maxLen=1000) (required)
+- `no_background`: boolean (default=True) (optional)
+- `seed`: integer | null (optional)
+
+### Responses
+- **200**: State queued
+- **400**: Source object is not completed
+- **401**: Invalid API token
+- **402**: Insufficient generations
+- **404**: Source object not found
+- **429**: Concurrent job limit reached
+- **422**: Validation Error
+
+## POST /objects/{object_id}/select-frames
+**Promote selected frames of a review object to completed objects**
+Tags: Objects
+
+### Parameters
+- `object_id` [path]: string (required)
+
+### Request Body
+- `indices`: array[integer] (required)
+  Frame indices (0-based) to keep as completed individual objects.
+- `common_tag`: string | null (optional)
+  Optional tag applied to every newly-created object.
+
+### Responses
+- **200**: Frames promoted
+- **400**: Object not in review status / invalid indices
+- **401**: Invalid API token
+- **404**: Object not found
+- **422**: Validation Error
+
+## POST /objects/{object_id}/dismiss-review
+**Dismiss a review object without saving any frames**
+Tags: Objects
+
+### Parameters
+- `object_id` [path]: string (required)
+
+### Responses
+- **200**: Review dismissed
+- **400**: Object not in review status
+- **401**: Invalid API token
+- **404**: Object not found
+- **422**: Validation Error
+
+# Rotate
+
+## POST /generate-8-rotations-v2
+**Generate 8 rotations (Pro)**
+Tags: Rotate
+
+Generate 8 rotational views of a character or object.
+
+### Parameters
+
+### Request Body
+- `method`: enum[rotate_character, create_with_style, create_from_concept] (default=rotate_character) (optional)
+  Generation method: 'rotate_character' rotates an existing character, 'create_with_style' creates new character matching style, 'create_from_concept' creates from concept art
+- `image_size`: object (required)
+- `image_size.width`: integer (min=32.0, max=168.0) (required)
+  Image width (32-168 pixels, matches reference_to_8_rotations)
+- `image_size.height`: integer (min=32.0, max=168.0) (required)
+  Image height (32-168 pixels, matches reference_to_8_rotations)
+- `reference_image`: object | null (optional)
+  Image to rotate (rotate_character) or style reference
+- `concept_image`: object | null (optional)
+  Concept art image (only for create_from_concept method)
+- `description`: string | null (optional)
+  Description of the character/item
+- `style_description`: string | null (optional)
+  Description of the visual style
+- `view`: enum[low top-down, high top-down, side] (default=low top-down) (optional)
+  Camera perspective angle
+- `seed`: integer | null (optional)
+  Seed for reproducible generation
+- `no_background`: boolean | null (optional)
+  Remove background from generated images
+
+### Responses
+- **202**: 8 rotations job accepted and processing
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent jobs
+
+## POST /generate-8-rotations-v3
+**Generate 8 rotations v3**
+Tags: Rotate
+
+Generate 8 directional rotations from a reference frame.
+
+### Parameters
+
+### Request Body
+- `first_frame`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `first_frame.type`: string (default=base64) (optional)
+  Image data type
+- `first_frame.base64`: string (required)
+  Base64 encoded image data
+- `first_frame.format`: string (default=png) (optional)
+  Image format
+- `no_background`: boolean | null (optional)
+  Remove background from generated frames
+- `seed`: integer | null (optional)
+  Seed for reproducible generation (0 for random)
+
+### Responses
+- **200**: Background job accepted
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many concurrent background jobs
+
+## POST /rotate
+**Rotate character or object**
+Tags: Rotate
+
+Rotates a pixel art image based on the provided parameters. Called "Rotate" in the plugin.
+
+### Parameters
+
+### Request Body
+- `image_size`: object (required)
+- `image_size.width`: integer (min=16.0, max=200.0) (required)
+  Image width in pixels
+- `image_size.height`: integer (min=16.0, max=200.0) (required)
+  Image height in pixels
+- `image_guidance_scale`: number (min=1.0, max=20.0, default=3.0) (optional)
+  How closely to follow the reference image
+- `view_change`: integer | null (optional)
+  How many degrees to tilt the subject
+- `direction_change`: integer | null (optional)
+  How many degrees to rotate the subject
+- `from_view`: string | null (optional)
+  From camera view angle
+- `to_view`: string | null (optional)
+  To camera view angle
+- `from_direction`: string | null (optional)
+  From subject direction
+- `to_direction`: string | null (optional)
+  From subject direction
+- `isometric`: boolean (default=False) (optional)
+  Generate in isometric view
+- `oblique_projection`: boolean (default=False) (optional)
+  Generate in oblique projection
+- `init_image`: object | null (optional)
+  Initial image to start from
+- `init_image_strength`: integer (min=1.0, max=999.0, default=300) (optional)
+  Strength of the initial image influence
+- `mask_image`: object | null (optional)
+  Inpainting / mask image. Requires init image! (black and white image, where the white is where the model should inpaint)
+- `from_image`: object (required)
+  A base64 encoded image.
+
+Attributes:
+    type (Literal["base64"]): Always "base64" to indicate the image encoding type
+    base64 (str): The base64 encoded image data
+    format (str): The image format (e.g., "png", "jpeg")
+- `from_image.type`: string (default=base64) (optional)
+  Image data type
+- `from_image.base64`: string (required)
+  Base64 encoded image data
+- `from_image.format`: string (default=png) (optional)
+  Image format
+- `color_image`: object | null (optional)
+  Forced color palette, image containing colors used for palette
+- `seed`: integer | null (optional)
+  Seed decides the starting noise
+
+### Responses
+- **200**: Successfully generated image
+- **401**: Invalid API token
+- **402**: Insufficient credits
+- **422**: Validation error
+- **429**: Too many requests
+- **529**: Rate limit exceeded
+
+## Usage Examples
+
+### Create a Character (Python)
+```python
+import requests
+
+response = requests.post(
+    "https://api.pixellab.ai/v2/create-character-with-4-directions",
+    headers={
+        "Authorization": "Bearer YOUR_TOKEN",
+        "Content-Type": "application/json"
+    },
+    json={
+        "description": "brave knight with shining armor",
+        "image_size": {"width": 64, "height": 64}
+    }
+)
+
+job_id = response.json()['background_job_id']
+character_id = response.json()['character_id']
+```
+
+### Check Job Status
+```python
+status_response = requests.get(
+    "https://api.pixellab.ai/v2/background-jobs/{job_id}",
+    headers={
+        "Authorization": "Bearer YOUR_TOKEN"
+    }
+)
+
+if status_response.json()['status'] == 'completed':
+    print('Character ready!')
+```
+
+## Error Codes
+- **400**: Bad Request - Invalid parameters
+- **401**: Unauthorized - Invalid or missing token
+- **402**: Payment Required - Insufficient credits
+- **403**: Forbidden - Feature not available for your tier
+- **404**: Not Found - Resource doesn't exist
+- **423**: Locked - Resource still being generated
+- **429**: Too Many Requests - Rate limit exceeded
+- **500**: Internal Server Error
+
+## Support
+- Documentation: https://api.pixellab.ai/v2/docs
+- Python Client: https://github.com/pixellab-code/pixellab-python
+- Discord: https://discord.gg/pBeyTBF8T7
+- Email: support@pixellab.ai

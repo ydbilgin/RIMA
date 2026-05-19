@@ -21,7 +21,7 @@ namespace RIMA.Systems.Map
         public Transform[] pickupAnchors;
 
         [Header("Grid Contract")]
-        public Vector3 cellSize = new Vector3(1f, 0.5f, 0f);
+        public Vector3 cellSize = new Vector3(0.94f, 0.94f, 1f);
         public GridLayout.CellLayout gridLayout = GridLayout.CellLayout.Isometric;
         public GridLayout.CellSwizzle orientation = GridLayout.CellSwizzle.XYZ;
     }

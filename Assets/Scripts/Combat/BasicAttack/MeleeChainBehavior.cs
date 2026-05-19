@@ -54,6 +54,9 @@ namespace RIMA
 
             float chainMult = owner.FlowTracker != null ? owner.FlowTracker.ConsumeBasicChain() : 1f;
             ApplyMeleeHit(owner, profile, step, chainMult);
+
+            if (profile.classType == ClassType.Warblade && step == profile.comboLength - 1)
+                CrossClassSkillManager.Instance?.TriggerWarbladeBeat3RoninQuickdraw(owner.transform.position);
         }
 
         private void ExecuteRageOutlet(PlayerAttack owner, BasicAttackProfile profile)

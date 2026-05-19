@@ -77,6 +77,10 @@ namespace RIMA
                     AddIfMissing<FocusSystem>(player);
                     AddIfMissing<Ranger_SkillController>(player, secondary: true);
                     break;
+                case ClassType.Ronin:
+                    AddIfMissing<TensionSystem>(player);
+                    AddIfMissing<RoninController>(player, secondary: true);
+                    break;
             }
         }
 
@@ -89,11 +93,13 @@ namespace RIMA
             var elementalist = player.GetComponent<Elementalist_SkillController>();
             var shadowblade = player.GetComponent<Shadowblade_SkillController>();
             var ranger = player.GetComponent<Ranger_SkillController>();
+            var ronin = player.GetComponent<RoninController>();
 
             if (warblade != null) warblade.enabled = type == ClassType.Warblade;
             if (elementalist != null) elementalist.enabled = type == ClassType.Elementalist;
             if (shadowblade != null) shadowblade.enabled = type == ClassType.Shadowblade;
             if (ranger != null) ranger.enabled = type == ClassType.Ranger;
+            if (ronin != null) ronin.enabled = type == ClassType.Ronin;
 
             switch (type)
             {
@@ -113,10 +119,17 @@ namespace RIMA
                     AddIfMissing<FocusSystem>(player);
                     AddIfMissing<Ranger_SkillController>(player).enabled = true;
                     break;
+                case ClassType.Ronin:
+                    AddIfMissing<TensionSystem>(player);
+                    AddIfMissing<RoninController>(player).enabled = true;
+                    break;
             }
 
+            ApplyBasicAttackProfile(player, type);
             ApplyPrimaryClassVisual(player, type);
         }
+
+        public void SwitchClass(ClassType type) => SetPrimaryClass(type);
 
         private static void ApplyPrimaryClassVisual(GameObject player, ClassType type)
         {
@@ -163,6 +176,7 @@ namespace RIMA
             TryRemove<Elementalist_SkillController>(player);
             TryRemove<Shadowblade_SkillController>(player);
             TryRemove<Ranger_SkillController>(player);
+            TryRemove<RoninController>(player);
             TryRemove<CrossClassPassive_WB_Elem>(player);
             TryRemove<CrossClassPassive_WB_Shadow>(player);
             TryRemove<CrossClassPassive_WB_Ranger>(player);
@@ -182,6 +196,28 @@ namespace RIMA
             var existing = go.GetComponent<T>();
             if (existing != null) return existing;
             return go.AddComponent<T>();
+        }
+
+        private static void ApplyBasicAttackProfile(GameObject player, ClassType type)
+        {
+            var attack = player.GetComponent<PlayerAttack>();
+            if (attack == null) return;
+
+            BasicAttackProfile profile = Resources.Load<BasicAttackProfile>($"Combat/BasicAttack/BasicAttackProfile_{type}");
+
+#if UNITY_EDITOR
+            if (profile == null && type == ClassType.Ronin)
+                profile = UnityEditor.AssetDatabase.LoadAssetAtPath<BasicAttackProfile>(
+                    "Assets/Data/Combat/Profiles/Ronin_BasicAttackProfile.asset");
+#endif
+
+            if (profile == null)
+            {
+                Debug.LogWarning($"[PlayerClassManager] BasicAttackProfile not found for {type}");
+                return;
+            }
+
+            attack.SetBasicAttackProfile(profile);
         }
     }
 }

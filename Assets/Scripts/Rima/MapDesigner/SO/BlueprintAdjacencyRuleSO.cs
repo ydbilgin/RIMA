@@ -10,5 +10,6 @@ namespace RIMA.MapDesigner.SO
         public string zoneIdB;
         public BlueprintPropPoolSO transitionPool;
         [Range(0f, 1f)] public float density = 0.5f;
+        [Range(0, 30)] public int decalsPerRoomCap = 8;
     }
 }

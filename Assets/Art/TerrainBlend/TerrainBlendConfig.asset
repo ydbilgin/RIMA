@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28f23c29eb6fbcf41aed550529e081cf, type: 3}
+  m_Name: TerrainBlendConfig
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Systems.Map.TerrainBlendConfig
+  terrainTextures:
+  - {fileID: 2800000, guid: dddbd2d6859a2b849af3d88ef20d7a46, type: 3}
+  - {fileID: 2800000, guid: 9c56219e040b7374b839ea87aea32b43, type: 3}
+  - {fileID: 2800000, guid: a7256ff57b3c53648a118decd40adbd7, type: 3}
+  - {fileID: 2800000, guid: 65f702bca7195d54aaf52209f054bd68, type: 3}
+  noiseTexture: {fileID: 2800000, guid: 4145bc9e1ba5f124fafd536bccf473e3, type: 3}
+  terrainTiling: 2
+  noiseScale: 0.8
+  noiseStrength: 0.12
+  blendSharpness: 2.5
+  blendMaterial: {fileID: 2100000, guid: 2e25efd55053ff04d9320fd31ae5a962, type: 2}

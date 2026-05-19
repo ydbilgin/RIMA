@@ -24,6 +24,7 @@ namespace RIMA
         private Health health;
         private Transform player;
         private float attackTimer;
+        private float attackWindupTimer;
         private SpriteRenderer sr;
 
         private void Awake()
@@ -83,11 +84,20 @@ namespace RIMA
             else
             {
                 rb.linearVelocity = Vector2.zero;
-                if (state == State.Attack && attackTimer <= 0f)
+                if (attackWindupTimer > 0f)
+                {
+                    attackWindupTimer -= Time.fixedDeltaTime;
+                    if (attackWindupTimer <= 0f)
+                    {
+                        var ph = player.GetComponent<Health>();
+                        if (ph != null) ph.TakeDamage(attackDamage);
+                    }
+                }
+                else if (state == State.Attack && attackTimer <= 0f)
                 {
                     attackTimer = attackCooldown;
-                    var ph = player.GetComponent<Health>();
-                    if (ph != null) ph.TakeDamage(attackDamage);
+                    attackWindupTimer = 0.35f;
+                    EnemyTelegraph.SpawnCircle(transform.position, attackRange, 0.35f);
                 }
             }
         }

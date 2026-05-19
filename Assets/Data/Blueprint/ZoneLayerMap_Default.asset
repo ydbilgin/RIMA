@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ba2473d1af4f5ab363a3df0d642b83, type: 3}
+  m_Name: ZoneLayerMap_Default
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Room.Data.ZoneToLayerMappingSO
+  zoneMap:
+  - zoneId: stone
+    displayName: Stone Floor
+    sprite: {fileID: 21300000, guid: 9c87c117f2e12fd42a6eb4570dd37fb1, type: 3}
+    defaultSortingOrder: -150
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: path
+    displayName: Path
+    sprite: {fileID: 0}
+    defaultSortingOrder: -140
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: grass
+    displayName: Grass
+    sprite: {fileID: 0}
+    defaultSortingOrder: -135
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: soil
+    displayName: Soil
+    sprite: {fileID: 0}
+    defaultSortingOrder: -135
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: moss
+    displayName: Moss
+    sprite: {fileID: 21300000, guid: 3bbe18d9a04cca844bd2aeb55802d34a, type: 3}
+    defaultSortingOrder: -135
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: rift_crack
+    displayName: Rift Crack
+    sprite: {fileID: 21300000, guid: be8666c174edb3641809ce0780c6e668, type: 3}
+    defaultSortingOrder: -130
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: rubble
+    displayName: Rubble
+    sprite: {fileID: 21300000, guid: 64bb1d1b7d8ac9e4f8bbbfa95ced60a7, type: 3}
+    defaultSortingOrder: -120
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: wall
+    displayName: Wall
+    sprite: {fileID: 21300000, guid: 4159b2e54d5650749bd37da4cf58275f, type: 3}
+    defaultSortingOrder: -110
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: wall_vines
+    displayName: Wall Vines
+    sprite: {fileID: 21300000, guid: 5010e1d0e949b5b428e3e9abdee9845f, type: 3}
+    defaultSortingOrder: -100
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: statue
+    displayName: Statue
+    sprite: {fileID: 21300000, guid: df2bbe5bb4c7a184291e8d96308b4dcb, type: 3}
+    defaultSortingOrder: -80
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}
+  - zoneId: glow
+    displayName: Glow
+    sprite: {fileID: 21300000, guid: 0572ced742f435e498c2cac444733f0a, type: 3}
+    defaultSortingOrder: -60
+    defaultOffset: {x: 0, y: 0}
+    defaultScale: {x: 1, y: 1}
+    defaultTint: {r: 1, g: 1, b: 1, a: 1}

@@ -69,7 +69,7 @@ namespace RIMA
             ClassType.Shadowblade  => new Color(0.56f, 0.18f, 0.90f, 1f), // violet
             ClassType.Ranger       => new Color(0.32f, 0.82f, 0.42f, 1f), // forest green
             ClassType.Ravager      => new Color(0.88f, 0.22f, 0.22f, 1f), // blood red
-            ClassType.Ronin        => new Color(0.88f, 0.78f, 0.32f, 1f), // gold steel
+            ClassType.Ronin        => new Color(0.42f, 0.95f, 1f,   1f), // cyan-violet
             ClassType.Gunslinger   => new Color(0.98f, 0.72f, 0.18f, 1f), // brass gold
             ClassType.Brawler      => new Color(0.78f, 0.46f, 0.18f, 1f), // amber
             ClassType.Summoner     => new Color(0.42f, 0.88f, 0.62f, 1f), // jade
@@ -85,7 +85,7 @@ namespace RIMA
             ClassType.Shadowblade  => new Color(0.48f, 0.14f, 0.82f, 0.96f),
             ClassType.Ranger       => new Color(0.28f, 0.78f, 0.38f, 0.96f),
             ClassType.Ravager      => new Color(0.82f, 0.18f, 0.18f, 0.96f),
-            ClassType.Ronin        => new Color(0.82f, 0.72f, 0.28f, 0.96f),
+            ClassType.Ronin        => new Color(0.48f, 0.36f, 0.96f, 0.96f),
             ClassType.Gunslinger   => new Color(0.92f, 0.68f, 0.14f, 0.96f),
             ClassType.Brawler      => new Color(0.72f, 0.42f, 0.14f, 0.96f),
             ClassType.Summoner     => new Color(0.38f, 0.82f, 0.56f, 0.96f),
@@ -99,6 +99,7 @@ namespace RIMA
             ClassType.Elementalist => "MANA",
             ClassType.Shadowblade  => "ENERGY",
             ClassType.Ranger       => "FOCUS",
+            ClassType.Ronin        => "TENSION",
             ClassType.Gunslinger   => "HEAT",
             ClassType.Summoner     => "RIFT",
             ClassType.Hexer        => "CURSE",

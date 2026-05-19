@@ -83,6 +83,18 @@ namespace RIMA
             ? PlayerClassManager.Instance.PrimaryClass
             : ClassType.Warblade;
 
+        public void SetBasicAttackProfile(BasicAttackProfile profile)
+        {
+            if (profile == null) return;
+            basicAttackProfile = profile;
+            behavior = basicAttackProfile.CreateBehavior();
+            ComboStep = 0;
+            ComboTimer = 0f;
+            CommitTimer = 0f;
+            BufferedAttack = false;
+            enabled = true;
+        }
+
         private void Awake()
         {
             controller = GetComponent<PlayerController>();

@@ -1,5 +1,5 @@
 {
-"disabledMcpjsonServers": ["UnityMCP", "pixellab"],
+"disabledMcpjsonServers": [],
 "permissions": {
     "allow": [
       "mcp__UnityMCP__get_scene_info",

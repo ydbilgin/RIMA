@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c59e9e38cfbec4b86b3a1380d240c2, type: 3}
+  m_Name: PaintTest_Rift_Data
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Brush.Data.RoomDecalDataSO
+  roomId: Combat_Small_01
+  placements:
+  - worldPos: {x: 4, y: 3}
+    spriteId: 0
+    layer: 6
+    rotationStep: 3
+    flags: 0
+    tintPackedRGB: 0

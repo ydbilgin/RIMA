@@ -1,0 +1,64 @@
+{
+  "output_dir": "Assets/Art/Rooms/Backgrounds/Spawn_01",
+  "layers": [
+    {
+      "index": 0,
+      "name": "floor_painted_granite",
+      "endpoint": "/generate-image-v2",
+      "width": 632,
+      "height": 424,
+      "no_background": false,
+      "seed": 4201,
+      "description": "A top-down 2D pixel art game scene viewed from a 30-35 degree angled perspective. Continuous painted floor surface - rounded organic oval stone shapes (NOT square grid tiles) with subtle foreshortening: top edges compressed, bottom edges wider, creating fake-3D depth. Soft directional shadows hint at elevation. Painterly hand-painted texture, no grid lines, seamless natural composition. Biome: Shattered Ruins / Shattered Keep - cracked granite flagstones in cool gray with cyan rift cracks, broken stone walls at edges, moss patches, scattered rubble. Muted Hades-tone shadows. Style: Hades / Sea of Stars painted background.",
+      "negative_description": "flat top-down, square tile grid, visible grid lines, isometric diamond tiles, axonometric view, sharp square stones, repeating tile pattern, gridded floor, sprite sheet, character, creature, person"
+    },
+    {
+      "index": 1,
+      "name": "decal_rift_crack",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 4202,
+      "style_image_from_layer": 0,
+      "description": "Hairline cyan rift crack cluster on transparent background - branching micro-fractures, subtle glow, painterly stroke, matching the floor's brushwork and palette. Single decorative decal element.",
+      "negative_description": "tile, grid, square edges, character, person, full scene, rectangular background"
+    },
+    {
+      "index": 2,
+      "name": "decal_rubble",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 4203,
+      "style_image_from_layer": 0,
+      "description": "Broken granite rubble chunks and chipped oval stone fragments on transparent background - scattered cluster suitable for wall-edge scatter, painterly hand-painted, same palette and shadow direction as the floor.",
+      "negative_description": "tile, grid, square edges, character, person, full scene, rectangular background"
+    },
+    {
+      "index": 3,
+      "name": "prop_statue_silhouette",
+      "endpoint": "/generate-with-style-v2",
+      "width": 256,
+      "height": 256,
+      "no_background": true,
+      "seed": 4204,
+      "style_image_from_layer": 0,
+      "description": "Cracked headless stone statue on small pedestal - dark stone mass silhouette, painterly painted, corner-readable as set dressing, NOT a gameplay blocker. Transparent background.",
+      "negative_description": "tile, grid, square edges, full scene, rectangular background, multiple statues"
+    },
+    {
+      "index": 4,
+      "name": "accent_glow_mote",
+      "endpoint": "/generate-with-style-v2",
+      "width": 128,
+      "height": 128,
+      "no_background": true,
+      "seed": 4205,
+      "style_image_from_layer": 0,
+      "description": "Small cyan rift glow accent with dust motes - soft selective magical highlight, painterly, matching floor brushwork. Single ambient element on transparent background.",
+      "negative_description": "tile, grid, square edges, character, full scene, rectangular background"
+    }
+  ]
+}

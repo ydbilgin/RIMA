@@ -1,0 +1,9 @@
+props=375
+transitions=20
+transitionChildren=20
+waterProps=3
+totalChildren=395
+v15Active=False
+v15bActive=True
+adjacencyDensityRuntimeOverride=1
+screenshot=Assets/Screenshots/PlayableRoom_combat_v15b_full_adjacency.png
