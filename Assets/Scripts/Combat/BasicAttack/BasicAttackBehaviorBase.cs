@@ -92,12 +92,6 @@ namespace RIMA
                     });
                 }
                 rage?.OnHitEnemy();
-                HitStop.Instance?.FreezeLight();
-                LightPulse.Emit(new Color(0.4f, 0.7f, 1f), 1.5f, 0.10f);
-                DamagePopup.Show(col.transform.position, finalDmg);
-
-                if (isFinisher)
-                    CameraShake.Instance?.Shake(0.18f, 0.12f);
 
                 var kb = col.GetComponent<KnockbackReceiver>();
                 if (kb != null)

@@ -3,6 +3,48 @@
 
 ---
 
+## LIVE — 2026-05-20 S95 LATE NIGHT → Design audit + production plan lock + bug tespiti
+
+**QC Review Sonuçları (Opus + Codex):**
+- BasicAttackBehaviorBase.cs → **PASS** (legacy cleanup temiz)
+- MarkPulseBehavior.cs → **YANLIŞ bırakıldı** — Ravager 6 legacy call hâlâ var, bus bypass ediyor. Bir sonraki Antigravity görevi
+- RimaUnifiedPainterWindow.cs → **PASS_WITH_NOTES**
+  - Bug: auto-connect walls `Walls` subgrubunu bypass ediyor (direkt Props_Root'a koyuyor)
+  - Bug: LoadMapData sub-grup hiyerarşisini restore etmiyor
+  - Bug: `prefabScaleMultiplier` default 0.5f, Reset 1.0f'a dönüyor (tutarsız)
+  - UX Öneri #1: Scene organization panel (subgroup count + rebuild button)
+  - UX Öneri #2: Wall auto-connect transparency (variant preview)
+  - UX Öneri #3: Map file safety (dirty state + last save info)
+- PathC_BaseTest.unity → **PASS** (Props_Root identity transform, scene root)
+
+**Sonraki Antigravity Görevi (henüz verilmedi):**
+- MarkPulseBehavior.cs bus migration (6 legacy → PublishHit/PublishKill)
+- RimaUnifiedPainterWindow.cs: PaintWallWithConnections → GetOrCreateGroupParent route
+- LoadMapData → sub-grup restore
+- prefabScaleMultiplier default/reset tutarlı yap (0.5f → 0.5f)
+
+### Bu Session Sonu Kararlar
+
+**Design Plan Lock:**
+- `STAGING/PRODUCTION_PLAN_WALLS_OBJECTS_S95.md` yazıldı
+- Duvar: Hibrit L2a (create_isometric_tile, taban) + L2b (create_object tall sprite, yüzey)
+- Corner = ayrı sprite (perspektif baked-in, rotation çalışmaz)
+- Void Flame: RIMA-özgün wall-mounted ışık, Act rengi, Unity Point Light 2D bağlı
+- Obje boyut standardı: 32×32 zemin/item, 64×64 mob/prop, 64×128 dikey prop
+- Yıkık iç duvar piece'leri scope'a dahil
+
+**Tespit Edilen Bug'lar (Antigravity'ye verildi):**
+- BasicAttackBehaviorBase.cs: çift event (CombatEventBus + legacy juice birlikte ateşliyor)
+- MarkPulseBehavior.cs: aynı pattern kontrol gerekiyor
+- Prop parent sorunu: Grid(scale 1,0.5,1) altında kalan prop'lar Y'de eziliyor → Props_Root fix
+
+**Sonraki Session (onay bekleyen):**
+- `STAGING/PRODUCTION_PLAN_WALLS_OBJECTS_S95.md` — tüm onay checklistleri orada
+- Antigravity çalışmasını ANTIGRAVITY_DONE.md'ye yazacak (background)
+- Onay sonrası: duvar üretim kuyruğu başlar
+
+---
+
 ## LIVE — 2026-05-20 S95 LATE NIGHT → Design audit batch + isometric tile import + combat juice P0/P1/P2
 
 ### Bu Session Tamamlanan (2026-05-20)
