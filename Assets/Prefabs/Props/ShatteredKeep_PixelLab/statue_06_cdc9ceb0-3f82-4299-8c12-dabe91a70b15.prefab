@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7595660186934703171}
   - component: {fileID: 8370308184308550514}
-  - component: {fileID: 3878008315896457393}
+  - component: {fileID: 7330729593172347786}
   m_Layer: 0
   m_Name: statue_06_cdc9ceb0-3f82-4299-8c12-dabe91a70b15
   m_TagString: Untagged
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &3878008315896457393
+--- !u!61 &7330729593172347786
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,7 +126,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.39999998}
+  m_Offset: {x: 0, y: -0.30624998}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}

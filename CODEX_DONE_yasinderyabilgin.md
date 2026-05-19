@@ -1,16 +1,14 @@
 # CODEX DONE - yasinderyabilgin
 
-Task: Combat Juice P0/P1/P2
+Task executed from CODEX_TASK_yasinderyabilgin.md.
 
-Changed files:
-- Assets/Scripts/Combat/BasicAttack/BasicAttackBehaviorBase.cs: added CombatEventBus PublishHit after successful melee damage, marks combo finisher as isCrit, publishes KillEvent when target dies, kept legacy juice calls intact.
-- Assets/Scripts/Player/PlayerController.cs: cached Health, enables dash immunity at dash start, restores previous IsImmune state at dash end.
-- Assets/Scripts/Enemies/EnemyAI.cs: added 0.35s attack windup with EnemyTelegraph.SpawnCircle, enemy remains stopped during windup, damage applies after windup.
+Wrote review report:
+- STAGING/CODEX_DONE_review_antigravity_s95.md
 
-Diff stat:
-- 3 files changed, 42 insertions, 5 deletions.
+Overall verdict: PASS_WITH_NOTES.
 
-Validation:
-- Checked VFXBusDemo HitEvent/KillEvent schema and matched fields.
-- Ran: dotnet build .\Assembly-CSharp.csproj
-- Result: build succeeded, 0 errors. Existing project warnings remain.
+Key findings:
+- BasicAttackBehaviorBase.cs bus migration is mechanically OK, with only pre-existing profile-contract null/empty array assumptions.
+- MarkPulseBehavior.cs should not remain on legacy generic hit feedback long-term; migrate its custom melee hit path to CombatEventBus and remove generic legacy hit effects there.
+- RimaUnifiedPainterWindow.cs grouping is partially implemented, but auto-connected wall placement and LoadMapData bypass subgroup parenting.
+- PathC_BaseTest.unity Props_Root is a scene root with identity transform, not under Grid/Tilemap.

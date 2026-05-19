@@ -2021,3 +2021,57 @@ Validation:
 - Checked VFXBusDemo HitEvent/KillEvent schema and matched fields.
 - Ran: dotnet build .\Assembly-CSharp.csproj
 - Result: build succeeded, 0 errors. Existing project warnings remain.
+Executed CODEX_TASK_laurethayday.md read-only review.
+
+Output written:
+- STAGING/CODEX_DONE_combat_juice_review_s95.md
+
+Verdict:
+- FAIL
+
+Key results:
+- CombatEventBus PublishHit/PublishKill placement is mechanically valid, including int finalDmg to float HitEvent.damage assignment.
+- High risk found: BasicAttackBehaviorBase still triggers legacy HitStop/DamagePopup/CameraShake beside new CombatEventBus subscribers, causing duplicate or racing combat juice.
+- High risk found: EnemyAI windup can pause during Chase while the telegraph expires, then later apply damage without a current warning or range/state recheck.
+- Medium risk found: PlayerController dash immunity restore preserves only a boolean and can clobber overlapping Health.SetImmune users such as Passive_Unyielding.
+- Medium risk found: ApplyMeleeHit assumes BasicAttackProfile melee arrays are non-null and non-empty; Validate exists but is not enforced.
+
+Notes:
+- No source code changes were made.
+- ANTIGRAVITY.md was not present at the project root when checked.
+# CODEX_DONE laurethgame
+
+Task: CODEX_TASK_laurethgame.md
+Status: DONE
+
+Wrote review artifact:
+- STAGING/CODEX_DONE_review_antigravity_s95.md
+
+General verdict: PASS_WITH_NOTES
+
+Key findings:
+- BasicAttackBehaviorBase.cs passes. Hit and kill events publish correctly; runtime build passed.
+- MarkPulseBehavior.cs should not stay outside CombatEventBus. It currently avoids duplicate bus effects only because it does not publish, but it bypasses the new centralized juice/VFX subscribers. Recommendation: add PublishHit/PublishKill and remove per-hit legacy HitStop/DamagePopup/CameraShake calls from the damage path.
+- RimaUnifiedPainterWindow.cs builds, recursive flows mostly cover erase/save/wall rebuild, and Props_Root creation works at a basic level. Main issue: auto-connected walls are placed directly under Props_Root instead of the Walls subgroup, and LoadMapData restores objects directly under Props_Root, losing subgroup organization. GameObject.Find("Props_Root") is also weak for multi-scene/duplicate-root contexts.
+- PathC_BaseTest.unity passes. Props_Root is scene-rooted, not under Grid/Tilemap, and has identity transform.
+
+Verification run:
+- dotnet build .\Assembly-CSharp.csproj --no-restore: PASS with existing warnings.
+- dotnet build .\Assembly-CSharp-Editor.csproj: PASS after restore with existing warnings.
+
+Note:
+- ANTIGRAVITY.md was not found at repo root.
+# CODEX DONE - yasinderyabilgin
+
+Task executed from CODEX_TASK_yasinderyabilgin.md.
+
+Wrote review report:
+- STAGING/CODEX_DONE_review_antigravity_s95.md
+
+Overall verdict: PASS_WITH_NOTES.
+
+Key findings:
+- BasicAttackBehaviorBase.cs bus migration is mechanically OK, with only pre-existing profile-contract null/empty array assumptions.
+- MarkPulseBehavior.cs should not remain on legacy generic hit feedback long-term; migrate its custom melee hit path to CombatEventBus and remove generic legacy hit effects there.
+- RimaUnifiedPainterWindow.cs grouping is partially implemented, but auto-connected wall placement and LoadMapData bypass subgroup parenting.
+- PathC_BaseTest.unity Props_Root is a scene root with identity transform, not under Grid/Tilemap.

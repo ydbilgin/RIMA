@@ -1,62 +1,89 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_yasinderyabilgin.md AS THE VERY LAST STEP.
 
-# Codex Task — Combat Juice P0/P1/P2 (3 küçük edit)
-
 ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
 
-## Bağlam
+# Code Review — Antigravity S95 Cleanup
 
-Opus combat audit'i RIMA'da 3 kritik eksik tespit etti. Her biri küçük (5-10 satır), hepsi independent. Execute every step in this task.
+NLM ACCESS: If you need RIMA design context, query NLM first via:
+  uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "<your question>"
 
-Mevcut altyapı tamamen hazır — sadece bağlamalar eksik:
-- `CombatEventBus`, 5 driver (HitPauseDriver, ScreenShakeDriver, CameraPunchController, VignetteFlashController, DamageNumberDriver) → KOD VAR ama hiç `PublishHit/Kill/Dash` çağrısı yok (dead code)
-- `Health.SetImmune(bool)` API → VAR ama dash'te çağrılmıyor
-- `EnemyTelegraph.SpawnCircle` → VAR, Mob system kullanıyor ama placeholder `EnemyAI.cs` kullanmıyor
+## Görev
 
-## P0 — CombatEventBus'ı bağla
+Antigravity (Gemini) aşağıdaki değişiklikleri yaptı. Her dosyayı oku, review et, PASS/FAIL ver.
 
-**Dosya:** `Assets/Scripts/Combat/BasicAttack/BasicAttackBehaviorBase.cs`
+## İncelenecek Dosyalar
 
-`ApplyMeleeHit` metodu içinde (mevcut hp.TakeDamage çağrısından SONRA):
-- Her başarılı hit için `CombatEventBus.PublishHit(new HitEvent { ... })` çağır
-- HitEvent fields'leri uygun şekilde set et (damage, isCrit, position, attacker, target — şemaya bak)
-- `step == profile.comboLength - 1` durumunda `isCrit = true` veya finisher flag set et
-- Hedef öldüyse (hp.IsDead) `CombatEventBus.PublishKill(...)` da çağır
+### 1. Assets/Scripts/Combat/BasicAttack/BasicAttackBehaviorBase.cs
+**Yapılan:** Legacy juice çağrıları silindi (HitStop, LightPulse, DamagePopup, CameraShake).
+**Kontrol et:**
+- CombatEventBus.PublishHit + PublishKill doğru çağrılıyor mu?
+- Null reference riski var mı?
+- Knockback null check yeterli mi?
+- Herhangi bir compile hatası riski var mı?
 
-**ÖNEMLİ migration safety:** Mevcut legacy çağrıları (HitStop.Instance.FreezeLight, CameraShake.Instance.Shake, DamagePopup.Show, LightPulse.Emit) **SİLME** — çift juice olabilir ama bu QC'de yakalanır, ilk pas için event-publish'i ADD et legacy'yi BIRAK. Cleanup ayrı task.
+### 2. Assets/Scripts/Combat/BasicAttack/MarkPulseBehavior.cs
+**Yapılan:** Antigravity dokunmadı (CombatEventBus yoktu, sadece legacy vardı).
+**Kontrol et:**
+- Bu karar doğru muydu? Legacy çağrılar burada sorun yaratır mı?
+- Bus subscriber'larla çift efekt riski devam ediyor mu?
+- Öneride bulun: Bus eklenip legacy silinmeli mi?
 
-## P1 — Dash i-frame ekle
+### 3. Assets/Editor/RimaUnifiedPainterWindow.cs
+**Yapılan:** Props_Root parent + sub-gruplar eklendi (Walls/Statues/WallMountings/Patches/Mobs/FloorProps).
+**Kontrol et:**
+- Props_Root bulma/oluşturma mantığı sağlam mı? (null check, scene context)
+- GetRecursiveChildren doğru implement edilmiş mi?
+- Sub-grup kategorizasyonu prefab naming convention ile uyumlu mu? (`wall_*`, `statue_*`, `mounting_*` vb.)
+- Erase/Save/Load/WallConnect fonksiyonları rekürsif güncellemeyi kapsamış mı?
+- Herhangi bir memory leak veya Editor-only API hatası riski var mı?
+- **UI/UX açısından:** Sub-grup hiyerarşisi kullanıcıya sahnede görünüyor mu? Daha kullanıcı dostu yapılabilir mi? Örn. grup başlıkları, toggle, renkli etiket?
 
-**Dosya:** `Assets/Scripts/Player/PlayerController.cs`
+### 4. Assets/Scenes/Demo/PathC_BaseTest.unity
+**Yapılan:** Props_Root GameObject sahnede scene root'a eklendi.
+**Kontrol et:**
+- Props_Root transform identity mi? (0,0,0 pos, 0,0,0 rot, 1,1,1 scale)
+- Grid/Tilemap'in child'ı olmadığını doğrula
 
-`TryDash()` metodunda:
-- Dash başlangıcında `GetComponent<Health>()?.SetImmune(true)` çağır
-- Dash bittiğinde (mevcut isDashing=false set edildiği yerde veya dash sonu cleanup'ında) `SetImmune(false)` çağır
-- Sadece dash süresince immune ol — passive_unyielding ve merciful dodge ile çakışmasın (immune flag cumulative değilse, dash sonunda set false yapma — onun yerine dash öncesi already-immune kontrolü yap)
+## UI/UX Genel Değerlendirme
 
-Eğer şüphedeysen: dash öncesi `wasImmune = health.IsImmune` kaydet, dash sonunda `health.SetImmune(wasImmune)` — passive immunity'yi korur.
+RimaUnifiedPainterWindow.cs tüm dosyayı okuyarak şunu değerlendir:
+- Mevcut arayüz bir map designer için kullanıcı dostu mu?
+- En kritik 3 UX sorunu nedir?
+- Öneride bulun (kod yazmana gerek yok, sadece öneri)
 
-## P2 — EnemyAI windup ekle
+## Output Formatı
 
-**Dosya:** `Assets/Scripts/Enemies/EnemyAI.cs`
+Sonucu STAGING/CODEX_DONE_review_antigravity_s95.md olarak yaz:
 
-Placeholder attack flow şu an: mesafe < attackRange → anında TakeDamage. Bunu değiştir:
-- Attack tetiklenmeden 0.35s önce `EnemyTelegraph.SpawnCircle(transform.position, attackRange, 0.35f)` çağır
-- 0.35s windup sonrası TakeDamage uygula
-- Windup sırasında düşman hareket etmesin (state machine veya basit flag)
+```
+# Codex Review — Antigravity S95 Cleanup
 
-EnemyTelegraph utility hazır, sadece çağrılması yeterli.
+## BasicAttackBehaviorBase.cs
+Verdict: PASS / FAIL / PASS_WITH_NOTES
+Bulgular: ...
 
-## Doğrulama
+## MarkPulseBehavior.cs
+Verdict: PASS / FAIL / PASS_WITH_NOTES
+Karar doğru muydu: EVET/HAYIR
+Öneri: ...
 
-Tüm değişiklikler sonrası:
-1. `dotnet build` veya Unity compile error yok
-2. `Assets/Scripts/Combat/Demo/VFXBusDemo.cs` örneğine bakarak HitEvent şema doğru kullanıldığını kontrol et
-3. Console hatasız
+## RimaUnifiedPainterWindow.cs
+Verdict: PASS / FAIL / PASS_WITH_NOTES
+Bulgular: ...
+UI/UX Notlar: ...
 
-## Çıktı
+## PathC_BaseTest.unity
+Verdict: PASS / FAIL
+Bulgular: ...
 
-Her dosya için diff özetini ver. Total satır sayısı: ~20-25 satır beklenti. 4 dosyadan fazla dokunma.
+## UI/UX Genel Öneriler (Top 3)
+1. ...
+2. ...
+3. ...
+
+## Genel Verdict
+PASS / PASS_WITH_NOTES / FAIL
+```
 
 
 ---
