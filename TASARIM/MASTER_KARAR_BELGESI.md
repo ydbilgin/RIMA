@@ -49,7 +49,7 @@ ozet: "Tüm RIMA tasarım kararlarının canonical listesi"
 | 33 | **PixelLab Faz Master Rehberi** | Tüm fazlar için tek üretim referansı. Faz 1 tam detay, Faz 2 tam, Faz 3-4 outline. ~~`GUIDES/PIXELLAB_FAZ_MASTER.md`~~ → arşivlendi, yerini `CHARACTER_PROMPT_PIPELINE.md` aldı | 2026-04-17 |
 | 34 | **Class cinsiyetleri — 5E/5K kilitlendi** | Erkek: Warblade, Brawler, Ravager, Ronin, Shadowblade. Kadın: Elementalist, Gunslinger, Hexer, Ranger, Summoner. Denge + özgünlük. Gunslinger kadın → trençkot+revolver arketipi klişeden kaçıyor. Hexer kadın → erkek dark wizard generic. | 2026-04-19 |
 | 35 | **PixelLab Sprite Pipeline — Session 17 kilitlendi** | #40+#41 ile override edildi. ~~`GUIDES/CHARACTER_IDENTITY_FRAMEWORK.md`~~ → arşivlendi. Güncel spec: `CHARACTER_PROMPT_PIPELINE.md` | 2026-04-19 |
-| 36 | **Kamera açısı: Hero Siege style — KİLİTLENDİ** | Tüm playable class sprite üretiminde **High Top-Down** (her iki aşamada). Prompt açı tanımı: `high overhead top-down camera, steep bird's eye view, around 75-80 degree downward angle`. Low Top-Down TERK EDİLDİ (Hades açısı — hedef değil). 8 yön üretim standart. | 2026-04-19 |
+| 36 | **Kamera açısı: Hero Siege style — KİLİTLENDİ** | Tüm playable class sprite üretiminde **High Top-Down** (her iki aşamada). Prompt açı tanımı: `high overhead top-down camera, steep bird's eye view, around 75-80 degree downward angle`. Low Top-Down TERK EDİLDİ (Hades açısı — hedef değil). 8 yön üretim standart. (SUPERSEDED by #40 — PixelLab low top-down ~35° ARPG; tutarlilik icin bu satir pasif) | 2026-04-19 |
 | 37 | **Ranger identity — tactical rift hunter** | Dungeon/ruins avcısı. Forest archer DEĞİL. Asimetrik utility silüeti: trap canister + tether spool. Kite-control visual language. Rift hunter arka planı. | 2026-04-19 |
 | 38 | **Gunslinger identity — rift-tech dual-pistol duelist** | Western/kovboy arketipi YASAK. Rift-tech dual-pistol, kinetic run-and-gun okuma. Coat/hat silüeti altında kadın okuma korunmalı. | 2026-04-19 |
 | 39 | **Helmet scope ayrımı (Gemini vs PixelLab fazı)** | Gemini reference aşaması: helmet yok (yüz okunurluğu şart). PixelLab Warblade framework aşaması: helmet intentional (QC'de kontrol edilir). Bu faz ayrımıdır, çelişki değil. | 2026-04-19 |
@@ -84,7 +84,7 @@ ozet: "Tüm RIMA tasarım kararlarının canonical listesi"
 | 68 | **OnDash Passive Proc (4. pasif tipi)** | Cross-Class Proc system'e OnDash eklendi. CrossClassEffectType.OnDash enum + CrossClassSkillManager.OnDash() method. Shadowblade/Ronin primary kullanicilar. | 2026-05-09 |
 | 69 | **Cross-Class Proc Text Feedback** | 3-tag Rift / 2-tag Resonance proc tetiklenince sigil glyph ustune 1 satir 12px text ("Tremor!" / "Severance!" / "Bloodveil!" vb.) + SFX. Death recap + next-run hint UX layer (boss yenilgisi sonrasi, opsiyonel). | 2026-05-09 |
 | 70 | **Resonance 2-tag Named Outcomes v2 ADAY** | [!] v2 aday, henuz LOCKED degil. 10 pair: Tremor/Bloodveil/Severance/Crushblood/Resonant Hold/Lockedge/Splinter/Phantom Pulse/Hammerwound/Hemorrhage. Rift 3-tag kurali KORUNUR. v2 onayi sonrasi LOCKED isaretlenecek. | 2026-05-09 |
-| ~~71~~ -> #144 ile REVOKE | ~~**Silah Gorunurluk: Single-State LOCKED**~~ **REVOKED by Karar #144 (2026-05-16)** | Tum siniflarda silah hep elde / hazir pozisyonda — combat-out ayri state YOK, "puf" mekanigi YOK. Istisna sadece **Ronin** (sheath/draw kimligi) ve kismen Gunslinger (kilif'tan cekme). Pixel art constraint + combat-readability + animasyon scope (10 sinif x 4 yon x 6 frame zaten 1800-2000 uretim) bu karari zorluyor. Alabaster Dawn'in 3-state "puf" modeli RIMA'da rejected cunku pixel-art frame teleport bug'lari + solo dev scope kabul edilemez. Hub atmosferi ve cinematic moments icin ayri **Makeup Backlog** + **Cinematic Layer** dosyalari (TASARIM/MAKEUP_BACKLOG.md + CINEMATIC_LAYER_v1.md). 10 sinif konumlandirma: Warblade=sag omuzda, Shadowblade=ters tutus vucuda yakin (phase step'te bile kaybolmaz), Ranger=elde at-rest, Ravager=omuzda, Ronin=KINDA (kimlik), Gunslinger=kilif'ta/yaninda, Brawler=ciplak el (silah yok), Summoner=kristal asa elde, Elementalist=SILAHSIZ (buyu el jestleriyle), Hexer=SILAHSIZ (run eller + bel'de ruh feneri). | 2026-05-09 |
+| ~~71~~ -> #144 ile REVOKE | ~~**Silah Gorunurluk: Single-State LOCKED**~~ **REVOKED by Karar #144 (2026-05-16)** (SUPERSEDED 2026-05-18 by Karar #146 — body weaponless + WeaponSR child + puff system; Ronin iaido istisnasi korunur) | Tum siniflarda silah hep elde / hazir pozisyonda — combat-out ayri state YOK, "puf" mekanigi YOK. Istisna sadece **Ronin** (sheath/draw kimligi) ve kismen Gunslinger (kilif'tan cekme). Pixel art constraint + combat-readability + animasyon scope (10 sinif x 4 yon x 6 frame zaten 1800-2000 uretim) bu karari zorluyor. Alabaster Dawn'in 3-state "puf" modeli RIMA'da rejected cunku pixel-art frame teleport bug'lari + solo dev scope kabul edilemez. Hub atmosferi ve cinematic moments icin ayri **Makeup Backlog** + **Cinematic Layer** dosyalari (TASARIM/MAKEUP_BACKLOG.md + CINEMATIC_LAYER_v1.md). 10 sinif konumlandirma: Warblade=sag omuzda, Shadowblade=ters tutus vucuda yakin (phase step'te bile kaybolmaz), Ranger=elde at-rest, Ravager=omuzda, Ronin=KINDA (kimlik), Gunslinger=kilif'ta/yaninda, Brawler=ciplak el (silah yok), Summoner=kristal asa elde, Elementalist=SILAHSIZ (buyu el jestleriyle), Hexer=SILAHSIZ (run eller + bel'de ruh feneri). | 2026-05-09 |
 | 52 | **Skill VFX + Projectile Mimarisi — Tüm Classlara Geçerli** | Projectile prefab yapısı: SpriteRenderer + PointLight2D (elemental renge göre) + CircleCollider2D + Rigidbody2D + `ProjectileBase.cs`. **Elemental ışık engine-side, art değil:** Fire=`#FF6A00` intensity 1.2 / Frost=`#A0D8FF` intensity 0.8 / Radiant=`#FFFFCC` intensity 1.5. Işık projectile ile hareket eder, destroy'da kaybolur. **Pixel art gerektiren:** projectile sprite + impact/hit spritesheet (fire/frost/radiant, ~48×48 4-6 frame). **Engine-side (art yok):** Freeze/slow tint = shader MaterialPropertyBlock, DoT göstergesi = Particle System, ground indicator = circle sprite tek renk. **Skill kategorileri:** Projectile / Line-cast / Slow-orb / Ground-AoE / Self-buff / Delayed-explosion — her kategorinin prefab mimarisi farklı, `ProjectileBase.cs` abstract. **Üretim sırası (Faz 2):** Impact spritesheet önce → projectile sprite → ground indicator. Area-control skillerin (Frozen Orb, Frost Wall) anim ihtiyacı yok — tek frame + Unity tween. | 2026-04-27 |
 | 72 | **S59 Pivot — Pure 2D Top-Down LOCKED** | 2.5D mimari (3D env + 2D billboard) REVOKED. Pure 2D top-down (Hammerwatch/HLD ref) LOCKED. Karakter 64x64 chibi (eski 128px native + chibi YASAK kararlari REVOKED), tile 32x32 top-down (eski 64x64 floor + 64x128 wall iso REVOKED), VFX 64-128px mix. URP 2D Renderer + Pixel Perfect Camera + 2D Lights. Anim view: high top-down ~30-35° (Hades match KEEP). Mevcut RIMA projesi RESTORE (RIMA_2.5D nested arsivlenecek). 4 yon + flip KEEP. PPU=64. Detay: `MEMORY/project_pure_2d_topdown_pivot_2026-05-12.md` (auto-memory). | 2026-05-12 |
 | ~~73~~ -> #144 ile REVOKE | ~~**Karakter Silah Entegrasyonu — Silahlı 1-piece LOCKED**~~ **REVOKED by Karar #144 (2026-05-16)** | Karakter 64px chibi sınıf-spesifik silahla TEK SPRITE üretilir. Body-only + WeaponAnchorMap + AnimationCurve senkron sistemi REVOKED. Sebep: 64px'te body-only AI variance yuksek, pixel-precise anchor imkansiz; PixelLab Create Character native silahli 1-piece uretiyor; sınıf↔silah sabit (Warblade=kılıç, Ranger=yay, Shadowblade=hançer, Elementalist=asa); referans oyunlar (Hammerwatch/HLD/Tunic) hepsi 1-piece. Karar #71 (silah hep elde single-state) ile uyumlu. Detay: `MEMORY/project_64px_armed_character_locked.md`. | 2026-05-12 |
@@ -142,6 +142,7 @@ ozet: "Tüm RIMA tasarım kararlarının canonical listesi"
 | #133 | Game UI — MainMenu + CharacterSelect | LOCKED. Koyu rift paleti, 10 sınıf seçici. Build Settings: 0=MainMenu / 1=CharacterSelect / 2=FazMVP_Demo. | 2026-05-14 |
 | #134 | Procedural Room Designer Pivot | LOCKED. PixelLab=asset factory, Unity=procedural+polish source-of-truth. RoomRecipe/9-stage pipeline/PatchAtlas/PropCluster/DungeonRecipe. Karar #131/#132 re-contextualized (not revoked). Master spec: STAGING/room_designer_master_spec_v3.md. | 2026-05-14 |
 | 144 | **Karakter silahsiz + Weapon Child SR (Karar #71 + #73 OVERRIDE)** | Karakter base sprite SILAHSIZ uretilir. Silah Unity'de child SpriteRenderer olarak parent karaktere baglanir. Body animasyonu silahsiz kol hareketi gosterir; weapon child SR kendi animasyonunu oynar; senkron Animation Events + HandAnchorMap ScriptableObject. **Karar #71 (silah hep elde single-state)** ve **Karar #73 (silahli 1-piece)** bu kararla REVOKE. Brawler hala silahsiz sinif (Karar #71 Brawler kismi korunur). Ronin sheath/draw kimligi korunur (WeaponSR idle=sheath, attack=drawn). Spec: `STAGING/animation_spec_weaponless.md` + memory [[weaponless-animation-v1]]. | 2026-05-16 |
+| #146 | **Weapon Visibility Input-Driven Puff System (#71+#144 unify)** | Body sprite weaponless (universal 10 class), WeaponSR child SR @ HandAnchor default hidden. Combat input (LMB/RMB/Q/E/R/F/V) → puff-in 0.15s materialize at hand. Last-attack timer 5s expired → puff-out 0.3s dissolve. **Space dash HARIC** (movement-only, puff tetiklemez). **Ronin istisna:** Puff DEGIL → iaido sheath/draw acik animasyon (#71 identity korunur). Cinematic/Hub explicit override. State change cue + RPG convention (Diablo/PoE sheath out-of-combat). | 2026-05-18 |
 | #135 | Phase 1 Map Workflow — Procedural+Paint Hybrid | LOCKED 2026-05-15 S77. **Three-component hybrid:** (1) Procedural base — Codex + orchestrator ProceduralRoomGenerator + RoomRecipe SO; vertex grid + encounter slot JSON output. (2) Paint editor polish — user fine-tunes in RimaMapDesignerWindow (RIMA > Tools > Map Designer); "Generate Room" calls recipe, "Reseed" lock-and-regenerate, brush for terrain swap/prop add. (3) Organic visual layers (automatic) — Corner Wang transitions (Karar #131) + multi-variant runtime random (S75-B 528 stub variant pool) + Patch overlay (Karar #128/#129) + Scatter brush (Karar #121 Perlin scatter) + URP 2D Lights polish. Five-layer stack eliminates grid-feel = "paint-like organic" user requirement met. **Codex Phase 1 dispatch:** 6 deliverables: D1 TerrainDefinition+TilesetPairing SO extend (walkable/elevationLevel/collisionType/variantPool/patchAtlasRef), D2 PatchAtlasSO+PatchOverlayPainter, D3 ScatterBrush production SO+Painter+sample asset, D4 Multi-variant Wang runtime random (CornerWangPainter mod), D5 RoomRecipe+DungeonRecipe+PropCluster+ProceduralRoomGenerator, D6 Map Designer "Load from Generator" + integration test scene. Estimated 2-3h Codex background. **Paralel:** kullanıcı Pro UI Pair A/B raggedness gen (STAGING/pro_ui_pair_a_b_raggedness.md). **Karar #134 REVOKE EDILMEZ** — #135 sadece Phase 1 concrete implementation seçimini somutlaştırır. | 2026-05-15 |
 | 145 | **PixelLab Character States — Multi-Use Augment LOCK** | LOCKED 2026-05-16 S86. PixelLab Web UI V3'e eklenen **Character States** özelliği RIMA pipeline'a **AUGMENT** olarak entegre (replace değil). Karar #74/#100/#144/#47 ile tam uyumlu, hiçbiri override etmez. **5 Use Case LIVE:** (1) Animation anchor — Idle/Run/Attack/Dash/Hit/Death first-frame state-locked workflow; (2) Enemy variant matrix — 1 base mob × N outfit state (normal/armored/elite/boss); (3) Boss multi-phase — idle→enraged→damaged→on-fire state'leri; (4) Class skin variants — Rift Break meta progression alternative outfit'ler; (5) State-to-state interpolation — death/transformation/stand-up transition (Karar #47 KF+Interp birinci-class realization). **Pilot 4 sınıf:** Warblade (ilk) → Ranger → Shadowblade → Elementalist; pass sonrası kalan 6 sınıf rollout. **Workflow per class:** V3 base → 5 dir idle state → idle 4f + run 6f anim → 3 anchor state per dir (attack/hit/death) → action anim → PixelLab Web UI mirror SW/W/NW → Pixelorama manuel cleanup. **64×64 native korunur** (custom width deneme yapılmadı). **Mid-walk anchor:** try-and-see, kalite düşükse idle→run fallback. **South direction:** reroll budget 2×. **No MCP endpoint** — user Web UI V3 manuel ([[char-web-ui-v3]]). Spec: `STAGING/character_production_prompts.md` + memory [[pixellab-character-states-workflow]] (RIMA local) + Lauret Studio global reference. | 2026-05-16 |
 
@@ -305,6 +306,121 @@ Ronin:       LightPulse.Emit(new Color(0.9f, 0.9f, 1.0f), 2.0f, 0.06f);  // shar
 **ChatGPT 5-layer spec ile karşılaştırma (2026-05-16):** RIMA L1/L2/L4/L5/L6 ChatGPT 1-5 ile 1:1 match. **L3 Wall Overlay (Hades cap) RIMA-spesifik EXTRA.** ChatGPT'den entegre edilen 6 madde: 143-M..R. Detay: `F:\LaurethStudio\01_PIPELINE\layered_environment_pipeline.md` Bölüm 13-14.
 
 **Bağlantılı STUDIO_KARAR:** [STUDIO_KARAR_010 Natural Feature Placement Pipeline](../../../LaurethStudio/00_RULES/STUDIO_CONSTITUTION.md) — RIMA/CB/Caterpillar (Wingspan) universal pattern.
+
+---
+
+## Karar #147 — Multi-Layer Painter System LOCK (S92, 2026-05-18)
+
+**Karar:** RoomTemplate painted background = `List<BackgroundLayerData>` (sortingOrder/offset/scale/tint/visible). ReorderableList Custom Inspector Phase 1, EditorWindow Phase 2 defer. Reusable across all 2D games.
+
+**Why:** S91 Map Plan v1 LOCK Option C (hibrit painted bg + gameplay overlay) icin Hades/Alabaster Dawn tarzi Photoshop layered painter UX gerekti. Single backgroundSprite (S92 sabah eklendi) yetmedi.
+
+**Codex review:** PASS_WITH_REVISIONS — revisions applied (room-local coord, size table full).
+
+**Supersedes:** Bu sabah eklenen `RoomTemplateSO.backgroundSprite` single field. Multi-layer'a gore clean break.
+
+**Files:**
+- NEW: `Assets/Scripts/MapDesigner/Room/Data/BackgroundLayerData.cs`
+- EDIT: `Assets/Scripts/MapDesigner/Room/Data/RoomTemplateSO.cs` (backgroundLayers list)
+- EDIT: `Assets/Scripts/MapDesigner/Room/Runtime/RoomBankRuntimeTester.cs` (foreach-layer spawn, localPosition)
+- NEW: `Assets/Editor/MapDesigner/Inspectors/RoomTemplateSOInspector.cs` (ReorderableList UI)
+
+**Cross-ref:** Plan `STAGING/MULTILAYER_PAINTER_PLAN_v1.md`, memory `[[multilayer-painter-v1-lock]]`, Karar #143 (6-layer pipeline) bu sistemin rendering tarafi.
+
+---
+
+## Karar #148 — Floor Projection + Camera Tilt LOCK (S93 Night, 2026-05-19)
+
+**Karar:** RIMA canonical view = Hades 35 derece angled high top-down. Branch D (Hades floor de-emphasis) + Branch E (camera tilt 4-8 derece safe range) hybrid LOCK. Branch A (PixelLab `low top-down` = sprite-frame projection) PERMANENTLY REJECTED. Transform squash (Tilemap parent localScale.y = cos(35) = 0.819) LIVE as Branch F. Camera tilt revised 4-8 derece (Codex S94 revision from 8-12).
+
+**Cross-ref:** memory `[[project-tile-angle-verdict-branch-d-e-lock]]`, `[[project-transform-squash-floor-fix-s93]]`
+
+---
+
+## Karar #149 — Combat Encounter Sub-Room Sequence (2026-05-19 S94)
+
+**Karar:** Combat veya Elite macro node, 3-5 connected RoomTemplateSO sub-room iceren tek bir EncounterTemplateSO ile uygulanir. Sub-room transitions encounter-internal'dir ve DungeonGraph'i ilerletmez. Sub-room'lar bireysel skill/map reward vermez. Macro reward sequence (Map Fragment, Skill Draft, route gate reveal) yalnizca final sub-room clear sonrasi tetiklenir.
+
+**Default sub-room boyutu:** 16x10 (Hades-style combat readability icin). 12x8 yalniz connector, ambush pocket veya low-threat non-combat transition icin izinli.
+
+**Transition:** Mevcut `RoomTransitionFX` fade-to-black, MVP icin tercih edilir. Door+camera-pan ve seamless transition reddedildi (sirasiyla complexity ve composition-problem-reintroduction nedeniyle).
+
+**Enemy & threat:** Enemy identity + threat budget EncounterBank katmaninda (ayri sistem). RoomTemplateSO yalniz socket/tag/mask/prop/visual tasir. Sub-room spawn = hybrid (pre-authored socket + enter-trigger spawn).
+
+**Save/load MVP:** Mid-encounter save YOK. Quit edilen encounter reload'ta sub-room 0'dan restart. Mid-encounter save Phase 2 scope.
+
+**Catisma checks:**
+- Karar #27 (Echo/Death Imprint): preserved — imprint counting macro encounter granularity, sub-room degil
+- Karar #80 (Class Silhouette): preserved — 16x10 sub-room'da 64px chibi silhouette readability korunur
+- Karar #143 (6-layer Painter): preserved + `encounterAvoidRadius` ekleme (spawn-pocket vs edge-density clutter catismasini cozer)
+- Karar #147 (Multi-Layer Painter LIVE): preserved — BackgroundLayerData her sub-room'a ayri kompozisyon imkani verir
+
+**Implementation:** Codex tarafindan `STAGING/SUBROOM_ENCOUNTER_TECH_SPEC_OPUS.md` (Opus tarafindan yaziliyor) referans alinarak yapilir.
+
+**Vertical slice hedef:** 2 sub-room Combat node, fade transition, sub-room clear lock unlock, final reward only.
+
+**Codex verdict:** APPROVE_WITH_REVISIONS — `STAGING/CODEX_DONE_subroom_encounter_review.md`
+
+**Reference:**
+- Dead Cells biome model, Hollow Knight area transitions
+- `STAGING/CODEX_DONE_subroom_encounter_review.md` (full Codex review)
+- `STAGING/codex_task_subroom_encounter_review.md` (original proposal)
+
+**Cross-ref:** memory `[[project-karar-149-subroom-encounter-lock]]`, Karar #143, Karar #147
+
+---
+
+## Karar #150 — Act-Aware Dungeon-Inside Architecture LIVE (2026-05-19 S94 LATE NIGHT)
+
+**Karar (Codex APPROVE_WITH_REVISIONS final wording):** RIMA dungeon rooms use a fake-isometric, dungeon-inside visual architecture. The v3 diamond/corner-cut silhouette constraint is revoked. The default combat sub-room canvas becomes about 32×22 for the inside-dungeon feel; this overrides Karar #149's 16×10 default size but preserves Karar #149's encounter semantics: Combat/Elite macro nodes may contain connected RoomTemplateSO sub-rooms inside one EncounterTemplateSO, internal fade-to-black transitions do not advance DungeonGraph, and rewards fire only after the final sub-room clears. Each Act shares the same internal architecture grammar but uses Act-specific material identity: Act 1 cool granite keep, Act 2 corrupted bone/root/bog architecture, Act 3 void-stone/gold-sigil architecture. Production uses the Karar #143/#147 layered visual stack, with MVP allowed to ship via authored BackgroundLayerData sub-room compositions until RoomData-based 6-layer painting is wired per sub-room. L3 wall production target per Act is 5 wall classes plus arch, pillar, collapsed_stub, with about 3 variants each. Cross-Act reuse is mandatory for neutral/tintable universal assets; material-defining walls, floors, patches, and hero accents remain per-Act unless palette-edit quality is verified.
+
+**v4 PASS reference:** `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png` (1536×1024, Codex `image_gen` $0 cost).
+
+**Core visual rules:**
+- Map silhouette: irregular ~32×22 sub-room default (16×10 v3 fail evidence-based revize)
+- Perimeter walls minimal/off-screen, frame %75'i internal architecture
+- Min 2 free-standing pillar + 1 archway connector + 1 collapsed stub per sub-room
+- 8-dir character (Karar #114 LOCK 2026-05-13): 5 sprite üret (S, SE, E, NE, N) + 3 mirror (W/SW/NW)
+- L3 wall class set: 5 sınıf (top hero, bottom hero, side L, side R, corner) + arch + pillar + collapsed_stub = 8 class × 3 variant = 24 wall sprites per Act
+
+**Karar #149 sub-room integration (door-through mechanic):**
+- Combat/Elite macro node = 1 EncounterTemplateSO × 3-5 sub-room
+- Sub-room transition: sağ-alt archway → fade-to-black → sub-room N+1 sol-üst archway entry (mirror match)
+- Visual consistency: same Act material, same palette, variation in composition + density only
+- Logical connection: storytelling debris trail (L5 decals) sub-room N → N+1
+
+**Per-Act material adaptation:**
+
+| Act | Theme | Palette dominant | Accent | L3 wall variant |
+|---|---|---|---|---|
+| Act 1 Shattered Keep | Fragmented ancient order | Cool granite `#3A3D42` | Cyan rift `#00FFCC` | Granite blocks, vine creep |
+| Act 2 Bleeding Wastes | Living corrupted wound | Bog `#3A2840` | Rust ember `#C8502A` | Bone-wrapped granite, root overlay |
+| Act 3 Core Approach | Transcendental cosmic | Void `#0A0810` | Incandescent gold `#FFD700` | Void-stone, gold sigil carvings |
+
+**Asset count per Act:** ~110 (16 L1 + 16 L2 + 24 L3 + 24 L4 + 18 L5 + 12 L6). 3 Act × 110 = 330 total + 25% regen buffer = ~445 effective gens. 5000 PixelLab budget içinde rahat.
+
+**Cross-Act reuse:** `_Universal` pack (small_stones, vfx_atomic, generic floor decals) tüm Act'lerde reuse. L1/L2/L3/L4 + L6 hero accent per-Act. L5 scatter mixed (generic universal, Act-themed per-Act).
+
+**Roadmap entegrasyon:** Karar #150 LIVE → Faz 0 satisfy. Faz 1 trigger = Act 1 skeleton dispatch (5 wall class regen + arch + pillar + stub). Roadmap discipline (`STAGING/ROADMAP_dungeon_buildup.md`) Act 1 LIVE'a kadar uygulanır, sonra Act 2/3 için tekrar eder.
+
+**Catisma checks:**
+- Karar #98 cyan rift accent: PRESERVED (per-Act color variant)
+- Karar #100 35° + Karar #114 8-dir: PRESERVED (fake iso art tekniği, kamera açısı değil)
+- Karar #143 6-layer painter: PRESERVED (sadece L3 wall class değişiyor)
+- Karar #147 Multi-Layer Painter LIVE: PRESERVED
+- Karar #148 Branch D+E: PRESERVED (floor de-emphasis + camera tilt)
+- Karar #149 sub-room sequence: **UPDATED — sub-room default 16×10 → 32×22 (v4 evidence-based)**
+- v3 diamond constraint: KALDIRILDI
+
+**Implementation gate:** Codex review dispatch IN FLIGHT (`STAGING/CODEX_TASK_karar_150_review.md`). Verdict → revisions apply → Faz 1' dispatch.
+
+**Reference:**
+- v4 image: `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png` (PASS, candidate framing locked)
+- v3 image: `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v3_fakeiso.png` (REJECTED arena-feel)
+- Full spec: `STAGING/KARAR_150_LIVE_act_aware_dungeon_inside.md`
+- Roadmap: `STAGING/ROADMAP_dungeon_buildup.md`
+
+**Cross-ref:** memory `[[project-karar-150-fake-isometric-lock]]`, `[[project-act-aware-dungeon-inside-lock]]`, Karar #100, Karar #143, Karar #148, Karar #149
 
 ---
 

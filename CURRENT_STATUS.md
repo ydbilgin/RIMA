@@ -1,5 +1,896 @@
 # CURRENT_STATUS
 
+## 2026-05-19 S94 LATE NIGHT (LATER) → Karar #150 LIVE FULL CYCLE COMPLETE — drift fix, cleanup, NLM canonical aligned, ready for /clear
+
+**Karar #150 (Act-Aware Dungeon-Inside Architecture) LIVE FULL CYCLE.** Tüm aşamalar tamamlandı:
+- Design doc + Codex APPROVE_WITH_REVISIONS verdict + 8 revision integrated
+- MASTER_KARAR_BELGESI Karar #150 entry LIVE wording
+- Memory authoritative (`project_karar_150_fake_isometric_lock.md` + `project_subroom_canonical_tags_lock.md`)
+- Codex pre-cleanup fixes (gate ref + test paths + Wang16 dead code) commit `d83d20d`
+- Unity legacy cleanup execute (224 file ARCHIVE + 125 file DELETE) commit `34ee1f5`
+- NLM 300 → 127 cleanup + 9 Priority 1 push = canonical drift correction LIVE
+- 4-dir → 8-dir drift fix (Karar #114 LOCK 2026-05-13 doğru wording yapıldı)
+
+**Bu session shipped (S94 LATE NIGHT LATER):**
+
+| İş | Status |
+|---|---|
+| v4 image_gen PASS | ✅ `RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png` |
+| Karar #150 LIVE design doc | ✅ `STAGING/KARAR_150_LIVE_act_aware_dungeon_inside.md` (Codex 8 revision integrated) |
+| MASTER_KARAR Karar #150 entry | ✅ LIVE wording (Codex önerisi) |
+| Memory: project_karar_150 LIVE + subroom_canonical_tags_lock yeni | ✅ MEMORY.md index güncel |
+| Codex pre-cleanup fixes (commit `d83d20d`) | ✅ 3 fix PASS, dotnet 0 error, EditMode 420/0 |
+| Codex Unity legacy cleanup (commit `34ee1f5`) | ✅ 125 DELETE + 224 ARCHIVE, compile + test PASS |
+| NLM cleanup 300 → 127 | ✅ 173 obsolete deleted (cinderia drift source + Karar 118/119 reports + Brush sprint inputs + research integrated + meta + sprint old) |
+| NLM Priority 1 sync 9 file | ✅ Karar #150 + #149 canonical drift correction confirmed (test query returns correct 3-5 sub-room, 32×22, fade-to-black, mirror archway) |
+| 4-dir → 8-dir drift fix | ✅ Karar #114 LOCK doğru wording — Karar #150 doc + MASTER_KARAR + PROJECT_RULES + memory + CURRENT_STATUS sync |
+
+**Pre-cleanup fixes detayı (commit `d83d20d`):**
+1. `LargeDungeonMapPainterBase.cs` — `RIMA_gate_arch`/`gate_spikes` Resources.Load null-safe wrap (broken ref fix)
+2. `BrushDataTests.cs` — `Keep/Floor/tile_1-3.png` → `Act1_ShatteredKeep/floor_tiles/granite_tile_01-03.png`
+3. Wang16 dead code archive — `RebuildAllWangTilesets.cs` + `CreateCornerWangTileSetAsset.cs` deleted, `WangImporterTests` IGNORED, `AutoBiomePresetBuilder` Obsolete
+
+**Unity legacy cleanup detayı (commit `34ee1f5`):**
+- DELETE: 8 paths, ~120 files (STAGING/TILESET_OUTPUT/ 6 batches + undercroft_connected + RIMA_Painterly_Pack_v1 stubs)
+- ARCHIVE: 224 files to `Assets/Art/_archive_karar150/` (.meta preserved)
+  - Batch 1 flat walls (26) — Karar #150 fake-iso uyumsuz painterly_wall_01-12 + wall_decoration_vines
+  - Batch 2 stranded gates (4) — gate_arch/spikes Resources D
+  - Batch 3 concept v1-v3 (6) — v4 production reference kalır
+  - Batch 4 StoneDungeon pre-painterly (67)
+  - Batch 5 Wang16 v2 (58) — CB pivot scope
+  - Batch 6 Keep legacy (52) — purple walls/decals + old tilesets + Wang loose
+  - Batch 7 F1 loose (11) — Wang16 ColdWall + loose root PNGs
+- KEEP intact: Resources/StoneDungeon, F1/Tilesets, F1/Generated, _Universal, Act1 painterly production
+- Pre-existing gap: `tile_6.png` missing (git history'de yok, cleanup ile ilgisiz, ignore)
+
+**NLM canonical state (post-cleanup):**
+- Source count: 136/300 (164 free slot)
+- Karar #149 + Karar #150 + Codex reviews + ROADMAP + asset plans = canonical authoritative
+- Sub-agent dispatch'leri artık doğru canonical context dönüyor
+- `cinderia_analysis.md` (Karar #149 = "L6 single hue lock" drift source) DELETED
+- 2.5d_salvage + 2_5D_TRANSITION_LOCKED (pivot rejected) DELETED
+
+**Critical canonical fix bu session:**
+- **8-dir (Karar #114 LOCK 2026-05-13)** — Karar #53/#88 (4-dir) REVOKED. 5 sprite üret (S, SE, E, NE, N) + 3 mirror (W←E, SW←SE, NW←NE) Unity SpriteRenderer.flipX
+- Karar #150 LIVE doc'umda yanlışlıkla "4-dir" yazılmıştı — düzeltildi
+- PROJECT_RULES.md "4 yön MVP" satırı güncellendi
+
+**Per-Act material spec (Karar #150 final):**
+
+| Act | Theme | Dominant | Accent (Karar #98) | L3 wall variant |
+|---|---|---|---|---|
+| Act 1 Shattered Keep | Fragmented ancient order | `#3A3D42` granite | `#00FFCC` cyan | Granite + vine creep |
+| Act 2 Bleeding Wastes | Living corrupted wound | `#3A2840` bog | `#C8502A` rust ember | Bone-wrapped granite |
+| Act 3 Core Approach | Transcendental cosmic | `#0A0810` void | `#FFD700` gold | Void-stone + gold sigil |
+
+**Sub-room connection mechanic (Karar #149 + #150 integration):**
+- Combat/Elite node = 1 EncounterTemplateSO × 3-5 sub-room
+- Archway exit (sub-room N) → fade-to-black → archway entry (sub-room N+1) MIRROR placement
+- Sub-room canvas: 32×22 (Karar #149 16×10 override)
+- Slot grammar: `subRoomTag` 5 canonical string (entry_chamber/pillar_arena/collapse_corridor/ritual_hall/crypt_cell)
+- Mirror validator: inverse direction + edge match + width tolerance + placement tolerance (one code edit pending)
+
+**Asset count target (Karar #150 economics):**
+- Per Act: ~110 (16 L1 + 16 L2 + 24 L3 + 24 L4 + 18 L5 + 12 L6)
+- 3 Act × 110 = 330 + 25% regen buffer = ~446 effective gen
+- PixelLab balance: 3,200/5,000 → 3 Act env package için comfortable
+
+**PixelLab inventory (rima-asset analysis):**
+- 33 asset reusable (L1/L2 floor + L5 scatter production-ready)
+- L3 walls: 0 reusable → 24 sprite fresh gen
+- 4 review queue item resolve (cyan rift c2b48c99 dahil)
+- Pilot önerisi: arch class first (en zor, formula validation)
+
+---
+
+## Next session pickup (CLAUDE clear sonrası ilk action queue)
+
+**Önce oku:**
+1. `.claude/PROJECT_RULES.md` (8-dir + Karar #150 fake-iso lock güncel)
+2. Bu CURRENT_STATUS.md üst kısmı (S94 LATE NIGHT LATER section)
+3. `STAGING/KARAR_150_LIVE_act_aware_dungeon_inside.md` (Karar #150 full spec)
+4. `STAGING/RIMA_FRESH_ASSET_PLAN.md` (PixelLab gen plan)
+5. `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png` (art bible reference)
+
+**Sıradaki action queue:**
+
+1. **Act 1 tile gap analysis** — `Assets/Art/AssetPacks/Act1_ShatteredKeep/` mevcut envanter vs Karar #150 spec (110 hedef). Cleanup sonrası kalanlar:
+   - KEEP: 12 painterly_decal + 6 painterly_accent + 12 painterly_prop + 8 painterly_floor + _Universal/small_stones (5)
+   - EKSİK: 24 L3 wall sprite (8 class × 3 variant), arch + pillar + collapsed_stub fake-iso depth, L4 patches Act1 spec (cave moss + dust + cracked rubble), L6 brazier/lantern (point-light source), cyan rift hero accent (sparse)
+   - Hedef: tile-by-tile envanter çıkar, fresh gen prompt'larını hazırla
+
+2. **In-game map design test** — Mevcut KEEP'leri kullanarak küçük sub-room test scene'i kur (16×10 veya 24×16 minimal), 1 archway + 1 free-standing pillar + 1 collapsed stub layout. Faz 1 skeleton hazır olmadan TEST scene authored composition ile (Karar #147 Multi-Layer Painter LIVE). Player movement (8-dir) + camera + Y-sort sanity check.
+
+3. **Fresh gen pilot dispatch** — arch class single dispatch (PixelLab `create_object`, 256×256, low top-down 35°, granite + cyan rift glow). 5-gate review pass → 7 wall class batch.
+
+4. **EncounterTemplateValidator mirror geometry** — 4 rule add (Codex one-edit dispatch).
+
+5. **swarm mob walk concept** (deferred / backlog) — crowds-system-js incelendi (S94 LATE), Unity port maliyeti yüksek, ROI sınırlı. Phase 2'de düşük priority swarm mob (Hollow Mite tipi 1-point threat) için tek anchor pose + procedural slice-deformation walk experimenti. Şu an Karar #100/#114 8-dir PixelLab V3 pipeline yerini DOLDURMAZ — sadece anim cost save deneyi.
+
+**Active TODO:**
+- Cleanup PASS gate'i geçti, fresh gen dispatch hazır
+- NLM canonical artık güncel
+- Pre-existing tile_6.png gap (ignore, BrushDataTests Act1 path'inde)
+- Worktree'de pre-existing modified file'lar var (cleanup commit dışı, ignore)
+
+**Token state:**
+- Codex: laurethayday profile bu session active, çoklu fix dispatch PASS
+- PixelLab: 3,200/5,000 (3,500 stale, gerçek 3,200)
+- NLM: 136/300 (164 free slot)
+- Sonnet: liberal kullanım devam
+- Opus 4.7: ~15-20 karar bu session (Karar #150 design + cleanup planning + drift fix)
+
+---
+
+## 2026-05-19 S94 LATE NIGHT → Karar #150 LIVE LOCK, v4 PASS, Codex review IN FLIGHT, per-Act asset pack spec ready
+
+**Karar #150 (Act-Aware Dungeon-Inside Architecture) LIVE.** v4 concept image (`Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png`) PASS — 32×22 + irregular layout + internal-arch primary + dungeon-inside framing. Diamond constraint KALDIRILDI. User direktifi "her acte uygun yap, RIMA ruhuna uygun, dungeon içi, mantıksal bağlantılı bol tasarım" → 3 Act per-material adaptation spec'i tamamlandı.
+
+**Bu session shipped (S94 LATE NIGHT):**
+
+| İş | Status |
+|---|---|
+| v4 image_gen `bhgn2285o` background completion | ✅ 1536×1024, $0 cost, "dungeon İÇİNDE" hissi PASS |
+| Karar #150 LIVE design doc | ✅ `STAGING/KARAR_150_LIVE_act_aware_dungeon_inside.md` — 3 Act material spec + sub-room connection mechanic + 110 asset/Act count |
+| MASTER_KARAR_BELGESI Karar #150 entry | ✅ LIVE wording yazıldı, Codex revisions optional integration |
+| Memory `project_karar_150_fake_isometric_lock.md` | ✅ CANDIDATE → LIVE, v4 PASS reference + 32×22 + Karar #149 sub-room integration full spec |
+| MEMORY.md index update | ✅ Karar #150 LIVE description revize |
+| NLM context query (3 dispatch) | ✅ Act 1-3 themes + Karar #143 6-layer + asset pack reuse rules pulled |
+| Codex review task | ✅ `STAGING/CODEX_TASK_karar_150_review.md` dispatch IN FLIGHT (background `bb6gno28v`) |
+
+**NLM staleness flag (CRITICAL):**
+
+NLM canonical hâlâ Karar #149 öncesi "1 oda = 1 arena wave-based" modeli söylüyor. Karar #149 (S94 morning LIVE) + Karar #150 (S94 LATE NIGHT LIVE) NLM'e sync edilmemiş. Sonraki session `/nlm-sync` dispatch et — Karar #143/147/148/149/150 + memory dosyaları push.
+
+**Per-Act material spec (Karar #150):**
+
+| Act | Theme | Dominant | Accent | L3 wall variant |
+|---|---|---|---|---|
+| Act 1 Shattered Keep | Fragmented ancient order | `#3A3D42` granite | `#00FFCC` cyan | Granite + vine creep |
+| Act 2 Bleeding Wastes | Living corrupted wound | `#3A2840` bog | `#C8502A` rust ember | Bone-wrapped granite |
+| Act 3 Core Approach | Transcendental cosmic | `#0A0810` void | `#FFD700` gold | Void-stone + gold sigil |
+
+**Sub-room connection mechanic (Karar #149 + #150 integration):**
+
+- Combat/Elite node = 1 EncounterTemplateSO × 3-5 sub-room
+- Sub-room transition: archway exit (N) → fade-to-black → archway entry (N+1) MIRROR placement
+- 5 sub-room slot types: Entry chamber / Pillar arena / Collapse corridor / Ritual hall / Crypt cell
+- Visual consistency: same Act material + palette; variation in composition + density + accent placement only
+- Logical connection: optional L5 debris trail breadcrumb sub-room N → N+1
+- Karar #149 default sub-room 16×10 → **32×22** (v4 evidence-based revize)
+
+**Asset count target (full game):**
+
+- Per Act: ~110 sprites (16 L1 + 16 L2 + 24 L3 + 24 L4 + 18 L5 + 12 L6)
+- 3 Act × 110 = 330 + 25% regen buffer = ~445 effective gens
+- Current budget: 3500/5000 PixelLab → comfortable for all 3 Acts
+
+**Active dispatches at session end:**
+
+| Dispatch | Status | Output |
+|---|---|---|
+| Codex review Karar #150 (background `bb6gno28v`) | ⏳ IN FLIGHT | `STAGING/CODEX_DONE_karar_150_review.md` bekleniyor |
+
+**Next session ilk action queue:**
+
+1. Codex review verdict oku (`STAGING/CODEX_DONE_karar_150_review.md`)
+2. Revisions varsa apply → MASTER_KARAR_BELGESI Karar #150 wording finalize
+3. `/nlm-sync` dispatch — Karar #143/147/148/149/150 + tüm memory push
+4. Roadmap Faz 1' dispatch hazırla: Act 1 isometric wall regen (5 wall class + arch + pillar + collapsed_stub = 24 sprite, ~25-30 PixelLab gen, Antigravity Opus 4.6 prompt veya Sonnet UnityMCP)
+5. Faz 1 artifact (skeleton silhouette) review → PASS gate → Faz 2 dispatch
+
+**Pre-/clear note:**
+
+Status + memory + karar lock + MASTER_KARAR yazıldı. Codex review background'da. /clear sonrası ilk okunacak:
+1. `.claude/PROJECT_RULES.md` + bu CURRENT_STATUS.md üst kısmı
+2. `STAGING/CODEX_DONE_karar_150_review.md` (verdict)
+3. `STAGING/KARAR_150_LIVE_act_aware_dungeon_inside.md` (full Karar #150 spec)
+4. `STAGING/ROADMAP_dungeon_buildup.md` (6-faz discipline)
+5. Memory: `project_karar_150_fake_isometric_lock.md` LIVE + `project_karar_149_subroom_encounter_lock.md` + `project_asset_pack_organization_lock.md`
+
+**Reference concept iteration final state:**
+
+- v1 50-60° isometric → REJECTED
+- v2 35° + flat walls → REJECTED
+- v3 35° + fake iso + DIAMOND → REJECTED arena-feel
+- **v4 35° + fake iso + IRREGULAR + 32×22 + internal-arch primary → LOCKED**
+
+---
+
+## 2026-05-19 S94 LATE → Fake Isometric pipeline candidate LOCK, piece-by-piece roadmap LOCK, /clear pending
+
+**Karar #150 candidate (Fake Isometric Pipeline) IN FLIGHT.** v3 image_gen dispatch `bii903pjb` bekleniyor. v3 PASS olursa: Karar #100 35° tilt korunur + walls fake-isometric depth ile yeniden çizilir (5 yeni sprite class) + diamond room shape (corner-cut octagonal). 8-dir char (Karar #114) + Y-sort + collision aynı kalır — tek değişim asset class + room generator corner-fill.
+
+**Bu session shipped:**
+
+| İş | Status |
+|---|---|
+| Wave E wall execution (Sonnet UnityMCP sub-agent) | ✅ DONE 68% fidelity (< 80% gate FAIL). 48 SR Spawn_01 + 46 SR Spawn_02, brazier cyan Light2D + animator, file pack cleanup. Sonuç: sprite collage hissi, "bu hiç dungeon gibi durmuyor" verdict |
+| Wave H Codex Step 2 SubRoomSequenceController (laurethgame profile) | ✅ DONE PASS. 730 LOC new + 86/-3 modified. 6 runtime files + 1 EditMode test. 2/2 test PASS. `MapLayerOrchestrator.Paint(RoomTemplateSO)` API yok deviation flagged |
+| Codex profile rotation | ✅ yasinderyabilgin bypass, laurethgame + laurethayday rotation kullanılıyor |
+| Research dispatch 1: Hades scene integration pipeline | ✅ DONE. `STAGING/RESEARCH_dungeon_scene_integration.md`. Hades 2.5D mesh DEĞIL 2D — bizim sprite-only pipeline yapısal olarak farklı. Anti-pattern listesi (3/8'i bizim hata), top 3 actionable no-regen fix (Global Light2D fill + contact shadow blob + wall-base AO + 8px floor overlap) |
+| Research dispatch 2: RIMA project knowledge question-driven | ✅ DONE. `STAGING/RESEARCH_rima_project_knowledge.md`. 5 kritik bulgu: Terminator Line (Jen Zee 1px highlight Karar #98 ile match), Beautification Pass zorunlu (Karar #143 AutoPopulator yetersiz), Karar #143 6-layer + Karar #149 sub-room visual complexity vs combat readability conflict, 35°+4-dir shipped precedent yok (playtest gate), Death Imprint mechanical-difficulty YASAK (Returnal cautionary) |
+| Codex concept v2 image_gen (35° redraw) | ✅ DONE $0 cost. `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v2_35deg.png` 1536×1024. v1 50-60° REJECTED, v2 35° + 0° Y rotation TARGET candidate |
+| Codex concept v3 image_gen (fake isometric) | ⏳ IN FLIGHT `bii903pjb`, ~5-10 dk. 35° tilt + 0° Y + isometric wall depth + diamond room shape. Stardew/Octopath/SNES RPG aesthetic |
+| `STAGING/ROADMAP_dungeon_buildup.md` (6-faz piece-by-piece plan) | ✅ DRAFT. Faz 0 lock + Faz 1 skeleton + Faz 2 floor + Faz 3 decoration + Faz 4 lighting + Faz 5 post-FX + Faz 6 variant. Her faz tek artifact + tek karar gate, scope creep YASAK |
+| Antigravity prompt v2 (skeleton-first) | ✅ READY `STAGING/ANTIGRAVITY_PROMPT_visual_rethink.md`. v3 onaylanırsa fake-iso regen list ile yeniden yazılır |
+| Memory persist | ✅ Karar #150 candidate + Roadmap + Fake Iso Pipeline lock + Antigravity Opus 4.6 escalation reference. MEMORY.md index güncel |
+
+**Critical realization (session insight):**
+
+User direktifi: *"gereksiz detaylardan ziyade parça parça ilerleyelim dungeon yapısını kuramadan bi şeyler ekliyoruz hepsi birbirine giriyor"*
+
+Wave E + Antigravity v1 prompt + tüm önceki denemeler **yapısal hataya** dayanıyordu: dungeon iskeleti kurmadan dekorasyon/lighting/post-FX ekliyorduk. Roadmap (6 faz) bu disiplini hard rule olarak lockluyor. v3 candidate gelmeden Faz 1 dispatch edilmiyor.
+
+**Sub-agent collision lesson:**
+
+UnityMCP bridge stdio MCP — Claude Code main session + sub-agent paralel bağlanmaya çalışırsa race condition. Workaround:
+- Sub-agent çalışırken main session `/mcp` reconnect TRIGGER ETMEME
+- Bir anda tek UnityMCP client (orchestrator veya sub-agent)
+- Codex'in kendi profile-level UnityMCP'si var, bu race'e girmez
+
+**Active TODO (next session pickup):**
+
+1. v3 image gelince yan yana v2 + v3 + v1 değerlendir, kararı kilitle
+2. Fake iso lock → Karar #150 LIVE → MASTER_KARAR_BELGESI'ne ekle
+3. Faz 1' regen dispatch: 5 isometric wall sprite PixelLab gen (~5-7 gen, ~3500/5000 reserve içinde)
+4. Faz 2-6 sırasıyla Antigravity veya Sonnet UnityMCP dispatch'leri
+5. Roadmap güncel tutulur (her faz sonrası status edit)
+
+**Token state:**
+- Sonnet weekly: liberal kullanım devam, henüz limit yok
+- Opus 4.7 (orchestrator): bu session ~6-8 decision (Karar #150 candidate, roadmap synthesis, gap analysis)
+- Codex laurethgame + laurethayday rotation aktif, yasinderyabilgin skip
+- PixelLab ~3500/5000 (gen yapılmadı bu late session, sadece image_gen $0)
+
+**Pre-/clear note (user direktifi):**
+
+Status + memory + karar lock yazıldı. /clear sonrası ilk okunacak:
+1. `.claude/PROJECT_RULES.md` + `CURRENT_STATUS.md` (bu üst kısım)
+2. `STAGING/ROADMAP_dungeon_buildup.md` (6-faz disciplin)
+3. **Reference concept iteration sırası** — sırayla bak:
+   - `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v1.png` — REJECTED 50-60° isometric
+   - `_v2_35deg.png` — REJECTED düz facing, walls flat
+   - `_v3_fakeiso.png` — fake iso PASS ama arena-feel, REJECTED with feedback
+   - **`_v4_inside_dungeon.png`** — bg `bhgn2285o` IN FLIGHT, target = zoom-out + internal walls + perimeter off-screen + irregular layout
+4. Memory: `project_karar_150_fake_isometric_lock.md` + `project_roadmap_dungeon_buildup_lock.md`
+
+**v4 acceptance criteria (v3'ten farkı):**
+- Map size 32×22 (v3 18×12'ye göre 3× area)
+- Perimeter walls SADECE 1 köşe/edge'de veya off-screen
+- Internal walls PRIMARY — 2-3 pillar/divider, 1 archway connector, 1 collapsed stub
+- Irregular layout, diamond shape ZORUNLU DEĞİL
+- User direktifi: "dungeon İÇİNDE gibi hissetmek, arena yukarıdan izlemek değil"
+
+v4 PASS olursa Karar #150 memory file güncel — diamond constraint kaldırılır, bigger-map + internal-architecture lock'a eklenir.
+
+**Next session ilk action queue:**
+1. v4 image gelmiş mi kontrol (`Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v4_inside_dungeon.png`)
+2. v4 PASS değerlendirmesi
+3. PASS → Karar #150 LIVE, memory + MASTER_KARAR_BELGESI update
+4. Sonra: Faz 1' regen dispatch için PixelLab gen prompt'ları hazırla (5 isometric wall class)
+5. User'ın söylediği "daha düzenli prompt" gelirse o yöne dönülür
+
+**Eğer v4 yine FAIL:**
+- User feedback'i al, v5 dispatch et — image_gen $0 cost olduğu için iterasyon ucuz
+- Maksimum 3 iteration sonra UPSTREAM problem'i araştır (concept değil pipeline mı?)
+
+---
+
+## 2026-05-19 S94 MID-DAY → MCP disconnect, session restart pending. Wave E (wall execution) blocked.
+
+**HANDOFF NOTE — session restart in progress.** UnityMCP MCP server disconnected mid-session. `.claude/settings.json` had `disabledMcpjsonServers: ["UnityMCP", "pixellab"]` — both now removed `[]`. Restart required for MCP reconnect.
+
+**Next action after restart:** Dispatch Wave E execution per `STAGING/OPUS_WALL_FINAL_DECISION.md` Phase 1-10 (~90 min Sonnet UnityMCP). Then Wave F (L4 patches rebuild), Wave H (Codex Step 2 SubRoomSequenceController).
+
+**Read first after restart:**
+1. `.claude/PROJECT_RULES.md` + this CURRENT_STATUS.md (S94 mid-day section)
+2. `STAGING/NEXT_SESSION_PICKUP.md` (detailed handoff)
+3. `STAGING/OPUS_WALL_FINAL_DECISION.md` (execution-ready spec for Wave E)
+
+**S94 morning + mid-day shipped:**
+
+| İş | Status |
+|---|---|
+| Karar #149 LIVE (sub-room encounter system) | ✅ MASTER_KARAR_BELGESI + memory + Codex APPROVE_WITH_REVISIONS verdict |
+| Opus Wave B tech spec (EncounterTemplate + Controller) | ✅ `STAGING/SUBROOM_ENCOUNTER_TECH_SPEC_OPUS.md` |
+| Codex Step 1 implementation (EncounterTemplateSO + Validator + Editor) | ✅ 6 files, dotnet build PASS, validator works |
+| Faz 1 sub-room 1 visual polish v1/v2/v3 | ✅ Hades chamber grammar applied, zone groups |
+| Sub-room 2 variant compose | ✅ +25 offset, chest exit, ritual circle, single brazier |
+| Wave 4 wall composition (painterly_wall_01-12 set) | ✅ replaced wall_edge_stone, but visual gap to concept |
+| Wall inventory + canon (Wave A) | ✅ `STAGING/RIMA_WALL_INVENTORY_AND_CANON.md` |
+| 3 priority PixelLab walls downloaded | ✅ pixellab_wall_section_horizontal + corner + arch_section |
+| Opus Wave B + Wave D wall spec | ✅ `STAGING/OPUS_WALL_FINAL_DECISION.md` execution-ready |
+| Rift Batch 1 (3 obj × 3-4 states) | ✅ wall_rift_small/large + floor_rift_scar |
+| Rift Batch 2 DUPLICATE (rima-asset late completion) | ⚠ 170 gen wasted, decide which batch to keep via V3 |
+| RIMA-theme patches (Wave 5) | ✅ rift_seepage, corrupted_moss, void_ash gen done |
+| Karar #98 Path A expanded | ✅ cyan also brazier, behavior discipline (steady breath vs fast pulse) |
+| Memory persist | ✅ feedback_token_management + feedback_object_state_animation_workflow_split + project_karar_149_subroom_encounter_lock |
+
+**Critical findings (mid-day):**
+
+1. **Hero horizontal wall sprite CANNOT be rotated for side edges** — 35° perspective baked, rotating breaks illusion. Phase 1 uses gate_arch column stacks for side walls (zero new gen). Phase 2 contingent mini-regen 2-3 vertical walls for 95%+ fidelity.
+2. **Scale math correction:** Wave 4 used wrong PPU; Opus Wave D recomputes with PPU 64 + 18×12 world units. 4 sprites per long edge, 16 seam decals, Warblade scale 0.85→0.5 in spawn rooms for 2.8× ratio.
+3. **Karar #98 expansion path locked** — cyan extended to braziers (behavior differentiation rule).
+4. **Codex profile issues:** yasinderyabilgin silent-failed twice this session, laurethayday once. cx_dispatch.py works but Codex execution layer not always producing output. Need to investigate or rotate profiles.
+5. **MCP disconnect cause unknown** — settings.json had servers disabled, may have been auto-toggled or accidentally edited. Fixed.
+
+**Active dispatches at handoff:** None — all completed or pending restart.
+
+**PixelLab balance:** ~3500 / 5000 gen (340 wasted on rift duplicate, 60 on RIMA patches, 60 on rift batch).
+
+**Active TODO after restart:**
+1. Wave E dispatch (wall execution per Opus FINAL)
+2. Wave F file pack cleanup (archive wall_edge_stone, delete old STAGING PNGs)
+3. Wave G L4_Patches rebuild (download 3 RIMA-theme patches + reposition)
+4. Wave H Codex Step 2 SubRoomSequenceController (parallel to Wave E OK)
+5. Wave I Rift Batch duplicate cleanup (after user V3 comparison)
+
+---
+
+## 2026-05-19 S94 MORNING → Asset Pack reorganization + RIMA visual production plan + Sub-Room Encounter proposal
+
+**TLDR (S94 morning, context clear öncesi checkpoint):**
+
+### Bu session shipped
+
+| Iş | Status |
+|---|---|
+| **Asset Pack reorganization** | ✓ `Assets/Art/AssetPacks/{_Universal, Act1_ShatteredKeep, Act2, Act3, Special}` hiyerarşi LIVE. Mevcut ~35 asset Act 1'e + 5 universal'a migrate edildi. GUID preserved → references korundu. Memory: `project_asset_pack_organization_lock.md` |
+| **Act 1 concept art** | ✓ `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v1.png` (Codex built-in image_gen) — art bible reference, Warblade + Elementalist + Imp + cool granite walls + cyan rift gates |
+| **RIMA Visual Production Plan** | ✓ `STAGING/RIMA_VISUAL_PRODUCTION_PLAN.md` — 5-phase plan, RIMA identity reframe (stones+grass → cracks+rifts), tool split (Codex / PixelLab MCP / V3 user web UI) |
+| **Sub-Room Encounter proposal** | ⏳ User önerdi (Dead Cells biome model — Combat Encounter = 4-5 sub-room sequence). Codex review dispatch IN FLIGHT. Memory: `project_subroom_encounter_system_proposal.md`. **Karar #149 candidate** |
+| **Spawn_01 scene composition** | ✓ Granite_pure_noise floor + Yudou dark tint + walls + gates + Warblade + semantic L4/L5 placement. Transform Squash Y=0.819 + Branch E tilt 6° applied |
+
+### Critical findings (S94)
+
+1. **Transform Squash** (cos 35° = 0.819 Y scale) — gece bulduğumuz KILLER FIX, sahnede uygulandı, çalışıyor. Pure noise tile + dark tint + squash + tilt kombosu cell-grid'i öldürdü.
+2. **Pure noise tile** (granite_pure_noise_01.png) — recognizable shape yok → visible repeat yok. Procedural generated.
+3. **Concept art bible** — Codex built-in image_gen gerçekten kullanılabilir kalitede üretti, $0 cost.
+4. **Sub-room encounter idea** — user önerdi, mevcut architecture (RoomTemplateSO + Multi-Layer Painter + DungeonGraph) tam destekliyor, ~1 hafta MVP estimate.
+
+### Active in flight (clear öncesi)
+
+| Dispatch | Status |
+|---|---|
+| `<codex>` Sub-Room Encounter review | ⏳ IN FLIGHT — `STAGING/CODEX_DONE_subroom_encounter_review.md` bekleniyor |
+| PixelLab `cbe06cc3...` blood drop 16-frame review pack | ⏳ Processing — geldiğinde select frames |
+
+### Clear sonrası pickup için
+
+**Önce oku:**
+1. `STAGING/RIMA_VISUAL_PRODUCTION_PLAN.md` (full visual plan, 5 phase)
+2. `STAGING/CODEX_DONE_subroom_encounter_review.md` (Codex verdict — geldikten sonra)
+3. `Assets/Art/Reference/RIMA_Act1_Spawn01_concept_v1.png` (art bible reference)
+4. Memory: `project_asset_pack_organization_lock.md` + `project_subroom_encounter_system_proposal.md` + `project_transform_squash_floor_fix_s93.md`
+
+**Sonraki action queue:**
+1. Codex Sub-Room verdict review (gelince user'a sun)
+2. Karar #149 (Sub-Room Encounter) onayla veya reddet
+3. Onaylanırsa: Visual production plan'ı sub-room model'e revize
+4. Phase 1 Unity cleanup (15 dk — boş klasörler + legacy sil)
+5. Phase 2 asset gen sırasıyla (wall cap → gate → floor variant → rift seepage → cracks → debris)
+
+### Memory updates (S94)
+
+Yeni 3 memory file eklendi:
+- `project_asset_pack_organization_lock.md`
+- `project_subroom_encounter_system_proposal.md`
+- `project_transform_squash_floor_fix_s93.md` (gece eklenen, S94'te uygulandı)
+
+### Generation budget durum
+
+- PixelLab kalan: ~4250 gen
+- Codex gpt-image-1 (built-in): $0 user cost
+- User V3 web UI: unlimited (subscription)
+- S94 morning spend: ~25 gen (concept art + blood drop dispatch)
+
+---
+
+## 2026-05-19 S93 NIGHT → User sleeping, parallel agent work (3 dispatches), zero PixelLab gen, status saves every checkpoint
+
+**TLDR (S93 NIGHT WORK START, user yatıyor sabah bakacak):**
+
+### Active dispatches (night) — STATUS at S93 ~02:00 checkpoint
+
+| Dispatch | Status | Output |
+|---|---|---|
+| Codex Ronin impl `bxzr42sk8` | ✅ DONE | `STAGING/CODEX_DONE_ronin_implementation.md` — LIVE, 0 error, 12 files, dotnet test exit 0 |
+| Opus tile angle `a8dd3f49c6552dac5` | ✅ DONE | `STAGING/TILE_ANGLE_ARCHITECTURE_OPUS.md` — Branch D + E, Branch A REJECTED |
+| Opus CB pivot + epic mech `abca8238da3126548` | ✅ DONE | `STAGING/EPIC_MECHANIC_AND_CB_PIVOT_OPUS.md` — RIMA continue, Echo Imprint Cascade top pick |
+| Codex 4-class skill bank `btecte55f` | ✅ DONE | `STAGING/RIMA_4CLASS_SKILL_DESIGN_BANK.md` — 48 skill (12×4 class) |
+| DaveX tweet scrape `a242c808...` | ⚠️ BLOCKED | x.com 402 + Nitter dead. **User'a sormak gerek** (DaveX = Fransız AI comic, asset pack workflow değil — topic mismatch) |
+| Codex tile angle review `ba4niw7pu` | ✅ DONE | `STAGING/CODEX_DONE_review_tile_angle_verdict.md` — Branch D + E (4-8° safe) PASS with refinements, Karar #148 draft ready, morning action: floor tint A/B FIRST then camera tilt |
+| Codex CB pivot review `bhgy6n3n0` | ✅ DONE | `STAGING/CODEX_DONE_review_cb_pivot_epic_mechanic.md` — Opus amendments: Echo Imprint Cascade ship realism 8→6.5-7.5, naming friction "Echo Cascade" vs Karar #122 → use "Death Imprint", Death Imprint prototype spec gate required |
+| Opus skill bank review `a7172f5daa4e866ce` | ✅ DONE | `STAGING/OPUS_DONE_skill_bank_balance_review.md` — NEEDS REVISION minor: 4 weakness + 5 POLISH + Death Imprint gap. Tag reclassify 9→7+2 (Karar #65 update). Trigger anomaly Warblade/Shadowblade |
+| rima-research free asset alternatives `aca6d10e00243ec68` | ✅ DONE | `STAGING/RESEARCH_DONE_free_asset_alternatives.md` — **KILLER FINDING: Transform Squash** Tilemap Y scale cos(35°)=0.819, optical foreshorten, ZERO art/shader/gen. Test edildi live (math doğru). + 32rogues CC0 control set + ComfyUI/SDXL workflow long-term |
+| Phase 4 morning briefing synthesis `bfvz3t4r3` | ✅ DONE | `STAGING/MORNING_BRIEFING.md` — 3 strategic decision + day-by-day plan + risks. Post-synthesis update Transform Squash eklendi. |
+
+### SIGN-OFF (S93 NIGHT END)
+
+**Tüm gece dispatch'leri tamamlandı.** Morning briefing hazır, memory + status updated, Unity baseline state (camera 0°, grid Y=1, no Transform Squash committed). User sabah uyandığında:
+
+1. `STAGING/MORNING_BRIEFING.md` oku (5 dk read)
+2. 3 strategic decision için karar ver (floor hierarchy, RIMA vs CB + Death Imprint gate, skill bank revision)
+3. Karar sonrası morning sequence başlat (Transform Squash test → Branch D contrast A/B → Death Imprint prototype gate spec)
+
+**Yeni 5 memory dosyası night work boyunca yazıldı:**
+- `project_tile_angle_verdict_branch_d_e_lock.md`
+- `project_echo_imprint_cascade_signature_candidate.md`
+- `project_ronin_live_s93_night.md`
+- `project_skill_bank_v1_revision_needed.md`
+- `project_transform_squash_floor_fix_s93.md` (KILLER FIX)
+
+**Codex Ronin code LIVE:** 12 file + 9 modified, 0 error, dotnet test exit 0.
+
+**5 STAGING research/verdict file:**
+- `TILE_ANGLE_ARCHITECTURE_OPUS.md` + Codex review
+- `EPIC_MECHANIC_AND_CB_PIVOT_OPUS.md` + Codex review
+- `RIMA_4CLASS_SKILL_DESIGN_BANK.md` + Opus review
+- `RESEARCH_DONE_free_asset_alternatives.md`
+- `MORNING_BRIEFING.md` (top-level)
+
+**Total night spend:** $0 PixelLab (frozen), Codex/Opus subscription cost only.
+
+**Open item for user:** DaveX tweet — x.com blocked, share content manually if relevant.
+
+### Yeni memory dosyaları (night)
+
+- `memory/project_tile_angle_verdict_branch_d_e_lock.md` — Branch D + E LOCK, A REJECTED, Karar #148 candidate
+- `memory/project_echo_imprint_cascade_signature_candidate.md` — top epic mechanic candidate
+- `memory/project_ronin_live_s93_night.md` — Ronin LIVE detail, gap inventory other classes
+
+### Camera tilt test (Branch E)
+
+10° X tilt uygulandı, screenshot subtle effect. **Branch D contrast disiplini şart** — sadece tilt yetersiz. Revert beklemede (Codex review sonrası karar).
+
+### Phase 4 morning synthesis
+
+3 review döndüğünde tek Codex mega-synthesis dispatch → `STAGING/MORNING_BRIEFING.md`.
+
+### S93 ~02:00 checkpoint progress
+
+- Camera tilt 10° test → reverted (Branch E confirmed insufficient alone, needs D contrast discipline)
+- Mechanic bank deep read → `STAGING/RESEARCH_mechanic_bank_summary.md` (155+ mekanik, M59-M68 RIMA-anchored combat subset)
+- Hades + Children of Morta pipeline research → `STAGING/RESEARCH_hades_art_pipeline.md`
+- CB design dir inventory → 12 doc + STAGING (`CB_v4_PIVOT_PROPOSAL`, `CB_V4_FAUX_ISO_PROTOTYPE_PLAN` mevcut — agent okudu)
+
+### Memory cleanup pending (morning)
+
+- `project_tile_character_angle_mismatch_s93.md` Branch A recommendation supersede (→ `project_tile_angle_verdict_branch_d_e_lock.md` REJECTED)
+- MEMORY.md index: yeni 3 memory eklendi, drift kontrolü morning'e
+
+### Tonight's critical insight
+
+**TILE vs CHARACTER ANGLE MISMATCH (S93 night, user diagnosed):**
+- Character sprite = 35° high top-down (Hades-style)
+- Tile asset = 90° pure top-down (flat square)
+- Visual incoherence STRUCTURAL — asset gen ile çözülmez
+- 4 branches: A (regen tiles 35°), B (regen chars 90° YASAK), C (perspective overlay), D (Hades model = flat + 3D walls)
+- Önerim Branch D — mevcut altyapı destekliyor (L3 walls + L4 patches + L5 scatter)
+- Memory: `memory/project_tile_character_angle_mismatch_s93.md` HARD LOCK
+
+### User directives (night)
+
+- Çalış durmadan, agent'larla paralel
+- Ara ara status + memory kaydet (elektrik riski)
+- PixelLab gen: BUGÜN HARCAMA (sıfır)
+- Tile için farklı fikirler araştır
+- Character skill yazımı OK
+- Epic RIMA mekanik brainstorm
+- CB pivot analizi
+- Mechanic bank kullan (F:\LaurethStudio\03_IDEAS\MECHANIC_BANK)
+- CB path: F:\LaurethStudio\02_GAMES\CircuitBreaker
+
+### Skill count clarification (S93 night)
+
+- Codex/Opus 12→8 cut önerisi PRODUCTION cost için, NOT "combat empty" için
+- Skill 12/sınıf = POOL, active 4 = standart roguelite slot
+- User haklı: pool 12 fine, active 4 = standart
+- Cut KARARı bekleniyor — Ronin 8 skill ile prototype, "az hissediliyor mu" check
+- Production budget ayrı tartışma (8 vs 12 = +33% iş ama unique signature kaybı yok)
+
+### Map composition test results (S93 sabah-akşam)
+
+3 pass denendi (RoomPipelineTest scene):
+1. Tilemap base + path + dirt → grid çok belirgin
+2. + L4 patches + L5 scatter (60 stone) → çok dense, hero stones scatter olmadı
+3. + L4 sparse + L5 25 küçük → daha iyi ama walls dwarf, gates küçük
+4. Painterly Pack floor tiled → her tile'ın platform border'ı, 8x6 grid net görünür
+
+**Tüm tile asset'lerimizde ortak sorun:** her tile self-contained framed object (PixelLab semantic), seamless ground texture değil. Plus angle mismatch (yukarıdaki bulgu).
+
+### Karar boşluğu (sabah karara)
+
+User uyandığında karar verecek:
+1. Branch seçimi (A/C/D for tile angle)
+2. Cut yapılacak mı (12→8 skill, evrim, echo sayıları)
+3. CB pivot mı RIMA continue mı (Opus + Codex verdict'leri okuyup karar)
+4. Epic mechanic eklenecek mi
+5. Two-Class Combat Stress Test Day 2 başlasın mı (Ronin Day 1 sonucuna bağlı)
+
+---
+
+## 2026-05-19 S93 EARLY → Round-brush + same-elevation LOCK + ChatGPT (gpt-image-1) Wang16 prompt pack + Codex pipeline research
+
+**TLDR (S93 START, elektrik kesintisi sonrası recovery):**
+
+### Bu session decisions
+
+| Iş | Status |
+|---|---|
+| **Unity Safe Mode fix** | ✓ `MapLayerOrchestrator.cs` struct corruption (TerrainBlend fields LayerToggles içine yanlış konmuş, C# 9 struct field initializer error) düzeltildi. Class body'ye taşındı. |
+| **Round-brush + same-elevation LOCK** | ✓ `memory/feedback_round_brush_same_elevation_lock.md` — Map Designer paint workflow = spray brush mantığı, variable radius, floor↔floor SAME PLANE blob transition, cliff/wall YASAK |
+| **create_tiles_pro 4-type batch capability** | ✓ `memory/reference_pixellab_create_tiles_pro_4type.md` — tek call 4 type x 4 variant = 16 tile, 25 gen |
+| **ChatGPT Wang16 prompt pack** | ✓ `STAGING/chatgpt_tile_prompts_act1_2_3.md` — Act 1+2+3 base tiles + Wang16 transitions, master system instructions + 8 prompt (1.1-1.5 + 2.1-2.3 + 3.1-3.2) |
+| **Codex pipeline research dispatch** | ✓ `STAGING/codex_task_topdown_floor_pipeline_research.md` dispatched (bvlte86bi), verdict bekleniyor `STAGING/CODEX_DONE_topdown_floor_pipeline_decision.md` |
+
+### S93 ilk adımlar
+
+1. Unity'yi aç, Safe Mode geçtiğini doğrula, Console error olmamalı
+2. Codex verdict'ini oku (pipeline decision)
+3. Eğer Codex gpt-image-1 yolunu onaylarsa: `chatgpt_tile_prompts_act1_2_3.md` PROMPT 1.1 + 1.3'ü ChatGPT'ye yapıştır, görsel kontrol gate
+4. PASS olursa Act 1 base + first Wang16 transition LIVE → Unity import → Brush V1 round paint test
+5. FAIL olursa Codex'in Plan B'sine geç
+
+### Locked constraints
+
+- Floor↔floor SAME PLANE, cliff/wall YASAK (round-brush memory)
+- 32px chunky, top-down PURE, painterly hand-drawn edge
+- Wang16 corner blend = sadece flat transition için, elevation Wang KULLANMA
+- Act 1 cool granite + worn stone path + cool moss + mud crust palette (ACT_FLOOR_TAXONOMY canonical)
+
+### S93 STRATEGIC LOCK — RIMA = Hades-style, CB = Wang topdown (two-game split)
+
+**Karar:** 1200+ gen Wang16 painterly R&D'sinden sonra pragmatik split:
+- **RIMA** görsel paradigm = **Hades-style tile + sprite overlay**. Wang16 transition GEREKSİZ (Hades, Stardew, çoğu başarılı 2D oyun Wang transition kullanmıyor — tile + overlay yetiyor)
+- **CircuitBreaker (2. oyun)** = **pure top-down Wang tile game**. Wang16 R&D + Test 2 PNG (grass+dirt painterly flat) CB'nin asset foundation'ı
+- RIMA için Wang16 pipeline **KAPATILDI**. Drift trigger: biri "Wang transition" / "painterly edge wrap" / "compositor" derse → CB sevk
+
+**RIMA floor pipeline (revize):**
+- Existing F1 tile pool + L4 patches + L5 scatter (Karar #143)
+- Brush V1 + Multi-Layer Painter (Karar #147) LIVE infrastructure
+- Yeni floor pair gen YOK, overlay üretimine odaklan
+- Square cell data, görsel non-square via overlay layers (Hades model proven)
+
+**CB (deferred):**
+- Design 5 açık soruda, sonraki sprint
+- Test 2 PNG (`STAGING/pixellab_flat_test/wang16_test2_grass_dirt.png`) + tüm Wang R&D verdict'leri CB'ye taşınır
+- CB design olgunlaşınca pipeline resume
+
+**Acknowledged risks (user concerns):**
+- "Hades-style smooth rooms çıkar mı?" → Evet, Multi-Layer Painter LIVE
+- "Sprite'lar doğru yerleşir mi?" → Brush V1 + Bridson Poisson + manual placement var
+- "Animasyon da patlar mı?" → Ayrı risk, ayrı pilot (Warblade pilot via PixelLab animate_character). De-risk separately
+
+**Memory:** `memory/project_rima_hades_style_cb_wang_split_lock.md` (drift önleme HARD LOCK)
+
+### S93 EARLIER — Wang16 Compositor Pipeline (Codex+Opus joint verdict)
+
+**Pipeline (drift-proof):**
+- **PixelLab `create_tiles_pro`** → flat base materials (Granite + Stone Path için, 32px, top-down PURE, tile_depth_ratio 0)
+- **Custom Python Wang16 compositor** (`STAGING/wang16_compositor/compose_wang16.py`, ~200-300 satır Pillow) → 16 corner cell + contact sheet + 6x6 randomized preview, deterministic + scriptable + $0
+- **Karar #143 L4/L5/L6 overlays** → repetition + grid feel killer ZORUNLU (optional değil)
+- **Unity Tilemap + RuleTile** → square cell data, görsel non-square overlay'lerle
+
+**REJECTED (drift döndüğünde hatırla):**
+- ❌ Tilesetter ($25, GUI manual click, no CLI)
+- ❌ gpt-image-1 tek-shot Wang sheet (coherence yok, sadece motif source OK)
+- ❌ PixelLab `create_topdown_tileset` (elevation/cliff üretiyor)
+- ❌ Splat shader (TerrainBlend) MVP'de değil, experimental toggle scene'den disabled
+- ❌ F1'deki 11 mevcut Wang16 (Codex baktı, hepsi wall/rim/elevation; sadece pink_cream flat ama palette yanlış)
+- ❌ "Tüm Act 1+2+3 paralel" — MVP TEK pair (Granite↔Path)
+
+**Grid form karar:** 32x32 kare Tilemap data'da kalır. Görsel kare hissi YOK çünkü Wang cell internal irregularity + L4 patch + L5 scatter + L3 wall overlay'leri grid feel'i siliyor. Hades/Stardew/Colossus aynı altyapı. "We escape square tiles" YANLIŞ MESAJ; "square for runtime, visual non-square via overlays" doğru.
+
+**Memory:** `memory/project_wang16_compositor_pipeline_lock.md` (drift önleme HARD LOCK, 7 Codex risk + mitigation table)
+
+**Codex artifacts:**
+- `STAGING/CODEX_DONE_topdown_floor_pipeline_decision.md` (first verdict, full pipeline)
+- `STAGING/CODEX_DONE_wang16_compositor_review.md` (second verdict, 7 risk + grid clarification)
+- `STAGING/colossus_floor_crops.jpg` + `STAGING/f1_tilesets_contact_sheet.png` (visual review)
+
+**Next dispatch:** Codex'e `compose_wang16.py` MVP build (background)
+
+### CB pivot durum
+
+CB (LaurethStudio CircuitBreaker) S92 LATE'te erken gündeme geldi ama **RIMA devam kararı LOCK** (19:47), CB ikinci oyun olarak fikir bekliyor. Bu session CB'ye geçmiyoruz.
+
+---
+
+## 2026-05-18 S92 LATE → Alabaster Dawn pipeline LOCK + ACT_FLOOR_TAXONOMY + NLM canonical angle reconciliation
+
+**TLDR (S92 LATE SESSION CLOSE — yeni session pickup için):**
+
+### Bu session locked decisions
+
+| Iş | Status |
+|---|---|
+| **Paint-Brush Architecture LOCK** | ✓ `memory/project_paint_brush_architecture_lock.md` — small piece composition (deprecated, üst kontrol) |
+| **F1 Canonical Tilesets discovery** | ✓ `memory/project_f1_canonical_tilesets_discovery.md` — Wang16 tilesets ZATEN VAR `Assets/Art/Tiles/F1/Tilesets/` (11 set, S88 öncesi) |
+| **Multi-Layer Painter v1 LOCK** | ✓ `memory/project_multilayer_painter_v1_lock.md` — Karar #147, RoomTemplateSO.backgroundLayers, ReorderableList Inspector |
+| **Alabaster Dawn Pipeline LOCK** | ✓ `memory/project_alabaster_dawn_pipeline_lock.md` — Tile base + LARGE ORGANIC PATCHES (soft alpha) + walls + props + decals. Karar #143 6-layer canonical. Wang16 ONLY for wall↔floor, NOT floor↔floor variety |
+| **Hades research synthesis** | ✓ `STAGING/HADES_FLOOR_RESEARCH.md` — `/generate-image-v2` wrong endpoint (3D platform); `create_tiles_pro` + `create_topdown_tileset` correct |
+| **Act floor taxonomy** | ✓ `STAGING/ACT_FLOOR_TAXONOMY.md` — NLM canonical: Act 1-3 + Alabaster Dawn + Cave + Nexus Core materials, palettes, endpoints, forbidden words |
+| **Angle canonical** | ✓ Tile `tile_view: "top-down"` PURE (NOT low/high — NLM lock). Hades 35° feel from L3 walls + decorations + camera tilt, NOT tile angle |
+
+### Karar #143 6-layer çözüm (canonical)
+
+```
+L1 Base Floor (tile pool 16 variant PURE top-down)
+L2 Variation (alternate material tile)
+L3 Wall Overlay sprites (Hades perimeter cap — 35° perspective BURADAN gelir)
+L4 Large Patch Overlay (organic alpha, grid KIRAR — Alabaster Dawn secret)
+L5 Detail Decal + Scatter (Bridson distributed)
+L6 Rift Accent (sparse hero)
+```
+
+Tek tile katmanı YETERLİ DEĞİL — 6 katmanın TÜMÜ Hades/Alabaster Dawn look için gerekli.
+
+### Üretilen / hazır assets
+
+| Asset | Path | Status |
+|---|---|---|
+| 16 flat granite tile pool | `Assets/Art/Rooms/AssetPack/FloorStones/` (TR yanlış dizin — taşınmalı `Assets/Art/Tiles/F1/...`) | ✓ üretildi, **ANGLE muhtemelen yanlış** (top-down PURE değil) |
+| 5 stone variant (organic transparent) | `Assets/Art/Rooms/AssetPack/FloorStones/` | ✓ pilot, L5 scatter için |
+| 4 large patches (path/moss/dust/rubble) | `Assets/Art/Rooms/AssetPack/LargePatches/` | ✓ L4 patches |
+| Rift, statue, glow decals | `Assets/Art/Rooms/Backgrounds/Spawn_01/` | ✓ Daha eski batch |
+| Layer 0 organic floor | `Assets/Art/Rooms/Backgrounds/Spawn_01/layer_00_floor_painted_granite.png` | ⚠️ "platform with cliff edges" — Karar #143 ile UYUMSUZ |
+| Wall_edge + Wall_decoration | `Assets/Art/Rooms/Backgrounds/Spawn_01/layer_11/12_*.png` | ✓ Decal-style |
+| F1 Wang16 tilesets | `Assets/Art/Tiles/F1/Tilesets/*` + `Generated/` | ✓ Eskiden hazır, RuleTile + tile assets |
+| Codex Hades Preset button | `Assets/Editor/MapDesigner/Inspectors/RoomTemplateSOInspector.cs` | ✓ LIVE Inspector |
+| ZoneToLayerMappingSO | `Assets/Scripts/MapDesigner/Room/Data/ZoneToLayerMappingSO.cs` + `Assets/Data/Blueprint/ZoneLayerMap_Default.asset` | ✓ LIVE 11 zone mapping |
+
+### Yeni session ilk 3 adım
+
+1. **Read** these memory files in order:
+   - `project_alabaster_dawn_pipeline_lock.md` (workflow LOCK)
+   - `project_paint_brush_architecture_lock.md` (composition philosophy)
+   - `project_f1_canonical_tilesets_discovery.md` (existing assets)
+   - `STAGING/ACT_FLOOR_TAXONOMY.md` (Act 1-3+ taxonomy reference)
+   - `STAGING/HADES_FLOOR_RESEARCH.md` (technical research synthesis)
+2. **Re-dispatch Act 1 base tiles** with NLM canonical settings:
+   - `create_tiles_pro` `tile_view: "top-down"` (PURE), `tile_depth_ratio: 0`, `outline_mode: "segmentation"`
+   - Cool Granite 16 variant + Worn Stone Path 16 variant
+   - Forbidden words list strict
+3. **Continue Act 1 production** per ACT_FLOOR_TAXONOMY.md order:
+   - L3 Wall Overlay (Hades perimeter cap, `create_object`)
+   - L4 patches missing (dust+ash+moss+mud+rift, `create_map_object`)
+   - L5/L6 scatter (stones, moss tufts, `create_object`)
+4. **Compose Spawn_01** with all 6 layers — visual test for "natural look" achieved or grid still visible
+5. **Brush + Tilemap workflow**: user paints in Map Designer (Tile Palette for L1/L2, Asset Pack Browser placement mode for L3-L6)
+
+### Pending Codex / Sonnet dispatches
+
+| Job ID | Status | Bekleniyor |
+|---|---|---|
+| `ff9f5489` Wang16 moss/granite | ⏳ uncertain (floor↔floor Wang yanlış strateji, ama dispatched, gelirse wall sprite olarak kullanmayı dene) |
+| `2f886879` Wang16 grass/granite | ⏳ same |
+| `f6c16987` Wang16 path/granite | ⏳ same |
+| `88fbb4e7` Wang16 dirt/granite | ⏳ same |
+| `e195a7aa` Granite tile pool (high top-down) | ⏳ — angle muhtemelen yanlış, alındığında görsel kontrol; PURE değil, re-dispatch gerekebilir |
+| `f68f7389` Worn stone path (high top-down) | ⏳ same |
+
+Bu in-flight'lar yeni session başında notify olabilir / olmamış olabilir — check job status if needed.
+
+### Bütçe
+
+- Spent total ~$5 USD this session (asset gen + multiple regen)
+- Subscription remaining: ~4280/5000 generations
+- Animation budget reserved: ~4000 generations
+- Map asset budget: ~280 generations remaining
+
+### Karar reminder (session sonu)
+
+User defalarca tekrarladı, orchestrator drift etti, sonunda 4 ana lock memory yazıldı:
+1. `paint-brush-architecture-lock` — composition philosophy
+2. `multilayer-painter-v1-lock` — data model
+3. `f1-canonical-tilesets-discovery` — existing assets
+4. `alabaster-dawn-pipeline-lock` — workflow + endpoints + angles
+
+Yeni session orchestrator BU 4 memory'i okumadan asset gen başlatmamalı.
+
+---
+
+## 2026-05-18 S91 → Map Plan v1 LOCK + Karar #146 weapon unify + clean state (Obsidian/graphify/NLM ready)
+
+**TLDR (S91 SESSION CLOSE, yeni session pickup için):**
+
+### Bu session shipped
+
+| Iş | Status |
+|---|---|
+| **Map Plan v1 LOCK** | ✓ STAGING/MAP_PLAN_v1_FINAL.md + memory/project_map_plan_v1_lock.md (16 decisions, Option C hibrit painted bg + gameplay overlay, Hades model) |
+| **Karar #146 LOCK — Weapon Visibility Input-Driven Puff** | ✓ MASTER_KARAR ekleme + #71/#36 supersede + weaponless v1 memory revize |
+| **6 stale memory archived** | ✓ memory/_archive/ (128px_pivot_s43, animation_notes, visual_quality, v15g_v15h, room_design, map_system). 2 extract → ANIMATION_BIBLE + map_fragment_system |
+| **NLM clean sync** | ✓ 2 doc updated, 28 orphan cleaned, state temiz |
+| **Sahne temiz** | ✓ 3 karakter silindi (Warblade_v15h_Player, Player, PlayerGlow), v15h root disabled |
+| **Knowledge graph (graphify)** | ✓ STAGING/graphify_corpus/graphify-out/ — 1644 nodes, 1796 edges, 111 communities, HTML (1.2MB) + Obsidian vault (1755 notes) |
+| **Discord soru hazır** | ✓ STAGING/pixellab_discord_question.md (V3 anim MCP + Create Image Pro MCP ETA sorusu) |
+| **Painted bg prompts** | ✓ STAGING/painted_background_prompts_by_size.md (14 oda için copy-paste, PixelLab Pro size'larında) |
+| **Orchestrator delegation HARD RULE** | ✓ feedback_orchestrator_delegation_strict.md + memory |
+| **NLM-first context HARD RULE** | ✓ feedback_nlm_first_context_strict.md + PROJECT_RULES.md update |
+
+### Knowledge graph top communities (graphify)
+
+- Blueprint Map Zones + Sprite Direction (126 nodes)
+- Combat Core + Family Tags + FAZ Roadmap (82)
+- Class Mechanics + Shadow Echo Matrix (81)
+- Hybrid Asset Pipeline PixelLab+Codex (79)
+- Karar History + 5000 PixelLab Allocation (76)
+- Room Philosophy + Burden/Gift + Act 1 (72)
+- Master Karar + Doc Index (68)
+- Multi-Projection Architecture + Wang16 (62)
+- Sub-Agent Routing + Research Channels (53)
+- Top god nodes: Memory Index (d=34), Map Plan v1 LOCK S91 (d=32), PixelLab Character States Workflow (d=25)
+
+### S92 increment (2026-05-18) — Multi-Layer Painter LOCK
+
+- ✅ **Multi-Layer Painter v1 LOCK** — `List<BackgroundLayerData>` sistem LIVE: BackgroundLayerData class + RoomTemplateSO.backgroundLayers + RoomBankRuntimeTester foreach spawn + RoomTemplateSOInspector ReorderableList. Plan `STAGING/MULTILAYER_PAINTER_PLAN_v1.md` (Codex PASS_WITH_REVISIONS, revisions applied). Memory `project_multilayer_painter_v1_lock.md`. Karar #147.
+- ✅ **Reserved sortingOrder ranges** — bg layers `-200..-50`, gameplay `0..49`, fg overlays `50..199`, HUD `200+`.
+- ✅ **PixelLab REST API discovery** — Discord cevap: Create Image Pro + V3 anim REST'te (`api.pixellab.ai/v2/docs`), MCP defer. Codex docs fetch dispatched.
+- ⏳ **3-layer demo + Warblade overlay** — UnityMCP test (Task #9) Codex review pass sonrasi.
+- ⏳ **First production painted bg** — user manual PixelLab Pro uretim (Spawn_01 floor base 632x424, decal 256x256, accent 128x128).
+- ⏳ **EditorWindow Phase 2** — Painter Window with thumbnail strip + composite preview (defer after Phase 1 validated).
+
+### Pending (next session)
+
+- ⏳ Task #6: First painted RoomTemplate background sample (user manual PixelLab Pro üretim) — field artık hazır, sample asset bekleniyor
+- ⏳ Warblade re-download (PixelLab Character section) — sahnede yok
+- ⏳ ThreatBudgetSO + EncounterSelector NEW pre-MVP critical system
+- ⏳ Phase 1.5 RoomData spec — 5 question resolved, impl başlama hazır
+- ⏳ XPatla discussion (gelecek future)
+
+### Key memory files (yeni eklenenler)
+
+- **`project_map_plan_v1_lock.md`** — 16 LOCK decisions (Option C visual layer architecture)
+- **`feedback_orchestrator_delegation_strict.md`** — orchestrator BULK iş yapmaz
+- **`feedback_nlm_first_context_strict.md`** — NLM-first sub-agent dispatch MANDATORY
+
+### Yeni session ilk 3 adim
+
+1. Bu CURRENT_STATUS S91 oku + 3 yeni memory: `project_map_plan_v1_lock`, `feedback_orchestrator_delegation_strict`, `feedback_nlm_first_context_strict`
+2. Sample painted background bekleniyor (user manual üretim) — geldiğinde Sonnet+UnityMCP ile RoomTemplate `background_sprite` import + scene test
+3. Warblade re-spawn (kullanıcı PixelLab'den indirdiyse) + RoomTemplate runtime integration
+
+## 2026-05-18 S90_LATE → v15h playable map in flight + 10 canonical anchors + Wang v2 + Tile Palette LIVE + Phase 1.5 spec DRAFT
+
+**TLDR (S90 late, yeni session pickup için):**
+
+### Bu session shipped
+
+| Iş | Status |
+|---|---|
+| **v15d composition budget LOCK** | ✓ LIVE 403 tests PASS, 20% neg + 70/20/10 floor + 3 cluster cap |
+| **v15e-A L8 atmospheric cap** | ✓ LIVE 405 tests, mist 67→32 |
+| **v15e-B secondary cluster cap** | ✓ LIVE 411 tests, purple crystal 7-8→2-3 |
+| **v15g minimal PixelLab clean redesign** | ✓ LIVE clean tiles, ama sparse + hard edges |
+| **v15h playable map** | 🔄 DISPATCHED (bty2oujf8 laurethayday xhigh) — Wang wire + density 85% + adjacency cap + Warblade spawn |
+| **10 canonical char anchors** | ✓ LOCKED — see `project_canonical_character_roster_v2.md` (Warblade 2656075d, Ronin a7957352, Gunslinger a78545eb, Ranger d5b1cf71, Elementalist 4c83c0be, Shadowblade deee34b5, Ravager 091e9552, Hexer e260a1af, Brawler d4fa3d13, Summoner 83039c80) |
+| **4 identity state edits** | ✓ Warblade young, Hexer cursemark, Shadowblade teal, Gunslinger no-hair-acc trenchcoat |
+| **Warblade longsword 96×96** | ✓ LIVE `441bccf0` (was 64, regen larger per user feedback) |
+| **Ronin katana 64×64** | ✓ LIVE `692f43ce` |
+| **PixelLab create_tiles_pro cobble v1** | ✓ 16 var painterly lineless |
+| **PixelLab dirt tiles v1** | ✓ 16 var painterly warm brown |
+| **PixelLab Wang v2 32×32 dirt→cobble** | ✓ smooth transition no grass — pending Unity import in v15h |
+| **Tile Palette enabled** | ✓ 32 Tile assets + 3 RandomTile pools + workflow doc + menu item Tools/RIMA/Map Designer/Open Tile Palette |
+| **Asset Pack Browser ENHANCED** | ✓ LIVE — Tools/RIMA/Map Designer/Asset Pack Browser + adjacency 3×3 preview + semantic auto-grouping + hover popup 256×256 + placement mode + ghost preview (4/4 new tests + 5/5 regression PASS) |
+| **Phase 1.5 RoomData spec DRAFT** | ✓ 570-line `STAGING/PHASE_1_5_ROOMDATA_SPEC_DRAFT.md` (schema + 4 SO + 4 brushes + chunked renderer + migration + 5 open questions) |
+| **Codex 10-repo library eval** | ✓ Phase 1.5 architecture verdict — RoomData source-of-truth + no-GameObject-per-decal + chunked renderer + Ogmo layer model |
+| **5000 PixelLab allocation LOCK** | ✓ Memory: 900 chars + 600 mobs + 400 props + 250 VFX + 200 item + 150 HUD + 150 hazard + 200 boss + 2150 reserve |
+| **Codex strategic Q1+Q2+Q3 verdict** | ✓ Q1=E(Wang+decal) HIGH · Q2=FULL test parallel MED · Q3=Tilemap now+chunked Phase 1.5 HIGH |
+| **VFX dual-pilot dash trail + hitspark** | ✓ Static + animations LIVE PixelLab (autosprite MCP paid-wall, dropped) |
+| **Tweet-fetching workflow** | ✓ Memory: yt-dlp + Playwright + cookies (verified twice) |
+| **Aktimur tweet 3D pipeline** | ℹ️ Parked — pixal3D Blender + gpt-image-2 reference for S90+ 3D portability |
+
+### USER DIRECTION CHANGE (session sonu)
+
+**"Üretimleri minimuma indir, MAP playable hedef. Eksik parçaları üretiriz. Çeşitlendirme kolay iş."**
+
+- ⏸ PAUSED: more weapon production, more character state production, more PixelLab gen
+- ▶ FOCUS: v15h playable map + Warblade spawn + WASD test
+- After playable: iterate variations
+
+### Active dispatch (running when session closes)
+
+| Dispatch | Profile | ETA | DONE marker expected |
+|---|---|---|---|
+| **v15h playable map** | laurethayday xhigh | 1-2 hr | `STAGING/CODEX_TASK_v15h_playable_map_DONE.md` |
+| ~~Asset Browser adjacency~~ | ✓ DONE | — | `STAGING/CODEX_TASK_asset_browser_adjacency_preview_DONE.md` |
+
+### Yeni session ilk 3 adim
+
+1. Bu CURRENT_STATUS S90_LATE oku + 2 yeni memory: `project_canonical_character_roster_v2.md` + `project_v15g_v15h_minimal_pixellab_pipeline.md`
+2. v15h DONE marker check → screenshot + side-by-side görü ver
+3. PlayMode test Warblade WASD → eksik gördüklerini list olarak yaz, sonra parça parça üret
+
+### Key memory files (yeni eklenenler)
+
+- **`project_v15d_composition_budget_lock.md`** — composition budget (mevcut)
+- **`project_5000_pixellab_allocation_lock.md`** — budget LOCK (mevcut)
+- **`project_canonical_character_roster_v2.md`** — YENI 10 anchor IDs LIVE
+- **`project_v15g_v15h_minimal_pixellab_pipeline.md`** — YENI Q2 FULL PixelLab test path
+- **`project_hybrid_asset_pipeline_lock.md`** — extended with v15g/v15h fallback path
+- **`reference_tweet_fetching_workflow.md`** — yt-dlp + Playwright workflow (verified)
+
+### Codex profile observations
+- **laurethgame** profile **3 abort** this session (v15e-A first attempt, v15g first attempt, asset browser adjacency first attempt). yasinderyabilgin re-dispatch worked all 3 times. Possible profile issue — **prefer yasinderyabilgin/laurethayday for critical dispatches**. laurethgame might be in cooldown or auth-related issue, but cx_dispatch.py doesn't surface error — just clean exit with no work done.
+
+### Map Designer UI/UX complete (user's earlier request)
+- ✓ Blueprint Painter LIVE (semantic zone paint, existed)
+- ✓ Tile Palette LIVE (direct paint with 32 tiles + 3 pools, NEW)
+- ✓ Asset Pack Browser ENHANCED — categories + grouping + adjacency 3×3 preview + hover popup + placement mode + ghost preview (NEW)
+- ⏳ Asset Pack Browser LIVE preview (paint sırasında final render görme) — Phase 1.5 chunked renderer ile mümkün olur, S90+
+
+### Defer S90+
+
+- Shader-based biome blending (3-agent REJECT)
+- Full POI capacity system (cluster cap = lightweight version LIVE)
+- Boss roster production (silhouette prep only in 5000 allocation)
+- Layer collapse refactor (8→5) if v15h still doesn't satisfy
+- Aktimur 3D pipeline reference (pixal3D + gpt-image-2) — 3D portability scope
+- Phase 1.5 RoomData implementation (spec DRAFT ready, awaits Opus open-question resolution then Codex impl)
+
+---
+
+## 2026-05-18 S90_PREP → v15d Composition LOCK + 5000 PixelLab allocation LOCK + 3-agent Boona review SHIPPED
+
+**TLDR (S90 prep, dispatch'ler aktif):**
+
+### Bu turn LIVE
+
+| Iş | Status | Detay |
+|---|---|---|
+| **Boona tweet 3-agent review** | DONE ✓ | Opus + Codex + Gemini bağımsız verdict, 8/8 hipotez consensus. Artifacts: `STAGING/boona_analysis_package.md`, `CODEX_DONE_BOONA_REVIEW.md`, `GEMINI_DONE_BOONA_REVIEW.md` |
+| **v15d Composition Budget LOCK** | LOCK ✓ Memory | 20% neg + 70/20/10 floor + 3 cluster cap + 8 palette + 15% path. Memory: `project_v15d_composition_budget_lock.md` |
+| **5000 PixelLab Allocation LOCK** | LOCK ✓ Memory | 900 chars + 600 mobs + 400 props + 250 VFX + 200 item + 150 HUD + 150 hazard + 200 boss + 2150 reserve. Memory: `project_5000_pixellab_allocation_lock.md` |
+| **Hybrid pipeline style-consistency fallback** | LOCK ✓ Memory | 5 trigger condition (2+ TRUE → revisit). v15d screenshot = ilk check noktası. Memory update: `project_hybrid_asset_pipeline_lock.md` |
+| **Tweet-fetching workflow** | LOCK ✓ Memory | yt-dlp + Playwright + cookies chain LIVE. Win11 admin/lock gotcha logged. Memory: `reference_tweet_fetching_workflow.md` |
+
+### Aktif background dispatch (bu turn başlatıldı)
+
+| Dispatch | Profile | Effort | ETA | BG ID | DONE marker |
+|---|---|---|---|---|---|
+| v15d Composition LOCK implementation (SO+AutoPopulator+metrics+10 test+L1/L8 wiring+screenshot) | laurethgame | xhigh | 3-4 saat | bjt9cx5z4 | `STAGING/CODEX_TASK_v15d_COMPOSITION_LOCK_DONE.md` |
+| v15d Tile asset support (gpt-image-1 16-24 sprite + zone wiring + style check) | laurethayday | high | 1-2 saat | bs11bh82w | `STAGING/CODEX_TASK_v15d_TILE_ASSETS_DONE.md` |
+
+### Foreground dispatch DONE bu turn
+
+| Iş | Output |
+|---|---|
+| VFX dual-pilot prompts (rima-asset) | 6 dosya `STAGING/vfx_pilot_prompts/` — dash trail × hitspark × {PixelLab, autosprite, Codex}. **Blocker:** `mcp__autosprite__animate_asset` schema needs ToolSearch before execution |
+
+### USER ACTION — paralel
+
+**3 priority class anchor production** (PixelLab web UI V3, per state-first workflow):
+1. **Warblade** — exists, sadece state tweaks (memory: `char_state_tweaks_pending`)
+2. **Elementalist** — signature class, style ref
+3. **Gunslinger** — user-approved outfit
+
+10 anchor silhouette LOCK olunca → diğer 7 batch.
+
+### Yeni session ilk 3 adim
+
+1. Dispatch'ler return etti mi check (`STAGING/*_DONE.md`)
+2. v15d screenshot review + metrics validation
+3. Style consistency check (`STAGING/style_check_v15d_tiles_vs_pixellab_chars.png`) — hybrid LOCK koru veya fallback tetikle
+
+### Backlog (P2/P3, S90 sprint)
+
+- Karpathy Adım 2 (cx_dispatch.py surgical_header inject)
+- Karpathy Adım 3 (CODEX_TASK_TEMPLATE.md standard)
+- Tools/RIMA menu cleanup (deprecate stale items)
+- Commit hygiene: Brush V1 modified files (BrushLayerOperation, MapDesignerBrushPresetSO, BrushExecutorRouter) — user decide
+
+### Defer S90+
+
+- Shader-based biome blending (3-agent REJECT)
+- Full POI capacity system (3-agent MODIFY, cluster cap = lightweight version LIVE)
+- Boss roster production (silhouette prep only in 5000 allocation)
+- Layer collapse refactor (8→5) eğer v15d budget yetmezse
+
+---
+
 ## 2026-05-18 S89_LATE → v15c 8-layer LIVE + UnityMCP modal bypass LIVE + autosprite MCP trial pending
 
 **TLDR (S89 late, yeni session pickup):**

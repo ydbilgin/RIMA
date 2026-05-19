@@ -45,7 +45,7 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 - Karakter sprite: **64x64 chibi** (Karar #100 RESTORE), PixelLab Create Image Pro (master sheet) -> Create Character -> Custom Animation V3
 - Tile: **32x32** top-down grid
 - VFX: **64-128px mix** (küçük 64-80, ultimate 96-128)
-- Yön (MVP): **4 yön** (N/S/E uretilir, W=flipX)
+- Yön: **8 yön LOCKED (Karar #114, 2026-05-13)** — 5 sprite üret (S, SE, E, NE, N), 3 mirror (W←E, SW←SE, NW←NE) Unity SpriteRenderer.flipX. Karar #53 + #88 (4-dir) REVOKED.
 - Renderer: **URP 2D Renderer + Pixel Perfect Camera + 2D Lights**
 - Anim view: **High top-down ~30-35° (Hades match, S59 KEEP via Karar #100)**
 - Anim FPS: **10-12 fps**
@@ -145,10 +145,22 @@ Sub-agent token overhead artık düşük → **serbestçe spawn et**. Eşik:
 ## NotebookLM — HARD RULE (Context Source)
 **Proje dosyalarını direkt okuma. Tüm bağlam NotebookLM MCP üzerinden gelir.**
 
-- MCP tool (tercih): `mcp__notebooklm__notebook_query`, notebook_id: `06a27df3-79e6-43da-a550-2937149af0a4`
-- CLI fallback: `uvx --from notebooklm-mcp-cli nlm notebook query 06a27df3-79e6-43da-a550-2937149af0a4 "soru"`
+- **LIVE Notebook ID:** `30ddffa5-292f-4248-8e77-68074af901be` (RIMA design knowledge base — 2026-05+ canonical)
+- MCP tool (tercih varsa): `mcp__notebooklm__notebook_query`
+- CLI fallback (her ortam çalışır): `uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "soru"`
 - Dosya oku: **sadece** NotebookLM yetersiz kalırsa, sadece ilgili satır aralıklarını.
-- **YASAK Notebook ID:** `ed3c8952-417c-4988-84a7-425d25ba3b08` (eski, deprecated)
+- **YASAK Notebook ID'ler:** `ed3c8952-417c-4988-84a7-425d25ba3b08`, `06a27df3-79e6-43da-a550-2937149af0a4` (eski, deprecated)
+
+### Sub-Agent NLM Access — MANDATORY (S91 LOCK)
+**Her sub-agent dispatch prompt'una ZORUNLU ekle (ilk satırlardan biri):**
+
+```
+NLM ACCESS: If you need RIMA design context, query NLM first via:
+  uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "<your question>"
+Direct-read sadece: CURRENT_STATUS.md / .claude/PROJECT_RULES.md / kod / STAGING / memory files.
+```
+
+Bu satır yoksa sub-agent dosyaları kendi başına okur → context israfı + drift riski. Orchestrator dispatch öncesi prompt'u kontrol eder.
 
 **İstisnalar (direkt oku, NLM'e gitme):**
 - `CURRENT_STATUS.md` — session başında
