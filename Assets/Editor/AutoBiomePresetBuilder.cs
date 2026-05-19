@@ -16,9 +16,12 @@ namespace RIMA.Editor
         private const string DefaultTilesetRoot = "Assets/Art/Tiles/F1/Tilesets";
         private const string GeneratedFolder = "Assets/Art/Tiles/F1/Generated";
 
+        [Obsolete("Karar #150 — RIMA Wang16 closed, CB scope only")]
         [MenuItem("RIMA/Tools/Auto-Build BiomePreset from Tilesets")]
         public static void BuildFromTilesets()
         {
+            Debug.LogWarning("[RIMA] Karar #150 — RIMA Wang16 closed, CB scope only.");
+            /*
             string root = EditorUtility.OpenFolderPanel(
                 "Select tileset root",
                 ToAbsolutePath(DefaultTilesetRoot),
@@ -70,6 +73,7 @@ namespace RIMA.Editor
             AssetDatabase.Refresh();
 
             Debug.Log($"[RIMA] Auto-Built BiomePreset '{preset.name}': {preset.terrains.Count} terrain(s), {preset.tilesetPairings.Count} pairing(s), {nullBaseTiles} null baseTile(s).");
+            */
         }
 
         private static List<MapTerrain> BuildTerrains(Dictionary<string, int> terrainIds, List<TilesetMeta> metas)

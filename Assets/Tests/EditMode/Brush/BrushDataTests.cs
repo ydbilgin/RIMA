@@ -14,6 +14,7 @@ namespace RIMA.Tests.Brush
         private const string PoolPath = OutputFolder + "/AssetPool_Floor_ShatteredKeep.asset";
         private const string CleanBrushPath = OutputFolder + "/Brush_CleanStoneFloor.asset";
         private const string CompositeBrushPath = OutputFolder + "/Brush_MossyCorner_Composite.asset";
+        private const string Act1FloorTilePrefix = "Assets/Art/AssetPacks/Act1_ShatteredKeep/floor_tiles/granite_tile_";
 
         public static void CreateSamples()
         {
@@ -123,7 +124,7 @@ namespace RIMA.Tests.Brush
             var sprites = new List<Sprite>();
             for (int i = 1; i <= 5; i++)
             {
-                string path = $"Assets/Art/Tiles/Keep/Floor/tile_{i}.png";
+                string path = Act1FloorTilePath(i);
                 Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
                 if (sprite == null)
                 {
@@ -134,6 +135,11 @@ namespace RIMA.Tests.Brush
             }
 
             return sprites;
+        }
+
+        private static string Act1FloorTilePath(int index)
+        {
+            return $"{Act1FloorTilePrefix}{index:00}.png";
         }
 
         private static T LoadOrCreate<T>(string path) where T : ScriptableObject
@@ -152,7 +158,8 @@ namespace RIMA.Tests.Brush
 
     public class BrushDataTests
     {
-        private const string KnownSpritePath = "Assets/Art/Tiles/Keep/Floor/tile_1.png";
+        private const string KnownSpritePath = "Assets/Art/AssetPacks/Act1_ShatteredKeep/floor_tiles/granite_tile_01.png";
+        private const string Act1FloorTilePrefix = "Assets/Art/AssetPacks/Act1_ShatteredKeep/floor_tiles/granite_tile_";
         private const string CleanBrushPath = "Assets/Data/Brush/Brush_CleanStoneFloor.asset";
         private const string CompositeBrushPath = "Assets/Data/Brush/Brush_MossyCorner_Composite.asset";
 
@@ -172,17 +179,22 @@ namespace RIMA.Tests.Brush
             var pool = ScriptableObject.CreateInstance<AssetPoolSO>();
             pool.poolName = "JsonTestPool";
             pool.category = AssetCategory.Floor;
-            pool.sprites.Add(AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Tiles/Keep/Floor/tile_1.png"));
-            pool.sprites.Add(AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Tiles/Keep/Floor/tile_2.png"));
-            pool.sprites.Add(AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Tiles/Keep/Floor/tile_3.png"));
+            pool.sprites.Add(AssetDatabase.LoadAssetAtPath<Sprite>(Act1FloorTilePath(1)));
+            pool.sprites.Add(AssetDatabase.LoadAssetAtPath<Sprite>(Act1FloorTilePath(2)));
+            pool.sprites.Add(AssetDatabase.LoadAssetAtPath<Sprite>(Act1FloorTilePath(3)));
 
             string json = BrushJsonSerializer.ExportAssetPoolToJson(pool);
             AssetPoolDTO dto = BrushJsonSerializer.ImportAssetPoolFromJson(json);
 
             Assert.AreEqual(3, dto.spritePaths.Count);
-            Assert.AreEqual("Assets/Art/Tiles/Keep/Floor/tile_1.png", dto.spritePaths[0]);
-            Assert.AreEqual("Assets/Art/Tiles/Keep/Floor/tile_2.png", dto.spritePaths[1]);
-            Assert.AreEqual("Assets/Art/Tiles/Keep/Floor/tile_3.png", dto.spritePaths[2]);
+            Assert.AreEqual(Act1FloorTilePath(1), dto.spritePaths[0]);
+            Assert.AreEqual(Act1FloorTilePath(2), dto.spritePaths[1]);
+            Assert.AreEqual(Act1FloorTilePath(3), dto.spritePaths[2]);
+        }
+
+        private static string Act1FloorTilePath(int index)
+        {
+            return $"{Act1FloorTilePrefix}{index:00}.png";
         }
 
         [Test]

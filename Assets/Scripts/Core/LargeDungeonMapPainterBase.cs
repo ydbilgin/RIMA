@@ -85,6 +85,9 @@ namespace RIMA
             "R10 Containment Arena",
         };
 
+        private const string GateArchResourcePath = "Environment/StoneDungeon/Walls/RIMA_gate_arch";
+        private const string GateSpikesResourcePath = "Environment/StoneDungeon/Walls/RIMA_gate_spikes";
+
         private readonly struct RoomLightSpec
         {
             public readonly Vector2 normalizedPosition;
@@ -1013,7 +1016,7 @@ namespace RIMA
 
             foreach (DecorSpec spec in GetDecorSpecs(layout))
             {
-                Sprite sprite = RimaGeneratedSpriteCache.Load(spec.spritePath);
+                Sprite sprite = LoadDecorSprite(spec.spritePath);
                 if (sprite == null) continue;
 
                 Vector2Int preferred = new Vector2Int(
@@ -1036,13 +1039,29 @@ namespace RIMA
             }
         }
 
+        private static Sprite LoadDecorSprite(string spritePath)
+        {
+            Sprite sprite = RimaGeneratedSpriteCache.Load(spritePath);
+            if (sprite == null && IsKarar150GateSprite(spritePath))
+            {
+                Debug.LogWarning("Karar #150 migration pending — gate sprite missing: " + spritePath);
+            }
+
+            return sprite;
+        }
+
+        private static bool IsKarar150GateSprite(string spritePath)
+        {
+            return spritePath == GateArchResourcePath || spritePath == GateSpikesResourcePath;
+        }
+
         private IEnumerable<DecorSpec> GetDecorSpecs(LayoutKind layout)
         {
             const string decor = "Environment/StoneDungeon/Decor/";
             const string walls = "Environment/StoneDungeon/Walls/";
 
-            yield return new DecorSpec(walls + "RIMA_gate_arch", new Vector2(0.50f, 0.88f), 1.45f, 40);
-            yield return new DecorSpec(walls + "RIMA_gate_spikes", new Vector2(0.50f, 0.14f), 1.25f, 40);
+            yield return new DecorSpec(GateArchResourcePath, new Vector2(0.50f, 0.88f), 1.45f, 40);
+            yield return new DecorSpec(GateSpikesResourcePath, new Vector2(0.50f, 0.14f), 1.25f, 40);
 
             switch (layout)
             {
@@ -1121,7 +1140,7 @@ namespace RIMA
                     yield return new DecorSpec(walls + "RIMA_wall_cracked", new Vector2(0.72f, 0.70f), 1.05f, 42);
                     break;
                 case LayoutKind.BossAntechamber:
-                    yield return new DecorSpec(walls + "RIMA_gate_arch", new Vector2(0.50f, 0.76f), 1.65f, 45);
+                    yield return new DecorSpec(GateArchResourcePath, new Vector2(0.50f, 0.76f), 1.65f, 45);
                     yield return new DecorSpec(decor + "RIMA_rift_crystal", new Vector2(0.50f, 0.48f), 1.25f, 48);
                     yield return new DecorSpec(walls + "RIMA_wall_torch", new Vector2(0.30f, 0.68f), 1.10f, 42);
                     yield return new DecorSpec(walls + "RIMA_wall_torch", new Vector2(0.70f, 0.68f), 1.10f, 42);

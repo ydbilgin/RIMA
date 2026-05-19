@@ -36,8 +36,11 @@ namespace RIMA.Tests.Editor
         }
 
         [Test]
+        [Ignore("Karar #150 — RIMA Wang16 closed")]
         public void WangImporter_ParsesMetadata_Returns16Tiles()
         {
+            Assert.Ignore("Karar #150 — RIMA Wang16 closed");
+
             PixelLabWangImporter.WangMetadataDocument metadata = PixelLabWangImporter.ParseMetadata(SourceMetadata);
 
             Assert.AreEqual(16, metadata.tileset_data.tiles.Length);
@@ -54,8 +57,11 @@ namespace RIMA.Tests.Editor
         }
 
         [Test]
+        [Ignore("Karar #150 — RIMA Wang16 closed")]
         public void WangImporter_CreatesRuleTileAsset_FromSampleSheet()
         {
+            Assert.Ignore("Karar #150 — RIMA Wang16 closed");
+
             string assetPath = PixelLabWangImporter.ImportWangSheetAsset(TempPng, TempGenerated);
             ScriptableObject ruleTile = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
 
@@ -66,8 +72,11 @@ namespace RIMA.Tests.Editor
         }
 
         [Test]
+        [Ignore("Karar #150 — RIMA Wang16 closed")]
         public void WangImporter_AllLowerTile_DefaultSprite()
         {
+            Assert.Ignore("Karar #150 — RIMA Wang16 closed");
+
             string assetPath = PixelLabWangImporter.ImportWangSheetAsset(TempPng, TempGenerated);
             ScriptableObject ruleTile = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
             PixelLabWangImporter.WangMetadataDocument metadata = PixelLabWangImporter.ParseMetadata(TempMetadata);
