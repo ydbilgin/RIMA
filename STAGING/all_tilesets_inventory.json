@@ -1,0 +1,702 @@
+[
+  {
+    "index": 1,
+    "id": "3273fdfd-4036-45ef-bf5b-d39177d1fac3",
+    "id_short": "3273fdfd",
+    "terrain": "worn dirt ground with rounded river stones embedded in warm brown earth, painterly hand-drawn, completely flat ground at exact same level as upper material, organic stone placement, no cliff, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, no border, chunky pixel art, both materials on same horizontal plane -> lush green grass meadow with painterly thick grass blade detail and tiny scattered wildflowers, hand-drawn painterly style, completely flat ground at exact same level as lower material, organic blade variation, no cliff, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, no border, chunky pixel art, both materials on same horizontal plane",
+    "lower_description": "worn dirt ground with rounded river stones embedded in warm brown earth, painterly hand-drawn, completely flat ground at exact same level as upper material, organic stone placement, no cliff, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, no border, chunky pixel art, both materials on same horizontal plane",
+    "upper_description": "lush green grass meadow with painterly thick grass blade detail and tiny scattered wildflowers, hand-drawn painterly style, completely flat ground at exact same level as lower material, organic blade variation, no cliff, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, no border, chunky pixel art, both materials on same horizontal plane",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "",
+    "transition_size": 0.0,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/3273fdfd-4036-45ef-bf5b-d39177d1fac3/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/3273fdfd-4036-45ef-bf5b-d39177d1fac3/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "c9b8a4eb-035c-4b2e-be37-42287e4c51d4"
+      },
+      "upper": {
+        "id": "a1186a69-a9d5-40a3-a9a1-0a72d4281903"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/3273fdfd_worn_dirt_ground_with_rounded_river_stones_embedded_in_warm_brown_earth.png",
+    "rima_fit": "discard for RIMA core",
+    "keep_delete": "DELETE?"
+  },
+  {
+    "index": 2,
+    "id": "62d91ed9-c5a4-416c-a562-1af92002232d",
+    "id_short": "62d91ed9",
+    "terrain": "cool weathered granite floor surface, chunky pixel art, completely flat ground at exact same height as upper material, painterly hand-drawn small natural cracks, muted gray with subtle blue-violet undertones, no cliff edge, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, flat top-down view -> worn stone path surface with rounded river stones embedded in dark mud, chunky pixel art, completely flat ground at exact same height as lower material, painterly hand-drawn organic stone placement, pale grey-brown, no cliff edge, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, flat top-down view",
+    "lower_description": "cool weathered granite floor surface, chunky pixel art, completely flat ground at exact same height as upper material, painterly hand-drawn small natural cracks, muted gray with subtle blue-violet undertones, no cliff edge, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, flat top-down view",
+    "upper_description": "worn stone path surface with rounded river stones embedded in dark mud, chunky pixel art, completely flat ground at exact same height as lower material, painterly hand-drawn organic stone placement, pale grey-brown, no cliff edge, no wall, no bevel, no rim, no height difference, no shadow drop, no extrusion, flat top-down view",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "",
+    "transition_size": 0.0,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/62d91ed9-c5a4-416c-a562-1af92002232d/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/62d91ed9-c5a4-416c-a562-1af92002232d/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "1070fd3d-9091-4881-bc8a-510367d4c32c"
+      },
+      "upper": {
+        "id": "14179b3b-f25d-46f1-b244-c75288bcdd04"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/62d91ed9_cool_weathered_granite_floor_surface_chunky_pixel_art_completely_flat_g.png",
+    "rima_fit": "Act 1 support",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 3,
+    "id": "88fbb4e7-045c-4e25-8c29-331bd850da95",
+    "id_short": "88fbb4e7",
+    "terrain": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges -> cool grey-brown dirt patch on stone, painterly hand-painted seamless top-down walkable surface, packed earthy texture muted palette, no walls, no raised edges, no warm brown",
+    "lower_description": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges",
+    "upper_description": "cool grey-brown dirt patch on stone, painterly hand-painted seamless top-down walkable surface, packed earthy texture muted palette, no walls, no raised edges, no warm brown",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "dirt spilling onto stone with natural irregular edge, painterly hand-painted soft blend",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/88fbb4e7-045c-4e25-8c29-331bd850da95/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/88fbb4e7-045c-4e25-8c29-331bd850da95/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "33886a9d-ef9a-4476-b33c-2df08d04a534"
+      },
+      "upper": {
+        "id": "47b43644-5919-4ef0-bc5a-d73bf2e4b3e3"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/88fbb4e7_flat_cool_grey_granite_stone_floor_painterly_hand-painted_seamless_top-.png",
+    "rima_fit": "Act 1 support",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 4,
+    "id": "f6c16987-cfcf-4f57-8346-47cf93d78f39",
+    "id_short": "f6c16987",
+    "terrain": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges -> darker weathered cobble stone path, painterly hand-painted seamless top-down walkable surface, slightly darker grey cobbles, no walls, no raised edges",
+    "lower_description": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges",
+    "upper_description": "darker weathered cobble stone path, painterly hand-painted seamless top-down walkable surface, slightly darker grey cobbles, no walls, no raised edges",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "cobble path meeting granite floor with natural irregular edge, painterly hand-painted soft blend",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/f6c16987-cfcf-4f57-8346-47cf93d78f39/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/f6c16987-cfcf-4f57-8346-47cf93d78f39/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "33886a9d-ef9a-4476-b33c-2df08d04a534"
+      },
+      "upper": {
+        "id": "3352dd6c-f91c-481f-b719-038d0277722d"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/f6c16987_flat_cool_grey_granite_stone_floor_painterly_hand-painted_seamless_top-.png",
+    "rima_fit": "Act 1 support",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 5,
+    "id": "2f886879-a625-4d39-8387-dff867787630",
+    "id_short": "2f886879",
+    "terrain": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges -> soft muted cool grass patch on stone, painterly hand-painted seamless top-down walkable surface, sparse grass tufts cool grey-green palette, no walls, no raised edges, no swamp green",
+    "lower_description": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges",
+    "upper_description": "soft muted cool grass patch on stone, painterly hand-painted seamless top-down walkable surface, sparse grass tufts cool grey-green palette, no walls, no raised edges, no swamp green",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "grass creeping onto stone with natural irregular border, painterly hand-painted soft blend",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/2f886879-a625-4d39-8387-dff867787630/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/2f886879-a625-4d39-8387-dff867787630/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "33886a9d-ef9a-4476-b33c-2df08d04a534"
+      },
+      "upper": {
+        "id": "08f97e5c-0192-4001-818a-76c9d2758964"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/2f886879_flat_cool_grey_granite_stone_floor_painterly_hand-painted_seamless_top-.png",
+    "rima_fit": "decoration only",
+    "keep_delete": "DELETE?"
+  },
+  {
+    "index": 6,
+    "id": "ff9f5489-2cfa-4de1-9492-7785bb9d9516",
+    "id_short": "ff9f5489",
+    "terrain": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges -> organic muted cool green-grey moss patch growing on stone, painterly hand-painted seamless top-down walkable surface, soft uneven moss texture, no walls, no raised edges",
+    "lower_description": "flat cool grey granite stone floor, painterly hand-painted seamless top-down walkable surface, subtle mineral speckles, cool palette #3A3D42 to #4E5260, no walls, no raised edges",
+    "upper_description": "organic muted cool green-grey moss patch growing on stone, painterly hand-painted seamless top-down walkable surface, soft uneven moss texture, no walls, no raised edges",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "soft moss creeping onto stone with natural irregular border, painterly hand-painted blend, no harsh edges",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/ff9f5489-2cfa-4de1-9492-7785bb9d9516/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/ff9f5489-2cfa-4de1-9492-7785bb9d9516/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "33886a9d-ef9a-4476-b33c-2df08d04a534"
+      },
+      "upper": {
+        "id": "a3c85a0c-6586-4fc6-9e04-96eb91db6715"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/ff9f5489_flat_cool_grey_granite_stone_floor_painterly_hand-painted_seamless_top-.png",
+    "rima_fit": "Act 1 support",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 7,
+    "id": "4235c9c1-500d-428c-a497-9c6376460a4e",
+    "id_short": "4235c9c1",
+    "terrain": "soft painterly warm brown dirt earth, muted, no grass, no moss -> weathered grey-blue cobblestone floor, painterly muted, no hard outlines, no grass",
+    "lower_description": "soft painterly warm brown dirt earth, muted, no grass, no moss",
+    "upper_description": "weathered grey-blue cobblestone floor, painterly muted, no hard outlines, no grass",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "low top-down",
+    "transition": "organic blended dirt-to-cobble edge, soft natural transition, no grass",
+    "transition_size": 0.5,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/4235c9c1-500d-428c-a497-9c6376460a4e/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/4235c9c1-500d-428c-a497-9c6376460a4e/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "ca8cb144-36b1-4fb0-b3fe-85bef3a4f2cd"
+      },
+      "upper": {
+        "id": "3820d72d-d565-4952-96f7-61443a838ef1"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/4235c9c1_soft_painterly_warm_brown_dirt_earth_muted_no_grass_no_moss.png",
+    "rima_fit": "Act 2 support",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 8,
+    "id": "aa7ca5bb-668a-47a1-8ee6-e99f38bc78b3",
+    "id_short": "aa7ca5bb",
+    "terrain": "soft painterly warm brown dirt earth path -> weathered grey-blue cobblestone floor, painterly muted, no hard outlines",
+    "lower_description": "soft painterly warm brown dirt earth path",
+    "upper_description": "weathered grey-blue cobblestone floor, painterly muted, no hard outlines",
+    "tiles": 16,
+    "tile_size": "16x16",
+    "view": "low top-down",
+    "transition": "organic blended edge, moss specks, soft natural transition",
+    "transition_size": 0.5,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/aa7ca5bb-668a-47a1-8ee6-e99f38bc78b3/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/aa7ca5bb-668a-47a1-8ee6-e99f38bc78b3/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "b6138599-d9e6-4fbb-97f1-ca6e60d00956"
+      },
+      "upper": {
+        "id": "ce0177a4-1edf-48a2-bee9-9206ea1f0032"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/aa7ca5bb_soft_painterly_warm_brown_dirt_earth_path.png",
+    "rima_fit": "discard - 16 px",
+    "keep_delete": "DELETE?"
+  },
+  {
+    "index": 9,
+    "id": "341338df-9f1b-42ef-8db2-33d1fee9cdc8",
+    "id_short": "341338df",
+    "terrain": "weathered dark slate gray stone floor with deep brown undertone, ancient ritual temple, hard pixel edges, max 3 tones, pixel art -> deep moss green organic patch over dark slate stone, sparse moss tufts, hard pixel edges, max 3 tones, pixel art",
+    "lower_description": "weathered dark slate gray stone floor with deep brown undertone, ancient ritual temple, hard pixel edges, max 3 tones, pixel art",
+    "upper_description": "deep moss green organic patch over dark slate stone, sparse moss tufts, hard pixel edges, max 3 tones, pixel art",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "moss creeping over stone edge, organic natural seam, pixel art transition",
+    "transition_size": 0.5,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/341338df-9f1b-42ef-8db2-33d1fee9cdc8/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/341338df-9f1b-42ef-8db2-33d1fee9cdc8/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "60ffe2ea-f986-4bf6-8e50-5b4d7284f8d6"
+      },
+      "upper": {
+        "id": "37b59b15-302b-480e-9662-6c3c1d4c2bf8"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/341338df_weathered_dark_slate_gray_stone_floor_with_deep_brown_undertone_ancient.png",
+    "rima_fit": "Act 1 / Act 3 support",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 10,
+    "id": "7b34aa6b-2031-455d-94e5-4322579c984e",
+    "id_short": "7b34aa6b",
+    "terrain": "Fractured stone keep floor tiles, weathered slate, dim mossy green cracks, muted gray-blue palette, pixel art, ancient ruin atmosphere, top-down view, no UI elements -> Fractured stone keep wall, broken parapet edge, darker gray slate, deep vertical cracks, occasional faint rune fragment, hint of teal moss creep, pixel art, dark fantasy ruin",
+    "lower_description": "Fractured stone keep floor tiles, weathered slate, dim mossy green cracks, muted gray-blue palette, pixel art, ancient ruin atmosphere, top-down view, no UI elements",
+    "upper_description": "Fractured stone keep wall, broken parapet edge, darker gray slate, deep vertical cracks, occasional faint rune fragment, hint of teal moss creep, pixel art, dark fantasy ruin",
+    "tiles": 25,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Stone rubble base, rough wall-to-floor edge transition, scattered debris and small chunks at wall foot",
+    "transition_size": 1.0,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/7b34aa6b-2031-455d-94e5-4322579c984e/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/7b34aa6b-2031-455d-94e5-4322579c984e/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "a6ee4481-6fba-4d5e-aee4-74058438a2b5"
+      },
+      "upper": {
+        "id": "ed7a07e1-f665-42e7-9cc6-a942a12186be"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/7b34aa6b_fractured_stone_keep_floor_tiles_weathered_slate_dim_mossy_green_cracks.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 11,
+    "id": "04633962-c19c-4fed-9a55-80d954d36614",
+    "id_short": "04633962",
+    "terrain": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile viewed from approximately 35 degrees, uneven charcoal flagstones in muted #2C2A2A with worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically, mat painterly pixel, dark gritty Shattered Keep palette, walkable flat ground, no characters, no props, tileable. -> Rift-fractured stone floor variant for a shattered keep, 32x32 top-down pixel art tile, dark warm charcoal-grey RGB(44,42,42) base broken by cold blue cyan RGB(123,167,188) and violet RGB(110,90,140) hairline rift fracture overlay, weathered ruined keep floor with magical seam tearing through stone, matte desaturated palette with sparse cyan-violet thread accent, dark gritty serious Shattered Keep mood, walkable flat ground at same elevation as rubble, no characters, no props, tileable.",
+    "lower_description": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile viewed from approximately 35 degrees, uneven charcoal flagstones in muted #2C2A2A with worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically, mat painterly pixel, dark gritty Shattered Keep palette, walkable flat ground, no characters, no props, tileable.",
+    "upper_description": "Rift-fractured stone floor variant for a shattered keep, 32x32 top-down pixel art tile, dark warm charcoal-grey RGB(44,42,42) base broken by cold blue cyan RGB(123,167,188) and violet RGB(110,90,140) hairline rift fracture overlay, weathered ruined keep floor with magical seam tearing through stone, matte desaturated palette with sparse cyan-violet thread accent, dark gritty serious Shattered Keep mood, walkable flat ground at same elevation as rubble, no characters, no props, tileable.",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Cold blue cyan rift cracks splitting through ancient flagstones, hairline fracture pattern spreading from the rift boundary onto adjacent rubble, very subtle violet shimmer at the seam edges, magical fracture seam with no height change, asymmetric organic spread, dark gritty Shattered Keep palette, Karar 98 rift cyan and violet accent.",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/04633962-c19c-4fed-9a55-80d954d36614/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/04633962-c19c-4fed-9a55-80d954d36614/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "2165fb86-6bb6-4ff1-83e5-74e1611332a2"
+      },
+      "upper": {
+        "id": "6e5e6639-9fcf-494e-b927-7f5f452fc672"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_rift.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_rift.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 12,
+    "id": "cc1d7d6f-fe72-4934-9f34-9be83234e81b",
+    "id_short": "cc1d7d6f",
+    "terrain": "Warm dusty pink dreamy ground in pixel art top-down view, soft pastel mauve-pink powder surface RGB(180,138,140), gentle organic grain texture, faint dust particles scattered, painterly desaturated palette dominated by rose-pink and dusty mauve, NO STONES, NO SLABS, NO BLOCKS, NO FLAGSTONES, smooth flowing ground without hard edges, lineless silhouette, no individual tile shapes, Alabaster Dawn aesthetic, fully walkable flat ground, no elevation, no wall, dreamy magical biome floor, soft pastel mood. -> Pale cream-beige dust ground in pixel art top-down view, lighter sand-toned powder RGB(220,200,170) with subtle dust grain, occasional tiny pale flecks, painterly desaturated palette with warm cream and tan tones, NO blue NO cool grey, NO STONES, NO SLABS, NO BLOCKS, smooth flowing ground without hard edges, lineless silhouette, walkable flat ground at exact same elevation as the surrounding pink dust \u2014 NO height difference, NO wall, NO raised edge, just gentle texture and color shift, dreamy magical biome variation, soft pastel mood.",
+    "lower_description": "Warm dusty pink dreamy ground in pixel art top-down view, soft pastel mauve-pink powder surface RGB(180,138,140), gentle organic grain texture, faint dust particles scattered, painterly desaturated palette dominated by rose-pink and dusty mauve, NO STONES, NO SLABS, NO BLOCKS, NO FLAGSTONES, smooth flowing ground without hard edges, lineless silhouette, no individual tile shapes, Alabaster Dawn aesthetic, fully walkable flat ground, no elevation, no wall, dreamy magical biome floor, soft pastel mood.",
+    "upper_description": "Pale cream-beige dust ground in pixel art top-down view, lighter sand-toned powder RGB(220,200,170) with subtle dust grain, occasional tiny pale flecks, painterly desaturated palette with warm cream and tan tones, NO blue NO cool grey, NO STONES, NO SLABS, NO BLOCKS, smooth flowing ground without hard edges, lineless silhouette, walkable flat ground at exact same elevation as the surrounding pink dust \u2014 NO height difference, NO wall, NO raised edge, just gentle texture and color shift, dreamy magical biome variation, soft pastel mood.",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Soft organic dreamy blend where pale cream dust drifts onto warm pink dust, irregular pastel fade with scattered tiny flecks at the boundary, no height edge, no shadow rim, no hard line, just gentle texture and color fade between two dreamy powder grounds, lineless painterly transition, Raggedness 55 percent organic boundary, walkable continuous surface, Alabaster Dawn aesthetic, no individual tile shapes visible.",
+    "transition_size": 0.01,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/cc1d7d6f-fe72-4934-9f34-9be83234e81b/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/cc1d7d6f-fe72-4934-9f34-9be83234e81b/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "c3c14f35-3fe2-4d36-9f3f-d419652453f4"
+      },
+      "upper": {
+        "id": "80ab8a2a-227d-44a5-80fb-54a217da0422"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/cc1d7d6f_warm_dusty_pink_dreamy_ground_in_pixel_art_top-down_view_soft_pastel_ma.png",
+    "rima_fit": "Act 2",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 13,
+    "id": "0a361fb8-f1b5-42d1-98f8-c0689a9a58e1",
+    "id_short": "0a361fb8",
+    "terrain": "Warm dusty pink dreamy ground in pixel art top-down view, soft pastel mauve-pink powder surface RGB(180,138,140), gentle organic grain texture, faint dust particles scattered, painterly desaturated palette dominated by rose-pink and dusty mauve, NO STONES, NO SLABS, NO BLOCKS, NO FLAGSTONES, smooth flowing ground without hard edges, lineless silhouette, no individual tile shapes, Alabaster Dawn aesthetic, fully walkable flat ground, no elevation, no wall, dreamy magical biome floor, soft pastel mood. -> Pale cream-beige dust ground in pixel art top-down view, lighter sand-toned powder RGB(220,200,170) with subtle dust grain, occasional tiny pale flecks, painterly desaturated palette with warm cream and tan tones, NO blue NO cool grey, NO STONES, NO SLABS, NO BLOCKS, smooth flowing ground without hard edges, lineless silhouette, walkable flat ground at exact same elevation as the surrounding pink dust \u2014 NO height difference, NO wall, NO raised edge, just gentle texture and color shift, dreamy magical biome variation, soft pastel mood.",
+    "lower_description": "Warm dusty pink dreamy ground in pixel art top-down view, soft pastel mauve-pink powder surface RGB(180,138,140), gentle organic grain texture, faint dust particles scattered, painterly desaturated palette dominated by rose-pink and dusty mauve, NO STONES, NO SLABS, NO BLOCKS, NO FLAGSTONES, smooth flowing ground without hard edges, lineless silhouette, no individual tile shapes, Alabaster Dawn aesthetic, fully walkable flat ground, no elevation, no wall, dreamy magical biome floor, soft pastel mood.",
+    "upper_description": "Pale cream-beige dust ground in pixel art top-down view, lighter sand-toned powder RGB(220,200,170) with subtle dust grain, occasional tiny pale flecks, painterly desaturated palette with warm cream and tan tones, NO blue NO cool grey, NO STONES, NO SLABS, NO BLOCKS, smooth flowing ground without hard edges, lineless silhouette, walkable flat ground at exact same elevation as the surrounding pink dust \u2014 NO height difference, NO wall, NO raised edge, just gentle texture and color shift, dreamy magical biome variation, soft pastel mood.",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "",
+    "transition_size": 0.0,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/0a361fb8-f1b5-42d1-98f8-c0689a9a58e1/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/0a361fb8-f1b5-42d1-98f8-c0689a9a58e1/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "c1c4c8ea-245a-4139-8d30-e000929e9dd8"
+      },
+      "upper": {
+        "id": "54b11592-3834-4760-97c6-ead1e1393d31"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/0a361fb8_warm_dusty_pink_dreamy_ground_in_pixel_art_top-down_view_soft_pastel_ma.png",
+    "rima_fit": "Act 2",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 14,
+    "id": "b41919aa-d20c-441e-a812-67e1f25f3331",
+    "id_short": "b41919aa",
+    "terrain": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against surrounding shattered keep floor, no characters, no props, tileable. -> Moss-overgrown stone patches on shattered keep floor, 32x32 top-down pixel art tile, same #4A4842 stone base partially covered with damp dark green moss patches RGB(54,75,46), small wet glistening puddles in cracks, walkable flat ground at exact same elevation as the path \u2014 NO height difference, NO wall, NO raised edge, just texture variation, dark gritty palette, Salt and Sanctuary chibi-but-serious mood.",
+    "lower_description": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against surrounding shattered keep floor, no characters, no props, tileable.",
+    "upper_description": "Moss-overgrown stone patches on shattered keep floor, 32x32 top-down pixel art tile, same #4A4842 stone base partially covered with damp dark green moss patches RGB(54,75,46), small wet glistening puddles in cracks, walkable flat ground at exact same elevation as the path \u2014 NO height difference, NO wall, NO raised edge, just texture variation, dark gritty palette, Salt and Sanctuary chibi-but-serious mood.",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Soft organic moss patch edges where damp green growth creeps onto worn walkway stones, mossy clumps fading into bare polished stone, occasional small puddles at the boundary, no straight line, irregular natural fade with subtle damp glistening, walkable continuous surface, no height edge, dark gritty palette, asymmetric weathering, Raggedness 50 percent or higher organic boundary.",
+    "transition_size": 0.05,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/b41919aa-d20c-441e-a812-67e1f25f3331/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/b41919aa-d20c-441e-a812-67e1f25f3331/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "3bdfb21d-c5c9-4a93-993a-6313f9b57d08"
+      },
+      "upper": {
+        "id": "21223297-9461-4f62-945f-7366a47b90aa"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/worn_path_to_moss.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/worn_path_to_moss.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 15,
+    "id": "ea19bab2-fea4-4c36-b5ef-6db1d103cc74",
+    "id_short": "ea19bab2",
+    "terrain": "Warm dusty pink soil ground in pixel art top-down view, soft mauve-pink earth surface with gentle organic grain, faint dust particles scattered, painterly desaturated palette dominated by rose-pink RGB(180,138,140) and dusty mauve, no harsh outlines, dreamy magical biome floor, fully walkable flat ground, no elevation, no wall, Alabaster Dawn aesthetic, soft pastel mood -> Pale cream-beige sandy patch in pixel art top-down view, lighter sand-toned ground RGB(220,200,170) with subtle dust grain, occasional small pebbles and tiny pale flecks, painterly desaturated palette with warm cream and tan tones, NO blue NO cool grey, walkable flat ground at exact same elevation as the surrounding pink soil \u2014 NO height difference, NO wall, NO raised edge, just gentle texture and color shift, dreamy magical biome variation</upper_description>\n<parameter name=\"transition_description\">Soft organic blend where pale cream sand patches dust onto warm pink soil, irregular fade with scattered tiny pebbles at the boundary, no height edge, no shadow rim, just gentle texture and color fade between dry dusty pink ground and lighter cream sand, walkable continuous surface, Alabaster Dawn style soft pastel transition",
+    "lower_description": "Warm dusty pink soil ground in pixel art top-down view, soft mauve-pink earth surface with gentle organic grain, faint dust particles scattered, painterly desaturated palette dominated by rose-pink RGB(180,138,140) and dusty mauve, no harsh outlines, dreamy magical biome floor, fully walkable flat ground, no elevation, no wall, Alabaster Dawn aesthetic, soft pastel mood",
+    "upper_description": "Pale cream-beige sandy patch in pixel art top-down view, lighter sand-toned ground RGB(220,200,170) with subtle dust grain, occasional small pebbles and tiny pale flecks, painterly desaturated palette with warm cream and tan tones, NO blue NO cool grey, walkable flat ground at exact same elevation as the surrounding pink soil \u2014 NO height difference, NO wall, NO raised edge, just gentle texture and color shift, dreamy magical biome variation</upper_description>\n<parameter name=\"transition_description\">Soft organic blend where pale cream sand patches dust onto warm pink soil, irregular fade with scattered tiny pebbles at the boundary, no height edge, no shadow rim, just gentle texture and color fade between dry dusty pink ground and lighter cream sand, walkable continuous surface, Alabaster Dawn style soft pastel transition",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "",
+    "transition_size": 0.0,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/ea19bab2-fea4-4c36-b5ef-6db1d103cc74/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/ea19bab2-fea4-4c36-b5ef-6db1d103cc74/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "7f9ddcb7-7614-46aa-af72-989cc9cfedae"
+      },
+      "upper": {
+        "id": "49de404c-2b4e-42ef-bc21-8d12cb1fa833"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/ea19bab2_warm_dusty_pink_soil_ground_in_pixel_art_top-down_view_soft_mauve-pink.png",
+    "rima_fit": "Act 2",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 16,
+    "id": "9591f35a-2373-4150-b737-7b4620d1834c",
+    "id_short": "9591f35a",
+    "terrain": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, charcoal flagstones with cracked mortar, muted #2C2A2A base value, sparse dust and tiny stone chips, mat painterly pixel, dark gritty palette, no elevation, fully walkable floor -> Moss-overgrown wet stone floor variant, 32x32 top-down pixel art tile, same #2C2A2A stone base partially covered with damp dark green moss patches RGB(54,75,46), wet glistening surface, small puddles in cracks, walkable floor at exact same elevation as rubble \u2014 NO height difference, NO wall, NO raised edge, just texture variation</upper_description>\n<parameter name=\"lower_base_tile_id\">2165fb86-6bb6-4ff1-83e5-74e1611332a2",
+    "lower_description": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, charcoal flagstones with cracked mortar, muted #2C2A2A base value, sparse dust and tiny stone chips, mat painterly pixel, dark gritty palette, no elevation, fully walkable floor",
+    "upper_description": "Moss-overgrown wet stone floor variant, 32x32 top-down pixel art tile, same #2C2A2A stone base partially covered with damp dark green moss patches RGB(54,75,46), wet glistening surface, small puddles in cracks, walkable floor at exact same elevation as rubble \u2014 NO height difference, NO wall, NO raised edge, just texture variation</upper_description>\n<parameter name=\"lower_base_tile_id\">2165fb86-6bb6-4ff1-83e5-74e1611332a2",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Soft organic blend where moss creeps onto dry stone, irregular damp patches at boundary, no height edge, no shadow rim, just texture fade between dry charcoal stone and wet mossy stone, walkable continuous surface",
+    "transition_size": 0.0,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/9591f35a-2373-4150-b737-7b4620d1834c/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/9591f35a-2373-4150-b737-7b4620d1834c/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "e6550e7f-b378-490a-80b6-ef2fa01b7b81"
+      },
+      "upper": {
+        "id": "c0ccf6aa-4591-4ca2-a612-996df8a65449"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_moss.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_moss.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 17,
+    "id": "ecfee0a0-a5ec-4992-b435-1f1d3ae2dfdb",
+    "id_short": "ecfee0a0",
+    "terrain": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs smoother than rubble floor, foot-traffic polish, occasional cracks, mat painterly pixel, dark gritty palette -> Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent",
+    "lower_description": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs smoother than rubble floor, foot-traffic polish, occasional cracks, mat painterly pixel, dark gritty palette",
+    "upper_description": "Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Rift crack overlay seeping onto worn walkway, hairline cyan fracture trace through polished path stones, very subtle blue accent at boundary, organic asymmetric fade between path slab texture and rift-touched debris",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/ecfee0a0-a5ec-4992-b435-1f1d3ae2dfdb/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/ecfee0a0-a5ec-4992-b435-1f1d3ae2dfdb/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "7f5b8f02-e410-4466-bbb9-59453eb8bab1"
+      },
+      "upper": {
+        "id": "6e5e6639-9fcf-494e-b927-7f5f452fc672"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/worn_path_to_rift.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/worn_path_to_rift.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 18,
+    "id": "02a5a97b-9475-4bdb-b2e4-cde475068f4d",
+    "id_short": "02a5a97b",
+    "terrain": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees, raised wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, ancient fortress masonry, dark gritty palette -> Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood",
+    "lower_description": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees, raised wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, ancient fortress masonry, dark gritty palette",
+    "upper_description": "Dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Cold blue cyan rift cracks splitting through ancient wall masonry, fractured stone with magical seam where rift overlay meets wall block surface, hairline cyan fracture pattern, dust accumulation in crevices, asymmetric organic boundary",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/02a5a97b-9475-4bdb-b2e4-cde475068f4d/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/02a5a97b-9475-4bdb-b2e4-cde475068f4d/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "02586a60-25e7-4b89-aeef-6b9dc274c531"
+      },
+      "upper": {
+        "id": "6e5e6639-9fcf-494e-b927-7f5f452fc672"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/broken_wall_to_rift.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/broken_wall_to_rift.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 19,
+    "id": "8c154e37-8c0a-450a-82fd-126cc8b35c97",
+    "id_short": "8c154e37",
+    "terrain": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees, raised wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, dark gritty palette -> Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare, mat painterly pixel, dark gritty palette",
+    "lower_description": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees, raised wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, dark gritty palette",
+    "upper_description": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare, mat painterly pixel, dark gritty palette",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Broken stone debris where wall masonry meets worn walkway, fallen blocks at the boundary, dust accumulation in the crevice between raised wall and polished path stones, occasional hairline cyan rift trace, asymmetric organic boundary, no straight line",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/8c154e37-8c0a-450a-82fd-126cc8b35c97/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/8c154e37-8c0a-450a-82fd-126cc8b35c97/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "02586a60-25e7-4b89-aeef-6b9dc274c531"
+      },
+      "upper": {
+        "id": "7f5b8f02-e410-4466-bbb9-59453eb8bab1"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/broken_wall_to_worn_path.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/broken_wall_to_worn_path.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 20,
+    "id": "4c962284-90f4-43ee-8192-2b108a77b6ca",
+    "id_short": "4c962284",
+    "terrain": "dark debris stone floor tile, pixel art top-down view, very dark warm charcoal-grey RGB(44,42,42) dominant tone, weathered ruined keep floor, slightly warm brown undertone NOT cold blue, matte desaturated stone with subtle hairline cracks, intimate fractured keep atmosphere, Salt and Sanctuary chibi-but-serious mood, dark gritty serious palette, NO purple, NO blue, NO mauve, neutral warm-gray stone -> dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, same dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood, NO purple, NO bright blue dominance, charcoal base with thin rift line accent only",
+    "lower_description": "dark debris stone floor tile, pixel art top-down view, very dark warm charcoal-grey RGB(44,42,42) dominant tone, weathered ruined keep floor, slightly warm brown undertone NOT cold blue, matte desaturated stone with subtle hairline cracks, intimate fractured keep atmosphere, Salt and Sanctuary chibi-but-serious mood, dark gritty serious palette, NO purple, NO blue, NO mauve, neutral warm-gray stone",
+    "upper_description": "dark debris stone floor variant with subtle rift crack hint, pixel art top-down view, same dark warm charcoal-grey RGB(44,42,42) base with faint cold blue RGB(123,167,188) hairline rift fracture overlay, weathered ruined keep floor with magical seam, matte desaturated with sparse cyan thread accent, dark gritty serious mood, NO purple, NO bright blue dominance, charcoal base with thin rift line accent only",
+    "tiles": 25,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "ragged organic blend between charcoal debris stone and rift-cracked stone variant, raggedness 40 percent or higher, soft irregular boundary with natural fracture pattern, no harsh edges, both stones share dark warm-gray base, faint cold blue cyan hairline rift trace through transition only",
+    "transition_size": 1.0,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/4c962284-90f4-43ee-8192-2b108a77b6ca/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/4c962284-90f4-43ee-8192-2b108a77b6ca/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "c40bfd20-a7e8-4a91-80ef-12f9fa8357a4"
+      },
+      "upper": {
+        "id": "6e5e6639-9fcf-494e-b927-7f5f452fc672"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_debris_to_rift.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_debris_to_rift.png",
+    "rima_fit": "Act 1 accent",
+    "keep_delete": "KEEP_WITH_CAUTION (already imported)"
+  },
+  {
+    "index": 21,
+    "id": "a1b63282-7bc3-4acb-a390-e82853b8168d",
+    "id_short": "a1b63282",
+    "terrain": "warm dusty mauve pink ground in pixel art top-down view, soft rosy beige stone surface with gentle natural grain, painterly desaturated palette in pink and rose-tan tones with no blue and no grey-blue, mineral powder ground texture, magical fantasy dungeon biome floor, intimate yet warm atmosphere, soft pastel mauve dominant color, NOT slate, NOT cold -> warm dusty pink ground with subtle sandy beige patches and faint hexagonal honeycomb pattern overlay in pixel art top-down view, light tan and rose accent shift from base ground, painterly desaturated mineral patches, soft pastel warm tones with no blue and no cool grey, magical biome floor with otherworldly hexagon trace, NOT slate, NOT stone, NOT cold",
+    "lower_description": "warm dusty mauve pink ground in pixel art top-down view, soft rosy beige stone surface with gentle natural grain, painterly desaturated palette in pink and rose-tan tones with no blue and no grey-blue, mineral powder ground texture, magical fantasy dungeon biome floor, intimate yet warm atmosphere, soft pastel mauve dominant color, NOT slate, NOT cold",
+    "upper_description": "warm dusty pink ground with subtle sandy beige patches and faint hexagonal honeycomb pattern overlay in pixel art top-down view, light tan and rose accent shift from base ground, painterly desaturated mineral patches, soft pastel warm tones with no blue and no cool grey, magical biome floor with otherworldly hexagon trace, NOT slate, NOT stone, NOT cold",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "soft painterly blend between dusty mauve ground and sandy beige patch with faint hexagonal trace, gentle organic warm boundary, dreamy mineral fade, no harsh edges, all warm pink and tan tones",
+    "transition_size": 0.5,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/a1b63282-7bc3-4acb-a390-e82853b8168d/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/a1b63282-7bc3-4acb-a390-e82853b8168d/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "27b4ce59-2276-4f4c-a7d5-50fa1667143e"
+      },
+      "upper": {
+        "id": "551ca4c5-b581-463e-af95-11625758a8ec"
+      }
+    },
+    "already_imported": false,
+    "cross_reference_path": "",
+    "local_png": "STAGING/_pixellab_outputs/all_tilesets/a1b63282_warm_dusty_mauve_pink_ground_in_pixel_art_top-down_view_soft_rosy_beige.png",
+    "rima_fit": "Act 2 / decoration",
+    "keep_delete": "MAYBE"
+  },
+  {
+    "index": 22,
+    "id": "d43914a8-bd20-4aa4-9ded-f95a773062f9",
+    "id_short": "d43914a8",
+    "terrain": "cold slate blue-grey dungeon stone floor, uniform muted desaturated tone RGB(62,60,77), subtle organic micro-texture, intimate cave atmosphere -> cold slate blue-grey dungeon stone floor with subtle lighter mineral patch variation toward RGB(78,76,95), warm soft undertone, gentle texture distinction from base",
+    "lower_description": "cold slate blue-grey dungeon stone floor, uniform muted desaturated tone RGB(62,60,77), subtle organic micro-texture, intimate cave atmosphere",
+    "upper_description": "cold slate blue-grey dungeon stone floor with subtle lighter mineral patch variation toward RGB(78,76,95), warm soft undertone, gentle texture distinction from base",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "soft natural mineral blend between two stone tones, gentle organic boundary, no sharp edges",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/d43914a8-bd20-4aa4-9ded-f95a773062f9/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/d43914a8-bd20-4aa4-9ded-f95a773062f9/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "687d485c-d821-42bc-9db3-11b8e6d0b688"
+      },
+      "upper": {
+        "id": "95a4435a-5522-46e9-b938-24a3255348ab"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/cold_slate_to_mineral.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/cold_slate_to_mineral.png",
+    "rima_fit": "Act 1 / Act 3 support",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 23,
+    "id": "bdca2623-62ac-4624-9ffb-d1728f86e3c3",
+    "id_short": "bdca2623",
+    "terrain": "Cold dark dungeon stone floor surface viewed from high top-down. Weathered ancient charcoal granite, base color #3A3D42 cool grey, deeper crevices #252830, occasional subtle cold blue rim #7BA7BC microcracks. Pebble grain texture, hairline microcracks scattered organically, NO baked light, NO directional shadow, NO vignette. Salt and Sanctuary dark gritty palette. NO warm brown, NO yellow, NO green. -> Cold dark dungeon stone wall edge viewed from high top-down \u2014 slightly raised wall blocks with vertical rim shadow on the side facing camera. Charcoal granite blocks #3A3D42 with darker crevices #252830 between stones, subtle cold blue #7BA7BC rim highlight on top edge, mortar gaps visible. Wall reads as raised barrier from above with minimal vertical extrusion (TOP-DOWN not isometric). NO brown tones, NO warm colors, NO baked lighting.",
+    "lower_description": "Cold dark dungeon stone floor surface viewed from high top-down. Weathered ancient charcoal granite, base color #3A3D42 cool grey, deeper crevices #252830, occasional subtle cold blue rim #7BA7BC microcracks. Pebble grain texture, hairline microcracks scattered organically, NO baked light, NO directional shadow, NO vignette. Salt and Sanctuary dark gritty palette. NO warm brown, NO yellow, NO green.",
+    "upper_description": "Cold dark dungeon stone wall edge viewed from high top-down \u2014 slightly raised wall blocks with vertical rim shadow on the side facing camera. Charcoal granite blocks #3A3D42 with darker crevices #252830 between stones, subtle cold blue #7BA7BC rim highlight on top edge, mortar gaps visible. Wall reads as raised barrier from above with minimal vertical extrusion (TOP-DOWN not isometric). NO brown tones, NO warm colors, NO baked lighting.",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Wall base meets floor with broken stone debris and fallen masonry chunks scattered along the edge, dirt accumulation in the crevice between wall and floor, occasional hairline cold blue rift crack at the boundary. Asymmetric organic boundary, no straight line.",
+    "transition_size": 0.5,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/bdca2623-62ac-4624-9ffb-d1728f86e3c3/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/bdca2623-62ac-4624-9ffb-d1728f86e3c3/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "b6b6b815-b9c5-4035-9e34-881bb5f17af9"
+      },
+      "upper": {
+        "id": "bbd1796e-943a-4366-806d-eb396f1660da"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/cold_floor_to_wall_edge.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/cold_floor_to_wall_edge.png",
+    "rima_fit": "Act 1 / Act 3 support",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 24,
+    "id": "49913501-fd93-41df-8a9f-f24e97a7b76c",
+    "id_short": "49913501",
+    "terrain": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable. -> Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable.",
+    "lower_description": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable.",
+    "upper_description": "Worn stone walkway path, 32x32 top-down pixel art tile, paler #4A4842 stone slabs slightly smoother than rubble floor, foot-traffic polish, occasional cracks, hairline cyan rift dust accents very rare. Mat painterly pixel, dark gritty palette, asymmetric weathering, must connect cleanly against the dark rubble floor terrain. No characters, no props, tileable.",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Sparse stone fragments and dust scattered at the path edge where worn walkway meets rubble floor, occasional cracked flagstone chips, hairline cyan rift dust very rare, natural worn fade from polished path stones to surrounding broken stone. Mat painterly pixel, dark gritty palette, asymmetric weathering, no characters.",
+    "transition_size": 0.25,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/49913501-fd93-41df-8a9f-f24e97a7b76c/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/49913501-fd93-41df-8a9f-f24e97a7b76c/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "2165fb86-6bb6-4ff1-83e5-74e1611332a2"
+      },
+      "upper": {
+        "id": "7f5b8f02-e410-4466-bbb9-59453eb8bab1"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_worn_path.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_worn_path.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  },
+  {
+    "index": 25,
+    "id": "9ffbb4d1-79d0-441d-8c23-e1df62e25644",
+    "id_short": "9ffbb4d1",
+    "terrain": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable. -> Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.",
+    "lower_description": "Dark rubble stone floor for a shattered keep, 32x32 top-down pixel art tile, viewed from approximately 35 degrees high top-down angle (Hades reference). Uneven charcoal flagstones, worn cracked mortar, chipped slab edges, subtle cold blue shadow tint, muted #2C2A2A base value, sparse dust and tiny stone chips, hairline cyan rift cracks scattered asymmetrically. Gritty Vivid Vulnerability mood, Salt and Sanctuary chibi-but-serious tone, mat painterly pixel art, dark gritty palette, heavy texture, no characters, no props, tileable.",
+    "upper_description": "Dark broken stone wall terrain for a ruined keep, 32x32 high top-down pixel art viewed from ~35 degrees (Hades reference). Raised rough wall stones and collapsed block mass, muted #4A3F3F value, darker crevices, restrained cold blue rim shadows #7BA7BC, ancient fortress masonry, heavy but readable silhouette, must connect cleanly against floor terrain. Mat painterly pixel, dark gritty palette, no gradients, heavy texture, asymmetric weathering.",
+    "tiles": 16,
+    "tile_size": "32x32",
+    "view": "high top-down",
+    "transition": "Broken rubble seam between floor and wall: loose dark stones, cracked mortar, small debris piles, chipped flagstone edges, a few pale lichen flecks, very subtle cyan-violet rift dust only in tiny accents. Keep the transition narrow and readable so room walkable space remains clear.",
+    "transition_size": 0.1,
+    "download_png": "https://api.pixellab.ai/mcp/tilesets/9ffbb4d1-79d0-441d-8c23-e1df62e25644/image",
+    "download_metadata": "https://api.pixellab.ai/mcp/tilesets/9ffbb4d1-79d0-441d-8c23-e1df62e25644/metadata",
+    "base_tile_ids": {
+      "lower": {
+        "id": "2165fb86-6bb6-4ff1-83e5-74e1611332a2"
+      },
+      "upper": {
+        "id": "02586a60-25e7-4b89-aeef-6b9dc274c531"
+      }
+    },
+    "already_imported": true,
+    "cross_reference_path": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_broken_wall.png",
+    "local_png": "Assets/Art/Tiles/Act1_ShatteredKeep/wang_pack/dark_rubble_to_broken_wall.png",
+    "rima_fit": "Act 1",
+    "keep_delete": "KEEP (already imported)"
+  }
+]
