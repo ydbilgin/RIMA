@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 135e8c34aac14ac41946581450121352, type: 3}
+  m_Name: MapManifest_Act1_ShatteredKeep
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Map.MapManifestSO
+  manifestId: act1_shattered_keep
+  displayName: "Act 1 \u2014 The Shattered Keep"
+  actOrder: 1
+  startingRoom: {fileID: 11400000, guid: 380e042eadc417f468f2be47aa7e0ba8, type: 2}
+  endingRoom: {fileID: 11400000, guid: 8fdb81c9bea31d54abda644da5c5e7c5, type: 2}
+  rooms:
+  - {fileID: 11400000, guid: 380e042eadc417f468f2be47aa7e0ba8, type: 2}
+  - {fileID: 11400000, guid: 5711b2e90993bdb439dcab030f9e89e4, type: 2}
+  - {fileID: 11400000, guid: b3e5aaaa895fe4742b84cef50da5f9de, type: 2}
+  - {fileID: 11400000, guid: 8fede964d5838c945bffce61106a5810, type: 2}
+  - {fileID: 11400000, guid: 2d43fe691fe0b5c46b654ac8f83660b5, type: 2}
+  - {fileID: 11400000, guid: 8fdb81c9bea31d54abda644da5c5e7c5, type: 2}
+  checkpointRooms:
+  - {fileID: 11400000, guid: 380e042eadc417f468f2be47aa7e0ba8, type: 2}
+  - {fileID: 11400000, guid: 2d43fe691fe0b5c46b654ac8f83660b5, type: 2}
+  - {fileID: 11400000, guid: 8fdb81c9bea31d54abda644da5c5e7c5, type: 2}

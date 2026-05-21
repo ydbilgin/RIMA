@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e12c28ddbd261884e817e5eb71b158f2, type: 3}
-  m_Name: RoomManifest_EntryHall
+  m_Name: RoomManifest_ShatteredThrone
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.Map.RoomManifestSO
-  roomId: act1_entry_hall
-  jsonLayout: {fileID: 4900000, guid: fb77b65b965ba554785e476b5bed32c0, type: 3}
-  defaultCameraBounds: {x: 32, y: 24}
+  roomId: act1_shattered_throne
+  jsonLayout: {fileID: 4900000, guid: 795a19f7dc490534e85584f7910afbb8, type: 3}
+  defaultCameraBounds: {x: 40, y: 30}
   connectedRooms:
   - {fileID: 11400000, guid: 2d43fe691fe0b5c46b654ac8f83660b5, type: 2}
-  - {fileID: 11400000, guid: b3e5aaaa895fe4742b84cef50da5f9de, type: 2}
-  - {fileID: 11400000, guid: 5711b2e90993bdb439dcab030f9e89e4, type: 2}

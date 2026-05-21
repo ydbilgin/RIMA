@@ -1,0 +1,38 @@
+{
+  "manifest_id": "act1_shattered_keep",
+  "display_name": "Act 1 — The Shattered Keep",
+  "act_order": 1,
+  "starting_room": "act1_entry_hall",
+  "ending_room": "act1_shattered_throne",
+  "checkpoint_rooms": [
+    "act1_entry_hall",
+    "act1_north_antechamber",
+    "act1_shattered_throne"
+  ],
+  "door_graph": {
+    "act1_entry_hall": {
+      "south": null,
+      "north": "act1_north_antechamber",
+      "east": "act1_east_corridor",
+      "west": "act1_west_chamber"
+    },
+    "act1_west_chamber": {
+      "east": "act1_entry_hall",
+      "north": "act1_north_antechamber"
+    },
+    "act1_east_corridor": {
+      "west": "act1_entry_hall",
+      "east": "act1_treasure_vault"
+    },
+    "act1_treasure_vault": {
+      "west": "act1_east_corridor"
+    },
+    "act1_north_antechamber": {
+      "south": "act1_entry_hall",
+      "north": "act1_shattered_throne"
+    },
+    "act1_shattered_throne": {
+      "south": "act1_north_antechamber"
+    }
+  }
+}

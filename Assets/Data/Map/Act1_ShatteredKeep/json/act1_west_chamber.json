@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "room_id": "act1_west_chamber",
+  "display_name": "West Chamber — Broken Pillars",
+  "act": "act1_shattered_keep",
+  "room_type": "combat_medium",
+  "width": 24,
+  "height": 18,
+  "shape": {
+    "type": "rectangle"
+  },
+  "floor": {
+    "default_material": "rubble",
+    "zones": [
+      {
+        "material": "granite",
+        "rect": {
+          "x": 8,
+          "y": 6,
+          "width": 8,
+          "height": 6
+        },
+        "blend_edges": true
+      }
+    ],
+    "accents": [
+      {
+        "material": "rift",
+        "x": 11,
+        "y": 9
+      }
+    ]
+  },
+  "walls": [
+    {
+      "prefab": "column_broken",
+      "x": 5,
+      "y": 4,
+      "rotation": 0
+    },
+    {
+      "prefab": "column_broken",
+      "x": 18,
+      "y": 4,
+      "rotation": 90
+    },
+    {
+      "prefab": "column_broken",
+      "x": 5,
+      "y": 13,
+      "rotation": 180
+    },
+    {
+      "prefab": "column_broken",
+      "x": 18,
+      "y": 13,
+      "rotation": 270
+    }
+  ],
+  "props": [
+    {
+      "prefab": "rubble_pile_large",
+      "x": 2,
+      "y": 9
+    },
+    {
+      "prefab": "rubble_pile_large",
+      "x": 21,
+      "y": 9
+    },
+    {
+      "prefab": "rubble_pile_small",
+      "x": 11,
+      "y": 3
+    },
+    {
+      "prefab": "rubble_pile_small",
+      "x": 12,
+      "y": 14
+    }
+  ],
+  "mob_spawns": [
+    {
+      "mob_id": "rift_husk",
+      "x": 6,
+      "y": 9,
+      "wave": 1
+    },
+    {
+      "mob_id": "rift_husk",
+      "x": 18,
+      "y": 9,
+      "wave": 1
+    },
+    {
+      "mob_id": "shattered_knight",
+      "x": 12,
+      "y": 9,
+      "wave": 2,
+      "elite": false
+    }
+  ],
+  "doors": [
+    {
+      "direction": "east",
+      "x": 23,
+      "y": 9,
+      "target_room_id": "act1_entry_hall",
+      "target_spawn_point": "from_west",
+      "locked_initial": true
+    },
+    {
+      "direction": "north",
+      "x": 12,
+      "y": 17,
+      "target_room_id": "act1_north_antechamber",
+      "target_spawn_point": "from_south_west",
+      "locked_initial": true
+    }
+  ],
+  "spawn_points": [
+    {
+      "id": "from_east",
+      "x": 21,
+      "y": 9
+    },
+    {
+      "id": "from_north",
+      "x": 12,
+      "y": 15
+    }
+  ],
+  "camera_bounds": {
+    "x_min": 0,
+    "x_max": 24,
+    "y_min": 0,
+    "y_max": 18
+  },
+  "lighting": {
+    "global_color": "#1F2228",
+    "global_intensity": 0.6,
+    "point_lights": [
+      {
+        "x": 11,
+        "y": 9,
+        "color": "#5DEFFF",
+        "intensity": 0.9,
+        "outer_radius": 4,
+        "flicker": false
+      }
+    ]
+  },
+  "audio": {
+    "music_track_id": "act1_combat_first",
+    "ambient_loop_id": "wind_low_rubble"
+  }
+}

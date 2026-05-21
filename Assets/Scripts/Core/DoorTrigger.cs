@@ -18,6 +18,8 @@ namespace RIMA
     public class DoorTrigger : MonoBehaviour
     {
         [SerializeField] private DoorDirection direction;
+        [SerializeField] private string targetRoomId;
+        [SerializeField] private string targetSpawnPoint;
 
         [Header("Visual Feedback")]
         [SerializeField] private SpriteRenderer doorIndicator; // optional: glow/arrow sprite
@@ -29,12 +31,28 @@ namespace RIMA
         private bool isActive;
         private bool triggered;
         private bool playerInRange;
+        private bool HasTargetRoom => !string.IsNullOrEmpty(targetRoomId);
 
         private void Awake()
         {
             col = GetComponent<BoxCollider2D>();
             col.isTrigger = true;
             SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            if (col == null) col = GetComponent<BoxCollider2D>();
+            if (!isActive || col == null) return;
+
+            triggered = false;
+            col.enabled = true;
+        }
+
+        public void ConfigureTransition(string roomId, string spawnPoint)
+        {
+            targetRoomId = roomId;
+            targetSpawnPoint = spawnPoint;
         }
 
         public void SetActive(bool active)
@@ -57,8 +75,7 @@ namespace RIMA
             col.enabled = false;
             ClearPlayerRange();
 
-            if (RuntimeRoomManager.Instance != null)
-                RuntimeRoomManager.Instance.OnPlayerEnteredDoor(direction);
+            TriggerTransition();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -67,8 +84,26 @@ namespace RIMA
             if (!other.CompareTag("Player")) return;
             if (triggered) return;
 
+            if (HasTargetRoom)
+            {
+                triggered = true;
+                if (col != null) col.enabled = false;
+                TriggerTransition();
+                return;
+            }
+
             playerInRange = true;
             HUDController.Instance?.SetInteractionPrompt(GetPromptText());
+        }
+
+        private void TriggerTransition()
+        {
+            if (RuntimeRoomManager.Instance == null) return;
+
+            if (HasTargetRoom)
+                RuntimeRoomManager.Instance.TransitionToRoom(targetRoomId, targetSpawnPoint);
+            else
+                RuntimeRoomManager.Instance.OnPlayerEnteredDoor(direction);
         }
 
         private void OnTriggerExit2D(Collider2D other)

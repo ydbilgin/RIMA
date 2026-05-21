@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e12c28ddbd261884e817e5eb71b158f2, type: 3}
-  m_Name: RoomManifest_EntryHall
+  m_Name: RoomManifest_WestChamber
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.Map.RoomManifestSO
-  roomId: act1_entry_hall
-  jsonLayout: {fileID: 4900000, guid: fb77b65b965ba554785e476b5bed32c0, type: 3}
-  defaultCameraBounds: {x: 32, y: 24}
+  roomId: act1_west_chamber
+  jsonLayout: {fileID: 4900000, guid: ff02eae5d2f70d440ac8cc235ffcac40, type: 3}
+  defaultCameraBounds: {x: 24, y: 18}
   connectedRooms:
+  - {fileID: 11400000, guid: 380e042eadc417f468f2be47aa7e0ba8, type: 2}
   - {fileID: 11400000, guid: 2d43fe691fe0b5c46b654ac8f83660b5, type: 2}
-  - {fileID: 11400000, guid: b3e5aaaa895fe4742b84cef50da5f9de, type: 2}
-  - {fileID: 11400000, guid: 5711b2e90993bdb439dcab030f9e89e4, type: 2}

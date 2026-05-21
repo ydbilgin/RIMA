@@ -15,23 +15,25 @@ MonoBehaviour:
   materials:
   - materialId: granite
     variants:
-    - {fileID: 11400000, guid: 44db6e88b1d025642a0a9d7ea8f20e99, type: 2}
-    - {fileID: 11400000, guid: 4d90e867b052ef04b975b8d95e185fcb, type: 2}
-    - {fileID: 11400000, guid: 9e86aa15da8d15b4e99c685e4e9cd88d, type: 2}
-    - {fileID: 11400000, guid: f8f828dbee1c07e499e1230850d65e86, type: 2}
-  - materialId: walkway
-    variants:
-    - {fileID: 11400000, guid: 9ff6d8faa08707b429ea2cecfa6aa4e4, type: 2}
-    - {fileID: 11400000, guid: 5d1a746ed33eae748b7971fd21f3cfa9, type: 2}
-    - {fileID: 11400000, guid: c45a91631fbf9a54a8cb6e15a52a6e8f, type: 2}
-    - {fileID: 11400000, guid: 0447e9552e5aaa04bb66b48e10b48589, type: 2}
-  - materialId: rift
-    variants:
-    - {fileID: 11400000, guid: 4492a96a8180d7c4b8f171477dd0a03a, type: 2}
-    - {fileID: 11400000, guid: 6d55bfc028da5f140a40db5f561b455a, type: 2}
+    - {fileID: 11400000, guid: 540f3f058bcbc0647bf98e7aabb7f01d, type: 2}
+    - {fileID: 11400000, guid: f827d72bec1262741b9d4d05a732aed0, type: 2}
+    - {fileID: 11400000, guid: ecd56c8d614bb9347b4478a05eb51867, type: 2}
+    - {fileID: 11400000, guid: c7c13427faafc7042a6c008eda6e8153, type: 2}
   - materialId: rubble
     variants:
-    - {fileID: 11400000, guid: c31335fe06de40a479079ef1a3bbebac, type: 2}
-    - {fileID: 11400000, guid: 36c5c61f5ba740e46baeb11b49240d1d, type: 2}
-    - {fileID: 11400000, guid: 8dfe70c182018cc45bc5a100cd761fcb, type: 2}
-    - {fileID: 11400000, guid: e88816e75626ee8479357fcfed0db659, type: 2}
+    - {fileID: 11400000, guid: 768de75def0d9d74f82f7eb0cbc1caca, type: 2}
+    - {fileID: 11400000, guid: d4a8cefb43069d94d93ccdd3b296c464, type: 2}
+    - {fileID: 11400000, guid: 9d7452b5c6d1b524aa771e8ec74458fb, type: 2}
+    - {fileID: 11400000, guid: 6498cf91645ae584a8bcfb8400244734, type: 2}
+  - materialId: walkway
+    variants:
+    - {fileID: 11400000, guid: b694569a393cd0c4b841fe56ca5253f7, type: 2}
+    - {fileID: 11400000, guid: d2fc7486fea630345b1b15bb7ce6331f, type: 2}
+    - {fileID: 11400000, guid: eb6d4d680440d254fb9b45670840da25, type: 2}
+    - {fileID: 11400000, guid: 3ead65f2a017405418927d15f1b73097, type: 2}
+  - materialId: rift
+    variants:
+    - {fileID: 11400000, guid: 00ef3ef55c545e5468eea541a322508e, type: 2}
+    - {fileID: 11400000, guid: 70eb4310bdd968f458b3323002bceaa2, type: 2}
+    - {fileID: 11400000, guid: 22c311170c35d3a4ea98e25589379096, type: 2}
+    - {fileID: 11400000, guid: ba213a7c0343b464b91f5bb6705b1ad9, type: 2}

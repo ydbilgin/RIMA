@@ -52,6 +52,9 @@ namespace RIMA
         [SerializeField] private LargeDungeonMapPainter largeMapPainter;
         [SerializeField] private DungeonWorldBuilder worldBuilder;
 
+        [Header("Map Manifest Runtime")]
+        [SerializeField] private RIMA.Map.MapManifestSO currentManifest;
+
         [Header("Map Fragment")]
         [SerializeField] private GameObject mapFragmentPrefab;
         [SerializeField, Range(0f, 1f)] private float mapFragmentChanceWhenAheadVisible = 0.35f;
@@ -108,6 +111,8 @@ namespace RIMA
         private IEncounterBank encounterBank;
         private bool isEncounterContext;
         private bool isFinalSubRoom;
+        private readonly Dictionary<string, GameObject> roomGameObjects = new Dictionary<string, GameObject>();
+        private string currentRoomId;
 
         // Kuzey duvarındaki 3 kapı slotu (x başlangıcı), hepsi aynı y'de
         private int DoorYNorth  => roomHeight - wallThickness;      // 22
@@ -127,6 +132,7 @@ namespace RIMA
             // Bu ayar domain reload'da sıfırlanabileceğinden her Awake'te set edilir.
             Physics2D.IgnoreLayerCollision(12, 0, false);
             encounterBank = encounterBankStub;
+            BuildRoomGameObjectLookup();
         }
 
         private void Start()
@@ -157,6 +163,12 @@ namespace RIMA
             // Auto-find death screen
             deathScreen = FindAnyObjectByType<DeathScreenManager>();
 
+            if (currentManifest != null)
+            {
+                InitializeManifestRoomState();
+                return;
+            }
+
             if (worldBuilder != null) worldBuilder.BuildWorld();
 
             // Start first room
@@ -165,6 +177,126 @@ namespace RIMA
 
             RoomLoader.OnRoomLoaded += HandleRoomLoaded;
             RoomLoader.OnRoomCleared += HandleRoomCleared;
+        }
+
+        private void BuildRoomGameObjectLookup()
+        {
+            roomGameObjects.Clear();
+
+            GameObject roomsRoot = GameObject.Find("Rooms");
+            if (roomsRoot == null) return;
+
+            foreach (Transform child in roomsRoot.transform)
+            {
+                var instance = child.GetComponentInChildren<RIMA.Map.RoomInstance>(true);
+                if (instance == null || string.IsNullOrEmpty(instance.roomId)) continue;
+                roomGameObjects[instance.roomId] = child.gameObject;
+            }
+        }
+
+        private void InitializeManifestRoomState()
+        {
+            BuildRoomGameObjectLookup();
+
+            string startRoomId = currentManifest.startingRoom != null
+                ? currentManifest.startingRoom.roomId
+                : null;
+
+            if (string.IsNullOrEmpty(startRoomId))
+            {
+                Debug.LogWarning("[RuntimeRoomManager] MapManifestSO has no starting room.");
+                return;
+            }
+
+            foreach (var pair in roomGameObjects)
+                pair.Value.SetActive(pair.Key == startRoomId);
+
+            currentRoomId = startRoomId;
+            MovePlayerToSpawn(currentRoomId, "default");
+            ApplyCameraBounds(currentRoomId);
+        }
+
+        public void TransitionToRoom(string targetRoomId, string targetSpawnPoint)
+        {
+            if (string.IsNullOrEmpty(targetRoomId))
+            {
+                Debug.LogWarning("[RuntimeRoomManager] Transition target is empty.");
+                return;
+            }
+
+            if (roomGameObjects.Count == 0) BuildRoomGameObjectLookup();
+            if (!roomGameObjects.TryGetValue(targetRoomId, out GameObject targetRoom) || targetRoom == null)
+            {
+                Debug.LogWarning("[RuntimeRoomManager] Target room not found: " + targetRoomId);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(currentRoomId) &&
+                roomGameObjects.TryGetValue(currentRoomId, out GameObject currentRoom) &&
+                currentRoom != null)
+            {
+                currentRoom.SetActive(false);
+            }
+
+            targetRoom.SetActive(true);
+            currentRoomId = targetRoomId;
+            MovePlayerToSpawn(targetRoomId, targetSpawnPoint);
+            ApplyCameraBounds(targetRoomId);
+            Debug.Log("[RuntimeRoomManager] Transitioned to " + targetRoomId + " spawn=" + targetSpawnPoint);
+        }
+
+        private void MovePlayerToSpawn(string roomId, string spawnPoint)
+        {
+            if (playerTransform == null)
+            {
+                var player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null) playerTransform = player.transform;
+            }
+
+            if (playerTransform == null) return;
+            if (!roomGameObjects.TryGetValue(roomId, out GameObject room) || room == null) return;
+
+            string spawnName = "PlayerSpawn_" + (string.IsNullOrEmpty(spawnPoint) ? "default" : spawnPoint);
+            Transform spawn = FindChildRecursive(room.transform, spawnName);
+            if (spawn == null && spawnName != "PlayerSpawn_default")
+                spawn = FindChildRecursive(room.transform, "PlayerSpawn_default");
+
+            if (spawn != null)
+                playerTransform.position = spawn.position;
+        }
+
+        private void ApplyCameraBounds(string roomId)
+        {
+            CameraFollow follow = Camera.main != null ? Camera.main.GetComponent<CameraFollow>() : FindAnyObjectByType<CameraFollow>();
+            if (follow == null || currentManifest == null || currentManifest.rooms == null) return;
+
+            for (int i = 0; i < currentManifest.rooms.Length; i++)
+            {
+                RIMA.Map.RoomManifestSO room = currentManifest.rooms[i];
+                if (room == null || room.roomId != roomId || room.jsonLayout == null) continue;
+
+                RIMA.Map.RoomLayoutJson layout = JsonUtility.FromJson<RIMA.Map.RoomLayoutJson>(room.jsonLayout.text);
+                if (layout == null || layout.camera_bounds == null) return;
+
+                Vector2 min = new Vector2(layout.camera_bounds.x_min, layout.camera_bounds.y_min);
+                Vector2 max = new Vector2(layout.camera_bounds.x_max, layout.camera_bounds.y_max);
+                follow.SetBounds(min, max);
+                return;
+            }
+        }
+
+        private static Transform FindChildRecursive(Transform root, string childName)
+        {
+            if (root == null) return null;
+            if (root.name == childName) return root;
+
+            foreach (Transform child in root)
+            {
+                Transform match = FindChildRecursive(child, childName);
+                if (match != null) return match;
+            }
+
+            return null;
         }
 
         // ─── Room Lifecycle ──────────────────────────────────
