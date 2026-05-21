@@ -124,7 +124,8 @@ namespace RIMA.Editor.MapDesigner
         private const string UseCategoryScalePrefsKey = "Painter.UseCategoryScale";
         private const string PaletteAddsPrefsPrefix = "RimaPainter_CustomAdds_";
         private const string PaletteExcludesPrefsPrefix = "RimaPainter_Excludes_";
-        private const string WallRuleTileAssetPath = "Assets/Art/Tilesets/Act1_WallRuleTile.asset";
+        private const string WangRuleTileFolder = "Assets/Data/Tiles/Act1_ShatteredKeep/wang_rules";
+        private const string WallRuleTileAssetPath = WangRuleTileFolder + "/dark_rubble_to_broken_wall.asset";
         [SerializeField] private CollisionRulesSO collisionRules;
 
         [SerializeField] private string activeMapName = string.Empty;
@@ -659,6 +660,7 @@ namespace RIMA.Editor.MapDesigner
                     }
                 }
             }
+            ScanFloorTilesInFolder(WangRuleTileFolder);
 
             // 2. Scan Wall Prefabs (generic wall naming)
             wallPrefabs.Clear();
@@ -674,6 +676,21 @@ namespace RIMA.Editor.MapDesigner
             ScanPrefabsInFolder("Assets/Prefabs/Mobs/ShatteredKeep_PixelLab", "enemy_", mobPrefabs);
 
             ApplyPaletteOverrides();
+        }
+
+        private void ScanFloorTilesInFolder(string folderPath)
+        {
+            if (string.IsNullOrWhiteSpace(folderPath) || !AssetDatabase.IsValidFolder(folderPath)) return;
+            string[] guids = AssetDatabase.FindAssets("t:TileBase", new[] { folderPath });
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                TileBase tile = AssetDatabase.LoadAssetAtPath<TileBase>(path);
+                if (tile != null)
+                {
+                    AddTileToScanList(tile, CleanName(tile.name));
+                }
+            }
         }
 
         private void AddTileToScanList(TileBase tile, string name)
@@ -765,6 +782,7 @@ namespace RIMA.Editor.MapDesigner
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Props/ShatteredKeep_PixelLab");
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Walls/pilot_a");
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Walls");
+            AddDefaultIfMissing(wallScanFolders, WangRuleTileFolder);
 
             if (wallScanNamePatterns == null)
             {
@@ -2914,6 +2932,18 @@ namespace RIMA.Editor.MapDesigner
         {
             if (wallRuleTile != null) return;
             wallRuleTile = AssetDatabase.LoadAssetAtPath<TileBase>(WallRuleTileAssetPath);
+            if (wallRuleTile != null) return;
+            if (!AssetDatabase.IsValidFolder(WangRuleTileFolder)) return;
+
+            string[] guids = AssetDatabase.FindAssets("broken wall t:TileBase", new[] { WangRuleTileFolder });
+            if (guids.Length == 0)
+            {
+                guids = AssetDatabase.FindAssets("wall t:TileBase", new[] { WangRuleTileFolder });
+            }
+            if (guids.Length == 0) return;
+
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            wallRuleTile = AssetDatabase.LoadAssetAtPath<TileBase>(path);
         }
 
         private GameObject GetRandomWallVariantFromGroup(GameObject prefab)
