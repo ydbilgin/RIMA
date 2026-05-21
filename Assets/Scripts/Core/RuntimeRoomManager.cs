@@ -113,6 +113,9 @@ namespace RIMA
         private bool isFinalSubRoom;
         private readonly Dictionary<string, GameObject> roomGameObjects = new Dictionary<string, GameObject>();
         private string currentRoomId;
+        private Coroutine manifestTransitionRoutine;
+        private CheckpointData pendingCheckpoint;
+        private bool hasPendingCheckpoint;
 
         // Kuzey duvarındaki 3 kapı slotu (x başlangıcı), hepsi aynı y'de
         private int DoorYNorth  => roomHeight - wallThickness;      // 22
@@ -133,6 +136,7 @@ namespace RIMA
             Physics2D.IgnoreLayerCollision(12, 0, false);
             encounterBank = encounterBankStub;
             BuildRoomGameObjectLookup();
+            hasPendingCheckpoint = CheckpointSystem.LoadCheckpoint(out pendingCheckpoint);
         }
 
         private void Start()
@@ -198,7 +202,9 @@ namespace RIMA
         {
             BuildRoomGameObjectLookup();
 
-            string startRoomId = currentManifest.startingRoom != null
+            string startRoomId = hasPendingCheckpoint && !string.IsNullOrEmpty(pendingCheckpoint.roomId)
+                ? pendingCheckpoint.roomId
+                : currentManifest.startingRoom != null
                 ? currentManifest.startingRoom.roomId
                 : null;
 
@@ -214,22 +220,40 @@ namespace RIMA
             currentRoomId = startRoomId;
             MovePlayerToSpawn(currentRoomId, "default");
             ApplyCameraBounds(currentRoomId);
+            NotifyRoomEntered(currentRoomId);
         }
 
-        public void TransitionToRoom(string targetRoomId, string targetSpawnPoint)
+        public Coroutine TransitionToRoom(string targetRoomId, string targetSpawnPoint)
         {
             if (string.IsNullOrEmpty(targetRoomId))
             {
                 Debug.LogWarning("[RuntimeRoomManager] Transition target is empty.");
-                return;
+                return null;
             }
 
             if (roomGameObjects.Count == 0) BuildRoomGameObjectLookup();
             if (!roomGameObjects.TryGetValue(targetRoomId, out GameObject targetRoom) || targetRoom == null)
             {
                 Debug.LogWarning("[RuntimeRoomManager] Target room not found: " + targetRoomId);
-                return;
+                return null;
             }
+
+            if (manifestTransitionRoutine != null) return manifestTransitionRoutine;
+            manifestTransitionRoutine = StartCoroutine(TransitionToRoomRoutine(targetRoomId, targetSpawnPoint, targetRoom));
+            return manifestTransitionRoutine;
+        }
+
+        private IEnumerator TransitionToRoomRoutine(string targetRoomId, string targetSpawnPoint, GameObject targetRoom)
+        {
+            PlayerMovementController movement = ResolvePlayerMovement();
+            bool movementWasEnabled = movement != null && movement.enabled;
+            if (movement != null) movement.enabled = false;
+
+            if (RoomTransitionFX.Instance != null)
+                yield return RoomTransitionFX.Instance.FadeOut(0.3f);
+
+            CheckpointSystem.SaveCheckpoint(targetRoomId, CheckpointSystem.CapturePlayerState(playerTransform), currentManifest);
+            NotifyRoomExited(currentRoomId);
 
             if (!string.IsNullOrEmpty(currentRoomId) &&
                 roomGameObjects.TryGetValue(currentRoomId, out GameObject currentRoom) &&
@@ -242,7 +266,41 @@ namespace RIMA
             currentRoomId = targetRoomId;
             MovePlayerToSpawn(targetRoomId, targetSpawnPoint);
             ApplyCameraBounds(targetRoomId);
+            NotifyRoomEntered(targetRoomId);
+
+            if (RoomTransitionFX.Instance != null)
+                yield return RoomTransitionFX.Instance.FadeIn(0.3f);
+
+            if (movement != null) movement.enabled = movementWasEnabled;
+            manifestTransitionRoutine = null;
             Debug.Log("[RuntimeRoomManager] Transitioned to " + targetRoomId + " spawn=" + targetSpawnPoint);
+        }
+
+        private PlayerMovementController ResolvePlayerMovement()
+        {
+            if (playerTransform == null)
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null) playerTransform = player.transform;
+            }
+
+            return playerTransform != null ? playerTransform.GetComponent<PlayerMovementController>() : null;
+        }
+
+        private void NotifyRoomEntered(string roomId)
+        {
+            if (string.IsNullOrEmpty(roomId)) return;
+            if (!roomGameObjects.TryGetValue(roomId, out GameObject room) || room == null) return;
+            var instance = room.GetComponentInChildren<RIMA.Map.RoomInstance>(true);
+            if (instance != null) instance.OnEnter();
+        }
+
+        private void NotifyRoomExited(string roomId)
+        {
+            if (string.IsNullOrEmpty(roomId)) return;
+            if (!roomGameObjects.TryGetValue(roomId, out GameObject room) || room == null) return;
+            var instance = room.GetComponentInChildren<RIMA.Map.RoomInstance>(true);
+            if (instance != null) instance.OnExit();
         }
 
         private void MovePlayerToSpawn(string roomId, string spawnPoint)
