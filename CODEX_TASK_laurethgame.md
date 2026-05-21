@@ -1,89 +1,137 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
 
+# Codex Task — Unity Import Wall Pack v3 + Tile Asset Creation
+
 ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
 
-# Code Review — Antigravity S95 Cleanup
-
-NLM ACCESS: If you need RIMA design context, query NLM first via:
-  uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "<your question>"
+NLM ACCESS: query NLM if needed for RIMA visual context.
 
 ## Görev
 
-Antigravity (Gemini) aşağıdaki değişiklikleri yaptı. Her dosyayı oku, review et, PASS/FAIL ver.
+22 sliced wall pack PNG'leri Unity'e import et + her biri için Tile asset oluştur.
 
-## İncelenecek Dosyalar
+## Input
 
-### 1. Assets/Scripts/Combat/BasicAttack/BasicAttackBehaviorBase.cs
-**Yapılan:** Legacy juice çağrıları silindi (HitStop, LightPulse, DamagePopup, CameraShake).
-**Kontrol et:**
-- CombatEventBus.PublishHit + PublishKill doğru çağrılıyor mu?
-- Null reference riski var mı?
-- Knockback null check yeterli mi?
-- Herhangi bir compile hatası riski var mı?
+`Assets/Art/AssetPacks/Act1_ShatteredKeep/wall_pack_v3/` altında 22 PNG (sliced tiles).
 
-### 2. Assets/Scripts/Combat/BasicAttack/MarkPulseBehavior.cs
-**Yapılan:** Antigravity dokunmadı (CombatEventBus yoktu, sadece legacy vardı).
-**Kontrol et:**
-- Bu karar doğru muydu? Legacy çağrılar burada sorun yaratır mı?
-- Bus subscriber'larla çift efekt riski devam ediyor mu?
-- Öneride bulun: Bus eklenip legacy silinmeli mi?
+## Görev Adımları
 
-### 3. Assets/Editor/RimaUnifiedPainterWindow.cs
-**Yapılan:** Props_Root parent + sub-gruplar eklendi (Walls/Statues/WallMountings/Patches/Mobs/FloorProps).
-**Kontrol et:**
-- Props_Root bulma/oluşturma mantığı sağlam mı? (null check, scene context)
-- GetRecursiveChildren doğru implement edilmiş mi?
-- Sub-grup kategorizasyonu prefab naming convention ile uyumlu mu? (`wall_*`, `statue_*`, `mounting_*` vb.)
-- Erase/Save/Load/WallConnect fonksiyonları rekürsif güncellemeyi kapsamış mı?
-- Herhangi bir memory leak veya Editor-only API hatası riski var mı?
-- **UI/UX açısından:** Sub-grup hiyerarşisi kullanıcıya sahnede görünüyor mu? Daha kullanıcı dostu yapılabilir mi? Örn. grup başlıkları, toggle, renkli etiket?
+### Adım 1 — Sprite Import Settings (Batch via UnityMCP execute_code)
 
-### 4. Assets/Scenes/Demo/PathC_BaseTest.unity
-**Yapılan:** Props_Root GameObject sahnede scene root'a eklendi.
-**Kontrol et:**
-- Props_Root transform identity mi? (0,0,0 pos, 0,0,0 rot, 1,1,1 scale)
-- Grid/Tilemap'in child'ı olmadığını doğrula
+Her PNG için:
+- **Texture Type:** Sprite (2D and UI)
+- **Sprite Mode:** Single
+- **Pixels Per Unit:** 64 (RIMA standard, matches floor tiles)
+- **Filter Mode:** Point (no filter)
+- **Compression:** None (sharp pixel art preservation)
+- **Pivot:** Bottom Center (so walls sit on tile cell bottom)
+- **Mesh Type:** Full Rect
+- **Alpha Source:** Input Texture Alpha
+- **Alpha is Transparency:** True
 
-## UI/UX Genel Değerlendirme
+### Adım 2 — Tile Asset Creation (UnityEditor.Tilemaps.Tile per sprite)
 
-RimaUnifiedPainterWindow.cs tüm dosyayı okuyarak şunu değerlendir:
-- Mevcut arayüz bir map designer için kullanıcı dostu mu?
-- En kritik 3 UX sorunu nedir?
-- Öneride bulun (kod yazmana gerek yok, sadece öneri)
+Klasör: `Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/`
 
-## Output Formatı
+Her sprite için `.asset` Tile dosyası:
+- `walls_v3/tile_archway_NE.asset`
+- `walls_v3/tile_archway_SE.asset`
+- ... (22 total)
 
-Sonucu STAGING/CODEX_DONE_review_antigravity_s95.md olarak yaz:
+Her Tile asset:
+- Type: UnityEngine.Tilemaps.Tile
+- Sprite: Linked to corresponding PNG sprite
+- Color: white (default)
+- Collider Type: Grid (or Sprite if precise collision needed)
+- Transform Matrix: identity
 
+### Adım 3 — Verification
+
+- 22 sprite imported with correct settings
+- 22 tile asset created and linked
+- No console errors/warnings
+- Sample: load 1 tile in tilemap, verify visual
+
+## Python/C# Approach
+
+UnityMCP `execute_code` ile C# script çağır:
+
+```csharp
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+using System.IO;
+
+string spriteDir = "Assets/Art/AssetPacks/Act1_ShatteredKeep/wall_pack_v3/";
+string tileDir = "Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/";
+
+// Ensure tile dir exists
+if (!AssetDatabase.IsValidFolder(tileDir.TrimEnd('/'))) {
+    AssetDatabase.CreateFolder("Assets/Data/Tiles/Act1_ShatteredKeep", "walls_v3");
+}
+
+string[] pngs = AssetDatabase.FindAssets("t:Texture2D", new[] { spriteDir });
+int imported = 0, tilesCreated = 0;
+
+foreach (var guid in pngs) {
+    string path = AssetDatabase.GUIDToAssetPath(guid);
+    string filename = Path.GetFileNameWithoutExtension(path);
+    if (filename.StartsWith("_")) continue;  // skip contact sheet
+    
+    // 1. Import settings
+    var imp = AssetImporter.GetAtPath(path) as TextureImporter;
+    if (imp != null) {
+        imp.textureType = TextureImporterType.Sprite;
+        imp.spriteImportMode = SpriteImportMode.Single;
+        imp.spritePixelsPerUnit = 64f;
+        imp.filterMode = FilterMode.Point;
+        imp.textureCompression = TextureImporterCompression.Uncompressed;
+        imp.alphaIsTransparency = true;
+        var settings = new TextureImporterSettings();
+        imp.ReadTextureSettings(settings);
+        settings.spriteMeshType = SpriteMeshType.FullRect;
+        settings.spriteAlignment = (int)SpriteAlignment.BottomCenter;
+        imp.SetTextureSettings(settings);
+        imp.SaveAndReimport();
+        imported++;
+    }
+    
+    // 2. Create Tile asset
+    var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+    if (sprite != null) {
+        var tile = ScriptableObject.CreateInstance<Tile>();
+        tile.sprite = sprite;
+        tile.color = Color.white;
+        tile.colliderType = Tile.ColliderType.Grid;
+        string tilePath = $"{tileDir}{filename}.asset";
+        AssetDatabase.CreateAsset(tile, tilePath);
+        tilesCreated++;
+    }
+}
+
+AssetDatabase.SaveAssets();
+AssetDatabase.Refresh();
+Debug.Log($"Imported {imported} sprites, created {tilesCreated} tile assets.");
 ```
-# Codex Review — Antigravity S95 Cleanup
 
-## BasicAttackBehaviorBase.cs
-Verdict: PASS / FAIL / PASS_WITH_NOTES
-Bulgular: ...
+## Verification After Import
 
-## MarkPulseBehavior.cs
-Verdict: PASS / FAIL / PASS_WITH_NOTES
-Karar doğru muydu: EVET/HAYIR
-Öneri: ...
+UnityMCP `read_console` ile:
+- 0 error, 0 warning
+- Log: imported + tilesCreated count
 
-## RimaUnifiedPainterWindow.cs
-Verdict: PASS / FAIL / PASS_WITH_NOTES
-Bulgular: ...
-UI/UX Notlar: ...
+`manage_asset action="search"` ile tile asset listesi confirm
 
-## PathC_BaseTest.unity
-Verdict: PASS / FAIL
-Bulgular: ...
+## Output Confirmation
 
-## UI/UX Genel Öneriler (Top 3)
-1. ...
-2. ...
-3. ...
+- Import sprite count
+- Tile asset count
+- Console state (errors/warnings)
+- Sample tile asset path verification
 
-## Genel Verdict
-PASS / PASS_WITH_NOTES / FAIL
-```
+## Effort
+
+medium — straightforward UnityMCP execute_code, batch processing.
 
 
 ---

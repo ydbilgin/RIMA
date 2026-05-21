@@ -87,6 +87,8 @@ namespace RIMA.Editor.MapDesigner
         // Grouping & Randomization state
         [SerializeField] private bool useRandomVariants = false;
         [SerializeField] private bool autoConnectWalls = true;
+        [SerializeField] private bool wallRuleTileMode = true;
+        [SerializeField] private TileBase wallRuleTile;
         [SerializeField] private bool randomizeWallCracks = true;
 
         [System.Serializable]
@@ -122,6 +124,7 @@ namespace RIMA.Editor.MapDesigner
         private const string UseCategoryScalePrefsKey = "Painter.UseCategoryScale";
         private const string PaletteAddsPrefsPrefix = "RimaPainter_CustomAdds_";
         private const string PaletteExcludesPrefsPrefix = "RimaPainter_Excludes_";
+        private const string WallRuleTileAssetPath = "Assets/Art/Tilesets/Act1_WallRuleTile.asset";
         [SerializeField] private CollisionRulesSO collisionRules;
 
         [SerializeField] private string activeMapName = string.Empty;
@@ -429,6 +432,7 @@ namespace RIMA.Editor.MapDesigner
             LoadPainterPrefs();
             LoadCollisionRulesAsset();
             ScanAllAssets();
+            LoadDefaultWallRuleTile();
             TryAutoAssignTargets();
             RefreshSavedMapsList();
         }
@@ -1349,6 +1353,11 @@ namespace RIMA.Editor.MapDesigner
                             autoConnectWalls = EditorGUILayout.Toggle(L("Duvarları Otomatik Bağla", "Komşu duvarlara göre doğru parçayı seçer."), autoConnectWalls);
                             if (autoConnectWalls)
                             {
+                                wallRuleTileMode = EditorGUILayout.Toggle(L("Wall RuleTile Mode", "Wall Tilemap üzerinde RuleTile ile otomatik bağlantı boyar."), wallRuleTileMode);
+                                using (new EditorGUI.DisabledScope(!wallRuleTileMode))
+                                {
+                                    wallRuleTile = (TileBase)EditorGUILayout.ObjectField(L("Wall RuleTile", "Otomatik bağlantı için kullanılacak RuleTile asset'i."), wallRuleTile, typeof(TileBase), false);
+                                }
                                 randomizeWallCracks = EditorGUILayout.Toggle(L("Duvar Bozulması Rastgele", "Bazı duvarları hasarlı varyantla değiştirir."), randomizeWallCracks);
                                 if (GUILayout.Button(L("Bağlantıları Yenile", "Sahnedeki duvar bağlantılarını yeniden hesaplar."), GUILayout.Height(20f)))
                                 {
@@ -2799,6 +2808,21 @@ namespace RIMA.Editor.MapDesigner
                 {
                     PaintTile(cellPos, selectedTile);
                 }
+                else if (currentCategory == PaletteCategory.Wall && autoConnectWalls && wallRuleTileMode)
+                {
+                    if (Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag)
+                    {
+                        if (wallRuleTile == null)
+                        {
+                            LoadDefaultWallRuleTile();
+                        }
+
+                        if (wallRuleTile != null)
+                        {
+                            PaintTile(cellPos, wallRuleTile);
+                        }
+                    }
+                }
                 else if (selectedPrefab != null)
                 {
                     bool isPressOrDrag = Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag;
@@ -2884,6 +2908,12 @@ namespace RIMA.Editor.MapDesigner
                 return group.allTiles[rIndex];
             }
             return tile;
+        }
+
+        private void LoadDefaultWallRuleTile()
+        {
+            if (wallRuleTile != null) return;
+            wallRuleTile = AssetDatabase.LoadAssetAtPath<TileBase>(WallRuleTileAssetPath);
         }
 
         private GameObject GetRandomWallVariantFromGroup(GameObject prefab)

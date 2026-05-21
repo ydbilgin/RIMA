@@ -25,7 +25,7 @@ public static class IsometricSortSetup
         }
 
         EnsureSortingLayer("Ground");
-        EnsureSortingLayer("Wall");
+        EnsureSortingLayer("Walls");
 
         Grid grid = grids[0];
         TilemapRenderer[] renderers = grid.GetComponentsInChildren<TilemapRenderer>(true);
@@ -52,12 +52,12 @@ public static class IsometricSortSetup
             }
             else if (objectName.Contains("Wall") || objectName.Contains("Structural"))
             {
-                renderer.sortingLayerName = "Wall";
+                renderer.sortingLayerName = "Walls";
                 renderer.sortingOrder = 10;
             }
             else if (objectName.Contains("Obstacle"))
             {
-                renderer.sortingLayerName = "Wall";
+                renderer.sortingLayerName = "Walls";
                 renderer.sortingOrder = 5;
             }
             else

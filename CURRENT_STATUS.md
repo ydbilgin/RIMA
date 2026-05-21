@@ -1,173 +1,196 @@
 # CURRENT_STATUS
-> Archive: `STAGING/_archive/current_status_pre_s95.md` (S94 ve öncesi)
+> Archive: `STAGING/_archive/current_status_pre_s97_late.md`
+> Bu session: **S97 LATE NIGHT (2026-05-21)** — Wall Pack v3 LIVE + 22 tile asset + paint test PASS
+> Önceki session pickup için bu dosyayı oku.
 
 ---
 
-## LIVE — 2026-05-20 S95 LATE NIGHT → Design audit + production plan lock + bug tespiti
+## 🟢 LIVE — Major Deliverables Bu Session
 
-**QC Review Sonuçları (Opus + Codex):**
-- BasicAttackBehaviorBase.cs → **PASS** (legacy cleanup temiz)
-- MarkPulseBehavior.cs → **YANLIŞ bırakıldı** — Ravager 6 legacy call hâlâ var, bus bypass ediyor. Bir sonraki Antigravity görevi
-- RimaUnifiedPainterWindow.cs → **PASS_WITH_NOTES**
-  - Bug: auto-connect walls `Walls` subgrubunu bypass ediyor (direkt Props_Root'a koyuyor)
-  - Bug: LoadMapData sub-grup hiyerarşisini restore etmiyor
-  - Bug: `prefabScaleMultiplier` default 0.5f, Reset 1.0f'a dönüyor (tutarsız)
-  - UX Öneri #1: Scene organization panel (subgroup count + rebuild button)
-  - UX Öneri #2: Wall auto-connect transparency (variant preview)
-  - UX Öneri #3: Map file safety (dirty state + last save info)
-- PathC_BaseTest.unity → **PASS** (Props_Root identity transform, scene root)
+### Wall Pack v3 — 22 Tile Asset PRODUCTION-READY 🌟
 
-**Sonraki Antigravity Görevi (henüz verilmedi):**
-- MarkPulseBehavior.cs bus migration (6 legacy → PublishHit/PublishKill)
-- RimaUnifiedPainterWindow.cs: PaintWallWithConnections → GetOrCreateGroupParent route
-- LoadMapData → sub-grup restore
-- prefabScaleMultiplier default/reset tutarlı yap (0.5f → 0.5f)
+- **Path:** `Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/`
+- **22 unique tile:** archway_NE/SE (multi-direction!), column, wall_hero, straight NE/SE, 4 outer corner, 2 inner corner, 4 T-junction, low walls, foundation, floor_edge
+- **Paint test PASS:** PlayableRoom_v2'de wall_v3 ile rectangular room + south archway, screenshot kaydedildi
+- **Scene saved:** corruption prevention HARD RULE
+- Memory: `project_wall_pack_v3_live.md`
 
-### Bu Session Sonu Kararlar
+### Production Workflow LOCKED — Workflow F Hybrid
 
-**Design Plan Lock:**
-- `STAGING/PRODUCTION_PLAN_WALLS_OBJECTS_S95.md` yazıldı
-- Duvar: Hibrit L2a (create_isometric_tile, taban) + L2b (create_object tall sprite, yüzey)
-- Corner = ayrı sprite (perspektif baked-in, rotation çalışmaz)
-- Void Flame: RIMA-özgün wall-mounted ışık, Act rengi, Unity Point Light 2D bağlı
-- Obje boyut standardı: 32×32 zemin/item, 64×64 mob/prop, 64×128 dikey prop
-- Yıkık iç duvar piece'leri scope'a dahil
+- **Path:** `STAGING/_research/PIXELLAB_WORKFLOW_INSIGHTS.md` (288 satır)
+- Memory: `feedback_chatgpt_pixellab_hybrid_workflow.md`
+- ChatGPT concept → PixelLab Create Image Pro refine → Codex slice → UnityMCP import
+- **%93 cost saving** vs naive per-piece (50 gen vs 660 gen for 22 walls)
 
-**Tespit Edilen Bug'lar (Antigravity'ye verildi):**
-- BasicAttackBehaviorBase.cs: çift event (CombatEventBus + legacy juice birlikte ateşliyor)
-- MarkPulseBehavior.cs: aynı pattern kontrol gerekiyor
-- Prop parent sorunu: Grid(scale 1,0.5,1) altında kalan prop'lar Y'de eziliyor → Props_Root fix
+### Codex Multi-Source Imagegen Done
 
-**Sonraki Session (onay bekleyen):**
-- `STAGING/PRODUCTION_PLAN_WALLS_OBJECTS_S95.md` — tüm onay checklistleri orada
-- Antigravity çalışmasını ANTIGRAVITY_DONE.md'ye yazacak (background)
-- Onay sonrası: duvar üretim kuyruğu başlar
+3 farklı pack üretildi, comparison verdict alındı:
+- `act1_wall_modular_pack_codex_v1.png` (Codex imagegen v1, 512×512 RGBA)
+- `act1_wall_modular_pack_codex_v2.png` (Codex imagegen v2, RGBA transparent, no text)
+- `act1_wall_modular_pack_chatgpt_v1.png` (ChatGPT, 1254×1254 RGB, alpha eksik)
+- `act1_wall_pure_pixellab_v3_clean.png` (PixelLab pure prompt, WINNER) ⭐
+
+Comparison: `STAGING/_research/MASTER_SHEET_REVIEW_VERDICT.md` + `MASTER_SHEET_V2_COMPARISON.md`
+
+### Door Choice Mechanic — 3 Visualization Done
+
+- **Path:** `STAGING/_pixellab_outputs/door_choice/`
+  - `proposal_A_echo_loom_fractures.png` (cyan rift seams + glyph icons)
+  - `proposal_B_mirror_remnant_triptych.png` (3 cracked mirrors with reflections)
+  - `proposal_C_defender_echo_silhouettes.png` (3 ghost defenders + footprint trail)
+- **Brainstorm doc:** `STAGING/_research/BUFFER_FILL_DOOR_CHOICE_BRAINSTORM.md`
+- **LOCK status:** PENDING (Phase 2 task #8)
+
+### Phase 2 Mega-Batch Plan READY
+
+3 batch identified, **~100-150 gen total** for ALL objects + overlays + pickups:
+- Batch 1: Medium Decorations (size 64, n_frames=16) → 16 sprite
+- Batch 2: Large Features (size 128, n_frames=4) → 4 sprite
+- Batch 3: Tiny Overlays + Pickups (size 32, n_frames=64) → ~30 sprite
+
+Prompts hazır, paste-ready (see chat history).
+
+### Discord Insights System
+
+- Folder: `STAGING/_research/discord_archives/` (manual screenshot dump)
+- Doc: `STAGING/_research/PIXELLAB_WORKFLOW_INSIGHTS.md` (auto-update via Codex)
 
 ---
 
-## LIVE — 2026-05-20 S95 LATE NIGHT → Design audit batch + isometric tile import + combat juice P0/P1/P2
+## 📁 Yeni Dosya Inventory (Bu Session)
 
-### Bu Session Tamamlanan (2026-05-20)
+### Memory (`~/.claude/projects/.../memory/`)
+- `project_wall_pack_v3_live.md` — 22 tile inventory + production workflow
+- `feedback_chatgpt_pixellab_hybrid_workflow.md` — Workflow F lock
 
-**Asset Import:**
-- 16 isometric floor tile indirildi (PixelLab `b340684f-552b-49e6-a281-ab360d376564`) → `Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/`
-- Gemini 3.5 (Antigravity) tile import + 16×10 grid paint + seam fix yaptı:
-  - `Grid.cellSize=(0.94, 0.94, 1)`, `scale=(1, 0.5, 1)`, Transparency sort axis `(0, 1, -0.26)`, Sprite Atlas padding 8
-  - Iso seam çözümü → `MEMORY/project_iso_seam_solution.md`
+### Research (`STAGING/_research/`)
+- `PIXELLAB_WORKFLOW_INSIGHTS.md` — 8 tool analysis + 6 patterns
+- `MASTER_SHEET_REVIEW_VERDICT.md` — v1 comparison
+- `MASTER_SHEET_V2_COMPARISON.md` — v1/v2/ChatGPT comparison
+- `BUFFER_FILL_DOOR_CHOICE_BRAINSTORM.md` — Echo Loom / Mirror / Silhouettes
 
-**Combat Juice (Codex implemented, ~25 satır 3 dosya):**
-- ✅ P0: `CombatEventBus.PublishHit/Kill` bağlandı → `BasicAttackBehaviorBase.cs`
-- ✅ P1: Dash i-frame (`SetImmune` + prior-state preserve) → `PlayerController.cs`
-- ✅ P2: EnemyAI 0.35s windup + `EnemyTelegraph.SpawnCircle` → `EnemyAI.cs`
-- Console: 0 error, 0 warning. Migration safety: legacy juice çağrıları korundu, cleanup ayrı task
+### Codex Tasks (`STAGING/codex_task_*`)
+- 10+ task dispatch files (all completed, archived in STAGING)
 
-**Design Audits (4 Opus dispatch — sadece spec/öneri, kod değil):**
-- Mekanik bankası audit → 5 TAM UYGULANABILIR + 4 ESINLENME + 8 REDDET + 3 yeni primitif (M165-M167)
-- Combat completeness audit → P0/P1/P2 (yukarıda uygulandı)
-- Room template tasarım → 5 canonical tag layout, Faz-1: entry_chamber + pillar_arena
-- Sınıf balance review → 10 sınıf + 5 kritik karar + 3 broken kombo + 5 dead combo
+### Assets
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/wall_pack_v3/` — 22 sliced PNGs + contact sheet
+- `Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/` — 22 Unity Tile assets
 
-**Mechanic Bank güncellemesi:**
-- `F:\LaurethStudio\03_IDEAS\MECHANIC_BANK\_MEKANIK_BANKASI.md` → KATEGORI 16 (M165-M167) eklendi
+### PixelLab Outputs (`STAGING/_pixellab_outputs/`)
+- `walls/v2/` — 4 master sheet versions (3 source comparison)
+- `door_choice/` — 3 proposal visualizations
+- `walls/v2/act1_wall_tall_straight_v2.png` — Sprint 1 single wall test
 
-### Sonraki Session İçin Bekleyenler
+---
 
-**Onay/red bekleyen design önerileri:**
-- `STAGING/CLASS_BALANCE_REVIEW_S95.md` — 10 sınıf detaylı balance + 5 üst öncelik + broken/dead combo listeleri
-- `STAGING/CROSSCLASS_TIER_SPEC_S95.md` — T1-T4 mimari spec, migration path, EnemyFamilyTagTracker tasarımı (Karar #122 codification)
-- `TASARIM/SUBROOM_TEMPLATES_ACT1.md` — Faz-1 entry_chamber + pillar_arena lock önerisi, diğer 3 backlog
-- Mekanik öncelikleri: M73 Shadow Echo Tail (Faz 2 ⭐), M68/M82/M81/M99
+## 🎯 NEXT SESSION — Yapılacaklar
 
-**Kritik blocker (sınıf balance #1):**
-- CrossClassSkillManager Karar #122 ile uyumsuz → T1-T4 mimari refactor şart, Faz 2 başlamadan
-- Warblade kod skeleton **henüz yok** — Faz 1 Warblade implementation öncelikli
+### A) Scene Cleanup + Setup (Önce)
+1. Eski Dungeon A/B/C kalıntıları zaten temizlendi (cleanup yapıldı)
+2. **Sorting layer reorder** gerekli — Floor şu an LAST (üstte), Wall ARKADA kalıyor
+   - Doğru sıra: Default → Floor → Walls → Entities → VFX
+   - Şu an: Default → Ground → Walls → Entities → VFX → Floor (yanlış)
+   - Unity Edit → Project Settings → Tags & Layers → Sorting Layers
+3. Scene view iso lock — boşluğa tıklayınca top-down'a dönmesin
+   - Unity Scene View'da rotate/perspektif gizmo'su var
+   - **2D toggle** açık olmalı (sol üstte "2D" butonu) → iso projeksiyon kalır
+   - Veya custom scene camera lock script
 
-**Tile devamı:**
-- PathC_BaseTest sahnesi: 16×10 granite floor LIVE, console temiz
-- Wall asset üretimi bekliyor — Karar: `create_object`, tall sprite Hades-style (Grid dışı, world-space)
-- Mevcut wall assetları (`Assets/Art/AssetPacks/Act1_ShatteredKeep/walls/` × 5) fake-iso uyumluluk kontrolü yapılmadı
+### B) Multi-Room Painting (Asıl iş)
+3-4 farklı oda shape paint et, hepsi proper iso:
+1. **Rectangle room** (basit, 8×6)
+2. **L-shape room** (corner_inner kullan, oda cutout)
+3. **Multi-chamber** (T-junction ile 2 oda bağlantısı)
+4. **Boss antechamber** (büyük 12×10, archway exit + columns)
 
-### S95 Sub-Agent Audit Sonuçları (referans)
+Wall_v3 22 tile + Unity flipX ile yeterli coverage.
 
-| Sonuç | Dosya |
+### C) Phase 2 Mega-Batch Dispatch
+Sıralama:
+1. **Mega-Batch 1** — Medium Decorations (~30-50 gen)
+2. **Mega-Batch 2** — Large Features (~30-40 gen)
+3. **Mega-Batch 3** — Tiny Overlays + Pickups (~40-60 gen)
+
+Prompts kaydedildi (chat history + memory).
+
+### D) Door Choice LOCK (Memory)
+3 visualization mevcut, LOCK pending:
+- Phase 1 standard = A (Echo Loom Fractures)
+- Phase 2 rare event = C (Echo Silhouettes)
+- Act 4 reveal = B (Mirror Triptych)
+
+Hibrit lock memory'e yazılır + Phase 2 production'a girer.
+
+### E) Git Commit (Önce git status)
+Bu session'da büyük asset gen yapıldı:
+- 22 sliced PNG (`wall_pack_v3/`)
+- 22 Unity tile asset (`walls_v3/`)
+- 4 master sheet PNG (comparison)
+- 3 door choice visualization
+- Multiple research docs (~5 markdown)
+- Updated PlayableRoom_v2 scene
+
+Commit önerisi: `[S97-LATE] Wall pack v3 LIVE + Workflow F + door choice viz`
+
+---
+
+## 🛠️ Tools Used (Bu Session)
+
+| Tool | Use case |
 |---|---|
-| Mekanik audit özet | `MEMORY/project_mechanic_bank_audit_s95.md` |
-| Sınıf balance detay | `STAGING/CLASS_BALANCE_REVIEW_S95.md` |
-| Room template | `TASARIM/SUBROOM_TEMPLATES_ACT1.md` |
-| Iso seam fix | `MEMORY/project_iso_seam_solution.md` |
-| Codex P0/P1/P2 diff | git diff `BasicAttackBehaviorBase.cs` + `PlayerController.cs` + `EnemyAI.cs` |
+| ChatGPT/DALL-E (manual) | Initial wall pack concepts |
+| PixelLab Create Image Pro (Web UI) | Pure pixel art wall pack v3 |
+| Codex imagegen (cx_dispatch.py) | Door choice visualizations + comparison |
+| Codex Python PIL (cx_dispatch.py) | Master sheet init grids + slicing |
+| UnityMCP execute_code | Sprite import + tile asset creation + scene paint |
+| UnityMCP manage_scene | Scene view framing + save |
+| UnityMCP manage_camera | Scene screenshots |
 
 ---
 
-## LIVE — 2026-05-19 S95 LATE → Isometric Tilemap LIVE, PixelLab tile üretimi bekliyor
+## ⚠️ Bilinen Problemler / Notlar
 
-### Tamamlanan (bu session)
-- **Isometric Tilemap LIVE** — `PathC_BaseTest.unity`
-  - `m_CellLayout: 3` (Isometric), `cellSize (1, 0.5, 1)`
-  - Placeholder diamond tile: `Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/placeholder_iso.asset`
-  - 8×8 test grid çizildi, screenshot: `STAGING/codex_iso_setup_v01/iso_grid_test_v01.png`
-  - 0 console error
-  - Not: Karakter + wall Y-sort için ileride `IsometricZAsY` (4) gerekebilir
-- **Square tilemap seam sorunu** → isometric grid ile çözüldü (diamond geometry seam'i perceptual olarak gizler)
+### Sorting Layers Order Yanlış
+Sahnede Floor en üstte render oluyor (görünür kapatıyor). Düzeltme: Floor → Ground gibi erkene taşı.
 
-### Sonraki action (yeni session)
-1. **PixelLab → 4 isometric floor tile üret** (user yapıyor)
-   - `create_tiles_pro`: `tile_type=isometric`, `tile_view_angle=90`, `tile_depth_ratio=0`, `tile_size=64`, `outline_mode=segmentation`
-   - 4 variant: granite / cracked+cyan / dirt / ritual
-   - Bkz: `memory/reference_pixellab_create_tiles_pro_4type.md`
-2. **Tile import + 16×10 repaint** → Codex dispatch (placeholder → gerçek tile'lar)
-3. **PixelLab → isometric wall tile üret**
-   - Duvarlar da PixelLab'dan — background'lu sprite set olarak
-   - `create_tiles_pro` isometric + thickness (tile_depth_ratio > 0) veya `create_isometric_tile` block shape
-   - Karar: wall tile mi, wall sprite mi? → yeni session'da belirle
-4. Karakter (Warblade) sahneye indir → isometric floor üstünde perspektif uyumu test et
+### Scene View Iso Locking
+Boşluğa tıklayınca Unity Scene View top-down'a dönüyor. Workaround:
+- 2D toggle hep açık olsun
+- Veya Scene View → Rotate gizmo lock
+
+### Wall Sprite Pivot
+Walls BottomCenter pivot ile import edildi. Doğru oturuyor mu test: yan yana paint'te kontrol.
+
+### Codex Dispatch Profile
+Çoğu dispatch laurethgame/laurethayday profile'ları kullanıyor. Yasinderyabilgin profil dengeli kalsın.
 
 ---
 
-## İsometric Mimari (S95 LOCK)
+## 📊 PixelLab Budget Status
 
-| Katman | İçerik | Durum |
-|---|---|---|
-| L1 Floor | PixelLab isometric tile × 4 mat × 4 var | **Üretim bekliyor** |
-| L2 Walls | PixelLab isometric wall (background'lu) | **Tasarım bekliyor** |
-| L3 Object overlay | PixelLab 119 PNG Act1 envanter | HAZIR |
-| L4 Gameplay | Warblade + mob + VFX | HAZIR |
-| L5 Collision | BoxCollider2D | Map Designer |
-
-**Unity scene:** `Assets/Scenes/Demo/PathC_BaseTest.unity`
-**Tile path:** `Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/`
+- **Önceki:** 2,820 / 5,000
+- **Bu session spend:** ~150-200 gen (master sheets + 3 door choice + comparison)
+- **Mevcut tahmin:** ~2,400-2,500 / 5,000
+- **Reserve:** ~2,500 gen (Phase 2-6 için bol)
 
 ---
 
-## Kilitli Kararlar (özet, detay MEMORY'de)
+## 🚦 Yeni Session İlk Adımlar
 
-| Karar | Özet | Memory |
-|---|---|---|
-| **Isometric S95** | Floor = isometric diamond tile (view_angle 90, thickness 0). Seam sorunu çözümü. | — |
-| #150 LIVE | Act-aware dungeon-inside, 3 Act (granite/bog/void), 32×22 sub-room, 5 canonical tag | `project_karar_150_fake_isometric_lock.md` |
-| #149 LIVE | Combat/Elite = 3-5 sub-room sequence, fade-to-black, mirror archway | `project_karar_149_subroom_encounter_lock.md` |
-| #148 | Hades floor de-emphasis (Branch D) + Transform squash y=cos(35°)=0.819 | `project_tile_angle_verdict_branch_d_e_lock.md` |
-| #114 LOCK | 8-dir: 5 üret (S/SE/E/NE/N) + 3 mirror flipX | `project_camera_angle_revisit_s43.md` |
-
-**Per-Act material:**
-- Act 1 Shattered Keep: granite `#3A3D42` + cyan `#00FFCC`
-- Act 2 Bleeding Wastes: bog `#3A2840` + rust `#C8502A`
-- Act 3 Core Approach: void `#0A0810` + gold `#FFD700`
+1. `.claude/PROJECT_RULES.md` + bu CURRENT_STATUS.md oku
+2. **Sorting layer fix** — Project Settings → Sorting Layers (Floor'u Ground'a taşı veya yeniden sırala)
+3. **Scene view 2D toggle** kontrol et (iso kalsın)
+4. PlayableRoom_v2 aç, mevcut state'i gör
+5. **Multi-room paint** — 3-4 farklı shape (rectangle, L, multi-chamber, boss)
+6. **Phase 2 Mega-Batch 1** (Medium Decorations) dispatch
 
 ---
 
-## Budget
+## 🔗 Quick Reference
 
-| Kaynak | Durum |
-|---|---|
-| PixelLab | ~2,500 / 5,000 |
-| NLM | 136 / 300 source |
-| Codex | cx_dispatch.py — idle |
-| Orchestrator | **Sonnet (default)**, Opus sadece cross-system design |
-
----
-
-## Session başı pickup
-1. `.claude/PROJECT_RULES.md`
-2. Bu CURRENT_STATUS.md (tümü)
-3. PixelLab tile'ları geldiyse → Codex tile import + repaint dispatch
+- Wall pack: `Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/` (22 tile)
+- Floor tiles: `Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/` (16 tile)
+- Scene: `Assets/Scenes/Demo/PlayableRoom_v2.unity` (LIVE, committed)
+- Lore: `memory/project_act1_shattered_keep_lore_lock.md`
+- Workflow lock: `memory/feedback_chatgpt_pixellab_hybrid_workflow.md`
+- Wall pack lock: `memory/project_wall_pack_v3_live.md`

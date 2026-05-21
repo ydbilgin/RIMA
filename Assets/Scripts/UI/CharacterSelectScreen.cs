@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace RIMA
 {
@@ -31,6 +34,7 @@ namespace RIMA
         private TMP_Text  tagline2Label;
         private Image     accentBar;
         private Button    startButton;
+        private TMP_Text  startButtonLabel;
 
         private static readonly ClassType[] AllClasses =
         {
@@ -44,7 +48,9 @@ namespace RIMA
             public RectTransform root;
             public Image         bg;
             public Image         accentLine;
+            public Image         portrait;
             public TMP_Text      nameLabel;
+            public TMP_Text      actionLabel;
             public ClassType     classType;
         }
 
@@ -175,15 +181,21 @@ namespace RIMA
             nameLabel.alignment = TextAlignmentOptions.Left;
             var nRt = nameLabel.transform as RectTransform;
             nRt.anchorMin = new Vector2(0f, 0.45f); nRt.anchorMax = new Vector2(1f, 1f);
-            nRt.offsetMin = new Vector2(16f, 0f); nRt.offsetMax = new Vector2(-4f, 0f);
+            nRt.offsetMin = new Vector2(58f, 0f); nRt.offsetMax = new Vector2(-4f, 0f);
 
-            // Tagline
-            var (tl1, _) = RimaUITheme.ClassTagline(cls);
-            var tagLabel = MakeText(tl1, cardRoot, 8, FontStyles.Normal, RimaUITheme.TextMuted);
-            tagLabel.alignment = TextAlignmentOptions.Left;
-            var tRt = tagLabel.transform as RectTransform;
-            tRt.anchorMin = new Vector2(0f, 0f); tRt.anchorMax = new Vector2(1f, 0.48f);
-            tRt.offsetMin = new Vector2(16f, 0f); tRt.offsetMax = new Vector2(-4f, 0f);
+            var portraitRoot = MakePanel("Portrait", cardRoot);
+            SetStretch(portraitRoot, new Vector2(0.12f, 0.14f), new Vector2(0.38f, 0.86f), Vector2.zero, Vector2.zero);
+            var portrait = portraitRoot.GetComponent<Image>();
+            portrait.sprite = LoadCanonicalSprite(cls);
+            portrait.preserveAspect = true;
+            portrait.raycastTarget = false;
+
+            var actionLabel = MakeText(CardActionText(cls), cardRoot, 8, FontStyles.Normal, RimaUITheme.TextMuted);
+            actionLabel.alignment = TextAlignmentOptions.Left;
+            actionLabel.enableWordWrapping = true;
+            var aRt = actionLabel.transform as RectTransform;
+            aRt.anchorMin = new Vector2(0f, 0f); aRt.anchorMax = new Vector2(1f, 0.48f);
+            aRt.offsetMin = new Vector2(58f, 0f); aRt.offsetMax = new Vector2(-4f, 0f);
 
             // Button
             var btn = cardRoot.gameObject.AddComponent<Button>();
@@ -198,8 +210,11 @@ namespace RIMA
             cards[cls] = new CardEntry
             {
                 root = cardRoot, bg = bg, accentLine = accentImg,
-                nameLabel = nameLabel, classType = cls
+                portrait = portrait, nameLabel = nameLabel,
+                actionLabel = actionLabel, classType = cls
             };
+
+            ApplyCardLockVisual(cards[cls], false);
         }
 
         private void BuildCenterPanel(RectTransform parent)
@@ -307,9 +322,9 @@ namespace RIMA
             bgImg.color = RimaUITheme.ClassAccent(ClassType.Warblade);
             bgImg.raycastTarget = true;
 
-            var lbl = MakeText("START RUN", btnRoot, 20, FontStyles.Bold, Color.white);
-            lbl.alignment = TextAlignmentOptions.Center;
-            var lRt = lbl.transform as RectTransform;
+            startButtonLabel = MakeText("START RUN", btnRoot, 20, FontStyles.Bold, Color.white);
+            startButtonLabel.alignment = TextAlignmentOptions.Center;
+            var lRt = startButtonLabel.transform as RectTransform;
             lRt.anchorMin = Vector2.zero; lRt.anchorMax = Vector2.one;
             lRt.offsetMin = lRt.offsetMax = Vector2.zero;
 
@@ -338,6 +353,7 @@ namespace RIMA
                     ? RimaUITheme.SlotBg
                     : RimaUITheme.SlotLocked;
                 kv.Value.nameLabel.color = sel ? accent : RimaUITheme.TextPrimary;
+                ApplyCardLockVisual(kv.Value, sel);
             }
 
             if (accentBar != null) accentBar.color = accent;
@@ -352,11 +368,8 @@ namespace RIMA
             // Portrait
             if (portraitImage != null)
             {
-                var tex = Resources.Load<Texture2D>(RimaUITheme.AnchorPath(cls));
-                portraitImage.sprite = tex != null
-                    ? Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0f))
-                    : null;
-                portraitImage.color = tex != null ? Color.white : new Color(0.12f, 0.14f, 0.20f, 1f);
+                portraitImage.sprite = LoadCanonicalSprite(cls);
+                portraitImage.color = IsUnlocked(cls) ? Color.white : new Color(0.02f, 0.02f, 0.025f, 0.90f);
             }
 
             // Start button color
@@ -364,16 +377,93 @@ namespace RIMA
             {
                 var img = startButton.GetComponent<Image>();
                 if (img != null) img.color = accent;
+                startButton.interactable = IsUnlocked(cls);
+                if (startButtonLabel != null)
+                {
+                    startButtonLabel.text = IsUnlocked(cls) ? "START RUN" : LockedButtonText(cls).ToUpperInvariant();
+                    startButtonLabel.fontSize = IsUnlocked(cls) ? 20f : 13f;
+                }
             }
         }
 
         private void OnStartRun()
         {
+            if (!IsUnlocked(selectedClass)) return;
+
             UIManager.Instance?.ResumeGame();
             if (PlayerClassManager.Instance != null)
                 PlayerClassManager.Instance.SetPrimaryClass(selectedClass);
             SceneManager.LoadScene(gameSceneName);
             Destroy(gameObject); // Cleanup select screen when moving to game
+        }
+
+        private static bool IsUnlocked(ClassType cls) =>
+            cls == ClassType.Warblade ||
+            cls == ClassType.Elementalist ||
+            cls == ClassType.Ranger ||
+            cls == ClassType.Shadowblade;
+
+        private static string CardActionText(ClassType cls)
+        {
+            if (IsUnlocked(cls)) return "Click to Start";
+            return cls == ClassType.Hexer
+                ? "Unlock for 250 Echoes\nElementalist ile 1 run yap"
+                : $"Unlock for {UnlockCost(cls)} Echoes";
+        }
+
+        private static string LockedButtonText(ClassType cls)
+        {
+            return cls == ClassType.Hexer
+                ? "250 Echoes + Elementalist run"
+                : $"{UnlockCost(cls)} Echoes required";
+        }
+
+        private static int UnlockCost(ClassType cls) => cls switch
+        {
+            ClassType.Ronin => 120,
+            ClassType.Ravager => 120,
+            ClassType.Gunslinger => 180,
+            ClassType.Brawler => 180,
+            ClassType.Summoner => 180,
+            ClassType.Hexer => 250,
+            _ => 0,
+        };
+
+        private static void ApplyCardLockVisual(CardEntry card, bool selected)
+        {
+            bool unlocked = IsUnlocked(card.classType);
+            if (card.portrait != null)
+            {
+                card.portrait.color = unlocked
+                    ? Color.white
+                    : new Color(0.015f, 0.015f, 0.018f, selected ? 0.95f : 0.82f);
+            }
+
+            if (card.actionLabel != null)
+            {
+                card.actionLabel.text = CardActionText(card.classType);
+                card.actionLabel.color = unlocked ? RimaUITheme.Cyan : RimaUITheme.TextMuted;
+            }
+        }
+
+        private static Sprite LoadCanonicalSprite(ClassType cls)
+        {
+#if UNITY_EDITOR
+            string path = CanonicalSpritePath(cls);
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            if (sprite != null) return sprite;
+#endif
+            var tex = Resources.Load<Texture2D>(RimaUITheme.AnchorPath(cls));
+            return tex != null
+                ? Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0f))
+                : null;
+        }
+
+        private static string CanonicalSpritePath(ClassType cls)
+        {
+            string className = cls.ToString();
+            string lower = className.ToLowerInvariant();
+            return $"Assets/Art/Characters/{className}/Rotations/{lower}_south.png";
         }
 
         // ─── Helpers ──────────────────────────────────────────────────────

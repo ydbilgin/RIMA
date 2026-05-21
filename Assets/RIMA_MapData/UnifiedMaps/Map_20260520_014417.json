@@ -1,0 +1,3803 @@
+{
+    "mapName": "Map_20260520_014417",
+    "tiles": [
+        {
+            "position": {
+                "x": 0,
+                "y": -2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": -2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": -2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": -2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": -2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": -1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": -1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": -1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": -1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": -1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": -1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v4.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 0,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 1,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 2,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 3,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 4,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 5,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 6,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 7,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v2.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 8,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v4.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 13,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v1.asset"
+        },
+        {
+            "position": {
+                "x": 14,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 15,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 9,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_granite_v3.asset"
+        },
+        {
+            "position": {
+                "x": -5,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 10,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 11,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": -5,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v4.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 12,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": -6,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -5,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v2.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v4.asset"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v4.asset"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 13,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": -5,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v2.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v3.asset"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v2.asset"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 4,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 14,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": -5,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v3.asset"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v3.asset"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v2.asset"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v4.asset"
+        },
+        {
+            "position": {
+                "x": 3,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v3.asset"
+        },
+        {
+            "position": {
+                "x": 5,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 7,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 15,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v2.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 16,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v2.asset"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 16,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v2.asset"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 16,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": 16,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v2.asset"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": 17,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 17,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v4.asset"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 17,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_dirt_v1.asset"
+        },
+        {
+            "position": {
+                "x": 172,
+                "y": 34,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 173,
+                "y": 34,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 170,
+                "y": 35,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 171,
+                "y": 35,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 172,
+                "y": 35,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 169,
+                "y": 36,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 170,
+                "y": 36,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 165,
+                "y": 37,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 166,
+                "y": 37,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 167,
+                "y": 37,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        },
+        {
+            "position": {
+                "x": 168,
+                "y": 37,
+                "z": 0
+            },
+            "tileAssetPath": "Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/tile_floor_cyan_v1.asset"
+        }
+    ],
+    "objects": [
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 5.078999996185303,
+                "y": 14.54699993133545,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 4.6999969482421879,
+                "y": 4.6999969482421879,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 6.5800018310546879,
+                "y": 4.6999969482421879,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3.prefab",
+            "position": {
+                "x": 7.049999237060547,
+                "y": 5.1699981689453129,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.237299919128418
+            },
+            "name": "wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 0.94000244140625,
+                "y": 15.980003356933594,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/mounting_01_f7763267-747e-4a7f-b30a-1dec04273cd7.prefab",
+            "position": {
+                "x": -1.365997314453125,
+                "y": 6.58074951171875,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 0,
+            "colliderSize": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "name": "mounting_01_f7763267-747e-4a7f-b30a-1dec04273cd7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/statue_11_d5574785-18cb-4ce8-b1f4-ed9f5dafac87.prefab",
+            "position": {
+                "x": -2.305999755859375,
+                "y": 6.58074951171875,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 1.7000000476837159,
+                "y": 1.2000000476837159
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": -0.2437499761581421
+            },
+            "name": "statue_11_d5574785-18cb-4ce8-b1f4-ed9f5dafac87"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/statue_11_d5574785-18cb-4ce8-b1f4-ed9f5dafac87.prefab",
+            "position": {
+                "x": 2.3939971923828127,
+                "y": 8.460746765136719,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 1.7000000476837159,
+                "y": 1.2000000476837159
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": -0.2437499761581421
+            },
+            "name": "statue_11_d5574785-18cb-4ce8-b1f4-ed9f5dafac87"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/statue_06_cdc9ceb0-3f82-4299-8c12-dabe91a70b15.prefab",
+            "position": {
+                "x": 1.4540023803710938,
+                "y": 8.523246765136719,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 1.7000000476837159,
+                "y": 1.2000000476837159
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": -0.3062499761581421
+            },
+            "name": "statue_06_cdc9ceb0-3f82-4299-8c12-dabe91a70b15"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/statue_02_1ecd6d55-f064-40e5-8bd4-80db80a29b52.prefab",
+            "position": {
+                "x": 0.5139999389648438,
+                "y": 9.275749206542969,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 1.7000000476837159,
+                "y": 1.2000000476837159
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": -0.11874997615814209
+            },
+            "name": "statue_02_1ecd6d55-f064-40e5-8bd4-80db80a29b52"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/statue_07_a7d8dd6d-a8e6-4340-9f92-0399ef4b64b0.prefab",
+            "position": {
+                "x": 1.9240036010742188,
+                "y": 6.769500732421875,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 1.7000000476837159,
+                "y": 1.2000000476837159
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 0.03750002384185791
+            },
+            "name": "statue_07_a7d8dd6d-a8e6-4340-9f92-0399ef4b64b0"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 8.930000305175782,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 7.049999237060547,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": 7.520000457763672,
+                "y": 4.6999969482421879,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 90.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": 9.400001525878907,
+                "y": 4.6999969482421879,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 90.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 0.0,
+                "y": 6.5800018310546879,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 10.810001373291016,
+                "y": 5.1699981689453129,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 9.869998931884766,
+                "y": 5.1699981689453129,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": 8.930000305175782,
+                "y": 5.1699981689453129,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": 7.989997863769531,
+                "y": 5.1699981689453129,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": 7.520000457763672,
+                "y": 5.6399993896484379,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 270.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 2.99399995803833,
+                "y": 12.972999572753907,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -4.230003356933594,
+                "y": 10.80999755859375,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -3.2900009155273439,
+                "y": 10.80999755859375,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -1.410003662109375,
+                "y": 10.80999755859375,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -2.3499984741210939,
+                "y": 10.80999755859375,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": 0.470001220703125,
+                "y": 10.80999755859375,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": -5.6399993896484379,
+                "y": 12.220001220703125,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": -5.6399993896484379,
+                "y": 12.220001220703125,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": -7.0500030517578129,
+                "y": 12.69000244140625,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 12.69000244140625,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": -0.470001220703125,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -0.94000244140625,
+                "y": 11.279998779296875,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.237299919128418
+            },
+            "name": "wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": -5.6399993896484379,
+                "y": 12.220001220703125,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.237299919128418
+            },
+            "name": "wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3.prefab",
+            "position": {
+                "x": -7.0500030517578129,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.237299919128418
+            },
+            "name": "wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3.prefab",
+            "position": {
+                "x": -7.0500030517578129,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.237299919128418
+            },
+            "name": "wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.237299919128418
+            },
+            "name": "wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -5.6399993896484379,
+                "y": 10.340003967285157,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.237299919128418
+            },
+            "name": "wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -7.989997863769531,
+                "y": 10.80999755859375,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": -7.0500030517578129,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -7.519996643066406,
+                "y": 11.279998779296875,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f.prefab",
+            "position": {
+                "x": -6.5800018310546879,
+                "y": 10.340003967285157,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.893549919128418
+            },
+            "name": "wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91.prefab",
+            "position": {
+                "x": -6.1100006103515629,
+                "y": 11.75,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 270.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": 0.5
+            },
+            "collisionMode": 5,
+            "colliderSize": {
+                "x": 4.0,
+                "y": 1.600000023841858
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 1.143549919128418
+            },
+            "name": "wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/mounting_03_98bc117a-cb56-4584-8646-09cc505aeed2.prefab",
+            "position": {
+                "x": -3.246002197265625,
+                "y": 9.400749206542969,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 0,
+            "colliderSize": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "name": "mounting_03_98bc117a-cb56-4584-8646-09cc505aeed2"
+        },
+        {
+            "prefabAssetPath": "Assets/Prefabs/Props/ShatteredKeep_PixelLab/mounting_03_98bc117a-cb56-4584-8646-09cc505aeed2.prefab",
+            "position": {
+                "x": -2.7760009765625,
+                "y": 8.930747985839844,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.5
+            },
+            "collisionMode": 0,
+            "colliderSize": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "colliderOffset": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "name": "mounting_03_98bc117a-cb56-4584-8646-09cc505aeed2"
+        }
+    ]
+}

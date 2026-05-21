@@ -1,0 +1,702 @@
+fileFormatVersion: 2
+guid: e27832565a93bd44f9abb58136803d8d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2334893383551681876
+    second: _contact_sheet_0
+  - first:
+      213: 2570887135816158222
+    second: _contact_sheet_1
+  - first:
+      213: -7618883089301890199
+    second: _contact_sheet_2
+  - first:
+      213: 590553474251422939
+    second: _contact_sheet_3
+  - first:
+      213: -7738677560759827903
+    second: _contact_sheet_4
+  - first:
+      213: 2018065934295518685
+    second: _contact_sheet_5
+  - first:
+      213: 6207016462878049501
+    second: _contact_sheet_6
+  - first:
+      213: -4990454445975336442
+    second: _contact_sheet_7
+  - first:
+      213: 803741480202787222
+    second: _contact_sheet_8
+  - first:
+      213: -8119402710153078193
+    second: _contact_sheet_9
+  - first:
+      213: 8310138227807412905
+    second: _contact_sheet_10
+  - first:
+      213: 2674903480462129599
+    second: _contact_sheet_11
+  - first:
+      213: 4741152488977657226
+    second: _contact_sheet_12
+  - first:
+      213: -2244749199736862974
+    second: _contact_sheet_13
+  - first:
+      213: 1594479416106932855
+    second: _contact_sheet_14
+  - first:
+      213: -9100461901577277989
+    second: _contact_sheet_15
+  - first:
+      213: -8010033848090074539
+    second: _contact_sheet_16
+  - first:
+      213: -89571024478985644
+    second: _contact_sheet_17
+  - first:
+      213: -2013699108558972464
+    second: _contact_sheet_18
+  - first:
+      213: -1258412694608217979
+    second: _contact_sheet_19
+  - first:
+      213: 7272957105707450618
+    second: _contact_sheet_20
+  - first:
+      213: -4621216370858571075
+    second: _contact_sheet_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: _contact_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 400
+        width: 68
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caafdf4a6dac89fd0800000000000000
+      internalID: -2334893383551681876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 400
+        width: 68
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0c81f79a30ada320800000000000000
+      internalID: 2570887135816158222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 400
+        width: 37
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96b1ee4623a444690800000000000000
+      internalID: -7618883089301890199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 400
+        width: 87
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdcf0a58141123800800000000000000
+      internalID: 590553474251422939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 402
+        width: 83
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 142cf9f72c1ba9490800000000000000
+      internalID: -7738677560759827903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 402
+        width: 82
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddd400b664c910c10800000000000000
+      internalID: 2018065934295518685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 280
+        width: 72
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd409d83690c32650800000000000000
+      internalID: 6207016462878049501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 280
+        width: 76
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60a0fd73f185ebab0800000000000000
+      internalID: -4990454445975336442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 280
+        width: 78
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 699dbba2e96772b00800000000000000
+      internalID: 803741480202787222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 283
+        width: 82
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4a5bf8e046125f80800000000000000
+      internalID: -8119402710153078193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 273
+        width: 79
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a2eade60ba835370800000000000000
+      internalID: 8310138227807412905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 273
+        width: 79
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb9b6611b8a2f1520800000000000000
+      internalID: 2674903480462129599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 145
+        width: 80
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8de87ba115fbc140800000000000000
+      internalID: 4741152488977657226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 145
+        width: 79
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20787dbfe7c09d0e0800000000000000
+      internalID: -2244749199736862974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 145
+        width: 62
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77ad9beb49ab02610800000000000000
+      internalID: 1594479416106932855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 145
+        width: 59
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdda288ed1aa4b180800000000000000
+      internalID: -9100461901577277989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 152
+        width: 77
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5526cb577a4a6d090800000000000000
+      internalID: -8010033848090074539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 152
+        width: 77
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45223c7b0a7c1cef0800000000000000
+      internalID: -89571024478985644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 31
+        width: 79
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d952dd6457ed04e0800000000000000
+      internalID: -2013699108558972464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 31
+        width: 82
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 588f8055258398ee0800000000000000
+      internalID: -1258412694608217979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 29
+        width: 83
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af0885034fbbee460800000000000000
+      internalID: 7272957105707450618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: _contact_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 33
+        width: 82
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dba41c8e1342edfb0800000000000000
+      internalID: -4621216370858571075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      _contact_sheet_0: -2334893383551681876
+      _contact_sheet_1: 2570887135816158222
+      _contact_sheet_10: 8310138227807412905
+      _contact_sheet_11: 2674903480462129599
+      _contact_sheet_12: 4741152488977657226
+      _contact_sheet_13: -2244749199736862974
+      _contact_sheet_14: 1594479416106932855
+      _contact_sheet_15: -9100461901577277989
+      _contact_sheet_16: -8010033848090074539
+      _contact_sheet_17: -89571024478985644
+      _contact_sheet_18: -2013699108558972464
+      _contact_sheet_19: -1258412694608217979
+      _contact_sheet_2: -7618883089301890199
+      _contact_sheet_20: 7272957105707450618
+      _contact_sheet_21: -4621216370858571075
+      _contact_sheet_3: 590553474251422939
+      _contact_sheet_4: -7738677560759827903
+      _contact_sheet_5: 2018065934295518685
+      _contact_sheet_6: 6207016462878049501
+      _contact_sheet_7: -4990454445975336442
+      _contact_sheet_8: 803741480202787222
+      _contact_sheet_9: -8119402710153078193
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

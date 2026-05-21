@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2525561156733021940}
   - component: {fileID: 492376250866907175}
-  - component: {fileID: 6852173087688017279}
+  - component: {fileID: 2056448983074127446}
   m_Layer: 0
   m_Name: statue_12_52e58d14-e20f-46a4-99a3-fee58d332a2d
   m_TagString: Untagged
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &6852173087688017279
+--- !u!61 &2056448983074127446
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

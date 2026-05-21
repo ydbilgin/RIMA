@@ -7,12 +7,10 @@ namespace RIMA.Editor
     [InitializeOnLoad]
     public static class RimaSortingLayerValidator
     {
-        private const string PatchLayerName = "Patch";
-        private const string ScatterLayerName = "Scatter";
-        private const string DetailLayerName = "Detail";
-        private const string AccentLayerName = "Accent";
-        private const string PropsLayerName = "Props";
+        private const string GroundLayerName = "Ground";
+        private const string WallsLayerName = "Walls";
         private const string EntitiesLayerName = "Entities";
+        private const string VfxLayerName = "VFX";
         private const string TagManagerPath = "ProjectSettings/TagManager.asset";
 
         static RimaSortingLayerValidator()
@@ -38,12 +36,14 @@ namespace RIMA.Editor
             }
 
             var changed = false;
-            changed |= EnsureLayerAfter(sortingLayers, PatchLayerName, "Default");
-            changed |= EnsureLayerAfter(sortingLayers, ScatterLayerName, PatchLayerName);
-            changed |= EnsureLayerAfter(sortingLayers, DetailLayerName, ScatterLayerName);
-            changed |= EnsureLayerAfter(sortingLayers, AccentLayerName, DetailLayerName);
-            changed |= EnsureLayerAfter(sortingLayers, PropsLayerName, AccentLayerName);
-            changed |= EnsureLayerAfter(sortingLayers, EntitiesLayerName, PropsLayerName);
+            changed |= EnsureLayerAfter(sortingLayers, GroundLayerName, "Default");
+            changed |= EnsureLayerAfter(sortingLayers, WallsLayerName, GroundLayerName);
+            changed |= EnsureLayerAfter(sortingLayers, EntitiesLayerName, WallsLayerName);
+            changed |= EnsureLayerAfter(sortingLayers, VfxLayerName, EntitiesLayerName);
+            // 2026-05-20 S95: Detail/Accent/Props orphan, atomic cleanup TagManager'dan sildi
+            // changed |= EnsureLayerAfter(sortingLayers, "Detail", "Scatter");
+            // changed |= EnsureLayerAfter(sortingLayers, "Accent", "Detail");
+            // changed |= EnsureLayerAfter(sortingLayers, "Props", "Accent");
 
             if (!changed)
             {
@@ -52,7 +52,7 @@ namespace RIMA.Editor
 
             tagManager.ApplyModifiedProperties();
             AssetDatabase.SaveAssets();
-            Debug.Log("RIMA: Sorting layers ensured — Patch / Scatter / Detail / Accent / Props / Entities (Karar #135 + S86 Sprint 9 R2 retrofit)");
+            Debug.Log("RIMA: Sorting layers ensured - Default / Ground / Walls / Entities / VFX");
         }
 
         private static bool EnsureLayerAfter(SerializedProperty sortingLayers, string layerName, string previousLayerName)

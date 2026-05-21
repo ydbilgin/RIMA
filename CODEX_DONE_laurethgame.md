@@ -1,22 +1,24 @@
-# CODEX_DONE laurethgame
+# Codex Done - laurethgame
 
-Task: CODEX_TASK_laurethgame.md
-Status: DONE
+Task: Unity Import Wall Pack v3 + Tile Asset Creation
 
-Wrote review artifact:
-- STAGING/CODEX_DONE_review_antigravity_s95.md
+Result: DONE
 
-General verdict: PASS_WITH_NOTES
+Import source:
+Assets/Art/AssetPacks/Act1_ShatteredKeep/wall_pack_v3/
 
-Key findings:
-- BasicAttackBehaviorBase.cs passes. Hit and kill events publish correctly; runtime build passed.
-- MarkPulseBehavior.cs should not stay outside CombatEventBus. It currently avoids duplicate bus effects only because it does not publish, but it bypasses the new centralized juice/VFX subscribers. Recommendation: add PublishHit/PublishKill and remove per-hit legacy HitStop/DamagePopup/CameraShake calls from the damage path.
-- RimaUnifiedPainterWindow.cs builds, recursive flows mostly cover erase/save/wall rebuild, and Props_Root creation works at a basic level. Main issue: auto-connected walls are placed directly under Props_Root instead of the Walls subgroup, and LoadMapData restores objects directly under Props_Root, losing subgroup organization. GameObject.Find("Props_Root") is also weak for multi-scene/duplicate-root contexts.
-- PathC_BaseTest.unity passes. Props_Root is scene-rooted, not under Grid/Tilemap, and has identity transform.
+Tile output:
+Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/
 
-Verification run:
-- dotnet build .\Assembly-CSharp.csproj --no-restore: PASS with existing warnings.
-- dotnet build .\Assembly-CSharp-Editor.csproj: PASS after restore with existing warnings.
+Execution summary:
+- Source PNGs found: 23 total, 22 processed, _contact_sheet.png skipped.
+- Sprite import settings applied: 22/22.
+- Tile assets created: 22.
+- Tile assets updated: 0.
+- Unity verification: 22 valid sprite imports, 22 valid Tile assets linked to sprites.
+- Sample tilemap load check: PASS.
+- Sample tile asset: Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/tile_archway_NE.asset
+- Console verification after run: 0 log entries, 0 errors, 0 warnings.
 
-Note:
-- ANTIGRAVITY.md was not found at repo root.
+Notes:
+- Unity manage_asset search returned 0 for this folder, but Unity AssetDatabase verification returned tileGuids=22 and loadedTilesWithSprites=22.

@@ -43,21 +43,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Patch
-    uniqueID: 1365605006
-    locked: 0
-  - name: Scatter
-    uniqueID: 27625511
-    locked: 0
-  - name: Detail
-    uniqueID: 351335743
-    locked: 0
-  - name: Accent
-    uniqueID: 1570199623
-    locked: 0
-  - name: Props
-    uniqueID: 399489520
-    locked: 0
   - name: Ground
     uniqueID: 2024493761
     locked: 0
@@ -70,8 +55,11 @@ TagManager:
   - name: VFX
     uniqueID: 200
     locked: 0
-  - name: Wall
-    uniqueID: 2024493762
+  - name: Floor
+    uniqueID: 1843609376
+    locked: 0
+  - name: Player
+    uniqueID: 0
     locked: 0
   m_RenderingLayers:
   - Default

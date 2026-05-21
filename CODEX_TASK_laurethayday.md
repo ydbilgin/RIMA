@@ -1,99 +1,183 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
 
-# Codex Review — Combat Juice P0/P1/P2 (S95 Audit)
+# Codex Task — Fresh Scene PlayableRoom_v2 (Iso Setup + Painter Ready)
 
-## Görev
-Bu 3 dosyada combat juice P0/P1/P2 implementasyonunu satır satır review et.
-**Sadece read-only kod analizi yap. Değişiklik üretme.**
+ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
 
-## Review Edilecek Dosyalar
+UnityMCP REQUIRED — Unity Editor açık + Scene/Game window docked (just verified).
 
-1. **P0 — CombatEventBus integration:**
-   `F:/Antigravity Projeler/2d roguelite/RIMA/Assets/Scripts/Combat/BasicAttack/BasicAttackBehaviorBase.cs`
-   - Lines 74-93: `CombatEventBus.PublishHit` ve `PublishKill` çağrıları
-   - Lines 47-114: `ApplyMeleeHit` metodu tümü
+---
 
-2. **P1 — Dash i-frame (SetImmune + prior-state preserve):**
-   `F:/Antigravity Projeler/2d roguelite/RIMA/Assets/Scripts/Player/PlayerController.cs`
-   - Lines 184-198: TryDash içinde `dashWasImmune = health.IsImmune; health.SetImmune(true);`
-   - Lines 220-229: Dash bitince `health.SetImmune(dashWasImmune)` restore
+## Bağlam
 
-3. **P2 — EnemyAI windup + telegraph:**
-   `F:/Antigravity Projeler/2d roguelite/RIMA/Assets/Scripts/Enemies/EnemyAI.cs`
-   - Lines 87-101: `attackWindupTimer` ve `EnemyTelegraph.SpawnCircle` çağrısı
-   - Lines 96-101: `state == State.Attack && attackTimer <= 0f` koşulu
+Önceki `IsoShowcaseRoom_S95.unity` Unity Editor crash'ine sebep oldu (native access violation, scene corruption). Quarantine edildi → `IsoShowcaseRoom_S95.unity.corrupted_2026_05_21`. **O dosyaya DOKUNMA, açma, reference verme.**
 
-## Aranan Sorunlar (öncelikli)
+Sıfırdan yeni scene yarat: `Assets/Scenes/Demo/PlayableRoom_v2.unity`
 
-### A. Null reference riskleri
-- `BasicAttackBehaviorBase.ApplyMeleeHit`:
-  - `col.GetComponent<Health>()` → null check var, OK
-  - `col.GetComponent<KnockbackReceiver>()` → null check var, OK
-  - `col.gameObject == owner.gameObject` → owner null mı olabilir? Caller'da garanti mi?
-  - `profile.knockbackForce` null check var, ama `profile` kendisi null olur mu? Caller'lar nereden çağırıyor (`MeleeChainBehavior`, `VeilStrikeBehavior`)?
-- `PlayerController.TryDash`:
-  - `health?.SetImmune(true)` — null-safe, OK
-  - `dashWasImmune = health != null && health.IsImmune` — null-safe, OK
-  - Update lines 220-229: dash bitince `health?.SetImmune(dashWasImmune)` restore — `health` Awake'de null olabilir, sonra dashTimer aktifken hala null mu? Edge case var mı?
-- `EnemyAI.FixedUpdate`:
-  - Line 92-93: `var ph = player.GetComponent<Health>(); if (ph != null) ph.TakeDamage(...)` — OK
-  - Line 75: `if (player == null) return;` üstte güvende
-  - ❓ `attackWindupTimer > 0f` branch'i sadece `state != Chase` iken çalışır (line 84 else). Player chase mesafesine girip dönerse windup iptal olmuyor — kasıtlı mı, yoksa bug mı?
+## Görev — Sıfırdan İso Scene Setup
 
-### B. Legacy / eski çağrılar
-- `BasicAttackBehaviorBase`:
-  - Line 95-100: `HitStop.Instance?.FreezeLight()`, `LightPulse.Emit(...)`, `DamagePopup.Show(...)`, `CameraShake.Instance?.Shake(...)` — bunlar legacy juice. CURRENT_STATUS.md "legacy juice çağrıları korundu, cleanup ayrı task" der.
-  - Sorun: Yeni `CombatEventBus.PublishHit` ile çift event mi? Subscriber tarafında çift hit-stop, çift shake riski var mı? Search yap: kim `CombatEventBus.OnHit` subscribe ediyor?
+User Painter ile boyamak istiyor — Scene view iso görünmeli, math doğru çalışmalı.
 
-### C. Eksik null check / potansiyel NullRef
-- `BasicAttackBehaviorBase.ApplyMeleeHit` line 58: `Vector2 facing = owner.Controller.FacingDirection;`
-  - `owner.Controller` null check yok. `PlayerAttack.Controller` property garanti dolu mu?
-- `EnemyAI.Update` line 57: `attackTimer -= Time.deltaTime;` — health.IsDead kontrolünden sonra, OK.
-- `EnemyAI.FixedUpdate` line 85-103: `state == State.Attack && attackTimer <= 0f` koşulu — `attackWindupTimer` 0 iken `state` `Chase` ise hiç windup başlamayabilir. Player çok hızlı yaklaşır → State.Chase → uzaklaşır → State.Idle → windup hiç başlamaz. Saldırı dead-zone bug?
+Memory `project-isometric-floor-pivot-s95` LOCK referans:
+- Grid cellLayout = **Isometric Z As Y** (4)
+- cellSize = **(1, 0.5, 1)** diamond ratio
+- Transparency Sort Axis = (0, 1, 0)
 
-### D. State machine tutarlılığı (EnemyAI)
-- `state` Update'te set ediliyor, FixedUpdate'te okunuyor — Update FixedUpdate'ten sonra çalışırsa 1 frame gecikme var.
-- Windup yarım kalırsa (state Chase'e dönerse) telegraph görsel hala çiziliyor olabilir. `EnemyTelegraph.SpawnCircle` ayrı `GameObject` spawnlıyor, EnemyAI cancel etmiyor.
+## Workflow
 
-### E. Race / ordering
-- `PlayerController.TryDash` line 187: `dashWasImmune = health != null && health.IsImmune;`
-  - Eğer bir başka sistem (örn. NeutralPassives.cs satır 145) aynı anda `SetImmune(true)` çağırırsa dash bittiğinde `false`'a düşürür mü? NeutralPassives short-window immune mı, longer? Korunan state doğru mu?
+### Step 1 — New Empty Scene
+1. UnityMCP `manage_scene` ile yeni empty scene yarat: `Assets/Scenes/Demo/PlayableRoom_v2.unity`
+2. Scene aç (load)
+3. Default Main Camera + Directional Light EditorScene'inden geliyor — Main Camera tut, Directional Light sil (2D iso için)
 
-## Kontrol İstenen Spesifik Sorular
-
-1. **`BasicAttackBehaviorBase.ApplyMeleeHit`** içinde `CombatEventBus.PublishHit` ve `PublishKill` çağrıları DOĞRU mu? `HitEvent.damage` `float`, ama `finalDmg` `int` — implicit cast OK?
-2. **`PlayerController.TryDash`** dash i-frame logic'i (prior state preserve) DOĞRU mu? Edge case: dash sırasında `health` null ya da `SetImmune` arada başka sistem tarafından değiştirilirse restore hatalı olabilir mi?
-3. **`EnemyAI.FixedUpdate`** windup + telegraph DOĞRU mu? State.Chase'e geri dönüş windup'ı iptal etmiyor — bu kasıtlı tasarım mı, bug mu?
-4. **Legacy juice çağrıları (HitStop/LightPulse/DamagePopup/CameraShake)** ile yeni `CombatEventBus` arası **çift event** riski var mı? Search yap: `CombatEventBus.OnHit` subscribe eden sınıflar.
-5. **Compile-time integrity:** Şu anki 3 dosya `dotnet build` clean — bunu kabul ediyoruz. Sadece **runtime davranış doğruluğu** ve **logical bug** ara.
-
-## Output Format
-
-`STAGING/CODEX_DONE_combat_juice_review_s95.md` dosyasına şunu yaz:
+### Step 2 — Isometric Grid Hierarchy
 
 ```
-## Verdict
-PASS / PASS_WITH_NOTES / FAIL
-
-## Bulgu 1: <title>
-- Severity: critical / high / medium / low / info
-- File: <path>:<line>
-- Issue: <what>
-- Suggested fix: <how>
-
-## Bulgu 2: ...
-
-## Çift Event Analizi
-- CombatEventBus.OnHit subscriber'ları: <list>
-- Çift event riski: var / yok
-- Recommendation: <legacy çağrıları sub'a taşı, ya da CombatEventBus'ı geri al, vb.>
-
-## Combat Loop Bütünlüğü Notu
-- P0/P1/P2 birlikte çalışırken anlamlı bir bütün veriyor mu?
-- Eksik P0/P1/P2 element var mı?
+Grid (root GameObject)
+├─ Component: Grid
+│   ├─ Cell Layout: Isometric Z As Y (cellLayout=4)
+│   ├─ Cell Size: (1, 0.5, 1)
+│   └─ Cell Swizzle: XYZ
+├─ FloorTilemap (child)
+│   ├─ Component: Tilemap
+│   └─ Component: TilemapRenderer
+│       ├─ Sorting Layer: "Floor" (yarat eğer yoksa)
+│       └─ Order in Layer: 0
+├─ WallTilemap (child)
+│   ├─ Component: Tilemap
+│   └─ Component: TilemapRenderer
+│       ├─ Sorting Layer: "Walls" (yarat eğer yoksa)
+│       └─ Order in Layer: 20
+├─ Props_Root (child empty GameObject)
+│   └─ (prop GameObject'ler için parent)
+└─ Lighting_Root (child empty GameObject)
+    └─ (Light2D obje'leri için parent)
 ```
 
-**Effort:** high. Read-only analysis. NO code changes.
+### Step 3 — Project Settings
+
+UnityMCP `manage_graphics`:
+- `Edit > Project Settings > Graphics > Camera Settings > Transparency Sort Mode`: **Custom Axis**
+- `Transparency Sort Axis`: **(0, 1, 0)** Y dominant
+
+### Step 4 — Camera Setup
+
+Main Camera:
+- Projection: **Orthographic**
+- Ortho Size: **5**
+- Position: **(0, 0, -10)**
+- Rotation: **(0, 0, 0)** — sprite iso angle baked-in, camera rotation YOK
+- Background: dark gray (HSV 0,0,0.1)
+
+### Step 5 — Tile Asset Creation (varsa reuse)
+
+3 granite variant için Tile asset yarat:
+- `Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/granite_clean.asset`
+- `granite_worn.asset`
+- `granite_chiseled.asset`
+
+Source sprite path:
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/floor_tiles/iso/act1_iso_granite_clean.png`
+- `act1_iso_granite_worn.png`
+- `act1_iso_granite_chiseled.png`
+
+Eğer Tile asset'ler zaten varsa reuse.
+
+### Step 6 — Floor Paint (16×10 grid)
+
+FloorTilemap'e 16×10 cell paint:
+- Random weighted: clean 60%, worn 30%, chiseled 10%
+- Cell coord range: (0,0) to (15,9) — Isometric layout otomatik diamond places
+- Programmatic paint via `tilemap.SetTile(new Vector3Int(x, y, 0), tile)`
+
+### Step 7 — Wall Paint (Perimeter Rectangle)
+
+WallTilemap'e perimeter rectangle:
+- RuleTile asset: `Assets/Art/Tilesets/Act1_WallRuleTile.asset` (mevcut, önceki dispatch yarattı)
+- North row (y=9): 16 cell paint (RuleTile auto-pick face_NS + corners)
+- South row (y=0): 14 cell paint + 2 cell manual arch_opening center
+- East col (x=15): 8 cell (y=1..8)
+- West col (x=0): 8 cell (y=1..8)
+- 4 corner auto-handled by RuleTile
+
+Arch opening:
+- WallTilemap'e separate Tile asset `Act1_WallArchOpening.asset` (mevcut)
+- Manual SetTile at south wall center (cells (7,0) ve (8,0))
+
+### Step 8 — Warblade Player
+
+Player GameObject yarat:
+- Name: "Player_Warblade"
+- Components:
+  - SpriteRenderer: sprite = `Assets/Art/Characters/Warblade/Rotations/warblade_south.png`
+  - Sorting Layer: "Player" (yarat eğer yoksa)
+  - Rigidbody2D: kinematic
+  - CircleCollider2D: radius 0.3
+  - `Assets/Scripts/Player/PlayerMovementController.cs` (mevcut, önceki dispatch yazdı)
+  - `Assets/Scripts/Utilities/IsoSortingOrder.cs` (mevcut, önceki dispatch yazdı)
+- Spawn position: **(7.5, 4.5, 0)** (room center)
+
+### Step 9 — Camera Follow (basit)
+
+Main Camera GameObject'ine basit follow script ekle (varsa reuse veya minimal yaz):
+
+```csharp
+public class CameraFollow2D : MonoBehaviour {
+    public Transform target;
+    public Vector3 offset = new Vector3(0, 0, -10);
+    void LateUpdate() {
+        if (target != null) transform.position = target.position + offset;
+    }
+}
+```
+
+Eğer mevcut `CameraFollow2D.cs` veya benzer varsa o reuse.
+Target: Player_Warblade GameObject.
+
+### Step 10 — Test + Verification
+
+1. Scene save: `PlayableRoom_v2.unity`
+2. Scene view'da görsel kontrol:
+   - Grid lines diamond pattern (iso) — square DEĞİL
+   - Floor 16×10 diamond layout
+   - Walls perimeter rectangle iso projection
+   - Player center'da Warblade sprite
+3. Painter window aç (`RIMA/Tools/World Painter` veya benzer menu):
+   - Floor Paint test: 1 cell paint et, doğru hücreye gidiyor mu?
+   - Wall Paint test: 1 cell paint et, RuleTile auto-connect mi?
+4. Play mode test (5sn):
+   - WASD ile Warblade hareket ediyor mu?
+   - Camera follow çalışıyor mu?
+   - Console error check
+5. Screenshots:
+   - `STAGING/screenshots/playable_room_v2_scene.png` (Scene view, iso görünür)
+   - `STAGING/screenshots/playable_room_v2_game.png` (Game view, player visible)
+
+### Step 11 — Compile Check (HARD RULE 2026-05-21 LOCK)
+
+- `read_console` çağır
+- Error/warning varsa **OTOMATIK fix et** + recheck
+- Hâlâ hata varsa BLOCKED + raporla
+
+## Output
+
+1. `Assets/Scenes/Demo/PlayableRoom_v2.unity` — yeni scene
+2. (gerekirse) 3 Tile asset granite_clean/worn/chiseled
+3. `STAGING/screenshots/playable_room_v2_scene.png`
+4. `STAGING/screenshots/playable_room_v2_game.png`
+5. `CODEX_DONE_*.md`: setup verification + Painter test + player movement OK/FAIL + compile result
+
+## Kısıt
+
+- Corrupted scene `IsoShowcaseRoom_S95.unity.corrupted_2026_05_21` **AÇMA, REFERENCE ETME**
+- Existing asset reuse (RuleTile, Player movement script, IsoSortingOrder)
+- Yeni asset gen YASAK (sadece scene + tile asset + minor script)
+- Cell Layout `Isometric Z As Y` HARD LOCK — değiştirme
+- Camera rotation YASAK
+- Mob YASAK (sadece environment + player)
+
+## Effort
+medium (1-2 saat)
 
 
 ---

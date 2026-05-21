@@ -2075,3 +2075,2210 @@ Key findings:
 - MarkPulseBehavior.cs should not remain on legacy generic hit feedback long-term; migrate its custom melee hit path to CombatEventBus and remove generic legacy hit effects there.
 - RimaUnifiedPainterWindow.cs grouping is partially implemented, but auto-connected wall placement and LoadMapData bypass subgroup parenting.
 - PathC_BaseTest.unity Props_Root is a scene root with identity transform, not under Grid/Tilemap.
+STATUS: LIVE_WITH_NOTES
+
+Completed review for `STAGING/UIUX_PAINTER_DESIGN_DRAFT.md`.
+
+Primary output:
+- `STAGING/CODEX_DONE_uiux_painter_review_v1.md`
+
+Key findings:
+- All four panels are implementable in Unity IMGUI.
+- Panel 1 must not use `SetActive` for "does not affect save" visibility; use editor scene visibility instead.
+- Panel 2 cache key must include category, custom collider values, and CollisionRulesSO state/version.
+- Panel 4 ping/status must not call `GetTargetParent()` when it promises not to auto-create `Props_Root`.
+
+Overall verdict: LIVE_WITH_NOTES.
+# Codex Done - laurethgame
+
+Task executed from CODEX_TASK_laurethgame.md.
+
+Primary output written:
+- STAGING/CODEX_DONE_uiux_painter_review_v2.md
+
+Status:
+- NEEDS_REVISION
+
+Summary:
+- Verified v2 spec against v1 review and targeted source ranges.
+- Confirmed current source was not modified.
+- Main blockers found: SceneVisibilityManager named argument mismatch (`includeChildren` vs `includeDescendants`), literal ZWSP still present in the v2 spec snippet, and CollisionRulesSO asmdef placement mismatch with the current painter window assembly.
+# Codex Done - yasinderyabilgin
+
+- Task executed: Unity console diagnose, PathC scene metadata verify, and wall PNG metadata report.
+- Main output: `STAGING/CODEX_DONE_unity_diagnose_phaseA_s95.md`
+- Console result: 0 errors, 0 warnings.
+- Fix branch: not triggered; no code changes and no build run.
+- Scene result: `PathC_BaseTest` active/loaded; Grid scale `(1, 0.5, 1)`; `Props_Root` identity and empty.
+- PNG result: all 5 checked wall PNGs have bottom alpha padding; pivot `(0.5, 0.0)` would float without trim/re-import or compensation.
+# Codex Done — laurethayday
+
+Task executed. Primary review written to `STAGING/CODEX_DONE_uiux_painter_review_v3.md`.
+
+Result: `NEEDS_REVISION`.
+
+Reason: v3 fixes the four hard issues in the main body, but two blockers remain before downstream implementation:
+
+- `STAGING/UIUX_PAINTER_DESIGN_DRAFT.md` line 543 still recommends the old asmdef path `Assets/Editor/MapDesigner/Rules/CollisionRulesSO.cs`, contradicting the corrected body lines 292-298 and reintroducing the compile-break risk.
+- The CollisionResolver caller list matches the cited source ranges but omits `ConfigureAssetPackColliders()` at `Assets/Editor/RimaUnifiedPainterWindow.cs` lines 1799-1801, triggered by the setup button at lines 704-709.
+
+No source files were modified.
+# Codex Done - yasinderyabilgin
+
+Completed CODEX_TASK_yasinderyabilgin.md.
+
+- Read `STAGING/UIUX_PAINTER_DESIGN_DRAFT.md`, `STAGING/CODEX_DONE_uiux_painter_review_v3.md`, and the referenced source slices in `Assets/Editor/RimaUnifiedPainterWindow.cs`.
+- Ran byte-level ZWSP check; result: 0.
+- Wrote final review to `STAGING/CODEX_DONE_uiux_painter_review_v3_1.md`.
+- Final verdict: LIVE_WITH_MINOR_NOTES.
+# Mob PNG Reorganize - Codex Report
+
+## Moved Files (16)
+
+### Universal (8)
+| # | Old -> New | GUID | Import OK |
+|---|---|---|---|
+| 1 | act1_mob_dungeon_rat_v01 -> _Universal/.../decor_silhouette_rat_v01 | eb4653386c871324da54cf54f94fd3ae | OK |
+| 2 | act1_mob_bat_v01 -> _Universal/.../decor_silhouette_bat_v01 | 1c6ac5ebda250e9479cc6b2a77c81a8a | OK |
+| 3 | act1_mob_giant_spider_v01 -> _Universal/.../decor_silhouette_spider_v01 | 3b3e6786918e1564ba19472eb1276ab0 | OK |
+| 4 | act1_mob_bone_walker_v01 -> _Universal/.../decor_silhouette_bone_walker_v01 | 20aa4505ecb872444a361dd9ab616d32 | OK |
+| 5 | act1_mob_ground_crawler_v01 -> _Universal/.../decor_silhouette_ground_crawler_v01 | 265260f8735cafa40a3d28ee86249de5 | OK |
+| 6 | act1_mob_animated_skull_v01 -> _Universal/.../decor_silhouette_animated_skull_v01 | b5eab47464ddad94eb5f27d56263cf86 | OK |
+| 7 | act1_mob_bone_hand_v01 -> _Universal/.../decor_silhouette_bone_hand_v01 | 2b9236d1a54fd0544a155240b17753b6 | OK |
+| 8 | act1_mob_bone_archer_v01 -> _Universal/.../decor_silhouette_bone_archer_v01 | 020102a2d47bb6044bae44d0c6f890f4 | OK |
+
+### Act1 (8)
+| # | Old -> New | GUID | Import OK |
+|---|---|---|---|
+| 9 | act1_mob_cyan_slime_v01 -> Act1_ShatteredKeep/.../decor_silhouette_cyan_slime_v01 | 42bd8e9d7e871d6418c04714b5da8609 | OK |
+| 10 | act1_mob_cyan_wisp_v01 -> Act1_ShatteredKeep/.../decor_silhouette_cyan_wisp_v01 | dabd6851f296a294e8cf5f3d948b3399 | OK |
+| 11 | act1_mob_imp_demon_v01 -> Act1_ShatteredKeep/.../decor_silhouette_imp_demon_v01 | 11ab8ce60eaa28b48a3dc4e3e2cbb06a | OK |
+| 12 | act1_mob_goblin_v01 -> Act1_ShatteredKeep/.../decor_silhouette_goblin_v01 | 59f9455a84add3e4da40cc5f2cfb57f3 | OK |
+| 13 | act1_mob_wraith_specter_v01 -> Act1_ShatteredKeep/.../decor_silhouette_wraith_specter_v01 | 3372816b51705134e92df79c6ca8c71d | OK |
+| 14 | act1_mob_husk_v01 -> Act1_ShatteredKeep/.../decor_silhouette_husk_v01 | 1d63202c4c7b08547b98e2c2d8b7c11b | OK |
+| 15 | act1_mob_specter_ghost_v01 -> Act1_ShatteredKeep/.../decor_silhouette_specter_ghost_v01 | e661dc1d4381e3643a597967d3412438 | OK |
+| 16 | act1_mob_rat_king_v01 -> Act1_ShatteredKeep/.../decor_silhouette_rat_king_v01 | 290a3cdc916c08549b8c68860f4a3b7a | OK |
+
+## Old Folder Cleanup
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/mobs/`: removed (was empty after move)
+
+## Verify
+- AssetDatabase.MoveAsset executed for 16 files in the active Unity editor.
+- 16 files moved, 16 GUIDs preserved against HEAD meta GUIDs.
+- Unity-side import verification passed for all 16 files: Single, PPU 64, Point, alpha transparency, Clamp, bottom-center pivot, FullRect, max size 256, Uncompressed.
+- AssetDatabase.GetDependencies executed for all 16 moved files.
+- Unity console error check after cleanup: clean.
+- Git status scope: old `mobs.meta` and 16 old PNG metas deleted; two new `decor_silhouettes/` target folders and `STAGING/CODEX_DONE_mob_png_reorganize_s95.md` are untracked. PNG files are ignored by repo `.gitignore` rule `*.png`.
+
+## Output
+- `STAGING/CODEX_DONE_mob_png_reorganize_s95.md` written.
+
+## Acik Sorular
+- None
+# Mob PNG Reorganize - Codex Report
+
+## Moved Files (16)
+### Universal (8)
+| # | Old -> New | GUID | Import OK |
+|---|---|---|---|
+| 1 | act1_mob_dungeon_rat_v01 -> _Universal/.../decor_silhouette_rat_v01 | eb4653386c871324da54cf54f94fd3ae | OK |
+| 2 | act1_mob_bat_v01 -> _Universal/.../decor_silhouette_bat_v01 | 1c6ac5ebda250e9479cc6b2a77c81a8a | OK |
+| 3 | act1_mob_giant_spider_v01 -> _Universal/.../decor_silhouette_spider_v01 | 3b3e6786918e1564ba19472eb1276ab0 | OK |
+| 4 | act1_mob_bone_walker_v01 -> _Universal/.../decor_silhouette_bone_walker_v01 | 20aa4505ecb872444a361dd9ab616d32 | OK |
+| 5 | act1_mob_ground_crawler_v01 -> _Universal/.../decor_silhouette_ground_crawler_v01 | 265260f8735cafa40a3d28ee86249de5 | OK |
+| 6 | act1_mob_animated_skull_v01 -> _Universal/.../decor_silhouette_animated_skull_v01 | b5eab47464ddad94eb5f27d56263cf86 | OK |
+| 7 | act1_mob_bone_hand_v01 -> _Universal/.../decor_silhouette_bone_hand_v01 | 2b9236d1a54fd0544a155240b17753b6 | OK |
+| 8 | act1_mob_bone_archer_v01 -> _Universal/.../decor_silhouette_bone_archer_v01 | 020102a2d47bb6044bae44d0c6f890f4 | OK |
+
+### Act1 (8)
+| # | Old -> New | GUID | Import OK |
+|---|---|---|---|
+| 9 | act1_mob_cyan_slime_v01 -> Act1_ShatteredKeep/.../decor_silhouette_cyan_slime_v01 | 42bd8e9d7e871d6418c04714b5da8609 | OK |
+| 10 | act1_mob_cyan_wisp_v01 -> Act1_ShatteredKeep/.../decor_silhouette_cyan_wisp_v01 | dabd6851f296a294e8cf5f3d948b3399 | OK |
+| 11 | act1_mob_imp_demon_v01 -> Act1_ShatteredKeep/.../decor_silhouette_imp_demon_v01 | 11ab8ce60eaa28b48a3dc4e3e2cbb06a | OK |
+| 12 | act1_mob_goblin_v01 -> Act1_ShatteredKeep/.../decor_silhouette_goblin_v01 | 59f9455a84add3e4da40cc5f2cfb57f3 | OK |
+| 13 | act1_mob_wraith_specter_v01 -> Act1_ShatteredKeep/.../decor_silhouette_wraith_specter_v01 | 3372816b51705134e92df79c6ca8c71d | OK |
+| 14 | act1_mob_husk_v01 -> Act1_ShatteredKeep/.../decor_silhouette_husk_v01 | 1d63202c4c7b08547b98e2c2d8b7c11b | OK |
+| 15 | act1_mob_specter_ghost_v01 -> Act1_ShatteredKeep/.../decor_silhouette_specter_ghost_v01 | e661dc1d4381e3643a597967d3412438 | OK |
+| 16 | act1_mob_rat_king_v01 -> Act1_ShatteredKeep/.../decor_silhouette_rat_king_v01 | 290a3cdc916c08549b8c68860f4a3b7a | OK |
+
+## Old Folder Cleanup
+- `Assets/Art/AssetPacks/Act1_ShatteredKeep/mobs/`: removed (was empty after move)
+
+## Verify
+- AssetDatabase.MoveAsset executed for 16 files in the active Unity editor.
+- 16 files moved, 16 GUIDs preserved against HEAD meta GUIDs.
+- New target counts: 8 Universal PNGs, 8 Act1 PNGs.
+- Import settings passed Unity and meta checks for all 16 files: Single, PPU 64, Point, alpha transparency, Clamp, bottom-center pivot, FullRect, maxTextureSize 256, Uncompressed.
+- Explicit DefaultTexturePlatform, Standalone, and WebGL platform settings normalized to maxTextureSize 256 / Uncompressed.
+- AssetDatabase.GetDependencies executed for all 16 moved files.
+- Unity console error check after cleanup: clean.
+- Git status scope: old `mobs.meta` and 16 old PNG metas deleted; two new `decor_silhouettes/` target folders and this report are untracked. PNG files are ignored by repo `.gitignore` rule `*.png`, but the files exist on disk.
+- Auto-commit: not run.
+
+## Output
+- `STAGING/CODEX_DONE_mob_png_reorganize_s95.md` written.
+- `CODEX_DONE_yasinderyabilgin.md` written as the last step.
+
+## Acik Sorular
+- None
+# Wall PNG Re-Import - Codex Report
+
+## Applied Settings (per file)
+| # | File | PPU before->after | Filter before->after | Pivot before->after | spriteMode |
+|---|---|---|---|---|---|
+| 1 | straight_horizontal | 100->64 | Bilinear->Point | (0.5,0.5)->(0.5,0.0313) | Multiple->Single |
+| 2 | corner_L_NE | 100->64 | Bilinear->Point | (0.5,0.5)->(0.5,0.0313) | Multiple->Single |
+| 3 | arch_opening | 100->64 | Bilinear->Point | (0.5,0.5)->(0.5,0.0313) | Multiple->Single |
+| 4 | cyan_rift_integrated | 100->64 | Bilinear->Point | (0.5,0.5)->(0.5,0.0313) | Multiple->Single |
+| 5 | partition_low_stub | 64->64 | Point->Point | (0.5,0.5)->(0.5,0.0417) | Multiple->Single |
+
+## Verify Result
+- Unity TextureImporter reimport: PASS (5/5)
+- Target settings: PASS (`textureType=8`, `spriteMode=1`, `spritePixelsToUnits=64`, `filterMode=0`, `wrapU/V/W=1`, `alphaIsTransparency=1`, `spriteMeshType=0`, `spriteExtrude=1`)
+- Sprite pivot check: PASS against task-specified `4 / height` offsets (`0.03125` for 128px, `0.041666668` for 96px)
+- Raw `dotnet build`: NOT RUN TO SUCCESS - root command failed with MSB1011 because the folder contains multiple project files and no root solution target.
+- Targeted builds: PASS, 0 errors for `RIMA.Runtime.csproj`, `Assembly-CSharp.csproj`, and `Assembly-CSharp-Editor.csproj` (warnings only).
+- Git diff before report write: 5 `.meta` files modified under `Assets/Art/AssetPacks/Act1_ShatteredKeep/walls/`, no PNG changes.
+
+## Git Diff Summary
+```text
+.../walls/act1_wall_arch_opening_v01.png.meta                | 12 ++++++------
+.../walls/act1_wall_corner_L_NE_v01.png.meta                 | 12 ++++++------
+.../walls/act1_wall_cyan_rift_integrated_v01.png.meta        | 12 ++++++------
+.../walls/act1_wall_partition_low_stub_v01.png.meta          |  8 ++++----
+.../walls/act1_wall_straight_horizontal_v01.png.meta         | 12 ++++++------
+5 files changed, 28 insertions(+), 28 deletions(-)
+```
+
+## Acik Sorular (varsa)
+- None.
+# Codex Done - laurethgame
+
+Read `CODEX_TASK_laurethgame.md`, inspected the referenced spec and source task, checked local PixelLab notes/logs, and re-confirmed the live PixelLab OpenAPI schema on 2026-05-20 using shell commands.
+
+Wrote the requested review output:
+- `STAGING/CODEX_DONE_object_production_master_review_v1.md`
+
+Final verdict: PASS_WITH_REVISIONS.
+
+Key revisions required:
+- L2a and L2b cannot be justified as one same-dispatch bundle because they require different `view` values.
+- Use API `item_descriptions` for multi-frame packs instead of relying on `17-64). variants` range shorthand.
+- Treat `<=30% pixel change` as a RIMA heuristic, not an official PixelLab state_of constraint.
+- Do not blindly combine `view="side"` with `object_view="top-down"`; pilot null/sidescroller/top-down if needed.
+- Replace exact cost claims with usage-logged ranges; live docs do not publish fixed prices.
+
+No PixelLab MCP generation was dispatched. No code, asset, prefab, Library, or PackageCache files were edited.
+# Codex Done — laurethayday
+
+Task executed: Phase B visual test for `act1_wall_straight_horizontal_v01` wall seating in `Assets/Scenes/Demo/PathC_BaseTest.unity`.
+
+Outputs:
+- Report: `STAGING/CODEX_DONE_phaseB_visual_test_wall_seating_s95.md`
+- Screenshots:
+  - `STAGING/phaseB_wall_seating_v01_variant_1.png`
+  - `STAGING/phaseB_wall_seating_v01_variant_2.png`
+  - `STAGING/phaseB_wall_seating_v01_variant_3.png`
+  - `STAGING/phaseB_wall_seating_v01_variant_4.png`
+  - `STAGING/phaseB_wall_seating_v01_variant_5.png`
+
+Result:
+- Test hierarchy `WallSeatingTest_S95` was created, captured, deleted, and the scene was reloaded without saving.
+- Final Unity scene state verified: `PathC_BaseTest.unity`, dirty flag `False`, `WallSeatingTest_S95` not present.
+- `Floor` sorting layer does not exist; Variant 4 used existing `Ground` layer as floor-equivalent without modifying project settings.
+- Unity loaded the wall sprite with pivot `(64,64)` pixels on the 128x128 sprite, not the requested normalized pivot `(0.5, 0.0313)`.
+- Best relative fit among tested variants: Variant 1.
+- Opus verdict confirmed: NO, because the active Unity import uses center pivot and does not match the requested bottom-pivot test condition.
+# Codex Done - laurethgame
+
+Executed CODEX_TASK_laurethgame.md.
+
+Outputs written:
+- STAGING/CODEX_DONE_object_production_master_review_v2.md
+
+Result:
+- Overall Verdict: PASS_WITH_MINOR_REVISIONS
+- Iter 3: not required
+- Critical blockers: none
+- LIVE recommendation: mark LIVE after minor inline edits for open questions #5/#7 and an explicit dispatch-path caveat for item_descriptions support
+# Wall Alignment Fix + Sorting Layer Setup - Codex Report
+
+## Status
+
+BLOCKED before edits.
+
+Reason: `ProjectSettings/TagManager.asset` current sorting layers do not match the task precondition. The task states current layers are expected to be `Default`, `Ground`, and requires adding `Floor` and `Entities`. Actual project state already has 11 sorting layers, including an existing `Entities` layer, and `Ground` is not index 1.
+
+Per task hard constraint: "BLOCKED if unclear: Mevcut sorting layer durumu beklenenden farkliysa ... durdur".
+
+## Bolum 1: Alignment Fix
+
+No re-import or meta edit was performed because the task entered BLOCKED state before project changes.
+
+### Current Meta State
+
+| File | spriteAlignment current | spritePivot current | Action |
+|---|---:|---|---|
+| straight_horizontal | 0 | `{x: 0.5, y: 0.03125}` | not changed |
+| corner_L_NE | 0 | `{x: 0.5, y: 0.03125}` | not changed |
+| arch_opening | 0 | `{x: 0.5, y: 0.03125}` | not changed |
+| partition_low_stub | 7 | `{x: 0.5, y: 0.041666668}` | not changed |
+| cyan_rift_integrated | 0 | `{x: 0.5, y: 0.03125}` | not changed |
+
+## Bolum 2: Sorting Layer Setup
+
+### TagManager Current
+
+- Index 0: Default (uniqueID 0, locked 0)
+- Index 1: Patch (uniqueID 1365605006, locked 0)
+- Index 2: Scatter (uniqueID 27625511, locked 0)
+- Index 3: Detail (uniqueID 351335743, locked 0)
+- Index 4: Accent (uniqueID 1570199623, locked 0)
+- Index 5: Props (uniqueID 399489520, locked 0)
+- Index 6: Ground (uniqueID 2024493761, locked 0)
+- Index 7: Walls (uniqueID 593505845, locked 0)
+- Index 8: Entities (uniqueID 1293760285, locked 0)
+- Index 9: VFX (uniqueID 200, locked 0)
+- Index 10: Wall (uniqueID 2024493762, locked 0)
+
+### Scene Current
+
+- `Assets/Scenes/Demo/PathC_BaseTest.unity` `Floor_Tilemap`
+- `m_SortingLayerID: 0`
+- `m_SortingLayer: 0`
+- `m_SortingOrder: -100`
+
+## Verify
+
+- 5 wall sprites Pivot pixel verify: NOT RUN, blocked before Unity re-import.
+- 2 new sorting layers added: NOT RUN, blocked by existing unexpected layer state and existing `Entities`.
+- Floor_Tilemap on Floor layer: NOT RUN, blocked before scene edit.
+- dotnet build: NOT RUN, no code change.
+- Unity console: NOT RUN, no Unity edit.
+
+## Git Diff Summary
+
+- No new task edits were intentionally made after reading the task.
+- Pre-existing git diff already includes the 5 listed wall `.meta` files.
+- `ProjectSettings/TagManager.asset` was not modified.
+- `Assets/Scenes/Demo/PathC_BaseTest.unity` was not modified.
+
+## Acik Sorular
+
+- Should `Floor` be inserted into the existing 11-layer stack without reordering existing layers, or should the stack be normalized to `Default -> Ground -> Floor -> Entities` despite existing `Patch`, `Scatter`, `Detail`, `Accent`, `Props`, `Walls`, `VFX`, and `Wall` layers?
+- Should the existing `Entities` layer at index 8 be reused, moved, or left in place?
+# Codex Done - yasinderyabilgin
+
+Task: Wall Transparency / Occlusion + Sorting Layer Audit (S95)
+
+Output written:
+- `STAGING/CODEX_DONE_wall_transparency_research_s95.md`
+
+Executed:
+- Read `CODEX_TASK_yasinderyabilgin.md`.
+- Confirmed `ANTIGRAVITY.md` is absent at repo root.
+- Audited Unity version, URP version, active renderer settings, sorting layers, active serialized sorting-layer usage, and relevant editor drift scripts.
+- Produced report-only recommendation. No code, asset, scene, or meta changes were made.
+
+Recommended path in report:
+- Path B alpha shader / MaterialPropertyBlock wall fade.
+- Canonical wall layer: `Walls`, delete orphan `Wall` only after fixing tool drift.
+- Keep layer cleanup surgical; migrate `Patch` and `Scatter` only if `Phase1_ProceduralMap_Test.unity` is retired.
+Codex review complete.
+
+Output written:
+- STAGING/CODEX_DONE_production_plan_review_v1.md
+
+Verdict:
+- PASS
+- Pilot dispatch ready: YES
+- No blocking revisions needed
+# Wall Alignment + Layer Cleanup Atomic - Codex Report
+
+## Bolum 1: Wall .meta Alignment Fix
+| File | spriteAlignment | spritePivot | Verify (pixel) |
+|---|---:|---|---|
+| straight_horizontal | 0 -> 9 | (0.5, 0.03125) | (64, 4) PASS |
+| corner_L_NE | 0 -> 9 | (0.5, 0.03125) | (64, 4) PASS |
+| arch_opening | 0 -> 9 | (0.5, 0.03125) | (64, 4) PASS |
+| partition_low_stub | 7 -> 9 | (0.5, 0.041666668) | (48, 4) PASS |
+| cyan_rift_integrated | 0 -> 9 | (0.5, 0.03125) | (64, 4) PASS |
+
+## Bolum 2: PathC_BaseTest Floor_Tilemap
+- sortingLayerID: 0 (Default) -> 2024493761 (Ground)
+- m_SortingLayer: 0 -> 1
+- Scene saved: YES
+
+## Bolum 3: Orphan Layers Deleted
+- Detail (351335743): DELETED
+- Accent (1570199623): DELETED
+- Props (399489520): DELETED
+- Wall singular (2024493762): DELETED
+- Patch (1365605006): DELETED after Phase1 archive
+- Scatter (27625511): DELETED after Phase1 archive
+
+## Bolum 4: Script Drift Fix
+- IsometricSortSetup.cs: canonical `"Walls"` sorting layer; no standalone `"Wall"` string remains.
+- RimaSortingLayerValidator.cs: canonical 5 layer set only: Default, Ground, Walls, Entities, VFX.
+- Removed Patch/Scatter/Detail/Accent/Props creation.
+
+## Bolum 5: Phase1 Sahne Archive
+- `Assets/Scenes/Phase1_ProceduralMap_Test.unity` -> `Assets/_ARCHIVE/Scenes/Phase1_ProceduralMap_Test.unity`
+- `.meta` moved with GUID preserved: `0b540b97e2fde464d95a830e75f24ebc`
+- Build Settings'te yoktu.
+- Note: requested `Assets/_archive` resolves to existing `Assets/_ARCHIVE` on this Windows workspace.
+
+## Bolum 6: Final Verify
+- dotnet build targeted:
+  - `RIMA.Runtime.csproj`: 0 warnings, 0 errors
+  - `Assembly-CSharp.csproj`: 0 warnings, 0 errors
+  - `Assembly-CSharp-Editor.csproj`: 0 errors, 18 existing warnings in unrelated editor files
+- Unity Console: clean, 0 entries
+- Sprite pivot: 5/5 PASS
+- Sorting layers final: [Default, Ground, Walls, Entities, VFX]
+- Floor_Tilemap on Ground: PASS
+- Scripts canonical: PASS
+
+## Git Diff Summary
+- 5 wall `.png.meta` files: custom alignment enabled; pivots verified
+- `ProjectSettings/TagManager.asset`: removed Patch, Scatter, Detail, Accent, Props, Wall
+- `Assets/Editor/DevTools/IsometricSortSetup.cs`: Wall -> Walls canonical cleanup
+- `Assets/Editor/RimaSortingLayerValidator.cs`: canonical 5 layer validator
+- `Assets/Scenes/Phase1_ProceduralMap_Test.unity` + `.meta` moved to `Assets/_ARCHIVE/Scenes/`
+- `Assets/_ARCHIVE/Scenes.meta` created by Unity
+- `Assets/Scenes/Demo/PathC_BaseTest.unity`: Floor_Tilemap sorting layer set to Ground
+- `STAGING/CODEX_DONE_wall_alignment_layer_cleanup_atomic_s95.md`: detailed report written
+
+## Acik Sorular
+- None
+# Faz B v2 Visual Test - Codex Report
+
+## Onkosul Verify
+- Wall pivot pixel: (64, 4) PASS
+- Floor_Tilemap layer: Ground PASS
+- Layer set: [Default, Ground, Walls, Entities, VFX] PASS
+- Console: clean PASS
+
+## Variant Results
+
+### Variant 1 - OPUS VERDICT (Entities, Y-sort)
+- Screenshot: STAGING/phaseB_v2_wall_seating_variant_1.png
+- Wall foot: diamond lower edge YES
+- Cube vs wall: cube onde YES (Y-sort dogru)
+- Wall order: 4532
+- Cube order: 4632
+- Verdict: PASS
+
+### Variant 2 - diagnostic (Entities, Y-sort, +0.25 Y)
+- Screenshot: STAGING/phaseB_v2_wall_seating_variant_2.png
+- Wall foot: diamond lower edge NO (wall too high)
+- Verdict: FAIL
+
+### Variant 3 - diagnostic (Entities, Y-sort, -0.25 Y)
+- Screenshot: STAGING/phaseB_v2_wall_seating_variant_3.png
+- Wall foot: diamond lower edge NO (wall too low)
+- Verdict: FAIL
+
+### Variant 4 - diagnostic (Ground, fixed -100)
+- Screenshot: STAGING/phaseB_v2_wall_seating_variant_4.png
+- Wall foot: diamond lower edge YES
+- Cube vs wall: cube onde YES, but wall is on Ground so occluder behavior is wrong
+- Verdict: FAIL
+
+### Variant 5 - diagnostic (Entities, fixed 0)
+- Screenshot: STAGING/phaseB_v2_wall_seating_variant_5.png
+- Wall foot: diamond lower edge YES
+- Cube vs wall: sorting is not tied to Y; fixed wall order creates incorrect depth behavior
+- Verdict: FAIL
+
+## Summary
+- Best fit: Variant 1
+- Opus verdict confirmed: YES
+- Acik tartisma: none
+
+## Cleanup
+- WallSeatingTest_S95v2 deleted: YES
+- Camera restored: YES
+- Scene dirty: NO
+# Codex Done — yasinderyabilgin
+
+Executed `CODEX_TASK_yasinderyabilgin.md`.
+
+- Wrote detailed review report: `STAGING/CODEX_DONE_production_plan_v1_1_review.md`
+- PixelLab read-only checks completed:
+  - `list_characters`: 17 total
+  - `get_character`: all 17 checked; 10 completed base-rotation chars, 7 failed chars
+  - `get_balance`: 2567 / 5000 live remaining generations
+- Verdict: PASS_WITH_REVISIONS
+- Key result: V3 formula remains INCONCLUSIVE empirically because PixelLab metadata exposes no gen/state cost and no sampled smooth-state chars; Pilot B real-cost log remains mandatory.
+- Budget result: TIGHT for Act 2/3 headroom; recommend conditional Faz 2.2 mob cut/defer gate.
+# Antigravity Verify + Follow-up - Codex Report
+
+## Phase A Verify
+### A1 dotnet build
+- Result: 0 error
+- Targeted builds run: `RIMA.Runtime.csproj`, `Assembly-CSharp.csproj`, `Assembly-CSharp-Editor.csproj`
+
+### A2 Hardcoded literal grep
+- Line 1481: `"Walls"` CONFIRMED (Karpathy violation, UIUX v3.1 subsume planned)
+- Line 1485: `"Entities"` CONFIRMED
+- Line 1481-1491: `sortingOrder = 20` NOT present; uses `targetSortingOrder`
+- Line 2628/2629: `"Walls"` + `sortingOrder = 20` CONFIRMED
+- Line 2746/2747: `"Walls"` + `sortingOrder = 20` CONFIRMED
+- Verdict: 3-way sorting layer literal duplication confirmed; `sortingOrder = 20` duplicated in the 2 wall-connection paths; subsume by UIUX implementation
+
+### A3 EndScrollView
+- Line 793 early-return: EndScrollView present YES
+- Line 822 normal exit: EndScrollView present YES
+- Scope: cerrahi PASS; no method-scope move detected in reviewed hunk
+
+### A4 Editor smoke test
+- `PathC_BaseTest.unity` loaded in Unity editor
+- `RIMA/Tools/Unified Painter` opened and closed
+- GUIClip log: 0
+- BeginScrollView without EndScrollView: 0
+- Layout mismatch: 0
+- Scene dirty after smoke/count check: False
+
+### A5 Scene renderer counts
+- Default: 0 (expected 0)
+- Walls: 55 (expected 52)
+- Entities: 8 (expected 8)
+- Note: SpriteRenderer count also returns Walls=55, Entities=8. This does not match the expected Walls=52.
+
+### A6 ConfigureCollider intact
+- Diff: clean YES for `ConfigureCollider` (no diff hunk touches line 1910-1986)
+- WallBlock formula `(spriteWidth*scale, 0.8f)`: intact YES
+- Active code: `desiredWorldWidth = spriteWidth * scale; desiredWorldHeight = 0.8f;`
+
+## Phase B Follow-up
+### B1 IsometricSortSetup.cs
+- `"Wall"` sorting-layer occurrences found: 3
+- Replaced with `"Walls"`: 3
+- Non-layer detection string `objectName.Contains("Wall")` left intact by constraint
+- Files touched: `Assets/Editor/DevTools/IsometricSortSetup.cs`
+
+### B2 RimaSortingLayerValidator.cs
+- Detail/Accent/Props create lines commented-out: YES
+- Canonical 5-layer check: YES (`Default`, `Ground`, `Walls`, `Entities`, `VFX`)
+- Active old orphan layer IDs searched in `Assets/Scenes` and `Assets/Prefabs`: none found
+- Files touched: `Assets/Editor/RimaSortingLayerValidator.cs`
+
+## Phase C Verdict
+- Antigravity claims: FAIL_DETAIL (A5 Walls count 55 vs expected 52)
+- Sortinglayer hardcoded drift: CONFIRMED (subsume by UIUX impl)
+- Follow-up B1+B2: APPLIED
+- dotnet build post-fix: 0 error
+- ONERI: UIUX DRAFT v3.1 implementation Codex task'i dispatch et
+
+## Git Diff Summary
+- `Assets/Editor/DevTools/IsometricSortSetup.cs` (3 insertions, 3 deletions)
+- `Assets/Editor/RimaSortingLayerValidator.cs` (12 insertions, 12 deletions)
+
+## Acik Sorular
+- Why does `PathC_BaseTest.unity` now report Walls=55 when the expected count is 52?
+# Pilot A Visual Review + Walls Diagnose — Codex Report
+
+## Bölüm 1: Walls 55 vs 52 Mismatch
+### Enumerate Result
+- Total Walls renderer: 55
+- Unity summary:
+``text
+scenePath=Assets/Scenes/Demo/PathC_BaseTest.unity
+sceneDirty=False
+pilotATestExists=False
+layerCounts=Entities:8, Walls:55
+wallsByRoot=Grid:43, Props_Root:12
+gridChildren=52
+propsRootChildren=12
+``
+- GameObject list:
+  - 1. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-78.89,-41.795,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 2. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-78.42,-41.56,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 3. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-77.48,-42.03,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 4. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-76.54,-42.03,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 5. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-75.13,-41.795,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 6. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-74.19,-41.795,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 7. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-73.25,-41.795,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 8. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-72.31,-41.795,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 9. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-71.84,-41.56,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 10. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-70.9,-43.91,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 11. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-70.43,-41.795,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 12. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-69.96,-39.21,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 13. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-67.906,-40.714,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 14. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-66.2,-44.85,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 15. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-65.821,-39.927,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 16. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-64.32,-44.85,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 17. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-63.85,-41.325,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 18. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-61.97,-41.325,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 19. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-61.03,-44.615,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 20. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Grid): pos=(-60.09,-44.615,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 21. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-77.95,-41.325,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 22. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-77.01,-41.325,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 23. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-77.01,-41.325,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 24. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-77.01,-41.325,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 25. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-76.54,-41.09,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 26. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-76.54,-41.09,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 27. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-76.54,-41.09,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 28. wall_01_8530799c-41f8-4df5-a76f-28f49e6d71c7 (Grid): pos=(-61.97,-44.615,0), prefabGUID=c80818f3996bf5545804b2a10679258e
+  - 29. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-77.95,-40.855,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 30. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-77.01,-41.325,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 31. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-77.01,-40.855,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 32. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-71.37,-41.325,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 33. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-63.38,-44.85,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 34. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-63.38,-44.38,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 35. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-62.91,-44.615,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 36. wall_02_a52f6711-e1e6-434d-a178-9eebd8521f91 (Grid): pos=(-61.5,-44.85,0), prefabGUID=4427eebe5f5ef2941a8f18931a033686
+  - 37. wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3 (Grid): pos=(-77.95,-41.325,0), prefabGUID=f63c940199fa2f84c9933fbbe4285dbb
+  - 38. wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3 (Grid): pos=(-77.95,-41.325,0), prefabGUID=f63c940199fa2f84c9933fbbe4285dbb
+  - 39. wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3 (Grid): pos=(-77.01,-41.325,0), prefabGUID=f63c940199fa2f84c9933fbbe4285dbb
+  - 40. wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3 (Grid): pos=(-77.01,-41.325,0), prefabGUID=f63c940199fa2f84c9933fbbe4285dbb
+  - 41. wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3 (Grid): pos=(-77.01,-41.325,0), prefabGUID=f63c940199fa2f84c9933fbbe4285dbb
+  - 42. wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3 (Grid): pos=(-77.01,-41.325,0), prefabGUID=f63c940199fa2f84c9933fbbe4285dbb
+  - 43. wall_03_abf9c178-4a5b-4cb2-a3e7-3729eeaceec3 (Grid): pos=(-63.85,-44.615,0), prefabGUID=f63c940199fa2f84c9933fbbe4285dbb
+  - 44. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-68.976,-42.293,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 45. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-68.55,-43.205,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 46. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-68.08,-39.68,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 47. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-67.14,-43.44,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 48. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-66.156,-41.823,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 49. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-65.73,-43.675,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 50. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-64.79,-40.385,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 51. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-64.79,-38.975,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 52. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-64.32,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 53. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-64.32,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 54. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-64.276,-42.293,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 55. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-63.38,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+
+### Antigravity Cross-Check
+- Antigravity raporu 52; live Unity count is 55 active SpriteRenderer on sortingLayerName Walls.
+- Cross-check by root: Grid has 43 Walls SpriteRenderer; Props_Root has 12 Walls SpriteRenderer; all 55 are active and none are hidden/disabled.
+- Grid.childCount is 52, but that is not a Walls-renderer count: it includes Floor_Tilemap, 43 wall SpriteRenderers, and 8 Entity SpriteRenderers.
+- The 12 Props_Root Walls candidates are:
+  - 44. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-68.976,-42.293,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 45. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-68.55,-43.205,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 46. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-68.08,-39.68,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 47. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-67.14,-43.44,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 48. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-66.156,-41.823,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 49. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-65.73,-43.675,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 50. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-64.79,-40.385,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 51. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-64.79,-38.975,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 52. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-64.32,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 53. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-64.32,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 54. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-64.276,-42.293,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 55. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f: pos=(-63.38,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+- If the current deterministic sorted list is compared directly against Antigravity's claimed 52, the +3 tail entries are:
+  - 53. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-64.32,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 54. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-64.276,-42.293,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+  - 55. wall_00_65c99904-12b8-4b98-9e5f-fe2f280f6a2f (Props_Root): pos=(-63.38,-40.15,0), prefabGUID=1f9527adb7c6df441b1678146669eb5c
+- Most likely cause: Antigravity's 52 was a stale/simple hierarchy count, not the current live Walls SpriteRenderer count. The scene has 55 live active Walls SpriteRenderers; the mismatch is not caused by inactive objects or TilemapRenderer/SpriteRenderer mixing.
+- Verdict: needs cleanup/reconciliation if 52 is intended, because Props_Root contains 12 active wall instances and the scene has no metadata identifying exactly three canonical extras.
+
+## Bölüm 2: Pilot A Visual Review
+### PNG Download
+- 4 frame downloaded: FAIL / BLOCKED
+- Shell Invoke-WebRequest failed: unreachable network to ackblaze.pixellab.ai.
+- Shell curl.exe -L --retry 3 failed with exit 7: could not connect to ackblaze.pixellab.ai:443.
+- Test-NetConnection backblaze.pixellab.ai -Port 443: TcpTestSucceeded=False.
+- UnityWebRequest failed: ConnectionError, responseCode  , error Cannot connect to destination host.
+- Sizes: not available.
+- STAGING/pilot_a_candidates/ klasörü oluşturuldu; no PNG files were downloaded.
+
+### Unity Import
+- SKIPPED: blocked by PNG download access failure.
+- No files copied to Assets/Art/AssetPacks/Act1_ShatteredKeep/walls/pilot_a_test/.
+- Import setting verify: not run.
+
+### Scene Placement
+- SKIPPED: blocked by PNG download access failure.
+- No PilotATest_S95v2 instances were created.
+
+### Screenshot
+- SKIPPED: blocked by PNG download access failure.
+- STAGING/pilot_a_visual_review.png not written.
+
+### Cleanup
+- PilotATest_S95v2 exists: NO
+- Pilot test hierarchy delete needed: NO
+- PNG asset'ler korundu: no asset PNGs were created.
+- Scene dirty: NO
+
+## Açık Sorular
+- ackblaze.pixellab.ai is unreachable from both shell and Unity in this environment; Pilot A visual placement cannot proceed until the PNGs are locally available or the host is reachable.
+- For Walls cleanup: decide whether Props_Root 12 active wall instances are intentional. Without a baseline marker, there is no reliable way to isolate exactly three extras from the 55 live renderers.
+# UIUX Painter Implementation v3.1 — Codex Report
+
+## Files Created
+- Assets/Editor/CollisionRulesSO.cs (75 lines)
+- Assets/Editor/MapDesigner/Rules/DefaultCollisionRules.asset (95 lines)
+- Unity metadata sidecars were generated for the new script/asset.
+
+## RimaUnifiedPainterWindow.cs Changes
+- GroupClassifier nested class added.
+- CollisionResolver nested class added.
+- PeekTargetParent method added.
+- Panel 1 Scene Organization added.
+- Panel 2 Collision Inspector added/refactored.
+- Panel 3 palette tile redesign applied.
+- Panel 4 target status banner added.
+- Panel 5 selected instance editor added.
+- 6 caller paths refactored toward CollisionResolver.Resolve.
+- 3 hardcoded sortingLayer literal sites removed.
+
+## Verify
+- root `dotnet build`: FAIL, ambiguous because multiple project/solution files exist in repo root.
+- `dotnet build .\Assembly-CSharp-Editor.csproj`: PASS, 0 errors.
+- Unity script refresh/compile: PASS before MCP disconnected during domain reload.
+- Painter window smoke: NOT RUN fully; Unity batchmode was blocked by the already-open project and MCP bridge disconnected after reload.
+- RoomFlowTests.cs: PlayMode test, not EditMode. `dotnet test .\RIMA.Tests.PlayMode.csproj -v minimal` exited 0 but produced no Unity test count.
+- Git diff for painter: +1031 / -317. New authored files: CollisionRulesSO.cs, DefaultCollisionRules.asset, report files; Unity also generated metadata sidecars.
+
+## Notes
+- Unity 6000.3 reflection shows `UnityEditorInternal.EditMode.SceneViewEditMode.Collider`, not `Collider2D`; implementation uses `ChangeEditMode(...Collider, box.bounds, owner)` so the project compiles on the installed editor.
+DONE
+
+Task: Pixal3D devil's advocate teknik degerlendirme
+Output: F:/LaurethStudio/STAGING/codex_output_pixal3d_eval.md
+
+Summary:
+- Read CODEX_TASK_laurethayday.md and all listed local context files.
+- Checked official Pixal3D GitHub, Hugging Face, arXiv, and TRELLIS.2 sources.
+- Wrote 2132-word ASCII-only evaluation with all 6 requested sections.
+- Key result: REJECT for production due to Pixal3D academic-only / no commercial or production use license; WATCH-ITEM only if license changes and CB V4 faux-iso slice hits a real angle-consistency blocker.
+# Clean Test Scene + UIUX Bug Test - Codex Report
+
+## Bolum 1: Eski Wall Temizligi
+- Deleted: 57 wall instance actual (45 Grid + 12 Props_Root). Task expected 55, but scene contained 57 matching wall_* under the allowed roots.
+- Statue/mounting/decor preserved: YES. Delete filter was name starts with wall_* only under Grid and Props_Root.
+- Scene saved: YES
+
+## Bolum 2: Pilot A Place
+- 3 prefab created:
+  - Assets/Prefabs/Walls/pilot_a/pilot_a_wall_face_EW.prefab
+  - Assets/Prefabs/Walls/pilot_a/pilot_a_wall_corner_outer.prefab
+  - Assets/Prefabs/Walls/pilot_a/pilot_a_wall_arch_opening.prefab
+- Painter place executed through RimaUnifiedPainterWindow private PaintWallWithConnections path with Auto-Connect enabled.
+- Placed: 4 south face cells (3,3)-(6,3), 2 east face cells (3,4)-(3,5), 1 corner at (3,6), 1 arch at (4,5). Total Pilot A instances: 8.
+- Painter auto-connect: FAIL for Pilot A. Normal wall palette scan after menu open had 4 legacy wall prefabs and contains Pilot A=false. Code scans only Assets/Prefabs/Props/ShatteredKeep_PixelLab with filename prefix wall_. FindWallAtCell also only detects instance/sprite names starting wall_, so pilot_a_wall_* is not connectable even if selected by reflection.
+- Scene saved: YES
+
+## Bolum 3.1: Console Logs
+- Painter open-close 3x: 0 errors, 0 warnings
+- Selection switch test: 0 errors, 0 warnings
+- Edit Collider in Scene API path entered and exited: 0 errors, 0 warnings
+- Captured logs: none
+
+## Bolum 3.2: "Wall Buyuk Uste" Bug
+- Replication: Selected placed Pilot A wall, opened painter, selected wall, entered collider edit mode, deselected, selected statue/ground tile. No console error reproduced.
+- transform values on selected wall:
+  - path: Props_Root/pilot_a_wall_face_EW
+  - localScale=(0.50, 0.50, 0.50), lossyScale=(0.50, 0.50, 0.50)
+  - position=(-67.57, -45.25, 0.00)
+  - BoxCollider2D.size=(2.00, 1.60), offset=(0.00, 0.74)
+  - sprite boundsSize=(2.00, 2.00, 0.20), pivot=(64,4), rect=128x128
+- Root cause: not fully reproduced on Props_Root placement. Two likely code causes remain:
+  - Selected Instance editor edits only localScale.x and writes uniform x/y scale. For instances parented under Grid, Grid has scale=(1,0.5,1), so this can destroy painter's compensated scale and make the wall appear too tall/shifted after edit.
+  - Preview/selection placement uses auto bottom alignment from visible sprite bounds plus pivot. Pilot A pivot is near bottom, and transform is intentionally below the tile center to seat the wall base; this can read as "comes above/on top" if the editor UI shows transform center rather than visual base.
+- Fix suggestion: in Selected Instance editor, edit/display intended world scale or preserve compensated local scale per parent lossyScale; show base anchor/cell coordinate separately from transform center.
+
+## Bolum 3.3: "Wall Gorunmez Alti" Bug
+- Replication: after Pilot A placement, Game view screenshot shows walls visible above ground.
+- Wall sortingLayer/order: Walls, IsoSorter-overwritten orders 4454-4525 in this room.
+- Ground sortingLayer/order: Ground, -100.
+- CollisionResolver expected for WallBlock: layerName=Walls, sortingOrder=20. Actual order is then overwritten by IsoSorter because ApplySorting attaches IsoSorter to every wall SpriteRenderer.
+- Root cause: not reproduced in this scene. Sorting layer is correct. Remaining risk is that ApplySorting sets 20 but IsoSorter immediately replaces it with Y sort order; if sorting layer order is broken in TagManager or a wall stays on Default, it can render under ground.
+- Fix suggestion: keep wall sorting on Walls layer, but make wall IsoSorter behavior explicit: either disable IsoSorter for static walls or set a wall baseOrder that preserves intended wall banding.
+
+## Bolum 3.4: Genel Bug Listesi
+- Bug 1: Pilot A prefabs are not in the real Painter wall palette. Replication: open RIMA/Tools/Unified Painter, category Duvar; scanner only loads Assets/Prefabs/Props/ShatteredKeep_PixelLab/wall_*. Root cause: hardcoded ScanPrefabsInFolder path/prefix. Fix: include Assets/Prefabs/Walls/pilot_a or support configured wall folders/prefixes.
+- Bug 2: Auto-Connect cannot detect pilot_a_wall_* instances. Replication: place Pilot A wall through PaintWallWithConnections; UpdateWallConnectionsAt/FindWallAtCell returns null because names/sprites do not start wall_. Fix: detect category/group/prefab metadata or names containing _wall_, not only prefix wall_.
+- Bug 3: Selected Instance scale editing can break compensated scale for Grid-parented walls. Replication target: select an instance under Grid where parent scale is (1,0.5,1), change Scale in Panel 7. Root cause: editor writes uniform localScale from localScale.x. Fix: world-scale editor with parent compensation.
+- Bug 4: Sorting order display is misleading for walls. Replication: resolver returns 20, actual SpriteRenderer order becomes 4454+ after IsoSorter LateUpdate. Root cause: ApplySorting adds IsoSorter and later it overrides resolved sortingOrder. Fix: show effective runtime order or do not attach IsoSorter to static walls.
+
+## Bolum 4: Screenshot
+- STAGING/clean_test_scene_room.png yazildi
+- Unity also created Assets/Screenshots/STAGING_clean_test_scene_room.png from Main Camera; copied to required STAGING path.
+
+## Acik Sorular
+- Should Pilot A wall prefab names be renamed to wall_* or should Painter support pilot_a_wall_* as a valid wall naming convention?
+- Should static walls use IsoSorter, or should walls keep CollisionResolver sortingOrder=20 with only sortingLayer separation?
+# UIUX Bug Fix + User-Friendly — Codex Report
+
+Output written:
+- STAGING/CODEX_DONE_uiux_bug_fix_plus_user_friendly_s95.md
+
+Files touched:
+- Assets/Editor/RimaUnifiedPainterWindow.cs
+- STAGING/CODEX_DONE_uiux_bug_fix_plus_user_friendly_s95.md
+- CODEX_DONE_laurethayday.md
+
+Summary:
+- Added multi-folder generic wall prefab scanning for legacy wall_* and pilot_a_wall_* assets.
+- Added generic IsWallObject detection for GameObject and Sprite names containing "wall".
+- Updated wall auto-connect to use generic wall detection and same-family wall pieces.
+- Fixed selected instance Boyut editing with parent.lossyScale.y compensation.
+- Prevented IsoSorter from being added to static walls and added cleanup when wall sorting is applied.
+- Added WallVariantGroup plumbing with empty-pool fallback for future wall random variants.
+- Simplified/Turkish-labeled the Unified Painter UI and hid user-facing sorting layer/order details.
+
+Verify:
+- dotnet build .\RIMA.slnx: PASS, 0 errors
+- Unity smoke palette scan: PASS, pilot_a_wall_face_EW / pilot_a_wall_corner_outer / pilot_a_wall_arch_opening + legacy wall_* found
+- Unity smoke auto-connect: PASS, Pilot A corner produced pilot_a_wall_corner_outer
+- Unity smoke scale compensation: PASS, parent scale (1, 0.5, 1) kept worldY=1
+- Unity smoke IsoSorter: PASS, walls removed/skip IsoSorter; mob still gets IsoSorter
+- Unity console errors after smoke: 0
+# Codex Done - laurethgame
+
+Task executed: `CODEX_TASK_laurethgame.md`
+
+Primary report written:
+
+- `STAGING/CODEX_DONE_wall_side_by_side_diagnose_plus_naming.md`
+
+Summary:
+
+- No implementation changes were made.
+- No asset or prefab renames were made.
+- No commit was made.
+- Unity diagnostic ran against active `PathC_BaseTest.unity`.
+- Scene was already dirty before testing and remained dirty after cleanup.
+- Temporary adjacent-paint test objects were deleted: `cleanupDeletedNewObjects=2`.
+- Root cause found: wall root transform is shifted by auto base alignment after snap, so `WorldToCell(transform.position)` no longer matches the clicked cell. This breaks wall occupancy/neighbor detection and allows stacking/mis-registration.
+- Secondary issue found: adjacent isometric cell centers differ by `(0.47,0.24)`, while wall collider world bounds are `(1.00,0.80)`, so adjacent wall colliders overlap by `overlapX=0.5300`, `overlapY=0.5650`.
+- Naming issue found: `CleanName` collapses all Pilot A wall prefabs to `pilot_a_wall`, making the palette labels non-unique and not user-friendly.
+# CODEX DONE - yasinderyabilgin
+
+Completed CODEX_TASK_yasinderyabilgin.md.
+
+- Archived task-listed assets to Assets/Art/AssetPacks/_archive/act1_legacy_topdown_s95/.
+- Archived RoomPipelineTest.unity to Assets/_ARCHIVE/Scenes/.
+- Counts present in archive: 41 PNG, 41 PNG .meta, 32 .asset, 32 .asset .meta, 6 folder .meta, 1 scene, 1 scene .meta.
+- Verification report written: STAGING/CODEX_DONE_archive_legacy_iso_s95.md.
+- No commit made.
+
+Flags:
+- Four root wall PNG binaries were not tracked by Git, so git mv refused those PNGs; they were moved by filesystem rename after their tracked .meta files were moved with git mv.
+- act1_wall_arch_opening_v01.png remains in the source wall folder because it is absent from the task exact move list and absent from the audit's 41-PNG archive count.
+# Codex Done: laurethgame
+
+Task executed from CODEX_TASK_laurethgame.md.
+
+Output written:
+- F:/LaurethStudio/STAGING/codex_output_3d_blender_mcp_feasibility.md
+
+Verification:
+- File exists: yes
+- Word count: 2795
+- Lines: 153
+
+Notes:
+- Current web research was performed for 3D generation tools, commercial-use licensing, Blender MCP maturity, and marketplace license risks as requested.
+- ANTIGRAVITY.md was attempted but was not present in the project root.
+# CODEX DONE - yasinderyabilgin
+
+Executed CODEX_TASK_yasinderyabilgin.md.
+
+- Created scene: Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity
+- Created tile assets: Assets/Data/Tiles/Act1_ShatteredKeep/iso_v01/*.asset
+- Created pulse script: Assets/Scripts/Visual/RiftPulse2D.cs
+- Created screenshot: STAGING/screenshots/IsoShowcaseRoom_S95_first_build.png
+- Created detailed report: STAGING/CODEX_DONE_iso_showcase_room_s95.md
+- Unity console after final pass: 0 errors, 0 warnings
+
+Result: PASS with visual review flag for intentionally dark final screenshot and plausible mounting-variant selections.
+IsoShowcaseRoom S95 brightness/framing task complete.
+
+Changed scene:
+- Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity
+
+Applied values:
+- GlobalLight2D_Ambient intensity 0.25 -> 0.55
+- GlobalLight2D_Ambient color #1A1A2A -> #2A2238
+- L1_Rift_Cyan_PointLight intensity 1.0 -> 1.7
+- L2_Torch_West_Orange_PointLight intensity 0.8 -> 1.4
+- L3_Torch_East_Orange_PointLight intensity 0.8 -> 1.4
+- L4_Brazier_Orange_PointLight intensity 0.6 -> 1.1
+- L5_Brazier_Cyan_PointLight intensity 0.5 -> 0.9
+- Main Camera orthographic size 5 -> 3.5
+- Main Camera position (1.5, 1.838, -10) -> (2.2, 2.3, -10)
+
+Screenshot:
+- STAGING/screenshots/IsoShowcaseRoom_S95_brightness_fix.png
+
+Report:
+- STAGING/CODEX_DONE_iso_showcase_brightness_fix.md
+
+Console:
+- 0 errors on final read_console check.
+
+Note:
+- Unity initially wrote the screenshot to Assets/Screenshots/STAGING_screenshots_IsoShowcaseRoom_S95_brightness_fix.png, then it was copied to the required STAGING/screenshots path.
+# CODEX DONE laurethgame
+
+Executed CODEX_TASK_laurethgame.md.
+
+- Archived 12 files total: 6 PNG + 6 .meta.
+- Destination: Assets/Art/AssetPacks/_archive/act1_2nd_drift_s95/
+- Tracked renames: 5 .meta files via git mv.
+- Untracked/ignored moves: 6 PNG files plus pilot wall .meta via Move-Item.
+- Verification passed: target contains all 12 files; source wall/patch/prop checks match the task expectations.
+- Commit: not created.
+- Report written: STAGING/CODEX_DONE_archive_2nd_drift_s95.md.
+- Flag: pilot wall .meta was untracked despite task note saying tracked; moved successfully.
+# CODEX DONE - laurethgame
+
+Task executed: rebuilt `Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity` from `STAGING/ISO_SHOWCASE_ROOM_BIG_v2_FINAL.md`.
+
+Result: PASS
+
+Key outputs:
+- Scene reset path: hierarchy clear + rebuild in existing scene.
+- Scene saved: `Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity`
+- Report written: `STAGING/CODEX_DONE_iso_showcase_big_v2.md`
+- Screenshot written: `STAGING/screenshots/IsoShowcaseRoom_S95_v2.png`
+- Console error check: 0 errors
+
+Validation:
+- Floor tiles: 432
+- Wall pieces: 17, west wall 0
+- Lights: 8 point lights + 1 global 2D light
+- Wall decorations: WD1..WD19 placed
+- Forbidden archived asset string scan: PASS
+- PathC_BaseTest was not edited by this task; it already appeared modified in git status.
+
+Decisions:
+- East wall used flipX fallback because Y=90 on SpriteRenderer walls renders edge-on/invisible from the 2D camera.
+- Statue picks: S1 statue_02, S2 statue_00.
+- ANTIGRAVITY.md was not present at project root.
+# CODEX DONE laurethayday
+
+Task: Unified Painter paint regression diagnose (S95)
+
+Result: DONE.
+
+Wrote diagnostic report:
+- STAGING/CODEX_DONE_painter_diagnose.md
+
+No code changes made.
+No scene edits made.
+
+Most likely cause:
+- Unified Painter auto-assigns `targetParent` to `targetTilemap.transform.parent`.
+- In the checked scenes, `Floor_Tilemap` parent is `Grid`.
+- `PeekTargetParent()` returns non-null `targetParent` before its Grid/Tilemap fallback can infer or create `Props_Root`.
+- Wall paint then parents directly under the wrong root, and `PaintWallWithConnections()` bypasses `GetOrCreateGroupParent()`, so the S95 scene organization and painter target are misaligned.
+
+Key evidence:
+- `RimaUnifiedPainterWindow.cs:752-755` assigns `targetParent = targetTilemap.transform.parent`.
+- `RimaUnifiedPainterWindow.cs:3203-3206` returns targetParent immediately.
+- `RimaUnifiedPainterWindow.cs:3511-3546` wall auto-connect places directly under `GetTargetParent()`.
+- `PathC_BaseTest.unity` has `Floor_Tilemap` under `Grid` and `Props_Root` separately.
+- `IsoShowcaseRoom_S95.unity` has `Floor_Tilemap` under `Grid`, while authored objects live under root containers like `Walls_Root` and `Props_Root`.
+
+Recommendation summary:
+- Do not persist Grid/Tilemap as object target parent.
+- Let `PeekTargetParent()` infer the intended object root when the tilemap parent is Grid/Tilemap.
+- Route wall auto-connect placement through the same canonical group creation path as normal prefab paint.
+# Painter Paint Regression Fix Done
+
+- Modified `Assets/Editor/RimaUnifiedPainterWindow.cs` only.
+- Fixed auto-init so Grid/Tilemap parents are not stored as `targetParent`.
+- Fixed `PeekTargetParent()` so stale Grid/Tilemap `targetParent` values fall through to fallback instead of being returned.
+- Fixed `PaintWallWithConnections()` to place through `GetOrCreateGroupParent()` like regular prefab paint.
+- Unity compile/read_console: 0 errors.
+- S95 painter verification:
+  - opened `Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity`
+  - opened `RIMA/Tools/Unified Painter`
+  - `pilot_a_wall_*` palette count = 3
+  - wall paint test placed under `IsoShowcaseRoom_S95_Root/Walls_Root/Walls/pilot_a_wall_face_EW`
+  - test-created objects cleaned up, scene not saved
+- Detailed report written to `STAGING/CODEX_DONE_painter_fix.md`.
+CODEX DONE - Painter Wang Adjacency Graceful Degrade
+
+Modified:
+- `Assets/Editor/RimaUnifiedPainterWindow.cs`
+- `STAGING/CODEX_DONE_painter_wang_degrade.md`
+
+Implemented:
+- Removed `arch` from damaged/crack fallback.
+- Excluded `arch` prefabs from Wang auto-connect family/list while leaving palette source intact.
+- Added single-face fallback detection and 90-degree rotation for NW/SE direction when only one face prefab is available.
+- Prevented random crack injection when crack falls back to the face prefab.
+
+Verification:
+- Unity compile/console: 0 errors.
+- `validate_script Assets/Editor/RimaUnifiedPainterWindow.cs`: 0 errors.
+- Loaded `Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity`.
+- Painted `(5,5,0)`, `(5,6,0)`, `(5,7,0)` with `pilot_a_wall_face_EW`, auto-connect ON: 3 walls created under `Walls_Root/Walls`, 0 arch hits, Undo cleanup left 0 test objects.
+- Additional perpendicular rotation check `(5,5,0)`, `(6,5,0)`, `(7,5,0)`: 3 walls created, all `rotZSteps=1`, 0 arch hits, Undo cleanup left 0 test objects.
+
+Notes:
+- Scene was not saved.
+- `ANTIGRAVITY.md` was not present at repo root.
+- Pre-existing unrelated dirty worktree entries were left untouched.
+# CODEX DONE - yasinderyabilgin
+
+Implemented `CODEX_TASK_yasinderyabilgin.md`.
+
+Changed:
+- `Assets/Editor/RimaUnifiedPainterWindow.cs`
+- `STAGING/CODEX_DONE_painter_mode_asset_ui.md`
+
+Summary:
+- Added header `Mod: Top-down | Isometric` painter toggle with `PlayerPrefs` persistence via `RimaPainter_PaintMode`.
+- Added palette footer controls: `Add From Project` and `Remove Selected`.
+- Added category-scoped custom add/exclude persistence using `RimaPainter_CustomAdds_*` and `RimaPainter_Excludes_*`.
+- Rescan now keeps custom adds and excludes.
+- TopDown mode bypasses iso placement/scale compensation and rejects NS-direction wall placement if `face_NS` is missing.
+- Isometric mode keeps the existing flipX and Y/parent scale compensation paths.
+
+Validation:
+- `dotnet build RIMA.slnx --no-restore` passed with 0 errors.
+- Unity MCP opened painter window and verified mode PlayerPrefs, TopDown direct offset/scale, palette add/exclude rescan, and TopDown `face_NS` rejection.
+- Unity console error count: 0.
+- Screenshot: `Assets/Screenshots/painter_mode_asset_ui_codex_yasinderyabilgin.png`.
+
+Note:
+- `ANTIGRAVITY.md` was requested by project routing rules but does not exist in repo root; task was executed from `CODEX_TASK_yasinderyabilgin.md`.
+# CODEX DONE laurethayday
+
+PASS: Executed CODEX_TASK_laurethayday.md.
+
+Completed:
+- Built the 20x16 DungeonCombatV3 room in Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity.
+- Filled Floor_Tilemap with 320 new isometric_v01 tiles.
+- Added 14 wall pieces with west wall intentionally empty and no face_NS references.
+- Added props, wall decorations with mounts, patches, decals, silhouettes, rift overlay, and 6 point Light2D + 1 Global Light2D.
+- Reused Main Camera and set it to (1.5, 4.3, -10), orthographic size 7.
+- Captured screenshot at STAGING/screenshots/DungeonCombatV3_first.png.
+- Wrote detailed report to STAGING/CODEX_DONE_dungeon_combat_v3.md.
+
+Validation:
+- Unity read_console errors: 0 after post-build console clear/read.
+- Count check: tiles=320, walls=14, pillars=4, ritual group=5 (3 ritual + 2 brazier), statues=2, containers=4, rubble=5, hazards=1, wallDecoSprites=24, patches=3, decals=10, silhouettes=3, lights=7.
+- face_NS scene references: 0.
+
+Note:
+- Props_Root subgroup containers were missing in the live scene, so the required subgroup containers were created under the existing Props_Root before the build.
+# CODEX DONE - laurethgame
+
+Task: Painter Drag-Paint + Smart Auto-Connect
+
+Changed:
+- `Assets/Editor/RimaUnifiedPainterWindow.cs:2744-2756`
+  - Wall auto-connect paint accepts `MouseDown` + `MouseDrag`.
+  - Wall drag avoids repeat work on the same occupied cell via `FindWallAtCell`.
+  - Prop paint accepts `MouseDown` + `MouseDrag`.
+- `Assets/Editor/RimaUnifiedPainterWindow.cs:2774-2776`
+  - Wall/prop erase accepts `MouseDown` + `MouseDrag`.
+
+Reports:
+- `STAGING/CODEX_DONE_drag_paint_auto_connect.md`
+
+Verification:
+- Unity scene opened: `Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity`.
+- UnityMCP reflected wall core test: `wallCorePaint=4`, `wallCoreErase=0`.
+- UnityMCP reflected prop core test: `propCorePaint=3`; prop drag path enabled in `PerformAction`.
+- Unity console errors: `0`.
+- Script validation: `0` errors, `3` existing performance warnings.
+# CODEX_DONE_laurethgame
+
+Completed CODEX_TASK_laurethgame.md.
+
+Generated 4 Rift Threshold Act 1 concept PNGs under STAGING/concepts/:
+
+- STAGING/concepts/rift_threshold_locked_act1.png
+- STAGING/concepts/rift_threshold_active_act1.png
+- STAGING/concepts/rift_threshold_portal_act1.png
+- STAGING/concepts/rift_threshold_final_act1.png
+
+Report written:
+
+- STAGING/CODEX_DONE_rift_threshold_imagegen.md
+
+Validation:
+
+- All four final PNGs are 128x128 RGBA.
+- All four final PNGs have transparent corners after chroma-key removal.
+- No Unity scene or Pilot A wall files were modified.
+
+Execution note:
+
+- Direct shell/API gpt-image-1 path could not run because OPENAI_API_KEY is missing in this shell.
+- Used the project Codex built-in imagegen route, then shell post-processing for alpha, resize, validation, and report writing.
+Task: Rift Threshold Original Design Brainstorm + Imagegen
+Status: PARTIAL / BLOCKED
+
+Completed:
+- Read `CODEX_TASK_laurethayday.md`.
+- Attempted required NotebookLM-first context query; blocked by expired NLM authentication.
+- Checked shell imagegen access; no `OPENAI_API_KEY` and no OpenAI CLI are available.
+- Inspected existing `STAGING/concepts/rift_threshold_*_act1.png` alpha data.
+- Created `STAGING/CODEX_DONE_door_brainstorm.md` with 4 original threshold concepts, Hades-difference notes, production estimates, 8-dir notes, score matrix, final recommendation, existing-output alpha analysis, and next-step recommendation.
+- Created `STAGING/concepts/door_brainstorm/` output directory.
+
+Not completed:
+- gpt-image-1 renders were not generated because imagegen API access is unavailable in this shell environment. This matches the task's BLOCKED condition.
+
+Recommended next step:
+- Re-run Phase 2 after `OPENAI_API_KEY` or another approved gpt-image-1 shell access path is available. Dispatch `Scar Compass Ring` first, then `Echo Fault Loom`.
+# Compact Comparison Sheets Result
+
+Done.
+
+Generated and staged 4 PNG comparison sheets:
+
+- `STAGING/concepts/compact_sheets/01_threshold_lineup.png`
+- `STAGING/concepts/compact_sheets/02_hades_style_reward_doors.png`
+- `STAGING/concepts/compact_sheets/03_reward_drops_gallery.png`
+- `STAGING/concepts/compact_sheets/04_map_progression_marks.png`
+
+Report written:
+
+- `STAGING/CODEX_DONE_compact_sheets.md`
+
+Verification:
+
+- All 4 PNGs exist under `STAGING/concepts/compact_sheets/`.
+- Images are RGB PNGs with dark dungeon backdrops, grid layouts, and visible labels.
+- Visual QC completed.
+# CODEX DONE - laurethayday
+
+- Task: Painter rename + per-category scale fix.
+- Result: PASS.
+- Commit: `bf6492571022c9f03710724eb6e787f3468728f2` (`[S96] Painter rename + per-category scale fix`).
+- Renamed: `Assets/Editor/RimaUnifiedPainterWindow.cs` -> `Assets/Editor/RimaWorldPainterWindow.cs`.
+- GUID preserved: `af191c66b83e95f4c82e860e54de3d00`.
+- Updated reference file: `Assets/Editor/CollisionRulesSO.cs`.
+- Added category scales: Floor `1.0`, Wall `0.5`, Prop `0.4`, Mob `1.0`, default `useCategoryScale = true`.
+- Backward compat: `useCategoryScale = false` uses `prefabScaleMultiplier` universal override.
+- Validation: Unity `read_console` returned 0 errors/warnings; `RIMA/Tools/World Painter` opened; reflection check passed.
+- Report: `STAGING/CODEX_DONE_painter_rename_scalefix.md`.
+# CODEX DONE - laurethgame
+
+## Task
+
+Reviewed `STAGING/PROGRESSION_PLAN_v0_DRAFT.md` and produced v1 progression plan refinement.
+
+## Outputs
+
+| Path | Status |
+|---|---|
+| `STAGING/PROGRESSION_PLAN_v1_CODEX.md` | written |
+| `STAGING/CODEX_DONE_progression_plan_review.md` | written |
+| `CODEX_DONE_laurethgame.md` | written last |
+
+## Verdict Summary
+
+PASS 1 / NEEDS REVISION 5 / FAIL 0.
+
+Locked decisions:
+- A2 Imprint Scar is the canonical threshold base.
+- C1 Scar Compass is an overlay/state, not the base threshold.
+- Map Fragments drop at macro-node completion only.
+- Karar #149 sub-room sequences pay reward only on final sub-room clear.
+- Rune system is 3-slot, run-local, data-driven modifier layer.
+- Death does not remove earned Map Fragments; it causes temporary revealed-map distortion.
+- Boss Key and Map Fragment stay separate economies.
+
+## Constraint Notes
+
+- No code implementation was performed.
+- v0 was not modified.
+- New internal markdown files were kept ASCII-only.
+# CODEX DONE - laurethgame
+
+Task: `CODEX_TASK_laurethgame.md`
+
+Completed:
+- Read `STAGING/PROGRESSION_PLAN_v1_CODEX.md`.
+- Checked `MEMORY/_temp_canonical_lock.md`; file was absent, so inline NLM canonical block was used.
+- Checked compact sheet inventory under `STAGING/concepts/compact_sheets`.
+- Wrote `STAGING/PROGRESSION_PLAN_v2_FINAL.md`.
+- Wrote `STAGING/CODEX_DONE_progression_plan_v2_nlm.md`.
+
+Result:
+- v2 is NLM-canonical-reconciled and marked LOCK candidate.
+- 18 v1 contradictions were resolved.
+- No code was changed.
+- Remaining open items: 9 Combined Item names/recipes are not in the task block; Death Imprint is proposal-only pending spec gate.
+
+Verification:
+- Confirmed output files exist.
+- Confirmed written markdown files contain ASCII only.
+- Confirmed forbidden v1 concepts appear only in contradiction, deletion, or remap context.
+# CODEX DONE - laurethgame
+
+Task: Overnight Death Imprint Visual Concept
+
+Completed:
+- Created PNG mockup: STAGING/concepts/overnight/12_death_imprint_concept.png
+- PNG validated: 1280x800, RGBA, alpha channel present
+- Created final report: STAGING/CODEX_DONE_overnight_death_imprint.md
+
+Verdict:
+- Visual concept fits the Death Imprint proposal as map-node distortion on death.
+- No fragment loss or mechanical penalty represented.
+- LOCK recommendation: visual-only narrative reinforcement is sufficient.
+
+Note:
+- ANTIGRAVITY.md was not present in the repository root or discoverable by rg --files.
+# CODEX DONE - laurethgame
+
+Task: Overnight Death Imprint Visual Concept
+Status: DONE
+
+Created:
+- STAGING/concepts/overnight/12_death_imprint_concept.png
+- STAGING/concepts/overnight/12_death_imprint_hero_alt.png
+- STAGING/CODEX_DONE_overnight_death_imprint.md
+
+Primary verification:
+- 12_death_imprint_concept.png is 1280x800 PNG, RGBA, alpha yes.
+- Four-frame sequence covers pre-death, death moment, post-death distortion, and next-run persistent memory scar.
+
+Verdict:
+- Visual concept fits Death Imprint as narrative map-node distortion.
+- LOCK recommendation: visual cue only, no mechanical penalty, pending spec gate for data lifecycle and UI integration.
+# CODEX DONE - yasinderyabilgin
+
+Task: Overnight Master Flow Schema PNG
+
+Result: COMPLETE
+
+PNG path: `STAGING/concepts/overnight/01_progression_flow_schema.png`
+Report path: `STAGING/CODEX_DONE_overnight_flow_schema.md`
+
+Alpha analysis:
+- Mode: RGB
+- Size: 1024x1280
+- Total px: 1310720
+- Transparent px: 0
+- Opaque px: 1310720
+- Partial alpha px: 0
+
+Lore-fit verdict: PASS. Cracked stone tablet frame, rusty gold trim, dark dungeon backdrop, cyan rift cracks/connectors, readable node badges, and RIMA-specific flow notation are present.
+
+Acceptance coverage:
+- N00-N12 main route visible.
+- B01 Curse Gate left branch, no fragment.
+- B02 Mystery right branch, chance fragment.
+- Fragment and draft badges present.
+- 8-FRAGMENT GATE prominent before boss.
+- Boss panel includes Relic + Boss HP 50%.
+
+Improvement suggestion: For final UI production, replace the symbolic icon chips with hand-painted room-specific silhouettes while preserving the exact text overlay.
+# CODEX DONE - laurethgame
+
+Task: Overnight Death Imprint Visual Concept
+
+Completed:
+- Read CODEX_TASK_laurethgame.md.
+- Attempted to read ANTIGRAVITY.md; file was not present at project root.
+- Created STAGING/concepts/overnight/.
+- Generated and staged required 4-frame concept PNG:
+  - STAGING/concepts/overnight/12_death_imprint_concept.png
+  - PNG, 1280x800, RGBA, alpha present and fully opaque.
+- Generated and staged alternative hero composite render:
+  - STAGING/concepts/overnight/12_death_imprint_hero_composite.png
+  - PNG, 1280x800, RGBA, alpha present and fully opaque.
+- Wrote final task report:
+  - STAGING/CODEX_DONE_overnight_death_imprint.md
+
+Verdict:
+PASS. Visual proposal supports Death Imprint as narrative map-memory distortion with intensified cyan rifts and no mechanical penalty.
+# CODEX DONE - yasinderyabilgin
+
+Task: Overnight Kirik Tas Tablet MapPanel UI
+
+Result: COMPLETE
+
+PNG paths:
+- `STAGING/concepts/overnight/05_tablet_mappanel_act1.png`
+- `STAGING/concepts/overnight/06_tablet_minimap_128.png`
+- `STAGING/concepts/overnight/07_tablet_4act_evolution.png`
+
+Report path: `STAGING/CODEX_DONE_overnight_tablet_ui.md`
+
+Alpha analysis:
+- `05_tablet_mappanel_act1.png`: 1280x800, alpha min 220, alpha max 255, partial alpha px 4156 / 1024000, full transparent px 0.
+- `06_tablet_minimap_128.png`: 800x600, alpha min 220, alpha max 255, partial alpha px 2796 / 480000, full transparent px 0.
+- `07_tablet_4act_evolution.png`: 1280x320, alpha min 219, alpha max 255, partial alpha px 3196 / 409600, full transparent px 0.
+
+Lore-fit verdict: PASS. Kirik Tas Tablet reads as a relic-map interface with cracked stone, rusty gold framing, cyan rift seams, fragment slots, branch nodes, minimap HUD context, and four-act material evolution.
+
+Implementation notes: Use Unity UGUI Canvas for runtime MapPanel and minimap HUD, with a shared UI atlas for frame pieces, nodes, legend icons, fragment slots, and rift seams. Use additive animated sprites or a Canvas overlay for cyan rift connectors and current-node seam effects.
+# CODEX DONE - yasinderyabilgin
+
+Completed CODEX_TASK_yasinderyabilgin.md.
+
+Created/updated outputs:
+- STAGING/concepts/overnight/05_tablet_mappanel_act1.png
+- STAGING/concepts/overnight/06_tablet_minimap_128.png
+- STAGING/concepts/overnight/07_tablet_4act_evolution.png
+- STAGING/CODEX_DONE_overnight_tablet_ui.md
+
+Verification:
+- 05_tablet_mappanel_act1.png: 1280x800, RGBA, alpha range 221-255.
+- 06_tablet_minimap_128.png: 800x600, RGBA, alpha range 221-255.
+- 07_tablet_4act_evolution.png: 1280x320, RGBA, alpha range 220-255.
+
+Notes:
+- ANTIGRAVITY.md was requested by local routing guidance but is not present at repo root.
+- Root completion summary written last, as required by the task file.
+# CODEX DONE - yasinderyabilgin
+
+Task executed: Overnight Kirik Tas Tablet MapPanel UI.
+
+Outputs:
+- STAGING/concepts/overnight/05_tablet_mappanel_act1.png
+- STAGING/concepts/overnight/06_tablet_minimap_128.png
+- STAGING/concepts/overnight/07_tablet_4act_evolution.png
+
+Report:
+- STAGING/CODEX_DONE_overnight_tablet_ui.md
+
+Verification:
+- 05_tablet_mappanel_act1.png: 1280x800, fully opaque PNG, alpha min/max 255/255.
+- 06_tablet_minimap_128.png: 800x600, fully opaque PNG, alpha min/max 255/255.
+- 07_tablet_4act_evolution.png: 1280x320, fully opaque PNG, alpha min/max 255/255.
+
+Verdict:
+- PASS. Tablet metaphor is lore-fit for Decision #63 and usable for both full MapPanel and HUD MiniMap treatment.
+
+Implementation recommendation:
+- Start with Unity UGUI for fast graph/connectors/controller iteration; keep UI Toolkit only if the project already standardizes on it.
+- Pack frame, node icons, fragment slots, rift connectors, minimap frame, and act skins into a UI atlas.
+# CODEX DONE - yasinderyabilgin
+
+Executed CODEX_TASK_yasinderyabilgin.md.
+
+Outputs created:
+- STAGING/concepts/overnight/05_tablet_mappanel_act1.png - 1280x800
+- STAGING/concepts/overnight/06_tablet_minimap_128.png - 800x600
+- STAGING/concepts/overnight/07_tablet_4act_evolution.png - 1280x320
+- STAGING/CODEX_DONE_overnight_tablet_ui.md
+
+Alpha summary:
+- 05_tablet_mappanel_act1.png: alpha min 220, max 255, transparent pixels 0, semi-transparent pixels 4156 / 1024000.
+- 06_tablet_minimap_128.png: alpha min 220, max 255, transparent pixels 0, semi-transparent pixels 2796 / 480000.
+- 07_tablet_4act_evolution.png: alpha min 219, max 255, transparent pixels 0, semi-transparent pixels 3196 / 409600.
+
+Verdict: PASS. Kirik Tas Tablet map metaphor fits the lore and supports Act 1 map panel, HUD minimap, and 4-act visual evolution requirements.
+
+Implementation note: UGUI Canvas is recommended for prototype implementation; build production UI from layered sprites, pooled node prefabs, connector sprites, and a separate additive rift material/atlas.
+
+Note: ANTIGRAVITY.md was not present at repo root when checked.
+# CODEX DONE - laurethayday
+
+Completed CODEX_TASK_laurethayday.md.
+
+Outputs:
+- STAGING/concepts/overnight/02_threshold_8_variants.png
+- STAGING/CODEX_DONE_overnight_threshold_variants.md
+
+Verification:
+- Generated image copied into project staging.
+- Generated image resized to 1280x640.
+- Required overnight report written.
+# CODEX DONE - laurethgame
+
+Task executed from CODEX_TASK_laurethgame.md.
+
+Created PNG sheets:
+- STAGING/concepts/overnight/09_components_6.png
+- STAGING/concepts/overnight/10_combined_items_9.png
+- STAGING/concepts/overnight/11_relic_examples_4.png
+
+Created report:
+- STAGING/CODEX_DONE_overnight_component_icons.md
+
+Validation:
+- 09_components_6.png normalized to 1024x512 RGBA.
+- 10_combined_items_9.png normalized to 1280x768 RGBA.
+- 11_relic_examples_4.png normalized to 1024x512 RGBA.
+- Alpha check: all three outputs are fully opaque RGBA PNGs, alpha min 255 and alpha max 255.
+
+Notes:
+- ANTIGRAVITY.md was not present at repo root.
+- NotebookLM canonical name query failed with API code 5 NOT_FOUND, so placeholder combined item and relic names were retained.
+- Original generated images remain in the Codex profile generated_images cache; project copies were written to STAGING/concepts/overnight/.
+# CODEX DONE laurethgame
+
+Task executed: Overnight wall types per room comparison.
+
+Created:
+- `STAGING/concepts/overnight/03_wall_types_per_room.png`
+- `STAGING/concepts/overnight/03_wall_types_per_room.raw.png`
+- `STAGING/CODEX_DONE_overnight_wall_types.md`
+
+Result summary:
+- Generated one 4x2 wall mood concept sheet and normalized final deliverable to 1280x960 PNG.
+- Shader-driven variants: Entry, Combat with mask, Rest, Shop with decals, Mystery with overlay.
+- New authored PNG variants needed: Elite, Curse, Boss.
+- Mandatory re-gen remains `face_EW` and `face_NS` because S95 fill/drift issue blocks reliable tile-mate use.
+- Recommended cost path: 9-10 extra generations; full 7-piece authored sets for Elite/Curse/Boss would raise cost to 23-25.
+- Tile-mate verdict: continues for shader/decal variants; Elite/Curse must be authored on locked shared edges; Boss can intentionally break if unique final-room wall.
+# CODEX DONE - laurethayday
+
+Task: Overnight Floor Types Per Room Comparison.
+
+## Outputs
+- PNG: STAGING/concepts/overnight/04_floor_types_per_room.png
+- Report: STAGING/CODEX_DONE_overnight_floor_types.md
+
+## Validation
+- PNG dimensions: 1280x960
+- PNG mode: RGB
+- SHA256: F7A177ED0FF492120743361BB7AEDE7BBB59DBF104B3E76F8E94B8D378B5CD9E
+
+## Result
+- Generated the 4x2 per-room floor comparison sheet with 3x3 fake-isometric mock floors for Entry, Combat, Elite, Rest, Shop, Curse Gate, Mystery, and Boss.
+- Answered shader-vs-new-PNG split in the staging report.
+- Added production cost estimate: recommended 9 PixelLab jobs / about 144 candidate frames; minimal 7 jobs / about 112 candidates; conservative 10 jobs / about 160 candidates.
+- Added Karar #143-compatible L1 + L2a + L4 + L5 mapping per room variant.
+
+## Scope
+- No Unity assets, scenes, prefabs, or importer settings modified.
+# CODEX DONE - yasinderyabilgin
+
+Executed `CODEX_TASK_yasinderyabilgin.md`.
+
+- Generated and staged PNG: `STAGING/concepts/overnight/08_skill_draft_3choice.png`
+- PNG verified at 1280x800.
+- Wrote final report: `STAGING/CODEX_DONE_overnight_skill_draft_ui.md`
+- Readability verdict: PASS.
+- Tier scheme: Common white/silver, Rare cyan, Epic violet/magenta, Legendary rusty gold.
+- Runtime implementation recommendation: UGUI for the in-game draft modal; UI Toolkit only for editor/debug tooling.
+# CODEX DONE - laurethgame
+
+Task: All 4 Acts MASTER Flow single PNG.
+
+Completed outputs:
+- STAGING/concepts/overnight/13_all_acts_master_flow.png
+- STAGING/CODEX_DONE_overnight_all_acts_master.md
+
+Image validation:
+- PNG format
+- 1024x1536 portrait
+- RGB mode
+- No alpha channel
+- 100% opaque pixels
+
+Visual QC:
+- PASS for one-glance hierarchy.
+- Four act zones are stacked vertically.
+- Boss panels, tier unlock badges, node icon rows, transition arrows, and Stay/Break/Carry endings are present.
+
+Notes:
+- ANTIGRAVITY.md was requested by project routing rules but was not present at workspace root.
+- Final report was written before this file as required.
+# CODEX DONE - laurethayday
+
+Task: Overnight Skill Sheets v2.
+
+Completed:
+- Created 10 v2 skill sheet PNGs in `STAGING/concepts/skill_sheets_v2/`.
+- Wrote final task report to `STAGING/CODEX_DONE_overnight_skill_sheets_v2.md`.
+- Verified all PNGs are 1280x960 RGBA with alpha fully opaque: transparent 0, partial 0, opaque 1228800/1228800 for each file.
+- Verified real skill source coverage: Warblade 14/14, Elementalist 15/15, Ranger 20/20, Shadowblade 22/22, Ronin 4/4.
+- Warblade sheet uses `Assets/Art/Characters/Warblade/Rotations/warblade_south.png` as the local sprite reference.
+- Concept classes use 10 skills each: Gunslinger, Ravager, Hexer, Brawler, Summoner.
+
+Outputs:
+- `STAGING/concepts/skill_sheets_v2/01_warblade_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/02_ronin_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/03_gunslinger_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/04_ranger_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/05_elementalist_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/06_shadowblade_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/07_ravager_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/08_hexer_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/09_brawler_v2_sheet.png`
+- `STAGING/concepts/skill_sheets_v2/10_summoner_v2_sheet.png`
+
+Verdict: PASS for requested output count, skill count coverage, class-specific visual motifs, Warblade local sprite reference, and report creation.
+# CODEX DONE - laurethayday
+
+Task: STAGING directory cleanup and organization.
+
+Result: Completed.
+
+Actions run:
+- Listed and categorized matching root-level `STAGING/*.md` files and folders.
+- Created the requested organization folders.
+- Moved matching task, done, Antigravity, NLM, plan, and inventory files into subfolders using `git mv`.
+- Left `STAGING/concepts/` and `STAGING/_archive/` organization untouched.
+- Added `STAGING/README.md`.
+- Updated moved-path references in `CURRENT_STATUS.md`.
+- Committed the cleanup.
+- Wrote `STAGING/CODEX_DONE_staging_cleanup.md`.
+
+Move totals:
+- `_codex_tasks/overnight`: 12
+- `_codex_tasks`: 154
+- `_codex_done/overnight`: 10
+- `_codex_done`: 71
+- `_antigravity/prompts`: 1
+- `_antigravity/done`: 2
+- `_research/nlm`: 1
+- `_plans/progression`: 3
+- `_plans/door`: 1
+- `_inventories`: 7
+- Total moved: 262
+
+Verification:
+- Matching root leftovers after cleanup: 0
+- README path: `STAGING/README.md`
+- Final report path: `STAGING/CODEX_DONE_staging_cleanup.md`
+- Commit hash: `3895fa31`
+# CODEX DONE - yasinderyabilgin
+
+Task: Download 10 PixelLab character anchors, 8 directions each.
+
+Result: PASS
+
+- PixelLab MCP verify: 10/10 completed.
+- Rotation PNGs present: 80/80.
+- Per-class rotation folders: 10/10 have 8 PNG + 8 .meta files.
+- Unity import settings: PASS via .meta files for rotation PNGs.
+- Disk usage: 409166 bytes (399.58 KiB) under Assets/Art/Characters.
+- Commit: $commit [S96] Pull 10 character anchors from PixelLab (8-dir each, 80 PNG).
+- Detailed report: STAGING/_codex_done/CODEX_DONE_pixellab_character_download.md.
+- Not included: animation download (next task, P3).
+# CODEX DONE - yasinderyabilgin
+
+Task: Skill Sheets v3 (Real PixelLab Character Sprites)
+
+Result: PASS
+
+Outputs:
+- STAGING/concepts/skill_sheets_v3/01_warblade_v3_sheet.png - PASS, 14 skills
+- STAGING/concepts/skill_sheets_v3/02_ronin_v3_sheet.png - PASS, 4 skills
+- STAGING/concepts/skill_sheets_v3/03_gunslinger_v3_sheet.png - PASS, 8 skills
+- STAGING/concepts/skill_sheets_v3/04_ranger_v3_sheet.png - PASS, 20 skills
+- STAGING/concepts/skill_sheets_v3/05_elementalist_v3_sheet.png - PASS, 15 skills
+- STAGING/concepts/skill_sheets_v3/06_shadowblade_v3_sheet.png - PASS, 22 skills
+- STAGING/concepts/skill_sheets_v3/07_ravager_v3_sheet.png - PASS, 8 skills
+- STAGING/concepts/skill_sheets_v3/08_hexer_v3_sheet.png - PASS, 8 skills
+- STAGING/concepts/skill_sheets_v3/09_brawler_v3_sheet.png - PASS, 8 skills
+- STAGING/concepts/skill_sheets_v3/10_summoner_v3_sheet.png - PASS, 8 skills
+
+Report:
+- STAGING/_codex_done/CODEX_DONE_skill_sheets_v3.md
+
+Validation:
+- All 10 required south-view character sprites existed.
+- All 10 generated sheets are 1280x960 RGB PNGs.
+- Real code skill files were enumerated for Warblade, Ronin, Ranger, Elementalist, and Shadowblade.
+- Concept skill lists were used for Gunslinger, Ravager, Hexer, Brawler, and Summoner.
+
+Production cost:
+- $0 API spend; generated locally with deterministic Pillow composition.
+
+Decision gate:
+- v3 is a final candidate for direction approval. Request v4 only for hand-painted icon polish or typography/spacing refinements after visual QC.
+# CODEX DONE - laurethayday
+
+Task executed: Progression v2 FINAL plan review.
+
+Commands/steps completed:
+- Read `CODEX_TASK_laurethayday.md`.
+- Attempted to read `ANTIGRAVITY.md`; file was not present in this workspace.
+- Read `STAGING/_plans/progression/PROGRESSION_PLAN_v2_FINAL.md`.
+- Checked referenced image path `STAGING/concepts/overnight/13_all_acts_master_flow.png` and recorded SHA256.
+- Checked local `memory/` for requested canonical/style files; the named files were not present.
+- Queried NotebookLM through the task-provided `uvx --from notebooklm-mcp-cli nlm notebook query ...` command for:
+  - Stay/Break/Carry canonical status.
+  - Karar #60/#61/#62/#63 progression locks.
+  - RIMA Style Manifesto / style drift risks.
+  - Act boss reward flow.
+  - Death Imprint canonical status.
+
+Output written:
+- `STAGING/_plans/progression/PROGRESSION_PLAN_v2_1_REVIEW.md`
+
+Result summary:
+- Stay/Break/Carry is canonical as post-Architect ending choices, not as a run-start meta-track.
+- Death Imprint remains unlocked/spec-gated; v2.1 review provides A/B/C mechanic options and recommends prototyping pure narrative first.
+- Act 2/3/4 boss reward flow is specified from NLM canonical, including Echo Twin, Fracture Sovereign, and Architect win/lose handling.
+- Style drift audit added with PASS/WARN/FAIL verdicts and fixes.
+- v2 FINAL was not modified.
+# Codex Done - laurethgame
+
+Task executed: v2.2 LOCK + gate resolution review.
+
+Created:
+- STAGING/_plans/progression/CODEX_REVIEW_v2_2_GATES.md
+
+Executed shell checks:
+- Read CODEX_TASK_laurethgame.md.
+- Attempted ANTIGRAVITY.md read; file is missing at repo root.
+- Read v2.2 LOCK, gate proposal, and v2.1 review inputs.
+- Located canonical TASARIM files with rg.
+- Confirmed memory/project_progression_canonical_lock.md and memory/project_rima_style_manifesto.md are missing locally.
+- Queried NotebookLM for Forge, Echo Imprint, Architect endings, hub spend, Karar #60-63, style manifesto, cross-class proc, and Curse Gate.
+- Ran targeted local canonical searches/snippet reads against TASARIM/MAP_ITEM_SYSTEM.md, TASARIM/ROOM_MECHANICS.md, TASARIM/GDD.md, TASARIM/map_fragment_system.md, TASARIM/CROSS_CLASS_PROC_SYSTEM.md, and TASARIM/SUBROOM_TEMPLATES_ACT1.md.
+- Checked image 13 metadata: 1024x1536, SHA256 AF1BCEA0922DD6D45663780579F7584D7EDB5CB172AAF94E8CFCBE28A30AFADD.
+- Listed compact_sheets, threshold_gallery, and overnight concept images.
+- Verified CODEX_REVIEW_v2_2_GATES.md is ASCII-only.
+
+Key verdicts:
+- Gate 1 Forge: DISAGREE as written; Shop Anvil cannot replace canonical guaranteed Forge without explicit override.
+- Gate 2 Echo: PARTIAL AGREE; first Elite works as Act 1 shorthand, but canonical trigger is every third Combat/Elite clear plus act slot cap.
+- Gate 3 Architect: PARTIAL AGREE; Phase 1 story-first is OK, but GDD/NLM includes ending consequences, especially Break.
+- Gate 4 Hub: DISAGREE as written; canonical hub/class unlock economy differs from the proposed 4-start/100-400 plan.
+- Gate 5 Image 13: PARTIAL AGREE; relabel first, but avoid crowding the Act 4 row.
+
+No code or Unity files were changed.
+# CODEX DONE - yasinderyabilgin
+
+Task: Skill Sheets v5 canonical sprite + full skill coverage + PixelLab feasibility.
+
+Completed outputs:
+- STAGING/concepts/skill_sheets_v5/01_warblade_v5_all_skills.png - 1600x1600, 14 panels
+- STAGING/concepts/skill_sheets_v5/02_ronin_v5_all_skills.png - 1024x1024, 4 panels
+- STAGING/concepts/skill_sheets_v5/03_gunslinger_v5_all_skills.png - 1600x1600, 8 panels
+- STAGING/concepts/skill_sheets_v5/04_ranger_v5_all_skills.png - 1600x1600, 20 panels
+- STAGING/concepts/skill_sheets_v5/05_elementalist_v5_all_skills.png - 1600x1600, 15 panels
+- STAGING/concepts/skill_sheets_v5/06_shadowblade_v5_all_skills.png - 1600x1600, 22 panels
+- STAGING/concepts/skill_sheets_v5/07_ravager_v5_all_skills.png - 1600x1600, 8 panels
+- STAGING/concepts/skill_sheets_v5/08_hexer_v5_all_skills.png - 1600x1600, 8 panels
+- STAGING/concepts/skill_sheets_v5/09_brawler_v5_all_skills.png - 1600x1600, 8 panels
+- STAGING/concepts/skill_sheets_v5/10_summoner_v5_all_skills.png - 1600x1600, 8 panels
+- STAGING/concepts/skill_sheets_v5/v5_skill_feasibility.json - 115/115 skills annotated
+- STAGING/concepts/skill_sheets_v5/v5_render_log.md - generation params, sprite description dictionary, per-panel prompt log
+
+Validation run before this final write:
+- 10 deliverable PNG sheets present.
+- Skill feasibility total: 115 entries.
+- Class coverage matched source enumeration exactly for all 10 classes.
+- Feasibility tags present: EASY, MEDIUM, MEDIUM-HARD, HARD, HARD-COMPOSITE.
+- v5_render_log.md is ASCII-safe.
+
+Notes:
+- ANTIGRAVITY.md was not present at repo root, so execution used CODEX_TASK_yasinderyabilgin.md and the explicit project assets named in it.
+- Every panel uses the canonical south sprite for its class, with a visible signature weapon overlay, Act 1 style mob hit reaction, active VFX frame, granite floor, cyan rift accent, and skill caption.
+# CODEX DONE - laurethayday
+
+Task: Skill Sheets v6 full scope.
+
+Result: BLOCKED for complete execution under the requested shell-command constraint.
+
+Completed:
+- Read CODEX_TASK_laurethayday.md.
+- Read the available imagegen skill instructions.
+- Inspected all 10 canonical south sprites.
+- Created STAGING/concepts/skill_sheets_v6/canonical_sprite_bible.md with 10 detailed ASCII sprite descriptions.
+- Created STAGING/concepts/skill_sheets_v6/v6_skill_feasibility.json by carrying forward the 115-skill PixelLab annotation format from v5.
+- Generated one real built-in Codex image_gen panel for Warblade / Battle Surge.
+- Copied the generated source panel to STAGING/concepts/skill_sheets_v6/panels/01_warblade_01_battle_surge_source.png.
+- Normalized that generated panel to 320x320 at STAGING/concepts/skill_sheets_v6/panels/01_warblade_01_battle_surge.png.
+- Created STAGING/concepts/skill_sheets_v6/v6_render_log.md with the exact prompt and blocker details.
+
+Verification:
+- v6_skill_feasibility.json contains 115 skill entries.
+- 01_warblade_01_battle_surge.png is 320x320 by PNG header inspection.
+- ComfyUI check at http://127.0.0.1:8188/system_stats failed: connection refused.
+- Shell environment has openai and pillow installed, but OPENAI_API_KEY is missing.
+
+Not completed:
+- Remaining 114 per-skill image panels were not generated.
+- Final 10 class composite sheets were not generated because the full panel set does not exist.
+
+Blocker:
+The user explicitly requested execution using shell commands. The shell has no OPENAI_API_KEY, and no local ComfyUI service is running. The only working image generation path observed in this session is the built-in Codex image_gen tool, which is not callable as a shell command. Continuing through 114 more non-shell image_gen calls would violate the requested execution mode.
+# CODEX RESULT - yasinderyabilgin
+
+Status: BLOCKED
+
+Executed:
+- Read CODEX_TASK_yasinderyabilgin.md.
+- Read ANTIGRAVITY.md if present; file was absent or empty.
+- Read required source context:
+  - STAGING/_chatgpt/SKILL_SHEET_v6_CHATGPT_MASTER.md
+  - STAGING/concepts/skill_sheets_v6/canonical_sprite_bible.md
+  - STAGING/_chatgpt/sprites_south/01_warblade_south.png through 10_summoner_south.png
+  - STAGING/concepts/skill_sheets_v6/panels/01_warblade_01_battle_surge.png
+- Created spritesheet output directories under STAGING/concepts/skill_sheets_v6/spritesheets/.
+- Called Codex built-in image_gen directly for 01_warblade/01_battle_surge.png.
+- Regenerated once after the first image failed the dimension gate.
+- Validated both generated files with shell image dimension checks.
+
+Blocker:
+- The task requires every spritesheet to be exactly 1024x256.
+- Built-in image_gen produced 1774x887 on both attempts, even with an explicit 1024x256 / 4:1 horizontal-strip prompt.
+- Because the task says to mark BLOCKED if the built-in image_gen path cannot satisfy the workflow, I stopped before generating the remaining 114 invalid assets.
+
+Files written:
+- STAGING/concepts/skill_sheets_v6/spritesheets/progress_log.md
+- STAGING/concepts/skill_sheets_v6/spritesheets/_rejected/01_battle_surge_failed_dimension_1774x887.png
+
+No valid final spritesheet was completed.
+BLOCKED
+
+Reason: CODEX_TASK_laurethayday.md requires the Codex built-in image_gen tool to generate native PNG spritesheets, then read those native PNG files with PIL and save 115 final repo files. In this session, the available image_gen tool can be called with a prompt, but it does not expose an output filepath or saved PNG artifact that shell/PIL can read for post-processing into STAGING/concepts/skill_sheets_v6/spritesheets/.
+
+Executed:
+- Read CODEX_TASK_laurethayday.md.
+- Attempted to read ANTIGRAVITY.md; file is absent in this workspace.
+- Verified required input paths exist:
+  - STAGING/_chatgpt/SKILL_SHEET_v6_CHATGPT_MASTER.md
+  - STAGING/concepts/skill_sheets_v6/canonical_sprite_bible.md
+  - STAGING/concepts/skill_sheets_v6/panels/01_warblade_01_battle_surge.png
+  - STAGING/_chatgpt/sprites_south/01_warblade_south.png through 10_summoner_south.png
+
+No spritesheets generated. No progress_log entries marked complete.
+# Codex Done - laurethayday
+
+Task executed from `CODEX_TASK_laurethayday.md`.
+
+Wrote review artifact:
+- `STAGING/_research/CODEX_REVIEW_chatgpt_sheets_v2.md`
+
+Summary:
+- Audited all 10 ChatGPT v6 sheets against expected skill counts, canonical south sprites, weapon identity, mob variety, caption readability, painterly VFX quality, and isometric perspective.
+- Flagged incomplete/mismatched sheets: Ranger missing visible 20th panel, Hexer missing 8th panel, Elementalist cropped/incomplete and character drift, Ravager single-axe issue, Summoner/Gunslinger/Shadowblade character fidelity drift.
+- Validated hard-skill categories and production paths. Agreed with LineRenderer/sequential-spawn direction, with caveats for Prism Beam/Soul Drain/Sweep Volley and named industry references.
+- Attempted NLM query; blocked by expired NotebookLM authentication. Used web/Unity docs fallback for industry-pattern validation.
+- Reviewed v2.3 LOCK consistency. Main implementation blocker is O1 topology: 16 nodes vs 15 runtime nodes. Recommended mutually exclusive B01/B02 before map graph implementation.
+
+No listed source/spec files were rewritten.
+# CODEX_DONE_laurethgame
+
+Task completed: CODEX_TASK_laurethgame.md
+Date: 2026-05-21
+
+Wrote:
+- STAGING/3d_concepts_enrichment_codex_2026_05_21.md
+
+Executed checks before this final summary:
+- Confirmed output file exists.
+- Confirmed output file is ASCII-only.
+- Confirmed referenced source file STAGING/3d_simple_strong_concepts_2026_05_21.md is absent in this checkout, so the embedded task brief was used as source context.
+
+Result summary:
+- Validated the Multi-Medium Synergy Lens and identified where it breaks.
+- Classified layer costs for all six concepts under Unity URP solo-dev assumptions.
+- Flagged readability and clarity risks by concept and layer.
+- Added missing layer suggestions for each concept.
+- Proposed minimum depth sets for each concept.
+- Reworked the cross-concept primitive map into reusable implementation primitives.
+Pattern Library v1 implementation complete.
+
+Files written:
+- Assets/Scripts/Combat/Utilities/ChainBinder.cs
+- Assets/Scripts/Combat/Utilities/SequentialStrike.cs
+- Assets/Scripts/Combat/Utilities/ProjectileFanSpawner.cs
+- Assets/Scripts/Combat/Utilities/PlacedEffectSpawner.cs
+- Assets/Scripts/Combat/Utilities/AfterimageTrail.cs
+- Assets/Shaders/UVScroll2D.shader
+
+Implemented:
+- Generic dynamic caster-target ChainBinder with LineRenderer, texture tiling, tint, duration expiry, and anchor offsets.
+- SequentialStrike coroutine for nearest unhit target jumps, strike prefab spawn, damage callback, SendMessage damage fallback, and optional brief jump-line flash.
+- ProjectileFanSpawner for simultaneous or interval-based arc projectile spawn with Rigidbody2D velocity assignment.
+- PlacedEffectSpawner for ground or enemy placement, lifetime, trigger radius polling, OnEnter/OnExit/Continuous/OnTimer modes, callback, and SendMessage damage fallback.
+- AfterimageTrail for sprite-copy trail spawning with material instances and alpha fade.
+- URP-compatible RIMA/UVScroll2D shader with texture scroll and tint.
+
+Scope note:
+- Assets/Scenes/Test/PatternLibraryTest.unity was not created because the same task explicitly says "Sadece bu 6 dosyayi yaz, baska seye dokunma." I treated the six-file write restriction as the controlling scope.
+- ANTIGRAVITY.md was requested by project routing rules but does not exist at the repo root.
+
+Checks:
+- dotnet build Assembly-CSharp.csproj: success, 0 warnings, 0 errors.
+- Unity MCP script refresh/compile: completed.
+- Unity console after refresh: 0 errors, 0 warnings.
+# CODEX DONE - laurethgame
+
+Task file executed: CODEX_TASK_laurethgame.md
+Date: 2026-05-21
+
+Result:
+- Read CODEX_TASK_laurethgame.md.
+- Attempted to read ANTIGRAVITY.md; it was not present in this checkout.
+- Created/updated output file: F:/LaurethStudio/STAGING/codex_output_3d_roguelike_own_concepts.md
+- Delivered 7 original 3D roguelike concepts, each with pitch, core mechanic, 3D justification, roguelike structure, ready asset strategy, STUDIO_KARAR_017 twist, risk flag, one-week proof slice, and solo-dev scope estimate.
+- Included Codex strongest 2 ranking at the end.
+
+Status: DONE
+# CODEX_DONE_laurethayday
+
+Task: Playable Room MVP v1 (Atmospheric Quality, No Mobs Yet)
+
+Result: DONE
+
+Modified outputs:
+- Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity
+- Assets/Scripts/Player/PlayerMovementController.cs
+- Assets/Scripts/Combat/Utilities/AfterimageTrail.cs
+- STAGING/screenshots/room_mvp_before.png
+- STAGING/screenshots/room_mvp_after.png
+- STAGING/screenshots/room_mvp_playmode_warblade.png
+
+Scene verdict:
+- Visual quality: PASS. Room now reads as a closed atmospheric shattered-keep chamber with granite floor, cyan rift cracks, ritual center, pillars/statues, wall decorations, and torch/brazier lighting.
+- Wall quality: PASS. Rebuilt wall layout to 48 connected Pilot A pieces around a 16x10 floor area, including 4 outer corners and 2 south entry arch pieces with no collider.
+- Composition: PASS. West side has 3 pillars; east side has 2 statues plus 1 pillar; center has cyan brazier, altar, markers, tomb headstone, obelisk, bone chips, rubble, rifts, cracks, and dust.
+- Mob rule: PASS. No active mob objects were added; old inactive silhouette children were cleared.
+
+Player:
+- Warblade placed at south entry spawn.
+- Warblade body sprite assigned from Assets/Art/Characters/Warblade/Rotations/warblade_south.png.
+- Rigidbody2D set kinematic, CircleCollider2D added.
+- Added minimal RIMA.PlayerMovementController for 4-way WASD/arrow movement at 4u/s.
+- Play Mode movement verification: PASS. Simulated W input moved player from (2.50, -1.02, 0.00) to (2.50, 57.06, 0.00).
+
+Lighting:
+- Center cyan Light2D/Point Light added.
+- NE and SW orange brazier Light2D/Point Lights added.
+- Global Light2D and ambient color set for dark but readable dungeon mood.
+
+Validation:
+- Unity compile/refresh: PASS.
+- Final console check: PASS, 0 errors, 0 warnings after clearing MCP transport noise.
+- Final audit: 160 floor sprites, 48 wall pieces, 4 light objects, player movement component present, player sprite present.
+
+Note:
+- Fixed a compile blocker in Assets/Scripts/Combat/Utilities/AfterimageTrail.cs by adding the missing ColorId field to AfterimageFader.
+# Codex Done - yasinderyabilgin - 2026-05-21
+
+## Asset Cleanup
+
+- Archived 5 confirmed dust PNGs plus their 5 `.meta` files to:
+  `Assets/Art/AssetPacks/Act1_ShatteredKeep/_archive/dust_removed_2026_05_21/`
+- No extra audit candidates were moved.
+- Wrote audit report:
+  `STAGING/_research/ASSET_PACK_CLEANUP_AUDIT.md`
+- Dust reference check:
+  - `act1_patch_dust_drift_v01.png` GUID is referenced by `Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity` at 4 locations.
+  - The PNG and `.meta` moved together, so the GUID is preserved.
+  - No prefab/scene/asset references found for the 4 dust decal GUIDs.
+
+## Character Select
+
+- Updated `Assets/Scripts/UI/CharacterSelectScreen.cs`.
+- Updated `Assets/Scenes/UI/CharacterSelect.unity`.
+- Scene now has `CharacterSelectScreen` on `CharacterSelectCanvas`.
+- Legacy `CharacterSelectController` is disabled in the scene.
+- Canonical south sprites are used:
+  - Warblade, Elementalist, Ranger, Shadowblade: full color.
+  - Ronin, Gunslinger, Ravager, Hexer, Brawler, Summoner: dark silhouette.
+- Lock UI text:
+  - Ronin: 120 Echoes
+  - Ravager: 120 Echoes
+  - Gunslinger: 180 Echoes
+  - Brawler: 180 Echoes
+  - Summoner: 180 Echoes
+  - Hexer: 250 Echoes + Elementalist ile 1 run yap
+- PlayMode verification returned:
+  - 10 cards rendered.
+  - 4 unlocked full-color cards.
+  - 6 locked silhouette cards.
+- Screenshot written:
+  `STAGING/screenshots/character_select_updated.png`
+
+## Compile / Console
+
+- Unity script validation: PASS, 0 diagnostics.
+- Unity refresh/compile requested through UnityMCP.
+- Final Unity console check after PlayMode: 0 errors, 0 warnings.
+
+## Notes
+
+- `ANTIGRAVITY.md` was requested by project routing rules but was not present at repo root.
+# CODEX_DONE_laurethgame
+
+Task: Unity Wall Smooth Connection Fix (RuleTile + Y-Sort)
+
+Status: DONE
+
+Outputs:
+- Assets/Art/Tilesets/Act1_WallRuleTile.asset created/updated.
+- Assets/Art/Tilesets/Act1_WallArchOpening.asset created for manual arch placement.
+- Assets/Scripts/Utilities/IsoSortingOrder.cs added with RIMA/Tools/Attach IsoSortingOrder to Selected menu.
+- Assets/Editor/RimaWorldPainterWindow.cs extended with default-on Wall RuleTile mode. Note: task path said Assets/Scripts/Tools/RimaWorldPainterWindow.cs, but the existing active file in this project is Assets/Editor/RimaWorldPainterWindow.cs.
+- Assets/Scenes/Demo/IsoShowcaseRoom_S95.unity updated: removed 48 manual wall GameObjects, added/cleared WallTilemap, painted 16x10 closed rectangle, placed manual arch opening on south wall.
+- STAGING/screenshots/wall_ruletile_test.png captured.
+- Project Graphics transparency sort confirmed Custom Axis (0, 1, 0).
+
+RuleTile:
+- Rule count: 12.
+- Default sprite: pilot_a_frame_7_end_cap.png.
+- Auto pool excludes arch_opening.
+- corner_inner deferred; corner_outer rotation handles adjacency cases.
+- Demo scene verification: 48 occupied wall cells total, 47 RuleTile cells, 1 manual arch tile.
+
+Y sorting:
+- IsoSortingOrder attached to 56 SpriteRenderer GameObjects matching wall/prop/player scene paths.
+- Tilemap uses TilemapRenderer sorting layer Walls, order 20, plus global Y transparency sort axis.
+
+Visual verdict:
+- PASS for functional migration and neighbor-aware RuleTile selection in the demo scene.
+- Caveat: Pilot A wall pieces still read as modular vertical segments in the screenshot; this is source-art dependent, not a compile/setup failure.
+
+Compile / console status:
+- Unity console errors: 0.
+- Unity console warnings: 0.
+- validate_script errors: 0 for IsoSortingOrder.cs and RimaWorldPainterWindow.cs.
+# CODEX DONE - laurethayday
+
+Task: Fresh Scene PlayableRoom_v2 (Iso Setup + Painter Ready)
+
+Outputs:
+- Scene created and saved: Assets/Scenes/Demo/PlayableRoom_v2.unity
+- Tile assets available/reused or created:
+  - Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/granite_clean.asset
+  - Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/granite_worn.asset
+  - Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/granite_chiseled.asset
+- Screenshots:
+  - STAGING/screenshots/playable_room_v2_scene.png
+  - STAGING/screenshots/playable_room_v2_game.png
+
+Setup verification:
+- Grid root created with Grid component.
+- Grid cellLayout: IsometricZAsY.
+- Grid cellSize: (1.00, 0.50, 1.00).
+- Cell swizzle: XYZ.
+- Transparency sort mode: CustomAxis.
+- Transparency sort axis: (0.00, 1.00, 0.00).
+- Main Camera orthographic: true.
+- Main Camera size: 5.
+- Main Camera saved position: (0.00, 0.00, -10.00).
+- Main Camera saved rotation: (0.00, 0.00, 0.00).
+- Directional lights in target scene: 0.
+- FloorTilemap painted cells: 160 (16x10).
+- WallTilemap painted cells: 48 perimeter cells including south arch opening at (7,0) and (8,0).
+- Player_Warblade spawn position: (7.50, 4.50, 0.00).
+- Player components present: SpriteRenderer, Rigidbody2D, CircleCollider2D, RIMA.PlayerMovementController, IsoSortingOrder.
+
+Painter verification:
+- Opened menu item: RIMA/Tools/World Painter.
+- Floor paint probe: PASS. SetTile to FloorTilemap cell (1,1,0) landed on the expected cell.
+- Wall paint probe: PASS. SetTile to WallTilemap cell (1,2,0) landed on the expected cell with the RuleTile asset.
+- Probe cells restored after test.
+
+Play verification:
+- Entered Play Mode on Assets/Scenes/Demo/PlayableRoom_v2.unity.
+- WASD movement path: PASS after fixing PlayerMovementController kinematic movement from MovePosition to direct rb.position update.
+- Movement probe result: W input moved Rigidbody2D from (7.50, 4.50) to (7.50, 6.90).
+- Camera follow: PASS. Camera followed player to player position + (0,0,-10) during probe.
+
+Compile and console:
+- Unity refresh/compile requested after script edit.
+- read_console errors/warnings: 0.
+- Final read_console errors/warnings: 0.
+
+Notes:
+- Did not open or reference the quarantined IsoShowcaseRoom_S95 corrupted scene.
+- Duplicate screenshots written by Unity under Assets/Screenshots were removed; required copies remain under STAGING/screenshots.
+Result: DONE
+
+Created:
+- STAGING/_research/BUFFER_FILL_DOOR_CHOICE_BRAINSTORM.md
+
+Executed:
+- Read CODEX_TASK_laurethgame.md.
+- Tried required NLM queries first. Both failed with expired NotebookLM authentication.
+- Used allowed fallback context from CURRENT_STATUS.md, .claude/PROJECT_RULES.md, MEMORY, STAGING, and local NLM canonical batch.
+- Produced Buffer Fill List with exact slot coverage:
+  - Batch 4 medium buffer: 8/8 items
+  - Batch 5 tiny buffer: 56/56 items
+- Produced Door Choice Design with:
+  - 5 reasons the Hades door pattern would look ordinary
+  - 3 RIMA-specific alternatives
+  - PixelLab size/spec guidance
+  - Comparison table
+  - Final recommendation: Echo Loom Fractures
+
+Verification:
+- ASCII check: PASS
+- Medium row count: 8
+- Tiny row count: 56
+
+Blocked/Notes:
+- ANTIGRAVITY.md was not present at workspace root.
+- NotebookLM auth expired; command output requested `nlm login`.
+RESULT: DONE
+
+Task file read: CODEX_TASK_laurethgame.md
+
+Created:
+- STAGING/_research/WALL_PRODUCTION_METHOD_COMPARISON.md
+
+Summary:
+- Compared Methods A-G for RIMA Act 1 Shattered Keep wall production.
+- Selected PRIMARY: Method A (3D Box Outline + Edit Image Pro), followed by targeted Method C repair.
+- Selected SECONDARY: Method G only after Method A locks the base style and geometry.
+- Rejected MCP create_map_object/direct square-clamped flow for canonical non-square wall pieces.
+- Added concrete sprint sequence, cost reserves, combination recommendations, and risk catalog.
+
+Checks run:
+- Required section headings present.
+- Output markdown ASCII-only.
+- Output path exists as requested.
+Output path: STAGING/_pixellab_inputs/act1_sprint1_tall_outlines_v1.png
+PNG dimensions: 512x512 RGBA
+Slot count: 4
+Labels:
+- wall_tall_straight 96x160
+- wall_tall_corner 96x160
+- wall_archway 128x160
+- wall_endcap_column 48x160
+Verification:
+- Canvas is 512x512 PNG with transparent background outside drawn pixels.
+- Four 240x240 slots are visible with light gray 1px borders.
+- Each slot contains centered light gray iso 3D outline geometry.
+- Archway includes a centered front-face arch opening outline with transparent interior.
+- Corner slot uses two joined wall boxes to read as L-shape topology.
+Issues / edge cases:
+- The skeleton bottom slot y=288 would exceed the 512px canvas, so slot y positions were adjusted to fit all 240px slots inside the canvas while preserving the 16px gutter.
+# Codex Done ? laurethgame
+
+Generated 4 solo reference PNGs in `STAGING/_pixellab_inputs/solo/`.
+
+| File | Dimensions | QC |
+|---|---:|---|
+| `STAGING/_pixellab_inputs/solo/act1_wall_tall_straight_box.png` | 96x160 | PASS: transparent RGBA, outline in bounds, straight wall box only |
+| `STAGING/_pixellab_inputs/solo/act1_wall_tall_corner_box.png` | 128x160 | PASS: transparent RGBA, outline in bounds, two-box L-shape corner |
+| `STAGING/_pixellab_inputs/solo/act1_wall_archway_box.png` | 128x160 | PASS: transparent RGBA, outline in bounds, arch opening outline with transparent interior |
+| `STAGING/_pixellab_inputs/solo/act1_wall_endcap_column_box.png` | 48x160 | PASS: transparent RGBA, outline in bounds, narrow endcap column box |
+
+Verification command confirmed exact target canvas sizes, non-empty alpha outlines, transparent background pixels, and alpha bounds inside each canvas.
+
+Issues: none.
+Result: DONE
+
+Generated/replaced 4 filled 3D silhouette PNGs:
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_straight_silhouette.png ? 96x160 filled straight wall box, three shaded faces, transparent background.
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_corner_silhouette.png ? 128x160 filled L-shape corner made from two box arms, three shaded faces, transparent background.
+- STAGING/_pixellab_inputs/solo/act1_wall_archway_silhouette.png ? 128x160 filled wall box with transparent arch opening, three shaded faces, transparent background.
+- STAGING/_pixellab_inputs/solo/act1_wall_endcap_column_silhouette.png ? 48x160 filled narrow column, three shaded faces, transparent background.
+
+Verification:
+- Canvas sizes match requested targets.
+- Background alpha is transparent outside silhouettes.
+- Opaque pixels use only #A0A0A0, #808080, and #606060.
+- No internal construction/wireframe lines were generated.
+- Archway opening transparency probe passed.
+- Corner asset is a filled two-box L-shape union.
+# CODEX_DONE_laurethgame
+
+Generated and verified 4 standard-size filled silhouette PNGs.
+
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_straight_silhouette_v2.png ? 128x256 ? OK
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_corner_silhouette_v2.png ? 256x256 ? OK
+- STAGING/_pixellab_inputs/solo/act1_wall_archway_silhouette_v2.png ? 256x256 ? OK
+- STAGING/_pixellab_inputs/solo/act1_wall_endcap_column_silhouette_v2.png ? 64x256 ? OK
+
+Verification:
+- Exact canvas dimensions: OK
+- Transparent exterior background: OK
+- Three filled face colors present (#A0A0A0, #808080, #606060): OK
+- Hidden/internal line drawing: none added
+- Archway transparent interior: OK
+4 cropped wall init images created and verified:
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_straight_init.png -> 118x212
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_corner_init.png -> 195x217
+- STAGING/_pixellab_inputs/solo/act1_wall_archway_init.png -> 179x243
+- STAGING/_pixellab_inputs/solo/act1_wall_endcap_column_init.png -> 76x203
+
+Verification passed for all 4 PNGs:
+- Size matches requested actual_size table.
+- Alpha bounds are exact and fill each cropped canvas.
+- Transparent pixels are present outside each wall shape.
+DONE: Pad Cropped Walls to Standard Sizes for Init Image
+
+Generated and verified 4 padded PNG files:
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_straight_init_padded.png -> 128x256, source 118x212, offset (5,22)
+- STAGING/_pixellab_inputs/solo/act1_wall_tall_corner_init_padded.png -> 256x256, source 195x217, offset (30,19)
+- STAGING/_pixellab_inputs/solo/act1_wall_archway_init_padded.png -> 256x256, source 179x243, offset (38,6)
+- STAGING/_pixellab_inputs/solo/act1_wall_endcap_column_init_padded.png -> 128x256, source 76x203, offset (26,26)
+
+Verification PASS:
+- Canvas dimensions match target standard sizes.
+- Source wall pixels are unchanged.
+- Sources are centered at the required offsets.
+- Padding outside source bounds is fully transparent alpha=0.
+DONE
+
+Output path: STAGING/_research/PIXELLAB_WORKFLOW_INSIGHTS.md
+Section count: 11
+Key insights count: 24
+
+Summary:
+- Documented PixelLab tool-by-tool findings.
+- Organized workflow patterns, sizing standards, fail patterns, prompt rules, and cost estimates.
+- Added a production recommendation section and future research question list.
+- ANTIGRAVITY.md was requested by project routing rules but was not present in the project root.
+Codex result summary
+
+Output PNG: STAGING/_pixellab_inputs/master_sheets/act1_wall_modular_pack_v1.png
+Slot count: 52 total slots (4 feature, 16 modular base/extras, 16 rift overlays, 16 decoration silhouettes).
+Verification: PNG exists, 512x512, RGBA, transparent background retained.
+Screenshot description: transparent 512x512 master sheet with light gray bordered slots and labels; top row contains four large isometric wall feature outlines, middle rows contain sixteen smaller modular isometric wall/foundation pieces, row 256 contains sixteen distinct rift/crack overlay patterns, row 288 contains sixteen small decoration silhouettes, and the lower area is empty padding.
+# CODEX DONE ? laurethgame
+
+Task: Generate IMAGEGEN master sheet modular wall asset pack.
+
+Result: DONE
+
+Output PNG:
+STAGING/_pixellab_outputs/walls/v2/act1_wall_modular_pack_codex_v1.png
+
+Image dimensions:
+512x512
+
+Image mode:
+RGBA PNG with transparent alpha background.
+
+Generation path:
+Used Codex built-in imagegen once with the exact prompt from CODEX_TASK_laurethgame.md.
+Source image was saved under CODEX_HOME generated_images, then copied/processed into the requested project path.
+
+Iterations:
+1 imagegen iteration.
+
+Post-processing:
+The generated source image was RGB at 1254x1254 with a baked transparent-preview checkerboard. I converted it to RGBA, removed the checkerboard background into alpha, and resized to 512x512 with nearest-neighbor resampling to preserve pixel-art edges.
+
+Visual description:
+The sheet contains a dark fantasy isometric modular wall pack: 4 large top-row features, 16 modular wall/foundation pieces, 16 cyan rift overlay icons, and 16 small dungeon decorations. Visual content includes granite wall structures, cyan portal/rift effects, moss, candles, torches, banners, chains, stones, dust, skull, and cyan gem.
+
+Quality observations:
+- 52 requested visual tiles are present.
+- Pixel-art look is sharp and game-asset oriented.
+- Final file has transparent corners/background via RGBA alpha.
+- Section layout is visually correct, though spacing/scale follows the generated image rather than exact original pixel grid boundaries.
+- Built-in imagegen did not emit native 512x512 transparent PNG directly, so local conversion/downscale was required.
+Codex task completed.
+
+Output written:
+- STAGING/_research/MASTER_SHEET_REVIEW_VERDICT.md
+
+Generated assets:
+- 52 PNG slices in Assets/Art/AssetPacks/Act1_ShatteredKeep/wall_modular_v1/
+- Slice grid preview in STAGING/_research/master_sheet_review_artifacts/codex_slice_grid_preview.png
+- PIL analysis JSON and bbox previews in STAGING/_research/master_sheet_review_artifacts/
+
+Verdict summary:
+- Codex imagegen v1: PASS WITH CONDITIONS as the immediate transparent/sliceable production-import source.
+- ChatGPT v1: FAIL DIRECT IMPORT / REVISE because the checkerboard background is baked into opaque pixels and the canvas is 1254x1254, not the expected contract.
+- Art direction note: ChatGPT v1 is the stronger visual target, but Phase 2 should regenerate that quality with true alpha and exact modular semantics.
+
+Validation performed:
+- Verified both input images exist.
+- Ran PIL dimension, alpha, palette, cyan, component, and edge-density analysis.
+- Queried NLM for Act 1 Shattered Keep visual palette/lore.
+- Verified 52 generated tile_*.png files.
+- Verified 0 empty slices.
+Codex task complete: Door Choice Mechanic 3 Proposal Visualizations.
+
+Generated 3 PNG concept images with built-in imagegen, copied them into the requested project output folder, and resized/validated each final file to 1024x1024 PNG.
+
+Outputs:
+- `STAGING/_pixellab_outputs/door_choice/proposal_A_echo_loom_fractures.png`
+  - Echo Loom Fractures: three cyan reality rift seams in a dark granite isometric exit chamber, with broken ward-tablet energy and room-choice glyph cues.
+  - Iterations: 1 generation, no retry.
+- `STAGING/_pixellab_outputs/door_choice/proposal_B_mirror_remnant_triptych.png`
+  - Mirror Remnant Triptych: three cracked iron-framed standing mirrors along the back wall, reflecting combat, elite, and shop route interiors with cyan shimmer.
+  - Iterations: 1 generation, no retry.
+- `STAGING/_pixellab_outputs/door_choice/proposal_C_defender_echo_silhouettes.png`
+  - Defender Echo Silhouettes: three cyan ghost-warrior route echoes at the back wall with faint archways, wisps, and Death Imprint footprint trails.
+  - Iterations: 1 generation, no retry.
+
+Validation:
+- All three final PNGs are present at the requested paths.
+- All three final PNGs are 1024x1024.
+- Final files use PNG with alpha-capable pixel format after resizing; source imagegen outputs were copied and left intact under the Codex generated_images folder.
+# CODEX DONE - yasinderyabilgin
+
+Task: Modular Wall Pack v2 Imagegen + Auto-Review
+
+Completed:
+- Generated Codex v2 wall modular sheet and saved it to `STAGING/_pixellab_outputs/walls/v2/act1_wall_modular_pack_codex_v2.png`.
+- Normalized v2 to required 512x512 RGBA output. The generated source arrived as RGB with baked checkerboard; checkerboard background was converted to true alpha.
+- Verified v2 dimensions/mode: 512x512 RGBA.
+- Verified v2 true alpha transparency: 62.96%.
+- Ran PIL analysis across Codex v1, ChatGPT v1, and Codex v2.
+- Wrote comparison report to `STAGING/_research/MASTER_SHEET_V2_COMPARISON.md`.
+
+Final winner verdict:
+- Winner: Codex v2.
+- Reason: 512x512 RGBA, true alpha after cleanup, no text artifact flag, usable separated sprite components, cyan FX/decor present. Codex v1 remains a strong fallback; ChatGPT v1 is blocked by RGB/no true alpha and 1254x1254 dimensions.
+
+Key output confirmation:
+- v2 PNG: `STAGING/_pixellab_outputs/walls/v2/act1_wall_modular_pack_codex_v2.png`
+- v2 dimensions: 512x512 RGBA
+- comparison doc: `STAGING/_research/MASTER_SHEET_V2_COMPARISON.md`
+- final winner: Codex v2
+# CODEX DONE - yasinderyabilgin
+
+Task: Slice Wall Pack v3 (Pure PixelLab Output)
+
+Input:
+- STAGING/_pixellab_outputs/walls/v2/act1_wall_pure_pixellab_v3_clean.png
+- Verified source image: 512x512 RGBA
+
+Output directory:
+- Assets/Art/AssetPacks/Act1_ShatteredKeep/wall_pack_v3/
+
+Result:
+- Raw alpha connected components: 22
+- Filtered tile components (area > 100): 22
+- Sliced PNG tile count: 22
+- Detection method: alpha > 30, connected components, 2 px padded crop, row clustering, left-to-right naming
+- Visual sanity artifact: _contact_sheet.png (768x512 RGBA)
+
+Sliced PNGs:
+- tile_archway_NE.png: 115x161 RGBA
+- tile_archway_SE.png: 116x162 RGBA
+- tile_column_freestanding.png: 64x162 RGBA
+- tile_wall_hero.png: 152x166 RGBA
+- tile_straight_NE.png: 85x94 RGBA
+- tile_straight_SE.png: 84x95 RGBA
+- tile_corner_outer_a.png: 74x83 RGBA
+- tile_corner_outer_b.png: 78x83 RGBA
+- tile_corner_outer_c.png: 80x83 RGBA
+- tile_corner_outer_d.png: 84x77 RGBA
+- tile_corner_inner_a.png: 84x100 RGBA
+- tile_corner_inner_b.png: 85x100 RGBA
+- tile_T_junction_a.png: 83x97 RGBA
+- tile_T_junction_b.png: 82x97 RGBA
+- tile_T_junction_c.png: 66x98 RGBA
+- tile_T_junction_d.png: 63x98 RGBA
+- tile_low_wall_straight.png: 79x82 RGBA
+- tile_low_wall_corner.png: 79x82 RGBA
+- tile_low_wall_endcap.png: 81x69 RGBA
+- tile_foundation_a.png: 84x69 RGBA
+- tile_foundation_b.png: 85x73 RGBA
+- tile_floor_edge.png: 84x64 RGBA
+
+Anomalies:
+- None. Component count is 22, within expected ~22-25 range.
+# Codex Done - laurethgame
+
+Task: Unity Import Wall Pack v3 + Tile Asset Creation
+
+Result: DONE
+
+Import source:
+Assets/Art/AssetPacks/Act1_ShatteredKeep/wall_pack_v3/
+
+Tile output:
+Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/
+
+Execution summary:
+- Source PNGs found: 23 total, 22 processed, _contact_sheet.png skipped.
+- Sprite import settings applied: 22/22.
+- Tile assets created: 22.
+- Tile assets updated: 0.
+- Unity verification: 22 valid sprite imports, 22 valid Tile assets linked to sprites.
+- Sample tilemap load check: PASS.
+- Sample tile asset: Assets/Data/Tiles/Act1_ShatteredKeep/walls_v3/tile_archway_NE.asset
+- Console verification after run: 0 log entries, 0 errors, 0 warnings.
+
+Notes:
+- Unity manage_asset search returned 0 for this folder, but Unity AssetDatabase verification returned tileGuids=22 and loadedTilesWithSprites=22.

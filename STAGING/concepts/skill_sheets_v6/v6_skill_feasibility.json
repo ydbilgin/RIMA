@@ -1,0 +1,712 @@
+{
+  "Warblade": [
+    {
+      "skill": "Battle Surge",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Blade Rush",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Cleave",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Crippling Blow",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Death Blow",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Deep Wound",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Earthsplitter",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Gravity Cleave",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Iron Charge",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Ironclad Momentum",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Iron Counter",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Iron Crush",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Sunder Mark",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "War Stomp",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    }
+  ],
+  "Ronin": [
+    {
+      "skill": "Final Draw",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Iaido Stance",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Quickdraw",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Sakura Veil",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    }
+  ],
+  "Gunslinger": [
+    {
+      "skill": "Twin Fire",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Ricochet Shot",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Smoke Round",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Quick Reload",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Powder Burst",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Fan The Hammer",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Bullet Time",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Dead Eye",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    }
+  ],
+  "Ranger": [
+    {
+      "skill": "Aimed Shot",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Barbed Net Shot",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Black Arrow",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Bone Trap",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Concussive Arrow",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Disengage",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Explosive Trap",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Final Strike",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Flare",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Hunters Step",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Marked Detonate",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Multi Shot",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Pinning Shot",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Point Blank",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Predators Mark",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Rapid Fire",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Sweep Volley",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Tethering Arrow",
+      "pixellab": "HARD",
+      "approach": "Character plus target with beam, tether, or chain VFX as separated overlay; Unity controls live endpoints.",
+      "notes": "use static readable frame for concept, live anchors Unity-side"
+    },
+    {
+      "skill": "Volley",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Wireline Trap",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    }
+  ],
+  "Elementalist": [
+    {
+      "skill": "Arcane Blast",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Arcane Surge",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Blink",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Blizzard",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Chain Lightning",
+      "pixellab": "HARD",
+      "approach": "Character plus target with beam, tether, or chain VFX as separated overlay; Unity controls live endpoints.",
+      "notes": "use static readable frame for concept, live anchors Unity-side"
+    },
+    {
+      "skill": "Combustion",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Fireball",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Frost Wall",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Frozen Orb",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Glacial Spike",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Living Bomb",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Meteor",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Mirror Image",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Prism Beam",
+      "pixellab": "HARD",
+      "approach": "Character plus target with beam, tether, or chain VFX as separated overlay; Unity controls live endpoints.",
+      "notes": "use static readable frame for concept, live anchors Unity-side"
+    },
+    {
+      "skill": "Solar Flare",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    }
+  ],
+  "Shadowblade": [
+    {
+      "skill": "Ambush",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Backstab",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Backstab Mark",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Chain Cull",
+      "pixellab": "HARD-COMPOSITE",
+      "approach": "Static multi-target chain composition, separate character, targets, and chain VFX; Unity resolves jump anchors.",
+      "notes": "multi-target gameplay timing Unity-side"
+    },
+    {
+      "skill": "Death Mark",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Evasion",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Fan Of Knives",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Hemorrhage",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Kidney Shot",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Mirage Blade",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Night Aperture",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Phase Step",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Preparation",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Rupture",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Severance",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Shadow Clone",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Shadow Pin",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Shadow Step",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Smoke Veil",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Toxic Eruption",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Vanish",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Veil Burst",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    }
+  ],
+  "Ravager": [
+    {
+      "skill": "Berserk",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Axe Throw",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Earthcrack",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Bloodthirst",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "War Cry",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Whirlwind",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Reckless Strike",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Crimson Roar",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    }
+  ],
+  "Hexer": [
+    {
+      "skill": "Curse Mark",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Decay Aura",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Necrosis",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Hex Bolt",
+      "pixellab": "HARD",
+      "approach": "Character action frame plus projectile, dash, or path VFX; 4-8 frames or Unity tween handles travel distance.",
+      "notes": "n_frames=4-8 enough, path handled Unity-side"
+    },
+    {
+      "skill": "Shackle Curse",
+      "pixellab": "HARD",
+      "approach": "Character plus target with beam, tether, or chain VFX as separated overlay; Unity controls live endpoints.",
+      "notes": "use static readable frame for concept, live anchors Unity-side"
+    },
+    {
+      "skill": "Soul Drain",
+      "pixellab": "HARD",
+      "approach": "Character plus target with beam, tether, or chain VFX as separated overlay; Unity controls live endpoints.",
+      "notes": "use static readable frame for concept, live anchors Unity-side"
+    },
+    {
+      "skill": "Death Wail",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Plague Touch",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    }
+  ],
+  "Brawler": [
+    {
+      "skill": "Jab",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Cross",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Uppercut",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Earth Slam",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Body Lock",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Power Strike",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Iron Stance",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Knockout",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    }
+  ],
+  "Summoner": [
+    {
+      "skill": "Summon Wisp",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Spirit Bind",
+      "pixellab": "HARD",
+      "approach": "Character plus target with beam, tether, or chain VFX as separated overlay; Unity controls live endpoints.",
+      "notes": "use static readable frame for concept, live anchors Unity-side"
+    },
+    {
+      "skill": "Pact Drain",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    },
+    {
+      "skill": "Soul Link",
+      "pixellab": "HARD",
+      "approach": "Character plus target with beam, tether, or chain VFX as separated overlay; Unity controls live endpoints.",
+      "notes": "use static readable frame for concept, live anchors Unity-side"
+    },
+    {
+      "skill": "Ethereal Guard",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Familiar Strike",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Beacon",
+      "pixellab": "MEDIUM",
+      "approach": "Character action frame plus one placed sprite such as trap, summon, clone, veil, or ward; Unity layers effect.",
+      "notes": "separate placed sprite recommended"
+    },
+    {
+      "skill": "Sacrifice",
+      "pixellab": "EASY",
+      "approach": "Single character pose with one static impact VFX sprite; 1 gen plus optional Unity overlay.",
+      "notes": "n_frames=1-4 enough"
+    }
+  ]
+}
