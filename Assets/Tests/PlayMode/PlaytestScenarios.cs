@@ -57,7 +57,7 @@ namespace RIMA.Tests
             yield return null;
         }
 
-        private IEnumerator WaitForRoomCleared(LegacyRuntimeRoomManager rrm, float timeout = 5f)
+        private IEnumerator WaitForRoomCleared(RuntimeRoomManager rrm, float timeout = 5f)
         {
             while (rrm != null && !rrm.IsRoomCleared && timeout > 0f)
             {
@@ -66,9 +66,9 @@ namespace RIMA.Tests
             }
         }
 
-        private IEnumerator ClearCurrentRoom(LegacyRuntimeRoomManager rrm)
+        private IEnumerator ClearCurrentRoom(RuntimeRoomManager rrm)
         {
-            Assert.IsNotNull(rrm, "LegacyRuntimeRoomManager.Instance null.");
+            Assert.IsNotNull(rrm, "RuntimeRoomManager.Instance null.");
             Assert.Greater(rrm.AliveEnemies, 0, "Current room should have enemies before clear.");
 
             yield return KillAllEnemies();
@@ -78,7 +78,7 @@ namespace RIMA.Tests
             Assert.AreEqual(0, rrm.AliveEnemies, "AliveEnemies should be 0 after clear.");
         }
 
-        private IEnumerator NavigateNorthToNextRoom(LegacyRuntimeRoomManager rrm)
+        private IEnumerator NavigateNorthToNextRoom(RuntimeRoomManager rrm)
         {
             Assert.IsNotNull(DungeonGraph.Instance, "DungeonGraph.Instance null.");
             Assert.IsTrue(DungeonGraph.Instance.Navigate(DoorDirection.North, out _),
@@ -93,8 +93,8 @@ namespace RIMA.Tests
         {
             yield return null;
 
-            var rrm = LegacyRuntimeRoomManager.Instance;
-            Assert.IsNotNull(rrm, "LegacyRuntimeRoomManager.Instance null.");
+            var rrm = RuntimeRoomManager.Instance;
+            Assert.IsNotNull(rrm, "RuntimeRoomManager.Instance null.");
 
             yield return NavigateNorthToNextRoom(rrm);
 
@@ -107,7 +107,7 @@ namespace RIMA.Tests
         {
             yield return new WaitForSeconds(1f);
 
-            var rrm = LegacyRuntimeRoomManager.Instance;
+            var rrm = RuntimeRoomManager.Instance;
             yield return ClearCurrentRoom(rrm);
             yield return NavigateNorthToNextRoom(rrm);
             yield return ClearCurrentRoom(rrm);
@@ -241,7 +241,7 @@ namespace RIMA.Tests
         {
             yield return new WaitForSeconds(1f);
 
-            var rrm = LegacyRuntimeRoomManager.Instance;
+            var rrm = RuntimeRoomManager.Instance;
             yield return ClearCurrentRoom(rrm);
 
             RewardPickup reward = null;
@@ -270,3 +270,4 @@ namespace RIMA.Tests
         }
     }
 }
+

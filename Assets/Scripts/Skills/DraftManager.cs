@@ -105,7 +105,7 @@ namespace RIMA
         {
             if (IsDraftActive) return;
 
-            int room = LegacyRuntimeRoomManager.Instance?.CurrentRoom ?? 1;
+            int room = RuntimeRoomManager.Instance?.CurrentRoom ?? 1;
             if (room == ForgeRoom1 || room == ForgeRoom2) return;
             if (IsNonDraftRoom(currentRoomConfig)) return;
 
@@ -135,7 +135,7 @@ namespace RIMA
 
             IsDraftActive = true;
 
-            int room = LegacyRuntimeRoomManager.Instance?.CurrentRoom ?? 1;
+            int room = RuntimeRoomManager.Instance?.CurrentRoom ?? 1;
 
             // ── Forge milestone: Forge UI kendi akışını yönetir ───
             if (room == ForgeRoom1)
@@ -368,3 +368,4 @@ namespace RIMA
         public bool HasSkill(SkillData s) => currentActiveSkills.Contains(s);
     }
 }
+

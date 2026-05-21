@@ -89,7 +89,7 @@ namespace RIMA
 
         private static bool IsRoomClearInteractionAllowed()
         {
-            return LegacyRuntimeRoomManager.Instance == null || LegacyRuntimeRoomManager.Instance.IsRoomCleared;
+            return RuntimeRoomManager.Instance == null || RuntimeRoomManager.Instance.IsRoomCleared;
         }
 
         private IEnumerator DoInteract()
@@ -101,8 +101,8 @@ namespace RIMA
             if (DraftManager.Instance == null)
             {
                 // Draft yok — kapıları aç ve yok ol
-                if (LegacyRuntimeRoomManager.Instance != null)
-                    LegacyRuntimeRoomManager.Instance.OpenDoorsAfterReward();
+                if (RuntimeRoomManager.Instance != null)
+                    RuntimeRoomManager.Instance.OpenDoorsAfterReward();
                 Destroy(gameObject);
                 yield break;
             }
@@ -112,8 +112,8 @@ namespace RIMA
                 DraftManager.Instance == null || !DraftManager.Instance.IsDraftActive);
 
             // Draft bitti — kapıları aç
-            if (LegacyRuntimeRoomManager.Instance != null)
-                LegacyRuntimeRoomManager.Instance.OpenDoorsAfterReward();
+            if (RuntimeRoomManager.Instance != null)
+                RuntimeRoomManager.Instance.OpenDoorsAfterReward();
 
             Destroy(gameObject);
         }
@@ -167,3 +167,4 @@ namespace RIMA
         }
     }
 }
+

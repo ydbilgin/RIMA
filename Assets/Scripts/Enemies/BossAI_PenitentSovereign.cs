@@ -261,7 +261,7 @@ namespace RIMA
             StopAllCoroutines();
             rb.linearVelocity = Vector2.zero;
 
-            LegacyRuntimeRoomManager.Instance?.NotifyBossDefeated();
+            RuntimeRoomManager.Instance?.NotifyBossDefeated();
 
             StartCoroutine(DeathDelay());
         }
@@ -295,3 +295,4 @@ namespace RIMA
         }
     }
 }
+

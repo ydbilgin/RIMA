@@ -17,7 +17,7 @@ namespace RIMA.Tests
         [SetUp]
         public void SetUp()
         {
-            ResetStaticSingleton(typeof(LegacyRuntimeRoomManager), "Instance");
+            ResetStaticSingleton(typeof(RuntimeRoomManager), "Instance");
             ResetStaticSingleton(typeof(SubRoomSequenceController), "Active");
         }
 
@@ -33,14 +33,14 @@ namespace RIMA.Tests
 
             foreach (var controller in Object.FindObjectsByType<SubRoomSequenceController>(FindObjectsSortMode.None))
                 Object.DestroyImmediate(controller.gameObject);
-            foreach (var rrm in Object.FindObjectsByType<LegacyRuntimeRoomManager>(FindObjectsSortMode.None))
+            foreach (var rrm in Object.FindObjectsByType<RuntimeRoomManager>(FindObjectsSortMode.None))
                 Object.DestroyImmediate(rrm.gameObject);
             foreach (var reward in Object.FindObjectsByType<RewardPickup>(FindObjectsSortMode.None))
                 Object.DestroyImmediate(reward.gameObject);
             foreach (var bank in Object.FindObjectsByType<TestEncounterBank>(FindObjectsSortMode.None))
                 Object.DestroyImmediate(bank.gameObject);
 
-            ResetStaticSingleton(typeof(LegacyRuntimeRoomManager), "Instance");
+            ResetStaticSingleton(typeof(RuntimeRoomManager), "Instance");
             ResetStaticSingleton(typeof(SubRoomSequenceController), "Active");
             Time.timeScale = 1f;
         }
@@ -48,7 +48,7 @@ namespace RIMA.Tests
         [UnityTest]
         public IEnumerator SubRoomSequenceController_FinalClearTriggersReward()
         {
-            LegacyRuntimeRoomManager rrm = CreateRuntimeRoomManager();
+            RuntimeRoomManager rrm = CreateRuntimeRoomManager();
             EncounterTemplateSO template = CreateEncounterTemplate(1);
             GameObject enemyPrefab = CreateEnemyPrefab();
             CreateBank(template, enemyPrefab);
@@ -62,7 +62,7 @@ namespace RIMA.Tests
             GameObject killed = new GameObject("KilledEnemy_Final");
             cleanup.Add(killed);
             controller.OnEnemyKilled(killed);
-            Assert.IsTrue(rrm.IsRoomCleared, "Final sub-room clear should call LegacyRuntimeRoomManager.OnEncounterFinalCleared.");
+            Assert.IsTrue(rrm.IsRoomCleared, "Final sub-room clear should call RuntimeRoomManager.OnEncounterFinalCleared.");
             RunPrivateEnumerator(rrm, "RoomClearedSequence");
             yield return null;
             yield return null;
@@ -96,13 +96,13 @@ namespace RIMA.Tests
             Assert.AreSame(controller, SubRoomSequenceController.Active, "Controller should remain active before final sub-room completion.");
         }
 
-        private LegacyRuntimeRoomManager CreateRuntimeRoomManager()
+        private RuntimeRoomManager CreateRuntimeRoomManager()
         {
-            GameObject go = new GameObject("LegacyRuntimeRoomManager_Test");
+            GameObject go = new GameObject("RuntimeRoomManager_Test");
             cleanup.Add(go);
-            LegacyRuntimeRoomManager rrm = go.AddComponent<LegacyRuntimeRoomManager>();
+            RuntimeRoomManager rrm = go.AddComponent<RuntimeRoomManager>();
             rrm.enabled = false;
-            SetStaticSingleton(typeof(LegacyRuntimeRoomManager), "Instance", rrm);
+            SetStaticSingleton(typeof(RuntimeRoomManager), "Instance", rrm);
 
             GameObject player = new GameObject("Player_Test");
             cleanup.Add(player);
@@ -286,3 +286,4 @@ namespace RIMA.Tests
         }
     }
 }
+

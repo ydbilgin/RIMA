@@ -260,7 +260,7 @@ namespace RIMA.Runtime.Encounter
             if (IsFinalSubRoom)
             {
                 State = SubRoomState.EncounterComplete;
-                LegacyRuntimeRoomManager.Instance?.OnEncounterFinalCleared();
+                RuntimeRoomManager.Instance?.OnEncounterFinalCleared();
                 OnEncounterComplete?.Invoke();
                 if (Active == this) Active = null;
                 DestroyRuntimeObject(this);
@@ -398,3 +398,4 @@ namespace RIMA.Runtime.Encounter
         }
     }
 }
+

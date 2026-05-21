@@ -575,7 +575,7 @@ namespace RIMA
             }
 
             // Notify room manager
-            LegacyRuntimeRoomManager.Instance?.NotifyBossDefeated();
+            RuntimeRoomManager.Instance?.NotifyBossDefeated();
 
             Destroy(gameObject, 0.5f);
         }
@@ -675,3 +675,4 @@ namespace RIMA
         }
     }
 }
+

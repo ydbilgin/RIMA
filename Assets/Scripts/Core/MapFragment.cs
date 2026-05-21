@@ -14,7 +14,7 @@ namespace RIMA
     ///   - SpriteRenderer ekle (placeholder veya gerçek sprite)
     ///   - CircleCollider2D (isTrigger = true)   ← proximity detect
     ///   - Bu script
-    ///   - Prefab olarak kaydet → LegacyRuntimeRoomManager.mapFragmentPrefab'a ata
+    ///   - Prefab olarak kaydet → RuntimeRoomManager.mapFragmentPrefab'a ata
     /// </summary>
     [RequireComponent(typeof(CircleCollider2D))]
     public class MapFragment : MonoBehaviour
@@ -25,7 +25,7 @@ namespace RIMA
         [SerializeField] private float bobSpeed       = 2.5f;
         [SerializeField] private float glowPulseSpeed = 3f;
 
-        /// <summary>LegacyRuntimeRoomManager tarafından set edilir: 1 = 1 adım, 2 = 2 adım.</summary>
+        /// <summary>RuntimeRoomManager tarafından set edilir: 1 = 1 adım, 2 = 2 adım.</summary>
         [HideInInspector] public int revealSteps = 1;
 
         public static event System.Action OnFragmentCollected;
@@ -113,7 +113,7 @@ namespace RIMA
 
         private static bool IsRoomClearInteractionAllowed()
         {
-            return LegacyRuntimeRoomManager.Instance == null || LegacyRuntimeRoomManager.Instance.IsRoomCleared;
+            return RuntimeRoomManager.Instance == null || RuntimeRoomManager.Instance.IsRoomCleared;
         }
 
         private void Collect()
@@ -192,3 +192,4 @@ namespace RIMA
         }
     }
 }
+

@@ -21,9 +21,9 @@ namespace RIMA
     /// Works with the existing tile-based RoomBuilder output.
     /// </summary>
     [DefaultExecutionOrder(-100)]
-    public class LegacyRuntimeRoomManager : MonoBehaviour
+    public class RuntimeRoomManager : MonoBehaviour
     {
-        public static LegacyRuntimeRoomManager Instance { get; private set; }
+        public static RuntimeRoomManager Instance { get; private set; }
 
         [Header("Room Settings")]
         [SerializeField] private int roomWidth = 32;
@@ -1238,3 +1238,4 @@ namespace RIMA
 
 
 }
+

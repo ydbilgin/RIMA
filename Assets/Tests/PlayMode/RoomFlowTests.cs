@@ -81,18 +81,18 @@ namespace RIMA.Tests
         }
 
         [UnityTest]
-        public IEnumerator LegacyRuntimeRoomManager_Room1Starts()
+        public IEnumerator RuntimeRoomManager_Room1Starts()
         {
             // Wait for Start() to complete and StartRoom() to be called
             float timeout = 2f;
-            while ((LegacyRuntimeRoomManager.Instance == null || LegacyRuntimeRoomManager.Instance.CurrentRoom < 1) && timeout > 0f)
+            while ((RuntimeRoomManager.Instance == null || RuntimeRoomManager.Instance.CurrentRoom < 1) && timeout > 0f)
             {
                 timeout -= Time.deltaTime;
                 yield return null;
             }
 
-            Assert.IsNotNull(LegacyRuntimeRoomManager.Instance, "LegacyRuntimeRoomManager.Instance null.");
-            Assert.AreEqual(1, LegacyRuntimeRoomManager.Instance.CurrentRoom,
+            Assert.IsNotNull(RuntimeRoomManager.Instance, "RuntimeRoomManager.Instance null.");
+            Assert.AreEqual(1, RuntimeRoomManager.Instance.CurrentRoom,
                 $"İlk oda CurrentRoom=1 olmalı (timeout kaldı: {timeout:F2}s).");
         }
 
@@ -232,8 +232,8 @@ namespace RIMA.Tests
         {
             yield return new WaitForSeconds(1f);
 
-            var rrm = LegacyRuntimeRoomManager.Instance;
-            Assert.IsNotNull(rrm, "LegacyRuntimeRoomManager.Instance null.");
+            var rrm = RuntimeRoomManager.Instance;
+            Assert.IsNotNull(rrm, "RuntimeRoomManager.Instance null.");
 
             int initialEnemies = rrm.AliveEnemies;
             Assert.Greater(initialEnemies, 0, "İlk odada en az 1 düşman olmalı.");
@@ -258,7 +258,7 @@ namespace RIMA.Tests
         {
             yield return new WaitForSeconds(1f);
 
-            var rrm = LegacyRuntimeRoomManager.Instance;
+            var rrm = RuntimeRoomManager.Instance;
             Assert.IsNotNull(rrm);
             Assume.That(rrm.AliveEnemies, Is.GreaterThan(0), "Reward testi: odada düşman gerekirdi.");
 
@@ -283,7 +283,7 @@ namespace RIMA.Tests
         {
             yield return new WaitForSeconds(1f);
 
-            var rrm = LegacyRuntimeRoomManager.Instance;
+            var rrm = RuntimeRoomManager.Instance;
             Assert.IsNotNull(rrm);
             Assume.That(rrm.AliveEnemies, Is.GreaterThan(0), "Event testi: odada düşman gerekirdi.");
 
@@ -305,3 +305,4 @@ namespace RIMA.Tests
 
     }
 }
+
