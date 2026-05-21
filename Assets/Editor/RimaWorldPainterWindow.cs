@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using RIMA.Systems.Map;
+using RIMA.Map;
 using RIMA.Editor;
 using RIMA;
 
@@ -14,7 +15,7 @@ namespace RIMA.Editor.MapDesigner
 {
     public class RimaWorldPainterWindow : EditorWindow
     {
-        public enum PaletteCategory { Floor, Wall, Prop, Mob }
+        public enum PaletteCategory { Floor, Wall, Prop, Mob, Rooms }
         public enum ToolMode { Paint, Erase, Eyedropper }
         public enum CollisionMode { Auto, Passable, SmallFootprint, FullFootprint, WallBlock, Custom }
         public enum PaintMode { TopDown, Isometric }
@@ -65,13 +66,16 @@ namespace RIMA.Editor.MapDesigner
         private List<ScanResult> wallPrefabs = new List<ScanResult>();
         private List<ScanResult> propPrefabs = new List<ScanResult>();
         private List<ScanResult> mobPrefabs = new List<ScanResult>();
+        private List<RoomManifestSO> roomManifests = new List<RoomManifestSO>();
+        [SerializeField] private string currentRoomJsonPath = string.Empty;
         [SerializeField] private Dictionary<PaletteCategory, List<string>> paletteCustomAdds = new Dictionary<PaletteCategory, List<string>>();
         [SerializeField] private Dictionary<PaletteCategory, List<string>> paletteExcludes = new Dictionary<PaletteCategory, List<string>>();
         [SerializeField] private List<string> wallScanFolders = new List<string>
         {
             "Assets/Prefabs/Props/ShatteredKeep_PixelLab",
             "Assets/Prefabs/Walls/pilot_a",
-            "Assets/Prefabs/Walls"
+            "Assets/Prefabs/Walls",
+            "Assets/Prefabs/Environment/Walls"
         };
         [SerializeField] private List<string> wallScanNamePatterns = new List<string> { "wall" };
 
@@ -124,8 +128,7 @@ namespace RIMA.Editor.MapDesigner
         private const string UseCategoryScalePrefsKey = "Painter.UseCategoryScale";
         private const string PaletteAddsPrefsPrefix = "RimaPainter_CustomAdds_";
         private const string PaletteExcludesPrefsPrefix = "RimaPainter_Excludes_";
-        private const string WangRuleTileFolder = "Assets/Data/Tiles/Act1_ShatteredKeep/wang_rules";
-        private const string WallRuleTileAssetPath = WangRuleTileFolder + "/dark_rubble_to_broken_wall.asset";
+        private const string ModularFloorTileFolder = "Assets/Data/Tiles/Act1_ShatteredKeep/modular_v1";
         [SerializeField] private CollisionRulesSO collisionRules;
 
         [SerializeField] private string activeMapName = string.Empty;
@@ -660,7 +663,7 @@ namespace RIMA.Editor.MapDesigner
                     }
                 }
             }
-            ScanFloorTilesInFolder(WangRuleTileFolder);
+            ScanFloorTilesInFolder(ModularFloorTileFolder);
 
             // 2. Scan Wall Prefabs (generic wall naming)
             wallPrefabs.Clear();
@@ -670,12 +673,31 @@ namespace RIMA.Editor.MapDesigner
             propPrefabs.Clear();
             ScanPrefabsInFolder("Assets/Prefabs/Props/ShatteredKeep_PixelLab", "mounting_", propPrefabs);
             ScanPrefabsInFolder("Assets/Prefabs/Props/ShatteredKeep_PixelLab", "statue_", propPrefabs);
+            ScanPrefabsInFolder("Assets/Prefabs/Environment/Decorations", string.Empty, propPrefabs);
 
             // 4. Scan Mob Prefabs (enemy_*)
             mobPrefabs.Clear();
             ScanPrefabsInFolder("Assets/Prefabs/Mobs/ShatteredKeep_PixelLab", "enemy_", mobPrefabs);
 
+            // 5. Scan Room manifests
+            ScanRoomManifests();
+
             ApplyPaletteOverrides();
+        }
+
+        private void ScanRoomManifests()
+        {
+            roomManifests.Clear();
+            string[] guids = AssetDatabase.FindAssets("t:RoomManifestSO", new[] { "Assets/Data/Map" });
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                RoomManifestSO manifest = AssetDatabase.LoadAssetAtPath<RoomManifestSO>(path);
+                if (manifest != null && !roomManifests.Contains(manifest))
+                {
+                    roomManifests.Add(manifest);
+                }
+            }
         }
 
         private void ScanFloorTilesInFolder(string folderPath)
@@ -782,7 +804,7 @@ namespace RIMA.Editor.MapDesigner
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Props/ShatteredKeep_PixelLab");
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Walls/pilot_a");
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Walls");
-            AddDefaultIfMissing(wallScanFolders, WangRuleTileFolder);
+            AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Environment/Walls");
 
             if (wallScanNamePatterns == null)
             {
@@ -977,6 +999,7 @@ namespace RIMA.Editor.MapDesigner
                 case PaletteCategory.Wall: return "Duvar";
                 case PaletteCategory.Prop: return "Obje";
                 case PaletteCategory.Mob: return "Canavar";
+                case PaletteCategory.Rooms: return "Rooms";
                 default: return category.ToString();
             }
         }
@@ -1100,6 +1123,7 @@ namespace RIMA.Editor.MapDesigner
 
             DrawHeader();
             DrawTargetStatusBanner();
+            DrawMapDesignerSection();
 
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -1214,6 +1238,98 @@ namespace RIMA.Editor.MapDesigner
             }
         }
 
+        private void DrawMapDesignerSection()
+        {
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                EditorGUILayout.LabelField("Map Designer", EditorStyles.boldLabel);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (GUILayout.Button("Load JSON...", GUILayout.Height(28f)))
+                    {
+                        string path = EditorUtility.OpenFilePanel("Load Room Layout JSON", Application.dataPath + "/Data/Map", "json");
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            currentRoomJsonPath = path;
+                            LoadRoomJsonIntoPainterScene(path);
+                        }
+                    }
+
+                    EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(currentRoomJsonPath));
+                    if (GUILayout.Button("Reload", GUILayout.Height(28f)))
+                    {
+                        LoadRoomJsonIntoPainterScene(currentRoomJsonPath);
+                    }
+                    EditorGUI.EndDisabledGroup();
+
+                    if (GUILayout.Button("Save -> JSON", GUILayout.Height(28f)))
+                    {
+                        string path = EditorUtility.SaveFilePanel("Save Room Layout JSON", Application.dataPath + "/Data/Map", "room", "json");
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            File.WriteAllText(path, "{}");
+                            AssetDatabase.Refresh();
+                            Debug.LogWarning("[World Painter] Save -> JSON placeholder wrote an empty JSON object. Round-trip serializer is outside Phase H V1.");
+                        }
+                    }
+
+                    if (GUILayout.Button("Validate", GUILayout.Height(28f)))
+                    {
+                        string path = EditorUtility.OpenFilePanel("Validate Room Layout JSON", Application.dataPath + "/Data/Map", "json");
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            InvokeRoomLayoutValidator(path);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void LoadRoomJsonIntoPainterScene(string path)
+        {
+            if (targetTilemap == null)
+            {
+                TryAutoAssignTargets();
+            }
+
+            if (targetTilemap == null)
+            {
+                Debug.LogError("[World Painter] Assign a target Tilemap before loading room JSON.");
+                return;
+            }
+
+            MaterialVariantPoolSO pool = FindFirstAsset<MaterialVariantPoolSO>();
+            WallPrefabRegistry registry = FindFirstAsset<WallPrefabRegistry>();
+            RIMA.Map.RoomLoader.LoadJsonToScene(path, targetTilemap, GetTargetParent(), pool, registry);
+            SceneView.RepaintAll();
+        }
+
+        private static void InvokeRoomLayoutValidator(string path)
+        {
+            Type validatorType = Type.GetType("RIMA.Editor.Map.RoomLayoutValidator, RIMA.Editor");
+            if (validatorType == null)
+            {
+                Debug.LogError("[World Painter] RoomLayoutValidator assembly not found.");
+                return;
+            }
+
+            var method = validatorType.GetMethod("Validate", new[] { typeof(string) });
+            if (method == null)
+            {
+                Debug.LogError("[World Painter] RoomLayoutValidator.Validate(string) not found.");
+                return;
+            }
+
+            method.Invoke(null, new object[] { path });
+        }
+
+        private static T FindFirstAsset<T>() where T : UnityEngine.Object
+        {
+            string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name);
+            if (guids == null || guids.Length == 0) return null;
+            return AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guids[0]));
+        }
+
         private void DrawStatusRow(bool ok, string text, MessageType type)
         {
             using (new EditorGUILayout.HorizontalScope())
@@ -1239,6 +1355,7 @@ namespace RIMA.Editor.MapDesigner
                 DrawCategoryButton("Duvar", PaletteCategory.Wall);
                 DrawCategoryButton("Obje", PaletteCategory.Prop);
                 DrawCategoryButton("Canavar", PaletteCategory.Mob);
+                DrawCategoryButton("Rooms", PaletteCategory.Rooms);
             }
             EditorGUILayout.Space(10);
 
@@ -2094,6 +2211,16 @@ namespace RIMA.Editor.MapDesigner
             {
                 GUILayout.Label($"Palette of {currentCategory} - {itemCount} items", EditorStyles.miniBoldLabel);
                 GUILayout.FlexibleSpace();
+                if (currentCategory == PaletteCategory.Rooms)
+                {
+                    if (GUILayout.Button("Refresh Rooms", GUILayout.Width(120f), GUILayout.Height(24f)))
+                    {
+                        ScanRoomManifests();
+                        Repaint();
+                    }
+                    return;
+                }
+
                 if (GUILayout.Button("Add From Project", GUILayout.Width(140f), GUILayout.Height(24f)))
                 {
                     AddPaletteAssetFromProject();
@@ -2200,6 +2327,12 @@ namespace RIMA.Editor.MapDesigner
 
         private void DrawPalettePanel()
         {
+            if (currentCategory == PaletteCategory.Rooms)
+            {
+                DrawRoomsPalettePanel();
+                return;
+            }
+
             // Search field
             using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
             {
@@ -2262,6 +2395,90 @@ namespace RIMA.Editor.MapDesigner
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndScrollView();
             DrawPaletteActionButtons(filtered.Count);
+        }
+
+        private void DrawRoomsPalettePanel()
+        {
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
+            {
+                GUILayout.Label("Filter Search:", GUILayout.Width(80f));
+                searchQuery = EditorGUILayout.TextField(searchQuery, EditorStyles.toolbarSearchField);
+                if (GUILayout.Button("Clear", EditorStyles.toolbarButton, GUILayout.Width(45f)))
+                {
+                    searchQuery = string.Empty;
+                }
+            }
+
+            paletteScroll = EditorGUILayout.BeginScrollView(paletteScroll, EditorStyles.helpBox);
+            List<RoomManifestSO> filtered = roomManifests
+                .Where(x => x != null)
+                .Where(x => string.IsNullOrEmpty(searchQuery) ||
+                            (x.roomId != null && x.roomId.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                            (x.name != null && x.name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                .ToList();
+
+            if (filtered.Count == 0)
+            {
+                EditorGUILayout.HelpBox("No RoomManifestSO assets found under Assets/Data/Map.", MessageType.Info);
+                EditorGUILayout.EndScrollView();
+                DrawPaletteActionButtons(0);
+                return;
+            }
+
+            float viewWidth = position.width - 320f;
+            float itemWidth = 160f;
+            float itemHeight = 72f;
+            int columns = Mathf.Max(1, Mathf.FloorToInt(viewWidth / itemWidth));
+            int column = 0;
+
+            EditorGUILayout.BeginHorizontal();
+            for (int i = 0; i < filtered.Count; i++)
+            {
+                DrawRoomManifestButton(filtered[i], itemWidth, itemHeight);
+                column++;
+                if (column >= columns)
+                {
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                    column = 0;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndScrollView();
+            DrawPaletteActionButtons(filtered.Count);
+        }
+
+        private void DrawRoomManifestButton(RoomManifestSO manifest, float width, float height)
+        {
+            Rect rect = GUILayoutUtility.GetRect(width, height, GUILayout.Width(width), GUILayout.Height(height));
+            bool hover = rect.Contains(Event.current.mousePosition);
+            EditorGUI.DrawRect(rect, hover ? new Color(1f, 1f, 1f, 0.08f) : new Color(0.12f, 0.12f, 0.12f, 0.35f));
+
+            Rect labelRect = new Rect(rect.x + 8f, rect.y + 8f, rect.width - 16f, 20f);
+            GUI.Label(labelRect, string.IsNullOrEmpty(manifest.roomId) ? manifest.name : manifest.roomId, EditorStyles.boldLabel);
+
+            string jsonName = manifest.jsonLayout != null ? manifest.jsonLayout.name + ".json" : "No JSON";
+            Rect subRect = new Rect(rect.x + 8f, rect.y + 32f, rect.width - 16f, 18f);
+            GUI.Label(subRect, jsonName, EditorStyles.miniLabel);
+
+            Rect actionRect = new Rect(rect.x + 8f, rect.y + rect.height - 22f, rect.width - 16f, 18f);
+            GUI.Label(actionRect, "Click to load", EditorStyles.centeredGreyMiniLabel);
+
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && hover)
+            {
+                if (manifest.jsonLayout == null)
+                {
+                    Debug.LogWarning("[World Painter] Room manifest has no JSON layout: " + manifest.name);
+                }
+                else
+                {
+                    currentRoomJsonPath = AssetDatabase.GetAssetPath(manifest.jsonLayout);
+                    LoadRoomJsonIntoPainterScene(currentRoomJsonPath);
+                }
+
+                Event.current.Use();
+                Repaint();
+            }
         }
 
         private void DrawPaletteItemButton(ScanResult item, float width, float height)
@@ -2931,14 +3148,12 @@ namespace RIMA.Editor.MapDesigner
         private void LoadDefaultWallRuleTile()
         {
             if (wallRuleTile != null) return;
-            wallRuleTile = AssetDatabase.LoadAssetAtPath<TileBase>(WallRuleTileAssetPath);
-            if (wallRuleTile != null) return;
-            if (!AssetDatabase.IsValidFolder(WangRuleTileFolder)) return;
+            if (!AssetDatabase.IsValidFolder(ModularFloorTileFolder)) return;
 
-            string[] guids = AssetDatabase.FindAssets("broken wall t:TileBase", new[] { WangRuleTileFolder });
+            string[] guids = AssetDatabase.FindAssets("broken wall t:TileBase", new[] { ModularFloorTileFolder });
             if (guids.Length == 0)
             {
-                guids = AssetDatabase.FindAssets("wall t:TileBase", new[] { WangRuleTileFolder });
+                guids = AssetDatabase.FindAssets("wall t:TileBase", new[] { ModularFloorTileFolder });
             }
             if (guids.Length == 0) return;
 
