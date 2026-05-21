@@ -1,3 +1,5 @@
+// DEPRECATED 2026-05-21 - top-down pivot. See memory/project_topdown_fakeiso_pivot_lock.md
+#if false
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -121,3 +123,4 @@ public static class IsometricSortSetup
         return id;
     }
 }
+#endif

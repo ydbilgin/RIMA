@@ -1,3 +1,5 @@
+// DEPRECATED 2026-05-21 - top-down pivot. See memory/project_topdown_fakeiso_pivot_lock.md
+#if false
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -53,3 +55,4 @@ public class IsoSortingOrder : MonoBehaviour
     }
 #endif
 }
+#endif

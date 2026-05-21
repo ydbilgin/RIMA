@@ -4282,3 +4282,22 @@ Execution summary:
 
 Notes:
 - Unity manage_asset search returned 0 for this folder, but Unity AssetDatabase verification returned tileGuids=22 and loadedTilesWithSprites=22.
+# CODEX DONE - laurethgame
+
+Task: Wall Pack v3 Iso Placement Architecture Fix
+
+Completed:
+- Audited 22 wall pack v3 sprites and wrote STAGING/wall_pack_v3_tile_audit.md.
+- Selected Strategy A: back walls only, with full-height north/west silhouettes and low south/east front edges.
+- Repainted Assets/Scenes/Demo/WallTest_Map1_Rectangle.unity via ClearAllTiles() and programmatic tile placement.
+- Repainted Assets/Scenes/Demo/WallTest_Map2_LShape.unity via ClearAllTiles() and programmatic tile placement.
+- Captured screenshots:
+  - Assets/Screenshots/WallTest_Map1_v2_Rectangle.png
+  - Assets/Screenshots/WallTest_Map2_v2_LShape.png
+- Wrote STAGING/wall_iso_placement_fix_REPORT.md with v1 vs v2 verdicts and remaining gaps.
+- Checked Unity console errors after repaint: 0 errors.
+
+Notes:
+- ANTIGRAVITY.md was requested by project rules but was not present at repo root.
+- Floor pivot fix was not applied because Strategy C was rejected and the Strategy A repaint did not require global sprite import changes.
+- ITERATE_NEEDED is flagged for a dedicated Map 3 junction/endcap orientation test.

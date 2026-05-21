@@ -31,8 +31,8 @@ namespace RIMA.Editor.MapDesigner
         }
 
         [SerializeField] private PaletteCategory currentCategory = PaletteCategory.Floor;
-        [SerializeField] private PaintMode currentPaintMode = PaintMode.Isometric;
-        [SerializeField] private GridProjectionMode projectionMode = GridProjectionMode.Isometric;
+        [SerializeField] private PaintMode currentPaintMode = PaintMode.TopDown;
+        [SerializeField] private GridProjectionMode projectionMode = GridProjectionMode.TopDown;
         [SerializeField] private ToolMode currentTool = ToolMode.Paint;
         [SerializeField] private string searchQuery = string.Empty;
         [SerializeField] private RimaBiomePreset activeBiome;

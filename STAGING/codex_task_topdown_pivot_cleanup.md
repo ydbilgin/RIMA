@@ -1,5 +1,3 @@
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.
-
 # Codex Task — Top-Down Pivot Cleanup
 
 ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
@@ -178,7 +176,3 @@ After all above done:
 - Unity açık olmalı (UnityMCP scene create için)
 - Effort: high (multi-step, multi-system)
 - Tahmini süre: 30-60 dk
-
-
----
-ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethgame.md AS THE VERY LAST STEP.

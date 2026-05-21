@@ -46,6 +46,9 @@ TagManager:
   - name: Ground
     uniqueID: 2024493761
     locked: 0
+  - name: Floor
+    uniqueID: 1843609376
+    locked: 0
   - name: Walls
     uniqueID: 593505845
     locked: 0
@@ -54,9 +57,6 @@ TagManager:
     locked: 0
   - name: VFX
     uniqueID: 200
-    locked: 0
-  - name: Floor
-    uniqueID: 1843609376
     locked: 0
   - name: Player
     uniqueID: 0
