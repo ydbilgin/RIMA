@@ -28,13 +28,13 @@ namespace RIMA
 
             if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) x -= 1f;
             if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) x += 1f;
-            if (Mathf.Approximately(x, 0f))
-            {
-                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) y -= 1f;
-                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) y += 1f;
-            }
+            if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) y -= 1f;
+            if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) y += 1f;
 
-            rb.position += new Vector2(x, y) * (moveSpeed * Time.fixedDeltaTime);
+            Vector2 input = new Vector2(x, y);
+            if (input.sqrMagnitude > 1f) input.Normalize();
+
+            rb.position += input * (moveSpeed * Time.fixedDeltaTime);
         }
     }
 }
