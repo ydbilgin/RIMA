@@ -53,3 +53,67 @@ MonoBehaviour:
     baseSpriteId: wall_short_edge_s_v2
     flipX: 0
     prefab: {fileID: 6556813571760791444, guid: bc46f72d6f5e90b49b8f8f9d0567ea4c, type: 3}
+  - wallId: m01_wall_straight_a
+    baseSpriteId: M01_wall_straight_a
+    flipX: 0
+    prefab: {fileID: 5285501537556493502, guid: ad3c7d83341259945848130999b393ee, type: 3}
+  - wallId: m02_wall_straight_b
+    baseSpriteId: M02_wall_straight_b
+    flipX: 0
+    prefab: {fileID: 3540719745940248578, guid: e21d947314ca75e4a8433bab3045c7d8, type: 3}
+  - wallId: m03_corner_outer_NE
+    baseSpriteId: M03_corner_outer_NE
+    flipX: 0
+    prefab: {fileID: 6927150436077177029, guid: f73cb5666e04835448bc94f28b79a7b9, type: 3}
+  - wallId: m04_corner_outer_NW
+    baseSpriteId: M04_corner_outer_NW
+    flipX: 0
+    prefab: {fileID: 1902701316833542887, guid: 772de617e80b37a44b1cf68a27e1031e, type: 3}
+  - wallId: m05_corner_inner_NE
+    baseSpriteId: M05_corner_inner_NE
+    flipX: 0
+    prefab: {fileID: 338047185508883084, guid: e143c7c6509e73c4ba01bb741891abd6, type: 3}
+  - wallId: m06_corner_inner_NW
+    baseSpriteId: M06_corner_inner_NW
+    flipX: 0
+    prefab: {fileID: 405874294074022543, guid: 1c90841286b3c5d4ba080d73fcc2681b, type: 3}
+  - wallId: m07_wall_straight_c
+    baseSpriteId: M07_wall_straight_c
+    flipX: 0
+    prefab: {fileID: 7138447389627387998, guid: 425338a6e0b371f40b3fd7a7b74c6bdf, type: 3}
+  - wallId: m08_wall_straight_d
+    baseSpriteId: M08_wall_straight_d
+    flipX: 0
+    prefab: {fileID: 9217511992633107333, guid: 18821cfd405ac594aad7d317459e34d5, type: 3}
+  - wallId: m09_doorway_a
+    baseSpriteId: M09_doorway_a
+    flipX: 0
+    prefab: {fileID: 8054653878758022681, guid: a7c6876dbcf110746981181bb3d9d566, type: 3}
+  - wallId: m10_doorway_b
+    baseSpriteId: M10_doorway_b
+    flipX: 0
+    prefab: {fileID: 9028633030343797968, guid: 4dd29df9a2777da44af1ffda5c79f6a6, type: 3}
+  - wallId: m11_wall_broken_a
+    baseSpriteId: M11_wall_broken_a
+    flipX: 0
+    prefab: {fileID: 670528479714551216, guid: d4953be102427bf4abfce29988df08f2, type: 3}
+  - wallId: m12_wall_broken_b
+    baseSpriteId: M12_wall_broken_b
+    flipX: 0
+    prefab: {fileID: 4015697908843363005, guid: 51675f5d25321634393cb834c4366f13, type: 3}
+  - wallId: m13_junction_cross_a
+    baseSpriteId: M13_junction_cross_a
+    flipX: 0
+    prefab: {fileID: 7657952186374465211, guid: 4159bce8609902745a7ccc3af1648299, type: 3}
+  - wallId: m14_junction_cross_b
+    baseSpriteId: M14_junction_cross_b
+    flipX: 0
+    prefab: {fileID: 274794170119545680, guid: bb63e008fba892e419b4a6117ddb6fe4, type: 3}
+  - wallId: m15_wall_short_half
+    baseSpriteId: M15_wall_short_half
+    flipX: 0
+    prefab: {fileID: 4545040324135322738, guid: f3cbe250a9aff6445b6ff127ecaba78f, type: 3}
+  - wallId: m16_ruined_corner
+    baseSpriteId: M16_ruined_corner
+    flipX: 0
+    prefab: {fileID: 5531273363359815968, guid: f1d64545aab934e40862db6a8ae17ce7, type: 3}
