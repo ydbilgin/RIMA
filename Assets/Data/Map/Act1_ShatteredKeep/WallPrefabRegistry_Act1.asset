@@ -33,3 +33,19 @@ MonoBehaviour:
     baseSpriteId: corner_NE_v1
     flipX: 1
     prefab: {fileID: 468839459955096861, guid: ba4b437a4fda2e0429bef225ff1099c0, type: 3}
+  - wallId: corner_SE
+    baseSpriteId: corner_SE_placeholder
+    flipX: 0
+    prefab: {fileID: 4582214976477302644, guid: 42dbdf46e3f7e4b4f83287a16b4785e5, type: 3}
+  - wallId: corner_SW
+    baseSpriteId: corner_SE_placeholder
+    flipX: 1
+    prefab: {fileID: 4582214976477302644, guid: 42dbdf46e3f7e4b4f83287a16b4785e5, type: 3}
+  - wallId: collapsed_stub
+    baseSpriteId: collapsed_stub_placeholder
+    flipX: 0
+    prefab: {fileID: 1015172226311251691, guid: 418f07965fce4ae4ca7fd8e81d07da0d, type: 3}
+  - wallId: archway
+    baseSpriteId: archway_placeholder
+    flipX: 0
+    prefab: {fileID: 3108939922982728787, guid: e9ea0f10cc93f2d4995b7c8d52db5dc8, type: 3}
