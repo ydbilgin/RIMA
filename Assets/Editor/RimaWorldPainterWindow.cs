@@ -73,7 +73,7 @@ namespace RIMA.Editor.MapDesigner
         [SerializeField] private List<string> wallScanFolders = new List<string>
         {
             "Assets/Prefabs/Props/ShatteredKeep_PixelLab",
-            "Assets/Prefabs/Walls/pilot_a",
+            "Assets/Prefabs/Environment/Walls/Act1_ShatteredKeep",
             "Assets/Prefabs/Walls",
             "Assets/Prefabs/Environment/Walls"
         };
@@ -802,7 +802,7 @@ namespace RIMA.Editor.MapDesigner
                 wallScanFolders = new List<string>();
             }
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Props/ShatteredKeep_PixelLab");
-            AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Walls/pilot_a");
+            AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Environment/Walls/Act1_ShatteredKeep");
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Walls");
             AddDefaultIfMissing(wallScanFolders, "Assets/Prefabs/Environment/Walls");
 

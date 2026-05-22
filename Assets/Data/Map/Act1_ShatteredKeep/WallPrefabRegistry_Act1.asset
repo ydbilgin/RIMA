@@ -12,4 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be89450d25cd26544a00cc4416a69a14, type: 3}
   m_Name: WallPrefabRegistry_Act1
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.Map.WallPrefabRegistry
-  walls: []
+  walls:
+  - wallId: wall_n
+    baseSpriteId: wall_n_v1
+    flipX: 0
+    prefab: {fileID: 7024538580111222373, guid: b40bff93bf7feb44b849eb4aeb89c582, type: 3}
+  - wallId: wall_w
+    baseSpriteId: wall_w_v1
+    flipX: 0
+    prefab: {fileID: 4002928305901761154, guid: 1e9a8db44d3cb804cb0c86a09b15515f, type: 3}
+  - wallId: wall_e
+    baseSpriteId: wall_w_v1
+    flipX: 1
+    prefab: {fileID: 5640473343771910384, guid: e4e2dcc3009e59b41993bf9c48320168, type: 3}
+  - wallId: corner_NE
+    baseSpriteId: corner_NE_v1
+    flipX: 0
+    prefab: {fileID: 8574851638695609909, guid: f2ba41518ec4a7a47ad5d4d508cf44be, type: 3}
+  - wallId: corner_NW
+    baseSpriteId: corner_NE_v1
+    flipX: 1
+    prefab: {fileID: 468839459955096861, guid: ba4b437a4fda2e0429bef225ff1099c0, type: 3}
