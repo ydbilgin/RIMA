@@ -28,6 +28,7 @@ namespace RIMA.Combat
             CombatEventBus.OnCommitBeat += HandleCommitBeat;
             CombatEventBus.OnKill += HandleKill;
             CombatEventBus.OnDash += HandleDash;
+            CombatEventBus.OnTelegraph += HandleTelegraph;
         }
 
         private void OnDisable()
@@ -36,6 +37,7 @@ namespace RIMA.Combat
             CombatEventBus.OnCommitBeat -= HandleCommitBeat;
             CombatEventBus.OnKill -= HandleKill;
             CombatEventBus.OnDash -= HandleDash;
+            CombatEventBus.OnTelegraph -= HandleTelegraph;
             ResetCameraPosition();
         }
 
@@ -82,6 +84,16 @@ namespace RIMA.Combat
             }
 
             Shake(dashMagnitude, dashDuration);
+        }
+
+        private void HandleTelegraph(TelegraphEvent e)
+        {
+            if (!FeelToggleSettings.ShakeEnabled || !ProcLimiter.TryProc("shake_telegraph", minIcdSeconds))
+            {
+                return;
+            }
+
+            Shake(e.magnitude, e.duration);
         }
 
         public void Shake(float magnitude, float duration)

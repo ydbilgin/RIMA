@@ -47,7 +47,7 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 - VFX: **64-128px mix** (küçük 64-80, ultimate 96-128)
 - Yön: **8 yön LOCKED (Karar #114, 2026-05-13)** — 5 sprite üret (S, SE, E, NE, N), 3 mirror (W←E, SW←SE, NW←NE) Unity SpriteRenderer.flipX. Karar #53 + #88 (4-dir) REVOKED.
 - Renderer: **URP 2D Renderer + Pixel Perfect Camera + 2D Lights**
-- Anim view: **High top-down ~30-35° (Hades match, S59 KEEP via Karar #100)**
+- Anim view: **Near-pure TOP-DOWN (~85-90° from horizon, Diablo / Children of Morta / ChatGPT_TOPDOWN style). Camera close-up zoom for hero scale. NO iso projection math. Sprite 3/4 styling is sprite art choice, separate from camera angle.**
 - Anim FPS: **10-12 fps**
 - PPU: **64**
 - **YASAK:** 2.5D mimarisi, 3D environment + billboard, 128px detaylı karakter, KayKit/Blender 3D pipeline (S57-S58 REVOKED)

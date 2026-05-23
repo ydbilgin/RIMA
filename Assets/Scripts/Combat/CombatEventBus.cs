@@ -10,6 +10,7 @@ namespace RIMA.Combat
         public static event Action<DashEvent> OnDash;
         public static event Action<StatusEvent> OnStatusApplied;
         public static event Action<CommitBeatEvent> OnCommitBeat;
+        public static event Action<TelegraphEvent> OnTelegraph;
 
         public static void PublishHit(HitEvent e)
         {
@@ -36,6 +37,11 @@ namespace RIMA.Combat
             OnCommitBeat?.Invoke(e);
         }
 
+        public static void PublishTelegraph(TelegraphEvent e)
+        {
+            OnTelegraph?.Invoke(e);
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetOnDomainReload()
         {
@@ -44,6 +50,7 @@ namespace RIMA.Combat
             OnDash = null;
             OnStatusApplied = null;
             OnCommitBeat = null;
+            OnTelegraph = null;
         }
     }
 
@@ -87,5 +94,14 @@ namespace RIMA.Combat
         public Vector3 worldPos;
         public GameObject attacker;
         public int beatIndex;
+    }
+
+    public struct TelegraphEvent
+    {
+        public Vector3 worldPos;
+        public GameObject source;
+        public float magnitude;
+        public float duration;
+        public float radius;
     }
 }

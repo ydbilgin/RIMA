@@ -67,6 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "RIMA.slnx",
-    "kiroAgent.configureMCP": "Disabled"
+    "dotnet.defaultSolution": "RIMA_HD2D.slnx"
 }

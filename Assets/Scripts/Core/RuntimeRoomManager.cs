@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using RIMA.Runtime.Encounter;
+using RIMA.Save;
 using RIMA.Systems.Map;
 
 namespace RIMA
@@ -114,7 +115,7 @@ namespace RIMA
         private readonly Dictionary<string, GameObject> roomGameObjects = new Dictionary<string, GameObject>();
         private string currentRoomId;
         private Coroutine manifestTransitionRoutine;
-        private CheckpointData pendingCheckpoint;
+        private RIMA.Save.CheckpointData pendingCheckpoint;
         private bool hasPendingCheckpoint;
 
         // Kuzey duvarındaki 3 kapı slotu (x başlangıcı), hepsi aynı y'de
@@ -136,7 +137,8 @@ namespace RIMA
             Physics2D.IgnoreLayerCollision(12, 0, false);
             encounterBank = encounterBankStub;
             BuildRoomGameObjectLookup();
-            hasPendingCheckpoint = CheckpointSystem.LoadCheckpoint(out pendingCheckpoint);
+            pendingCheckpoint = CheckpointManager.Instance.Load();
+            hasPendingCheckpoint = pendingCheckpoint != null && !string.IsNullOrEmpty(pendingCheckpoint.currentRoomId);
         }
 
         private void Start()
@@ -202,8 +204,8 @@ namespace RIMA
         {
             BuildRoomGameObjectLookup();
 
-            string startRoomId = hasPendingCheckpoint && !string.IsNullOrEmpty(pendingCheckpoint.roomId)
-                ? pendingCheckpoint.roomId
+            string startRoomId = hasPendingCheckpoint && !string.IsNullOrEmpty(pendingCheckpoint.currentRoomId)
+                ? pendingCheckpoint.currentRoomId
                 : currentManifest.startingRoom != null
                 ? currentManifest.startingRoom.roomId
                 : null;
@@ -252,7 +254,16 @@ namespace RIMA
             if (RoomTransitionFX.Instance != null)
                 yield return RoomTransitionFX.Instance.FadeOut(0.3f);
 
-            CheckpointSystem.SaveCheckpoint(targetRoomId, CheckpointSystem.CapturePlayerState(playerTransform), currentManifest);
+            Health playerHealth = playerTransform != null ? playerTransform.GetComponent<Health>() : null;
+            CheckpointManager.Instance.Save(new RIMA.Save.CheckpointData
+            {
+                playerHealth = playerHealth != null ? playerHealth.CurrentHP : 0,
+                playerMaxHealth = playerHealth != null ? playerHealth.MaxHP : 0,
+                currentRoomId = targetRoomId,
+                currentActId = currentManifest != null ? currentManifest.manifestId : string.Empty,
+                inventory = System.Array.Empty<string>(),
+                equipped = System.Array.Empty<string>()
+            });
             NotifyRoomExited(currentRoomId);
 
             if (!string.IsNullOrEmpty(currentRoomId) &&

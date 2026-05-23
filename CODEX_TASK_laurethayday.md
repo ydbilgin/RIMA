@@ -1,183 +1,125 @@
 ALWAYS WRITE YOUR RESULT SUMMARY TO CODEX_DONE_laurethayday.md AS THE VERY LAST STEP.
 
-# Codex Task — Fresh Scene PlayableRoom_v2 (Iso Setup + Painter Ready)
+# Codex Task — HD-2D Hybrid Unity Technical Review
 
-ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
+## ACTIVE RULES
+(1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
 
-UnityMCP REQUIRED — Unity Editor açık + Scene/Game window docked (just verified).
+## NLM ACCESS
+If you need RIMA design context, query NLM first via:
+  `uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "<your question>"`
 
----
+## Amaç
+User wants to pivot RIMA from pure 2D pixel art pipeline to **HD-2D Hybrid pattern** (like Octopath Traveler, Triangle Strategy, HD-2D Dragon Quest III):
+- **Characters:** stay 2D pixel art sprites (PixelLab pipeline locked — Karar #100 chibi 64px)
+- **Environment (walls + floor):** modeled in 3D (Blender or Unity ProBuilder), textured with 2D pixel art
+- **Camera:** orthographic at iso angle (~85-90° tilt), Pixel Perfect Camera
+- **Lighting:** 3D scene lights interact with 2D sprites
 
-## Bağlam
+Evaluate Unity technical feasibility, complexity, and provide implementation outline.
 
-Önceki `IsoShowcaseRoom_S95.unity` Unity Editor crash'ine sebep oldu (native access violation, scene corruption). Quarantine edildi → `IsoShowcaseRoom_S95.unity.corrupted_2026_05_21`. **O dosyaya DOKUNMA, açma, reference verme.**
+This runs IN PARALLEL with Opus design verdict (rima-design agent handles design judgment). Your job: pure Unity tech.
 
-Sıfırdan yeni scene yarat: `Assets/Scenes/Demo/PlayableRoom_v2.unity`
+## Files for context
+- `F:/Antigravity Projeler/2d roguelite/RIMA/Assets/Scripts/Rooms/` — existing scaffolded room scripts (RoomTemplate, OverlayAnchor, DecorCategory, RoomDecorationSpawner). Will any of this still apply?
+- `F:/Antigravity Projeler/2d roguelite/RIMA/CURRENT_STATUS.md` — S102 status with Option C lock
+- `F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/architecture_decision.md` — current locked Option C
+- `F:/LaurethStudio/05_RESEARCH/3d_pipeline_tooling.md` — studio 3D tooling research (TRELLIS, Blender MCP, etc.)
 
-## Görev — Sıfırdan İso Scene Setup
+## Your task — Unity Tech Review
 
-User Painter ile boyamak istiyor — Scene view iso görünmeli, math doğru çalışmalı.
+### 1. Camera setup for HD-2D
+- Orthographic vs Perspective camera?
+- Tilt angle for iso top-down (85-90°)?
+- Pixel Perfect Camera component compatibility with 3D scene?
+- Multiple cameras (e.g., one for 3D bg, one for 2D UI)?
+- URP 2D Renderer (currently in use) vs URP 3D Renderer — can we use both? Switch?
 
-Memory `project-isometric-floor-pivot-s95` LOCK referans:
-- Grid cellLayout = **Isometric Z As Y** (4)
-- cellSize = **(1, 0.5, 1)** diamond ratio
-- Transparency Sort Axis = (0, 1, 0)
+### 2. Sprite-on-Mesh / 2D character in 3D world
+- Sprite Renderer with `Sorting Order` for character?
+- How does Y-sorting work with 3D environment? (Sprite must sort against 3D objects in front/behind)
+- Billboard shader OR fixed-rotation sprite?
+- Shadow casting: do 2D sprites cast shadows on 3D walls? (Octopath Traveler does this)
+- Lighting: how does a 2D sprite receive light from a 3D point light? (custom shader vs built-in URP 2D)
 
-## Workflow
+### 3. 3D wall mesh + 2D pixel art texture pipeline
+- Blender → FBX → Unity vs Unity ProBuilder native?
+- Texture filter mode: Point (no filter) for pixel art preservation
+- Texel density at iso angle (texture stretches/squashes when wall is tilted)
+- Seamless/tileable texture pipeline (existing PixelLab Wang tilesets relevant?)
+- Trim sheet vs full-wall texture
+- UV mapping considerations for irregular dungeon shapes
 
-### Step 1 — New Empty Scene
-1. UnityMCP `manage_scene` ile yeni empty scene yarat: `Assets/Scenes/Demo/PlayableRoom_v2.unity`
-2. Scene aç (load)
-3. Default Main Camera + Directional Light EditorScene'inden geliyor — Main Camera tut, Directional Light sil (2D iso için)
+### 4. Lighting system
+- URP 2D lights (currently locked S59) vs URP 3D forward+ renderer
+- Can we mix? Or full switch to 3D renderer with 2D-style materials?
+- Real-time vs baked lighting for dungeon torches
+- Sprite lighting: how Octopath handles "sprite catches light from 3D source"
 
-### Step 2 — Isometric Grid Hierarchy
+### 5. Pipeline complexity for solo dev
+- Estimated LOC for new pipeline (vs existing 2D pipeline)
+- Blender learning curve (assume basic) vs ProBuilder (in-Unity)
+- Asset production: 3D wall kit + 2D texture (number of unique assets needed)
+- Iteration speed: change a wall shape — how many steps?
 
-```
-Grid (root GameObject)
-├─ Component: Grid
-│   ├─ Cell Layout: Isometric Z As Y (cellLayout=4)
-│   ├─ Cell Size: (1, 0.5, 1)
-│   └─ Cell Swizzle: XYZ
-├─ FloorTilemap (child)
-│   ├─ Component: Tilemap
-│   └─ Component: TilemapRenderer
-│       ├─ Sorting Layer: "Floor" (yarat eğer yoksa)
-│       └─ Order in Layer: 0
-├─ WallTilemap (child)
-│   ├─ Component: Tilemap
-│   └─ Component: TilemapRenderer
-│       ├─ Sorting Layer: "Walls" (yarat eğer yoksa)
-│       └─ Order in Layer: 20
-├─ Props_Root (child empty GameObject)
-│   └─ (prop GameObject'ler için parent)
-└─ Lighting_Root (child empty GameObject)
-    └─ (Light2D obje'leri için parent)
-```
+### 6. Integration with existing scaffolded scripts
+- `Assets/Scripts/Rooms/RoomTemplate.cs` — does it still apply? Modify how?
+- `OverlayAnchor.cs` and decor placement — still valid for 2D decor in 3D world?
+- Anchor positions in 3D space (Vector3 vs Vector2)?
+- RoomDecorationSpawner — adapt for 3D scene?
 
-### Step 3 — Project Settings
+### 7. Performance & polish
+- Draw call estimation per dungeon room
+- Mesh count for typical dungeon
+- Z-fighting risks at wall joins
+- Pixel art crispness at iso angle (mipmap, scaling)
+- Common HD-2D gotchas (research Octopath / Triangle Strategy postmortems briefly)
 
-UnityMCP `manage_graphics`:
-- `Edit > Project Settings > Graphics > Camera Settings > Transparency Sort Mode`: **Custom Axis**
-- `Transparency Sort Axis`: **(0, 1, 0)** Y dominant
+### 8. Implementation outline (if pivot ADOPT)
+5-7 concrete Unity steps to validate this approach in a 1-day proof slice:
+1. Setup URP 3D renderer or hybrid
+2. Build 1 modular wall in ProBuilder
+3. Apply tileable PixelLab texture
+4. Setup orthographic camera at iso angle with Pixel Perfect
+5. Place test 2D character sprite (existing warblade)
+6. Add 1 dynamic light (point light = torch)
+7. Test: looks like Octopath? Looks like chatgpt_ref?
 
-### Step 4 — Camera Setup
-
-Main Camera:
-- Projection: **Orthographic**
-- Ortho Size: **5**
-- Position: **(0, 0, -10)**
-- Rotation: **(0, 0, 0)** — sprite iso angle baked-in, camera rotation YOK
-- Background: dark gray (HSV 0,0,0.1)
-
-### Step 5 — Tile Asset Creation (varsa reuse)
-
-3 granite variant için Tile asset yarat:
-- `Assets/Data/Tiles/Act1_ShatteredKeep/isometric_v01/granite_clean.asset`
-- `granite_worn.asset`
-- `granite_chiseled.asset`
-
-Source sprite path:
-- `Assets/Art/AssetPacks/Act1_ShatteredKeep/floor_tiles/iso/act1_iso_granite_clean.png`
-- `act1_iso_granite_worn.png`
-- `act1_iso_granite_chiseled.png`
-
-Eğer Tile asset'ler zaten varsa reuse.
-
-### Step 6 — Floor Paint (16×10 grid)
-
-FloorTilemap'e 16×10 cell paint:
-- Random weighted: clean 60%, worn 30%, chiseled 10%
-- Cell coord range: (0,0) to (15,9) — Isometric layout otomatik diamond places
-- Programmatic paint via `tilemap.SetTile(new Vector3Int(x, y, 0), tile)`
-
-### Step 7 — Wall Paint (Perimeter Rectangle)
-
-WallTilemap'e perimeter rectangle:
-- RuleTile asset: `Assets/Art/Tilesets/Act1_WallRuleTile.asset` (mevcut, önceki dispatch yarattı)
-- North row (y=9): 16 cell paint (RuleTile auto-pick face_NS + corners)
-- South row (y=0): 14 cell paint + 2 cell manual arch_opening center
-- East col (x=15): 8 cell (y=1..8)
-- West col (x=0): 8 cell (y=1..8)
-- 4 corner auto-handled by RuleTile
-
-Arch opening:
-- WallTilemap'e separate Tile asset `Act1_WallArchOpening.asset` (mevcut)
-- Manual SetTile at south wall center (cells (7,0) ve (8,0))
-
-### Step 8 — Warblade Player
-
-Player GameObject yarat:
-- Name: "Player_Warblade"
-- Components:
-  - SpriteRenderer: sprite = `Assets/Art/Characters/Warblade/Rotations/warblade_south.png`
-  - Sorting Layer: "Player" (yarat eğer yoksa)
-  - Rigidbody2D: kinematic
-  - CircleCollider2D: radius 0.3
-  - `Assets/Scripts/Player/PlayerMovementController.cs` (mevcut, önceki dispatch yazdı)
-  - `Assets/Scripts/Utilities/IsoSortingOrder.cs` (mevcut, önceki dispatch yazdı)
-- Spawn position: **(7.5, 4.5, 0)** (room center)
-
-### Step 9 — Camera Follow (basit)
-
-Main Camera GameObject'ine basit follow script ekle (varsa reuse veya minimal yaz):
-
-```csharp
-public class CameraFollow2D : MonoBehaviour {
-    public Transform target;
-    public Vector3 offset = new Vector3(0, 0, -10);
-    void LateUpdate() {
-        if (target != null) transform.position = target.position + offset;
-    }
-}
-```
-
-Eğer mevcut `CameraFollow2D.cs` veya benzer varsa o reuse.
-Target: Player_Warblade GameObject.
-
-### Step 10 — Test + Verification
-
-1. Scene save: `PlayableRoom_v2.unity`
-2. Scene view'da görsel kontrol:
-   - Grid lines diamond pattern (iso) — square DEĞİL
-   - Floor 16×10 diamond layout
-   - Walls perimeter rectangle iso projection
-   - Player center'da Warblade sprite
-3. Painter window aç (`RIMA/Tools/World Painter` veya benzer menu):
-   - Floor Paint test: 1 cell paint et, doğru hücreye gidiyor mu?
-   - Wall Paint test: 1 cell paint et, RuleTile auto-connect mi?
-4. Play mode test (5sn):
-   - WASD ile Warblade hareket ediyor mu?
-   - Camera follow çalışıyor mu?
-   - Console error check
-5. Screenshots:
-   - `STAGING/screenshots/playable_room_v2_scene.png` (Scene view, iso görünür)
-   - `STAGING/screenshots/playable_room_v2_game.png` (Game view, player visible)
-
-### Step 11 — Compile Check (HARD RULE 2026-05-21 LOCK)
-
-- `read_console` çağır
-- Error/warning varsa **OTOMATIK fix et** + recheck
-- Hâlâ hata varsa BLOCKED + raporla
+### 9. Verdict
+- **ADOPT** / **SKIP** / **RESEARCH_MORE** from pure tech feasibility perspective
+- Top 3 tech risks
+- Top 3 tech wins
 
 ## Output
 
-1. `Assets/Scenes/Demo/PlayableRoom_v2.unity` — yeni scene
-2. (gerekirse) 3 Tile asset granite_clean/worn/chiseled
-3. `STAGING/screenshots/playable_room_v2_scene.png`
-4. `STAGING/screenshots/playable_room_v2_game.png`
-5. `CODEX_DONE_*.md`: setup verification + Painter test + player movement OK/FAIL + compile result
+Write report to: `F:/Antigravity Projeler/2d roguelite/RIMA/STAGING/codex_hd2d_tech_review.md`
 
-## Kısıt
+Structure:
+```
+# Codex HD-2D Tech Review
 
-- Corrupted scene `IsoShowcaseRoom_S95.unity.corrupted_2026_05_21` **AÇMA, REFERENCE ETME**
-- Existing asset reuse (RuleTile, Player movement script, IsoSortingOrder)
-- Yeni asset gen YASAK (sadece scene + tile asset + minor script)
-- Cell Layout `Isometric Z As Y` HARD LOCK — değiştirme
-- Camera rotation YASAK
-- Mob YASAK (sadece environment + player)
+## Verdict
+Choice: ADOPT/SKIP/RESEARCH_MORE
+Confidence: low/med/high
+Top 3 wins / Top 3 risks
 
-## Effort
-medium (1-2 saat)
+## Tech analysis
+[Per question 1-7, brief but concrete]
+
+## Implementation outline (5-7 Unity steps)
+[Concrete, with file paths and component names]
+
+## Code-level risks
+[What could go wrong from engineering side]
+```
+
+Target 500-800 words. No actual code in the report — just analysis + outline.
+
+## Constraints
+- Do NOT write code or modify Unity files
+- Do NOT contradict character lock
+- Output ONE report file only
+- Don't redo design (Opus handles), focus on Unity tech
 
 
 ---

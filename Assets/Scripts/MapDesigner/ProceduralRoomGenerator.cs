@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using RIMA.Data;
+using RIMA.MapDesigner.Room.Data;
 using UnityEngine;
 
 namespace RIMA.MapDesigner
@@ -29,6 +30,7 @@ namespace RIMA.MapDesigner
         public PatchAtlasSO decalAtlas;
         public PatchAtlasSO accentAtlas;
         public ScatterBrushSO scatterBrush;
+        public List<BackgroundLayerData> backgroundLayers;
         public NaturalFeatureGraphResult naturalFeatures;
         public FeatureEdgeSmoothingProfileSO featureEdgeSmoothingProfile;
 

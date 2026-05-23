@@ -10,6 +10,8 @@ namespace RIMA.Map
         public class WallEntry
         {
             public string wallId;
+            public string baseSpriteId;
+            public bool flipX;
             public GameObject prefab;
         }
 

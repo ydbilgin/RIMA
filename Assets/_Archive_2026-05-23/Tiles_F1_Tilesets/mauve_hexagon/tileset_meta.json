@@ -1,0 +1,28 @@
+{
+  "name": "mauve_hexagon",
+  "tileSize": 32,
+  "upper": "hexagon",
+  "spritesheet": "spritesheet.png",
+  "gridRows": 4,
+  "cornerKeyToSpriteIndex": [
+    6,
+    7,
+    10,
+    9,
+    2,
+    11,
+    4,
+    15,
+    5,
+    14,
+    1,
+    8,
+    3,
+    0,
+    13,
+    12
+  ],
+  "id": "a1b63282-7bc3-4acb-a390-e82853b8168d",
+  "gridCols": 4,
+  "lower": "warm mauve"
+}
