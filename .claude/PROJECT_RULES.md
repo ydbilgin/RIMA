@@ -42,12 +42,12 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 
 ### Asset Üretim (S59 LOCKED — 2026-05-12)
 - **Pure 2D Top-Down chibi pixel art** mimarisi
-- Karakter sprite: **64x64 chibi** (Karar #100 RESTORE), PixelLab Create Image Pro (master sheet) -> Create Character -> Custom Animation V3
+- Karakter sprite: actual canvas **120x120** (Warblade verified 2026-05-24). "Chibi" = design intent terimi (proportion), canvas boyutu DEGIL. Karar #100 (64x64 chibi RESTORE) canvas tarafi REVISE; PixelLab Create Image Pro (master sheet) -> Create Character -> Custom Animation V3
 - Tile: **32x32** top-down grid
 - VFX: **64-128px mix** (küçük 64-80, ultimate 96-128)
 - Yön: **8 yön LOCKED (Karar #114, 2026-05-13)** — 5 sprite üret (S, SE, E, NE, N), 3 mirror (W←E, SW←SE, NW←NE) Unity SpriteRenderer.flipX. Karar #53 + #88 (4-dir) REVOKED.
 - Renderer: **URP 2D Renderer + Pixel Perfect Camera + 2D Lights**
-- Anim view: **High top-down ~30-35° (Hades match, S59 KEEP via Karar #100)**
+- Anim view: **HIGH TOP-DOWN 3/4 (~70-80° from horizon, Hades / Children of Morta / Diablo III ref, Karar #114 reaffirm 2026-05-24). Camera close-up zoom for hero scale. NO iso projection math, NO true 45° diamond. Sprite 3/4 styling = sprite art choice, separate from camera angle.**
 - Anim FPS: **10-12 fps**
 - PPU: **64**
 - **YASAK:** 2.5D mimarisi, 3D environment + billboard, 128px detaylı karakter, KayKit/Blender 3D pipeline (S57-S58 REVOKED)

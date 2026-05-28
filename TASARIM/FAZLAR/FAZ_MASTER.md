@@ -29,7 +29,7 @@ ozet: "RIMA referans dokumani"
 - **Detaylı kararlar:** `../MASTER_KARAR_BELGESI.md` dosyasında
 - **Act 1 oda revize (Karar #62 LOCKED):** ~~8-9 oda~~ -> **15 node** (1 entry + 6 combat + 2 elite + 2 rest + 1 shop + 1 curse gate + 1 mystery + 1 boss). Detay: `../dungeon_act1_map.md`
 - **Map Fragment + Kirrik Tas Tablet (Karar #63 LOCKED):** Fragment-based reveal sistemi, Boss kapisi 8 fragment. UI: TAB MapPanel + sol-ust MiniMap.
-- **Silah Gorünürlük Single-State (Karar #71 LOCKED):** Silah hep elde, Ronin istisna (sheath/draw kimligi). Pixel art constraint + combat-readability. Detay: `../MAKEUP_BACKLOG.md` + `../CINEMATIC_LAYER_v1.md`
+- ~~Silah Gorünürlük Single-State (Karar #71)~~ **REVOKED by Karar #144 (2026-05-16) + #146 (2026-05-18):** Body weaponless + Weapon Child SR + Puff system. Detay: MASTER_KARAR_BELGESI #144/#146.
 - **AD v1 Sprint (Karar #64-70):** ActionCommitProfile 5 alan, 3-layer feedback, posture v1 (boolean armor flag), dash-cancel per-class (Ravager/Shadow %15-25, Ranger/GS %30-55, Warblade/Brawler %60-75), OnDash proc, Cross-Class Proc text feedback.
 - **S59 Pivot LOCKED (Karar #72-76, 2026-05-12):** Pure 2D top-down + 64x64 chibi karakter, silahlı 1-piece (sınıf-silah sabit, body-only + WeaponAnchorMap REVOKED), boyut hiyerarşi 2^n + PPU=64 standardize, Final Boss 256x256+PPU=64 (sahnede ~2.5x), Map tools KULLANILMAYACAK (NLM lock), asset prompt format TYPE/HEAD/BODY/LIMBS. Eski 2.5D mimari + 128px native + chibi YASAK + KayKit/Blender pipeline REVOKED. Mevcut RIMA projesi RESTORE (RIMA_2.5D nested arsivlenecek).
 
@@ -187,7 +187,7 @@ Narrative direction:
 | #62 | Act 1 node sayisi: 15 node (entry+combat+elite+rest+shop+curse+mystery+boss) | Faz 2+ |
 | #63 | Map Fragment + Kirrik Tas Tablet reveal sistemi, 8 fragment boss kapisi | Faz 2+ |
 | #64-70 | AD v1 Sprint: ActionCommitProfile, 3-layer feedback, posture v1, dash-cancel | Faz 1+ |
-| #71 | Silah Single-State: hep elde, Ronin sheath/draw istisna | Faz 1+ |
+| ~~#71~~ | ~~Silah Single-State~~ REVOKED by #144/#146 | Faz 1+ |
 | #72 | S59 Pivot — pure 2D top-down 64x64 chibi | Tüm fazlar |
 | #74 | Boyut hiyerarşi 2^n + PPU=64 | Tüm fazlar |
 | #80 | Class Silhouette Bible | Tüm fazlar |
@@ -220,8 +220,12 @@ Narrative direction:
 | #133 | Game UI — MainMenu + CharacterSelect | Faz 1 |
 | #134 | Procedural Room Designer Pivot | Faz 1+ |
 | #135 | Phase 1 Map Workflow — Procedural+Paint Hybrid | Faz 1 P0: Codex 6-deliverable dispatch + Paralel Pro UI Pair A/B gen |
+| #144 | Karakter weaponless + Weapon Child SR (Karar #71/#73 OVERRIDE) | Faz 1+ |
+| #146 | Weapon Visibility Input-Driven Puff System (#71+#144 unify) | Faz 1+ |
+| #147 | Multi-Layer Painter System (RoomTemplate List<BackgroundLayerData>) | Faz 1+ |
+| #148 | 2026-05-24 Camera + Sprite Reconcile (HIGH TOP-DOWN 3/4, 70-80°, sprite 120×120 actual) | Tüm fazlar |
 
-**Durum: FAZ_MASTER tablosu sadece Faz-impact özet. #72-#135 canonical kararlar icin `../MASTER_KARAR_BELGESI.md` referans. Son guncelleme 2026-05-15 S77.**
+**Durum: FAZ_MASTER tablosu sadece Faz-impact özet. #72-#148 canonical kararlar icin `../MASTER_KARAR_BELGESI.md` referans. Son guncelleme 2026-05-24 S103.**
 
 ---
 
