@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using RIMA.Runtime.Encounter;
+using RIMA.Save;
 using RIMA.Systems.Map;
 
 namespace RIMA
@@ -114,7 +115,7 @@ namespace RIMA
         private readonly Dictionary<string, GameObject> roomGameObjects = new Dictionary<string, GameObject>();
         private string currentRoomId;
         private Coroutine manifestTransitionRoutine;
-        private CheckpointData pendingCheckpoint;
+        private RIMA.Save.CheckpointData pendingCheckpoint;
         private bool hasPendingCheckpoint;
 
         // Kuzey duvarındaki 3 kapı slotu (x başlangıcı), hepsi aynı y'de
@@ -136,7 +137,8 @@ namespace RIMA
             Physics2D.IgnoreLayerCollision(12, 0, false);
             encounterBank = encounterBankStub;
             BuildRoomGameObjectLookup();
-            hasPendingCheckpoint = CheckpointSystem.LoadCheckpoint(out pendingCheckpoint);
+            pendingCheckpoint = CheckpointManager.Instance.Load();
+            hasPendingCheckpoint = pendingCheckpoint != null && !string.IsNullOrEmpty(pendingCheckpoint.currentRoomId);
         }
 
         private void Start()
@@ -202,8 +204,8 @@ namespace RIMA
         {
             BuildRoomGameObjectLookup();
 
-            string startRoomId = hasPendingCheckpoint && !string.IsNullOrEmpty(pendingCheckpoint.roomId)
-                ? pendingCheckpoint.roomId
+            string startRoomId = hasPendingCheckpoint && !string.IsNullOrEmpty(pendingCheckpoint.currentRoomId)
+                ? pendingCheckpoint.currentRoomId
                 : currentManifest.startingRoom != null
                 ? currentManifest.startingRoom.roomId
                 : null;
@@ -245,14 +247,25 @@ namespace RIMA
 
         private IEnumerator TransitionToRoomRoutine(string targetRoomId, string targetSpawnPoint, GameObject targetRoom)
         {
-            PlayerMovementController movement = ResolvePlayerMovement();
-            bool movementWasEnabled = movement != null && movement.enabled;
-            if (movement != null) movement.enabled = false;
+            // Disable movement during transition. PlayerController is the active movement system;
+            // PlayerMovementController is legacy (kept for compatibility) but no longer moves the player.
+            PlayerController playerCtrl = playerTransform != null ? playerTransform.GetComponent<PlayerController>() : null;
+            bool movementWasEnabled = playerCtrl != null && playerCtrl.enabled;
+            if (playerCtrl != null) playerCtrl.enabled = false;
 
             if (RoomTransitionFX.Instance != null)
                 yield return RoomTransitionFX.Instance.FadeOut(0.3f);
 
-            CheckpointSystem.SaveCheckpoint(targetRoomId, CheckpointSystem.CapturePlayerState(playerTransform), currentManifest);
+            Health playerHealth = playerTransform != null ? playerTransform.GetComponent<Health>() : null;
+            CheckpointManager.Instance.Save(new RIMA.Save.CheckpointData
+            {
+                playerHealth = playerHealth != null ? playerHealth.CurrentHP : 0,
+                playerMaxHealth = playerHealth != null ? playerHealth.MaxHP : 0,
+                currentRoomId = targetRoomId,
+                currentActId = currentManifest != null ? currentManifest.manifestId : string.Empty,
+                inventory = System.Array.Empty<string>(),
+                equipped = System.Array.Empty<string>()
+            });
             NotifyRoomExited(currentRoomId);
 
             if (!string.IsNullOrEmpty(currentRoomId) &&
@@ -271,21 +284,11 @@ namespace RIMA
             if (RoomTransitionFX.Instance != null)
                 yield return RoomTransitionFX.Instance.FadeIn(0.3f);
 
-            if (movement != null) movement.enabled = movementWasEnabled;
+            if (playerCtrl != null) playerCtrl.enabled = movementWasEnabled;
             manifestTransitionRoutine = null;
             Debug.Log("[RuntimeRoomManager] Transitioned to " + targetRoomId + " spawn=" + targetSpawnPoint);
         }
 
-        private PlayerMovementController ResolvePlayerMovement()
-        {
-            if (playerTransform == null)
-            {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                if (player != null) playerTransform = player.transform;
-            }
-
-            return playerTransform != null ? playerTransform.GetComponent<PlayerMovementController>() : null;
-        }
 
         private void NotifyRoomEntered(string roomId)
         {
@@ -542,6 +545,7 @@ namespace RIMA
         {
             // Room cleared sequence tetiklenecek; draft yerine ClassSelectionTrigger devralır
             Debug.Log("[RuntimeRoomManager] Boss defeated! Class selection will trigger.");
+            RIMA.Systems.Map.RoomLoader.RaiseDemoComplete();
         }
 
         private IEnumerator SpawnEnemies(int count, bool forceElite, int spawnRunId)
@@ -1428,4 +1432,3 @@ namespace RIMA
 
 
 }
-

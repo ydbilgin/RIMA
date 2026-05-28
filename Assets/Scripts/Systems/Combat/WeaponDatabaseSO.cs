@@ -16,6 +16,7 @@ namespace RIMA
             public bool twoHanded;
             public bool orientBetweenHands;
             public float orientationOffsetDegrees;
+            public Vector2[] handOffsets = new Vector2[8];
         }
 
         public WeaponEntry[] entries;
@@ -28,3 +29,4 @@ namespace RIMA
         }
     }
 }
+

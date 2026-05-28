@@ -170,6 +170,18 @@ namespace RIMA
             OnComboStep?.Invoke(step);
         }
 
+#if UNITY_INCLUDE_TESTS
+        /// <summary>
+        /// Test-only hook: invokes the basic attack behavior directly, bypassing
+        /// InputAction device binding. Safe to call from PlayMode tests.
+        /// </summary>
+        public void InvokeBasicAttackForTest()
+        {
+            if (behavior == null || basicAttackProfile == null) return;
+            behavior.OnLMBInput(this, basicAttackProfile, true, false);
+        }
+#endif
+
         internal void EmitSlashArc(Vector2 facingDirection, int step)
         {
             slashArcVFX?.Emit(facingDirection, step);

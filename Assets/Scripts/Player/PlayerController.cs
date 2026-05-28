@@ -84,6 +84,12 @@ namespace RIMA
             set => PlayerPrefs.SetInt(AttackAimModePrefKey, (int)value);
         }
 
+        // CapsuleCollider2D sizing rationale (set in Warblade.prefab Inspector):
+        // width  = effective sprite width  × 0.9  — 10% inset prevents shoulder pixels
+        //          (alpha-threshold ~5%) from clipping into wall colliders.
+        // height = effective sprite height (full) — no vertical inset needed for top-down.
+        // "Effective" bounds = alpha-threshold scan at 5% opacity cutoff on the sprite sheet.
+        // Example: effective width 0.5938 → collider width 0.53 (0.5938 × 0.9 ≈ 0.535 → rounded 0.53).
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -181,6 +187,21 @@ namespace RIMA
                 dashDir = lastMoveDir;
             }
 
+            // Walkability pre-check (Hades pattern): if dash would land on void, abort.
+            // Input is registered, cooldown is NOT consumed, no movement starts.
+            // MVP: dash end = current + dashDir * (dashSpeed * dashDuration).
+            // If no WalkabilityMap in scene, behavior is unchanged (legacy permissive).
+            WalkabilityMap walkMap = WalkabilityMap.Instance;
+            if (walkMap != null)
+            {
+                Vector3 dashEnd = transform.position + (Vector3)(dashDir * (dashSpeed * dashDuration));
+                if (!walkMap.IsDashableWorld(dashEnd))
+                {
+                    // Future: trigger dash-fail SFX / anim hook here.
+                    return false;
+                }
+            }
+
             isDashing = true;
             dashTimer = dashDuration;
             dashCooldownTimer = dashCooldown;
@@ -235,9 +256,27 @@ namespace RIMA
             if (attack != null && attack.IsCommitted) speedMult *= commitmentMoveMult;
 
             if (isDashing)
+            {
                 rb.linearVelocity = dashDir * dashSpeed;
-            else
-                rb.linearVelocity = moveInput * moveSpeed * speedMult;
+                return;
+            }
+
+            // Defensive walkable pre-check: if next-frame position lands on a void cell,
+            // zero velocity instead of moving. Acts as a fallback for VoidBlocker collider.
+            // Permissive when no WalkabilityMap exists (legacy behavior preserved).
+            Vector2 desiredVel = moveInput * moveSpeed * speedMult;
+            WalkabilityMap walkMap = WalkabilityMap.Instance;
+            if (walkMap != null && desiredVel.sqrMagnitude > MoveDeadzoneSqr)
+            {
+                Vector3 nextPos = transform.position + (Vector3)(desiredVel * Time.fixedDeltaTime);
+                if (!walkMap.IsWalkableWorld(nextPos))
+                {
+                    rb.linearVelocity = Vector2.zero;
+                    return;
+                }
+            }
+
+            rb.linearVelocity = desiredVel;
         }
 
         public void FaceCombatTarget()

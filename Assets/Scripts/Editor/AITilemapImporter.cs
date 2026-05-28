@@ -5,7 +5,7 @@ using RIMA.Systems.Map;
 
 public class AITilemapImporter : EditorWindow
 {
-    [MenuItem("RIMA/Tools/AI Tilemap Importer")]
+    // [MenuItem removed — legacy AI importer, archived]
     public static void Open() => GetWindow<AITilemapImporter>("AI Tilemap Importer");
 
     private string elevationASCII = "# # #\n# . #\n# # #";

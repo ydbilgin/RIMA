@@ -40,7 +40,7 @@ namespace RIMA.MapDesigner.Brush.Editor.UI
         public BrushToolMode ToolMode => toolMode;
         public float BrushSize => brushSize;
 
-        [MenuItem("RIMA/Map Designer/Brush Tool", priority = 20)]
+        [MenuItem("RIMA/Map Designer Brush Tool", priority = 20)]
         public static void Open()
         {
             var w = GetWindow<MapDesignerBrushWindow>("RIMA Brush Tool");

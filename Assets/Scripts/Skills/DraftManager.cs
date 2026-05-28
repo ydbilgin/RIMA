@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using RIMA.Systems.Map;
+using RIMA.Environment;
 
 namespace RIMA
 {
@@ -105,11 +106,33 @@ namespace RIMA
         {
             if (IsDraftActive) return;
 
+            // Phase 1: gate-locked rooms suppress the auto-timer; draft fires from gate (portal) entry only.
+#if UNITY_2023_1_OR_NEWER
+            var anchor = Object.FindFirstObjectByType<FragmentDropAnchor>();
+#else
+            var anchor = Object.FindObjectOfType<FragmentDropAnchor>();
+#endif
+            if (anchor != null && anchor.usePortalGatedDraft)
+            {
+                Debug.Log("[DraftManager] Gate-locked room — auto-timer suppressed.");
+                return;
+            }
+
             int room = RuntimeRoomManager.Instance?.CurrentRoom ?? 1;
             if (room == ForgeRoom1 || room == ForgeRoom2) return;
             if (IsNonDraftRoom(currentRoomConfig)) return;
 
             StartCoroutine(ShowDraftDelayed(RoomClearDraftDelay));
+        }
+
+        /// <summary>
+        /// Phase 1 gate (portal) entry point — bypasses room-cleared timer suppression and opens the draft now.
+        /// </summary>
+        public void TriggerDraftFromFragment(Portal source)
+        {
+            if (IsDraftActive) return;
+            Debug.Log($"[DraftManager] TriggerDraftFromFragment — destination={(source != null ? source.destination.ToString() : "<null>")}");
+            ShowDraft();
         }
 
         private static bool IsNonDraftRoom(RoomConfig config)

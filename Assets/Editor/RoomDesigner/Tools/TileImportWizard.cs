@@ -17,7 +17,7 @@ public sealed class TileImportWizard : EditorWindow
     private Vector2 scrollPosition;
     private string lastResult = "No import run yet.";
 
-    [MenuItem("RIMA/Tile Import Wizard")]
+    // [MenuItem removed — duplicate; legacy path]
     public static void Open()
     {
         EnsureTemplateAsset();

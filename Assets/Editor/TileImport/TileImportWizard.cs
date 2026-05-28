@@ -46,7 +46,7 @@ namespace RIMA.Editor.TileImport
             Error
         }
 
-        [MenuItem("RIMA/Legacy Tile Import Wizard")]
+        // [MenuItem removed — legacy, replaced by RIMA/Room Painter Tools]
         public static void Open()
         {
             var window = GetWindow<TileImportWizard>();

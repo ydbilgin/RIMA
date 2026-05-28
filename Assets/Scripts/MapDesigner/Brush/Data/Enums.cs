@@ -1,6 +1,6 @@
 namespace RIMA.MapDesigner.Brush.Data
 {
-    public enum BrushCategory { Floor, Variation, Wall, Transition, Detail, RiftAccent, Composite }
+    public enum BrushCategory { Floor, Variation, Wall, Transition, Detail, RiftAccent, Composite, Cliff }
 
     public enum PaintMode
     {
@@ -37,7 +37,11 @@ namespace RIMA.MapDesigner.Brush.Data
         DirtChip,
         RiftCrack,
         RiftCorruption,
-        MagicalMark
+        MagicalMark,
+        // D2: 6-layer architecture additions (2026-05-27)
+        CliffFaceDecor,   // L3 — mounting_*.prefab, cliff-hanging decorations
+        WallBlocker,      // L5 — statue, pillar, broken column, small wall
+        GameplayObject    // L6 — chest, fragment, gate, trigger volumes
     }
 
     public enum SizeBucket { Micro, Small, Medium, Large, Hero }

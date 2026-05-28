@@ -8,11 +8,20 @@ namespace RIMA.Combat
     public class AttackTokenManager : MonoBehaviour
     {
         private static AttackTokenManager instance;
+        private static bool _shuttingDown;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            instance = null;
+            _shuttingDown = false;
+        }
 
         public static AttackTokenManager Instance
         {
             get
             {
+                if (_shuttingDown) return null;
                 if (instance == null && Application.isPlaying)
                 {
                     var go = new GameObject(nameof(AttackTokenManager));
@@ -43,10 +52,18 @@ namespace RIMA.Combat
             Instance = this;
         }
 
+        private void OnApplicationQuit()
+        {
+            _shuttingDown = true;
+        }
+
         private void OnDestroy()
         {
             if (instance == this)
-                Instance = null;
+            {
+                instance = null;
+                _shuttingDown = true;
+            }
         }
 
         public bool TryConsumeToken(GameObject enemy, AttackTokenType type)

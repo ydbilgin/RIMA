@@ -18,7 +18,7 @@ namespace RIMA.Editor
             window.Show();
         }
 
-        [MenuItem("RIMA/Scene View/Preview Room 01")]
+        // [MenuItem removed — diagnostic util, use Room Preview Panel instead]
         public static void PreviewFirstRoom()
         {
             PaintRoom(0);

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RIMA.MapDesigner.Encounter;
 using RIMA.MapDesigner.Room.Data;
+using RIMA.Save;
 using UnityEngine;
 
 namespace RIMA.Runtime.Encounter
@@ -80,6 +81,7 @@ namespace RIMA.Runtime.Encounter
                 return;
             }
 
+            SaveTransitionCheckpoint(nextIndex);
             State = SubRoomState.Transitioning;
             if (RoomTransitionFX.Instance != null)
             {
@@ -260,6 +262,7 @@ namespace RIMA.Runtime.Encounter
             if (IsFinalSubRoom)
             {
                 State = SubRoomState.EncounterComplete;
+                CheckpointManager.Instance.Clear();
                 RuntimeRoomManager.Instance?.OnEncounterFinalCleared();
                 OnEncounterComplete?.Invoke();
                 if (Active == this) Active = null;
@@ -300,6 +303,27 @@ namespace RIMA.Runtime.Encounter
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
                 player.transform.position = TileToWorld(socket.position);
+        }
+
+        private void SaveTransitionCheckpoint(int nextIndex)
+        {
+            if (Template == null || Template.subRooms == null || nextIndex < 0 || nextIndex >= Template.subRooms.Count)
+                return;
+
+            SubRoomEntry nextEntry = Template.subRooms[nextIndex];
+            RoomTemplateSO nextRoom = nextEntry != null ? nextEntry.room : null;
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            Health health = player != null ? player.GetComponent<Health>() : null;
+
+            CheckpointManager.Instance.Save(new RIMA.Save.CheckpointData
+            {
+                playerHealth = health != null ? health.CurrentHP : 0,
+                playerMaxHealth = health != null ? health.MaxHP : 0,
+                currentRoomId = nextRoom != null ? nextRoom.roomId : nextEntry?.subRoomKey,
+                currentActId = Template.biomeId,
+                inventory = Array.Empty<string>(),
+                equipped = Array.Empty<string>()
+            });
         }
 
         private void TeardownCurrentSubRoom()

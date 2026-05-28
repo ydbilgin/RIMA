@@ -1,0 +1,19 @@
+{
+    "name": "RIMA.RoomPainter.Editor",
+    "rootNamespace": "RIMA.RoomPainter",
+    "references": [
+        "RIMA.Runtime",
+        "LaurethStudio.PainterSuite.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
