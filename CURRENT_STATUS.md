@@ -7,7 +7,15 @@
 
 ## 🌙 S114 OVERNIGHT AUTONOMOUS (2026-05-29 gece, Opus 4.8 lead, user AWAY)
 
-### ☀️ SABAH ÖZET (ilk oku) — 15 item tamam, demo bir adım daha yakın
+### 🔥 PLAYTEST BUG FIX WAVE (2026-05-29, Opus-yazımı, kullanıcı playtest-raporu üzerine)
+Kullanıcı gerçek playtest'te bug bildirdi → Opus yazdı, play'de DOĞRULANDI, Codex+agy review:
+- ✅ **Kamera takip etmiyordu → FIXED+verified.** Kök neden: `CameraPunchController.cs` her frame kamerayı yakalanan origin'e PINLİYOR (transform yazıp CameraFollow ile kavga). Fix: punch transform yazmaz, `CurrentOffset` expose eder; `CameraFollow` (CameraSystem) base'i ayrı SmoothDamp + shake/punch offset üstüne ekler + target auto-find. Play: cam (12,6) player'ı izledi. agy review 4/5 AGREE.
+- ✅ **Live parallax çalışmıyordu → FIXED+verified.** ParallaxRig 6 layer factor'ları canonical set edildi (void 0.03→foreground 0.55). Play: BG'ler kamera ile hareket etti. Scene SAVED.
+- ✅ **Boot-flow kırık → FIXED.** CharacterSelect.gameSceneName 'RoomPipelineTest' (ARŞİV) → 'PlayableArena_Test01' (kod default + scene serialized). MainMenu→Select→gerçek arena.
+- ✅ **F5 tool crash → FIXED.** RimaDevShortcuts play-mode'da SaveOpenScenes exception → toggle+guard (playing ise stop).
+- ⏳ **Kalan playtest:** P4 cliff mantıksız (silinmiş→rebuild) · void-bg zenginleştir (N3 gradient) · camera room-bounds (agy-critical, void-kenar) · detached weapon (HandAnchor offset) · testler (_IsoGame/scene infra).
+
+### ☀️ SABAH ÖZET (önceki overnight) — 15 item tamam, demo bir adım daha yakın
 **Büyük adım atıldı.** Combat sistemi canlı-doğrulandı + 1 gerçek bug fix + live-editor ilerledi + 3 yeni dev-tool + tam tasarım seti. Hepsi `STAGING/` doc + memory index'te. Local checkpoint'lerle korumalı.
 
 **Bu gece BİTEN (15):**

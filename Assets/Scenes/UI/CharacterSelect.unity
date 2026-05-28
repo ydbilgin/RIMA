@@ -2439,7 +2439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29c9e136f6814493aaec0474b84a5ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.CharacterSelectScreen
-  gameSceneName: RoomPipelineTest
+  gameSceneName: PlayableArena_Test01
   targetCanvas: {fileID: 0}
 --- !u!1 &2022274317
 GameObject:

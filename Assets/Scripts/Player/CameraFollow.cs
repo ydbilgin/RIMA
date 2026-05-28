@@ -81,8 +81,10 @@ namespace RIMA
             if (target == null) return;
             Vector3 desired = ClampToRoom(target.position + offset);
 
-            Vector3 shakeOffset = CameraShake.Instance != null ? CameraShake.Instance.CurrentOffset : Vector3.zero;
-            transform.position = Vector3.Lerp(transform.position, desired, smoothSpeed * Time.deltaTime) + shakeOffset;
+            // Juice offsets added on top (both must expose offsets, NOT write the transform — see CameraPunchController).
+            Vector3 fxOffset = (CameraShake.Instance != null ? CameraShake.Instance.CurrentOffset : Vector3.zero)
+                             + (RIMA.Combat.Juice.CameraPunchController.Instance != null ? RIMA.Combat.Juice.CameraPunchController.Instance.CurrentOffset : Vector3.zero);
+            transform.position = Vector3.Lerp(transform.position, desired, smoothSpeed * Time.deltaTime) + fxOffset;
         }
 
         private Vector3 ClampToRoom(Vector3 desired)

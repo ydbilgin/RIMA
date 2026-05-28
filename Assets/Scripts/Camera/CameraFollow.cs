@@ -10,12 +10,31 @@ namespace RIMA.CameraSystem
         public Vector3 worldOffset = new Vector3(0f, 0f, -10f);
 
         private Vector3 currentVelocity;
+        private Vector3 _basePos;
+        private bool _baseInit;
 
         private void LateUpdate()
         {
-            if (target == null) return;
+            if (target == null)
+            {
+                var p = GameObject.FindGameObjectWithTag("Player");
+                if (p != null) target = p.transform;
+                else return;
+            }
+
+            if (!_baseInit) { _basePos = transform.position; _baseInit = true; }
+
             Vector3 desired = target.position + worldOffset;
-            transform.position = Vector3.SmoothDamp(transform.position, desired, ref currentVelocity, smoothTime);
+            _basePos = Vector3.SmoothDamp(_basePos, desired, ref currentVelocity, smoothTime);
+
+            // Juice offsets are ADDED on top. CameraShake + CameraPunchController expose decaying
+            // offsets and must NOT write the camera transform themselves (that pins the camera and
+            // fights this follow — the root cause of "camera not following").
+            Vector3 fx = Vector3.zero;
+            if (RIMA.CameraShake.Instance != null) fx += RIMA.CameraShake.Instance.CurrentOffset;
+            if (RIMA.Combat.Juice.CameraPunchController.Instance != null) fx += RIMA.Combat.Juice.CameraPunchController.Instance.CurrentOffset;
+
+            transform.position = _basePos + fx;
         }
 
         private void OnValidate()

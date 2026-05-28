@@ -6,6 +6,10 @@ namespace RIMA.Combat.Juice
     {
         public static CameraPunchController Instance { get; private set; }
 
+        /// <summary>Decaying punch offset. Read+added by CameraFollow; this controller does
+        /// NOT write the camera transform itself (that would fight the follow and pin the camera).</summary>
+        public Vector3 CurrentOffset { get; private set; }
+
         [SerializeField] private float impulseHit = 0.08f;
         [SerializeField] private float impulseCrit = 0.16f;
         [SerializeField] private float impulseKill = 0.22f;
@@ -13,10 +17,7 @@ namespace RIMA.Combat.Juice
         [SerializeField] private float decayPerSecond = 6f;
         [SerializeField] private float maxOffset = 0.5f;
 
-        private Camera cam;
-        private Vector3 originalLocalPos;
         private Vector3 currentOffset;
-        private bool capturedOriginal;
 
         private void Awake()
         {
@@ -54,25 +55,15 @@ namespace RIMA.Combat.Juice
 
         private void LateUpdate()
         {
-            if (cam == null)
+            // Do NOT write the camera transform — that fights CameraFollow and pins the camera
+            // to a stale captured origin. Decay the offset and expose it via CurrentOffset;
+            // CameraFollow adds it on top of the follow position (same pattern as CameraShake).
+            if (currentOffset != Vector3.zero)
             {
-                cam = Camera.main;
-                if (cam == null)
-                {
-                    return;
-                }
-                originalLocalPos = cam.transform.localPosition;
-                capturedOriginal = true;
+                currentOffset = Vector3.MoveTowards(currentOffset, Vector3.zero, decayPerSecond * Time.unscaledDeltaTime);
             }
 
-            if (!capturedOriginal)
-            {
-                originalLocalPos = cam.transform.localPosition - currentOffset;
-                capturedOriginal = true;
-            }
-
-            currentOffset = Vector3.MoveTowards(currentOffset, Vector3.zero, decayPerSecond * Time.unscaledDeltaTime);
-            cam.transform.localPosition = originalLocalPos + currentOffset;
+            CurrentOffset = currentOffset;
         }
 
         private void HandleHit(HitEvent e)
@@ -122,11 +113,8 @@ namespace RIMA.Combat.Juice
 
         private void ResetCamera()
         {
-            if (cam != null && capturedOriginal)
-            {
-                cam.transform.localPosition = originalLocalPos;
-            }
             currentOffset = Vector3.zero;
+            CurrentOffset = Vector3.zero;
         }
     }
 }
