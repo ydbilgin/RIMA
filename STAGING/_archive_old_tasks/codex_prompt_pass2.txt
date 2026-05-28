@@ -1,0 +1,193 @@
+You are Codex executing a bounded RIMA task. Read CODEX.md for project rules. Stay strictly inside the allowed file list. Report in the format specified at the end.
+
+# Codex Task -- V2 Algorithm Pass 2 Implementation
+
+ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical -- listed files only (4) BLOCKED if unclear.
+
+## Amac
+V2 WallChainRoomBuilder'i ChatGPT guide spec'lerine gore refactor. Pass 2 = Algorithm + 4 yeni room preset. Onceki Pass 1 placeholder ready, World Painter entegre, walkableCells field korundu.
+
+## Onceki Codex analiz (referans -- CODEX_DONE.md'de full)
+
+11 gap tespit edildi. Bu task implementation:
+
+P0 (oncelik 1):
+1. RoomSpec intent field'lari ekle
+2. Diamond ComputeFootprint stair-step rewrite
+3. EnforceDoorCenter() method
+4. EnsureFrontMinOpening() method
+
+P1 (oncelik 2):
+5. BuildSideChain orientation fix (L+R)
+6. FillRunWithSpans rhythmic connector (4-7 cell aralik)
+7. Niche/protrusion full formula
+
+P2 (oncelik 3, marker-only data first):
+8. PlaceInteriorIslands, PlaceCenterReserved, PlaceWaterPoolZones (placeholder GameObject marker, prefab gerekmiyor)
+
+Sonra:
+9. RoomBuilderTestRunner -- 4 yeni preset method ekle (Library/Combat/Ritual/Flooded)
+10. Comparison render screenshot
+
+## Onemli Constraint -- World Painter compat
+
+KORU: RoomSpec.walkableCells field + HasCustomWalkable property. World Painter bu field'i kullaniyor.
+
+KORU: ComputeFootprint Irregular branch -- HasCustomWalkable true ise spec.walkableCells kullanir, false ise rectangle (mevcut davranis).
+
+Pass 2'de bu DEGISMEMELI. Diamond + Rectangle modlari refactor edilir, Irregular branch dokunulmaz.
+
+## Gorev -- Detayli spec
+
+### 1. RoomSpec yeni field'lar (defaults safe)
+Assets/Scripts/Runtime/Walls/V2/RoomSpec.cs'e ekle:
+
+[Header("Layout Constraints")]
+public int interiorMarginCells = 1;
+public int rearMinWidthCells = 3;
+public int frontMinOpeningCells = 3;
+public bool enforceCenteredRearDoor = true;
+
+[Header("Diamond Shape")]
+public int diamondTopWidthCells = 6;
+public int diamondStepMin = 1;
+public int diamondStepMax = 2;
+
+[Header("Rhythm")]
+public int connectorSpacingMin = 4;
+public int connectorSpacingMax = 7;
+
+[Header("Reserved Zones")]
+public int reservedCenterRadiusCells = 0;
+public List<RectInt> interiorIslandRects = new List<RectInt>();
+public List<RectInt> waterPoolRects = new List<RectInt>();
+
+[Header("Niche/Protrusion Specs (full formula)")]
+public List<NicheSpec> nicheSpecs = new List<NicheSpec>();
+public List<ProtrusionSpec> protrusionSpecs = new List<ProtrusionSpec>();
+
+[Header("Preset")]
+public string roomPresetId = "";
+
+New serializable types (nested inside RoomSpec class or same file):
+
+[System.Serializable]
+public struct NicheSpec {
+    public string side;       // "left", "right", "rear"
+    public int anchorRow;
+    public int width;
+    public int depth;
+    public bool mirror;
+}
+[System.Serializable]
+public struct ProtrusionSpec {
+    public string side;
+    public int anchorRow;
+    public int width;
+    public int depth;
+    public bool mirror;
+}
+
+Defaults safe -- mevcut 5 test odasi ve World Painter etkilenmez.
+
+### 2. Diamond stair-step ComputeFootprint
+Mevcut case RoomShapeType.Diamond Manhattan mask rewrite:
+- Top row: diamondTopWidthCells (default 6), centered
+- Her sonraki row asagi: diamondStepMin..diamondStepMax arasi mirrored widening (sol+sag ayni)
+- Bottom row max width
+- Symmetry validation: solu saga mirror et, fark varsa duzelt
+
+### 3. EnforceDoorCenter
+BuildRearChain oncesi cagri:
+- spec.enforceCenteredRearDoor true ise:
+  - rear run center hesapla
+  - spec.doorPosition'i center'a override et (2-cell width icin)
+  - DoorArch piece registry'de yoksa Debug.LogWarning
+
+### 4. EnsureFrontMinOpening
+BuildFrontEdge oncesi cagri:
+- frontEdgeMode LowWall veya Broken ise:
+  - frontMinOpeningCells (default 3) kadar centered cell'i OpenGap yap
+  - LowFront sadece bu opening disina
+- frontEdgeMode Open ise tum front zaten OpenGap, dokunma
+
+### 5. BuildSideChain L+R orientation fix
+Mevcut bug: tek tarafta spawn ediyor.
+Fix:
+- ExtractSideEdges hem side=-1 hem side=+1 icin ayri cagri
+- BuildSideChain her iki list icin ayri invoke
+- Sorun: side_wall registry'de hep SideLeft. SideRight icin transform.localScale.x = -1 mirror yap
+
+### 6. Rhythmic connector
+FillRunWithSpans mevcut: sadece start/end connector.
+Update: span placement sirasinda cursor her connectorSpacingMin..Max cell'de bir interior connector spawn et.
+
+### 7. Niche/Protrusion full formula
+nicheSpecs icin her niche:
+  WallSpan + InnerCorner + ShortWall(depth) + InnerCorner + WallSpan
+- side="rear" -> rear chain icine inject
+- side="left/right" -> side chain icine inject
+- mirror=true ise sag tarafa da koy
+
+protrusionSpecs icin:
+  WallSpan + OuterCorner + ShortWall(depth) + OuterCorner + WallSpan
+
+ShortWall = registry'de WallSpan_1x
+
+### 8. P2 marker methods (basit)
+PlaceCenterReserved: reservedCenterRadiusCells > 0 ise scene'e empty GameObject "ReservedCenter" ekle. Marker only, prefab degil.
+
+PlaceInteriorIslands: her interiorIslandRects icin empty GameObject "Island_<i>" ekle.
+
+PlaceWaterPoolZones: her waterPoolRects icin empty GameObject "Water_<i>" + cyan color sprite (placeholder).
+
+### 9. RoomBuilderTestRunner -- 4 preset
+Assets/Scripts/Editor/Walls/V2/RoomBuilderTestRunner.cs'e MenuItem ekle:
+[MenuItem("RIMA/V2/Run Preset Rooms (4 guide)")]
+
+4 preset:
+1. library_alcove: 22x22 Rectangle, Open front, enforceCenteredRearDoor=true, doorPosition=(11,21), 1 niche (side=left, anchorRow=10, width=3, depth=2, mirror=true), 2 island rects
+2. narrow_combat: 22x22 Diamond, diamondTopWidthCells=8, stepMin/Max=1, Open front, enforceCenteredRearDoor=true, frontMinOpeningCells=4
+3. ritual_diamond: 22x22 Diamond, diamondTopWidthCells=6, LowWall front, reservedCenterRadiusCells=3, enforceCenteredRearDoor=true
+4. open_flooded: 22x16 Rectangle, Open front, 2 waterPoolRects
+
+Spawn 4 yan yana at positions (0,0,0), (25,0,0), (50,0,0), (0,-25,0).
+
+### 10. Test + render
+1. Compile + console check (0 error)
+2. Test scene RoomBuilderTest_v1.unity ac (Assets/Scenes/ altinda ara)
+3. RIMA/V2/Run All Test Rooms menu cagir (eski 5 regression)
+4. RIMA/V2/Run Preset Rooms (4 guide) menu cagir (yeni 4 preset)
+5. Save scene
+6. 2 screenshot:
+   - STAGING/concepts/asset_pack_v3/room_builder_v2_old5.png -- regression (eski 5 oda)
+   - STAGING/concepts/asset_pack_v3/room_builder_v2_presets.png -- yeni 4 preset
+
+## Allowed files (surgical -- ONLY these)
+- Assets/Scripts/Runtime/Walls/V2/RoomSpec.cs
+- Assets/Scripts/Runtime/Walls/V2/WallChainRoomBuilder.cs
+- Assets/Scripts/Editor/Walls/V2/RoomBuilderTestRunner.cs
+- CODEX_DONE.md (append/overwrite result)
+- STAGING/concepts/asset_pack_v3/room_builder_v2_old5.png (create)
+- STAGING/concepts/asset_pack_v3/room_builder_v2_presets.png (create)
+
+## Definition of Done
+- RoomSpec 13+ yeni field eklendi, defaults safe
+- ComputeFootprint Diamond stair-step
+- EnforceDoorCenter + EnsureFrontMinOpening method'lari calisiyor
+- BuildSideChain L+R orientation fix (SideRight icin scale.x=-1)
+- FillRunWithSpans rhythmic connector
+- 2 marker method (Center, Islands, Water)
+- Niche/Protrusion formula method
+- RoomBuilderTestRunner 4 preset menu
+- 2 screenshot
+- Console 0 error
+- World Painter (RoomPainterWindow) hala calisiyor (regression test)
+
+REPORT FORMAT:
+STATUS: DONE / FAILED / PARTIAL
+COMPLETED: <bullets>
+ERRORS: <or NONE>
+FILES_TOUCHED: <paths>
+SCREENSHOTS: <2 paths>
+NEXT_SIGNAL: "V2 Pass 2 ready for QC"

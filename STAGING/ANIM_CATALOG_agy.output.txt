@@ -1,0 +1,105 @@
+ACCOUNT_SELECTED: yasinderyabilgin
+Swapping cred blob -> yasinderyabilgin...
+### S1. Indie 2D Action Frame Budget Benchmark
+
+Aşağıdaki tablo, sektör standardı indie 2D action/RPG oyunlarının animasyon bütçelerini, kare sayılarını ve döngü yapılarını karşılaştırmaktadır. 
+
+| Oyun | Animasyon Tipi | Kare Sayısı (Frame Count) | FPS | Loop / One-shot | RIMA Değerlendirmesi & Notlar |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Hades** | Idle | 18 - 24 | 30 | Loop | 3D pre-rendered sprite. Akıcı breathing efekti için yüksek bütçe. |
+| **Hades** | Basic Attack | 12 - 16 | 30 | One-shot | 2-3f Rüzgar/Rüzgar izi (smear) + Uzun recovery fazı. |
+| **Children of Morta** | Idle | 6 - 8 | 12-15 | Loop | Klasik piksel sanatı nefes alma, saç ve kıyafet salınımı. |
+| **Children of Morta** | Walk / Run | 8 - 10 | 12-15 | Loop | Ağırlık hissi yüksek, basma ve geçiş fazları belirgin. |
+| **Children of Morta** | Basic Attack | 6 - 8 | 15 | One-shot | 2f Windup + 1f Impact + 3-5f Recovery. Oldukça dinamik. |
+| **Children of Morta** | Death | 10 - 14 | 12 | One-shot | Karakterin yere düşüşü ve toz kalkması dahil aşamalı yapı. |
+| **Hyper Light Drifter** | Idle | 4 - 6 | 12 | Loop | Minimalist stilize sallantı. |
+| **Hyper Light Drifter** | Walk / Run | 6 | 12 | Loop | Oldukça snappy, ara kareler atlanarak hız hissi verilmiştir. |
+| **Hyper Light Drifter** | Basic Attack | 5 - 6 | 12-15 | One-shot | 1f Windup + 1f Slash (smear/kılıç izi) + 3f Recovery. Çok hızlı. |
+| **Hyper Light Drifter** | Dash (Skill) | 3 - 4 | 15 | One-shot | Trail/gölge efektiyle desteklenmiş, kare sayısı az ve efektif. |
+| **Eastward** | Idle | 6 - 8 | 12 | Loop | Çok katmanlı bobbing (saç, çanta, kıyafet detayları). |
+| **Eastward** | Walk / Run | 8 - 12 | 12-15 | Loop | Zıplama yüksekliği ve adım genişliği dengeli, akıcı. |
+| **Sea of Stars** | Idle | 6 - 8 | 12 | Loop | JRPG standardı hafif yukarı-aşağı yaylanma döngüsü. |
+| **Sea of Stars** | Walk / Run | 8 | 12 | Loop | Klasik 8-kare yürüme döngüsü (contact-passing-contact). |
+| **Eldest Souls** | Basic Attack | 10 - 14 | 15 | One-shot | Ağır kılıç savurma; boss-fight ipucu için windup süresi uzun. |
+| **PixelLab V3 Demo** | Idle | 6 - 8 | 10-12 | Loop | RIMA entegrasyonu için en stabil ve titremeyen bütçe. |
+| **PixelLab V3 Demo** | Attack | 8 - 12 | 12 | One-shot | Maliyet ve vuruş hissi (impact) dengesi optimize edilmiş aralık. |
+
+---
+
+### S2. PixelLab Animation V3 Best Practice
+
+*   **"Keep First Frame" Checkbox Kullanımı:**
+    *   *Loop Animasyonlar (Idle, Walk, Run, Guard Hold):* **İşaretlenmelidir.** Döngünün son karesinin ilk kareye pürüzsüz bağlanması (loop coherence) ve titremelerin engellenmesi için gereklidir.
+    *   *One-shot Animasyonlar (Attack, Hit, Death, Skill Release):* **İşaretsiz bırakılmalıdır.** Bu animasyonlar genellikle başka bir state'ten (örn: Idle) tetiklenir ve sonunda karakter farklı bir duruşta kalır (örn: Death) veya Idle'a yumuşakça döner. İlk kareyi korumak, animasyon bitişinde takılmaya (hitch) neden olur.
+*   **"Action Description" Prompt Grameri:** PixelLab V3'ün hareket şablonunu doğru kurabilmesi için pasif tanımlar yerine emir kipi (imperative) ve dinamik sıfatlar içeren kalıplar kullanılmalıdır. 
+    *   *Kalıp:* `[Eylem Fiili] + [Silah/Ekipman] + [Hareket Yönü/Açı] + [Dinamik Detay/Efekt]`. 
+    *   *Örnek:* "Warrior slashing a giant broadsword in a wide horizontal arc, creating a blue energy slash trail, high-impact movement."
+*   **Frame Count (4-16) Sweet Spot Değerleri:** Animasyon tipine göre ideal kare sayıları: Idle için **6 kare**, Walk/Run için **8 kare** (fiziksel yürüme döngüsü standart fazları için), Hit için **4 kare** (hızlı tepki), Attack için **8-10 kare**, Death için **10-12 kare** ve ağır Skiller için **12-14 karedir**.
+*   **"Custom Frames" Start + End Entegrasyonu:** `character_state` çıktılarından alınan ilk duruş (örn: kılıcı çekmiş bekleyen poz) Start Frame olarak beslenir. Bitiş duruşu (End Frame) ise transition'ların kırılmaması için animator state machine'deki bir sonraki state'in ilk karesine hizalanır.
+*   **8-Direction Generation Cost:** Evet, her yön için ayrı üretim yapıldığında maliyet `2 gen x 8 yön = 16 generation` olur. Ancak simetrik 2D oyunlarda 5 yön üretilip (S, SE, E, NE, N) kalan 3 yön (W, SW, NW) Unity'de `flipX` ile aynalandığında maliyet **10 generation**'a düşürülür.
+*   **Mannequin Template Avantajı:** Mannequin şablonu, karakterin anatomik eklem noktalarını ve hareket arkını sabitler. Bu sayede hareket transfer edilirken zırh/kıyafet deformasyonları en aza iner ve farklı yönlerdeki perspektif kaymaları engellenir.
+
+---
+
+### S3. Start + End Frame "character_state" Pattern
+
+*   **PixelLab character_state Generation Mekaniği:** Tek bir state üretimi 1 birim kredi harcar. Start ve End frame'lerin ayrı stateler olarak üretilip animasyon motoruna girdi verilmesi durumunda, bu girdiler animasyon karesi bütçesinden (single state output) düşülmez; aksine modelin hareket interpolasyonu yapması için sınır koşulları (boundary constraints) olarak kullanılır. State duruşları şeffaf arka plan (transparent BG) ve 8 yönlü set olarak eş zamanlı üretilir.
+*   **n_frames vs character_state Maliyet Farkı:** RIMA bellek kilidi `feedback_state_vs_n_frames_cost_lock` uyarınca; tüm ara kareleri tek tek `character_state` olarak üretmek yerine, başlangıç state'i verip `n_frames` parametresiyle animasyon üretmek **4 ila 8 kat daha ucuzdur**. Bu yaklaşım onaylanmıştır.
+*   **reference_image_base64 + n_frames Birlikteliği:** Animation V3 motorunda bu kullanım tam uyumludur. Karakterin mevcut ekipmanlı `character_state` görseli base64 olarak referans verilir ve `n_frames` ile bu referanstaki detayların korunarak canlandırılması sağlanır.
+
+---
+
+### S4. Frame Count → Smoothness Perception
+
+*   **10-12 FPS RIMA Base Değerlendirmesi:**
+    *   *Idle (4 vs 6 frame):* 10 FPS hızda 4 karelik döngü saniyede 2.5 kez tekrar eder ve karakterin çok hızlı/telaşlı nefes almasına neden olur. 6 karelik döngü (0.6 saniye) nefes alma (breathing) hissini çok daha doğal ve sakin yansıtır.
+    *   *Walk (6 vs 8 vs 10 frame):* 6 karede yürüme döngüsünün "passing" (ayakların yan yana geldiği) fazları eksik kalır ve karakter topallıyor gibi görünür. 10 kare ise 10 FPS'te hantal kalır. Pixar/Disney animasyon prensiplerine göre sweet spot **8 karedir**.
+    *   *Attack One-shot (8 vs 12 vs 14 frame):* Vuruşun hantal kalmaması için basic attack süresi 0.8 saniyeyi geçmemelidir. Bu nedenle **8 kare** (10-12 FPS'te ~0.7s) en iyi vuruş hissiyatını verir. 12-14 karelik saldırılar sadece ağır finisher'lar için saklanmalıdır.
+    *   *Death (6 vs 10 frame):* 6 karelik ölüm çok ani olup "pat" diye yere düşme hissi yaratır. 10 kare ise diz çökme, yere kapaklanma ve toz kalkma aşamalarını (dramatik etkiyi) yansıtmak için idealdir.
+    *   *Frame Skip Pattern:* Evet. Örneğin 12 FPS hızda çalışan bir animasyonda vuruş anından sonraki 2-3 ara kare atlanarak (frame skip) doğrudan follow-through karesine geçilirse, vuruş çok daha sert ve çevik (snappy) algılanır.
+
+---
+
+### S5. Loop vs One-shot Semantics
+
+*   **Döngü Davranışları:**
+    *   *Loop Tek Yön (Continuous Loop):* Walk ve Run animasyonları sürekli ileri yönlü bir akışa sahiptir. Kareler sıralı şekilde (1-2-3-4-5-6-7-8-1...) akar.
+    *   *Loop İki Yön (Ping-Pong Loop):* Idle gibi durağan animasyonlarda gövdenin yukarı-aşağı hareketi için ping-pong döngüsü (1-2-3-4-3-2-1) kullanılabilir. Bu, üretilmesi gereken benzersiz kare sayısını azaltır.
+*   **Animator State Machine (ASM) Best Practice:**
+    *   One-shot animasyonlar (Attack, Hit) tetiklenirken `Has Exit Time` seçeneği **kapatılmalıdır** (anında tepki için).
+    *   One-shot durumundan Idle'a geri dönüşte ise `Has Exit Time` **açık olmalıdır** ki saldırı veya darbe alma hareketi yarıda kesilip görsel hata oluşturmasın.
+
+---
+
+### S6. 8-Direction Sprite Mirror Pattern
+
+*   **5+3 Mirror Uygulaması:** RIMA üzerinde aktif olan 5+3 yapısında; S, SE, E, NE, N yönleri üretilir. Unity tarafında `flipX` kullanılarak W, SW, NW yönleri oluşturulur.
+*   **PixelLab Üretim Karşılığı:** PixelLab "2 generations per direction" dediğinde, 5 yön için toplam 10 jenerasyon yapılır. 3 yön ise Unity içerisinde runtime'da aynalanarak bellekten ve üretim kredisinden tasarruf edilir.
+*   **Top-down 3/4 Açı (RIMA HIGH TOP-DOWN ~70-80°) Riskleri:** Aynalama (`flipX`) yapıldığında karakterin sağ elindeki kalkan sol eline geçer. Eğer oyunda asimetrik ekipman kullanımı (örn: sol elle kalkan bloklama mekaniği) kritik değilse, bu görsel sapma indie 2D oyun standartlarında (Hyper Light Drifter dahil) bütçe optimizasyonu için kabul edilebilir bir durumdur. Ancak asimetri hayatiyse, 8 yönün de native üretilmesi gerekir.
+
+---
+
+### S7. Combat Anim Impact Framing
+
+*   **5-Phase Rule Uygulaması:** Saldırı animasyonları şu şemayla kurgulanmalıdır:
+    1.  *Anticipation (Rüzgar alma/Geri çekilme):* Saldırı öncesi güç toplama (1-2f).
+    2.  *Strike (Vuruş):* Silahın hedefe doğru savrulduğu en hızlı an (1f, smear/blur çizgisi ile).
+    3.  *Hold (Vuruş Duraklaması / Hitstop):* Silahın hedefe değdiği karede 2-3 frame boyunca duraklatılması (hold). Bu, hedefin kütlesini ve darbe gücünü oyuncuya hissettirir.
+    4.  *Follow-through (Takip):* Savurma aksiyonunun tamamlandığı yay (1-2f).
+    5.  *Recovery (Toparlanma):* Karakterin tekrar Idle pozisyonuna döndüğü kareler (2-3f).
+*   **Hades Smash Combo Breakdown:** Hades'teki vuruş hissiyatının temeli hitstop (darbe anında oyunun ve sprite'ın 0.05-0.1 saniye donması), ekran sarsıntısı ve vuruş flaşına dayanır. Kare dağılımı: 3f Windup -> 1f Strike (büyük smear efekti) -> 3f Hitstop Hold (sabit kare) -> 4f Recovery.
+
+---
+
+### RIMA Warblade Demo & 9 Class Faz 4 Master Değerlendirme Çizelgesi
+
+*   **Idle:** 6 frame, Keep first: Evet
+*   **Walk:** 8 frame, Keep first: Evet
+*   **Run:** 8 frame, Keep first: Evet
+*   **Basic Attack:** 8 frame (windup: 2, hold: 2, follow: 4)
+*   **Hit:** 4 frame (windup: 1, hold: 1, follow: 2)
+*   **Death:** 10 frame (windup: 2, hold: 0, follow: 8 - yerde sabit kalma)
+*   **Skill (Iron Charge - Dash):** 6 frame (windup: 1, hold/dash: 3, follow: 2)
+*   **Skill (Earthsplitter - Slam):** 12 frame (windup: 4, hold/impact: 3, follow: 5)
+*   **Skill (Death Blow - Finisher):** 14 frame (windup: 5, hold/impact: 3, follow: 6)
+

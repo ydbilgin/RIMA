@@ -1,0 +1,13 @@
+{
+  "generatedAt": "20260527_150225_528",
+  "scene": "PlayableArena_Test01",
+  "pass": 4,
+  "fail": 1,
+  "results": [
+    {"test":"T1_MapBoundary_North","passed":true,"details":"Player at (0.00, -3.89, 0.00) — walkable confirmed after North push."},
+    {"test":"T1_MapBoundary_South","passed":true,"details":"Player at (0.00, 0.00, 0.00) — walkable confirmed after South push."},
+    {"test":"T1_MapBoundary_East","passed":true,"details":"Player at (0.00, 0.00, 0.00) — walkable confirmed after East push."},
+    {"test":"T1_MapBoundary_West","passed":true,"details":"Player at (0.00, 0.00, 0.00) — walkable confirmed after West push."},
+    {"test":"T2_GateFlow_Fragment_G_Draft_Gate_Unlock","passed":false,"details":"MapFragment did not spawn within 3s after RoomCleared. Check: MapFragmentBridge.useFragmentGateFlow, FragmentDropAnchor present, room category = Combat/BossApproach."}
+  ]
+}

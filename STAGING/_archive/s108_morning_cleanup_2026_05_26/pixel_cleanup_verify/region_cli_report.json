@@ -1,0 +1,43 @@
+{
+  "region": {
+    "x": 15,
+    "y": 15,
+    "size": 16
+  },
+  "auto_mode": "safe",
+  "auto_threshold": 0.7,
+  "suggestions": [
+    {
+      "kind": "palette_snap",
+      "message": "Color noise cluster of 1 pixels (suggest: merge to #1A1612)",
+      "confidence": 0.88,
+      "bbox": [
+        15,
+        15,
+        16,
+        16
+      ],
+      "pixels": [
+        [
+          15,
+          15
+        ]
+      ],
+      "target_color": [
+        26,
+        22,
+        18
+      ],
+      "metadata": {
+        "cluster_id": 1,
+        "source_centroid": [
+          240,
+          30,
+          190
+        ],
+        "distance": 274.6707119443207
+      }
+    }
+  ],
+  "changed_pixel_count": 1
+}

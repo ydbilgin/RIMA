@@ -1,0 +1,72 @@
+{
+  "image_path": "STAGING\\pixel_cleanup_verify\\smart_cli_input.png",
+  "image_size": [
+    32,
+    32
+  ],
+  "total_opaque_pixels": 1024,
+  "semi_transparent_pixel_count": 0,
+  "stray_component_count": 0,
+  "removed_pixel_count": 0,
+  "palette_outlier_count": 0,
+  "color_noise_count": 2,
+  "bounding_box": [
+    0,
+    0,
+    32,
+    32
+  ],
+  "recommended_actions": [
+    "Local color noise detected (2). Consider --fix_color_noise."
+  ],
+  "smart_merge": {
+    "cluster_size": 32,
+    "auto_mode": "safe",
+    "auto_threshold": 0.7,
+    "auto_fixed_pixel_count": 2,
+    "clusters": {
+      "color_space": "lab",
+      "cluster_count": 3,
+      "total_pixels": 1024,
+      "clusters": [
+        {
+          "id": 0,
+          "centroid": [
+            26,
+            22,
+            18
+          ],
+          "size": 1022,
+          "ratio": 0.998046875,
+          "classification": "dominant"
+        },
+        {
+          "id": 1,
+          "centroid": [
+            230,
+            20,
+            180
+          ],
+          "size": 1,
+          "ratio": 0.0009765625,
+          "classification": "outlier"
+        },
+        {
+          "id": 2,
+          "centroid": [
+            240,
+            30,
+            190
+          ],
+          "size": 1,
+          "ratio": 0.0009765625,
+          "classification": "outlier"
+        }
+      ],
+      "dominant_count": 1,
+      "outlier_count": 2,
+      "review_count": 0
+    }
+  },
+  "changed_pixel_count": 2
+}

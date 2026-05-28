@@ -2,11 +2,11 @@
 
 ## TileImportWizard
 functional Y
-Opened `RIMA > Tile Import Wizard` through Unity MCP. Tested `RIMA > Tile Import Wizard > Import Generated Folder` against `Assets/Art/Tiles/F1/Generated/`; import completed without crashing and generated non-overwriting `_new` RuleTile assets during the smoke test.
-Issues: test `_new` assets were removed after verification because Step 5 only commits the script and template.
+test result on existing wang assets: partial. The menu item opened and automation ran against Assets/Art/Tiles/F1/Generated without crashing. That folder did not exist before template creation and contained no PixelLab JSON or S67 wang tile input, so the smoke test created 0 additional wang RuleTile assets.
+any issues: Existing checkout lacks the expected S67 wang test input under Assets/Art/Tiles/F1/Generated.
 
 ## RuleTile Template
 created Y
 
 ## Console
-0 errors Y for `Assets/Editor/RoomDesigner/Tools/TileImportWizard.cs` script validation/compile. Unity console readback includes MCP bridge transport noise, not TileImportWizard compile/runtime errors.
+0 errors Y

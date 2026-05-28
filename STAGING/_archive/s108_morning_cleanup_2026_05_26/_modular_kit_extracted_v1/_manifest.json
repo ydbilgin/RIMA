@@ -1,0 +1,354 @@
+{
+  "M01": {
+    "name": "wall_straight_a",
+    "file": "M01_wall_straight_a.png",
+    "cell_pos": [
+      0,
+      0
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      114
+    ],
+    "bbox_in_cell": [
+      13,
+      9,
+      115,
+      123
+    ]
+  },
+  "M02": {
+    "name": "wall_straight_b",
+    "file": "M02_wall_straight_b.png",
+    "cell_pos": [
+      0,
+      1
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      114
+    ],
+    "bbox_in_cell": [
+      13,
+      9,
+      115,
+      123
+    ]
+  },
+  "M03": {
+    "name": "corner_outer_NE",
+    "file": "M03_corner_outer_NE.png",
+    "cell_pos": [
+      0,
+      2
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      105,
+      104
+    ],
+    "bbox_in_cell": [
+      11,
+      18,
+      116,
+      122
+    ]
+  },
+  "M04": {
+    "name": "corner_outer_NW",
+    "file": "M04_corner_outer_NW.png",
+    "cell_pos": [
+      0,
+      3
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      105,
+      102
+    ],
+    "bbox_in_cell": [
+      11,
+      19,
+      116,
+      121
+    ]
+  },
+  "M05": {
+    "name": "corner_inner_NE",
+    "file": "M05_corner_inner_NE.png",
+    "cell_pos": [
+      1,
+      0
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      96
+    ],
+    "bbox_in_cell": [
+      13,
+      9,
+      115,
+      105
+    ]
+  },
+  "M06": {
+    "name": "corner_inner_NW",
+    "file": "M06_corner_inner_NW.png",
+    "cell_pos": [
+      1,
+      1
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      96
+    ],
+    "bbox_in_cell": [
+      13,
+      9,
+      115,
+      105
+    ]
+  },
+  "M07": {
+    "name": "wall_straight_c",
+    "file": "M07_wall_straight_c.png",
+    "cell_pos": [
+      1,
+      2
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      99,
+      115
+    ],
+    "bbox_in_cell": [
+      14,
+      2,
+      113,
+      117
+    ]
+  },
+  "M08": {
+    "name": "wall_straight_d",
+    "file": "M08_wall_straight_d.png",
+    "cell_pos": [
+      1,
+      3
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      101,
+      115
+    ],
+    "bbox_in_cell": [
+      13,
+      2,
+      114,
+      117
+    ]
+  },
+  "M09": {
+    "name": "doorway_a",
+    "file": "M09_doorway_a.png",
+    "cell_pos": [
+      2,
+      0
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      118
+    ],
+    "bbox_in_cell": [
+      13,
+      2,
+      115,
+      120
+    ]
+  },
+  "M10": {
+    "name": "doorway_b",
+    "file": "M10_doorway_b.png",
+    "cell_pos": [
+      2,
+      1
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      118
+    ],
+    "bbox_in_cell": [
+      13,
+      2,
+      115,
+      120
+    ]
+  },
+  "M11": {
+    "name": "wall_broken_a",
+    "file": "M11_wall_broken_a.png",
+    "cell_pos": [
+      2,
+      2
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      109
+    ],
+    "bbox_in_cell": [
+      13,
+      8,
+      115,
+      117
+    ]
+  },
+  "M12": {
+    "name": "wall_broken_b",
+    "file": "M12_wall_broken_b.png",
+    "cell_pos": [
+      2,
+      3
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      109
+    ],
+    "bbox_in_cell": [
+      13,
+      8,
+      115,
+      117
+    ]
+  },
+  "M13": {
+    "name": "junction_cross_a",
+    "file": "M13_junction_cross_a.png",
+    "cell_pos": [
+      3,
+      0
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      106
+    ],
+    "bbox_in_cell": [
+      13,
+      10,
+      115,
+      116
+    ]
+  },
+  "M14": {
+    "name": "junction_cross_b",
+    "file": "M14_junction_cross_b.png",
+    "cell_pos": [
+      3,
+      1
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      106
+    ],
+    "bbox_in_cell": [
+      13,
+      10,
+      115,
+      116
+    ]
+  },
+  "M15": {
+    "name": "wall_short_half",
+    "file": "M15_wall_short_half.png",
+    "cell_pos": [
+      3,
+      2
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      102,
+      74
+    ],
+    "bbox_in_cell": [
+      12,
+      40,
+      114,
+      114
+    ]
+  },
+  "M16": {
+    "name": "ruined_corner",
+    "file": "M16_ruined_corner.png",
+    "cell_pos": [
+      3,
+      3
+    ],
+    "raw_cell_size": [
+      128,
+      128
+    ],
+    "tight_size": [
+      105,
+      113
+    ],
+    "bbox_in_cell": [
+      11,
+      5,
+      116,
+      118
+    ]
+  }
+}

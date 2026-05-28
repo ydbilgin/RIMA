@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "generated_at": "2026-05-25T03:31:00+03:00",
+  "by": "antigravity-ydbilginn",
+  "schema_note": "Group letter A-G per blueprint_room ADIM 1. Confidence reflects visual certainty. Source: AGY_DONE_ydbilginn.md captured 2026-05-25 03:31 via agy_dispatch.py (UTF-8 fix applied).",
+  "sheet_1": {
+    "00_validation": "Already typed — used as visual calibration only",
+    "pieces": [
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/01_straight.png", "group": "B", "type_label": "rear_wall_straight", "lengthInCells": 1, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline rear wall reference"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/02_outer_corner.png", "group": "D", "type_label": "outer_corner", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline outer corner reference"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/03_inner_corner.png", "group": "D", "type_label": "inner_corner", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline inner corner reference"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/04_end.png", "group": "A", "type_label": "connector_column", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline end column reference"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/05_door_l.png", "group": "E", "type_label": "door_l", "lengthInCells": 1, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline left door post reference"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/06_door_r.png", "group": "E", "type_label": "door_r", "lengthInCells": 1, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline right door post reference"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/07_alcove.png", "group": "D", "type_label": "alcove_turn", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline alcove turn reference"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_1/08_protrusion.png", "group": "D", "type_label": "protrusion_turn", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "baseline protrusion turn reference"}
+    ]
+  },
+  "sheet_2": {
+    "pieces": [
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_01.png", "group": "B", "type_label": "rear_wall_straight_2x_a", "lengthInCells": 2, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "straight rear wall, 2-cell horizontal span, brick pattern variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_02.png", "group": "B", "type_label": "rear_wall_straight_2x_b", "lengthInCells": 2, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "straight rear wall, 2-cell horizontal span, brick pattern variant B"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_03.png", "group": "B", "type_label": "rear_wall_straight_2x_c", "lengthInCells": 2, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "straight rear wall, 2-cell horizontal span, brick pattern variant C"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_04.png", "group": "D", "type_label": "outer_corner_2x", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "convex outer corner piece, fits 1x1 footprint (rendered in 256x192 due to visual extent)"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_05.png", "group": "C", "type_label": "side_wall_straight_2x", "lengthInCells": 2, "direction": "side_right", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "side wall piece going down-right, 2-cell span"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_06.png", "group": "C", "type_label": "side_wall_stepped_2x", "lengthInCells": 2, "direction": "side_right", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "stepped side wall piece going down-right for stair-step diamond alignment"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_07.png", "group": "F", "type_label": "low_front_balustrade_2x", "lengthInCells": 2, "direction": "front", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "low front balustrade wall segment with column post on the left, 2-cell span"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_08.png", "group": "F", "type_label": "low_front_balustrade_1x_r", "lengthInCells": 1, "direction": "front", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "short low front balustrade segment with column post on the right, 1-cell span"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_2/piece_09.png", "group": "F", "type_label": "low_front_balustrade_1x_l", "lengthInCells": 1, "direction": "front", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "short low front balustrade segment with column post on the left, 1-cell span"}
+    ]
+  },
+  "sheet_3": {
+    "pieces": [
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_01_R0C0.png", "group": "E", "type_label": "door_arch_lintel_2x", "lengthInCells": 2, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "double column lintel bridge portal passage frame, 2-cell span"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_02_R0C1_L.png", "group": "D", "type_label": "inner_corner_l_a", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "concave inner corner piece, left alignment variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_02_R0C1_R.png", "group": "D", "type_label": "inner_corner_r_a", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "concave inner corner piece with additional filler brick, right alignment variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_03_R1C0_L.png", "group": "D", "type_label": "outer_corner_l_a", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "convex outer corner piece, left alignment variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_03_R1C0_R.png", "group": "D", "type_label": "outer_corner_r_a", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "convex outer corner piece, right alignment variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_04_R1C1_L.png", "group": "D", "type_label": "inner_corner_l_b", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "concave inner corner piece, left alignment variant B"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_04_R1C1_R.png", "group": "D", "type_label": "inner_corner_r_b", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "concave inner corner piece with additional filler brick, right alignment variant B"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_05_R2C0_L.png", "group": "E", "type_label": "door_arch_half_l", "lengthInCells": 1, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "left half of a double arch doorway, 1-cell span"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_05_R2C0_R.png", "group": "E", "type_label": "door_arch_half_r", "lengthInCells": 1, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "right half of a double arch doorway, 1-cell span"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_06_R2C1.png", "group": "E", "type_label": "door_arch_corner_lintel", "lengthInCells": 2, "direction": "rear", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "inner corner lintel gateway connector, spans 2 cells"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_07_R3C0.png", "group": "E", "type_label": "door_arch_corner", "lengthInCells": 2, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "corner arch doorway built into outer corners, spans 2 cells"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_08_R3C1_L.png", "group": "D", "type_label": "outer_corner_slit_window", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "convex outer corner piece with an arrow slit window opening, 1-cell footprint"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_3/cell_08_R3C1_R.png", "group": "C", "type_label": "side_wall_straight_1x", "lengthInCells": 1, "direction": "side_left", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "short side wall segment going down-left, 1-cell span"}
+    ]
+  },
+  "sheet_4": {
+    "pieces": [
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_01.png", "group": "A", "type_label": "column_standard", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "standard 1x1 height column connector pillar"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_02.png", "group": "F", "type_label": "low_front_outer_corner", "lengthInCells": 1, "direction": "any", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "low front outer corner piece for open front room borders"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_03.png", "group": "G", "type_label": "inner_corner_broken", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "damaged inner corner with debris, acts as cleanup filler"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_04.png", "group": "A", "type_label": "column_thin_a", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "slender support post pillar, variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_05.png", "group": "A", "type_label": "column_thin_b", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "slender support post pillar, variant B"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_06.png", "group": "D", "type_label": "outer_corner_1x_a", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "convex outer corner wall segment, brick variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_07.png", "group": "D", "type_label": "outer_corner_1x_b", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "convex outer corner wall segment, brick variant B"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_08.png", "group": "F", "type_label": "low_front_straight_1x", "lengthInCells": 1, "direction": "front", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "low straight front parapet wall segment, 1-cell span"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_09.png", "group": "A", "type_label": "pillar_block_thick_a", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "large massive stone block pillar, variant A"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_10.png", "group": "A", "type_label": "pillar_block_thick_b", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "large massive stone block pillar, variant B"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_11.png", "group": "A", "type_label": "column_thin_crooked", "lengthInCells": 1, "direction": "any", "heightType": "normal", "visualOffset": "0", "confidence": "high", "notes": "organically aligned crooked thin support pillar"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_12.png", "group": "G", "type_label": "rubble_pile_large", "lengthInCells": 1, "direction": "any", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "heap of broken rocks and bricks, cleanup filler"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_13.png", "group": "A", "type_label": "column_base_short", "lengthInCells": 1, "direction": "any", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "half-height square column connector base"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_14.png", "group": "G", "type_label": "seam_patch_flat", "lengthInCells": 1, "direction": "any", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "low flat group of bricks, seam cleanup block"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_15.png", "group": "G", "type_label": "rubble_pile_medium", "lengthInCells": 1, "direction": "any", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "loose stone rubble heap, variant B"},
+      {"file": "Assets/Sprites/AssetPackV3/walls/sheet_4/piece_16.png", "group": "G", "type_label": "rubble_single_brick", "lengthInCells": 1, "direction": "any", "heightType": "low", "visualOffset": "0", "confidence": "high", "notes": "individual scattered brick on the floor for organic clutter"}
+    ]
+  },
+  "unknowns": [],
+  "group_coverage_summary": {
+    "A_connector_column":     { "found": 7,  "files": ["sheet_4/piece_01", "sheet_4/piece_04", "sheet_4/piece_05", "sheet_4/piece_09", "sheet_4/piece_10", "sheet_4/piece_11", "sheet_4/piece_13"] },
+    "B_rear_wall":            { "found": 3,  "files": ["sheet_2/piece_01", "sheet_2/piece_02", "sheet_2/piece_03"] },
+    "C_side_wall_step":       { "found": 3,  "files": ["sheet_2/piece_05", "sheet_2/piece_06", "sheet_3/cell_08_R3C1_R"] },
+    "D_corner_turn":          { "found": 10, "files": ["sheet_2/piece_04", "sheet_3/cell_02_L", "sheet_3/cell_02_R", "sheet_3/cell_03_L", "sheet_3/cell_03_R", "sheet_3/cell_04_L", "sheet_3/cell_04_R", "sheet_3/cell_08_L", "sheet_4/piece_06", "sheet_4/piece_07"] },
+    "E_door_arch_portal":     { "found": 5,  "files": ["sheet_3/cell_01", "sheet_3/cell_05_L", "sheet_3/cell_05_R", "sheet_3/cell_06", "sheet_3/cell_07"] },
+    "F_low_front_open":       { "found": 5,  "files": ["sheet_2/piece_07", "sheet_2/piece_08", "sheet_2/piece_09", "sheet_4/piece_02", "sheet_4/piece_08"] },
+    "G_seam_cleanup_filler":  { "found": 5,  "files": ["sheet_4/piece_03", "sheet_4/piece_12", "sheet_4/piece_14", "sheet_4/piece_15", "sheet_4/piece_16"] }
+  },
+  "missing_groups": [],
+  "blueprint_room_room_alignment": {
+    "library_alcove_room_adim4": "Yes. The current sheets contain all necessary structural building blocks (straight rear walls, stepped side walls, outer/inner corners, support pillars, low front edges, and rubble/seam cleanup pieces) to build this room. Sprite mirroring (flipX) is utilized in Unity to handle SideLeft and door-side matching.",
+    "open_front_flooded_room_adim5": "Yes. All structural elements required for the wall layout (rear walls, stepped side walls, low front edges with balustrades and corners, and pillar connectors) are present. The flooded/water elements represent logical footprint tile layers and do not require separate wall assets other than the surrounding walls already present."
+  },
+  "codex_priority_recommendations": [
+    "1. wpd_rear_wall_2x (sheet_2/piece_01) — wide combat rooms",
+    "2. wpd_side_wall_2x + wpd_side_wall_stepped_2x (sheet_2/piece_05, piece_06) — stepped diamond arenas",
+    "3. wpd_low_front_2x + wpd_low_front_outer_corner (sheet_2/piece_07, sheet_4/piece_02) — open front edges",
+    "4. wpd_door_arch_2x (sheet_3/cell_01_R0C0) — entrance and ritual transition setpieces"
+  ],
+  "_methodology_notes": "See AGY_DONE_ydbilginn.md for full methodology. Dimension calibration via sheet_1 baseline (128x256 for 1-cell normal walls). 256-wide pieces = 2-cell spans, 128-wide = 1-cell. Low-height (Group F) consistently shows 128 height vs 256. flipX utilized for SideLeft (only 1 native left-side piece in sheets, mirroring resolves coverage)."
+}

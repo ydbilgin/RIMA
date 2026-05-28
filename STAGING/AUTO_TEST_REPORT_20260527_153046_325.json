@@ -1,0 +1,14 @@
+{
+  "generatedAt": "20260527_153046_325",
+  "scene": "PlayableArena_Test01",
+  "pass": 6,
+  "fail": 0,
+  "results": [
+    {"test":"T1_MapBoundary_North","passed":true,"details":"Player at (0.00, -3.89, 0.00) — walkable confirmed after North push."},
+    {"test":"T1_MapBoundary_South","passed":true,"details":"Player at (0.00, 0.00, 0.00) — walkable confirmed after South push."},
+    {"test":"T1_MapBoundary_East","passed":true,"details":"Player at (0.00, 0.00, 0.00) — walkable confirmed after East push."},
+    {"test":"T1_MapBoundary_West","passed":true,"details":"Player at (0.00, 0.00, 0.00) — walkable confirmed after West push."},
+    {"test":"T2_GateFlow_Fragment_G_Draft_Gate_Unlock","passed":true,"details":"All 1 gate(s) Unlocked after draft pick."},
+    {"test":"T3_Combat_BasicAttack_Hits_Target","passed":true,"details":"Target HP 100 → 75 (delta 25)."}
+  ]
+}
