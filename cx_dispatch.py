@@ -22,6 +22,8 @@ CX_CMD = r"C:\Users\ydbil\AppData\Roaming\npm\cx.cmd"
 PROFILE_ORDER = ["laurethayday", "laurethgame", "yasinderyabilgin"]
 CODEX_TASK_FILE = "CODEX_TASK.md"
 CODEX_DONE_FILE = "CODEX_DONE.md"
+LOCK_DIR = ".cx_dispatch_locks"
+LOCK_STALE_SECS = 7200  # 2 hours — auto-release ghost locks
 
 # Variables that trigger the Conda shell hook inside cmd.exe.
 # Stripping them from the child env prevents the
@@ -31,6 +33,36 @@ _CONDA_VARS = {
     "CONDA_EXE", "CONDA_PYTHON_EXE", "CONDA_PROMPT_MODIFIER",
     "_CE_CONDA", "_CE_M",
 }
+
+
+def _is_profile_locked(profile):
+    """Check if profile has an active lock (another dispatch using it)."""
+    lock_path = os.path.join(LOCK_DIR, f"{profile}.lock")
+    if not os.path.exists(lock_path):
+        return False
+    try:
+        age = datetime.now(timezone.utc).timestamp() - os.path.getmtime(lock_path)
+        if age > LOCK_STALE_SECS:
+            os.remove(lock_path)
+            return False
+        return True
+    except (FileNotFoundError, OSError):
+        return False
+
+
+def _acquire_profile_lock(profile):
+    os.makedirs(LOCK_DIR, exist_ok=True)
+    lock_path = os.path.join(LOCK_DIR, f"{profile}.lock")
+    with open(lock_path, "w") as f:
+        f.write(str(os.getpid()))
+    return lock_path
+
+
+def _release_profile_lock(lock_path):
+    try:
+        os.remove(lock_path)
+    except (FileNotFoundError, OSError):
+        pass
 
 
 def _clean_env():
@@ -114,10 +146,12 @@ def select_profile(profiles):
     ]
     if candidates:
         candidates.sort(key=lambda p: p["last_refresh"])
-        return candidates[0]["name"]
+        for c in candidates:
+            if not _is_profile_locked(c["name"]):
+                return c["name"]
     for name in PROFILE_ORDER:
         for p in profiles:
-            if p["name"] == name and p["logged_in"]:
+            if p["name"] == name and p["logged_in"] and not _is_profile_locked(p["name"]):
                 return p["name"]
     return None
 
@@ -187,6 +221,9 @@ def select_profile_quota_aware(profiles, primary_cap=85, secondary_cap=90):
     for p in profiles:
         if not p["logged_in"] or p["name"] not in PROFILE_ORDER:
             continue
+        if _is_profile_locked(p["name"]):
+            print(f"  Skipping {p['name']} (locked by parallel dispatch)", file=sys.stderr)
+            continue
         lim = _fetch_live_limits(p["name"])
         if lim is None:
             continue
@@ -222,7 +259,11 @@ def dispatch(profile, task_content, effort, task_file_path=None, timeout=1200):
         "--config", f"model_reasoning_effort={effort}",
         f"Read {task_file} and execute every step using shell commands. Do not describe — actually run them.",
     ]
-    result = _ps_run(cx_args, timeout=timeout)
+    lock_path = _acquire_profile_lock(profile)
+    try:
+        result = _ps_run(cx_args, timeout=timeout)
+    finally:
+        _release_profile_lock(lock_path)
     if result.stdout:
         print(result.stdout, file=sys.stderr)
 

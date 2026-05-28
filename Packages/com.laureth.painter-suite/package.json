@@ -1,0 +1,29 @@
+{
+  "name": "com.laureth.painter-suite",
+  "version": "0.1.0",
+  "displayName": "LaurethStudio 2D Painter Suite",
+  "description": "Visual Collider Painter + Iso/2D Parallax Layer Painter for Unity 2D pipelines. Drag-to-create colliders in SceneView, Photoshop-style layer composition, sort-axis aware iso support, template/copy-paste workflow. Designed for top-down/iso/2.5D indie games.",
+  "unity": "2022.3",
+  "author": {
+    "name": "LaurethStudio",
+    "email": "laurethgame@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "2d",
+    "tilemap",
+    "collider",
+    "parallax",
+    "editor extension",
+    "level design",
+    "iso",
+    "painter"
+  ],
+  "samples": [
+    {
+      "displayName": "Demo Pack",
+      "description": "5 demo prop sprites + 7 collider templates + sample scene with parallax layers",
+      "path": "Samples~/DemoPack"
+    }
+  ]
+}
