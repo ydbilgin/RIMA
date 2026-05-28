@@ -19,19 +19,19 @@ MonoBehaviour:
   - prefab: {fileID: 7373608451472963539, guid: 34f9366f44422d54487fd7edd55288d4, type: 3}
     position: {x: -4, y: 83, z: 0}
     isElite: 0
-  - prefab: {fileID: 7373608451472963539, guid: 34f9366f44422d54487fd7edd55288d4, type: 3}
+  - prefab: {fileID: 2176448396092048424, guid: f7d433dcffa589d42837444c7dfd2f68, type: 3}
     position: {x: 4, y: 83, z: 0}
     isElite: 0
-  - prefab: {fileID: 7373608451472963539, guid: 34f9366f44422d54487fd7edd55288d4, type: 3}
+  - prefab: {fileID: 6295133694971129511, guid: 127a34f24466f9a48a45edaa67ab3ad2, type: 3}
     position: {x: -2, y: 83, z: 0}
     isElite: 0
   - prefab: {fileID: 7373608451472963539, guid: 34f9366f44422d54487fd7edd55288d4, type: 3}
     position: {x: 2, y: 83, z: 0}
     isElite: 0
-  - prefab: {fileID: 7373608451472963539, guid: 34f9366f44422d54487fd7edd55288d4, type: 3}
+  - prefab: {fileID: 2176448396092048424, guid: f7d433dcffa589d42837444c7dfd2f68, type: 3}
     position: {x: -6, y: 80, z: 0}
     isElite: 0
-  - prefab: {fileID: 7373608451472963539, guid: 34f9366f44422d54487fd7edd55288d4, type: 3}
+  - prefab: {fileID: 6295133694971129511, guid: 127a34f24466f9a48a45edaa67ab3ad2, type: 3}
     position: {x: 6, y: 80, z: 0}
     isElite: 0
   - prefab: {fileID: 7373608451472963539, guid: 34f9366f44422d54487fd7edd55288d4, type: 3}
