@@ -67,5 +67,20 @@ TagManager:
   - name: Player
     uniqueID: 0
     locked: 0
+  - name: BackwallLandmark
+    uniqueID: 657081444
+    locked: 0
+  - name: Characters
+    uniqueID: 1200000003
+    locked: 0
+  - name: Props
+    uniqueID: 1200000004
+    locked: 0
+  - name: Decor_Cliff
+    uniqueID: 1200000005
+    locked: 0
+  - name: Decor_Floor
+    uniqueID: 1200000006
+    locked: 0
   m_RenderingLayers:
   - Default
