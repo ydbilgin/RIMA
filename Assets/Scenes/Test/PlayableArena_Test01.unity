@@ -17353,6 +17353,10 @@ PrefabInstance:
       propertyPath: m_AngularDamping
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1693915698238646874, guid: 51d1b129b77e6f04fbeca10699526625, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3912250625006464118, guid: 51d1b129b77e6f04fbeca10699526625, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

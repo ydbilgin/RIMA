@@ -24,6 +24,7 @@ namespace RIMA
             // Never create the legacy procedural menu when loading scene-backed UI or game/test scenes directly.
             var activeScene = SceneManager.GetActiveScene().name;
             if (activeScene == "_IsoGame" ||
+                activeScene == "PlayableArena_Test01" ||
                 activeScene == "MainMenu" ||
                 activeScene == "CharacterSelect" ||
                 activeScene == "RoomPipelineTest" ||
@@ -48,7 +49,7 @@ namespace RIMA
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             EnsureEventSystem();
-            if (scene.name != "_IsoGame") return;
+            if (scene.name != "_IsoGame" && scene.name != "PlayableArena_Test01") return;
 
             foreach (var menu in Object.FindObjectsByType<MainMenuScreen>(
                          FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -97,7 +98,8 @@ namespace RIMA
 
         private void Start()
         {
-            if (SceneManager.GetActiveScene().name == "_IsoGame")
+            var sceneName = SceneManager.GetActiveScene().name;
+            if (sceneName == "_IsoGame" || sceneName == "PlayableArena_Test01")
             {
                 Destroy(gameObject);
                 return;
