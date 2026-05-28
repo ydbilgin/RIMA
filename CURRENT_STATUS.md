@@ -5,6 +5,55 @@
 
 ---
 
+## 🌙 S114 OVERNIGHT AUTONOMOUS (2026-05-29 gece, Opus 4.8 lead, user AWAY)
+
+### ☀️ SABAH ÖZET (ilk oku) — 15 item tamam, demo bir adım daha yakın
+**Büyük adım atıldı.** Combat sistemi canlı-doğrulandı + 1 gerçek bug fix + live-editor ilerledi + 3 yeni dev-tool + tam tasarım seti. Hepsi `STAGING/` doc + memory index'te. Local checkpoint'lerle korumalı.
+
+**Bu gece BİTEN (15):**
+- **Tasarım (triple-AI: her biri Codex+agy review→Opus final, fallback çalıştı):** N1 canon+**2 saçmalık** (mixel-boss→PPU64 / weapon-swing KORU) · N3 ışık reçetesi · N4 çatlak üretim-spec · N5 ambiyans-bible · N6 live-editor gap · N9 UX-tool · N2 envanter-tutarlılık. → `STAGING/N{1..9}_*.md`
+- **Demo sistem (Unity, canlı-doğrulandı):** ND1 audit · **ND2 combat VERIFIED** (mob HP 100→0, 0-error) + **DamageNumberDriver.cs:114 NullRef FIXED** · ND4 PlayMode-test (demo testleri GEÇTİ; 25 fail=legacy `_IsoGame` infra) · **N8 cliff live-reload fix** (schema 1.1, no-op kapandı) · **N10 3 dev-tool** (Play-From-Here/Debug-F1/Sandbox-Launcher — JumpToRoom canlı-test PASS)
+- **FILL:** #41 envanter sentez · #42 safe-delete audit
+
+**🛠️ HEMEN KULLANABİLECEĞİN YENİ TOOL'LAR:**
+- **F5** = açık sahneyi kaydet + PlayableArena_Test01 aç + Play (her yerden tek tuş)
+- **F1** (play'de) = Debug panel: Kill All / God Mode / Speed / Force Clear / Restart / **Jump Room 1-5** (demo'yu baştan oynamadan oda-test → ND2'deki menü-boot derdini bypass eder)
+
+**🔴 SENİN KARARIN GEREKEN (gated):**
+- **A5** combat-feel playtest (PlayableArena_Test01, F5 ile aç) — "freeze" dersen art açılır
+- **Asset silme** (`N2_INVENTORY_CONSISTENCY_ACTION.md` A-grubu 3 SAFE dosya — tek "evet")
+- **git-push** (remote divergence, force-push senin kararın) · **weapon batch gen** (paused, "asıl üretim" sırası sende)
+- **UI-boot:** PlayableArena play'de 3 canvas (MainMenu+Settings+Death) aynı anda aktif → menü kapatınca gameplay temiz (ND6 spec hazır)
+
+**📋 SANA HAZIR (spec'li, gece-yapılabilir ama defer ettim):**
+- **ND3 mob variety:** FractureImp stack klonla→ShardWalker/HollowHulk graybox (`DEMO_MOB_AUDIT_S114.md`)
+- **ND5 black-cliff:** Scene_Lighting GO + Decor_Cliff light-target (`N3_LIGHTING_DESIGN_FINAL.md` — ⚠️ cliff'ler silinmiş, ÖNCE oda-rebuild)
+- **ND6 UI-boot temizliği · statue#9 kategorizasyon · N7 live-editor tam E2E · çatlak/ışık asset üretimi** (N4/N3 spec hazır, art-fazı)
+
+---
+
+**Sözleşme:** Sıralı kuyruk; her item Opus analiz+saçmalık-tarama → Codex+agy review (fallback zorunlu, asla atlama) → Opus final → üretilebilirlik notu → status+memory+index. North-star: **oynanabilir demoya sistemleri kur, "sadece animasyon kalsın".** Error'da durma, ara ara console. Bitince /lint.
+
+**Checkpoint:** `f27f068c` WIP overnight baseline (reviewed combat .cs korundu, `git reset --soft HEAD~1` geri alır).
+
+**PROGRESS LOG:**
+- ✅ **FILL #41** PixelLab envanter sentezi → `STAGING/PIXELLAB_SYNTHESIS_S114.md` (37 KEEP-T1/109 T2/51 DELETE/46 REVIEW, 6 çelişki).
+- ✅ **FILL #42** safe-delete audit → `STAGING/SAFE_DELETE_AUDIT_S114.md` (3 SAFE: _TempReferencePacks+Warblade/south.png / 3 UNSAFE: floor_iso aktif sahne, StoneColumn referanslı / 3 REVIEW). SİLME YOK, sabah onayı.
+- ✅ **N1** NLM conflict sweep → `STAGING/NLM_CONFLICT_RESOLUTION_S114.md` + memory `reference_nlm_conflict_resolution_s114`. Triple-AI 4/4 AGREE: mixel-boss=PPU64 / weapon-swing KORU / cliff 2-stage hibrit / 4 demo-blocker.
+- ✅ **ND1** demo-loop audit: RoomLoader.cs `useFragmentGateFlow` emekli, **clear-to-unlock LIVE** (combat oda: mob clear→gate unlock→enter→LoadNext; reward: fragment-pickup; boss: death→DemoComplete). Mob audit (`STAGING/DEMO_MOB_AUDIT_S114.md`): **1/4 combat-ready** (FractureImp✅ / ShardWalker=script+anim,prefab YOK / HollowHulk=YOK / boss=HP 100vs800 çelişki). 3 combat odası FractureImp spam.
+- ✅ **N3** ışıklandırma tasarımı → `STAGING/N3_LIGHTING_DESIGN_FINAL.md` (triple-AI). Işık reçetesi (global #1E1B2E 0.22 / cyan rim Freeform 1.2 sharp / brazier warm / rune pulse / void unlit). 🔴 4 saçmalık: black-cliff kök=ışıklar inaktif dekor-parent child (→Scene_Lighting GO) + Decor_Cliff light-target eksik + Shadowcaster2D ASLA + pixelSnapping tile-seam 1px bleed. Üretilebilir asset spec'leri hazır (Python-cheap, PixelLab gerekmez). → ND5 task.
+- ✅ **ND2** combat play-mode doğrulama: play **0-error temiz**; **DamageNumberDriver.cs:114 NullRef FIXED** (redundant TextMesh bloğu silindi, TextMeshPro kalır, recompile-clean); Health.TakeDamage çalışıyor (mob 100→0); player+9 enemy canlı; CombatJuice tam. Görsel: floor+cyan ışık havuzları render, void görünür, cliff EKSİK. ⚠️ menü-boot: 3 canvas (MainMenu+Settings+Death) aynı anda aktif timeScale=0 → ND6 (UI-flow polish, combat blocker değil).
+- ✅ **N4** çatlak/patch tasarımı → `STAGING/N4_CRACKS_DESIGN_FINAL.md` (triple-AI). 4 tip (taş-çatlağı/cyan-rift/kenar-erozyon/yama), 32px tile + 48/64 decor, üretim tablosu+promptlar hazır. Saçmalık: %15 yoğunluk limiti / cyan emissive-Light2D-yok / min 2px / erozyon collider değiştirmez. L4 overlay MVP + 4 painter brush. ÜRETİM YOK.
+- ✅ **N6** live-editor gap → `STAGING/LIVE_EDITOR_GAP_S114.md`: %58 kurulu (C2/C3/C4/C10/C11/C12/F7 çalışıyor), Tool.exe yok (T2-hibrit). Cliff no-op kök=`cliff_cells` şemasında tile_guid yok. 2 gece-item: N7 bake+E2E verify (XS), N8 cliff reload fix (S, ~30 satır).
+- ✅ **ND4** PlayMode test: 36 test, demo Phase1Demo (T2_GateFlow+T3_CombatReadiness) GEÇTİ; 25 fail = legacy `_IsoGame` sahnesi build-settings'te yok (test-infra/stale, demo-blocker DEĞİL — demo PlayableArena_Test01 kullanır). Demo loop/combat test-validated.
+- ✅ **N5** ambiyans-bible → `STAGING/N5_AMBIANCE_BIBLE.md` (görsel yığın + 7 mantıksal-güzelleştirme ilkesi + üretim roadmap). ✅ **N2** envanter-tutarlılık → `STAGING/N2_INVENTORY_CONSISTENCY_ACTION.md` (A:3 SAFE-delete kullanıcı-onay / B:UNSAFE-koru / C:51 cloud + tiles_rift_cliff / D:cliff rebuild ekleme). SİLME YOK.
+- ✅ **N8** cliff live-reload fix (Codex writer + Opus review, Unity compile 0-error): `CliffCellData.tile_guid` additive + serializer schema 1.1 (cliff tilemap→cliff_cells+guid) + LiveRoomReloader ApplyCliffTiles no-op→floor-pattern reload, legacy-safe. Live-editor "asıl büyük iş" ilerledi.
+- ✅ **N9** UX-tool ideation (agy+Opus) → `STAGING/N9_UX_TOOLS_FINAL.md`. Gece-build top-3: Play-From-Here / Debug-F1 / Sandbox-Launcher.
+- 🔄 **Çalışıyor (bg):** N10 top-3 dev-tool BUILD (Codex writer, `b9cpzpzgs`).
+- ⏭️ **Sıradaki:** N10 bitince review+compile-verify+play-test · ND5 black-cliff (Scene_Lighting GO + Decor_Cliff light-target, N3) · ND6 UI-boot temizliği · ND3 mob variety · statue#9 · **/lint (kullanıcı direktifi)** · sabah raporu. **N7 live-editor E2E = DEFER** (F7 smoke 29/29 + N8 compile zaten validate; tam Tool.exe-build follow-up). Tamamlanan: N1✅N2✅N3✅N4✅N5✅N6✅N8✅N9✅ + ND1✅ND2✅ND4✅.
+
+---
+
 ## 🟢 S114 — AKTİF (post-/clear pickup buradan)
 
 **Tek cümle:** 10 commit atıldı (local baseline temiz), push BLOCKED (remote divergence — kullanıcı kararı), roadmap LIVE. Faz 1 demo combat'a odaklan. **EN GÜNCEL DURUM = aşağıdaki "S114 SESSION 3 PROGRESS".**

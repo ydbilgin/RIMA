@@ -144,14 +144,14 @@ agy is research-only per current memory locks. agy is consulted for **architectu
 **Schema (locked here, Codex implements):**
 ```json
 {
-  "version": "1.0",
+  "version": "1.1",
   "roomId": "PlayableArena_Test01",
   "schemaTimestamp": "2026-05-27T22:30:00Z",
   "floorTiles": [
     { "gridX": 0, "gridY": 0, "tileGuid": "abc123..." }
   ],
   "cliffCells": [
-    { "gridX": 1, "gridY": 2, "direction": "S", "manual": true }
+    { "gridX": 1, "gridY": 2, "tileGuid": "abc123...", "direction": "S", "manual": true }
   ],
   "propInstances": [
     {

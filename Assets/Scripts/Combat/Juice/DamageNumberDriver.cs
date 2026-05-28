@@ -110,15 +110,6 @@ namespace RIMA.Combat
             tmp.color = normalColor;
             tmp.text = string.Empty;
 
-            TextMesh textMesh = go.AddComponent<TextMesh>();
-            textMesh.anchor = TextAnchor.MiddleCenter;
-            textMesh.alignment = TextAlignment.Center;
-            textMesh.fontSize = 32;
-            textMesh.characterSize = 0.1f;
-            textMesh.color = normalColor;
-            textMesh.text = string.Empty;
-            textMesh.gameObject.SetActive(false);
-
             return go;
         }
 

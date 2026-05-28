@@ -74,6 +74,16 @@ namespace RIMA.Systems.Map
             loader.LoadNextInstance();
         }
 
+        public static void JumpToRoom(int i)
+        {
+            FindFirstObjectByType<RoomLoader>()?.LoadRoomByIndex(i);
+        }
+
+        public static void DebugForceRoomCleared()
+        {
+            OnRoomCleared?.Invoke();
+        }
+
         public void LoadFirstRoom()
         {
             if (!TryGetRoomData(0, out RoomSequenceData firstData)) return;
@@ -86,6 +96,14 @@ namespace RIMA.Systems.Map
             CurrentRoomData = firstData;
             OnRoomChanged?.Invoke(CurrentRoomIndex);
             SetHudRoomStatus(firstData);
+        }
+
+        public void LoadRoomByIndex(int index)
+        {
+            if (!TryGetRoomData(index, out RoomSequenceData roomData)) return;
+
+            SwapRoomWhileBlack(index, roomData);
+            SetHudRoomStatus(roomData);
         }
 
         private void LoadNextInstance()

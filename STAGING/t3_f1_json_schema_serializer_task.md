@@ -13,11 +13,11 @@ T3 path implementation F1: JSON layout schema lock (semver 1.0) + RoomLayoutSeri
 
 ## İş kalemleri
 
-### 1. JSON schema lock (semver 1.0)
+### 1. JSON schema lock (semver 1.1 additive)
 - Schema:
   ```json
   {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "room_id": "phase1_room1_tutorial",
     "metadata": {
       "name": "Tutorial Combat",
@@ -28,7 +28,7 @@ T3 path implementation F1: JSON layout schema lock (semver 1.0) + RoomLayoutSeri
       { "cell": [x, y, z], "tile_guid": "..." }
     ],
     "cliff_cells": [
-      { "cell": [x, y, z], "is_decor": false }
+      { "cell": [x, y, z], "tile_guid": "...", "is_decor": false }
     ],
     "prop_instances": [
       { "prefab_guid": "...", "position": [x, y, z], "rotation": 0 }
@@ -46,7 +46,7 @@ T3 path implementation F1: JSON layout schema lock (semver 1.0) + RoomLayoutSeri
   - `Serialize(Scene scene, out string json)` — sahnedeki Tilemap + prop GameObject envanteri JSON'a çevir
   - `Deserialize(string json, Scene targetScene)` — JSON'dan sahne content restore
   - GUID-based asset reference (AssetDatabase.GUIDFromAssetPath)
-  - Versioning check: schema_version mismatch → migration veya error
+  - Versioning check: schema_version 1.0 remains readable; 1.1 adds cliff_cells[].tile_guid.
 - Singleton output: `Application.streamingAssetsPath/live/room_current.json`
 
 ### 3. RoomManifestSO.cs schema extend

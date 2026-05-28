@@ -206,10 +206,29 @@ namespace RIMA.Live
         {
             if (_cliffTilemap == null || data.cliff_cells == null || data.cliff_cells.Count == 0) return;
 
-            // Cliff cells don't carry a tile_guid in schema 1.0 cliff_cells list —
-            // they are placed by the painter via their own tilemap channel.
-            // If the cliff tilemap exists we leave it untouched unless explicit data arrives.
-            // (Cliff reconstruction from GUID data is F5+ scope — no-op here is safe.)
+            bool hasExplicitGuid = false;
+            foreach (CliffCellData ct in data.cliff_cells)
+            {
+                if (!string.IsNullOrEmpty(ct.tile_guid))
+                {
+                    hasExplicitGuid = true;
+                    break;
+                }
+            }
+            if (!hasExplicitGuid) return;
+
+            _cliffTilemap.ClearAllTiles();
+
+            foreach (CliffCellData ct in data.cliff_cells)
+            {
+                if (ct.cell == null || ct.cell.Length < 3) continue;
+                Vector3Int pos = new Vector3Int(ct.cell[0], ct.cell[1], ct.cell[2]);
+
+                TileBase tile = ResolveTile(ct.tile_guid);
+                if (tile != null)
+                    _cliffTilemap.SetTile(pos, tile);
+                // graceful-degrade: legacy cliff cell without tile_guid -> skip
+            }
         }
 
         // ── Prop diff ─────────────────────────────────────────────────────────

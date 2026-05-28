@@ -9,7 +9,7 @@
 - Unity package refresh also touched `Packages/packages-lock.json`.
 
 ## Implementation
-- Locked serializer schema version to `1.0`.
+- Locked serializer schema version to `1.1` additive; legacy `1.0` remains readable.
 - Added editor-only `RoomLayoutSerializer` static class.
 - `Serialize(Scene scene, out string json)` collects scene Tilemap cells and prefab instance roots, writes JSON to `Application.streamingAssetsPath/live/room_current.json`, and returns the JSON string.
 - `Deserialize(string json, Scene targetScene)` validates schema version, restores a generated Grid/Tilemap root, and instantiates prefab references by GUID/path fallback.
@@ -43,7 +43,7 @@ No compile diagnostics referenced `RoomLayoutSerializer.cs` or `RoomManifestSO.c
 ## Sample JSON Output
 ```json
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "room_id": "phase1_room1_tutorial",
   "metadata": {
     "name": "Tutorial Combat",
@@ -53,7 +53,9 @@ No compile diagnostics referenced `RoomLayoutSerializer.cs` or `RoomManifestSO.c
   "floor_tiles": [
     { "cell": [0, 0, 0], "tile_guid": "00000000000000000000000000000000" }
   ],
-  "cliff_cells": [],
+  "cliff_cells": [
+    { "cell": [1, 0, 0], "tile_guid": "33333333333333333333333333333333", "is_decor": false }
+  ],
   "prop_instances": [
     { "prefab_guid": "11111111111111111111111111111111", "position": [2.0, 1.0, 0.0], "rotation": 0.0 }
   ],

@@ -73,6 +73,7 @@ namespace RIMA.Live
     {
         /// <summary>cell[0]=x, cell[1]=y, cell[2]=z</summary>
         public int[] cell;
+        public string tile_guid;
         public bool is_decor;
     }
 

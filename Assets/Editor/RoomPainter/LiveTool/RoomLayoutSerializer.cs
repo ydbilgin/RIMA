@@ -12,7 +12,8 @@ namespace RIMA.Editor.RoomPainter.LiveTool
 {
     public static class RoomLayoutSerializer
     {
-        public const string SchemaVersion = "1.0";
+        public const string SchemaVersion = "1.1";
+        private const string LegacySchemaVersion = "1.0";
         public static string CurrentJsonPath => Path.Combine(Application.streamingAssetsPath, "live", "room_current.json");
 
         private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
@@ -47,7 +48,11 @@ namespace RIMA.Editor.RoomPainter.LiveTool
             scene.GetRootGameObjects(roots);
             foreach (GameObject root in roots)
             {
-                foreach (Tilemap tilemap in root.GetComponentsInChildren<Tilemap>(true)) AddTiles(tilemap, doc.floor_tiles);
+                foreach (Tilemap tilemap in root.GetComponentsInChildren<Tilemap>(true))
+                {
+                    if (IsCliffTilemap(tilemap)) AddCliffTiles(tilemap, doc.cliff_cells);
+                    else AddTiles(tilemap, doc.floor_tiles);
+                }
                 foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
                 {
                     GameObject go = transform.gameObject;
@@ -68,7 +73,7 @@ namespace RIMA.Editor.RoomPainter.LiveTool
 
             Layout doc = JsonConvert.DeserializeObject<Layout>(json);
             if (doc == null) throw new ArgumentException("JSON did not contain a room layout document.", "json");
-            if (doc.schema_version != SchemaVersion)
+            if (!IsCompatibleSchema(doc.schema_version))
             {
                 throw new NotSupportedException("Room layout schema " + doc.schema_version + " is not compatible with " + SchemaVersion + ".");
             }
@@ -115,6 +120,26 @@ namespace RIMA.Editor.RoomPainter.LiveTool
                 TileBase tile = tilemap.GetTile(cell);
                 if (tile != null) tiles.Add(new FloorTile { cell = new[] { cell.x, cell.y, cell.z }, tile_guid = GuidOrPath(tile) });
             }
+        }
+
+        private static void AddCliffTiles(Tilemap tilemap, List<CliffCell> cliffs)
+        {
+            tilemap.CompressBounds();
+            foreach (Vector3Int cell in tilemap.cellBounds.allPositionsWithin)
+            {
+                TileBase tile = tilemap.GetTile(cell);
+                if (tile != null) cliffs.Add(new CliffCell { cell = new[] { cell.x, cell.y, cell.z }, tile_guid = GuidOrPath(tile), is_decor = false });
+            }
+        }
+
+        private static bool IsCliffTilemap(Tilemap tilemap)
+        {
+            return tilemap != null && tilemap.gameObject.name.IndexOf("cliff", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private static bool IsCompatibleSchema(string schemaVersion)
+        {
+            return schemaVersion == SchemaVersion || schemaVersion == LegacySchemaVersion;
         }
 
         private static void AddProp(GameObject go, Layout doc)
@@ -179,7 +204,7 @@ namespace RIMA.Editor.RoomPainter.LiveTool
 
         private sealed class Meta { public string name; public string created; public string modified; }
         private sealed class FloorTile { public int[] cell; public string tile_guid; }
-        private sealed class CliffCell { public int[] cell; public bool is_decor; }
+        private sealed class CliffCell { public int[] cell; public string tile_guid; public bool is_decor; }
         private sealed class Prop { public string prefab_guid; public float[] position; public float rotation; }
         private sealed class ColliderOverride { public string instance_id; public float[] size; public float[] offset; public string shape; }
     }
