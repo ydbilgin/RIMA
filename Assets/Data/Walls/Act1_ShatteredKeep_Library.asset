@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65fa1141abd16bf41bc7fa9139230fc8, type: 3}
+  m_Name: Act1_ShatteredKeep_Library
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Walls.WallChunkLibrary
+  entries:
+  - data: {fileID: 11400000, guid: 582573fdbbf027144b6593af627e1374, type: 2}
+    prefab: {fileID: 8080940118294722299, guid: 5920158a9bf15e04581e43fd956a21b3, type: 3}
+  - data: {fileID: 11400000, guid: bdabbe35822eb944dae4958fd0bde075, type: 2}
+    prefab: {fileID: 4664595487399788900, guid: bc3a0c057eda30f42b59f664982dcc1b, type: 3}
+  - data: {fileID: 11400000, guid: ada6eea4168a40a4ebda195dde198b8d, type: 2}
+    prefab: {fileID: 1158768524181751532, guid: d7d369fbb904a594483f6a5e6e1700ea, type: 3}
+  - data: {fileID: 11400000, guid: ba7504245b5d5ac448ad7dc7bb94b231, type: 2}
+    prefab: {fileID: 4583133744068612361, guid: 8517fb0f84282cd41930445e8a80ff9e, type: 3}
+  - data: {fileID: 11400000, guid: 8eef48cc243a2264baec54770d453375, type: 2}
+    prefab: {fileID: 4707846548468789521, guid: bfd0b01f0bb12374ebc9eebe87c5de6f, type: 3}
+  - data: {fileID: 11400000, guid: 9f984c9f5f2e5454f98b9d0e8fb4bf7c, type: 2}
+    prefab: {fileID: 7495900361459668471, guid: dd0e5a54209fa564f87888e3bc836497, type: 3}
+  - data: {fileID: 11400000, guid: 7b14e54ea7c9d49438ef1757b0486713, type: 2}
+    prefab: {fileID: 4694883304844468370, guid: ee741d3bf8ffb9e4b96ffc33c49d15c7, type: 3}
+  - data: {fileID: 11400000, guid: d24a2d2a7115f5c43ad53d0dc40075c7, type: 2}
+    prefab: {fileID: 2445734464572050257, guid: d44096dab49e53141b2c434656d46aec, type: 3}
+  - data: {fileID: 11400000, guid: a0fa8be6fdb893549a59a551bf5f14c4, type: 2}
+    prefab: {fileID: 1683636137151900895, guid: d7b69c57d2db9994fa9f644b9911a5a0, type: 3}
+  - data: {fileID: 11400000, guid: 6175d592bd911f14f8c9aa1460dce222, type: 2}
+    prefab: {fileID: 6825578390996112869, guid: cf3a9c85d9741fd4594ab50243f138af, type: 3}
+  - data: {fileID: 11400000, guid: 1997201a79581864dbb8cf1e89fb9d79, type: 2}
+    prefab: {fileID: 998428586726731426, guid: f8a8f3e4f31e3004790462199a0ee379, type: 3}
+  - data: {fileID: 11400000, guid: f48d9353efb1bd448855a3f959b9eec1, type: 2}
+    prefab: {fileID: 3189319383495091485, guid: e0e68b43361897942ba4e999cfc12490, type: 3}
+  - data: {fileID: 11400000, guid: da648c675b2201e48a84de90d7759b10, type: 2}
+    prefab: {fileID: 6866676032332909799, guid: 79d9b9801a54aaa4cb57ac5b25c29dc6, type: 3}
+  - data: {fileID: 11400000, guid: f40120809c57e9f4eba9239288518bdf, type: 2}
+    prefab: {fileID: 8720035182083075640, guid: eb81e0a8cd1b9a64bab9cf2fbb10ba7a, type: 3}
+  - data: {fileID: 11400000, guid: 6ccf61e342e68a04e85ae4b7b29f7ca7, type: 2}
+    prefab: {fileID: 993905167856202234, guid: 3467ff3ed5cadf644a0a2f7f278319fa, type: 3}
+  - data: {fileID: 11400000, guid: cbfc68ff7b4a8e34e8e67c72f88257a6, type: 2}
+    prefab: {fileID: 1682539875873195014, guid: 65bcc03d3ee837448b527b63e10241cc, type: 3}
+  - data: {fileID: 11400000, guid: 81e2a49ebf41ba5448e2506d64177de2, type: 2}
+    prefab: {fileID: 4143869734598724032, guid: 265619cb78edc6a4dab561c7df4fa96f, type: 3}

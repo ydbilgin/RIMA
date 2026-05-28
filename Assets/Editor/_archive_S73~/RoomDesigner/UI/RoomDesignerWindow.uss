@@ -1,0 +1,114 @@
+:root {
+    --rd-bg: #15181c;
+    --rd-panel-bg: #20252b;
+    --rd-accent: #4da3ff;
+}
+
+.rd-root {
+    flex-grow: 1;
+    background-color: var(--rd-bg);
+}
+
+.rd-toolbar {
+    height: 36px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #1b2026;
+    border-bottom-width: 1px;
+    border-bottom-color: #313941;
+}
+
+.rd-toolbar Button {
+    margin-right: 6px;
+}
+
+.rd-toolbar DropdownField {
+    min-width: 170px;
+    margin-left: 4px;
+}
+
+.rd-cell-debug {
+    margin-left: 12px;
+    color: var(--rd-accent);
+    unity-font-style: bold;
+}
+
+.rd-body {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.rd-panel {
+    background-color: var(--rd-panel-bg);
+    border-color: #313941;
+}
+
+.rd-left {
+    width: 280px;
+    border-right-width: 1px;
+}
+
+.rd-right {
+    width: 320px;
+    border-left-width: 1px;
+}
+
+.rd-canvas {
+    flex-grow: 1;
+    background-color: #101316;
+}
+
+#room-designer-imgui-canvas {
+    flex-grow: 1;
+    background-color: #0f1214;
+}
+
+.rd-tile-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 4px;
+}
+
+.rd-tile-card {
+    width: 56px;
+    height: 56px;
+    margin: 2px;
+    border-width: 1px;
+    border-color: #333;
+}
+
+.rd-tile-card--selected {
+    border-color: #7BA7BC;
+    border-width: 2px;
+}
+
+.rd-biome-tab {
+    padding: 4px 8px;
+    margin: 2px;
+}
+
+.rd-biome-tab--active {
+    background-color: #2A3848;
+}
+
+.rd-layer-chip {
+    padding: 2px 6px;
+    margin: 1px;
+    border-radius: 4px;
+}
+
+.rd-layer-chip--active {
+    background-color: #2A3848;
+    border-color: #7BA7BC;
+}
+
+.rd-brush-toolbar { flex-direction: row; padding: 4px; background-color: #1A1C20; }
+.rd-brush-button { width: 32px; height: 32px; margin: 2px; }
+.rd-brush-button--active { background-color: #7BA7BC; }
+
+.rd-meta-title { font-size: 12px; -unity-font-style: bold; padding: 6px 8px 2px 8px; color: #d0d8e0; }
+.rd-meta-row { flex-direction: row; align-items: center; padding: 2px 6px; }
+.rd-meta-field { flex-grow: 1; margin-right: 4px; }
+.rd-meta-sep { height: 1px; background-color: #313941; margin: 6px 0; }

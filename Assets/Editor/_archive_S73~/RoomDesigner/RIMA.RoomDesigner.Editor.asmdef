@@ -1,0 +1,37 @@
+{
+    "name": "RIMA.RoomDesigner.Editor",
+    "rootNamespace": "RIMA.Editor.RoomDesigner",
+    "references": [
+        "RIMA.Runtime",
+        "RIMA.RoomDesigner.Core",
+        "RIMA.RoomDesigner.Core.Editor",
+        "Unity.2D.Tilemap.Extras",
+        "Unity.2D.PixelPerfect",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Universal.2D.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "Editor",
+        "Android",
+        "iOS",
+        "LinuxStandalone64",
+        "macOSStandalone",
+        "PS4",
+        "PS5",
+        "Stadia",
+        "tvOS",
+        "WSA",
+        "WebGL",
+        "WindowsStandalone32",
+        "WindowsStandalone64",
+        "XboxOne"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -58,11 +58,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -70,15 +70,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -92,9 +92,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6815711741237431960, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: m_Size.x
+      value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815711741237431960, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: m_Size.y
+      value: 0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815711741237431960, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815711741237431960, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.9375
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815711741237431960, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: m_Direction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815711741237431960, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815711741237431960, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: m_UsedByEffector
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6976688939510951028, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_BodyType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6976688939510951028, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_LinearDamping
@@ -106,52 +134,28 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 212858638558393185}
+      addedObject: {fileID: 1693915698238646874}
     - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1693915698238646874}
+      addedObject: {fileID: 6149835107572577534}
+    - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2448860982180649108}
+    - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2498248242850639397}
+    - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2501367934047808920}
+    - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7444985518921700907}
   m_SourcePrefab: {fileID: 100100000, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
 --- !u!1 &6045311534637519706 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
   m_PrefabInstance: {fileID: 7075480785000568146}
   m_PrefabAsset: {fileID: 0}
---- !u!58 &212858638558393185
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6045311534637519706}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.3}
-  m_Radius: 0.4
 --- !u!114 &1693915698238646874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,3 +169,107 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.PlayerMovementController
   moveSpeed: 4
+--- !u!114 &6149835107572577534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045311534637519706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74b1c4004c6ac85449206c7a9a52561c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Health
+  maxHP: 100
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+  incomingDamageMultiplier: 1
+  healMultiplier: 1
+--- !u!114 &2448860982180649108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045311534637519706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 351890a7bb286de489ba092f80303d4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.RageSystem
+  OnResourceChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  maxRage: 100
+  OnRageChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  ragePerHitDealt: 1
+  gainMultiplier: 1
+  ragePerHitTaken: 5
+  ragePerKill: 3
+  decayDelay: 1.5
+  decayPerSecond: 10
+  furyThreshold: 50
+  bloodrageThreshold: 80
+  OnFuryStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBloodrageStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2498248242850639397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045311534637519706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2860fe9f3bedbf44d8ec7399934fe436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
+  knockbackResistance: 0
+--- !u!114 &2501367934047808920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045311534637519706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abe7c6a690aaf7448a29af32917e59db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.PlayerController
+  moveSpeed: 4.5
+  dashSpeed: 18
+  dashDuration: 0.15
+  dashCooldown: 0.8
+  commitmentMoveMult: 0.25
+  combatFacingLockDuration: 0.18
+--- !u!114 &7444985518921700907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045311534637519706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9abc5473e54225448f6d57e5e5170b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.PlayerAttack
+  basicAttackProfile: {fileID: 0}
+  slashArcVFX: {fileID: 0}
+  outgoingDamageMultiplier: 1
+  baseDamage: 0

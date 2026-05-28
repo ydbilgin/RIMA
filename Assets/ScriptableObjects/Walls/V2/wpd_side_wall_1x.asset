@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b1e1b80c88c095408333f6cc32e2fa6, type: 3}
+  m_Name: wpd_side_wall_1x
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Walls.V2.WallPieceData
+  id: side_wall_1x
+  type: 1
+  direction: 1
+  footprintSize: {x: 1, y: 1}
+  lengthInCells: 1
+  heightType: 1
+  connectLeft: 1
+  connectRight: 1
+  anchorOffset: {x: 0, y: 0}
+  leftSocketLocal: {x: -0.5, y: 0}
+  rightSocketLocal: {x: 0.5, y: 0}
+  seamSocketLeftLocal: {x: -0.5, y: 0}
+  seamSocketRightLocal: {x: 0.5, y: 0}
+  colliderSize: {x: 1, y: 1}
+  colliderOffset: {x: 0, y: 0}
+  placeholderColor: {r: 0.1882353, g: 0.5019608, b: 0.3137255, a: 1}
+  prefab: {fileID: 6469563835686499316, guid: 922aa16035846de4ca9ef529bff70784, type: 3}

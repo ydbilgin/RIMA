@@ -79,9 +79,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 200
-  m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 150
   m_MaskInteraction: 0
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 0.85, b: 0, a: 1}
@@ -141,6 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81cb176bbb9aea243b289acf0b7dcdd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RIMA.MapFragment
+  interactRadius: 3
   bobAmplitude: 0.12
   bobSpeed: 2.5
   glowPulseSpeed: 3
+  revealSteps: 1

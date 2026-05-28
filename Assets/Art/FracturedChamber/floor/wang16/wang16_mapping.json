@@ -1,0 +1,114 @@
+[
+  {
+    "index": 1,
+    "slug": "isolated",
+    "pattern": "ISOLATED",
+    "edges": "",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_01_isolated.png"
+  },
+  {
+    "index": 2,
+    "slug": "cap_n",
+    "pattern": "CAP-N",
+    "edges": "S",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_02_cap_n.png"
+  },
+  {
+    "index": 3,
+    "slug": "cap_s",
+    "pattern": "CAP-S",
+    "edges": "N",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_03_cap_s.png"
+  },
+  {
+    "index": 4,
+    "slug": "vertical_pass",
+    "pattern": "VERTICAL-PASS",
+    "edges": "N+S",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_04_vertical_pass.png"
+  },
+  {
+    "index": 5,
+    "slug": "cap_w",
+    "pattern": "CAP-W",
+    "edges": "E",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_05_cap_w.png"
+  },
+  {
+    "index": 6,
+    "slug": "corner_nw",
+    "pattern": "CORNER-NW",
+    "edges": "E+S",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_06_corner_nw.png"
+  },
+  {
+    "index": 7,
+    "slug": "corner_sw",
+    "pattern": "CORNER-SW",
+    "edges": "E+N",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_07_corner_sw.png"
+  },
+  {
+    "index": 8,
+    "slug": "t_left",
+    "pattern": "T-LEFT",
+    "edges": "E+N+S",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_08_t_left.png"
+  },
+  {
+    "index": 9,
+    "slug": "cap_e",
+    "pattern": "CAP-E",
+    "edges": "W",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_09_cap_e.png"
+  },
+  {
+    "index": 10,
+    "slug": "corner_ne",
+    "pattern": "CORNER-NE",
+    "edges": "W+S",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_10_corner_ne.png"
+  },
+  {
+    "index": 11,
+    "slug": "corner_se",
+    "pattern": "CORNER-SE",
+    "edges": "W+N",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_11_corner_se.png"
+  },
+  {
+    "index": 12,
+    "slug": "t_right",
+    "pattern": "T-RIGHT",
+    "edges": "W+N+S",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_12_t_right.png"
+  },
+  {
+    "index": 13,
+    "slug": "horizontal_pass",
+    "pattern": "HORIZONTAL-PASS",
+    "edges": "E+W",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_13_horizontal_pass.png"
+  },
+  {
+    "index": 14,
+    "slug": "t_top",
+    "pattern": "T-TOP",
+    "edges": "E+W+S",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_14_t_top.png"
+  },
+  {
+    "index": 15,
+    "slug": "t_bottom",
+    "pattern": "T-BOTTOM",
+    "edges": "E+W+N",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_15_t_bottom.png"
+  },
+  {
+    "index": 16,
+    "slug": "full",
+    "pattern": "FULL",
+    "edges": "N+E+S+W",
+    "asset": "Assets/Art/FracturedChamber/floor/wang16/tile_16_full.png"
+  }
+]

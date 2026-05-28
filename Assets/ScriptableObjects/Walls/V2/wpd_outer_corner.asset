@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b1e1b80c88c095408333f6cc32e2fa6, type: 3}
+  m_Name: wpd_outer_corner
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Walls.V2.WallPieceData
+  id: outer_corner
+  type: 3
+  direction: 4
+  footprintSize: {x: 1, y: 1}
+  lengthInCells: 1
+  heightType: 1
+  connectLeft: 1
+  connectRight: 1
+  anchorOffset: {x: 0, y: 0}
+  leftSocketLocal: {x: -0.5, y: 0}
+  rightSocketLocal: {x: 0.5, y: 0}
+  seamSocketLeftLocal: {x: -0.5, y: 0}
+  seamSocketRightLocal: {x: 0.5, y: 0}
+  colliderSize: {x: 1, y: 1}
+  colliderOffset: {x: 0, y: 0}
+  placeholderColor: {r: 0.8784314, g: 0.4392157, b: 0.1882353, a: 1}
+  prefab: {fileID: 8090326606968126416, guid: a54e113e2ed571d4eb841d878974f79c, type: 3}
