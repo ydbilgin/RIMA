@@ -104,6 +104,12 @@ namespace RIMA
             rb.gravityScale = 0f;
             rb.freezeRotation = true;
             mainCam = Camera.main;
+            // Put player on the Player physics layer so chasing kinematic enemies can't
+            // physically shove the dynamic body (enemy contact was transferring chase
+            // velocity into the player → continuous void drift). Combat damage uses
+            // overlap/triggers, not this body collision, so this is safe.
+            int playerLayer = LayerMask.NameToLayer("Player");
+            if (playerLayer >= 0) gameObject.layer = playerLayer;
             defaultLayer = gameObject.layer;
             EnsureCombatAimDefault();
             GroundBlobShadow.Ensure(transform, new Vector2(1.0f, 0.34f), 0.30f);

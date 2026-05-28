@@ -74,6 +74,17 @@ namespace RIMA
             Rb.freezeRotation = true;
             Rb.bodyType = RigidbodyType2D.Kinematic;
             Rb.useFullKinematicContacts = true;
+
+            // Enemy physics layer + ignore Player<->Enemy body collision. Kinematic enemies
+            // chasing the dynamic player were transferring their chase velocity (e.g. -3 Y)
+            // into the player via contact → player drifted into the void. Damage is handled by
+            // combat overlap/triggers, not this body collision, so ignoring it is safe.
+            int enemyLayer = LayerMask.NameToLayer("Enemy");
+            if (enemyLayer >= 0) gameObject.layer = enemyLayer;
+            int playerLayer = LayerMask.NameToLayer("Player");
+            if (enemyLayer >= 0 && playerLayer >= 0)
+                Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+
             GroundBlobShadow.Ensure(transform, new Vector2(0.9f, 0.30f), 0.28f);
 
             // Spawn anında renk sıfırla — önceki ölüm fade'i prefab'a yazılmışsa temizle
