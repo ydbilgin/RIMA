@@ -37,6 +37,23 @@ namespace RIMA
         public bool IsCommitted => CommitTimer > 0f;
 
         /// <summary>
+        /// Duration of the procedural weapon swing for the current attack, spanning the
+        /// startup windup through the commitment follow-through. Consumed by the
+        /// orientation/mount bridge (HandAnchorAttach) to drive OrientationSync.BeginSwing.
+        /// </summary>
+        public float CurrentSwingWindow => basicAttackProfile != null
+            ? Mathf.Max(0.12f, basicAttackProfile.attackStartup + basicAttackProfile.commitment)
+            : 0.2f;
+
+        /// <summary>
+        /// Normalized time within <see cref="CurrentSwingWindow"/> at which the mechanical
+        /// hit fires (attackStartup). Used to align the visual swing's strike frame to the hit.
+        /// </summary>
+        public float CurrentStrikeFraction => basicAttackProfile != null && CurrentSwingWindow > 0f
+            ? Mathf.Clamp01(basicAttackProfile.attackStartup / CurrentSwingWindow)
+            : 0.35f;
+
+        /// <summary>
         /// Returns true if a dash is allowed. If within the cancel window, interrupts the commitment.
         /// Returns false if mid-commit and past the cancel window (dash blocked).
         /// </summary>

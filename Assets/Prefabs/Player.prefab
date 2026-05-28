@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 6495326905166548884}
   - component: {fileID: 9127120314395514002}
   - component: {fileID: 8889791799018062746}
+  - component: {fileID: 6829785233186328636}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -254,9 +255,11 @@ MonoBehaviour:
   classId: Warblade
   handAnchor: {fileID: 599438984922063064}
   attachMode: 0
-  bodyRenderer: {fileID: 0}
+  bodyRenderer: {fileID: 1375603082478773792}
   spriteHandData: []
   preferRightHand: 0
+  orientationSync: {fileID: 6829785233186328636}
+  weaponRenderer: {fileID: 0}
 --- !u!114 &8889791799018062746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,6 +272,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 842100242970ac3459da93c7bc16d07a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::PlayerPrefabSetup
+--- !u!114 &6829785233186328636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3590611930566067720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b2cc7bc50e488595292280e2ba4dfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.OrientationSync
+  handAnchor: {fileID: 599438984922063064}
+  weaponTransform: {fileID: 0}
+  handOffsets:
+  - {x: 0, y: -0.08}
+  - {x: 0.08, y: -0.04}
+  - {x: 0.1, y: 0}
+  - {x: 0.07, y: 0.05}
+  - {x: 0, y: 0.08}
+  - {x: -0.07, y: 0.05}
+  - {x: -0.1, y: 0}
+  - {x: -0.08, y: -0.04}
+  weaponRotations:
+  - -90
+  - -45
+  - 0
+  - 45
+  - 90
+  - 135
+  - 180
+  - -135
 --- !u!1 &6113728015348485514
 GameObject:
   m_ObjectHideFlags: 0

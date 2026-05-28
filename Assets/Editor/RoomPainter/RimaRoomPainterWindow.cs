@@ -360,6 +360,29 @@ namespace RIMA.RoomPainter.Editor
                 }
 
                 GUI.backgroundColor = prevBg;
+
+                // F6 — Launch Live Tool button (spec: right of Edit Hitbox).
+                GUILayout.Space(6f);
+                bool liveRunning = RIMA.Editor.RoomPainter.LiveTool.LiveToolLauncher.IsRunning;
+                Color liveColor = liveRunning
+                    ? new Color(0.20f, 0.90f, 0.55f, 1f)   // green tint when live
+                    : new Color(0.60f, 0.85f, 1.00f, 1f);  // cyan tint when idle
+                GUI.backgroundColor = liveColor;
+                string liveLabel = liveRunning ? "Live Tool: ON" : "Launch Live Tool";
+                GUIContent liveContent = new GUIContent(
+                    liveLabel,
+                    liveRunning
+                        ? RIMA.Editor.RoomPainter.LiveTool.LiveToolLauncher.StatusText + "\nClick to stop."
+                        : "Serialize current room to room_current.json and launch Tool.exe + Game.exe side by side.");
+                if (GUILayout.Button(liveContent, EditorStyles.toolbarButton, GUILayout.Width(130f)))
+                {
+                    if (liveRunning)
+                        RIMA.Editor.RoomPainter.LiveTool.LiveToolLauncher.StopAll();
+                    else
+                        RIMA.Editor.RoomPainter.LiveTool.LiveToolLauncher.Launch();
+                }
+
+                GUI.backgroundColor = prevBg;
             }
         }
 

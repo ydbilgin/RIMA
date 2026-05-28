@@ -10,6 +10,25 @@ namespace RIMA.Background
     [ExecuteAlways]
     public sealed class ParallaxLayer : MonoBehaviour
     {
+        // --- Canonical parallax-factor anchors (Sang-Hendrix-L4 authoring convenience) ---
+        // The runtime math is pos = layerStart + cameraDelta * factor, so:
+        //   factor 1.0 => tracks the camera 1:1 (HUD-like)      = "Stick to Camera"
+        //   factor 0.0 => stays fixed in world space (no drift) = "Stick to Map"
+        // Anything between is the parallax depth. Canonical authoring range is 0.05..1.10;
+        // "Stick to Map" is allowed to clamp fully to 0.
+
+        /// <summary>Factor that pins the layer to the world (no parallax drift). "Stick to Map".</summary>
+        public const float StickToMapFactor = 0f;
+
+        /// <summary>Factor that glues the layer to the camera (HUD-like). "Stick to Camera".</summary>
+        public const float StickToCameraFactor = 1.0f;
+
+        /// <summary>Lower bound of the canonical authoring range (excludes the special 0 lock).</summary>
+        public const float CanonicalMinFactor = 0.05f;
+
+        /// <summary>Upper bound of the canonical authoring range.</summary>
+        public const float CanonicalMaxFactor = 1.10f;
+
         [Tooltip("Camera the layer follows. Auto-resolved to Camera.main if null.")]
         public Camera target;
 

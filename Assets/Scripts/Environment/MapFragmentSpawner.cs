@@ -15,28 +15,17 @@ namespace RIMA.Environment
         [Tooltip("Optional fragment prefab. If null a runtime GO with MapFragment + SpriteRenderer + CircleCollider2D is built.")]
         public MapFragment fragmentPrefab;
 
-        [Tooltip("If true, spawner activates only when MapFragmentBridge.useFragmentGateFlow is also true at scene level. Default true.")]
-        public bool gateOnBridgeFlag = true;
-
         private void OnEnable() { RoomLoader.OnRoomCleared += HandleRoomCleared; }
         private void OnDisable() { RoomLoader.OnRoomCleared -= HandleRoomCleared; }
 
         private void HandleRoomCleared()
         {
-            if (gateOnBridgeFlag)
+            // LOCK 1: only spawn fragments in reward rooms.
+            RoomSequenceData roomData = RoomLoader.CurrentRoomData;
+            if (roomData != null && !roomData.isRewardRoom)
             {
-                // Find bridge in scene; bail if useFragmentGateFlow=false (Day 1 portal flow active)
-                var bridge =
-#if UNITY_2023_1_OR_NEWER
-                    Object.FindFirstObjectByType<MapFragmentBridge>();
-#else
-                    Object.FindObjectOfType<MapFragmentBridge>();
-#endif
-                if (bridge == null || !bridge.useFragmentGateFlow)
-                {
-                    Debug.Log("[MapFragmentSpawner] Skipped — useFragmentGateFlow=false (Day 1 portal flow).");
-                    return;
-                }
+                Debug.Log("[MapFragmentSpawner] Skipped — not a reward room.");
+                return;
             }
 
             // Find anchor

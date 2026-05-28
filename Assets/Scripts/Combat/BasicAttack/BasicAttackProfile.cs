@@ -29,6 +29,11 @@ namespace RIMA
         public int comboLength = 3;
         public float comboWindow = 1.2f;
         public float commitment = 0.28f;
+        /// <summary>
+        /// Startup (windup) duration before the hit resolves. 0 = immediate (legacy).
+        /// A5 can expose per-step array; for graybox, one global value is sufficient.
+        /// </summary>
+        public float attackStartup = 0.08f;
         public int[] comboDamage = { 25, 30, 40 };
         public float[] hitRange = { 1.2f, 1.3f, 1.5f };
         public float[] hitRadius = { 0.75f, 0.75f, 0.9f };

@@ -34,7 +34,6 @@ namespace RIMA.Environment
             // Default fallback
             tileData.sprite = GetRandomVariant(spritesS, 0);
 
-#if UNITY_EDITOR
             // Find the placer in the scene to reference the floor map
             CliffAutoPlacer placer = Object.FindObjectOfType<CliffAutoPlacer>();
             if (placer == null || placer.floorTilemap == null)
@@ -75,7 +74,6 @@ namespace RIMA.Environment
             else if (hasSW) tileData.sprite = GetRandomVariant(spritesNE, seed);
             else if (hasSE) tileData.sprite = GetRandomVariant(spritesNW, seed);
             else if (hasS)  tileData.sprite = GetRandomVariant(spritesN, seed);
-#endif
         }
 
         private Sprite GetRandomVariant(Sprite[] array, int seed)

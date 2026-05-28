@@ -25,6 +25,7 @@ namespace RIMA.RoomPainter.Editor
             "Mid 0.40",
             "Far 0.22",
             "Skyline 0.10",
+            "Ambient 0.08",   // L3 cliff-base ambiance: factor (0.08, 0.04), sortingOrder -400, pixelSnap PPU 64
             "Horizon 0.03"
         };
 
@@ -36,6 +37,7 @@ namespace RIMA.RoomPainter.Editor
             0.40f,
             0.22f,
             0.10f,
+            0.08f,   // L3 ambient — set Y=0.04, sortingOrder=-400 on the ParallaxLayer component
             0.03f
         };
 
@@ -68,6 +70,7 @@ namespace RIMA.RoomPainter.Editor
                     }
                 }
 
+                DrawStickPresets(asset);
                 DrawDepthSlider(asset);
 
                 asset.cameraRelative = (RoomPainterBoolOverride)EditorGUILayout.EnumPopup("Camera Relative", asset.cameraRelative);
@@ -168,6 +171,49 @@ namespace RIMA.RoomPainter.Editor
             for (int i = 0; i < layers.Length; i++)
             {
                 layers[i].RecaptureOrigin();
+            }
+        }
+
+        /// <summary>
+        /// Sang-Hendrix-L4 "stick-to-map vs stick-to-camera" convenience. Both buttons write the
+        /// EXISTING <see cref="RoomPainterAsset.parallaxFactor"/> field (baked onto
+        /// <see cref="ParallaxLayer.factor"/> by the scene placer) — no parallel data model.
+        /// Runtime math is pos = layerStart + cameraDelta * factor, so factor 0 keeps the layer
+        /// pinned in world (Stick to Map) and factor 1.0 glues it to the camera (Stick to Camera).
+        /// </summary>
+        private static void DrawStickPresets(RoomPainterAsset asset)
+        {
+            // Both predicates read the RAW asset.parallaxFactor (not the resolved value) so the
+            // two states stay consistent. In the post-"Stick to Map" state (parallaxFactor == 0)
+            // this keeps isStickToCamera false, so the user can always escape the map lock.
+            bool isStickToMap = asset.parallaxFactor <= 0f;
+            bool isStickToCamera = Mathf.Approximately(asset.parallaxFactor, ParallaxLayer.StickToCameraFactor);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.Label("Anchor", EditorStyles.miniLabel, GUILayout.Width(48f));
+
+                using (new EditorGUI.DisabledScope(isStickToMap))
+                {
+                    if (GUILayout.Button(new GUIContent("Stick to Map", "Pin to world — no parallax drift (factor 0)."), EditorStyles.miniButtonLeft))
+                    {
+                        // Stick to Map is allowed to clamp fully to 0 (special world-lock value).
+                        asset.parallaxFactor = ParallaxLayer.StickToMapFactor;
+                        asset.parallaxTier = -1;
+                    }
+                }
+
+                using (new EditorGUI.DisabledScope(isStickToCamera))
+                {
+                    if (GUILayout.Button(new GUIContent("Stick to Camera", "Glue to camera — HUD-like (factor 1.0)."), EditorStyles.miniButtonRight))
+                    {
+                        asset.parallaxFactor = Mathf.Clamp(
+                            ParallaxLayer.StickToCameraFactor,
+                            ParallaxLayer.CanonicalMinFactor,
+                            ParallaxLayer.CanonicalMaxFactor);
+                        asset.parallaxTier = -1;
+                    }
+                }
             }
         }
 

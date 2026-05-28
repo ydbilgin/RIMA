@@ -17,6 +17,7 @@ MonoBehaviour:
   comboLength: 3
   comboWindow: 1.2
   commitment: 0.28
+  attackStartup: 0.08
   comboDamage: 190000001e00000028000000
   hitRange:
   - 1.2
@@ -42,3 +43,4 @@ MonoBehaviour:
   rmbDamage: 34
   rmbRadius: 2.2
   rmbCooldown: 1.5
+  cancelWindowFraction: -1

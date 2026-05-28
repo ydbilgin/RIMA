@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09bd9fbf8ec301241a60babe6bf52f21, type: 3}
+  m_Name: AssetPool_WallBlocker_Statues
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Brush.Data.AssetPoolSO
+  poolName: WallBlocker_Statues
+  category: 17
+  sprites: []
+  spriteWeights: []
+  tiles: []
+  prefabs:
+  - {fileID: 1, guid: 58ae3f00b2c714444a82e04749e88b73, type: 3}
+  - {fileID: 1, guid: aa59bd56ee5d9674b91105fc112a6532, type: 3}
+  - {fileID: 1, guid: 12e732a09af8101409cd5754d6755ca6, type: 3}
+  - {fileID: 1, guid: ce59b8651a7692542a3e07c078bfcc7a, type: 3}
+  - {fileID: 1, guid: 57da1d82e2519cd4a8a0d070b3db3d35, type: 3}
+  - {fileID: 1, guid: bd874b249e038334a9834b9ccbb4a218, type: 3}
+  - {fileID: 1, guid: e27395d0e5b8e8c4e9e63a4e76452ebb, type: 3}
+  - {fileID: 1, guid: ac5e19623d1e29e4e94336826c492210, type: 3}
+  - {fileID: 1, guid: 145fa9750c050ae40a5ff25c09a462c1, type: 3}
+  - {fileID: 1, guid: b3838662ddefb4e44b4bde6de7df360e, type: 3}
+  - {fileID: 1, guid: 35759119d775b91479aaa293e57fb08c, type: 3}
+  - {fileID: 1, guid: 1a0696a88934e50458b71d558a665f8b, type: 3}
+  - {fileID: 1, guid: 93540ff3731928f47b84d32095fcf8d9, type: 3}
+  - {fileID: 1, guid: 3ff4cdd0e2074a8409f359bbdfb8c6f4, type: 3}
+  nativeSize: {x: 64, y: 64}
+  supportsRotation: 0
+  supportsFlip: 1
+  isSoftEdge: 0

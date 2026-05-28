@@ -1,0 +1,24 @@
+GIMP Palette
+Name: RIMA
+Columns: 4
+# RIMA 16-color baseline palette (Hades Elysium aesthetic + cyan #00FFCC + violet rune accent)
+# Source: MEMORY/wang_tile_build_workflow_rima.md Bölüm VII
+# Karar referansı: Karar #98 (cyan accent), Karar #131 (16-key Wang), Karar #143 (6-layer env)
+# Status: PLACEHOLDER — user review + finalize gerekli
+#
+ 26  24  34	charcoal_outline
+ 46  43  58	dark_slate_shadow
+ 63  58  77	granite_shadow
+ 90  84 102	granite_mid
+122 116 136	granite_light
+152 144 164	stone_highlight
+192 184 204	pale_stone
+  0 255 204	cyan_accent_rune_glow
+ 77 255 224	cyan_light_bloom
+  0 184 148	cyan_deep_runescript
+124  91 203	violet_rune_magic
+ 75  62 128	violet_deep_shadow
+244 167  66	warm_amber_brazier
+196 104  24	warm_deep_flame
+232 216 192	off_white_skin_highlight
+255 250 224	pale_cream_extreme_highlight

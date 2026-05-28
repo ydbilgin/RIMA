@@ -21,6 +21,16 @@ namespace RIMA.Editor.RoomPainter.LiveTool
             NullValueHandling = NullValueHandling.Ignore
         };
 
+        /// <summary>
+        /// Convenience wrapper: serializes the active Editor scene and writes
+        /// <see cref="CurrentJsonPath"/>. Call this from the Launch Live Tool flow.
+        /// </summary>
+        public static void WriteCurrent()
+        {
+            Scene active = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+            Serialize(active, out _);
+        }
+
         public static void Serialize(Scene scene, out string json)
         {
             if (!scene.IsValid()) throw new ArgumentException("Scene is not valid.", "scene");

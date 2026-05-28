@@ -26,7 +26,7 @@ namespace RIMA.Tests.Phase1Demo
 
         /// <summary>
         /// Runs AFTER base [UnitySetUp] (scene load) — safe to FindObject.
-        /// 1. Force useFragmentGateFlow=true (guard against scene serialization issues).
+        /// 1. Verify MapFragmentBridge is present (useFragmentGateFlow flag retired in LOCK 1).
         /// 2. Ensure a FragmentDropAnchor exists at (0,0,0) — required by MapFragmentSpawner.
         ///    roomType=null triggers the default fallback: count=1 fragment.
         /// </summary>
@@ -35,14 +35,14 @@ namespace RIMA.Tests.Phase1Demo
         {
             yield return null; // one extra frame: Awake/Start complete
 
-            // (1) Force bridge flag on
+            // (1) Verify bridge is present (useFragmentGateFlow flag retired in LOCK 1 — bridge is always active).
 #if UNITY_2023_1_OR_NEWER
             var bridge = UnityEngine.Object.FindFirstObjectByType<MapFragmentBridge>();
 #else
             var bridge = UnityEngine.Object.FindObjectOfType<MapFragmentBridge>();
 #endif
             if (bridge != null)
-                bridge.useFragmentGateFlow = true;
+                Debug.Log("[T2-Setup] MapFragmentBridge found: " + bridge.gameObject.name);
 
             // (2) Add a FragmentDropAnchor if absent (scene has none by default)
 #if UNITY_2023_1_OR_NEWER
@@ -102,21 +102,16 @@ namespace RIMA.Tests.Phase1Demo
             Debug.Log("[T2] Test body started.");
 
             // ── Step 0: ensure scene prerequisites ───────────────────────────────
-            // (a) MapFragmentBridge.useFragmentGateFlow=true (in-body guard)
+            // (a) MapFragmentBridge present check (useFragmentGateFlow flag retired in LOCK 1).
 #if UNITY_2023_1_OR_NEWER
             var bridge = Object.FindFirstObjectByType<MapFragmentBridge>();
 #else
             var bridge = Object.FindObjectOfType<MapFragmentBridge>();
 #endif
             if (bridge != null)
-            {
-                bridge.useFragmentGateFlow = true;
-                Debug.Log($"[T2] useFragmentGateFlow forced=true on {bridge.gameObject.name}.");
-            }
+                Debug.Log($"[T2] MapFragmentBridge found on {bridge.gameObject.name}.");
             else
-            {
                 Debug.LogWarning("[T2] MapFragmentBridge not found — fragment flow may be blocked.");
-            }
 
             // (b) FragmentDropAnchor — required by MapFragmentSpawner. Create at (0,0,0) if absent.
 #if UNITY_2023_1_OR_NEWER
@@ -175,8 +170,8 @@ namespace RIMA.Tests.Phase1Demo
                 // Spawner pipeline didn't produce a fragment. Fallback: spawn directly.
                 // This still tests the downstream chain (pickup → DraftUI → Gate).
                 Debug.LogWarning("[T2] MapFragmentSpawner did not spawn fragment via RoomCleared — " +
-                    "creating one directly. Check MapFragmentBridge.useFragmentGateFlow and " +
-                    "FragmentDropAnchor in scene.");
+                    "creating one directly. Check MapFragmentBridge is in scene and " +
+                    "FragmentDropAnchor is configured.");
                 var fallbackGO = new GameObject("T2_FallbackMapFragment");
                 fallbackGO.transform.position = Vector3.zero;
                 fragment = fallbackGO.AddComponent<EnvFragment>(); // RIMA.Environment.MapFragment
@@ -238,7 +233,7 @@ namespace RIMA.Tests.Phase1Demo
             Debug.Log("[T2] DraftUI is active.");
 
             // ── Step 7: simulate skill pick to unlock gates ───────────────────────
-            // OnSkillPicked fires HandleSkillPicked → UnlockAllAwaitingGates (useFragmentGateFlow=true).
+            // OnSkillPicked fires HandleSkillPicked → UnlockAllGates (reward room branch in MapFragmentBridge).
             // We invoke it directly to avoid dependency on SkillOfferGenerator pool availability
             // (empty pool yields Gold/Heal offers which don't call OnSkillPicked).
             if (DraftManager.Instance != null)
@@ -283,7 +278,7 @@ namespace RIMA.Tests.Phase1Demo
             {
                 RegisterResult(TestName, false,
                     $"One or more of {gates.Length} gate(s) NOT Unlocked. " +
-                    "Check MapFragmentBridge.useFragmentGateFlow=true and Gate wiring.");
+                    "Check MapFragmentBridge OnRoomCleared handler and Gate wiring.");
                 Assert.Fail("[T2] Not all Gates reached Unlocked state.");
             }
         }

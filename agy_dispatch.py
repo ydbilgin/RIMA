@@ -224,6 +224,12 @@ LOCK_DIR = ROOT / ".agy_dispatch_locks"
 STATE_FILE = ROOT / ".agy_dispatch_state.json"
 LOCK_STALE_SECS = 7200  # 2h — auto-release ghost locks
 
+# Fixed account priority (user-set 2026-05-28). Dispatch tries these in order; on a
+# swap failure / empty response / timeout it FALLS THROUGH to the next account in the
+# list automatically (within one dispatch). Accounts not listed are tried last, in
+# glob order. Round-robin is no longer used unless --account overrides.
+ACCOUNT_PRIORITY = ["ydbilgin", "ydbilginn", "yasinderyabilgin", "laurethayday", "laurethgame"]
+
 # ANSI escape sequences: CSI (most common), OSC, charset selects, single-char escapes.
 ANSI_RE = re.compile(
     r"\x1b\[[0-9;?]*[a-zA-Z]"     # CSI ... letter
@@ -270,6 +276,13 @@ def pick_next_account(accounts: list[str], state: dict) -> str | None:
     else:
         idx = 0
     return accounts[idx]
+
+
+def order_by_priority(accounts: list[str]) -> list[str]:
+    """Order accounts by ACCOUNT_PRIORITY (listed first, in order); unlisted appended
+    alphabetically. Used to build the fallback chain for a single dispatch."""
+    rank = {name: i for i, name in enumerate(ACCOUNT_PRIORITY)}
+    return sorted(accounts, key=lambda a: (rank.get(a, len(ACCOUNT_PRIORITY)), a))
 
 
 def is_locked(account: str) -> bool:
@@ -510,7 +523,7 @@ def main() -> int:
             print("ERROR: task file is empty", file=sys.stderr)
             return 1
 
-    # Account selection
+    # Account selection — build a priority-ordered candidate chain.
     state = load_state()
     if args.account:
         matches = [a for a in accounts if args.account in a]
@@ -518,63 +531,65 @@ def main() -> int:
             print(f"ERROR: no account matching '{args.account}'. Available: {accounts}",
                   file=sys.stderr)
             return 1
-        account = matches[0]
+        candidates = [matches[0]]  # explicit override: single account, no fallback
     else:
-        account = pick_next_account(accounts, state)
-        if account is None:
-            print(f"ERROR: no accounts in {SNAP_DIR}", file=sys.stderr)
+        candidates = [a for a in order_by_priority(accounts) if not is_locked(a)]
+        if not candidates:
+            print(f"ERROR: all accounts locked/unavailable: {accounts}", file=sys.stderr)
             return 1
-        # Skip locked accounts (try every account once)
-        tried = set()
-        while is_locked(account) and len(tried) < len(accounts):
-            tried.add(account)
-            idx = (accounts.index(account) + 1) % len(accounts)
-            account = accounts[idx]
-        if account in tried and is_locked(account):
-            print(f"ERROR: all accounts locked: {accounts}", file=sys.stderr)
-            return 1
+        print(f"PRIORITY CHAIN: {candidates}", file=sys.stderr)
 
-    print(f"ACCOUNT_SELECTED: {account}", file=sys.stderr)
+    # Try each candidate in order; fall through to the next on swap-fail/empty/timeout.
+    last_err = "no candidates"
+    for account in candidates:
+        print(f"ACCOUNT_SELECTED: {account}", file=sys.stderr)
 
-    if not args.no_swap:
-        print(f"Swapping cred blob -> {account}...", file=sys.stderr)
-        if not swap_account(account):
-            print(f"ERROR: failed to swap to {account}", file=sys.stderr)
-            return 1
+        if not args.no_swap:
+            print(f"Swapping cred blob -> {account}...", file=sys.stderr)
+            if not swap_account(account):
+                print(f"WARN: swap to {account} failed -> next account", file=sys.stderr)
+                last_err = f"swap failed ({account})"
+                continue
 
-    lock = acquire_lock(account)
-    t0 = time.time()
-    try:
-        clean, exit_code = run_agy_via_pty(prompt, print_timeout=args.print_timeout)
-    finally:
-        release_lock(lock)
-    dur = int(time.time() - t0)
+        lock = acquire_lock(account)
+        t0 = time.time()
+        try:
+            clean, exit_code = run_agy_via_pty(prompt, print_timeout=args.print_timeout)
+        finally:
+            release_lock(lock)
+        dur = int(time.time() - t0)
 
-    # Persist result
-    safe_acct = re.sub(r"[^a-zA-Z0-9_-]", "_", account)
-    done_file = ROOT / f"AGY_DONE_{safe_acct}.md"
-    done_file.write_text(clean, encoding="utf-8")
+        # Persist result (every attempt, so failures are inspectable on disk).
+        safe_acct = re.sub(r"[^a-zA-Z0-9_-]", "_", account)
+        done_file = ROOT / f"AGY_DONE_{safe_acct}.md"
+        done_file.write_text(clean, encoding="utf-8")
 
-    shared = ROOT / "AGY_DONE.md"
-    with open(shared, "a", encoding="utf-8") as f:
-        f.write(f"\n\n---\n## {account} @ {time.strftime('%Y-%m-%d %H:%M:%S')} "
-                f"(dur={dur}s, exit={exit_code})\n\n{clean}\n")
+        shared = ROOT / "AGY_DONE.md"
+        with open(shared, "a", encoding="utf-8") as f:
+            f.write(f"\n\n---\n## {account} @ {time.strftime('%Y-%m-%d %H:%M:%S')} "
+                    f"(dur={dur}s, exit={exit_code})\n\n{clean}\n")
 
-    # State update
-    state["last_account"] = account
-    state.setdefault("last_used", {})[account] = time.time()
-    save_state(state)
+        state["last_account"] = account
+        state.setdefault("last_used", {})[account] = time.time()
+        save_state(state)
 
-    print(clean)
+        body = clean.strip()
+        if "HARD_TIMEOUT" in body:
+            print(f"WARN: {account} timed out ({args.print_timeout + 30}s) -> next account", file=sys.stderr)
+            last_err = f"timeout ({account})"
+            continue
+        if not body:
+            print(f"WARN: {account} returned empty (exit={exit_code}, dur={dur}s) -> next account", file=sys.stderr)
+            last_err = f"empty ({account})"
+            continue
 
-    body = clean.strip()
-    if "HARD_TIMEOUT" in body:
-        print(f"FAILED: timeout after {args.print_timeout + 30}s", file=sys.stderr)
-        return 1
-    if not body:
-        print(f"FAILED: empty response (exit={exit_code}, dur={dur}s)", file=sys.stderr)
-        return 1
-    return 0
+        # Success.
+        print(clean)
+        print(f"SUCCESS via {account} (dur={dur}s)", file=sys.stderr)
+        return 0
+
+    print(f"FAILED: all priority accounts exhausted — last: {last_err}", file=sys.stderr)
+    return 1
 
 
 if __name__ == "__main__":

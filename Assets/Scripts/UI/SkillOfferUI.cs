@@ -75,7 +75,7 @@ namespace RIMA
             for (int i = 0; i < currentActives.Count; i++)
             {
                 var sd = currentActives[i];
-                var card = BuildSkillCard(sd.skillName, sd.tier, sd.description, i, currentActives.Count);
+                var card = BuildSkillCard(sd.skillName, sd.tier, sd.description, i, currentActives.Count, sd.icon);
                 var btn = card.GetComponentInChildren<Button>();
                 if (btn != null)
                 {
@@ -216,7 +216,7 @@ namespace RIMA
                 tierTag = offer.skill?.tier.ToString().ToUpperInvariant() ?? "";
             }
 
-            var card = BuildSkillCard(name, offer.skill?.tier ?? SkillTier.Common, desc, index, total);
+            var card = BuildSkillCard(name, offer.skill?.tier ?? SkillTier.Common, desc, index, total, offer.skill?.icon);
 
             // Select button
             var btn = card.GetComponentInChildren<Button>();
@@ -257,7 +257,7 @@ namespace RIMA
 
         // ─── Shared Card Builder ────────────────────────────────────
 
-        private GameObject BuildSkillCard(string skillName, SkillTier tier, string description, int index, int total)
+        private GameObject BuildSkillCard(string skillName, SkillTier tier, string description, int index, int total, Sprite icon = null)
         {
             var cardGo = new GameObject($"Card_{index}", typeof(RectTransform));
             cardGo.transform.SetParent(cardContainer, false);
@@ -287,7 +287,15 @@ namespace RIMA
             iconRt.sizeDelta = new Vector2(64f, 64f);
 
             var iconImg = iconGo.AddComponent<Image>();
-            iconImg.color = new Color(0.15f, 0.15f, 0.2f, 0.8f); // placeholder
+            if (icon != null)
+            {
+                iconImg.sprite = icon;
+                iconImg.color = Color.white;
+            }
+            else
+            {
+                iconImg.color = new Color(0.15f, 0.15f, 0.2f, 0.8f); // placeholder
+            }
             iconImg.raycastTarget = false;
 
             // Skill name

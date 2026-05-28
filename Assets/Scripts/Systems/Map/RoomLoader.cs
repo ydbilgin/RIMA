@@ -20,6 +20,9 @@ namespace RIMA.Systems.Map
 
         public static int CurrentRoomIndex { get; private set; } = 0;
 
+        /// <summary>The RoomSequenceData for the room currently loaded. Null before first load.</summary>
+        public static RoomSequenceData CurrentRoomData { get; private set; }
+
         [SerializeField] private RoomRegistry registry;
         [SerializeField] private Grid baseGrid;
         [SerializeField] private RoomSequenceData[] _sequence;
@@ -80,6 +83,7 @@ namespace RIMA.Systems.Map
             BuildRoomContent(firstData);
 
             CurrentRoomIndex = 0;
+            CurrentRoomData = firstData;
             OnRoomChanged?.Invoke(CurrentRoomIndex);
             SetHudRoomStatus(firstData);
         }
@@ -142,6 +146,7 @@ namespace RIMA.Systems.Map
             BuildRoomContent(nextData);
 
             CurrentRoomIndex = nextIndex;
+            CurrentRoomData = nextData;
             OnRoomChanged?.Invoke(nextIndex);
         }
 
@@ -214,13 +219,30 @@ namespace RIMA.Systems.Map
                 Instantiate(data.focalElementPrefab, data.focalElementPos, Quaternion.identity, _currentRoomContent.transform);
             }
 
+            // Boss room has no gate — boss death fires RaiseDemoComplete directly.
+            if (data.isBossRoom)
+            {
+                StartCoroutine(WireBossDeathListener(_currentRoomContent));
+                return;
+            }
+
+            // Build gate for non-boss rooms (visible + locked from the start).
             GameObject gateGO = new GameObject($"Gate_Room{data.roomIndex}_Exit");
             gateGO.transform.position = data.gatePosition;
             gateGO.transform.SetParent(_currentRoomContent.transform);
             gateGO.AddComponent<SpriteRenderer>();
             BoxCollider2D col = gateGO.AddComponent<BoxCollider2D>();
             col.size = data.gateSize == Vector2.zero ? new Vector2(1.5f, 2f) : data.gateSize;
-            gateGO.AddComponent<Gate>();
+            Gate gate = gateGO.AddComponent<Gate>();
+
+            // Wire gate-entered → LoadNext (one-shot: unsubscribe after first entry to prevent double-trigger).
+            Action<Gate> onEntered = null;
+            onEntered = _ =>
+            {
+                gate.OnPlayerEntered -= onEntered;
+                LoadNext();
+            };
+            gate.OnPlayerEntered += onEntered;
 
             if (data.fragmentDropOverride != Vector3.zero)
             {
@@ -232,24 +254,61 @@ namespace RIMA.Systems.Map
 
             if (data.isRewardRoom)
             {
-                StartCoroutine(RewardRoomAutoTrigger(data));
+                // Reward room: wait 2s, spawn fragment, listen for pickup → unlock gate.
+                StartCoroutine(RewardRoomAutoTrigger(data, gate));
             }
-
-            if (data.isBossRoom)
+            else
             {
-                StartCoroutine(WireBossDeathListener(_currentRoomContent));
+                // Combat room: all mobs dead → unlock gate immediately (clear-to-unlock, LOCK 1).
+                Action clearToUnlock = null;
+                clearToUnlock = () =>
+                {
+                    OnRoomCleared -= clearToUnlock;
+                    if (gate != null) gate.Unlock();
+                    Debug.Log($"[RoomLoader] Room {data.roomIndex} cleared — gate unlocked.");
+                };
+                OnRoomCleared += clearToUnlock;
             }
         }
 
-        private IEnumerator RewardRoomAutoTrigger(RoomSequenceData data)
+        private IEnumerator RewardRoomAutoTrigger(RoomSequenceData data, Gate rewardGate)
         {
             yield return new WaitForSeconds(2f);
 
             FragmentDropAnchor anchor = FindFirstObjectByType<FragmentDropAnchor>();
-            if (anchor == null) yield break;
+            if (anchor == null)
+            {
+                // No anchor — unlock gate directly as fallback.
+                Debug.LogWarning("[RoomLoader] RewardRoom: no FragmentDropAnchor — unlocking gate directly.");
+                if (rewardGate != null) rewardGate.Unlock();
+                yield break;
+            }
 
+            // Spawn fragment (via spawner if present, else directly).
             MapFragmentSpawner spawner = FindFirstObjectByType<MapFragmentSpawner>();
-            spawner?.SendMessage("HandleRoomCleared", SendMessageOptions.DontRequireReceiver);
+            if (spawner != null)
+            {
+                spawner.SendMessage("HandleRoomCleared", SendMessageOptions.DontRequireReceiver);
+            }
+            else
+            {
+                var go = new GameObject("MapFragment_Reward");
+                go.transform.position = anchor.transform.position;
+                go.AddComponent<EnvironmentMapFragment>();
+            }
+
+            // Fragment pickup → unlock gate (one-shot, LOCK 1: skip draft chain in reward room).
+            Action<EnvironmentMapFragment> onFragment = null;
+            onFragment = _ =>
+            {
+                EnvironmentMapFragment.OnAnyFragmentPickedUp -= onFragment;
+                if (rewardGate != null)
+                {
+                    rewardGate.Unlock();
+                    Debug.Log("[RoomLoader] Reward room fragment picked up — gate unlocked.");
+                }
+            };
+            EnvironmentMapFragment.OnAnyFragmentPickedUp += onFragment;
         }
 
         private IEnumerator WireBossDeathListener(GameObject roomContent)

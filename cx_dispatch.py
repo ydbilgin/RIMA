@@ -328,7 +328,19 @@ def main():
     if result:
         print(result)
 
-    failed = not result or any(kw in result for kw in ("BLOCKED", "FAILED", "STATUS: PARTIAL"))
+    # Failure detection is anchored to a STATUS: line, NOT a naive substring
+    # scan. A rich result legitimately containing the words "BLOCKED"/"FAILED"
+    # somewhere in its body (e.g. flagging one sub-point as unverified) used to
+    # trip the old `kw in result` check and exit 1 on a fully-successful run.
+    # Now: empty result = failure; a STATUS: line decides; otherwise non-empty
+    # output = success.
+    status_match = re.search(r"^\s*STATUS:\s*(.+)$", result, re.MULTILINE | re.IGNORECASE)
+    if not result.strip():
+        failed = True
+    elif status_match:
+        failed = any(kw in status_match.group(1).upper() for kw in ("BLOCKED", "FAILED", "PARTIAL"))
+    else:
+        failed = False
     sys.exit(1 if failed else 0)
 
 

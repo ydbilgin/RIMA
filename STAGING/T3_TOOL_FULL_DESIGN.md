@@ -19,6 +19,26 @@ The Editor extension stays as **canonical authoring** (single source of truth fo
 
 ---
 
+## 0.5 Sang Hendrix Reference — L1-L9 Decision Set (S114 2026-05-28, triple-AI converge)
+
+Canonical referans = **Sang Hendrix** (Little Master / Steam 4692780 dev). itch.io'da 30+ realtime/WYSIWYG RPG Maker MZ plugin; en yakini **Realtime Parallax Map Builder**. 3-AI (Opus+Codex+agy) mimariyi dogruladi: RPG Maker tek-process JS/PixiJS/NW.js -> `Utils.isOptionValid('test')` playtest algilar, PixiJS overlay biner, `$dataMap` DOGRUDAN bellekte degisir (hot-reload yok), "Save"'de `require('fs')` ile `data/Map001.json`'a geri yazar. RIMA cok-process oldugu icin file-watch (FileSystemWatcher + room_current.json) ayni deneyimi kopruler -- DOGRU secim. Memory: `project_sang_hendrix_live_editor_canonical_ref`.
+
+| # | Karar | RIMA durumu |
+|---|---|---|
+| L1 | file-watch = IPC (socket'e gerek yok, MVP) | `LiveRoomReloader` + `FileSystemWatcher` ✅ |
+| L2 | oyun-ici dev-only toggle (running game'e karsi author) | `LiveToolLauncher` + painter toolbar ✅ |
+| L3 | Photoshop layer paneli (z-index/blend/opacity/lock/dup/snap) | 6-layer sorting stack ✅, panel UI eklenecek |
+| L4 | stick-to-map ↔ stick-to-camera = parallax factor | ParallaxSection 0.05-1.10 ✅, toggle UI eklenecek |
+| L5 | **iki-katmanli persistence**: authoring->JSON, transient yazilmaz, explicit Save/Apply | RoomLayoutSerializer ✅, transient ayrim **YENI** |
+| L6 | klasor auto-index -> palette | `RuntimeAssetRegistryBaker` + `RuntimeBrushPalette` ✅ |
+| L7 | ayri collision/walkable paint pass (toggle grid overlay) | `RuntimeColliderHandles` + walkability ✅ |
+| L8 | grid-free + snap toggle (decor serbest, tile snap) | painter ✅, snap toggle netlestir |
+| L9 | **region-ID occlusion**: oyuncu altinda foreground/cati fade | **YENI feature kandidati** (roadmap) |
+
+Sonuc: T3 = sifirdan insa DEGIL. %80 kurulu (L1-L4,L6-L8); eksik = L5 transient persistence (kucuk) + L9 occlusion (yeni, ertelenebilir). Roadmap L5/L9 task: `FORWARD_EXECUTION_ROADMAP.md`.
+
+---
+
 ## 1. T3 Architecture Overview
 
 ### 1.1 Three deliverables
@@ -408,7 +428,7 @@ T3 is the architecturally cleanest answer to the user's "Sang Hendrix tool" inte
 ### 7.1 Files to extend (existing)
 
 - `Assets/Scripts/Map/Data/RoomManifestSO.cs` (C1, +schema struct)
-- `Assets/Scripts/Core/RuntimeRoomManager.cs` (C10 hook into `OnRoomLoaded` event, NOT a modify)
+- **[DÜZELTME 2026-05-28 Codex]** C10 `OnRoomLoaded`'a hook olur AMA bu event `RuntimeRoomManager`'da DEĞİL — `RoomLoader.OnRoomLoaded` (static event, `Assets/Scripts/Systems/Map/RoomLoader.cs:16`). `RuntimeRoomManager` sadece subscribe eder (:184) + `OnRoomStarted/OnRoomCleared/OnRoomChanged` expose eder. C10 → `RoomLoader.OnRoomLoaded` static event'ine hook (peer-add, modify değil, self-bootstrap mümkün). Eski "RuntimeRoomManager.OnRoomLoaded" iddiası YANLIŞTI.
 - `Assets/Editor/RoomPainter/RimaRoomPainterWindow.cs` (C12, +Launch button)
 
 ### 7.2 New files (impl phase)

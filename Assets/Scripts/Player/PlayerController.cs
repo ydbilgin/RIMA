@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using RIMA.Combat;
 using RIMA.Environment;
 
 namespace RIMA
@@ -207,6 +208,15 @@ namespace RIMA
             dashCooldownTimer = dashCooldown;
             dashWasImmune = health != null && health.IsImmune;
             health?.SetImmune(true);
+
+            // Publish dash event for juice/VFX/SFX systems
+            CombatEventBus.PublishDash(new DashEvent
+            {
+                startPos = transform.position,
+                endPos   = transform.position + (Vector3)(dashDir * dashSpeed * dashDuration),
+                dasher   = gameObject,
+                duration = dashDuration
+            });
 
             // OnDash passive proc
             CrossClassSkillManager.Instance?.OnDash();

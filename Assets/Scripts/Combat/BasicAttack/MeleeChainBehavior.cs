@@ -6,10 +6,26 @@ namespace RIMA
     /// Melee combo chain behavior for Warblade and generic melee classes.
     /// LMB: multi-step combo with commitment, buffering, and knockback.
     /// RMB: Rage Outlet AoE burst (spends Rage).
+    ///
+    /// A3 — Startup deferral: ExecuteCombo registers FaceCombatTarget + timers + RaiseComboStep
+    /// immediately (so windup anim fires on input frame), then defers EmitSlashArc +
+    /// ApplyMeleeHit + finisher trigger until _startupTimer expires via OnUpdate.
+    /// attackStartup &lt;= 0 falls back to immediate hit (legacy / graceful zero-value).
     /// </summary>
     public class MeleeChainBehavior : BasicAttackBehaviorBase
     {
         private float rageOutletTimer;
+
+        // ── A3 startup pending state ──────────────────────────────────────────────
+        private bool  _hitPending;
+        private int   _pendingStep;
+        private float _pendingChainMult;
+        private float _startupTimer;
+        // Store the owner reference so OnUpdate can invoke without re-discovery.
+        // (behavior instance is owned per PlayerAttack; ref is safe to hold.)
+        private PlayerAttack _pendingOwner;
+        private BasicAttackProfile _pendingProfile;
+        // ─────────────────────────────────────────────────────────────────────────
 
         public override void OnUpdate(PlayerAttack owner, BasicAttackProfile profile, float dt)
         {
@@ -17,6 +33,14 @@ namespace RIMA
 
             if (rageOutletTimer > 0f)
                 rageOutletTimer -= dt;
+
+            // A3: tick startup timer; resolve hit when it expires
+            if (_hitPending)
+            {
+                _startupTimer -= dt;
+                if (_startupTimer <= 0f)
+                    ResolvePendingHit();
+            }
         }
 
         public override void OnLMBInput(PlayerAttack owner, BasicAttackProfile profile,
@@ -49,12 +73,51 @@ namespace RIMA
             owner.ComboTimer = profile.comboWindow;
             owner.ComboStep = (owner.ComboStep + 1) % profile.comboLength;
 
+            // Windup anim starts immediately on input frame.
             owner.RaiseComboStep(isChained ? step + profile.comboLength : step);
-            owner.EmitSlashArc(owner.Controller.FacingDirection, step);
 
             float chainMult = owner.FlowTracker != null ? owner.FlowTracker.ConsumeBasicChain() : 1f;
-            ApplyMeleeHit(owner, profile, step, chainMult);
 
+            if (profile.attackStartup > 0f)
+            {
+                // A3: defer the active hit until startup window elapses. If a prior hit is
+                // still pending (profile timing where startup outlives the commit gate),
+                // resolve it now so the buffered combo step doesn't silently drop it.
+                if (_hitPending) ResolvePendingHit();
+                _hitPending       = true;
+                _pendingStep      = step;
+                _pendingChainMult = chainMult;
+                _startupTimer     = profile.attackStartup;
+                _pendingOwner     = owner;
+                _pendingProfile   = profile;
+            }
+            else
+            {
+                // Immediate (legacy / attackStartup == 0).
+                owner.EmitSlashArc(owner.Controller.FacingDirection, step);
+                ApplyMeleeHit(owner, profile, step, chainMult);
+                TriggerWarbladeFinisher(profile, step, owner);
+            }
+        }
+
+        private void ResolvePendingHit()
+        {
+            _hitPending = false;
+            if (_pendingOwner == null || _pendingProfile == null) return;
+
+            // STRIKE FRAME (fires at t = attackStartup, aligned to the swing's strike fraction
+            // via PlayerAttack.CurrentStrikeFraction). EmitSlashArc -> SlashArcVFX.Emit;
+            // VFXRouter handles downstream hit/kill bursts via CombatEventBus in ApplyMeleeHit.
+            _pendingOwner.EmitSlashArc(_pendingOwner.Controller.FacingDirection, _pendingStep);
+            ApplyMeleeHit(_pendingOwner, _pendingProfile, _pendingStep, _pendingChainMult);
+            TriggerWarbladeFinisher(_pendingProfile, _pendingStep, _pendingOwner);
+
+            _pendingOwner   = null;
+            _pendingProfile = null;
+        }
+
+        private static void TriggerWarbladeFinisher(BasicAttackProfile profile, int step, PlayerAttack owner)
+        {
             if (profile.classType == ClassType.Warblade && step == profile.comboLength - 1)
                 CrossClassSkillManager.Instance?.TriggerWarbladeBeat3RoninQuickdraw(owner.transform.position);
         }
