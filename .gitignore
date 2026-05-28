@@ -90,3 +90,26 @@ CODEX_DONE_history_backup.md
 .DS_Store
 Thumbs.db
 desktop.ini
+_backups/
+
+# Secrets — recursive cookie/credential captures (top-level rule above missed subdirs)
+STAGING/**/cookies_*.txt
+STAGING/**/*_cookies.txt
+
+# Agent dispatch artifacts — runtime I/O, never commit
+CODEX_DONE*.md
+CODEX_TASK*.md
+AGY_DONE*.md
+AGY_TASK*.md
+.agy_dispatch_state.json
+.agy_dispatch_relaunch.log
+.cx_dispatch_locks/
+*.tmp
+*.tmp.*
+tmp/
+
+# Backup / archive-junk directories — local only
+_backup_*/
+_archive_root_junk*/
+_archive_sprites_*~/
+.antigravitycli/
