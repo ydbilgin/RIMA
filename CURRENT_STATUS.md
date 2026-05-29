@@ -1,7 +1,74 @@
 # CURRENT_STATUS
 
-> **Session:** S114 SESSION 5 (2026-05-29) — Opus 4.8 otonom. Overnight tasarım suite + **PLAYTEST BUG-FIX WAVE: 8 gerçek bug çözüldü, demo OYNANABİLİR oldu.** **Yeni session pickup = hemen aşağıdaki "🆕 YENİ SESSION" bloğu.** | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
+> **Session:** S114 S5 → **S6 PICKUP** (2026-05-29) — Opus 4.8 otonom. **Pickup = hemen aşağıdaki "🆕 S6 PICKUP" bloğu.** | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
 > **Geçmiş session detayı (S106→S112):** `STAGING/_archive/current_status_pre_S114_20260528.md` (tam snapshot, arşiv).
+
+---
+
+## 🆕🆕 S6 SESSION CLOSE — İLK OKU (2026-05-29, Opus otonom uzun build + workflow'lar)
+
+**Tek cümle:** S6 = büyük otonom analiz+build. **4-kaynak (2 workflow + cx + agy) converge** → demo'nun gerçek durumu + tam yol haritası net; çekirdek fix'ler yazıldı (UNCOMMITTED, compile-clean, cx-reviewed). **NEXT SESSION = `STAGING/MOMENT_SPEC_S6.md` rank-1'den otonom kur.**
+
+### 📋 CANONICAL DELIVERABLES (sırayla oku)
+- **`STAGING/MOMENT_SPEC_S6.md`** ⭐ — moment-to-moment master spec (UI/UX + OYNANIŞ), 4-kaynak sentez. **= NEXT-EXECUTION (rank 1-9).**
+- `STAGING/INTEGRATION_BACKLOG_S6.md` — 19-item ROI backlog (workflow audit 114 bulgu).
+- `STRATEGIC_SYNTHESIS_S6.md` · `EXECUTION_WORKFLOWS_S6.md` (W1-W11 + map/gate tasarım) · `MOB_PRODUCTION_PLAN_S6.md`.
+
+### ✅ DONE (UNCOMMITTED, compile-clean, cx-reviewed)
+- **#1 skill-equip fix** — DraftManager: SkillDatabase + Warblade_SkillController self-heal + AssignActive/HandlePassivePick AddComponent. (Önceden picks no-op'tu; play-verify: draft gerçek skill listeliyor.)
+- **#2 boss-death race fix** — RoomLoader.WireBossDeathListener 30-frame poll (win-softlock önler).
+- **Gate.Unlock idempotence** · **EliteAffix Shielded SetMaxHP+initialized guard** · **PlayerAttack behavior+InputAction self-heal** (recompile-during-play NRE).
+- **MapProgressController.cs** (orphan MapPanelUI'yi RoomLoader'a bağlar: 5-oda path + reveal + M-toggle, self-bootstrap).
+- **W2 AudioManager.cs** (prosedürel SFX + Health/Draft/Gate hook). cx flag (KALAN): clips private→Resources/Audio/ auto-load ekle + Hit-spam/lethal-double/debounce tune.
+
+### 🎯 NEXT SESSION OTONOM SIRA (MOMENT_SPEC_S6 rank)
+**(agy FEEL-FIRST reorder — combat hissi HUD/Draft'tan ÖNCE):**
+3 **hit-confirm üçlüsü** (SlashArc field ata + VFXRouter.entries doldur + HitFlashDriver enemy+Health.TakeDamage) → 8 **player-hit feedback** (vignette 0.6→0/0.2s + flash + **player-hit-stop 0.08s**: HitPauseDriver VAR, player-damage event'e bağla=0-cost) → 1 HUD → 2 draft play-verify + 4 SkillBarUI → 9 bug-temizlik → 6 RoomTransitionFX + boss-telegraph → 7 boss (BossHealthBar + death→DemoComplete + class-select bypass) → 5a death-scale → 5b **Victory Wishlist-CTA** (slowmo 0.2 + zoom + `steam://openurl`).
+**Tune (agy):** hitstop normal 0.04 / finisher 0.10 / player-hit 0.08 · **directional shake** (knockback-vektör, amp 0.2→0.05s sönüm) · crit dmg-num 1.5x sarı DOScale-pop.
+**Her batch: Opus yaz → cx/agy review → play-verify.**
+**✅ ZATEN ÇALIŞIYOR (REDO ETME, 4-kaynak doğruladı):** hitstop 0.04s · shake · floating damage-number · RageSystem · combo+knockback · dash i-frame/cancel.
+
+### 🔴 BUG'LAR
+~~MapFragment namespace çakışması~~ **cx: YANLIŞ** (RoomLoader+Spawner ikisi de `Environment.MapFragment`; `Core.MapFragment` AYRI legacy pipeline — KOVALANMASIN) · **boss-death→class-select Victory ile çakışıyor (cx CONFIRMED: PenitentSovereign.cs:571 TriggerClassSelection + RoomLoader:346 race) → boss demo'da class-select BYPASS** · duplicate "Systems" GO (ESKİ CameraShake/HitStop; modern CombatJuice ayrı — cleanup, düşük) + stale Gate_Room0_Exit.
+
+### 🔒 GATED (kullanıcı kararı)
+- **Mob/boss sanatı:** A=arşiv-restore (`ARCHIVE/Sprites_Enemies_old/`, 0-gen, OTONOM) / B=PixelLab / **RTX-local (Flux infra var)**. agy: temel-mob=A, boss=kaliteli-gen. → "renkli kareler" sıçraması.
+- **Audio:** gerçek klip (RTX-local) → `Resources/Audio/<sfx>.wav` (AudioManager auto-load eklenince).
+- **NLM:** ✅✅ S6 ÇÖZÜLDÜ + DOĞRULANDI (2026-05-29). Tam reset (`.notebooklm-mcp-cli` rename → `.bak_20260529_230247`) + kullanıcı fresh `nlm login` (49 cookie, OAuth) → `login --check`=valid/11 notebook + canonical sorgu çalışıyor. `--clear` yetmiyordu çünkü cookies.json+auth.json'a dokunmuyor (loop sebebi). Detay [[reference_nlm_auth_recovery_manual_cookie]].
+- **git-commit:** ✅ S6 round COMMIT'LENDİ (2026-05-29 kullanıcı onayı): `ab23ec75` (combat/demo core: skill-equip+boss-race+AudioManager+MapProgress+SkillIconRegistry, 19 dosya) · `b3755115` (S5 cliff/depth+scene+prefab-vis+livetool, 26 dosya). Junk (CODEX_DONE/tmp_/.agy_detached/Screenshots .png.meta) commit'lenmedi. **PUSH hâlâ BLOCKED** (remote divergence — kullanıcı kararı).
+
+### Routing (HARD)
+Opus yazar+karar · **cx+agy review+fikir (writer DEĞİL)** · agy DAİMA `agy_detached.ps1` wrapper (flash-free) · cx `cx_dispatch.py --profile yekta`. Memory: [[feedback_opus_decides_codex_agy_review_s6]] · [[feedback_agy_always_detached_wrapper]] · [[reference_nlm_auth_recovery_manual_cookie]] · [[project_s6_autonomous_build_s114]].
+
+### ⏳ Bu close anında PENDING (yeni session ÖNCE bunu kontrol et)
+agy + cx final review ✅ **İKİSİ DE FOLDED.** **cx kritik düzeltmeler (yeni session UYGULA):** (1) ⭐ **PlayerClassManager + RageSystem SAHNEDE YOK** → HUD-Rage bar + SkillBar + draft-equip için **PlayerClassManager'ı sahneye koymak GİZLİ ÖN-KOŞUL** (rank-2/4/Rage hepsi buna bağlı). (2) **HitFlash + player-hit feedback `Health.OnDamageTaken` bridge** gerektirir (sadece BasicAttack CombatEventBus yetmez → direkt-damage path'leri hit-confirm'i atlar). (3) **DeathScreen zero-scale UNVERIFIED** — fix'lemeden ÖNCE play-verify (DeathScreenManager named-children auto-find ediyor). (4) DamageNumber/HitPause/ScreenShake scene-wired DOĞRULANDI; **RageSystem code-only (NOT scene-wired)**. Workflow script'leri: `.../workflows/scripts/rima-*-wf_*.js`.
+
+---
+
+## 🆕 S6 PICKUP — İLK OKU (S114 S5 son round kapanış, 2026-05-29, Opus otonom + triple-AI)
+
+**Tek cümle:** Cliff/depth **demo-kabul (A)** seviyesine geldi, T3 live-editor **full scaffold STAGING'de hazır**, cx-dispatch **otomatize edildi**, prefab-görünürlük bug'ı düzeldi — **gelecek session = BÜYÜK OTONOM İŞ** (kullanıcı direktifi).
+
+### ✅ Bu round DONE (hepsi kaydedildi, compile temiz, review'lı)
+- **Cliff #1 → demo-A:** sorting floor-altı + tek varyant + **robust exterior-void cut** (agy N/NE/NW + protrusion veto, diagonal veto YOK=over-cut sebebi) + organik yükseklik (Perlin) + AO contact-shadow + **köşe geometri-round (1 pass) + dark-fade softener** + floor collision GAPS=0. Detay [[project-cliff-depth-resolution-s114s5]].
+- **Backdrop → TEK görsel** (RoomBackgroundRig L1_Nebula, 5-katman kapatıldı). **Kullanıcı kararı: tek ANİMASYONLU abyss görseli (PixelLab üretecek, L1_Nebula sprite'ını swap).**
+- **Cliff live-reload no-op KAPANDI** (verified, LiveTool EditMode PASS) + **RuntimeAssetRegistry baked (67)**.
+- **Live Editor T3 FULL scaffold** (8 dosya STAGING/livetool_t3/ + review + runbook, **Assets/'a entegre DEĞİL** — Unity-care gerek). Giriş: `STAGING/livetool_t3/00_T3_STATUS.md`. [[project-livetool-t3-scaffold-s114s5]].
+- **Prefab-görünürlük fix:** RewardPickup→Entities, StoneColumn/Chasm/NarrowPassage→Props (Default'taydı=görünmezdi). PrefabHealthTests 10/10 PASS.
+- **cx-dispatch OTOMATİZE:** hardcoded liste YOK → `cx accounts` logged-in'ler auto-keşif + `cx_profiles.local.json` (disabled/priority). `cx add`=otomatik gelir. [[feedback-cx-dispatch-auto-discover]].
+
+### 🔒 LOCKED kararlar (triple-AI)
+- **Cliff demo = mevcut sprite + placement-fix (DONE).** **Kalite = yeni 128×128 dual-grid edge-art seti** (~14 parça: S/SE/SW düz + dış/iç köşe + cap + alçak-arka-rim; ÖNCE 3-4 parça prototip, sanat dili onayla). PixelLab, FUTURE.
+- **Küçük iç-delik (1-2 hücre) bu açıda derinlik gösteremez → dark-pit/backdrop-through.** Gerçek chasm = min 3×3 + kameraya-bakan kısa rim.
+- **Köşe naturalness = COMBO illüzyon** (dark-fade DONE; mist/rock-cap daha güçlü, FUTURE). Geometri-round DAHA fazla yapma (basamak artar).
+
+### 🎯 GELECEK SESSION = BÜYÜK OTONOM İŞ (kullanıcı: "büyük iş otonom") — aday track'ler
+1. **T3 live-editor entegrasyonu** (scaffold STAGING'de hazır → Assets/ + asmdef + ToolMain.unity + compile-verify + smoke). Runbook: `REVIEW_AND_INTEGRATION.md §4`. **En "hazır" büyük iş.**
+2. **Demo loop tamamlama** — boss (PenitentSovereign sprite YOK→üret) + mob variety + fragment-drop + 5-oda E2E playable.
+3. **Weapon system live-test** — mount kodu LIVE/uncommitted → import (cyan greatsword `31ee0f73`) + WeaponDatabase + 8-dir/swing/VFX verify.
+4. **Audio** (en büyük boşluk) — müzik+SFX iskeleti, his/maliyet en yüksek.
+- **Gated (kullanıcı):** A5 combat-feel playtest (F5) = demo'nun gerçek kilidi · PixelLab gen (edge-art/backdrop/weapon/boss) · git-push.
+- **cx artık otomatik yekta** (priority başta; geçici→bench: `cx_profiles.local.json` disabled'a ekle).
 
 ---
 
@@ -23,8 +90,9 @@
 
 DamageNumberDriver fix `df7bf637` içinde. Overnight tasarım: N1-N9 + N10 dev-tools + N8 cliff-live-reload (`STAGING/N*_*.md`).
 
-### 🔴 #1 AÇIK — CLIFF GÖRSELİ SAÇMA (kullanıcı reddetti, rework)
-CliffAutoPlacer.Regenerate ile 90 cell yerleştirdim (CliffTilemap_Auto, Decor_Cliff sorting) — cliff'ler VAR ama **kullanıcı "çok saçma duruyor" dedi.** Muhtemel sorun: DirectionalCliffTile yön çözümü (`#if UNITY_EDITOR` içinde, Play'de hep güney fallback — `CLIFF_BLACK_LAYER_DIAGNOSIS.md` P2) / auto-placer cell seçimi / sprite uyumsuz. **DOĞRU yol:** 2-stage hibrit (auto kaba + DecorCliffPainter manuel) + DirectionalCliffTile yön fix + KULLANICININ SANAT GÖZÜ. Auto-placer tek başına yetmiyor. Cliff canon: `STAGING/N1` + `project_walless_v1_hades_elysium_lock`.
+### 🟢 #1 — CLIFF GÖRSELİ BÜYÜK İLERLEME (S114 S5, Opus otonom + triple-AI, kullanıcı iteratif onay)
+Kök neden bulundu+çözüldü: cliff `Decor_Cliff`(12) sorting = floor ÜSTÜNDE → kule gibi dikiliyordu. **Fix stack (hepsi kaydedildi, compile temiz):** cliff `Ground` layer floor ALTINA (occlusion → sadece sarkma görünür, PPU korundu) + tek coherent varyant (cliff_S) + organik yükseklik varyasyonu (DirectionalCliffTile Perlin+jitter) + **robust exterior-void cut rule** (CliffAutoPlacer FloodExteriorVoid + monotonic-south, notch/peninsula keser, **diagonal veto YOK = diamond over-cut sebebiydi**, 78 cell) + AO contact-shadow (EdgeFX_Auto) + floor collision GAPS=0 + **depth backdrop** (RoomBackgroundRig nebula/void açıldı, gerçek boyut, unlit, snapToPixel=false jitter-fix). Tüm ada artık abyss'te yüzen-ada gibi okunuyor. Detay: [[project-cliff-depth-resolution-s114s5]] + `STAGING/CLIFF_DEPTH_SYNTHESIS_S114S5.md`.
+**KALAN (kullanıcı sanat gözü / PixelLab next task):** final doğal-yargı + AO gücü · seamless/tileable BG üretimi (688×384/512×288, "yürüdükçe devam") + coherent cliff varyant ailesi (3 yükseklik × doku) · cliff_S.png pixel temizliği (kullanıcı) · per-map BG preset sistemi (RoomBackgroundController, RoomLoader.OnRoomChanged hook). Demo gap (spawn kuzeyi) depth gösteriyor.
 
 ### 🆕 YENİ DEV-TOOL'LAR (kullan)
 **F5** = açık sahneyi kaydet + PlayableArena aç + Play. **F1** (play'de) = Debug panel (Kill All / God / Speed / Force-Clear / Restart / **Jump Room 1-5**). RoomLoader.JumpToRoom(i) live.
@@ -35,6 +103,10 @@ CliffAutoPlacer.Regenerate ile 90 cell yerleştirdim (CliffTilemap_Auto, Decor_C
 
 ### Memory yeni kayıtlar
 `feedback_kinematic_enemy_shoves_dynamic_player` (drift kök neden+fix) · `reference_nlm_conflict_resolution_s114` · STAGING N3/N4/N5/N6/N9 design docs.
+**S5 otonom (2026-05-29):** `project_cliff_depth_resolution_s114s5` (cliff#1 büyük ilerleme) · `project_livetool_t3_scaffold_s114s5` (T3 scaffold+mimari, giriş `STAGING/livetool_t3/00_T3_STATUS.md`).
+
+### 🤖 S114 S5 OTONOM OTURUM (Opus, kullanıcı AWAY) — KAPANIŞ
+Triple-AI (workflow+Codex+agy) review'lı. **Kapatılanlar:** (1) Cliff visual+depth #1 büyük ilerleme — sorting floor-altı + tek varyant + robust exterior-void cut (diagonal veto YOK) + organik yükseklik + AO + depth backdrop (RoomBackgroundRig nebula açık, snapToPixel=false) + floor collision GAPS=0. (2) Cliff live-reload no-op KAPANDI (verified, LiveTool EditMode PASS). (3) RuntimeAssetRegistry baked (67). (4) **Live Editor T3 FULL scaffold** — 6 bileşen + 2 runtime twin (C6/C7) STAGING/livetool_t3/'te, triple-AI mimari kilidi, asmdef root-cause çözüldü (tek RIMA.LiveTool.asmdef), tam integration runbook (`REVIEW_AND_INTEGRATION.md §4`). **T3 Assets/ entegrasyonu OTONOM YAPILMADI** (bilinçli — C7 blind, asmdef+scene+compile = red-console riski, rehberli yapılmalı). **Kullanıcı dönünce:** cliff/depth'i görsel onayla (`cliff_s5_robust_overview.png`) + cliff_S.png pixel temizle + T3 integration runbook'u izle. Açık güvenli kuyruk (`/tasks` #2-4 + menü): camera-bounds · AO-regen-bind · prefab-sorting-fix (PrefabHealthTest flag) · abyss-blend · per-map-BG.
 
 ---
 

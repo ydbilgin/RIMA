@@ -1,0 +1,147 @@
+<!-- TARGET: Assets/UI/LiveTool/ToolMain.uxml -->
+<!--
+    RIMA Live Editor T3 Standalone Tool.exe - Runtime authoring panel.
+    Contract: BUILD CONTRACT C5 (ToolBootstrap + ToolMain.unity/.uxml/.uss).
+    Spec: STAGING/T3_TOOL_FULL_DESIGN.md sec.3 F3 ; gap: STAGING/LIVE_EDITOR_GAP_S114.md.
+
+    Consumed by RIMA.LiveTool.ToolBootstrap (Assets/Scripts/LiveTool/ToolBootstrap.cs):
+        uiDocument.rootVisualElement.Q<...>(name) binds every named element below.
+
+    Element-name -> ToolBootstrap binding contract (names are load-bearing, do not rename):
+      mode-dropdown    DropdownField  -> SetMode(PaletteMode)   All/Tile/Cliff/Decor/Object (RuntimeBrushPalette.cs:160)
+      layer-filter     VisualElement  -> RoomLayer toggles      Floor=0..Parallax=9 (RoomLayer.cs)
+      search-field     TextField      -> palette.SetSearch(...)
+      thumbnail-grid   ScrollView     -> Button.brush-thumb x N from palette.GetFiltered() (RuntimeBrushPalette.cs:111)
+      preview-canvas   VisualElement  -> PointerDown/Move/Up + KeyDown(Ctrl+Z) target; handle dots + cliff hover overlay parent
+      selected-name    Label          -> SelectedEntry.displayName
+      collider-shape   DropdownField  -> ColliderShape Box/Circle/Capsule/Polygon (RoomPainterAsset.cs:6)
+      collider-size-x  FloatField     -> RoomLayoutData.collider_overrides[].size.x
+      collider-size-y  FloatField     -> RoomLayoutData.collider_overrides[].size.y
+      collider-offset-x FloatField    -> RoomLayoutData.collider_overrides[].offset.x   (// ASSUMPTION: offset edit surface, ColliderOverrideData has offset RoomLayoutData.cs:92)
+      collider-offset-y FloatField    -> RoomLayoutData.collider_overrides[].offset.y
+      save-room        Button         -> ToolBootstrap.RequestSave() -> room_current.json (+ .lock)
+      apply-room       Button         -> RequestSave() alias / explicit push (spec F3 "Save/Apply buttons")
+      open-in-editor   Button         -> spec sec.5.3 R3 mitigation (escape hatch to full Editor)
+      status-bar       Label          -> bootstrap status / "Registry not baked" banner / save confirmation
+-->
+<ui:UXML
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi="http://www.w3.org/2001/XMLSchema-instance"
+    engine="UnityEngine.UIElements"
+    noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd">
+
+    <!-- Runtime USS. Path resolves at runtime via the bundled stylesheet. -->
+    <Style src="ToolMain.uss" />
+
+    <ui:VisualElement name="root" class="root">
+
+        <!-- =========================== LEFT: PALETTE =========================== -->
+        <ui:VisualElement name="left-panel" class="left-panel">
+
+            <ui:Label name="palette-header" text="PALETTE" class="panel-header" />
+
+            <!-- Mode filter: maps 1:1 to PaletteMode (RuntimeBrushPalette.cs:160). -->
+            <ui:DropdownField name="mode-dropdown" label="Mode" index="0" class="mode-dropdown">
+                <ui:choices>
+                    <ui:string value="All" />
+                    <ui:string value="Tile" />
+                    <ui:string value="Cliff" />
+                    <ui:string value="Decor" />
+                    <ui:string value="Object" />
+                </ui:choices>
+            </ui:DropdownField>
+
+            <!-- Layer filter: one Toggle per RoomLayer (RoomLayer.cs Floor=0..Parallax=9).
+                 ToolBootstrap reads each Toggle's value to build palette.SetLayerFilter(...). -->
+            <ui:Label name="layer-filter-label" text="Layers" class="sub-header" />
+            <ui:VisualElement name="layer-filter" class="layer-filter">
+                <ui:Toggle name="layer-floor"     label="Floor"     value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-edge"      label="Edge"      value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-cliff"     label="Cliff"     value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-wall"      label="Wall"      value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-props"     label="Props"     value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-decals"    label="Decals"    value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-lighting"  label="Lighting"  value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-collision" label="Collision" value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-occlusion" label="Occlusion" value="true"  class="layer-toggle" />
+                <ui:Toggle name="layer-parallax"  label="Parallax"  value="true"  class="layer-toggle" />
+            </ui:VisualElement>
+
+            <!-- Search: drives palette.SetSearch(text) on ChangeEvent<string>. -->
+            <ui:TextField name="search-field" label="Search" class="search-field" />
+
+            <!-- Thumbnail grid: ToolBootstrap appends Button.brush-thumb per palette.GetFiltered() entry,
+                 each with a ClickEvent -> SelectEntry(RegistryEntry). -->
+            <ui:ScrollView name="thumbnail-grid" mode="VerticalAndHorizontal" class="thumbnail-grid" />
+
+        </ui:VisualElement>
+
+        <!-- =========================== CENTER: PREVIEW ========================= -->
+        <ui:VisualElement name="center-panel" class="center-panel">
+
+            <!-- Pointer target + handle-dot/cliff-hover overlay parent.
+                 ToolBootstrap registers PointerDownEvent/PointerMoveEvent/PointerUpEvent here;
+                 RuntimeColliderHandles.Initialize(canvas, previewCamera) parents its 8 handle Images here;
+                 RuntimeCliffHoverIndicator ghost is a world SpriteRenderer (not a UI child). -->
+            <ui:VisualElement name="preview-canvas" class="preview-canvas" picking-mode="Position" focusable="true" />
+
+            <!-- Bottom HUD strip over the canvas: live mode + rotation readout. -->
+            <ui:VisualElement name="canvas-hud" class="canvas-hud" picking-mode="Ignore">
+                <ui:Label name="hud-mode"     text="Mode: All"  class="hud-label" />
+                <ui:Label name="hud-rotation" text="Rot: 0&#176;" class="hud-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- =========================== RIGHT: INSPECTOR ======================== -->
+        <ui:VisualElement name="right-panel" class="right-panel">
+
+            <ui:Label name="inspector-header" text="INSPECTOR" class="panel-header" />
+
+            <ui:Label name="selected-name" text="(no selection)" class="selected-name" />
+
+            <ui:Label name="collider-header" text="Collider" class="sub-header" />
+
+            <!-- ColliderShape Box/Circle/Capsule/Polygon (RoomPainterAsset.cs:6).
+                 Polygon is exposed for parity; runtime handles defer Polygon (C7 ResolveShape). -->
+            <ui:DropdownField name="collider-shape" label="Shape" index="0" class="collider-shape">
+                <ui:choices>
+                    <ui:string value="Box" />
+                    <ui:string value="Circle" />
+                    <ui:string value="Capsule" />
+                    <ui:string value="Polygon" />
+                </ui:choices>
+            </ui:DropdownField>
+
+            <ui:VisualElement name="collider-size-row" class="field-row">
+                <ui:FloatField name="collider-size-x" label="Size X" value="1" class="num-field" />
+                <ui:FloatField name="collider-size-y" label="Size Y" value="1" class="num-field" />
+            </ui:VisualElement>
+
+            <!-- ASSUMPTION: offset edit fields. ColliderOverrideData carries offset (RoomLayoutData.cs:92);
+                 contract C5 UXML lists size only, but C7 writes offset too, so offset needs an edit surface. -->
+            <ui:VisualElement name="collider-offset-row" class="field-row">
+                <ui:FloatField name="collider-offset-x" label="Off X" value="0" class="num-field" />
+                <ui:FloatField name="collider-offset-y" label="Off Y" value="0" class="num-field" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="action-spacer" class="spacer" />
+
+            <!-- Save -> ToolBootstrap.RequestSave(): writes .lock, room_current.json (schema 1.1), deletes .lock. -->
+            <ui:Button name="save-room"  text="Save Room"  class="action-button primary-button" />
+            <!-- Apply -> explicit push to Game.exe watcher (RequestSave alias); spec F3 "Save/Apply buttons". -->
+            <ui:Button name="apply-room" text="Apply"      class="action-button primary-button" />
+            <!-- Escape hatch to the full Editor authoring (spec sec.5.3 R3 mitigation). -->
+            <ui:Button name="open-in-editor" text="Open in Editor" class="action-button" />
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+    <!-- =========================== STATUS BAR ============================== -->
+    <!-- Sibling of root so it spans full width under the 3 panels.
+         ToolBootstrap sets text: bootstrap progress, "Registry not baked" abort banner, save confirmations. -->
+    <ui:Label name="status-bar" text="Ready." class="status-bar" />
+
+</ui:UXML>

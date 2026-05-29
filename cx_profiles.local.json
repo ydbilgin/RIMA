@@ -1,0 +1,5 @@
+{
+  "_comment": "cx_dispatch profil kontrolu - KOD DUZENLEMEDEN. Logged-in hesaplar 'cx accounts'tan OTOMATIK kesfedilir (yeni hesap = 'cx add', kod degisikligi gerekmez). disabled: pasif hesaplar (atlanir) - gecici yekta'yi bench etmek icin buraya 'yekta' ekle. priority: tercih sirasi (listelenmeyen logged-in profiller sonra, en eski-refresh once).",
+  "disabled": [],
+  "priority": ["yekta", "laurethgame", "laurethayday", "yasinderyabilgin"]
+}

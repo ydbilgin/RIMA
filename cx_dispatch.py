@@ -19,7 +19,7 @@ import urllib.error
 from datetime import datetime, timezone
 
 CX_CMD = r"C:\Users\ydbil\AppData\Roaming\npm\cx.cmd"
-PROFILE_ORDER = ["laurethayday", "laurethgame", "yasinderyabilgin"]
+DEFAULT_PRIORITY = ["yekta", "laurethayday", "laurethgame", "yasinderyabilgin"]  # fallback order; cx_profiles.local.json overrides
 CODEX_TASK_FILE = "CODEX_TASK.md"
 CODEX_DONE_FILE = "CODEX_DONE.md"
 LOCK_DIR = ".cx_dispatch_locks"
@@ -33,6 +33,41 @@ _CONDA_VARS = {
     "CONDA_EXE", "CONDA_PYTHON_EXE", "CONDA_PROMPT_MODIFIER",
     "_CE_CONDA", "_CE_M",
 }
+
+
+def _load_profile_config():
+    """Active/passive + priority for cx profiles — editable WITHOUT touching code.
+    Reads cx_profiles.local.json (cwd): {"disabled": ["yekta"], "priority": ["yekta","laurethgame"]}
+      - disabled: profiles to skip (passive). Bench a temp account (e.g. 'yekta') by listing it here.
+      - priority: preferred order; unlisted logged-in profiles follow, oldest-refresh first.
+    Missing/invalid file -> no disabled, DEFAULT_PRIORITY order. Every logged-in profile is
+    auto-discovered from `cx accounts` (add new ones with `cx add` — no code edit needed)."""
+    try:
+        with open("cx_profiles.local.json", encoding="utf-8") as f:
+            cfg = json.load(f)
+        disabled = set(cfg.get("disabled", []))
+        priority = list(cfg.get("priority", [])) or list(DEFAULT_PRIORITY)
+        return disabled, priority
+    except Exception:
+        return set(), list(DEFAULT_PRIORITY)
+
+
+def _ordered_eligible(profiles):
+    """Auto-discovered candidates: every logged-in profile NOT disabled, ordered by
+    (priority index, oldest LastRefresh). Replaces the old hardcoded allowlist."""
+    disabled, priority = _load_profile_config()
+    elig = [p for p in profiles if p["logged_in"] and p["name"] not in disabled]
+    far = datetime.max.replace(tzinfo=timezone.utc)
+
+    def keyf(p):
+        try:
+            pi = priority.index(p["name"])
+        except ValueError:
+            pi = len(priority)
+        return (pi, p["last_refresh"] or far)
+
+    elig.sort(key=keyf)
+    return elig
 
 
 def _is_profile_locked(profile):
@@ -140,19 +175,10 @@ def _parse_accounts(output):
 
 
 def select_profile(profiles):
-    candidates = [
-        p for p in profiles
-        if p["logged_in"] and p["last_refresh"] and p["name"] in PROFILE_ORDER
-    ]
-    if candidates:
-        candidates.sort(key=lambda p: p["last_refresh"])
-        for c in candidates:
-            if not _is_profile_locked(c["name"]):
-                return c["name"]
-    for name in PROFILE_ORDER:
-        for p in profiles:
-            if p["name"] == name and p["logged_in"] and not _is_profile_locked(p["name"]):
-                return p["name"]
+    # Auto-discovered: first unlocked logged-in profile (minus disabled), by priority+refresh.
+    for p in _ordered_eligible(profiles):
+        if not _is_profile_locked(p["name"]):
+            return p["name"]
     return None
 
 
@@ -218,9 +244,7 @@ def select_profile_quota_aware(profiles, primary_cap=85, secondary_cap=90):
       LastRefresh-based selection.
     """
     scored = []
-    for p in profiles:
-        if not p["logged_in"] or p["name"] not in PROFILE_ORDER:
-            continue
+    for p in _ordered_eligible(profiles):
         if _is_profile_locked(p["name"]):
             print(f"  Skipping {p['name']} (locked by parallel dispatch)", file=sys.stderr)
             continue
