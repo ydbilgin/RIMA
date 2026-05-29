@@ -47,6 +47,7 @@ namespace RIMA
         private BaseMobBehavior mob;
         private SpriteRenderer spriteRenderer;
         private Color originalColor;
+        private bool initialized;
 
         public AffixType CurrentAffix => affixType;
 
@@ -90,6 +91,8 @@ namespace RIMA
 
         private void InitAffix()
         {
+            if (initialized) return;   // cx: Apply() and Start() both call InitAffix → guard against double HP-scale
+            initialized = true;
             // Re-cache if Awake hasn't run yet
             if (health == null) health = GetComponent<Health>();
             if (mob == null) mob = GetComponent<BaseMobBehavior>();
@@ -103,9 +106,10 @@ namespace RIMA
                         health.incomingDamageMultiplier = shieldDamageReduction;
                     // Shield visual: cyan tint
                     SetTint(new Color(0.6f, 0.9f, 1f, 1f));
-                    // Scale HP up 30%
+                    // Scale HP up 30%. ScaleMaxHP takes an INT multiplier → RoundToInt(MaxHP*1.3)/MaxHP
+                    // integer-divides to 1 (no-op bug). Use SetMaxHP with the computed value instead.
                     if (health != null)
-                        health.ScaleMaxHP(Mathf.RoundToInt(health.MaxHP * 1.3f) / health.MaxHP);
+                        health.SetMaxHP(Mathf.RoundToInt(health.MaxHP * 1.3f));
                     break;
 
                 case AffixType.Berserker:

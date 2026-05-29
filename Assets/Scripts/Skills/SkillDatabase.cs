@@ -12,6 +12,7 @@ namespace RIMA
         public static SkillDatabase Instance { get; private set; }
 
         private readonly List<SkillData> db = new List<SkillData>();
+        private SkillIconRegistry iconRegistry;
 
         private void Awake()
         {
@@ -25,6 +26,8 @@ namespace RIMA
         // ─────────────────────────────────────────────────────────
         private void Build()
         {
+            iconRegistry = Resources.Load<SkillIconRegistry>("SkillIconRegistry");
+
             WB("Iron Charge",
                "Bakış yönüne ani fırla, yoldaki tüm düşmanlara hasar ver ve geri it. Her isabet Rage +15.",
                SkillTier.Common, 3f, typeof(IronCharge));
@@ -321,6 +324,8 @@ namespace RIMA
             d.cooldown    = cd;
             d.skillType   = type;
             d.isPassive   = isPassive;
+            if (d.icon == null && iconRegistry != null)
+                d.icon = iconRegistry.Get(d.skillName);
             db.Add(d);
             return d;
         }

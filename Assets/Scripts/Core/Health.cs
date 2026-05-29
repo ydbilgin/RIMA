@@ -48,9 +48,13 @@ namespace RIMA
             OnDamageTaken?.Invoke(amount);
             int effective = Mathf.Max(1, Mathf.RoundToInt(amount * incomingDamageMultiplier));
             currentHP = Mathf.Max(0, currentHP - effective);
+            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.Hit);
             OnHealthChanged?.Invoke(currentHP, maxHP);
             if (currentHP == 0)
+            {
+                RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.Death);
                 OnDeath?.Invoke();
+            }
         }
 
         public void Heal(int amount)

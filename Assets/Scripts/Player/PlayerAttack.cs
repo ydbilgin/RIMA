@@ -127,17 +127,36 @@ namespace RIMA
             }
 
             behavior = basicAttackProfile.CreateBehavior();
+            BuildInputActions();
+        }
 
-            attackAction = new InputAction("Attack", InputActionType.Button);
-            attackAction.AddBinding("<Mouse>/leftButton");
-            attackAction.AddBinding("<Gamepad>/buttonWest");
-
-            secondaryAction = new InputAction("ClassSecondary", InputActionType.Button);
-            secondaryAction.AddBinding("<Mouse>/rightButton");
-            secondaryAction.AddBinding("<Gamepad>/buttonEast");
-
-            riftBreakAction = new InputAction("RiftBreak", InputActionType.Button);
-            riftBreakAction.AddBinding("<Keyboard>/v");
+        // Recreates any null InputActions (Awake-created fields are nulled by a mid-play domain reload)
+        // and enables them when active. Called from Awake and the Update self-heal.
+        private void BuildInputActions()
+        {
+            if (attackAction == null)
+            {
+                attackAction = new InputAction("Attack", InputActionType.Button);
+                attackAction.AddBinding("<Mouse>/leftButton");
+                attackAction.AddBinding("<Gamepad>/buttonWest");
+            }
+            if (secondaryAction == null)
+            {
+                secondaryAction = new InputAction("ClassSecondary", InputActionType.Button);
+                secondaryAction.AddBinding("<Mouse>/rightButton");
+                secondaryAction.AddBinding("<Gamepad>/buttonEast");
+            }
+            if (riftBreakAction == null)
+            {
+                riftBreakAction = new InputAction("RiftBreak", InputActionType.Button);
+                riftBreakAction.AddBinding("<Keyboard>/v");
+            }
+            if (isActiveAndEnabled)
+            {
+                attackAction.Enable();
+                secondaryAction.Enable();
+                riftBreakAction.Enable();
+            }
         }
 
         private void OnEnable()
@@ -156,6 +175,15 @@ namespace RIMA
 
         private void Update()
         {
+            // Self-heal: a script recompile / domain reload during play mode nulls
+            // non-serialized fields like `behavior` (Awake is not re-invoked mid-play).
+            // Recreate it from the serialized profile instead of NRE-spamming every frame.
+            if (behavior == null || attackAction == null || secondaryAction == null || riftBreakAction == null)
+            {
+                if (basicAttackProfile != null && behavior == null) behavior = basicAttackProfile.CreateBehavior();
+                BuildInputActions();
+                if (behavior == null) return;
+            }
             behavior.OnUpdate(this, basicAttackProfile, Time.deltaTime);
             behavior.OnLMBInput(
                 this, basicAttackProfile,

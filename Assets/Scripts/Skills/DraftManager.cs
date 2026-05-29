@@ -105,6 +105,7 @@ namespace RIMA
         private void HandleRoomCleared()
         {
             if (IsDraftActive) return;
+            if (RoomLoader.DraftDrivenByRoomLoader) return;
 
             // Phase 1: gate-locked rooms suppress the auto-timer; draft fires from gate (portal) entry only.
 #if UNITY_2023_1_OR_NEWER
@@ -257,6 +258,9 @@ namespace RIMA
             {
                 var comp = player.GetComponent(passive.skillType) as PassiveBase
                         ?? player.GetComponentInChildren(passive.skillType) as PassiveBase;
+                // Codex #1 fix: attach the passive component on demand if not already present.
+                if (comp == null)
+                    comp = player.AddComponent(passive.skillType) as PassiveBase;
                 comp?.LevelUp();
             }
 
@@ -308,6 +312,14 @@ namespace RIMA
 
         private void EnsureDependencies()
         {
+            // Codex #1 blocker fix: SkillDatabase is not guaranteed in the playable scene.
+            // Without it, SkillOfferGenerator falls back to an unwired serialized list and the draft is empty.
+            if (SkillDatabase.Instance == null && FindAnyObjectByType<SkillDatabase>() == null)
+            {
+                var dbGo = new GameObject("SkillDatabase_Auto");
+                dbGo.AddComponent<SkillDatabase>();
+                Debug.Log("[DraftManager] SkillDatabase otomatik oluşturuldu.");
+            }
             if (offerUI == null)
             {
                 offerUI = FindAnyObjectByType<SkillOfferUI>();
@@ -328,6 +340,16 @@ namespace RIMA
                     Debug.Log("[DraftManager] SkillOfferGenerator otomatik oluşturuldu.");
                 }
             }
+
+            // Codex #1 fix: picks can't equip without a Warblade_SkillController on the player.
+            // Start() caches it once (null if the prefab/scene lacks one) — re-fetch lazily and create on demand.
+            if (skillController == null)
+            {
+                if (player == null) player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null)
+                    skillController = player.GetComponent<Warblade_SkillController>()
+                                   ?? player.AddComponent<Warblade_SkillController>();
+            }
         }
 
         // ── Yardımcılar ──────────────────────────────────────────
@@ -338,10 +360,13 @@ namespace RIMA
             {
                 var comp = skillController.GetComponent(skill.skillType) as SkillBase
                         ?? skillController.GetComponentInChildren(skill.skillType) as SkillBase;
+                // Codex #1 fix: EnsureDefaultLoadout only AddComponents 4 skills; attach any other picked skill on demand.
+                if (comp == null)
+                    comp = skillController.gameObject.AddComponent(skill.skillType) as SkillBase;
                 if (comp != null)
                     skillController.SetSlot(slot, comp);
                 else
-                    Debug.LogWarning($"[Draft] '{skill.skillName}' bileşeni Player'da bulunamadı.");
+                    Debug.LogWarning($"[Draft] '{skill.skillName}' bileşeni eklenemedi (skillType={skill.skillType}).");
             }
             if (!currentActiveSkills.Contains(skill))
                 currentActiveSkills.Add(skill);
@@ -351,6 +376,7 @@ namespace RIMA
         {
             offerUI.Hide();
             IsDraftActive = false;
+            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.DraftSelect);
             OnSkillPicked.Invoke(skill);
         }
 
@@ -391,4 +417,3 @@ namespace RIMA
         public bool HasSkill(SkillData s) => currentActiveSkills.Contains(s);
     }
 }
-

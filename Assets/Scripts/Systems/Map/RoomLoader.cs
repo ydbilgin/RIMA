@@ -18,6 +18,7 @@ namespace RIMA.Systems.Map
         public static event Action<int> OnRoomChanged;
         public static event Action OnDemoComplete;
 
+        public static bool DraftDrivenByRoomLoader = true;
         public static int CurrentRoomIndex { get; private set; } = 0;
 
         /// <summary>The RoomSequenceData for the room currently loaded. Null before first load.</summary>
@@ -282,11 +283,24 @@ namespace RIMA.Systems.Map
                 clearToUnlock = () =>
                 {
                     OnRoomCleared -= clearToUnlock;
-                    if (gate != null) gate.Unlock();
-                    Debug.Log($"[RoomLoader] Room {data.roomIndex} cleared — gate unlocked.");
+                    StartCoroutine(UnlockGateAfterDraft(gate));
+                    Debug.Log($"[RoomLoader] Room {data.roomIndex} cleared — draft started before gate unlock.");
                 };
                 OnRoomCleared += clearToUnlock;
             }
+        }
+
+        private IEnumerator UnlockGateAfterDraft(Gate gate)
+        {
+            if (DraftManager.Instance != null)
+            {
+                DraftManager.Instance.ShowDraft();
+                yield return null;
+                while (DraftManager.Instance != null && DraftManager.Instance.IsDraftActive)
+                    yield return null;
+            }
+
+            if (gate != null) gate.Unlock();
         }
 
         private IEnumerator RewardRoomAutoTrigger(RoomSequenceData data, Gate rewardGate)
@@ -297,8 +311,8 @@ namespace RIMA.Systems.Map
             if (anchor == null)
             {
                 // No anchor — unlock gate directly as fallback.
-                Debug.LogWarning("[RoomLoader] RewardRoom: no FragmentDropAnchor — unlocking gate directly.");
-                if (rewardGate != null) rewardGate.Unlock();
+                Debug.LogWarning("[RoomLoader] RewardRoom: no FragmentDropAnchor — starting draft/unlock fallback.");
+                StartCoroutine(UnlockGateAfterDraft(rewardGate));
                 yield break;
             }
 
@@ -322,8 +336,8 @@ namespace RIMA.Systems.Map
                 EnvironmentMapFragment.OnAnyFragmentPickedUp -= onFragment;
                 if (rewardGate != null)
                 {
-                    rewardGate.Unlock();
-                    Debug.Log("[RoomLoader] Reward room fragment picked up — gate unlocked.");
+                    StartCoroutine(UnlockGateAfterDraft(rewardGate));
+                    Debug.Log("[RoomLoader] Reward room fragment picked up — draft started before gate unlock.");
                 }
             };
             EnvironmentMapFragment.OnAnyFragmentPickedUp += onFragment;
@@ -331,10 +345,19 @@ namespace RIMA.Systems.Map
 
         private IEnumerator WireBossDeathListener(GameObject roomContent)
         {
-            yield return null;
-
-            Health bossHealth = roomContent != null ? roomContent.GetComponentInChildren<Health>() : null;
-            if (bossHealth == null) yield break;
+            // Codex #2 fix: poll for the boss Health over ~0.5s instead of a single frame.
+            // If Health is on a child added in Start(), a one-frame wait misses it and DemoComplete never fires (win softlock).
+            Health bossHealth = null;
+            for (int i = 0; i < 30 && bossHealth == null; i++)
+            {
+                bossHealth = roomContent != null ? roomContent.GetComponentInChildren<Health>(true) : null;
+                if (bossHealth == null) yield return null;
+            }
+            if (bossHealth == null)
+            {
+                Debug.LogWarning("[RoomLoader] Boss Health not found after 30 frames — DemoComplete won't fire.");
+                yield break;
+            }
 
             if (bossHealth.OnDeath == null) bossHealth.OnDeath = new UnityEngine.Events.UnityEvent();
             bossHealth.OnDeath.AddListener(RaiseDemoComplete);
