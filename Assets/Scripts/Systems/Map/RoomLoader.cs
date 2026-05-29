@@ -103,8 +103,19 @@ namespace RIMA.Systems.Map
         {
             if (!TryGetRoomData(index, out RoomSequenceData roomData)) return;
 
-            SwapRoomWhileBlack(index, roomData);
-            SetHudRoomStatus(roomData);
+            PlayerController pc = FindFirstObjectByType<PlayerController>();
+            if (pc != null) pc.enabled = false;
+
+            if (RoomTransitionFX.Instance != null)
+            {
+                RoomTransitionFX.Instance.DoTransition(() => SwapRoomWhileBlack(index, roomData));
+            }
+            else
+            {
+                SwapRoomWhileBlack(index, roomData);
+            }
+
+            StartCoroutine(ReenableAfterFade(pc, roomData));
         }
 
         private void LoadNextInstance()
