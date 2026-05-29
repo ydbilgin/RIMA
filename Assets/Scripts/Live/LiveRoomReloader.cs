@@ -104,10 +104,12 @@ namespace RIMA.Live
 
             foreach (Tilemap tm in roomInstance.GetComponentsInChildren<Tilemap>(true))
             {
-                string n = tm.gameObject.name.ToLowerInvariant();
-                if (_floorTilemap == null && n.Contains("floor"))  _floorTilemap = tm;
-                if (_cliffTilemap == null && n.Contains("cliff"))  _cliffTilemap = tm;
+                if (_floorTilemap == null && TilemapNameContains(tm, "floor")) _floorTilemap = tm;
+                if (_cliffTilemap == null && TilemapNameContains(tm, "cliff")) _cliffTilemap = tm;
             }
+
+            if (_cliffTilemap == null)
+                UnityEngine.Debug.LogWarning("[LiveRoomReloader] Cliff Tilemap not found; cliff live-reload will be skipped. Expected a Tilemap GameObject name containing 'cliff'.");
 
             // Create/reset live-managed root under the room instance.
             Transform existing = roomInstance.transform.Find("[LiveProps]");
@@ -376,6 +378,21 @@ namespace RIMA.Live
         {
             if (v == null || v.Length < 3) return Vector3.zero;
             return new Vector3(v[0], v[1], v[2]);
+        }
+
+        private static bool TilemapNameContains(Tilemap tilemap, string token)
+        {
+            if (tilemap == null || string.IsNullOrEmpty(token)) return false;
+
+            string objectName = tilemap.gameObject != null ? tilemap.gameObject.name : null;
+            return ContainsOrdinalIgnoreCase(objectName, token) ||
+                   ContainsOrdinalIgnoreCase(tilemap.name, token);
+        }
+
+        private static bool ContainsOrdinalIgnoreCase(string value, string token)
+        {
+            return !string.IsNullOrEmpty(value) &&
+                   value.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private static void CountDiff(RoomLayoutData prev, RoomLayoutData next,

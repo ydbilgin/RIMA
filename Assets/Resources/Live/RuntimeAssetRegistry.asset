@@ -1,0 +1,551 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c21bc5f89217b0449bb3d66ff21d6d8, type: 3}
+  m_Name: RuntimeAssetRegistry
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Live.RuntimeAssetRegistry
+  _entries:
+  - guid: 7523d338e326abe4987f0d898ace7c38
+    displayName: alabaster_decal_5ccc5721-3007-4d9a-8fce-86e99bc6a078
+    tag: decal
+    layer: 0
+    sprite: {fileID: 21300000, guid: 7523d338e326abe4987f0d898ace7c38, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 366bfe9e05bd10041b1194c2942a971f
+    displayName: cliff_cyan_glow
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 366bfe9e05bd10041b1194c2942a971f, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: c08164f7fa618734897d163dd95333ff
+    displayName: cliff_E
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: c08164f7fa618734897d163dd95333ff, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: eff10014d1767a84c99113624ea94080
+    displayName: cliff_N
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: eff10014d1767a84c99113624ea94080, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 3f3ab8c77a30738418aa094d2ad3efa4
+    displayName: cliff_NE
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 3f3ab8c77a30738418aa094d2ad3efa4, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 62da8f70f5c21fe44999dff49dffcb15
+    displayName: cliff_NW
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 62da8f70f5c21fe44999dff49dffcb15, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 2a3d49363e3628c4292a7d2c6f575c9e
+    displayName: cliff_S
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 0fb53d1598117804fb280f73aa7bffee
+    displayName: cliff_S_new1
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 0fb53d1598117804fb280f73aa7bffee, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: c83d4e0fd9bbbc84980f65f902822fef
+    displayName: cliff_S_new2
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: c83d4e0fd9bbbc84980f65f902822fef, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 7483b62a84244a9458965f196815a0aa
+    displayName: cliff_S_new3
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 7483b62a84244a9458965f196815a0aa, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 4733d595eb91f4041a3b124836117587
+    displayName: cliff_S_new4
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 4733d595eb91f4041a3b124836117587, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 8e059e7d4307669438753289a79c7059
+    displayName: cliff_SE
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: 8e059e7d4307669438753289a79c7059, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: cced08e37b130ad43a4bf86632242964
+    displayName: cliff_SW
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: cced08e37b130ad43a4bf86632242964, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: b8ce4a81b9a8c404a8aaa0c4e92b7211
+    displayName: cliff_W
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 21300000, guid: b8ce4a81b9a8c404a8aaa0c4e92b7211, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: dc62b61716ca8d548a8bde0aaa56a8ba
+    displayName: edge_ao_rim
+    tag: misc
+    layer: 0
+    sprite: {fileID: 21300000, guid: dc62b61716ca8d548a8bde0aaa56a8ba, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 15b27e479b43d084780976c301841918
+    displayName: EdgeAORim_Tile
+    tag: tile
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: 15b27e479b43d084780976c301841918, type: 2}
+    prefab: {fileID: 0}
+    kind: 0
+  - guid: 6ace68eac50069846afeaec6ff482ec2
+    displayName: mounting_00_7227fa35-ade1-406e-af2e-600fb4176af2
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 899349195907239876, guid: 6ace68eac50069846afeaec6ff482ec2, type: 3}
+    kind: 2
+  - guid: 56779108dd0bb2649b133ff57f2b849a
+    displayName: mounting_01_f7763267-747e-4a7f-b30a-1dec04273cd7
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 8804362827250536221, guid: 56779108dd0bb2649b133ff57f2b849a, type: 3}
+    kind: 2
+  - guid: 4b52046174cafce4583755906ba8ded6
+    displayName: mounting_02_f88e821a-18c0-4c04-a63a-a7849409ffff
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 9139730725688606126, guid: 4b52046174cafce4583755906ba8ded6, type: 3}
+    kind: 2
+  - guid: d8905739873ac5f458e5d39c774ae765
+    displayName: mounting_03_98bc117a-cb56-4584-8646-09cc505aeed2
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 2136712495795434055, guid: d8905739873ac5f458e5d39c774ae765, type: 3}
+    kind: 2
+  - guid: 8e5d1bd077901cf46a5f83054cc79606
+    displayName: mounting_04_7ab5ec96-9435-4b45-82e0-000df92fb863
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3376750134778038866, guid: 8e5d1bd077901cf46a5f83054cc79606, type: 3}
+    kind: 2
+  - guid: 509c34bf99629d94b973d03b80ecfb91
+    displayName: mounting_05_50257aa7-2641-4a3a-b353-976d56749a39
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3331888303968479458, guid: 509c34bf99629d94b973d03b80ecfb91, type: 3}
+    kind: 2
+  - guid: a84d15c3e500d524d97842e923722214
+    displayName: mounting_06_bf737208-ede4-4eb4-a39a-eee024142932
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3286357181758571839, guid: a84d15c3e500d524d97842e923722214, type: 3}
+    kind: 2
+  - guid: 18466d4d047d8ff44968fcece493772e
+    displayName: mounting_07_1802229f-d853-4917-adc7-c3467e862d0d
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 543483234970499869, guid: 18466d4d047d8ff44968fcece493772e, type: 3}
+    kind: 2
+  - guid: b2cdbad821680864bbe906685b4f7119
+    displayName: mounting_08_173aa624-c2c2-498a-8145-38331cf6f3c8
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 6808271076199984507, guid: b2cdbad821680864bbe906685b4f7119, type: 3}
+    kind: 2
+  - guid: aec9115399aa3d041bea924baae1325e
+    displayName: mounting_09_bb34bab3-7d82-479e-a04d-f7bb00750696
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 321537378664794641, guid: aec9115399aa3d041bea924baae1325e, type: 3}
+    kind: 2
+  - guid: c037ce68746780d469a8bbd993de4015
+    displayName: mounting_10_de169bda-f674-4c1b-b060-489acc81b508
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 1490681330982966631, guid: c037ce68746780d469a8bbd993de4015, type: 3}
+    kind: 2
+  - guid: c3e1a15e2bbb4884d97555bffc8b751d
+    displayName: mounting_11_e4ff0cfa-4880-4915-87ed-3469e4e071bf
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 550556669518219716, guid: c3e1a15e2bbb4884d97555bffc8b751d, type: 3}
+    kind: 2
+  - guid: 7e9c7c1ff06e77848bf8ea89d2782b99
+    displayName: mounting_12_4fce26a7-38a9-47a6-9a8d-0ce8c04bf692
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4144490979807551982, guid: 7e9c7c1ff06e77848bf8ea89d2782b99, type: 3}
+    kind: 2
+  - guid: fd82ee0b68582524c8bd3de9fbfb50dd
+    displayName: mounting_13_ebd1307e-ae6a-45cf-a583-2ad53425ec61
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4955710723353273562, guid: fd82ee0b68582524c8bd3de9fbfb50dd, type: 3}
+    kind: 2
+  - guid: 7e12539b980d35d4cb81b3ecece61b89
+    displayName: mounting_14_41342e20-39a8-4482-9775-48abf9f05262
+    tag: mounting
+    layer: 2
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4311158205575468277, guid: 7e12539b980d35d4cb81b3ecece61b89, type: 3}
+    kind: 2
+  - guid: 58ae3f00b2c714444a82e04749e88b73
+    displayName: statue_00_e899a33d-e043-4f51-860d-ff0c046f89f3
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 8415970046728925027, guid: 58ae3f00b2c714444a82e04749e88b73, type: 3}
+    kind: 2
+  - guid: aa59bd56ee5d9674b91105fc112a6532
+    displayName: statue_01_a0da1143-2fc6-4c43-9d8d-9c46ed8b6be1
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3847309363963126301, guid: aa59bd56ee5d9674b91105fc112a6532, type: 3}
+    kind: 2
+  - guid: 12e732a09af8101409cd5754d6755ca6
+    displayName: statue_02_1ecd6d55-f064-40e5-8bd4-80db80a29b52
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4427270464602501901, guid: 12e732a09af8101409cd5754d6755ca6, type: 3}
+    kind: 2
+  - guid: ce59b8651a7692542a3e07c078bfcc7a
+    displayName: statue_03_f1ed6cce-ab50-4185-bd0f-3c24c63c10f3
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4233792872192539793, guid: ce59b8651a7692542a3e07c078bfcc7a, type: 3}
+    kind: 2
+  - guid: 57da1d82e2519cd4a8a0d070b3db3d35
+    displayName: statue_04_3675a661-2609-46de-98b0-247871a36643
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 8386770015990465411, guid: 57da1d82e2519cd4a8a0d070b3db3d35, type: 3}
+    kind: 2
+  - guid: bd874b249e038334a9834b9ccbb4a218
+    displayName: statue_05_11f9b270-ead0-4120-b6cd-02550afa6dd0
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3023225064026935357, guid: bd874b249e038334a9834b9ccbb4a218, type: 3}
+    kind: 2
+  - guid: e27395d0e5b8e8c4e9e63a4e76452ebb
+    displayName: statue_06_cdc9ceb0-3f82-4299-8c12-dabe91a70b15
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 7879807692293895664, guid: e27395d0e5b8e8c4e9e63a4e76452ebb, type: 3}
+    kind: 2
+  - guid: ac5e19623d1e29e4e94336826c492210
+    displayName: statue_07_a7d8dd6d-a8e6-4340-9f92-0399ef4b64b0
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 193064538451310806, guid: ac5e19623d1e29e4e94336826c492210, type: 3}
+    kind: 2
+  - guid: 145fa9750c050ae40a5ff25c09a462c1
+    displayName: statue_08_8b0f8790-ce97-444c-9304-c3ebf0d2b4f1
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 444363690579271664, guid: 145fa9750c050ae40a5ff25c09a462c1, type: 3}
+    kind: 2
+  - guid: b3838662ddefb4e44b4bde6de7df360e
+    displayName: statue_09_f75b1fa4-3fc4-43bf-b5e5-a31886bb7cbc
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 8800685066023740471, guid: b3838662ddefb4e44b4bde6de7df360e, type: 3}
+    kind: 2
+  - guid: 35759119d775b91479aaa293e57fb08c
+    displayName: statue_10_a2fb0a7f-1d03-424b-816a-6863bd0abac8
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 8783672523916915048, guid: 35759119d775b91479aaa293e57fb08c, type: 3}
+    kind: 2
+  - guid: 1a0696a88934e50458b71d558a665f8b
+    displayName: statue_11_d5574785-18cb-4ce8-b1f4-ed9f5dafac87
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 7999690364568376692, guid: 1a0696a88934e50458b71d558a665f8b, type: 3}
+    kind: 2
+  - guid: 93540ff3731928f47b84d32095fcf8d9
+    displayName: statue_12_52e58d14-e20f-46a4-99a3-fee58d332a2d
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 1415286227168060542, guid: 93540ff3731928f47b84d32095fcf8d9, type: 3}
+    kind: 2
+  - guid: 3ff4cdd0e2074a8409f359bbdfb8c6f4
+    displayName: statue_13_c5711681-d7f9-4fdc-9a20-00200bcccd1d
+    tag: statue
+    layer: 3
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3443576078689762865, guid: 3ff4cdd0e2074a8409f359bbdfb8c6f4, type: 3}
+    kind: 2
+  - guid: dede57f7d841d4740af2349b8d95dacd
+    displayName: 01_straight
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3834482370452177559, guid: dede57f7d841d4740af2349b8d95dacd, type: 3}
+    kind: 2
+  - guid: fc271c733ae52d84097b4c34db89bfcb
+    displayName: 02_outer_corner
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 2635244418327436239, guid: fc271c733ae52d84097b4c34db89bfcb, type: 3}
+    kind: 2
+  - guid: 821d17ba108b65042956c32201ec1947
+    displayName: 03_inner_corner
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 7212303798004017823, guid: 821d17ba108b65042956c32201ec1947, type: 3}
+    kind: 2
+  - guid: 2bccde6ce5cb0bb44a1843111cd7335e
+    displayName: 04_end
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 1304306468820311966, guid: 2bccde6ce5cb0bb44a1843111cd7335e, type: 3}
+    kind: 2
+  - guid: a1efc74a1d50c2b49adf3a2e3382aa2d
+    displayName: 05_door_l
+    tag: door
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3768346095382721343, guid: a1efc74a1d50c2b49adf3a2e3382aa2d, type: 3}
+    kind: 2
+  - guid: 595eee1788b2f104faeab0cc9b7c3838
+    displayName: 06_door_r
+    tag: door
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 5847633035521682586, guid: 595eee1788b2f104faeab0cc9b7c3838, type: 3}
+    kind: 2
+  - guid: 8ab0fbf80acc88447a3b8e522b50ae4c
+    displayName: 07_alcove
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4495657816554606736, guid: 8ab0fbf80acc88447a3b8e522b50ae4c, type: 3}
+    kind: 2
+  - guid: 6c2503ec3882d5c44a81db3892b72dac
+    displayName: 08_protrusion
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4405804995037489815, guid: 6c2503ec3882d5c44a81db3892b72dac, type: 3}
+    kind: 2
+  - guid: ea88a0bc9f86321429553f9e47ce82af
+    displayName: piece_01
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 3613227034148523485, guid: ea88a0bc9f86321429553f9e47ce82af, type: 3}
+    kind: 2
+  - guid: 4e58fd7dfb5b4594a9f6dd05c5646f65
+    displayName: piece_02
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 6566923603190644408, guid: 4e58fd7dfb5b4594a9f6dd05c5646f65, type: 3}
+    kind: 2
+  - guid: f7424b33f829c2945928a5b7e361bcad
+    displayName: piece_03
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4782154527918453289, guid: f7424b33f829c2945928a5b7e361bcad, type: 3}
+    kind: 2
+  - guid: ad954dbe1796d65439aa61d6cec0d5e2
+    displayName: piece_04
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4162306723881490284, guid: ad954dbe1796d65439aa61d6cec0d5e2, type: 3}
+    kind: 2
+  - guid: ff9d8786708d35f4db27aeb26c91a26c
+    displayName: wp_door_arch_2x_real
+    tag: door
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 2176938824930726757, guid: ff9d8786708d35f4db27aeb26c91a26c, type: 3}
+    kind: 2
+  - guid: 98df23d891531a54fb1b105c3ba41d4b
+    displayName: wp_low_front_outer_corner_real
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 8090326606968126416, guid: 98df23d891531a54fb1b105c3ba41d4b, type: 3}
+    kind: 2
+  - guid: 0ac1984ba36d5d5448dc21d6e063e9f1
+    displayName: wp_rear_wall_2x_real
+    tag: wall
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 1559885350478491781, guid: 0ac1984ba36d5d5448dc21d6e063e9f1, type: 3}
+    kind: 2
+  - guid: 89c6e96afcbe8eb4a99306f2f1dde621
+    displayName: wp_side_wall_stepped_2x_real
+    tag: wall
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 4117925465672055785, guid: 89c6e96afcbe8eb4a99306f2f1dde621, type: 3}
+    kind: 2
+  - guid: 933bbb0a8c11b314c9d82da7a7fedc51
+    displayName: Chasm
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 9133912708751274457, guid: 933bbb0a8c11b314c9d82da7a7fedc51, type: 3}
+    kind: 2
+  - guid: ca61d0b0dba04854db6b258b2a4cbb8d
+    displayName: NarrowPassage
+    tag: misc
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 5189334979539625071, guid: ca61d0b0dba04854db6b258b2a4cbb8d, type: 3}
+    kind: 2
+  - guid: 995cb83b025364a4481d9b13ac077bed
+    displayName: StoneColumn
+    tag: column
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 0}
+    prefab: {fileID: 8510796745027043946, guid: 995cb83b025364a4481d9b13ac077bed, type: 3}
+    kind: 2
+  - guid: 221d203f83ec4e0d8f615c003bf23b3b
+    displayName: CliffTile_Hades
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: 221d203f83ec4e0d8f615c003bf23b3b, type: 2}
+    prefab: {fileID: 0}
+    kind: 0
+  - guid: 16ecced5c069db1428c7f1f769143b6a
+    displayName: DirectionalCliffTile_Hades
+    tag: cliff
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: 16ecced5c069db1428c7f1f769143b6a, type: 2}
+    prefab: {fileID: 0}
+    kind: 0
+  - guid: 593542b3f40d5734fbb3945812390b10
+    displayName: VoidBlocker_Tile
+    tag: tile
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: 593542b3f40d5734fbb3945812390b10, type: 2}
+    prefab: {fileID: 0}
+    kind: 0

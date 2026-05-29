@@ -152,6 +152,31 @@ namespace RIMA.Tests
         }
 
         [Test]
+        public void FromJson_ValidJson_LegacyCliffCell_TileGuid_Empty()
+        {
+            RoomLayoutData data = RoomLayoutData.FromJson(ValidJson);
+            Assert.IsTrue(string.IsNullOrEmpty(data.cliff_cells[0].tile_guid),
+                "Legacy cliff_cells without tile_guid should remain valid.");
+        }
+
+        [Test]
+        public void FromJson_CliffCell_TileGuid_Preserved()
+        {
+            const string json = @"{
+                ""schema_version"": ""1.1"",
+                ""room_id"": ""CliffGuidRoom"",
+                ""cliff_cells"": [
+                    { ""cell"": [5, 0, 0], ""tile_guid"": ""cccc0001"", ""is_decor"": false }
+                ]
+            }";
+
+            RoomLayoutData data = RoomLayoutData.FromJson(json);
+            Assert.IsNotNull(data, "Cliff GUID JSON should parse.");
+            Assert.AreEqual("cccc0001", data.cliff_cells[0].tile_guid,
+                "cliff_cells tile_guid should survive round-trip.");
+        }
+
+        [Test]
         public void FromJson_ValidJson_PropInstances_Count()
         {
             RoomLayoutData data = RoomLayoutData.FromJson(ValidJson);

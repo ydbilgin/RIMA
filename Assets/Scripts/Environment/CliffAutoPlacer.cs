@@ -17,6 +17,13 @@ namespace RIMA.Environment
         public CliffPlacementRules rules;
         public bool clearExistingOnRegenerate = true;
 
+        // Front-edge filter (S114 S5 user red-box fix): only place cliffs where the drop is
+        // OPEN below. If floor exists within southClearCells screen-south steps, the cliff would
+        // hang over/in-front-of that lower floor and read as a "standing column" on concave
+        // notches / back peninsulas. 0 = off.
+        [Tooltip("Cut cliffs with floor within this many SOUTH steps (overflow/standing-column fix). 0 = off. agy: 5 (sprite ~4.9 cells tall).")]
+        public int southClearCells = 5;
+
         // F1: Adaptive cluster filter rules (optional — if null, no filtering applied)
         [SerializeField] private CliffClusterRules clusterRules;
 
@@ -253,21 +260,129 @@ namespace RIMA.Environment
             //
             // Spike filter kaldırıldı (S108 lock): void-cell yerleşimi yapmadığımız
             // için "half-drop spike" durumu artık üretilemez.
+            // S114 S5 robust rule (triple-AI: Opus+agy+Codex converge). Place a cliff only where a
+            // camera-facing (S/SE/SW) neighbour is EXTERIOR void AND the drop opens monotonically
+            // south for southClearCells. NO diagonal floor veto — that over-cut the diamond (57/59).
+            // Interior pockets / concave notches / back peninsulas are skipped (their void is not
+            // exterior, or the south drop is blocked); intentional pit cliffs return via the
+            // ManualPaintedCells whitelist in Regenerate().
+            int depth = Mathf.Max(1, southClearCells);
+            HashSet<Vector3Int> exteriorVoid = FloodExteriorVoid(floorCells, depth + 2);
+
             foreach (Vector3Int cell in floorCells)
             {
                 if (orphanCells.Contains(cell)) continue; // F1: orphan floor cell'e cliff koyma
-
-                bool sEmpty  = !floorTilemap.HasTile(cell + SouthCell);
-                bool seEmpty = !floorTilemap.HasTile(cell + SouthEastCell);
-                bool swEmpty = !floorTilemap.HasTile(cell + SouthWestCell);
-
-                if (sEmpty || seEmpty || swEmpty)
+                if (HasCameraFacingExteriorDrop(cell, exteriorVoid, depth))
                 {
+                    // RED Fix: Cut cliff if the cell has North/NE/NW exterior void (far-edge/back-side)
+                    bool hasNorthVoid = exteriorVoid.Contains(cell + NorthCell) ||
+                                        exteriorVoid.Contains(cell + new Vector3Int(1, 0, 0)) || // NE
+                                        exteriorVoid.Contains(cell + new Vector3Int(0, 1, 0));   // NW
+                    if (hasNorthVoid) continue;
+
+                    // RED Fix: Cut cliff on narrow protrusions (if 5 or more of the 8 neighbors are exterior void)
+                    int voidNeighbors = 0;
+                    Vector3Int[] allDirs = {
+                        SouthCell, SouthEastCell, SouthWestCell,
+                        EastCell, WestCell, NorthCell,
+                        new Vector3Int(1, 0, 0), // NE
+                        new Vector3Int(0, 1, 0)  // NW
+                    };
+                    foreach (Vector3Int dir in allDirs)
+                    {
+                        if (exteriorVoid.Contains(cell + dir)) voidNeighbors++;
+                    }
+                    if (voidNeighbors >= 5) continue;
+
                     cells.Add(cell);
                 }
             }
 
+            // S114 S5 (user YELLOW fix): Disabled for small holes due to steep 70-80 angle occlusion
+            // rendering them unreadable. Instead, rely on dark shadows / empty space.
+            /*
+            foreach (Vector3Int cell in floorCells)
+            {
+                if (orphanCells.Contains(cell) || cells.Contains(cell)) continue;
+                bool sHole  = !floorCells.Contains(cell + SouthCell)     && !exteriorVoid.Contains(cell + SouthCell);
+                bool seHole = !floorCells.Contains(cell + SouthEastCell) && !exteriorVoid.Contains(cell + SouthEastCell);
+                bool swHole = !floorCells.Contains(cell + SouthWestCell) && !exteriorVoid.Contains(cell + SouthWestCell);
+                if (sHole || seHole || swHole)
+                    cells.Add(cell);
+            }
+            */
+
             return cells;
+        }
+
+        // Flood-fills exterior void from the (padded) floor bounds border inward. Any non-floor cell
+        // reachable from outside is "exterior"; interior sealed pockets are excluded.
+        private HashSet<Vector3Int> FloodExteriorVoid(HashSet<Vector3Int> floorCells, int pad)
+        {
+            BoundsInt b = floorTilemap.cellBounds;
+            int xMin = b.xMin - pad, xMax = b.xMax + pad;
+            int yMin = b.yMin - pad, yMax = b.yMax + pad;
+
+            var exterior = new HashSet<Vector3Int>();
+            var queue = new Queue<Vector3Int>();
+            System.Action<Vector3Int> enroll = (c) =>
+            {
+                if (c.x < xMin || c.x > xMax || c.y < yMin || c.y > yMax) return;
+                if (floorCells.Contains(c)) return;
+                if (exterior.Add(c)) queue.Enqueue(c);
+            };
+
+            for (int x = xMin; x <= xMax; x++) { enroll(new Vector3Int(x, yMin, 0)); enroll(new Vector3Int(x, yMax, 0)); }
+            for (int y = yMin; y <= yMax; y++) { enroll(new Vector3Int(xMin, y, 0)); enroll(new Vector3Int(xMax, y, 0)); }
+
+            Vector3Int[] dirs = { SouthCell, NorthCell, EastCell, WestCell, SouthEastCell, SouthWestCell };
+            while (queue.Count > 0)
+            {
+                Vector3Int c = queue.Dequeue();
+                foreach (Vector3Int d in dirs) enroll(c + d);
+            }
+            return exterior;
+        }
+
+        // True if a camera-facing (S/SE/SW) neighbour is exterior void with a clean monotonic
+        // south opening for `depth` cells (genuine open drop, not a notch/overhang).
+        private bool HasCameraFacingExteriorDrop(Vector3Int cell, HashSet<Vector3Int> exteriorVoid, int depth)
+        {
+            Vector3Int[] frontDirs = { SouthCell, SouthEastCell, SouthWestCell };
+            foreach (Vector3Int dir in frontDirs)
+            {
+                Vector3Int seed = cell + dir;
+                if (!exteriorVoid.Contains(seed)) continue;
+                if (OpensMonotonicSouth(seed, exteriorVoid, depth)) return true;
+            }
+            return false;
+        }
+
+        // BFS that only advances camera-facing (S/SE/SW) through exterior void. Returns true once it
+        // reaches `depth` steps — the drop is open for the cliff's full height. No N/E/W routing, so
+        // it cannot sneak around a notch.
+        private bool OpensMonotonicSouth(Vector3Int seed, HashSet<Vector3Int> exteriorVoid, int depth)
+        {
+            var visited = new HashSet<Vector3Int> { seed };
+            var queue = new Queue<Vector3Int>();
+            var dist = new Dictionary<Vector3Int, int> { { seed, 0 } };
+            queue.Enqueue(seed);
+            Vector3Int[] openDirs = { SouthCell, SouthEastCell, SouthWestCell };
+            while (queue.Count > 0)
+            {
+                Vector3Int cur = queue.Dequeue();
+                int d = dist[cur];
+                if (d >= depth) return true;
+                foreach (Vector3Int dir in openDirs)
+                {
+                    Vector3Int next = cur + dir;
+                    if (!exteriorVoid.Contains(next)) continue;
+                    if (!visited.Add(next)) continue;
+                    dist[next] = d + 1;
+                    queue.Enqueue(next);
+                }
+            }
+            return false;
         }
 
         /// <summary>F1: Adaptive cluster filter — orphan (small isolated) floor cluster'ları tespit eder.

@@ -20,19 +20,51 @@ namespace RIMA.Environment
         public Vector3 transformOffset;
         public Vector2 spriteScale = Vector2.one;
 
+        [Header("Organic Variation (3-AI consensus)")]
+        [Tooltip("Cluster cells into short/mid/full hang tiers via Perlin noise + x jitter. Top contact line stays fixed.")]
+        public bool heightVariation = true;
+        [Tooltip("Lower = larger clusters (slower noise). ~0.10-0.20 gives 2-5 cell runs.")]
+        public float clusterFrequency = 0.14f;
+        [Tooltip("Max upward lift (world units) = the SHORTEST hang. Larger = more dramatic long/short spread.")]
+        public float maxLift = 1.1f;
+        [Range(0f, 1f)]
+        [Tooltip("0 = smooth clustered runs, 1 = fully per-cell random long/short mix.")]
+        public float randomness = 0.7f;
+        [Tooltip("Max +/- horizontal jitter to break grid alignment.")]
+        public float gridJitter = 0.10f;
+
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
         {
             tileData.colliderType = Tile.ColliderType.None;
             tileData.flags = TileFlags.LockTransform | TileFlags.LockColor;
             tileData.color = Color.white;
             
+            // 3-AI consensus (Opus+agy+Codex): break "wallpaper" repetition with clustered
+            // height variation while keeping the TOP contact line stable. We lift some cells
+            // UP (further under the floor = shorter visible hang, never a gap below), seeded by
+            // low-frequency Perlin noise so neighbours cluster into 2-5 cell runs. A tiny x
+            // jitter breaks perfect grid alignment. No sprite stretching (pixel-art safe).
+            int seed = DeterministicSeed(position);
+            Vector3 hangOffset = transformOffset;
+            if (heightVariation)
+            {
+                // Continuous (non-stepped) lift: blend smooth Perlin (some coherence) with a
+                // per-cell hash (randomness) so some cliffs hang much longer, some much shorter
+                // — not ordered runs. randomness=0 -> clustered, 1 -> fully random per cell.
+                float smooth = Mathf.PerlinNoise(position.x * clusterFrequency, position.y * clusterFrequency);
+                float rand = (seed & 0xFFFF) / 65535f;
+                float t = Mathf.Lerp(smooth, rand, randomness);
+                float liftY = t * maxLift;
+                float jitterX = (((seed >> 8) & 0xFF) / 255f - 0.5f) * gridJitter;
+                hangOffset += new Vector3(jitterX, liftY, 0f);
+            }
             tileData.transform = Matrix4x4.TRS(
-                transformOffset,
+                hangOffset,
                 Quaternion.identity,
                 new Vector3(spriteScale.x, spriteScale.y, 1f));
 
             // Default fallback
-            tileData.sprite = GetRandomVariant(spritesS, 0);
+            tileData.sprite = GetRandomVariant(spritesS, seed);
 
             // Find the placer in the scene to reference the floor map
             CliffAutoPlacer placer = Object.FindObjectOfType<CliffAutoPlacer>();
@@ -62,8 +94,6 @@ namespace RIMA.Environment
             bool hasNW = floor.HasTile(position + new Vector3Int(0, 1, 0));
             bool hasSE = floor.HasTile(position + new Vector3Int(0, -1, 0));
             bool hasSW = floor.HasTile(position + new Vector3Int(-1, 0, 0));
-
-            int seed = DeterministicSeed(position);
 
             // We determine the cliff direction based on where the floor is relative to the cliff cell
             if (hasN)  tileData.sprite = GetRandomVariant(spritesS, seed);
