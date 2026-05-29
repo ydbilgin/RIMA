@@ -17,7 +17,14 @@ import urllib.request
 import urllib.error
 from datetime import datetime
 
-PROFILES = ["laurethayday", "laurethgame", "yasinderyabilgin"]
+# Auto-discover ALL Codex profiles from the common store (.codex-profiles) - the
+# same place CodexAuthManager / `cx` creates them. Lists every profile dir whether
+# logged-in or not; fetch() flags ones without auth.json so they still show.
+_PROFILE_ROOT = os.path.expandvars(r"%USERPROFILE%\.codex-profiles")
+PROFILES = sorted(
+    d for d in (os.listdir(_PROFILE_ROOT) if os.path.isdir(_PROFILE_ROOT) else [])
+    if os.path.isdir(os.path.join(_PROFILE_ROOT, d))
+)
 ENDPOINT = "https://chatgpt.com/backend-api/codex/usage"
 
 

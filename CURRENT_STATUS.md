@@ -1,6 +1,6 @@
 # CURRENT_STATUS
 
-> **Session:** S114 S5 → **S6 PICKUP** (2026-05-29) — Opus 4.8 otonom. **Pickup = hemen aşağıdaki "🆕 S6 PICKUP" bloğu.** | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
+> **Session:** S6 (2026-05-30) — Opus 4.8 otonom. **POST-/CLEAR PICKUP = hemen aşağıdaki "🚧 S6-EXEC PROGRESS" bloğu.** Demo-loop sistemleri kuruldu (rank-1 HUD/rank-3 hit-confirm/rank-4 SkillBar/rank-6 transition, 6 commit), sıra = MOMENT_SPEC kalan rank'lar (2/5/7/9) + F5 görsel playtest. Tooling (cx/ax/cxs/ags) bitti. | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
 > **Geçmiş session detayı (S106→S112):** `STAGING/_archive/current_status_pre_S114_20260528.md` (tam snapshot, arşiv).
 
 ---
@@ -9,14 +9,16 @@
 
 **Tek cümle:** S6 = büyük otonom analiz+build. **4-kaynak (2 workflow + cx + agy) converge** → demo'nun gerçek durumu + tam yol haritası net; çekirdek fix'ler yazıldı (UNCOMMITTED, compile-clean, cx-reviewed). **NEXT SESSION = `STAGING/MOMENT_SPEC_S6.md` rank-1'den otonom kur.**
 
-### 🚧 S6-EXEC PROGRESS (2026-05-29, Opus otonom — sahneye sistem kurma)
-- ✅ **3 commit atıldı** (reviewed işi güvenceye aldı): `ab23ec75` combat/demo core · `b3755115` S5 cliff/scene · `50512251` S6 docs/tooling. Junk dışarıda. Push hâlâ BLOCKED.
-- ✅ **NLM ÇÖZÜLDÜ + doğrulandı** (full-reset → user OAuth → valid/11 notebook).
-- ✅ **RANK-1 HUD + gizli ön-koşul — SAHNEYE KURULDU + PLAY-VERIFIED:** `HUD_Canvas` GO (Canvas ScreenSpaceOverlay sortOrder5 + CanvasScaler 640×360 + HUDController) + `PlayerClassManager` GO (singleton, Warblade default). Play: HPFill+ResourceGroup runtime'da build oldu, Health+RageSystem'e abone, **NullRef YOK.** Sahne KAYDEDİLDİ. ⚠️ **cx'in "RageSystem SAHNEDE YOK" notu YANLIŞTI** — RageSystem zaten Player'da (id -206404) takılıydı; tek eksik PlayerClassManager+HUDController idi.
-- ✅ **RANK-3 #4 SlashArc — SAHNEYE KURULDU (wired + kod-yolu doğrulandı, görsel pending):** Player'a `SlashArcVFX` child GO (LineRenderer + SlashArcVFX, lineMaterial=`ParticleAdditive.mat` additive glow) + `PlayerAttack.slashArcVFX` field bağlandı. EmitSlashArc saldırıda çağrılıyor (MeleeChainBehavior+MarkPulseBehavior code-confirmed) → field null'dı, artık dolu. Sahne KAYDEDİLDİ. ⚠️ **Görsel play-verify YAPILMADI** (F5→saldır→yay görünür mü, 2sn). Risk düşük (materyal URP-uyumlu, geometri prosedürel).
-- ✅ **RANK-3 #5 white-flash — KOD+PREFAB WIRED (görsel pending):** `HitFlashDriver.cs` cerrahi edit (Awake'te Health cache + OnEnable/OnDisable `Health.OnDamageTaken` self-subscribe → Flash, HitImpact pattern'i) — **compile 0-error doğrulandı**. `FractureImp.prefab`'a HitFlashDriver eklendi (componentTypes'da `RIMA.Combat.HitFlashDriver`). HitImpact ile çakışmaz (biri spark, biri flash). Tüm spawn'lar artık hasar alınca 0.08s beyaza flash'lar.
-- 🔑 **Hit-confirm KALAN: #3 hitspark prefab** — `Health.OnDamageTaken→HitImpact` altyapısı hazır, sadece `HitImpact.hitSparkPrefab` null → bir hitspark prefab (particle/sprite-burst) üret + prefab'a ata (VFXRouter hit_default alternatif). + her ikisi (#4 slash, #5 flash) **görsel play-verify** (F5→saldır).
-- **▶ SIRADAKİ:** rank-3 görsel play-verify (#4 slash + #5 flash) → #3 hitspark prefab → rank-2 draft play-verify → rank-4 SkillBar.
+### 🚧 S6-EXEC PROGRESS — ⭐ POST-/CLEAR PICKUP BURADAN (2026-05-30, Opus otonom)
+**Demo-loop sistemleri sahneye kuruldu (hepsi commit'li). NEXT = `MOMENT_SPEC_S6.md` kalan rank'lar + F5 görsel playtest.**
+- **Commit'ler (6, local baseline):** `ab23ec75` combat/demo core · `b3755115` S5 cliff/scene · `50512251` S6 docs · `2883fe5c` rank-1 HUD + rank-3 wiring · `5f6c3938` rank-3 hitspark + rank-4 SkillBar + rank-6 transition (+ bu close commit'i). **Push BLOCKED** (remote divergence — kullanıcı kararı).
+- ✅ **NLM** çözüldü + çalışıyor (full-reset → OAuth, valid/11 notebook).
+- ✅ **RANK-1 HUD** + gizli ön-koşul **`PlayerClassManager` sahneye** — PLAY-VERIFIED (HP+Rage bar build, Health+RageSystem abone, 0 NullRef). (cx'in "RageSystem yok" notu yanlıştı — zaten Player'daydı.)
+- ✅ **RANK-3 hit-confirm üçlüsü WIRED:** #4 SlashArc (Player child + `ParticleAdditive.mat` + PlayerAttack.slashArcVFX) · #5 white-flash (`HitFlashDriver`→`Health.OnDamageTaken`, FractureImp.prefab) · #3 hitspark (`HitSpark.prefab`→HitImpact.hitSparkPrefab). compile 0-err. ⚠️ **GÖRSEL PLAY-VERIFY = F5** (slash 0.2s/flash 0.08s/spark çok kısa → statik screenshot'ta yakalanmaz, canlı izle).
+- ✅ **RANK-4 SkillBar** — HUD_Canvas altı bottom-center child, SkillBarUI self-build 7 hex slot. PLAY-VERIFIED (Slot_LMB build, 0 NullRef).
+- ✅ **RANK-6 transition** — `RoomLoader.LoadRoomByIndex` (JumpToRoom/F1) artık `RoomTransitionFX` black-fade + room-banner (ReenableAfterFade pattern'i).
+- ✅ **TOOLING TAMAMEN BİTTİ** (cx/ax/cxs/ags + 2 GitHub repo temiz, sadece ydbilgin) — ayrıntı [[reference_cx_agy_share_bundle]]. RIMA'ya dokunmadı; tek RIMA-fix = `STAGING/cx_limits.py` auto-discover (cxs artık 5 hesabı gösteriyor).
+- **▶ POST-/CLEAR NEXT (RIMA oyun, otonom-güvenli sıra):** (1) **rank-2 draft play-verify** — DraftManager #1 fix gerçek skill listeliyor mu (oda temizle→draft) · (2) **rank-5a death-screen** zero-scale (cx: ÖNCE play-verify, DeathScreen panel 110996 var) + **5b Victory Wishlist-CTA** · (3) **rank-7 boss** (BossHealthBar + boss-death→DemoComplete + ⚠️**class-select BYPASS**; boss sprite YOK) · (4) **rank-9** duplicate "Systems" GO (111142 inactive + 111438) temizliği · (5) **F5 görsel playtest** (hit-confirm üçlüsünü gözle doğrula). **cx critical ön-koşul (PlayerClassManager sahnede) ✅ ÇÖZÜLDÜ.**
 
 ### 📋 CANONICAL DELIVERABLES (sırayla oku)
 - **`STAGING/MOMENT_SPEC_S6.md`** ⭐ — moment-to-moment master spec (UI/UX + OYNANIŞ), 4-kaynak sentez. **= NEXT-EXECUTION (rank 1-9).**
