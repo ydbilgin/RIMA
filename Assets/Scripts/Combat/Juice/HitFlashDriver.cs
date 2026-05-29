@@ -17,6 +17,7 @@ namespace RIMA.Combat
         private MaterialPropertyBlock propertyBlock;
         private Coroutine flashCoroutine;
         private Color originalColor;
+        private Health health;
 
         private enum FlashMode
         {
@@ -38,7 +39,23 @@ namespace RIMA.Combat
             {
                 originalColor = spriteRenderer.color;
             }
+
+            health = GetComponentInParent<Health>() ?? GetComponent<Health>();
         }
+
+        // Self-wire to the universal damage event so every damage path (not just
+        // BasicAttack/CombatEventBus) triggers the hit-confirm white flash.
+        private void OnEnable()
+        {
+            if (health != null) health.OnDamageTaken.AddListener(OnDamaged);
+        }
+
+        private void OnDisable()
+        {
+            if (health != null) health.OnDamageTaken.RemoveListener(OnDamaged);
+        }
+
+        private void OnDamaged(int amount) => Flash();
 
         public void Flash()
         {

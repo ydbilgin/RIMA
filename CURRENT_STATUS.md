@@ -9,6 +9,15 @@
 
 **Tek cümle:** S6 = büyük otonom analiz+build. **4-kaynak (2 workflow + cx + agy) converge** → demo'nun gerçek durumu + tam yol haritası net; çekirdek fix'ler yazıldı (UNCOMMITTED, compile-clean, cx-reviewed). **NEXT SESSION = `STAGING/MOMENT_SPEC_S6.md` rank-1'den otonom kur.**
 
+### 🚧 S6-EXEC PROGRESS (2026-05-29, Opus otonom — sahneye sistem kurma)
+- ✅ **3 commit atıldı** (reviewed işi güvenceye aldı): `ab23ec75` combat/demo core · `b3755115` S5 cliff/scene · `50512251` S6 docs/tooling. Junk dışarıda. Push hâlâ BLOCKED.
+- ✅ **NLM ÇÖZÜLDÜ + doğrulandı** (full-reset → user OAuth → valid/11 notebook).
+- ✅ **RANK-1 HUD + gizli ön-koşul — SAHNEYE KURULDU + PLAY-VERIFIED:** `HUD_Canvas` GO (Canvas ScreenSpaceOverlay sortOrder5 + CanvasScaler 640×360 + HUDController) + `PlayerClassManager` GO (singleton, Warblade default). Play: HPFill+ResourceGroup runtime'da build oldu, Health+RageSystem'e abone, **NullRef YOK.** Sahne KAYDEDİLDİ. ⚠️ **cx'in "RageSystem SAHNEDE YOK" notu YANLIŞTI** — RageSystem zaten Player'da (id -206404) takılıydı; tek eksik PlayerClassManager+HUDController idi.
+- ✅ **RANK-3 #4 SlashArc — SAHNEYE KURULDU (wired + kod-yolu doğrulandı, görsel pending):** Player'a `SlashArcVFX` child GO (LineRenderer + SlashArcVFX, lineMaterial=`ParticleAdditive.mat` additive glow) + `PlayerAttack.slashArcVFX` field bağlandı. EmitSlashArc saldırıda çağrılıyor (MeleeChainBehavior+MarkPulseBehavior code-confirmed) → field null'dı, artık dolu. Sahne KAYDEDİLDİ. ⚠️ **Görsel play-verify YAPILMADI** (F5→saldır→yay görünür mü, 2sn). Risk düşük (materyal URP-uyumlu, geometri prosedürel).
+- ✅ **RANK-3 #5 white-flash — KOD+PREFAB WIRED (görsel pending):** `HitFlashDriver.cs` cerrahi edit (Awake'te Health cache + OnEnable/OnDisable `Health.OnDamageTaken` self-subscribe → Flash, HitImpact pattern'i) — **compile 0-error doğrulandı**. `FractureImp.prefab`'a HitFlashDriver eklendi (componentTypes'da `RIMA.Combat.HitFlashDriver`). HitImpact ile çakışmaz (biri spark, biri flash). Tüm spawn'lar artık hasar alınca 0.08s beyaza flash'lar.
+- 🔑 **Hit-confirm KALAN: #3 hitspark prefab** — `Health.OnDamageTaken→HitImpact` altyapısı hazır, sadece `HitImpact.hitSparkPrefab` null → bir hitspark prefab (particle/sprite-burst) üret + prefab'a ata (VFXRouter hit_default alternatif). + her ikisi (#4 slash, #5 flash) **görsel play-verify** (F5→saldır).
+- **▶ SIRADAKİ:** rank-3 görsel play-verify (#4 slash + #5 flash) → #3 hitspark prefab → rank-2 draft play-verify → rank-4 SkillBar.
+
 ### 📋 CANONICAL DELIVERABLES (sırayla oku)
 - **`STAGING/MOMENT_SPEC_S6.md`** ⭐ — moment-to-moment master spec (UI/UX + OYNANIŞ), 4-kaynak sentez. **= NEXT-EXECUTION (rank 1-9).**
 - `STAGING/INTEGRATION_BACKLOG_S6.md` — 19-item ROI backlog (workflow audit 114 bulgu).
@@ -41,7 +50,7 @@
 Opus yazar+karar · **cx+agy review+fikir (writer DEĞİL)** · agy DAİMA `agy_detached.ps1` wrapper (flash-free) · cx `cx_dispatch.py --profile yekta`. Memory: [[feedback_opus_decides_codex_agy_review_s6]] · [[feedback_agy_always_detached_wrapper]] · [[reference_nlm_auth_recovery_manual_cookie]] · [[project_s6_autonomous_build_s114]].
 
 ### ⏳ Bu close anında PENDING (yeni session ÖNCE bunu kontrol et)
-agy + cx final review ✅ **İKİSİ DE FOLDED.** **cx kritik düzeltmeler (yeni session UYGULA):** (1) ⭐ **PlayerClassManager + RageSystem SAHNEDE YOK** → HUD-Rage bar + SkillBar + draft-equip için **PlayerClassManager'ı sahneye koymak GİZLİ ÖN-KOŞUL** (rank-2/4/Rage hepsi buna bağlı). (2) **HitFlash + player-hit feedback `Health.OnDamageTaken` bridge** gerektirir (sadece BasicAttack CombatEventBus yetmez → direkt-damage path'leri hit-confirm'i atlar). (3) **DeathScreen zero-scale UNVERIFIED** — fix'lemeden ÖNCE play-verify (DeathScreenManager named-children auto-find ediyor). (4) DamageNumber/HitPause/ScreenShake scene-wired DOĞRULANDI; **RageSystem code-only (NOT scene-wired)**. Workflow script'leri: `.../workflows/scripts/rima-*-wf_*.js`.
+agy + cx final review ✅ **İKİSİ DE FOLDED.** **cx kritik düzeltmeler (yeni session UYGULA):** (1) ✅ **ÇÖZÜLDÜ (rank-1'de):** PlayerClassManager + HUD_Canvas sahneye kondu, play-verified. (RageSystem zaten Player'daydı — cx notu yanlıştı.) (2) **HitFlash + player-hit feedback `Health.OnDamageTaken` bridge** gerektirir (sadece BasicAttack CombatEventBus yetmez → direkt-damage path'leri hit-confirm'i atlar). (3) **DeathScreen zero-scale UNVERIFIED** — fix'lemeden ÖNCE play-verify (DeathScreenManager named-children auto-find ediyor). (4) DamageNumber/HitPause/ScreenShake scene-wired DOĞRULANDI; **RageSystem code-only (NOT scene-wired)**. Workflow script'leri: `.../workflows/scripts/rima-*-wf_*.js`.
 
 ---
 
