@@ -1,7 +1,40 @@
 # CURRENT_STATUS
 
-> **Session:** S114 SESSION 4 (2026-05-29) — Opus 4.8. Weapon mount kodu (workflow impl+3AI review+fix, compile-clean) + weapon size/style/batch kararları + flash-fix + dispatch fixes. **/clear pickup = "S114 SESSION 4 PICKUP" bölümü (hemen aşağıda).** | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
+> **Session:** S114 SESSION 5 (2026-05-29) — Opus 4.8 otonom. Overnight tasarım suite + **PLAYTEST BUG-FIX WAVE: 8 gerçek bug çözüldü, demo OYNANABİLİR oldu.** **Yeni session pickup = hemen aşağıdaki "🆕 YENİ SESSION" bloğu.** | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
 > **Geçmiş session detayı (S106→S112):** `STAGING/_archive/current_status_pre_S114_20260528.md` (tam snapshot, arşiv).
+
+---
+
+## 🆕 YENİ SESSION — İLK OKU (S114 S5 kapanış, 2026-05-29)
+
+**Tek cümle:** PlayableArena_Test01 artık **oynanabilir** (player ışıklı floating-ada üzerinde stabil, kamera takip, combat çalışıyor, parallax live, temiz boot) — AMA **cliff'lerin görseli HÂLÂ SAÇMA** (kullanıcı onaylamadı), rework gerek.
+
+### ✅ Bu session ÇÖZÜLEN (8 playtest bug + overnight suite) — hepsi commit'li, play-verified
+| Bug | Fix | Commit |
+|---|---|---|
+| Kamera takip etmiyor | CameraPunchController transform-pin → offset-pattern; CameraFollow base+fx | b9771e01 |
+| Live parallax yok | ParallaxRig 6 layer canonical factor + target | b9771e01 |
+| Boot arşiv sahneye | CharacterSelect.gameSceneName → PlayableArena_Test01 | b9771e01 |
+| F5 tool crash | play-mode toggle+guard | b9771e01 |
+| Mob çeşitliliği yok | HollowHulk_GB + ShardWalker_GB graybox → Room2/3 | 71b0b4b7 |
+| Boot menü dondurması | MainMenuScreen "_IsoGame" whitelist'e PlayableArena | 5d2407b6 |
+| **Player void'e düşüyor** | **Player(10)/Enemy(11) layer ayrımı + IgnoreLayerCollision** (kinematic düşman dynamic player'ı itiyordu) | afe02014 |
+| DamageNumberDriver NullRef | redundant TextMesh sil | f27f068c→ |
+
+DamageNumberDriver fix `df7bf637` içinde. Overnight tasarım: N1-N9 + N10 dev-tools + N8 cliff-live-reload (`STAGING/N*_*.md`).
+
+### 🔴 #1 AÇIK — CLIFF GÖRSELİ SAÇMA (kullanıcı reddetti, rework)
+CliffAutoPlacer.Regenerate ile 90 cell yerleştirdim (CliffTilemap_Auto, Decor_Cliff sorting) — cliff'ler VAR ama **kullanıcı "çok saçma duruyor" dedi.** Muhtemel sorun: DirectionalCliffTile yön çözümü (`#if UNITY_EDITOR` içinde, Play'de hep güney fallback — `CLIFF_BLACK_LAYER_DIAGNOSIS.md` P2) / auto-placer cell seçimi / sprite uyumsuz. **DOĞRU yol:** 2-stage hibrit (auto kaba + DecorCliffPainter manuel) + DirectionalCliffTile yön fix + KULLANICININ SANAT GÖZÜ. Auto-placer tek başına yetmiyor. Cliff canon: `STAGING/N1` + `project_walless_v1_hades_elysium_lock`.
+
+### 🆕 YENİ DEV-TOOL'LAR (kullan)
+**F5** = açık sahneyi kaydet + PlayableArena aç + Play. **F1** (play'de) = Debug panel (Kill All / God / Speed / Force-Clear / Restart / **Jump Room 1-5**). RoomLoader.JumpToRoom(i) live.
+
+### 📋 KALAN (polish/tech-debt, demo-blocker DEĞİL)
+- **Cliff rework** (#1 yukarıda — kullanıcı eli) · void-bg gradient (N3 art-spec hazır) · camera room-bounds (agy/Codex flag) · 2 CameraFollow + 2 PlayerController duplicate merge · Warblade.prefab PMC disable (scene override var, layer-fix zaten drift'i çözdü) · legacy `_IsoGame` test triage (obsolete, demo Phase1Demo testleri GEÇİYOR) · statue#9.
+- **Gated (kullanıcı):** A5 combat-feel playtest (F5 ile aç) · git-push (remote divergence) · weapon batch gen (paused) · asset-delete (`SAFE_DELETE_AUDIT_S114.md`).
+
+### Memory yeni kayıtlar
+`feedback_kinematic_enemy_shoves_dynamic_player` (drift kök neden+fix) · `reference_nlm_conflict_resolution_s114` · STAGING N3/N4/N5/N6/N9 design docs.
 
 ---
 
@@ -13,7 +46,13 @@ Kullanıcı gerçek playtest'te bug bildirdi → Opus yazdı, play'de DOĞRULAND
 - ✅ **Live parallax çalışmıyordu → FIXED+verified.** ParallaxRig 6 layer factor'ları canonical set edildi (void 0.03→foreground 0.55). Play: BG'ler kamera ile hareket etti. Scene SAVED.
 - ✅ **Boot-flow kırık → FIXED.** CharacterSelect.gameSceneName 'RoomPipelineTest' (ARŞİV) → 'PlayableArena_Test01' (kod default + scene serialized). MainMenu→Select→gerçek arena.
 - ✅ **F5 tool crash → FIXED.** RimaDevShortcuts play-mode'da SaveOpenScenes exception → toggle+guard (playing ise stop).
-- ⏳ **Kalan playtest:** P4 cliff mantıksız (silinmiş→rebuild) · void-bg zenginleştir (N3 gradient) · camera room-bounds (agy-critical, void-kenar) · detached weapon (HandAnchor offset) · testler (_IsoGame/scene infra).
+- ✅ **Cliff rebuild + lighting → FIXED+verified (commit 8df5e49d).** cliffTilemap ref kırıktı (cliff'ler silinince) → CliffTilemap_Auto kuruldu (Decor_Cliff ord40) + CliffAutoPlacer.Regenerate() = 90 cliff cell ada edge'lerinde. Play: cyan-tint lit cliff'ler adayı çerçeveliyor. 16/16 Light2D zaten Decor_Cliff hedefliyor (black-cliff yok).
+- ✅ **ND3 mob variety (commit 71b0b4b7):** HollowHulk_GB (tank hp280) + ShardWalker_GB (skirmisher hp55) FractureImp-stack klonu, Room2/Room3 SO'lara assign. JumpToRoom ile play-verified.
+- ✅ **ND6 clean arena-boot (commit 5d2407b6):** MainMenuScreen whitelist'i hardcoded "_IsoGame" → PlayableArena_Test01 eklendi (prosedürel menü arena'da spawn olup timeScale=0 donduruyordu). + legacy PlayerMovementController disable (PlayerController canonical). Play: timeScale=1, menü yok.
+- 🟢 **GÖRSEL DOĞRULAMA:** screenshot = player **lit-floor adasında + cliff'ler çerçeveliyor + cyan ışık + void** → "floating island" doğru okunuyor. Camera+parallax+cliff+lighting+menu hepsi birleşti.
+- ✅ **#1 KRİTİK BUG — player drift → ÇÖZÜLDÜ (commit afe02014, Codex xhigh + Opus).** Kök neden: chasing KINEMATIC düşmanlar (useFullKinematicContacts) DYNAMIC player ile **aynı Default collision layer'da** → düşman chase-hızını (-3) PlayerController vel=0 yazdıktan SONRA contact ile player'a transfer ediyordu; drag=0 → kalıcı → void'e kayma + mob chase feedback. Player(10)/Enemy(11) layer'ları tanımlı ama atanmamıştı. Fix: PlayerController.Awake→layer=Player, BaseMobBehavior.Awake→layer=Enemy + IgnoreLayerCollision. Combat hasarı overlap/trigger (body-collision değil) → bozulmadı. **Play-verified: player (0,-3.5) sabit, düşmanlar yanında saldırıyor, void'e kaymıyor.** DEMO ARTIK OYNANABİLİR.
+- **Reviews:** camera fix agy 4/5 + Codex 4/5 AGREE. Tech-debt: 2 CameraFollow + 2 PlayerController-benzeri controller (duplicate pattern). Merge=follow-up.
+- **Commits bu wave:** b9771e01 (camera/parallax/boot/F5) · 8df5e49d (cliff+lighting) · 71b0b4b7 (mob) · 5d2407b6 (UI-boot+PMC).
 
 ### ☀️ SABAH ÖZET (önceki overnight) — 15 item tamam, demo bir adım daha yakın
 **Büyük adım atıldı.** Combat sistemi canlı-doğrulandı + 1 gerçek bug fix + live-editor ilerledi + 3 yeni dev-tool + tam tasarım seti. Hepsi `STAGING/` doc + memory index'te. Local checkpoint'lerle korumalı.
