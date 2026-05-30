@@ -82,7 +82,8 @@
 - NLM (notebooklm-mcp-cli) broke again like before; full-reset fix didn't durably hold.
 - **ax research dispatched** (`STAGING/REVIEW_NLM_RECOVERY_AX.md`): root cause of recurring expiry + a DURABLE fix
   (refresh-token persistence / alt auth / version pin / keepalive / or reduce hard dependency by snapshotting canon to
-  local md). Fold its findings next session; user likely needs to run `! nlm login` (full reset) to unblock meanwhile.
+  local md). Was still running at /clear → **its result lands in `AGY_DONE_ydbilgin.md` (read that file FIRST next session)**.
+  User likely needs to run `! nlm login` (full reset) to unblock meanwhile.
 
 ---
 
