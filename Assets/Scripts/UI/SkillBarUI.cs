@@ -5,7 +5,7 @@ using TMPro;
 namespace RIMA
 {
     /// <summary>
-    /// "Rift Runeları" — 7 hexagonal skill slots (LMB, RMB, 1-5).
+    /// "Rift Runeları" — 6 hexagonal skill slots (LMB, RMB, Q, E, R, F — binding-driven labels).
     /// Ashen Glyph spec: hex mask bg, no border on bg, no drag-drop.
     /// States: Ready (normal), Cooldown (30% opacity + clockwise pie), Empty ("—"), Active (1px cyan glow).
     /// </summary>
@@ -23,10 +23,18 @@ namespace RIMA
         private const float SecondarySize = 16f;
         private const float SlotGap       = 5f;
 
-        private static readonly string[] SlotKeys = { "LMB", "RMB", "1", "2", "3", "4", "5" };
+        // Bar slots → gameplay actions (CONTROL_SCHEME_SYNTHESIS_S6 §7): LMB, RMB, Q, E, R, F.
+        private static readonly GameAction[] SlotActions =
+        {
+            GameAction.Attack, GameAction.ClassSecondary,
+            GameAction.Skill1, GameAction.Skill2, GameAction.Skill3, GameAction.Skill4
+        };
+
+        // Label shown on a slot — driven by the live binding so rebinds reflect immediately.
+        private static string SlotLabel(int i) => KeyBindManager.GetKeyName(SlotActions[i]);
 
         // ── Slots ───────────────────────────────────────────────────
-        private const int SlotCount = 7;
+        private const int SlotCount = 6;
         private SlotUI[] slots = new SlotUI[SlotCount];
         private bool controllersResolved;
         private GameObject cachedPlayer;
@@ -55,6 +63,8 @@ namespace RIMA
                 PlayerClassManager.Instance.OnPrimaryClassSet += OnPrimaryClassSet;
                 PlayerClassManager.Instance.OnSecondaryClassSelected += OnSecondaryPicked;
             }
+
+            KeyBindManager.OnBindingsChanged += RefreshKeyLabels;
         }
 
         private void OnDestroy()
@@ -64,6 +74,16 @@ namespace RIMA
                 PlayerClassManager.Instance.OnPrimaryClassSet -= OnPrimaryClassSet;
                 PlayerClassManager.Instance.OnSecondaryClassSelected -= OnSecondaryPicked;
             }
+
+            KeyBindManager.OnBindingsChanged -= RefreshKeyLabels;
+        }
+
+        // Refresh slot key labels from the registry (called on rebind).
+        private void RefreshKeyLabels()
+        {
+            if (slots == null) return;
+            for (int i = 0; i < slots.Length; i++)
+                if (slots[i].keyLabel != null) slots[i].keyLabel.text = SlotLabel(i);
         }
 
         private void OnPrimaryClassSet(ClassType _)
@@ -93,15 +113,15 @@ namespace RIMA
         {
             var container = GetComponent<RectTransform>();
 
-            // Calculate total width: 2 primary + 5 secondary + gaps
-            float totalW = 2 * PrimarySize + 5 * SecondarySize + 6 * SlotGap;
+            // Calculate total width: 2 primary + 4 secondary + gaps (6 slots)
+            float totalW = 2 * PrimarySize + 4 * SecondarySize + 5 * SlotGap;
             float x = -totalW / 2f;
 
             for (int i = 0; i < SlotCount; i++)
             {
                 float size = i < 2 ? PrimarySize : SecondarySize;
 
-                var slotGo = new GameObject($"Slot_{SlotKeys[i]}", typeof(RectTransform));
+                var slotGo = new GameObject($"Slot_{SlotLabel(i)}", typeof(RectTransform));
                 slotGo.transform.SetParent(container, false);
                 var rt = slotGo.GetComponent<RectTransform>();
                 rt.sizeDelta = new Vector2(size, size);
@@ -141,7 +161,7 @@ namespace RIMA
                 // Key label (lower-right corner, tiny)
                 var keyGo = MakeChild(slotGo.transform, "Key", 16f, 10f);
                 var keyTxt = keyGo.AddComponent<TextMeshProUGUI>();
-                keyTxt.text = SlotKeys[i];
+                keyTxt.text = SlotLabel(i);
                 keyTxt.fontSize = i < 2 ? 6f : 5f;
                 keyTxt.fontStyle = FontStyles.Bold;
                 keyTxt.color = new Color(0.72f, 0.82f, 0.92f, 0.65f);

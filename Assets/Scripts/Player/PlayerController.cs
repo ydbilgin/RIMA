@@ -118,17 +118,39 @@ namespace RIMA
             EnsureCombatAimDefault();
             GroundBlobShadow.Ensure(transform, new Vector2(1.0f, 0.34f), 0.30f);
 
+            BuildInputActions();
+        }
+
+        // Build move/dash from the binding registry (KeyBindManager) so rebinds take effect.
+        private void BuildInputActions()
+        {
             moveAction = new InputAction("Move", InputActionType.Value);
             moveAction.AddCompositeBinding("2DVector")
-                .With("Up",    "<Keyboard>/w")
-                .With("Down",  "<Keyboard>/s")
-                .With("Left",  "<Keyboard>/a")
-                .With("Right", "<Keyboard>/d");
+                .With("Up",    KeyBindManager.GetBinding(GameAction.MoveUp))
+                .With("Down",  KeyBindManager.GetBinding(GameAction.MoveDown))
+                .With("Left",  KeyBindManager.GetBinding(GameAction.MoveLeft))
+                .With("Right", KeyBindManager.GetBinding(GameAction.MoveRight));
             moveAction.AddBinding("<Gamepad>/leftStick");
 
             dashAction = new InputAction("Dash", InputActionType.Button);
-            dashAction.AddBinding("<Keyboard>/space");
+            dashAction.AddBinding(KeyBindManager.GetBinding(GameAction.Dash));
             dashAction.AddBinding("<Gamepad>/buttonSouth");
+        }
+
+        // Re-create the live actions from the registry after a rebind, preserving enabled state + handlers.
+        private void RebuildInput()
+        {
+            dashAction.performed -= HandleDash;
+            moveAction.Disable();
+            dashAction.Disable();
+            moveAction.Dispose();
+            dashAction.Dispose();
+
+            BuildInputActions();
+
+            moveAction.Enable();
+            dashAction.Enable();
+            dashAction.performed += HandleDash;
         }
 
         private static void EnsureCombatAimDefault()
@@ -145,10 +167,12 @@ namespace RIMA
             moveAction.Enable();
             dashAction.Enable();
             dashAction.performed += HandleDash;
+            KeyBindManager.OnBindingsChanged += RebuildInput;
         }
 
         private void OnDisable()
         {
+            KeyBindManager.OnBindingsChanged -= RebuildInput;
             dashAction.performed -= HandleDash;
             moveAction.Disable();
             dashAction.Disable();

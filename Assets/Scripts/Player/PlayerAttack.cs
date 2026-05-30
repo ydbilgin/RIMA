@@ -139,19 +139,19 @@ namespace RIMA
             if (attackAction == null)
             {
                 attackAction = new InputAction("Attack", InputActionType.Button);
-                attackAction.AddBinding("<Mouse>/leftButton");
+                attackAction.AddBinding(KeyBindManager.GetBinding(GameAction.Attack));
                 attackAction.AddBinding("<Gamepad>/buttonWest");
             }
             if (secondaryAction == null)
             {
                 secondaryAction = new InputAction("ClassSecondary", InputActionType.Button);
-                secondaryAction.AddBinding("<Mouse>/rightButton");
+                secondaryAction.AddBinding(KeyBindManager.GetBinding(GameAction.ClassSecondary));
                 secondaryAction.AddBinding("<Gamepad>/buttonEast");
             }
             if (riftBreakAction == null)
             {
                 riftBreakAction = new InputAction("RiftBreak", InputActionType.Button);
-                riftBreakAction.AddBinding("<Keyboard>/v");
+                riftBreakAction.AddBinding(KeyBindManager.GetBinding(GameAction.RiftBreak));
             }
             if (isActiveAndEnabled)
             {
@@ -161,15 +161,26 @@ namespace RIMA
             }
         }
 
+        // Force-recreate the actions from the registry after a rebind (BuildInputActions only fills nulls).
+        private void RebuildInputActions()
+        {
+            attackAction?.Disable();    attackAction?.Dispose();    attackAction = null;
+            secondaryAction?.Disable(); secondaryAction?.Dispose(); secondaryAction = null;
+            riftBreakAction?.Disable(); riftBreakAction?.Dispose(); riftBreakAction = null;
+            BuildInputActions();
+        }
+
         private void OnEnable()
         {
             attackAction?.Enable();
             secondaryAction?.Enable();
             riftBreakAction?.Enable();
+            KeyBindManager.OnBindingsChanged += RebuildInputActions;
         }
 
         private void OnDisable()
         {
+            KeyBindManager.OnBindingsChanged -= RebuildInputActions;
             attackAction?.Disable();
             secondaryAction?.Disable();
             riftBreakAction?.Disable();
