@@ -56,7 +56,7 @@ namespace RIMA
                     kd = 3f;
                 }
 
-                hp.TakeDamage(dmg);
+                SkillRuntime.DealDamage(hp, dmg, this);
                 status?.ApplyEffect(StatusEffectType.Stunned, kd);
 
                 var rb = hit.GetComponent<Rigidbody2D>();

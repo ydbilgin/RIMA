@@ -43,7 +43,7 @@ namespace RIMA
             // Stealth hâlâ aktif ve uzun süre geçtiyse bonus (ShadowbladeController'dan süre izle)
             dmg = Mathf.RoundToInt(dmg * 1f); // Cold Blood ileride eklenebilir
 
-            target.GetComponent<Health>()?.TakeDamage(dmg);
+            SkillRuntime.DealDamage(target.GetComponent<Health>(), dmg, this);
             target.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Chill, slowDuration);
             combo?.Add(4);
 

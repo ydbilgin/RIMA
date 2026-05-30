@@ -67,7 +67,7 @@ namespace RIMA
             {
                 if (h.CompareTag("Player")) continue;
                 var hp = h.GetComponent<Health>();
-                hp?.TakeDamage(explosionDamage);
+                SkillRuntime.DealDamage(hp, explosionDamage, this);
             }
             Destroy(gameObject);
         }

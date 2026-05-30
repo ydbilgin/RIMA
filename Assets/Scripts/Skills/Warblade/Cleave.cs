@@ -40,7 +40,7 @@ namespace RIMA
                 var hp = hit.collider.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
 
-                hp.TakeDamage(finalDamage);
+                SkillRuntime.DealDamage(hp, finalDamage, this);
                 rage?.AddRage(ragePerHit);
 
                 var enemyRb = hit.collider.GetComponent<Rigidbody2D>();

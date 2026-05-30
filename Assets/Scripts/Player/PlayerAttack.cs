@@ -18,6 +18,7 @@ namespace RIMA
         private PlayerController controller;
         private RageSystem rage;
         private SkillFlowTracker flowTracker;
+        private InputBufferService inputBuffer;
         private InputAction attackAction;
         private InputAction secondaryAction;
         private InputAction riftBreakAction;
@@ -117,6 +118,7 @@ namespace RIMA
             controller = GetComponent<PlayerController>();
             rage = GetComponent<RageSystem>();
             flowTracker = GetComponent<SkillFlowTracker>();
+            inputBuffer = GetComponent<InputBufferService>();
 
             if (basicAttackProfile == null)
             {
@@ -185,9 +187,17 @@ namespace RIMA
                 if (behavior == null) return;
             }
             behavior.OnUpdate(this, basicAttackProfile, Time.deltaTime);
+
+            bool attackPressed = attackAction.WasPressedThisFrame();
+            if (attackPressed && IsCommitted && inputBuffer != null)
+            {
+                inputBuffer.RequestAttack();
+                attackPressed = false;
+            }
+
             behavior.OnLMBInput(
                 this, basicAttackProfile,
-                attackAction.WasPressedThisFrame(),
+                attackPressed,
                 attackAction.WasReleasedThisFrame());
             behavior.OnRMBInput(
                 this, basicAttackProfile,
@@ -213,6 +223,13 @@ namespace RIMA
         internal void RaiseComboStep(int step)
         {
             OnComboStep?.Invoke(step);
+        }
+
+        internal void ExecuteBufferedPrimaryAttack()
+        {
+            if (IsCommitted || basicAttackProfile == null) return;
+            if (behavior == null) behavior = basicAttackProfile.CreateBehavior();
+            behavior?.OnLMBInput(this, basicAttackProfile, true, false);
         }
 
 #if UNITY_INCLUDE_TESTS

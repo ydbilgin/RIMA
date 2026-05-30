@@ -33,6 +33,7 @@ namespace RIMA.CameraSystem
             Vector3 fx = Vector3.zero;
             if (RIMA.CameraShake.Instance != null) fx += RIMA.CameraShake.Instance.CurrentOffset;
             if (RIMA.Combat.Juice.CameraPunchController.Instance != null) fx += RIMA.Combat.Juice.CameraPunchController.Instance.CurrentOffset;
+            if (RIMA.Combat.ScreenShakeDriver.Instance != null) fx += RIMA.Combat.ScreenShakeDriver.Instance.CurrentOffset;
 
             transform.position = _basePos + fx;
         }

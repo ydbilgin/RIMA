@@ -32,7 +32,7 @@ namespace RIMA
             var target = FindNearest(range);
             if (target == null) return;
 
-            target.TakeDamage(baseDamage);
+            SkillRuntime.DealDamage(target, baseDamage, this);
             rage?.AddRage(10);
 
             bool chained = ironCharge != null && ironCharge.CooldownPercent > 0.85f;

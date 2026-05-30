@@ -79,7 +79,7 @@ namespace RIMA
             foreach (var h in hits)
             {
                 if (h.CompareTag("Player")) continue;
-                h.GetComponent<Health>()?.TakeDamage(damage);
+                SkillRuntime.DealDamage(h.GetComponent<Health>(), damage, this);
                 h.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Chill, slowDuration);
             }
             onDestroyed?.Invoke();

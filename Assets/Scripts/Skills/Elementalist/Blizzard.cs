@@ -69,7 +69,7 @@ namespace RIMA
                 {
                     if (h.CompareTag("Player")) continue;
                     var hp = h.GetComponent<Health>();
-                    if (hp != null && !hp.IsDead) hp.TakeDamage(tickDamage);
+                    if (hp != null && !hp.IsDead) SkillRuntime.DealDamage(hp, tickDamage, this);
                     h.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Chill, 1.5f);
                 }
                 yield return new WaitForSeconds(0.5f);

@@ -48,7 +48,7 @@ namespace RIMA
                 yield return new WaitForSeconds(1f);
                 elapsed += 1f;
                 if (hp == null || hp.IsDead) yield break;
-                hp.TakeDamage(bleedDamagePerTick);
+                SkillRuntime.DealDamage(hp, bleedDamagePerTick, this);
             }
         }
 

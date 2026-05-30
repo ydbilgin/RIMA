@@ -39,7 +39,7 @@ namespace RIMA
                 foreach (var h in hits)
                 {
                     if (h.CompareTag("Player")) continue;
-                    h.GetComponent<Health>()?.TakeDamage(blinkExplosionDamage);
+                    SkillRuntime.DealDamage(h.GetComponent<Health>(), blinkExplosionDamage, this);
                 }
             }
         }

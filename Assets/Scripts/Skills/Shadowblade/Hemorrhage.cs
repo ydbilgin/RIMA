@@ -33,7 +33,7 @@ namespace RIMA
             var hp = target.GetComponent<Health>();
             if (hp == null || hp.IsDead) return;
 
-            hp.TakeDamage(damage);
+            SkillRuntime.DealDamage(hp, damage, this);
             target.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Poison, bleedDuration);
             combo?.Add(2);
 

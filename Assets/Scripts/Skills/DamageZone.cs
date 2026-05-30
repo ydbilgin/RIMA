@@ -50,7 +50,7 @@ namespace RIMA
             if (tickTimer < tickInterval) return;
             tickTimer = 0f;
 
-            if (tickDamage > 0) hp.TakeDamage(tickDamage);
+            if (tickDamage > 0) SkillRuntime.DealDamage(hp, tickDamage, this);
 
             var status = other.GetComponent<StatusEffectSystem>();
             if (status != null)

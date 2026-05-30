@@ -10723,7 +10723,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65417d5131306345a29280a6565c16d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.VFXRouter
-  entries: []
+  entries:
+  - tag: hit_default
+    prefab: {fileID: 3847315595652856162, guid: 5b5efa99ec8c39a41ae4a3e01aa899b5, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
+  - tag: kill_default
+    prefab: {fileID: 3816650666168744509, guid: 60fa4482bc483ec448f12bf833dea127, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
+  - tag: dash_default
+    prefab: {fileID: 3257891575806903289, guid: 7af854c39d614434cb76ebcf675841ec, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
+  - tag: status_default
+    prefab: {fileID: 7748907302331696808, guid: 387e760c3b07d24479fac44f8bf6118f, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
   poolSize: 16
 --- !u!114 &1063755856
 MonoBehaviour:
@@ -20757,10 +20773,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe3fd43558ae3541997b5966b57f6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.DeathScreenManager
-  deathPanel: {fileID: 0}
-  deathTitle: {fileID: 0}
-  deathStats: {fileID: 0}
-  restartButton: {fileID: 0}
+  deathPanel: {fileID: 441725019}
+  deathTitle: {fileID: 559781586}
+  deathStats: {fileID: 2070848406}
+  restartButton: {fileID: 1919540750}
   fadeInDuration: 0.8
   slowMoScale: 0.15
   slowMoDuration: 1.5
@@ -20836,7 +20852,7 @@ RectTransform:
   m_GameObject: {fileID: 1853264874}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 441725020}

@@ -81,7 +81,7 @@ namespace RIMA
 
             if (target == null) return;
 
-            target.TakeDamage(damage);
+            SkillRuntime.DealDamage(target, damage, this);
             rage?.AddRage(rageOnCounter);
 
             var status = target.GetComponent<StatusEffectSystem>();

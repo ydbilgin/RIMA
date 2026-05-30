@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RIMA.Audio
 {
-    public enum Sfx { Hit, Shatter, Dash, Cast, DraftSelect, GateOpen, Death, BossIntro }
+    public enum Sfx { Hit, Shatter, Dash, Cast, DraftSelect, GateOpen, Death, BossIntro, Finisher }
 
     /// <summary>
     /// Minimal self-contained SFX layer (W2 skeleton). Generates placeholder clips procedurally
@@ -17,6 +17,7 @@ namespace RIMA.Audio
         public static AudioManager Instance { get; private set; }
 
         private AudioSource src;
+        private AudioSource musicSrc;
         private readonly Dictionary<Sfx, AudioClip> clips = new Dictionary<Sfx, AudioClip>();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -36,6 +37,8 @@ namespace RIMA.Audio
             src.playOnAwake = false;
             src.spatialBlend = 0f;
             GenerateClips();
+            LoadResourceOverrides();
+            TryPlayMusic();
         }
 
         /// <summary>Play a SFX one-shot. No-op if manager/clip missing (safe from anywhere).</summary>
@@ -56,6 +59,31 @@ namespace RIMA.Audio
             clips[Sfx.GateOpen]    = Sweep(0.45f, 130f, 360f, 0.45f);
             clips[Sfx.Death]       = Sweep(0.38f, 420f, 80f, 0.50f);
             clips[Sfx.BossIntro]   = Tone(0.70f, 110f, 0.55f, true);
+            clips[Sfx.Finisher]    = Sweep(0.28f, 180f, 900f, 0.50f);
+        }
+
+        private void LoadResourceOverrides()
+        {
+            foreach (Sfx sfx in System.Enum.GetValues(typeof(Sfx)))
+            {
+                AudioClip clip = Resources.Load<AudioClip>("Audio/" + sfx);
+                if (clip != null)
+                    clips[sfx] = clip;
+            }
+        }
+
+        private void TryPlayMusic()
+        {
+            AudioClip music = Resources.Load<AudioClip>("Audio/music_demo");
+            if (music == null) return;
+
+            musicSrc = gameObject.AddComponent<AudioSource>();
+            musicSrc.clip = music;
+            musicSrc.loop = true;
+            musicSrc.playOnAwake = false;
+            musicSrc.spatialBlend = 0f;
+            musicSrc.volume = 0.25f;
+            musicSrc.Play();
         }
 
         // ── procedural synth helpers (mono, 44.1k) ──────────────────────

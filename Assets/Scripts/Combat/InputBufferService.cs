@@ -8,7 +8,7 @@ namespace RIMA
     {
         [SerializeField] private float bufferWindow = 0.18f;
 
-        private enum Pending { None, Dash }
+        private enum Pending { None, Dash, Attack }
 
         private Pending pending;
         private float bufferExpiry;
@@ -27,6 +27,12 @@ namespace RIMA
             bufferExpiry = Time.time + bufferWindow;
         }
 
+        public void RequestAttack()
+        {
+            pending = Pending.Attack;
+            bufferExpiry = Time.time + bufferWindow;
+        }
+
         private void Update()
         {
             if (pending == Pending.None) return;
@@ -34,7 +40,9 @@ namespace RIMA
             if (attack != null && attack.IsCommitted) return;
 
             if (pending == Pending.Dash)
-                controller.TryDash();
+                controller?.TryDash();
+            else if (pending == Pending.Attack)
+                attack?.ExecuteBufferedPrimaryAttack();
 
             pending = Pending.None;
         }

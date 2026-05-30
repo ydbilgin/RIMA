@@ -77,7 +77,7 @@ namespace RIMA
             go.transform.localScale = new Vector3(scale, scale, 1f);
 
             var projectile = go.AddComponent<PlayerProjectile>();
-            projectile.Init(dir * profile.projectileSpeed, damage, life: 2.2f, piercing: false);
+            projectile.Init(dir * profile.projectileSpeed, damage, life: 2.2f, piercing: false, attacker: owner.gameObject);
             projectile.SetOnHit(hit =>
             {
                 elementalist?.RegisterRiftBoltHit(empowered);

@@ -9,8 +9,9 @@ namespace RIMA.Combat
         public static HitPauseDriver Instance { get; private set; }
 
         [SerializeField] private float pauseDurationHit = 0.04f;
-        [SerializeField] private float pauseDurationCrit = 0.08f;
-        [SerializeField] private float pauseDurationKill = 0.14f;
+        [SerializeField] private float pauseDurationCrit = 0.07f;
+        [SerializeField] private float pauseDurationKill = 0.12f;
+        [SerializeField] private float pauseDurationBossDeath = 0.20f; // TODO: route boss-death event here when one exists.
         [SerializeField] private float pauseTimeScale = 0f;
         [SerializeField] private float minIcdSeconds = 0.05f;
 
@@ -32,12 +33,14 @@ namespace RIMA.Combat
         private void OnEnable()
         {
             CombatEventBus.OnHit += HandleHit;
+            CombatEventBus.OnCommitBeat += HandleCommitBeat;
             CombatEventBus.OnKill += HandleKill;
         }
 
         private void OnDisable()
         {
             CombatEventBus.OnHit -= HandleHit;
+            CombatEventBus.OnCommitBeat -= HandleCommitBeat;
             CombatEventBus.OnKill -= HandleKill;
 
             if (pauseCoroutine != null)
@@ -64,6 +67,16 @@ namespace RIMA.Combat
             }
 
             TriggerPause(e.isCrit ? pauseDurationCrit : pauseDurationHit);
+        }
+
+        private void HandleCommitBeat(CommitBeatEvent e)
+        {
+            if (e.beatIndex != 3 || !FeelToggleSettings.HitstopEnabled || !ProcLimiter.TryProc("hitpause_finisher", minIcdSeconds, 1))
+            {
+                return;
+            }
+
+            TriggerPause(pauseDurationCrit);
         }
 
         private void HandleKill(KillEvent e)

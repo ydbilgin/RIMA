@@ -41,7 +41,7 @@ namespace RIMA
             float mult = chained ? chainMultiplier : damageMultiplier;
 
             int damage = Mathf.RoundToInt(baseDamage * mult);
-            target.TakeDamage(damage);
+            SkillRuntime.DealDamage(target, damage, this);
 
             // Rage boşalt
             if (rage != null)

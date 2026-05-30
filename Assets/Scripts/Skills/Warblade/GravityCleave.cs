@@ -38,7 +38,7 @@ namespace RIMA
                 var hp = h.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
 
-                hp.TakeDamage(baseDamage);
+                SkillRuntime.DealDamage(hp, baseDamage, this);
 
                 // Çek
                 var rb = h.GetComponent<Rigidbody2D>();

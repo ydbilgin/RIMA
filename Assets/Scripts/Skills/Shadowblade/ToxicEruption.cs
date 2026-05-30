@@ -43,7 +43,7 @@ namespace RIMA
             int dmg = Mathf.Max(stacks, 1) * damagePerStack;
             if (!hasHemorrhage) dmg = Mathf.RoundToInt(dmg * 1.5f);
 
-            target.GetComponent<Health>()?.TakeDamage(dmg);
+            SkillRuntime.DealDamage(target.GetComponent<Health>(), dmg, this);
 
             // Yakına yayıl
             var nearby = Physics2D.OverlapCircleAll(target.transform.position, spreadRadius);
@@ -53,7 +53,7 @@ namespace RIMA
                 if (h.CompareTag("Player")) continue;
                 var hp = h.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
-                hp.TakeDamage(Mathf.RoundToInt(dmg * 0.5f));
+                SkillRuntime.DealDamage(hp, Mathf.RoundToInt(dmg * 0.5f), this);
                 h.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Poison, 4f);
             }
         }

@@ -1,7 +1,32 @@
 # CURRENT_STATUS
 
-> **Session:** S6 (2026-05-30) — Opus 4.8 otonom. **POST-/CLEAR PICKUP = hemen aşağıdaki "🚧 S6-EXEC PROGRESS" bloğu.** Demo-loop sistemleri kuruldu (rank-1 HUD/rank-3 hit-confirm/rank-4 SkillBar/rank-6 transition, 6 commit), sıra = MOMENT_SPEC kalan rank'lar (2/5/7/9) + F5 görsel playtest. Tooling (cx/ax/cxs/ags) bitti. | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
+> **Session:** S6 (2026-05-30) — Opus 4.8 otonom. **PICKUP = aşağıdaki "🌙 OVERNIGHT S6" bloğu + `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md`.** Demo-loop sistemleri kuruldu (rank-1 HUD/rank-3 hit-confirm/rank-4 SkillBar/rank-6 transition, 6 commit), sıra = MOMENT_SPEC kalan rank'lar (2/5/7/9) + F5 görsel playtest. Tooling (cx/ax/cxs/ags) bitti. | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
 > **Geçmiş session detayı (S106→S112):** `STAGING/_archive/current_status_pre_S114_20260528.md` (tam snapshot, arşiv).
+
+---
+
+## 🌙 OVERNIGHT S6 — AKTİF OTONOM (2026-05-30 gece, Opus lead, user AWAY ~10h) — ⭐ PICKUP BURADAN
+
+**Tek cümle:** Kullanıcı "gece boyu otonom çalış, SORMA, Opus karar ver, ax+cx danış, status+memory güncel tut" dedi → büyük **tasarım + kod build** push'u başladı.
+
+**🔑 KANONİK ROADMAP = `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md`** (sıralı PHASE 0-4 + writer→reviewer routing + PLACEHOLDER REGISTRY). ÖNCE onu oku. Memory: [[project-overnight-autonomous-designbuild-s6]].
+
+**Kurallar:** Opus TEK karar verici, SORMA · ax+cx danışman (writer DEĞİL) · kod yazan≠reviewer · placeholder + "yerine ne gelecek" notu · audio ERTELE (Sora+Gemini Pro) · çelişki YOK (floating-island'a uygun hikâye+ışık) · workflow serbest · NLM context.
+
+**Quota/routing (02:1x):** cx=**yekta** (week %14 sağlıklı; diğer Codex %90-97 dolu) · ax 5 hesap ~%100 boş (review/research) · Opus=karar+zor kod+sentez · Sonnet=mekanik alt.
+
+**✅ PHASE 0 DESIGN-LOCK BİTTİ → `STAGING/DESIGN_LOCK_DEMO_S6.md` (RATIFIED, §9 Opus kararları).** 3-kaynak converge (workflow `wf_b87f702d` + cx `DESIGN_CONSULT_CX_RESULT.md` + agy `AGY_DONE_ydbilgin.md`). Çekirdek premise: floor = mühüre-bağlı severed seal-keep fragment'i (NLM canon 61237986); cyan=mühür enerjisi; gaz-lamba→cyan-rift ışık; tek biome "Sundered Brink" + rift-threshold gate; Penitent Sovereign=zincirli trajik koruyucu (33% chains-break). 8 açık soru Opus-kararlandı (§9): cyan-split demo'da kalır · boss class-select fix=Batch A · audio=Sora+Gemini ertelendi · boss-art=text-card placeholder (gated) · tek shared backdrop · skill-hit feel parity EKLE.
+
+**🔨 BUILD İLERLEMESİ (gece, hepsi cx-yekta yazdı + Opus review + compile-clean `dotnet build RIMA.Runtime` 0-err):**
+- ✅ **PHASE 1 A** boss-race bypass + death-screen scale-0 fix + VFXRouter.entries(4) · **B** juice (hitstop tier + ters kamera kick + ScreenShakeDriver→offset) · **C** attack-buffer + dash cliff-grace + skill-hit OnHit parity (tüm sınıflar) · **D** Victory+Death Wishlist CTA (self-build UI, steam-url placeholder).
+- ✅ **PHASE 2 story** RoomMonologController (R2-R5 + boss title-card + phase-2 33%) · **PHASE 3 audio** Resources/Audio override loader + Dash/Finisher/Shatter hook.
+- ✅ **Docs:** `IMAGEGEN_PACK_S6.md` (ekran asset prompt+px) · `SCENE_WIRING_RUNBOOK_S6.md` (gated iş adım-adım).
+- ⚠️ **UnityMCP read/play timeout** (gece boyu) → scene-rig/prefab/play-verify GATED. Compile-verify = Editor.log + dotnet build. **Detaylı ilerleme+kalan = `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md` İLERLEME LOG.**
+- ▶ **KULLANICI DÖNÜNCE:** `SCENE_WIRING_RUNBOOK_S6.md` izle → A ışık-rig flip (en büyük görsel) → F5 play-verify (A5 feel gate) → B weapon-wire → C screen-images. Unity MCP takılıysa ÖNCE Unity restart.
+
+**✅ agy design özeti (AGY_DONE_ydbilgin.md):** Hikâye=**Shattered Keep** (Rift March'ı tutan yapı, "Fracturing" ile void'e düştü; cyan rift=gerçeklik yaraları/çözülen mühür; **Penitent Sovereign**=zincirli eski koruyucu; run=Mühür "Shattered Echoes" toplat). Işık=gaz-lamba YOK → emissive cyan-rift #00FFCC + deep-purple #3A1A4A→black void, abyss unlit. Map=floating-bridge + cyan rift-gateway + iron-chain landmark + slate palette + cyan≤15% + progresif erozyon (R1 sağlam→Boss kırık). Screens=slate+pulsing-cyan; death "The rift remembers. You won't."; victory=dikey neon-cyan kapı. Feel=chromatic-impact-frame + cliff-dust + emissive-weapon-trail + boss chain-break time-freeze (66%/33%).
+
+**NEXT (Opus, otonom):** cx-consult+workflow bitince → `DESIGN_LOCK_S6.md` yaz → PHASE 1 kod başlat (1.1 boss-race bypass + death-screen scale-0 fix → 1.6 audio loader). Her batch writer≠reviewer + Unity compile-verify.
 
 ---
 

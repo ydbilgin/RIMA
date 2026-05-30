@@ -73,7 +73,7 @@ namespace RIMA
                 foreach (var h in hits)
                 {
                     if (h.CompareTag("Player")) continue;
-                    h.GetComponent<Health>()?.TakeDamage(Mathf.RoundToInt(shadowDamage * 2.5f));
+                    SkillRuntime.DealDamage(h.GetComponent<Health>(), Mathf.RoundToInt(shadowDamage * 2.5f), this);
                     h.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Stunned, 1f);
                 }
                 yield return new WaitForSeconds(0.05f);
@@ -93,7 +93,7 @@ namespace RIMA
             if (other.CompareTag("Player")) return;
             var hp = other.GetComponent<Health>();
             if (hp == null || hp.IsDead) return;
-            hp.TakeDamage(damage);
+            SkillRuntime.DealDamage(hp, damage, this);
             combo?.Add(1);
             Destroy(gameObject);
         }

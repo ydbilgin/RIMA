@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -21,6 +22,8 @@ namespace RIMA
         private bool applyPoison;
         private float poisonDuration;
         private int knockbackForce;
+        private GameObject attacker;
+        private string hitElement = "projectile";
         private Action<Collider2D> onHit;
 
         public void Init(
@@ -30,7 +33,9 @@ namespace RIMA
             bool applyBurning = false, float burnDuration = 0f,
             bool applyChill = false,   float chillDuration = 0f,
             bool applyPoison = false,  float poisonDuration = 0f,
-            int knockback = 0)
+            int knockback = 0,
+            GameObject attacker = null,
+            string element = "projectile")
         {
             damage           = dmg;
             lifetime         = life;
@@ -42,6 +47,8 @@ namespace RIMA
             this.applyPoison  = applyPoison;
             this.poisonDuration = poisonDuration;
             knockbackForce    = knockback;
+            this.attacker     = attacker;
+            hitElement        = element;
 
             var rb = GetComponent<Rigidbody2D>();
             rb.gravityScale = 0f;
@@ -66,6 +73,10 @@ namespace RIMA
             if (hp == null || hp.IsDead) return;
 
             hp.TakeDamage(damage);
+            Vector2 hitDirection = GetComponent<Rigidbody2D>() != null
+                ? GetComponent<Rigidbody2D>().linearVelocity.normalized
+                : ((Vector2)other.transform.position - (Vector2)transform.position).normalized;
+            SkillRuntime.PublishSkillHit(hp, damage, attacker != null ? attacker : gameObject, hitDirection, hitElement);
             onHit?.Invoke(other);
 
             var status = other.GetComponent<StatusEffectSystem>();

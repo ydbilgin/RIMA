@@ -54,7 +54,7 @@ namespace RIMA
                 foreach (var h in hits)
                 {
                     if (h.CompareTag("Player")) continue;
-                    h.GetComponent<Health>()?.TakeDamage(tickDamage);
+                    SkillRuntime.DealDamage(h.GetComponent<Health>(), tickDamage, this);
                 }
             }
         }

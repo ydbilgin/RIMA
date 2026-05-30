@@ -53,7 +53,7 @@ namespace RIMA
             var projectile = SkillRuntime.SpawnProjectile(
                 (Vector2)owner.transform.position + dir * 0.35f,
                 dir, profile.projectileSpeed, damage,
-                new Color(0.4f, 0.95f, 0.42f, 0.95f), scale, 3f, "RiftArrow_Runtime");
+                new Color(0.4f, 0.95f, 0.42f, 0.95f), scale, 3f, "RiftArrow_Runtime", owner.gameObject);
 
             projectile.SetOnHit(hit =>
             {

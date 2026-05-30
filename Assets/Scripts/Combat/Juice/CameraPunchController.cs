@@ -73,7 +73,7 @@ namespace RIMA.Combat.Juice
                 return;
             }
 
-            Apply(e.hitDirection, e.isCrit ? impulseCrit : impulseHit);
+            Apply(-e.hitDirection, e.isCrit ? impulseCrit : impulseHit);
         }
 
         private void HandleKill(KillEvent e)

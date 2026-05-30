@@ -1,5 +1,6 @@
 using UnityEngine;
 using RIMA.Combat;
+using RIMA.Audio;
 
 namespace RIMA
 {
@@ -81,6 +82,9 @@ namespace RIMA
                     isCrit = isFinisher,
                     hitDirection = facing
                 });
+                if (isFinisher)
+                    AudioManager.Play(Sfx.Finisher);
+
                 if (hp.IsDead)
                 {
                     CombatEventBus.PublishKill(new KillEvent
@@ -90,6 +94,7 @@ namespace RIMA
                         victim = col.gameObject,
                         mobFamily = col.tag
                     });
+                    AudioManager.Play(Sfx.Shatter);
                 }
                 rage?.OnHitEnemy();
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -86,16 +87,58 @@ namespace RIMA
 
         public static void DealDamage(Health health, int damage, bool popup = true)
         {
+            DealDamage(health, damage, popup, null, null);
+        }
+
+        public static void DealDamage(Health health, int damage, Component source, bool popup = false)
+        {
+            GameObject attacker = source != null ? source.gameObject : null;
+            Vector2? hitDirection = null;
+            if (source != null && health != null)
+                hitDirection = ((Vector2)health.transform.position - (Vector2)source.transform.position).normalized;
+
+            DealDamage(health, damage, popup, attacker, hitDirection, applyStatusMultiplier: false);
+        }
+
+        public static void DealDamage(Health health, int damage, bool popup, GameObject attacker, Vector2? hitDirection,
+            string element = "skill", bool isCrit = false, bool applyStatusMultiplier = true)
+        {
             if (health == null || health.IsDead) return;
 
             int finalDamage = damage;
-            var status = health.GetComponent<StatusEffectSystem>();
-            if (status != null)
-                finalDamage = Mathf.RoundToInt(finalDamage * status.damageMultiplierIncoming);
+            if (applyStatusMultiplier)
+            {
+                var status = health.GetComponent<StatusEffectSystem>();
+                if (status != null)
+                    finalDamage = Mathf.RoundToInt(finalDamage * status.damageMultiplierIncoming);
+            }
 
             health.TakeDamage(finalDamage);
+            PublishSkillHit(health, finalDamage, attacker, hitDirection, element, isCrit);
             if (popup)
                 DamagePopup.Show(health.transform.position, finalDamage);
+        }
+
+        public static void PublishSkillHit(Health health, int damage, GameObject attacker = null, Vector2? hitDirection = null,
+            string element = "skill", bool isCrit = false)
+        {
+            if (health == null) return;
+
+            attacker ??= GameObject.FindGameObjectWithTag("Player");
+            Vector2 direction = hitDirection ?? Vector2.zero;
+            if (direction.sqrMagnitude < 0.001f && attacker != null)
+                direction = ((Vector2)health.transform.position - (Vector2)attacker.transform.position).normalized;
+
+            CombatEventBus.PublishHit(new HitEvent
+            {
+                worldPos = health.transform.position,
+                attacker = attacker,
+                target = health.gameObject,
+                damage = damage,
+                element = element,
+                isCrit = isCrit,
+                hitDirection = direction
+            });
         }
 
         public static void ApplyKnockback(Health health, Vector2 from, float force)
@@ -123,7 +166,8 @@ namespace RIMA
             return go;
         }
 
-        public static PlayerProjectile SpawnProjectile(Vector2 position, Vector2 direction, float speed, int damage, Color color, float scale, float life, string name)
+        public static PlayerProjectile SpawnProjectile(Vector2 position, Vector2 direction, float speed, int damage, Color color, float scale, float life, string name,
+            GameObject owner = null)
         {
             direction = direction.sqrMagnitude > 0.001f ? direction.normalized : Vector2.right;
 
@@ -145,7 +189,7 @@ namespace RIMA
             renderer.sortingOrder = 20;
 
             var projectile = go.AddComponent<PlayerProjectile>();
-            projectile.Init(direction * speed, damage, life: life);
+            projectile.Init(direction * speed, damage, life: life, attacker: owner);
             return projectile;
         }
     }

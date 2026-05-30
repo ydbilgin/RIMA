@@ -48,7 +48,7 @@ namespace RIMA
                 if (h.collider.CompareTag("Player")) continue;
                 var hp = h.collider.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
-                hp.TakeDamage(damage);
+                SkillRuntime.DealDamage(hp, damage, this);
 
                 var status = h.collider.GetComponent<StatusEffectSystem>();
                 status?.ApplyEffect(StatusEffectType.Stunned, 0.5f);

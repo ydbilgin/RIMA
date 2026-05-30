@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RIMA.Combat;
 using RIMA.Environment;
+using RIMA.Audio;
 
 namespace RIMA
 {
@@ -22,6 +23,7 @@ namespace RIMA
         [SerializeField] private float dashSpeed = 18f;
         [SerializeField] private float dashDuration = 0.15f;
         [SerializeField] private float dashCooldown = 0.8f;
+        [SerializeField] private float dashCliffGrace = 0.10f;
 
         [Header("Combat Feel")]
         [SerializeField] private float commitmentMoveMult = 0.25f;  // attack commitment'ta hareket %25
@@ -45,6 +47,8 @@ namespace RIMA
         private float dashCooldownTimer;
         private Vector2 dashDir;
         private bool dashWasImmune;
+        private float lastDashableTime = float.NegativeInfinity;
+        private bool hasDashableOrigin;
         private bool _mercifulDodgeActive;
         private float _mercifulDodgeExpiry;
 
@@ -159,6 +163,9 @@ namespace RIMA
         {
             if (isDashing || dashCooldownTimer > 0f) return false;
 
+            WalkabilityMap walkMap = WalkabilityMap.Instance;
+            RefreshDashableOrigin(walkMap);
+
             bool bypassAttackCommit = false;
             if (_mercifulDodgeActive)
             {
@@ -198,11 +205,13 @@ namespace RIMA
             // Input is registered, cooldown is NOT consumed, no movement starts.
             // MVP: dash end = current + dashDir * (dashSpeed * dashDuration).
             // If no WalkabilityMap in scene, behavior is unchanged (legacy permissive).
-            WalkabilityMap walkMap = WalkabilityMap.Instance;
             if (walkMap != null)
             {
+                if (!HasDashableOriginGrace(walkMap))
+                    return false;
+
                 Vector3 dashEnd = transform.position + (Vector3)(dashDir * (dashSpeed * dashDuration));
-                if (!walkMap.IsDashableWorld(dashEnd))
+                if (!IsReachableDashDestination(walkMap, dashEnd))
                 {
                     // Future: trigger dash-fail SFX / anim hook here.
                     return false;
@@ -223,6 +232,7 @@ namespace RIMA
                 dasher   = gameObject,
                 duration = dashDuration
             });
+            AudioManager.Play(Sfx.Dash);
 
             // OnDash passive proc
             CrossClassSkillManager.Instance?.OnDash();
@@ -238,6 +248,8 @@ namespace RIMA
         {
             if (_mercifulDodgeActive && Time.time > _mercifulDodgeExpiry)
                 _mercifulDodgeActive = false;
+
+            RefreshDashableOrigin(WalkabilityMap.Instance);
 
             moveInput = moveAction.ReadValue<Vector2>();
 
@@ -325,6 +337,33 @@ namespace RIMA
             Vector2 mouseWorld = mainCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector2 toMouse = mouseWorld - (Vector2)transform.position;
             return toMouse.sqrMagnitude > MoveDeadzoneSqr ? toMouse.normalized : lastMoveDir;
+        }
+
+        private void RefreshDashableOrigin(WalkabilityMap walkMap)
+        {
+            if (walkMap == null) return;
+            if (!walkMap.IsDashableWorld(transform.position)) return;
+            if (!IsReachableDashDestination(walkMap, transform.position)) return;
+
+            lastDashableTime = Time.time;
+            hasDashableOrigin = true;
+        }
+
+        private bool HasDashableOriginGrace(WalkabilityMap walkMap)
+        {
+            if (walkMap == null) return true;
+            if (IsReachableDashDestination(walkMap, transform.position)) return true;
+            return hasDashableOrigin && Time.time - lastDashableTime <= dashCliffGrace;
+        }
+
+        private static bool IsReachableDashDestination(WalkabilityMap walkMap, Vector3 worldPos)
+        {
+            if (walkMap == null) return true;
+            if (!walkMap.IsDashableWorld(worldPos)) return false;
+            if (walkMap.floorTilemap == null) return true;
+
+            Vector3Int cell = walkMap.floorTilemap.WorldToCell(worldPos);
+            return walkMap.IsReachableFromPlayer(cell);
         }
 
         // ────────────────────────────────────────────────────────────────

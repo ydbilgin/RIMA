@@ -39,7 +39,7 @@ namespace RIMA
                 dmg = Mathf.RoundToInt(dmg * 1.5f);
 
             var hp = target.GetComponent<Health>();
-            hp?.TakeDamage(dmg);
+            SkillRuntime.DealDamage(hp, dmg, this);
             combo?.Add(cpGain);
         }
 

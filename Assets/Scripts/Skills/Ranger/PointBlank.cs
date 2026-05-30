@@ -45,7 +45,7 @@ namespace RIMA
                 float angle = Vector2.Angle(forward, toEnemy);
                 if (angle > coneHalfAngle) continue;
 
-                h.GetComponent<Health>()?.TakeDamage(damage);
+                SkillRuntime.DealDamage(h.GetComponent<Health>(), damage, this);
 
                 if (knockback > 0)
                 {

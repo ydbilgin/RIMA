@@ -8,6 +8,7 @@ namespace RIMA
     /// Revize: Intensity-based — normal hit, heavy hit, kill için farklı süreler.
     /// PlayerAttack.cs bu singleton'ı çağırır: HitStop.Instance.Freeze(duration)
     /// </summary>
+    [System.Obsolete("Use HitPauseDriver — single timeScale owner")]
     public class HitStop : MonoBehaviour
     {
         public static HitStop Instance { get; private set; }

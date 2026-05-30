@@ -52,7 +52,7 @@ namespace RIMA
                 dmg += bleedStacks * 15;
             }
 
-            hp.TakeDamage(dmg);
+            SkillRuntime.DealDamage(hp, dmg, this);
             status?.ApplyEffect(StatusEffectType.Poison, bleedDur);
         }
     }

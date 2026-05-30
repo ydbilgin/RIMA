@@ -59,7 +59,7 @@ namespace RIMA
                 if (hp == null || hp.IsDead) continue;
 
                 bool wasDead = hp.IsDead;
-                hp.TakeDamage(damage);
+                SkillRuntime.DealDamage(hp, damage, this);
                 if (!wasDead && hp.IsDead) killedSomeone = true;
             }
 

@@ -38,7 +38,7 @@ namespace RIMA
                 if (h.CompareTag("Player")) continue;
                 var hp = h.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
-                hp.TakeDamage(damage);
+                SkillRuntime.DealDamage(hp, damage, this);
 
                 // Debuffları yay
                 if (referenceStatus != null)

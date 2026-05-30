@@ -6,6 +6,10 @@ namespace RIMA.Combat
 {
     public class ScreenShakeDriver : MonoBehaviour
     {
+        public static ScreenShakeDriver Instance { get; private set; }
+
+        public Vector3 CurrentOffset { get; private set; }
+
         [SerializeField] private float hitMagnitude = 0.05f;
         [SerializeField] private float hitDuration = 0.1f;
         [SerializeField] private float critMagnitude = 0.12f;
@@ -18,9 +22,18 @@ namespace RIMA.Combat
         [SerializeField] private float dashDuration = 0.08f;
         [SerializeField] private float minIcdSeconds = 0.04f;
 
-        private Camera targetCamera;
         private Coroutine shakeCoroutine;
-        private Vector3 baseLocalPosition;
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+        }
 
         private void OnEnable()
         {
@@ -38,7 +51,15 @@ namespace RIMA.Combat
             CombatEventBus.OnKill -= HandleKill;
             CombatEventBus.OnDash -= HandleDash;
             CombatEventBus.OnTelegraph -= HandleTelegraph;
-            ResetCameraPosition();
+            ResetOffset();
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
         }
 
         private void HandleHit(HitEvent e)
@@ -50,11 +71,11 @@ namespace RIMA.Combat
 
             if (e.isCrit)
             {
-                Shake(critMagnitude, critDuration);
+                Shake(critMagnitude, critDuration, e.hitDirection);
             }
             else
             {
-                Shake(hitMagnitude, hitDuration);
+                Shake(hitMagnitude, hitDuration, e.hitDirection);
             }
         }
 
@@ -98,57 +119,44 @@ namespace RIMA.Combat
 
         public void Shake(float magnitude, float duration)
         {
-            Camera cam = ResolveCamera();
-            if (cam == null)
-            {
-                return;
-            }
+            Shake(magnitude, duration, Vector2.zero);
+        }
 
+        public void Shake(float magnitude, float duration, Vector2 hitDirection)
+        {
             if (shakeCoroutine != null)
             {
                 StopCoroutine(shakeCoroutine);
-                ResetCameraPosition();
+                ResetOffset();
             }
 
-            baseLocalPosition = cam.transform.localPosition;
-            shakeCoroutine = StartCoroutine(ShakeRoutine(cam.transform, Mathf.Max(0f, magnitude), Mathf.Max(0.01f, duration)));
+            shakeCoroutine = StartCoroutine(ShakeRoutine(Mathf.Max(0f, magnitude), Mathf.Max(0.01f, duration), hitDirection));
         }
 
-        private IEnumerator ShakeRoutine(Transform cameraTransform, float magnitude, float duration)
+        private IEnumerator ShakeRoutine(float magnitude, float duration, Vector2 hitDirection)
         {
+            Vector2 axis = hitDirection.sqrMagnitude > 0.0001f ? hitDirection.normalized : Vector2.zero;
             float elapsed = 0f;
-            while (elapsed < duration && cameraTransform != null)
+            while (elapsed < duration)
             {
                 float t = elapsed / duration;
                 float falloff = 1f - t;
-                Vector2 offset = UnityEngine.Random.insideUnitCircle * magnitude * falloff;
-                cameraTransform.localPosition = baseLocalPosition + new Vector3(offset.x, offset.y, 0f);
+                Vector2 random = UnityEngine.Random.insideUnitCircle;
+                Vector2 directional = axis != Vector2.zero ? axis * UnityEngine.Random.Range(-1f, 1f) : random;
+                Vector2 offset = Vector2.ClampMagnitude(directional * 0.6f + random * 0.4f, 1f) * magnitude * falloff;
+                CurrentOffset = new Vector3(offset.x, offset.y, 0f);
 
                 elapsed += Time.unscaledDeltaTime;
                 yield return null;
             }
 
-            ResetCameraPosition();
+            ResetOffset();
             shakeCoroutine = null;
         }
 
-        private Camera ResolveCamera()
+        private void ResetOffset()
         {
-            if (targetCamera == null)
-            {
-                targetCamera = Camera.main;
-            }
-
-            return targetCamera;
-        }
-
-        private void ResetCameraPosition()
-        {
-            Camera cam = ResolveCamera();
-            if (cam != null)
-            {
-                cam.transform.localPosition = baseLocalPosition;
-            }
+            CurrentOffset = Vector3.zero;
         }
     }
 }

@@ -71,6 +71,9 @@ namespace RIMA
         [Header("Projectile")]
         [SerializeField] private GameObject chainProjectilePrefab;  // optional; runtime fallback if null
 
+        [Header("Demo Flow")]
+        [SerializeField] private bool suppressClassSelectOnDeath = true;
+
         [Header("Colors (telegraph)")]
         [SerializeField] private Color telegraphColor   = new Color(1f, 0.4f, 0f, 1f);   // orange
         [SerializeField] private Color phase2Color      = new Color(0.7f, 0f, 1f, 1f);   // purple
@@ -139,7 +142,7 @@ namespace RIMA
                 if (player == null) { yield return null; continue; }
 
                 // Phase transition check
-                if (!phaseTransitionDone && health.CurrentHP <= health.MaxHP / 2)
+                if (!phaseTransitionDone && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.33f))
                 {
                     phaseTransitionDone = true;
                     yield return StartCoroutine(DoPhaseTransition());
@@ -501,6 +504,7 @@ namespace RIMA
 
             // Transition moment: purple burst
             if (sr != null) sr.color = phase2Color;
+            RoomMonologController.Say("Discipline breaks before the chain does.");
             ScreenShake.Instance?.AddTrauma(0.7f);
 
             // Second half: settle into Phase 2 color
@@ -559,19 +563,22 @@ namespace RIMA
 
             yield return new WaitForSeconds(0.3f);
 
-            // Trigger secondary class selection
-            var trigger = FindAnyObjectByType<ClassSelectionTrigger>();
-            if (trigger != null)
+            if (!suppressClassSelectOnDeath)
             {
-                trigger.Trigger();
-            }
-            else
-            {
-                // Fallback: direct trigger
-                if (PlayerClassManager.Instance != null)
-                    PlayerClassManager.Instance.TriggerClassSelection();
+                // Trigger secondary class selection
+                var trigger = FindAnyObjectByType<ClassSelectionTrigger>();
+                if (trigger != null)
+                {
+                    trigger.Trigger();
+                }
                 else
-                    Debug.LogWarning("[PenitentSovereign] ClassSelectionTrigger bulunamadı!");
+                {
+                    // Fallback: direct trigger
+                    if (PlayerClassManager.Instance != null)
+                        PlayerClassManager.Instance.TriggerClassSelection();
+                    else
+                        Debug.LogWarning("[PenitentSovereign] ClassSelectionTrigger bulunamadı!");
+                }
             }
 
             // Notify room manager

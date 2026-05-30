@@ -45,7 +45,7 @@ namespace RIMA
                 if (hit.collider.gameObject == rb.gameObject) continue;
                 var hp = hit.collider.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
-                hp.TakeDamage(damage);
+                SkillRuntime.DealDamage(hp, damage, this);
                 rage?.AddRage(ragePerHit);
                 var erb = hit.collider.GetComponent<Rigidbody2D>();
                 if (erb != null) erb.AddForce(chargeDir * knockbackForce, ForceMode2D.Impulse);

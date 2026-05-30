@@ -34,7 +34,7 @@ namespace RIMA
                 var hp = h.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
 
-                hp.TakeDamage(damage);
+                SkillRuntime.DealDamage(hp, damage, this);
 
                 // Radial knockback
                 var rb = h.GetComponent<Rigidbody2D>();

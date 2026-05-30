@@ -55,7 +55,7 @@ namespace RIMA
                         status.ApplyEffect(StatusEffectType.Chill, slowDuration);
                     }
                 }
-                hp.TakeDamage(dmg);
+                SkillRuntime.DealDamage(hp, dmg, this);
             }
 
             ctrl?.RegisterElementCast(ElementalistElement.Frost, 2);

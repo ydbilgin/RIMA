@@ -45,7 +45,7 @@ namespace RIMA
                 if (hp != null && !hp.IsDead)
                 {
                     int finalDamage = Mathf.Max(8, Mathf.RoundToInt(damage * Mathf.Pow(0.86f, i)));
-                    hp.TakeDamage(finalDamage);
+                    SkillRuntime.DealDamage(hp, finalDamage, this);
                     current.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Shocked, shockedDuration);
                     SkillRuntime.SpawnCircleVisual(current.transform.position, new Color(0.98f, 0.92f, 0.26f, 0.58f), 0.58f, 0.16f, "ChainLightning_Hit");
                     SpawnArcVisual(previousPoint, current.transform.position);
