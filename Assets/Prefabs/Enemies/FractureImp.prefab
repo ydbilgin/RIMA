@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b1c4004c6ac85449206c7a9a52561c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RIMA.Health
-  maxHP: 100
+  maxHP: 60
   OnHealthChanged:
     m_PersistentCalls:
       m_Calls: []

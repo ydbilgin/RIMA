@@ -94,6 +94,13 @@ namespace RIMA
         private readonly int[] p2Rotation = { 0, 3, 1, 2 };
         private int p2Idx;
 
+        // Phase 3 "Unleashed" overlay (33% HP) — modifier layer on the P2 roster, biased to aggression
+        // (FractureStrike/Charge heavy, one ChainExplosion, no Wrath). See BOSS_MOB_DESIGN_S6 §1 P3.
+        private readonly int[] p3Rotation = { 0, 3, 0, 3, 1 };
+        private int p3Idx;
+        private bool phase3Active;
+        private bool phase3Done;
+
         // ─── Components ───────────────────────────────────────────────────────
 
         private Rigidbody2D  rb;
@@ -149,6 +156,15 @@ namespace RIMA
                     continue;
                 }
 
+                // Phase 3 "Unleashed" overlay — the last chains shatter at 33% HP (modifier layer on Phase 2).
+                if (phaseTransitionDone && !phase3Done && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.33f))
+                {
+                    phase3Done = true;
+                    phase3Active = true;
+                    yield return StartCoroutine(DoPhase3Transition());
+                    continue;
+                }
+
                 float dist = Vector2.Distance(transform.position, player.position);
 
                 if (dist > detectionRange)
@@ -164,8 +180,9 @@ namespace RIMA
                 else
                     yield return StartCoroutine(Phase2Turn());
 
-                // Cooldown
+                // Cooldown (Phase 3 is more relentless — shorter gaps, not chaos)
                 float cd = Random.Range(cooldownMin, cooldownMax);
+                if (phase3Active) cd *= 0.8f;
                 yield return new WaitForSeconds(cd);
             }
         }
@@ -198,10 +215,11 @@ namespace RIMA
 
         private IEnumerator Phase2Turn()
         {
-            int attackId = p2Rotation[p2Idx % p2Rotation.Length];
-            p2Idx++;
+            int attackId = phase3Active
+                ? p3Rotation[p3Idx++ % p3Rotation.Length]
+                : p2Rotation[p2Idx++ % p2Rotation.Length];
 
-            float speed = phase1Speed * phase2SpeedMult;
+            float speed = phase1Speed * phase2SpeedMult * (phase3Active ? 1.15f : 1f);
 
             // FractureStrike needs melee; others work at any range
             bool needsMelee = attackId == 0;
@@ -506,6 +524,7 @@ namespace RIMA
             if (sr != null) sr.color = phase2Color;
             RoomMonologController.Say("Discipline breaks before the chain does.");
             ScreenShake.Instance?.AddTrauma(0.7f);
+            RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.1f); // chains-snap freeze (design §1, 50% beat)
 
             // Second half: settle into Phase 2 color
             elapsed = 0f;
@@ -522,6 +541,44 @@ namespace RIMA
 
             phase = BossPhase.Phase2;
             Debug.Log("[PenitentSovereign] ⚡ PHASE 2 BAŞLADI");
+        }
+
+        // Phase 3 "Unleashed" — the seal fails: shorter ceremony, body floods cyan-veined, last chains shatter.
+        private IEnumerator DoPhase3Transition()
+        {
+            rb.linearVelocity = Vector2.zero;
+
+            float duration = Mathf.Max(0.6f, phaseTransitionTime - 0.5f); // ~1.0s — past ceremony
+            float half = duration * 0.5f;
+
+            // First half: white flash (discipline finally fails)
+            float elapsed = 0f;
+            while (elapsed < half)
+            {
+                float t = elapsed / half;
+                if (sr != null) sr.color = Color.Lerp(baseColor, Color.white, Mathf.Sin(t * Mathf.PI * 5f) * 0.5f + 0.5f);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            // Shatter moment: seal-energy floods the body cyan-veined (the boss-only cyan exception); monolog + heavy shake + freeze.
+            baseColor = Color.Lerp(baseColor, new Color(0f, 1f, 0.8f, 1f), 0.4f);
+            if (sr != null) sr.color = Color.white;
+            RoomMonologController.Say("There is nothing left to hold.");
+            ScreenShake.Instance?.AddTrauma(0.9f);
+            RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.1f);
+
+            // Second half: settle into the new cyan-veined rest color
+            elapsed = 0f;
+            while (elapsed < half)
+            {
+                if (sr != null) sr.color = Color.Lerp(Color.white, baseColor, elapsed / half);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            if (sr != null) sr.color = baseColor;
+
+            Debug.Log("[PenitentSovereign] ⚡⚡ PHASE 3 UNLEASHED");
         }
 
         // ─── Death ────────────────────────────────────────────────────────────
@@ -591,6 +648,9 @@ namespace RIMA
 
         private IEnumerator Telegraph(float duration)
         {
+            // Phase 3 "Unleashed": telegraphs shorten ~15%, floored at the player's reaction window (never below 0.22s).
+            if (phase3Active) duration = Mathf.Max(0.22f, duration * 0.85f);
+
             if (sr == null)
             {
                 yield return new WaitForSeconds(duration);
