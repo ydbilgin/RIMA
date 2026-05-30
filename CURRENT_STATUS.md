@@ -9,7 +9,8 @@
 
 **Tek cümle:** Kullanıcı "gece boyu otonom çalış, SORMA, Opus karar ver, ax+cx danış, status+memory güncel tut" dedi → büyük **tasarım + kod build** push'u başladı.
 
-**🔑 KANONİK ROADMAP = `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md`** (sıralı PHASE 0-4 + writer→reviewer routing + PLACEHOLDER REGISTRY). ÖNCE onu oku. Memory: [[project-overnight-autonomous-designbuild-s6]].
+**🌅 SABAH PICKUP = `STAGING/MORNING_REPORT_S6.md` (ÖNCE BUNU OKU).** Roadmap detay = `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md` (İLERLEME LOG + queue). Memory: [[project-overnight-autonomous-designbuild-s6]].
+**Gece özeti:** Tasarım kilitlendi + PHASE 1 combat/UX kodu yazıldı (compile-clean, commit `698bcec0`). Kalan = Unity-restart→scene-rig/F5 + PixelLab-art (hepsi sende, sebebi raporda). cx-yekta 5h-BLOCKED (reset 07:05).
 
 **Kurallar:** Opus TEK karar verici, SORMA · ax+cx danışman (writer DEĞİL) · kod yazan≠reviewer · placeholder + "yerine ne gelecek" notu · audio ERTELE (Sora+Gemini Pro) · çelişki YOK (floating-island'a uygun hikâye+ışık) · workflow serbest · NLM context.
 

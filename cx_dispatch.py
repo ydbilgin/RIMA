@@ -18,6 +18,14 @@ import urllib.request
 import urllib.error
 from datetime import datetime, timezone
 
+# Windows console is cp1254 here; print(result) crashes on chars like U+2192 (→).
+# Force utf-8 with replacement so dispatch never dies just printing a result.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 CX_CMD = r"C:\Users\ydbil\AppData\Roaming\npm\cx.cmd"
 DEFAULT_PRIORITY = ["yekta", "laurethayday", "laurethgame", "yasinderyabilgin"]  # fallback order; cx_profiles.local.json overrides
 CODEX_TASK_FILE = "CODEX_TASK.md"
