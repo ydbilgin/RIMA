@@ -64,6 +64,15 @@ Each step: Opus write → dotnet build green → cx or agy review → next.
 - **CHECK B:** dotnet build green. **F5 FEEL GATE = USER** (combat feel lock before art).
 
 ## BLOCK C — Phase 2 CONTROLS/HUD code (autonomous) ~6-8h  (= task #8)
+> ✅ **C1-C4 DONE (2026-05-30, Opus autonomous, build GREEN). C5 deferred.** cx C1-C3 review (FAIL→both fixed:
+> Q3 SkillBarUI static-event leak→OnEnable/OnDisable; Q5 5 skill controllers now subscribe OnBindingsChanged→
+> RebuildBindings for live skill-rebind). C1 registry + C2 player repoint + C3 bar labels = commit 5fc4a51f;
+> C4 + Q3/Q5 = commit abce81dd.
+> **C4 done:** SettingsMenuUI Aim+Dash toggles drive PlayerController (Bug-2 dead-toggle killed); Core/SettingsMenu
+> [Obsolete]+self-disabled (dup ESC/timeScale gone — UIManager owns it). **Full Controls/rebind UI section = F5-gated**
+> (needs interactive press-to-bind). **C5 (interact-key) DEFERRED:** spec §3 action list EXCLUDES Interact; demo uses
+> proximity+G; centralizing the 4 Key.G is low-value hygiene → revisit with the rebind UI. CHECK C: dotnet green ✅. F5 = USER.
+
 Per `CONTROL_SCHEME_SYNTHESIS_S6.md`. **Opus writes (multi-system) → cx+agy review → dotnet build.**
 - **C1** `KeyBindManager` → binding registry (MoveX/Y, Dash, Attack, ClassSecondary, RiftBreak, Skill1-4) + PlayerPrefs
   JSON persistence + duplicate/reserved guard + `OnBindingsChanged` + **`RebuildBindings()`** (currently SetKey writes
