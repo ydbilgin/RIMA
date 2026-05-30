@@ -88,6 +88,7 @@ namespace RIMA
             if (playerHealth != null)
             {
                 playerHealth.OnHealthChanged.AddListener(OnHPChanged);
+                playerHealth.OnDamageTaken.AddListener(OnPlayerDamaged); // hit-stop + flash on taking damage
                 OnHPChanged(playerHealth.CurrentHP, playerHealth.MaxHP);
             }
 
@@ -98,7 +99,11 @@ namespace RIMA
         private void OnDestroy()
         {
             if (resourceSystem != null) resourceSystem.OnResourceChanged.RemoveListener(OnResourceChanged);
-            if (playerHealth != null) playerHealth.OnHealthChanged.RemoveListener(OnHPChanged);
+            if (playerHealth != null)
+            {
+                playerHealth.OnHealthChanged.RemoveListener(OnHPChanged);
+                playerHealth.OnDamageTaken.RemoveListener(OnPlayerDamaged);
+            }
             if (PlayerClassManager.Instance != null) PlayerClassManager.Instance.OnPrimaryClassSet -= OnClassChanged;
             if (Instance == this) Instance = null;
         }
@@ -133,14 +138,57 @@ namespace RIMA
             else if ((pct > 0.3f || pct <= 0f) && isPulsing)
                 StopPulse();
 
-            // Low-HP vignette: fade in below 35% HP, strongest near death.
-            if (lowHpVignette != null)
+            // Low-HP vignette: fade in below 35% HP, strongest near death (skip while a hit-flash owns it).
+            if (lowHpVignette != null && !hitFlashActive)
             {
-                float vig = (pct > 0f && pct < 0.35f) ? Mathf.InverseLerp(0.35f, 0.08f, pct) * 0.55f : 0f;
                 Color vc = lowHpVignette.color;
-                vc.a = vig;
+                vc.a = SustainedVignetteAlpha();
                 lowHpVignette.color = vc;
             }
+        }
+
+        // ─── Player-hit feedback (hit-stop + vignette flash) ────────────
+
+        private bool hitFlashActive;
+
+        private void OnPlayerDamaged(int amount)
+        {
+            // Brief hit-stop on taking damage (FEEL-FIRST, 0-cost) — respect the accessibility toggle.
+            if (RIMA.Combat.Juice.FeelToggleSettings.HitstopEnabled)
+                RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.06f);
+
+            if (lowHpVignette != null && isActiveAndEnabled)
+                StartCoroutine(HitFlash());
+        }
+
+        private IEnumerator HitFlash()
+        {
+            hitFlashActive = true;
+            const float dur = 0.18f;
+            float t = 0f;
+            while (t < dur && lowHpVignette != null)
+            {
+                t += Time.unscaledDeltaTime;
+                float flash = Mathf.Lerp(0.5f, 0f, t / dur);
+                Color c = lowHpVignette.color;
+                c.a = Mathf.Max(SustainedVignetteAlpha(), flash); // composite over the sustained low-HP level
+                lowHpVignette.color = c;
+                yield return null;
+            }
+            hitFlashActive = false;
+            if (lowHpVignette != null)
+            {
+                Color c = lowHpVignette.color;
+                c.a = SustainedVignetteAlpha();
+                lowHpVignette.color = c;
+            }
+        }
+
+        private float SustainedVignetteAlpha()
+        {
+            if (playerHealth == null || playerHealth.MaxHP <= 0) return 0f;
+            float pct = (float)playerHealth.CurrentHP / playerHealth.MaxHP;
+            return (pct > 0f && pct < 0.35f) ? Mathf.InverseLerp(0.35f, 0.08f, pct) * 0.55f : 0f;
         }
 
         private IEnumerator PulseBar(Image img, Color baseColor)
