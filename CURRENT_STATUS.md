@@ -1,7 +1,38 @@
 # CURRENT_STATUS
 
-> **Session:** S6 (2026-05-30) — Opus 4.8 otonom. **PICKUP = aşağıdaki "🌙 OVERNIGHT S6" bloğu + `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md`.** Demo-loop sistemleri kuruldu (rank-1 HUD/rank-3 hit-confirm/rank-4 SkillBar/rank-6 transition, 6 commit), sıra = MOMENT_SPEC kalan rank'lar (2/5/7/9) + F5 görsel playtest. Tooling (cx/ax/cxs/ags) bitti. | **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY.
+> **Session:** S6 (2026-05-30) — Opus 4.8 FULL AUTONOMOUS. ⭐ **POST-/CLEAR PICKUP = `STAGING/WORK_ORDER_24_48H_S6.md`** (24-48h sıralı otonom üretim emri, BLOCK A'dan başla, her adım dotnet-verify). **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY, then the work order.
 > **Geçmiş session detayı (S106→S112):** `STAGING/_archive/current_status_pre_S114_20260528.md` (tam snapshot, arşiv).
+
+---
+
+## ✅ BLOCK A DONE — Phase 0 Consolidate (2026-05-30, Opus otonom, build GREEN) — ⭐ POST-/CLEAR PICKUP = WORK_ORDER **BLOCK B**
+**Tek cümle:** Work order BLOCK A (Faz 0 konsolidasyon) bitti, hepsi `dotnet build RIMA.Runtime` 0-hata, cx A3'ü review etti (3 gerçek bug buldu→hepsi v2'de düzeltildi). **NEXT = BLOCK B (combat-feel).**
+- **A1** boss phase threshold 0.33→**0.5** (canon chains-break) · **A2** 7 dormant duplicate `[Obsolete]` işaretli (silme YOK) · **A3** combat-oda-clear'da fragment drop (pickup→draft→Gate.Unlock; cx-fix: anchor yoksa **oyuncu ayağına** drop=reachable, event-leak teardown unsubscribe, softlock-yok) · **A4** MapFragment ref konsolidasyon doğrulandı (live=Environment.MapFragment, Core=test-only→koru) · **A5** test scene `_IsoGame`→`PlayableArena_Test01` + legacy RoomFlowTests/PlaytestScenarios `[Ignore]` · **A6** finisher CommitBeat publish (HitPause+ScreenShake+VFXRouter artık LIVE Beat3'te ateşler).
+- **🔗 CHECK A bulgusu — live→dormant kuplaj haritası (pre-existing debt, BLOCK B + ertelenmiş RRM refactor'da migrate):** ScreenShake ← live boss ×6 (→B1) · CameraShake ← live CameraFollow+3 (→B1) · RuntimeRoomManager ← live DraftManager+boss+5 (→ertelendi) · dormant CameraFollow ← SubRoom. **Gerçek-dormant (0 live ref):** BossAI_PenitentSovereign, static RoomLoader, Core/MapFragment.
+- **Reviews:** cx `bkg9p869i`→A3 v2 fix · agy `bo0lgi627`→A3v2+A6 (in-flight). **Commit:** BLOCK A local (push GATED). **Routing:** Opus yazdı, cx+agy review (writer≠reviewer).
+
+---
+
+## 🚀 S6 AUTONOMOUS-PRODUCTION CLOSE (2026-05-30) — ⭐ İLK OKU, sonra WORK_ORDER
+**Tek cümle:** Oyunun YÖNÜ NLM-canon'dan kilitlendi + temiz mimari + 4-kaynak roadmap + 24-48h sıralı iş emri hazır → **clear sonrası `WORK_ORDER_24_48H_S6.md` BLOCK A'dan otonom üretime devam.**
+
+**Otonom kurallar:** Opus karar+yazar, SORMA · cx+ax danışman/review (writer≠reviewer) · her kod adımı `dotnet build RIMA.Runtime.csproj` yeşil (~2s) · audio ERTELE · **animate adımı USER-GATED** ([[feedback_never_animate_without_approval]]) · çok-istek→queue+tek-tek, Opus sıralar ([[feedback_queue_decide_order_dont_ask_each]]).
+
+**🔒 KİLİTLİ KARARLAR (re-litigate etme — hepsi STAGING/ doc):**
+- **Yön:** `RIMA_DIRECTION_LOCK_S6.md` (NLM canon: ~10dk wishlist vertical slice, Warblade+5oda+boss, cursor-aim, draft, cyan-rift, VFX-first/graybox-first pivot, slash=painterly-flipbook).
+- **Mimari+roadmap:** `RIMA_ROADMAP_AND_CLEAN_STRUCTURE_S6.md` (Faz 0-6 + temiz yapı tablosu).
+- **Kontrol:** `CONTROL_SCHEME_SYNTHESIS_S6.md` (cursor-aim KORU, rebind=KeyBindManager genişlet, **4 skill Q/E/R/F**, ultimate V, 3 bug).
+- **VFX:** `VFX_STRATEGY_SYNTHESIS_S6.md` (rol-hibrit; **slash=painterly flipbook canon düzeltmesi**; pixelated-particle 4-kural).
+- **Style-upscale:** `STYLE_PRESERVING_UPSCALE_ANALYSIS_S6.md` (re-authoring, PixelLab Style-Ref + palette-lock; RIMA+studio).
+- **Asset pipeline:** `IMAGEGEN_ASSET_PACK_PLAN_S6.md` (cx üretir + Opus/agy QC; death/lowhp/particles=Python kalır).
+
+**🟢 CANLI OMURGA (cx GUID-trace, kesin — tek demo path):** `PlayableArena_Test01 → Systems.Map.RoomLoader → Phase1_Room5_BossArena → PenitentSovereign.prefab → PenitentSovereign.cs` · MapFragment=`Environment.MapFragment` · boss-death=direct `Health.OnDeath→RoomLoader.RaiseDemoComplete→DemoCompleteOverlay`. **Dormant duplikatlar** (RuntimeRoomManager/BossAI_PenitentSovereign/Core.MapFragment/Player.CameraFollow) ~10 dosyada referanslı → **[Obsolete], MASS-DELETE YOK** (regresyon). Detay = `CODEX_DONE.md` tail "Live Demo Consolidation Safety Map".
+
+**✅ BU SESSION DONE:** 5/7 hero imagegen (menu/victory/logo/next-class/boss, cx, QC-pass — `Resources/UI/RIMA/`) · 24 Python placeholder · NLM fix + `nlm_relogin.ps1` · **SkillDraftSystem.cs silindi** (csproj senkron, **build YEŞİL**) · SkillData korundu (workflow false-positive yakalandı) · cx live-path map · 6 sentez doc.
+
+**▶ NEXT (otonom, post-clear):** `WORK_ORDER_24_48H_S6.md` → **BLOCK A** (Faz 0: A1 boss 0.33→0.5 · A2 [Obsolete] duplikatlar · A3 fragment-in-combat-room · A5 test-scene · A6 finisher CommitBeat) → B (combat-feel) → C (kontrol/HUD) → D (conversion). Her BLOCK sonu dotnet-green + agy/cx review.
+
+**⛔ USER-GATED (biriktir):** Steam App ID (URL fix) · Unity SCENE wiring (DraftManager/MapFragmentSpawner null, Player layer, GO temizliği) · PixelLab Style-Ref refine + slash-flipbook + boss-sprite + her animate · F5 combat-feel gate · git-push (remote divergence).
 
 ---
 

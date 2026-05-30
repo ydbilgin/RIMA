@@ -141,8 +141,8 @@ namespace RIMA
             {
                 if (player == null) { yield return null; continue; }
 
-                // Phase transition check
-                if (!phaseTransitionDone && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.33f))
+                // Phase transition check — canon: chains break at 50% HP
+                if (!phaseTransitionDone && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.5f))
                 {
                     phaseTransitionDone = true;
                     yield return StartCoroutine(DoPhaseTransition());

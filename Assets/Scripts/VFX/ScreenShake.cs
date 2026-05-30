@@ -7,6 +7,7 @@ namespace RIMA
     /// Camera shake sistemi — vuruşlarda, kill'lerde, büyük saldırılarda kamera sallanır.
     /// Intensity-based: hafif vuruş = küçük shake, kill = büyük shake.
     /// </summary>
+    [System.Obsolete("Not the live spine - see WORK_ORDER_24_48H_S6. This rotates the camera; live shake = ScreenShakeDriver offset.")]
     public class ScreenShake : MonoBehaviour
     {
         public static ScreenShake Instance { get; private set; }

@@ -7,6 +7,7 @@ namespace RIMA
     /// Kamera sallama. CameraFollow.LateUpdate tarafından okunur.
     /// CameraShake.Instance.Shake(intensity, duration) çağır.
     /// </summary>
+    [System.Obsolete("Not the live spine - see WORK_ORDER_24_48H_S6. Live shake = VFX/ScreenShakeDriver.")]
     public class CameraShake : MonoBehaviour
     {
         public static CameraShake Instance { get; private set; }

@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 
 namespace RIMA.Map
 {
+    [System.Obsolete("Not the live spine - see WORK_ORDER_24_48H_S6. Live loader = Systems/Map/RoomLoader.cs.")]
     public static class RoomLoader
     {
         public static void LoadJsonToScene(string jsonPath, Tilemap floorMap, Transform propParent, MaterialVariantPoolSO pool)

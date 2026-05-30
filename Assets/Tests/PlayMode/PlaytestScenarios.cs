@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 namespace RIMA.Tests
 {
+    [Ignore("legacy _IsoGame scene retired — live demo scene is PlayableArena_Test01 (see WORK_ORDER A5)")]
     public class PlaytestScenarios
     {
         private const string SceneName = "_IsoGame";

@@ -17,6 +17,7 @@ namespace RIMA
     ///   - Prefab olarak kaydet → RuntimeRoomManager.mapFragmentPrefab'a ata
     /// </summary>
     [RequireComponent(typeof(CircleCollider2D))]
+    [System.Obsolete("Not the live spine - see WORK_ORDER_24_48H_S6. Live fragment = Environment/MapFragment.cs.")]
     public class MapFragment : MonoBehaviour
     {
         [SerializeField] private float interactRadius = 3.0f;

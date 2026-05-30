@@ -1,4 +1,5 @@
 using UnityEngine;
+using RIMA.Combat;
 
 public class CombatHandler : MonoBehaviour
 {
@@ -15,8 +16,17 @@ public class CombatHandler : MonoBehaviour
         _lastCommitBeatTime = Time.time;
 
         // TODO Faz 2+: invoke Echo Resonance proc
-        // For now: just increment combo counter and log
         _comboCount++;
         Debug.Log($"[CombatHandler] OnCommitBeat - combo #{_comboCount}");
+
+        // A6: drive the finisher juice — HitPauseDriver + ScreenShakeDriver + VFXRouter
+        // all subscribe to CombatEventBus.OnCommitBeat. The live Beat3 path never published it
+        // (only VFXBusDemo did), so finisher hitstop/shake never fired in real combat.
+        CombatEventBus.PublishCommitBeat(new CommitBeatEvent
+        {
+            worldPos = transform.position,
+            attacker = gameObject,
+            beatIndex = 3
+        });
     }
 }

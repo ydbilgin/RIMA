@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 namespace RIMA
 {
     [DefaultExecutionOrder(100)]
+    [System.Obsolete("Not the live spine - see WORK_ORDER_24_48H_S6. Live camera = Camera/CameraFollow.cs (RIMA.CameraSystem).")]
     public class CameraFollow : MonoBehaviour
     {
         [SerializeField] private Transform target;

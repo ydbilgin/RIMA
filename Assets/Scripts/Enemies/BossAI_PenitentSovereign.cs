@@ -17,6 +17,7 @@ namespace RIMA
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(KnockbackReceiver))]
+    [System.Obsolete("Not the live spine - see WORK_ORDER_24_48H_S6. Live boss = Enemies/Boss/PenitentSovereign.cs.")]
     public class BossAI_PenitentSovereign : MonoBehaviour
     {
         // ─── Inspector ────────────────────────────────────────────────────────

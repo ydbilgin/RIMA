@@ -182,6 +182,10 @@ namespace RIMA.Systems.Map
 
         private void TeardownCurrentRoom()
         {
+            // Drop any pending fragment-pickup subscriber before destroying fragments,
+            // so a not-yet-collected fragment can't unlock the next room's gate (cx A3 issue 3).
+            ClearPendingFragmentPickup();
+
             if (_currentRoomContent != null)
             {
                 Destroy(_currentRoomContent);
@@ -289,13 +293,13 @@ namespace RIMA.Systems.Map
             }
             else
             {
-                // Combat room: all mobs dead → unlock gate immediately (clear-to-unlock, LOCK 1).
+                // Combat room: mobs dead → drop a fragment; pickup → draft → gate unlock (B3 collect loop).
                 Action clearToUnlock = null;
                 clearToUnlock = () =>
                 {
                     OnRoomCleared -= clearToUnlock;
-                    StartCoroutine(UnlockGateAfterDraft(gate));
-                    Debug.Log($"[RoomLoader] Room {data.roomIndex} cleared — draft started before gate unlock.");
+                    Debug.Log($"[RoomLoader] Room {data.roomIndex} cleared — spawning fragment before draft/unlock.");
+                    SpawnFragmentThenDraftUnlock(gate);
                 };
                 OnRoomCleared += clearToUnlock;
             }
@@ -317,41 +321,79 @@ namespace RIMA.Systems.Map
         private IEnumerator RewardRoomAutoTrigger(RoomSequenceData data, Gate rewardGate)
         {
             yield return new WaitForSeconds(2f);
+            SpawnFragmentThenDraftUnlock(rewardGate);
+        }
+
+        // Tracks the active one-shot fragment-pickup subscriber so TeardownCurrentRoom can
+        // unsubscribe it if the room is swapped before pickup — prevents a stale static-event
+        // subscriber from unlocking the wrong room's gate (cx review A3, issue 3).
+        private Action<EnvironmentMapFragment> _pendingFragmentPickup;
+
+        // Shared fragment flow (combat + reward rooms): drop one fragment, then
+        // pickup → draft → gate unlock. Drop position = the room's FragmentDropAnchor when it
+        // authored one (reward rooms), else the player's feet (combat assets have
+        // fragmentDropOverride == 0 → no anchor) which is provably reachable, so the player
+        // can always collect it. Direct draft/unlock fallback only if there is no anchor AND
+        // no player, so the gate ALWAYS unlocks (never softlocks).
+        // LOCK: RoomLoader is the SINGLE fragment-spawn authority — MapFragmentSpawner is a
+        // passive prefab helper, driven only from here (no auto-subscribe → no double-spawn).
+        private void SpawnFragmentThenDraftUnlock(Gate gate)
+        {
+            ClearPendingFragmentPickup(); // defensive: drop any stale subscriber
 
             FragmentDropAnchor anchor = FindFirstObjectByType<FragmentDropAnchor>();
-            if (anchor == null)
+            Vector3 dropPos;
+            if (anchor != null)
             {
-                // No anchor — unlock gate directly as fallback.
-                Debug.LogWarning("[RoomLoader] RewardRoom: no FragmentDropAnchor — starting draft/unlock fallback.");
-                StartCoroutine(UnlockGateAfterDraft(rewardGate));
-                yield break;
-            }
-
-            // Spawn fragment (via spawner if present, else directly).
-            MapFragmentSpawner spawner = FindFirstObjectByType<MapFragmentSpawner>();
-            if (spawner != null)
-            {
-                spawner.SendMessage("HandleRoomCleared", SendMessageOptions.DontRequireReceiver);
+                dropPos = anchor.transform.position;
             }
             else
             {
-                var go = new GameObject("MapFragment_Reward");
-                go.transform.position = anchor.transform.position;
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player == null)
+                {
+                    Debug.LogWarning("[RoomLoader] No anchor and no player — draft/unlock fallback (no fragment).");
+                    StartCoroutine(UnlockGateAfterDraft(gate));
+                    return;
+                }
+                dropPos = player.transform.position;
+            }
+
+            // Prefer the prefab-based spawner for visuals when an anchor exists; guarantee a fragment regardless.
+            if (anchor != null)
+            {
+                MapFragmentSpawner spawner = FindFirstObjectByType<MapFragmentSpawner>();
+                if (spawner != null)
+                    spawner.SendMessage("HandleRoomCleared", SendMessageOptions.DontRequireReceiver);
+            }
+
+            if (FindFirstObjectByType<EnvironmentMapFragment>() == null)
+            {
+                var go = new GameObject("MapFragment_Drop");
+                go.transform.position = dropPos;
                 go.AddComponent<EnvironmentMapFragment>();
             }
 
-            // Fragment pickup → unlock gate (one-shot, LOCK 1: skip draft chain in reward room).
-            Action<EnvironmentMapFragment> onFragment = null;
-            onFragment = _ =>
+            // Fragment pickup → draft → gate unlock (one-shot; tracked for teardown-safe unsubscribe).
+            _pendingFragmentPickup = _ =>
             {
-                EnvironmentMapFragment.OnAnyFragmentPickedUp -= onFragment;
-                if (rewardGate != null)
+                ClearPendingFragmentPickup();
+                if (gate != null)
                 {
-                    StartCoroutine(UnlockGateAfterDraft(rewardGate));
-                    Debug.Log("[RoomLoader] Reward room fragment picked up — draft started before gate unlock.");
+                    StartCoroutine(UnlockGateAfterDraft(gate));
+                    Debug.Log("[RoomLoader] Fragment picked up — draft started before gate unlock.");
                 }
             };
-            EnvironmentMapFragment.OnAnyFragmentPickedUp += onFragment;
+            EnvironmentMapFragment.OnAnyFragmentPickedUp += _pendingFragmentPickup;
+        }
+
+        private void ClearPendingFragmentPickup()
+        {
+            if (_pendingFragmentPickup != null)
+            {
+                EnvironmentMapFragment.OnAnyFragmentPickedUp -= _pendingFragmentPickup;
+                _pendingFragmentPickup = null;
+            }
         }
 
         private IEnumerator WireBossDeathListener(GameObject roomContent)

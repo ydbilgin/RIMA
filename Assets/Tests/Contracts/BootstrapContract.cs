@@ -2,7 +2,7 @@ namespace RIMA.Tests.Contracts
 {
     public static class BootstrapContract
     {
-        public const string GameSceneName = "_IsoGame";
+        public const string GameSceneName = "PlayableArena_Test01";
         public const string MenuSceneName = "MainMenu";
         public const float MaxBootstrapTime = 0.5f;
 

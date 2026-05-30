@@ -15,19 +15,10 @@ namespace RIMA.Environment
         [Tooltip("Optional fragment prefab. If null a runtime GO with MapFragment + SpriteRenderer + CircleCollider2D is built.")]
         public MapFragment fragmentPrefab;
 
-        private void OnEnable() { RoomLoader.OnRoomCleared += HandleRoomCleared; }
-        private void OnDisable() { RoomLoader.OnRoomCleared -= HandleRoomCleared; }
-
+        // Passive helper — driven only via RoomLoader.SpawnFragmentThenDraftUnlock (SendMessage).
+        // No OnRoomCleared auto-subscription → RoomLoader stays the single spawn authority (no double-spawn).
         private void HandleRoomCleared()
         {
-            // LOCK 1: only spawn fragments in reward rooms.
-            RoomSequenceData roomData = RoomLoader.CurrentRoomData;
-            if (roomData != null && !roomData.isRewardRoom)
-            {
-                Debug.Log("[MapFragmentSpawner] Skipped — not a reward room.");
-                return;
-            }
-
             // Find anchor
             FragmentDropAnchor anchor =
 #if UNITY_2023_1_OR_NEWER
