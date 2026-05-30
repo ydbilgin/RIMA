@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -15,8 +17,26 @@ namespace RIMA
         private bool isOpen;
         private CanvasGroup canvasGroup;
 
+        // Re-sync callbacks for live toggles (e.g. aim/dash read PlayerController) — run on Open().
+        private readonly List<Action> refreshers = new List<Action>();
+
         // ── References (built at runtime) ────────────────────────────
         private Slider masterSlider, musicSlider, sfxSlider;
+
+        // Lazily-resolved player for the gameplay toggles (it may not exist when the UI auto-builds).
+        private PlayerController _player;
+        private PlayerController Player
+        {
+            get
+            {
+                if (_player == null)
+                {
+                    var p = GameObject.FindGameObjectWithTag("Player");
+                    if (p != null) _player = p.GetComponent<PlayerController>();
+                }
+                return _player;
+            }
+        }
 
         // ── Prefs keys ───────────────────────────────────────────────
         private const string PrefAimMode     = "setting_aim_mode";      // 0=mouse, 1=last dir
@@ -67,6 +87,7 @@ namespace RIMA
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
+            for (int i = 0; i < refreshers.Count; i++) refreshers[i]?.Invoke();
         }
 
         public void Close()
@@ -124,7 +145,23 @@ namespace RIMA
 
             // ── Gameplay Section ─────────────────────────────────────
             y = AddSectionHeader(panel, "GAMEPLAY", y);
-            y = AddToggleRow(panel, "Aim Mode", "MOUSE | SON YON", PrefAimMode, 0, y);
+            // Aim/Dash toggles drive PlayerController directly (Bug-2: the old aim toggle only wrote a dead pref key).
+            y = AddBoolToggleRow(panel, "Aim Mode", "MOUSE", "FACING",
+                () => Player != null && Player.AttackAimMode == CombatAimMode.TowardsMouse,
+                on =>
+                {
+                    if (Player == null) return;
+                    Player.AttackAimMode = on ? CombatAimMode.TowardsMouse : CombatAimMode.CharacterFacing;
+                    PlayerPrefs.Save();
+                }, y);
+            y = AddBoolToggleRow(panel, "Dash Mode", "MOUSE", "FACING",
+                () => Player != null && Player.DashMode == DashMode.TowardsMouse,
+                on =>
+                {
+                    if (Player == null) return;
+                    Player.DashMode = on ? DashMode.TowardsMouse : DashMode.FacingDirection;
+                    PlayerPrefs.Save();
+                }, y);
 
             // ── Accessibility Section ────────────────────────────────
             y -= 12f;
@@ -224,6 +261,66 @@ namespace RIMA
                 btnImg.color = next == 1
                     ? new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.3f)
                     : new Color(0.2f, 0.2f, 0.25f, 0.5f);
+            });
+
+            return y - 26f;
+        }
+
+        // A toggle row backed by live getter/setter callbacks (e.g. PlayerController aim/dash), not just a pref.
+        private float AddBoolToggleRow(RectTransform parent, string label, string onText, string offText,
+            Func<bool> get, Action<bool> set, float y)
+        {
+            var row = MakeRect($"Toggle_{label}", parent);
+            row.anchorMin = new Vector2(0f, 1f);
+            row.anchorMax = new Vector2(1f, 1f);
+            row.pivot = new Vector2(0f, 1f);
+            row.anchoredPosition = new Vector2(30f, y);
+            row.sizeDelta = new Vector2(-60f, 22f);
+
+            var lbl = MakeTMP("Label", row);
+            var lr = lbl.GetComponent<RectTransform>();
+            lr.anchorMin = Vector2.zero;
+            lr.anchorMax = new Vector2(0.6f, 1f);
+            lr.offsetMin = lr.offsetMax = Vector2.zero;
+            lbl.text = label;
+            lbl.fontSize = 10f;
+            lbl.color = new Color(0.8f, 0.85f, 0.9f, 0.9f);
+            lbl.alignment = TextAlignmentOptions.Left;
+
+            var btnGo = new GameObject("ToggleBtn", typeof(RectTransform));
+            btnGo.transform.SetParent(row, false);
+            var btnRt = btnGo.GetComponent<RectTransform>();
+            btnRt.anchorMin = new Vector2(0.65f, 0f);
+            btnRt.anchorMax = new Vector2(1f, 1f);
+            btnRt.offsetMin = btnRt.offsetMax = Vector2.zero;
+
+            var btnImg = btnGo.AddComponent<Image>();
+            var btnTxt = MakeTMP("BtnTxt", btnGo.GetComponent<RectTransform>());
+            var btRt = btnTxt.GetComponent<RectTransform>();
+            btRt.anchorMin = Vector2.zero;
+            btRt.anchorMax = Vector2.one;
+            btRt.offsetMin = btRt.offsetMax = Vector2.zero;
+            btnTxt.fontSize = 9f;
+            btnTxt.fontStyle = FontStyles.Bold;
+            btnTxt.color = Color.white;
+            btnTxt.alignment = TextAlignmentOptions.Center;
+
+            Color onColor  = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.3f);
+            Color offColor = new Color(0.2f, 0.2f, 0.25f, 0.5f);
+            void Paint(bool state)
+            {
+                btnTxt.text = state ? onText : offText;
+                btnImg.color = state ? onColor : offColor;
+            }
+            Paint(get());
+            refreshers.Add(() => Paint(get())); // re-sync when the menu opens
+
+            var btn = btnGo.AddComponent<Button>();
+            btn.onClick.AddListener(() =>
+            {
+                bool next = !get();
+                set(next);
+                Paint(next);
             });
 
             return y - 26f;

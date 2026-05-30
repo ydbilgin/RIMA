@@ -63,8 +63,19 @@ namespace RIMA
                 PlayerClassManager.Instance.OnPrimaryClassSet += OnPrimaryClassSet;
                 PlayerClassManager.Instance.OnSecondaryClassSelected += OnSecondaryPicked;
             }
+        }
 
+        // Static-event subscription lives on enable/disable so a disabled bar doesn't linger
+        // on KeyBindManager.OnBindingsChanged (cx C1-C3 review, Q3).
+        private void OnEnable()
+        {
             KeyBindManager.OnBindingsChanged += RefreshKeyLabels;
+            RefreshKeyLabels(); // guarded if slots not built yet
+        }
+
+        private void OnDisable()
+        {
+            KeyBindManager.OnBindingsChanged -= RefreshKeyLabels;
         }
 
         private void OnDestroy()
@@ -74,8 +85,6 @@ namespace RIMA
                 PlayerClassManager.Instance.OnPrimaryClassSet -= OnPrimaryClassSet;
                 PlayerClassManager.Instance.OnSecondaryClassSelected -= OnSecondaryPicked;
             }
-
-            KeyBindManager.OnBindingsChanged -= RefreshKeyLabels;
         }
 
         // Refresh slot key labels from the registry (called on rebind).

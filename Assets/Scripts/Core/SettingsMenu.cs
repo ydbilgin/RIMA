@@ -13,6 +13,8 @@ namespace RIMA
     ///   ✓ işaretli   → imlecin olduğu yöne saldırı/skill
     ///   işaretsiz    → karakterin son baktığı yöne saldırı/skill
     /// </summary>
+    [System.Obsolete("Retired (S6 BLOCK C4) — UIManager owns ESC + timeScale and drives UI/SettingsMenuUI, " +
+        "which now carries the Aim/Dash toggles. This was a duplicate ESC/timeScale owner (Bug-2).")]
     public class SettingsMenu : MonoBehaviour
     {
         [Header("Panel")]
@@ -30,21 +32,9 @@ namespace RIMA
 
         private void Awake()
         {
-            escAction = new InputAction("Escape", InputActionType.Button);
-            escAction.AddBinding("<Keyboard>/escape");
-
-            if (panel == null) panel = GameObject.Find("SettingsPanel");
-            if (dashToMouseToggle == null)
-            {
-                var go = GameObject.Find("Toggle_DashToMouse");
-                if (go != null) dashToMouseToggle = go.GetComponent<Toggle>();
-            }
-
-            if (attackAimToMouseToggle == null)
-            {
-                var go = GameObject.Find("Toggle_AttackAimToMouse");
-                if (go != null) attackAimToMouseToggle = go.GetComponent<Toggle>();
-            }
+            // Retired (BLOCK C4): disable self so this legacy menu can't register a second ESC handler
+            // or fight timeScale if it still lingers in a scene. UIManager + UI/SettingsMenuUI own this now.
+            enabled = false;
         }
 
         private void Start()
@@ -69,12 +59,14 @@ namespace RIMA
 
         private void OnEnable()
         {
+            if (escAction == null) return; // retired — see Awake
             escAction.Enable();
             escAction.performed += ToggleMenu;
         }
 
         private void OnDisable()
         {
+            if (escAction == null) return;
             escAction.performed -= ToggleMenu;
             escAction.Disable();
         }

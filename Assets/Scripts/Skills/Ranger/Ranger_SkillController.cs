@@ -92,9 +92,15 @@ namespace RIMA
             if (isActiveAndEnabled) EnableActions();
         }
 
-        private void OnEnable()  => EnableActions();
+        private void OnEnable()
+        {
+            EnableActions();
+            KeyBindManager.OnBindingsChanged += RebuildBindings; // live skill rebind (cx C1-C3 Q5)
+        }
+
         private void OnDisable()
         {
+            KeyBindManager.OnBindingsChanged -= RebuildBindings;
             if (skillActions != null) foreach (var a in skillActions) a?.Disable();
             actionsEnabled = false;
         }
