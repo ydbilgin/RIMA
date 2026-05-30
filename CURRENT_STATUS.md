@@ -9,8 +9,10 @@
 
 **Tek cümle:** Kullanıcı "gece boyu otonom çalış, SORMA, Opus karar ver, ax+cx danış, status+memory güncel tut" dedi → büyük **tasarım + kod build** push'u başladı.
 
-**🌅 SABAH PICKUP = `STAGING/MORNING_REPORT_S6.md` (ÖNCE BUNU OKU).** Roadmap detay = `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md` (İLERLEME LOG + queue). Memory: [[project-overnight-autonomous-designbuild-s6]].
-**Gece özeti:** Tasarım kilitlendi + PHASE 1 combat/UX kodu yazıldı (compile-clean, commit `698bcec0`). Kalan = Unity-restart→scene-rig/F5 + PixelLab-art (hepsi sende, sebebi raporda). cx-yekta 5h-BLOCKED (reset 07:05).
+**🌅 POST-/CLEAR PICKUP = `STAGING/MORNING_REPORT_S6.md` (ÖNCE BUNU OKU)** + `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md` (İLERLEME LOG). Memory: [[project-overnight-autonomous-designbuild-s6]].
+**Gece özeti:** Tasarım kilitlendi (`DESIGN_LOCK_DEMO_S6.md`) + PHASE 1 combat/UX kodu + impact-frame yazıldı, **hepsi compile-clean.** 3 commit: `698bcec0` (PHASE1+design) · `12755672` (docs+cx_dispatch utf-8 fix) · `a8b47e68` (impact-frame). **Push BLOCKED.**
+**🔁 ROUTING DERSİ (kullanıcı düzeltti):** cx rate-limit'e takılınca DURMA → **Opus-writer + agy-reviewer**'a geç (kullanıcı yetkisi var). cx-yekta 5h-BLOCKED, reset **07:05**; o saate kadar Opus yazar, agy review eder.
+**▶ POST-/CLEAR NEXT (otonom devam, kullanıcı "sonra devam edelim"):** (1) Opus-write kalan .cs: RoomLightingController (per-room mood §2.3, URP Light2D referenceable, RoomLoader.OnRoomChanged Action<int>) + screen-frame wiring (mevcut Resources/UI/RIMA stone-frame asset'leri) — her biri dotnet-build + agy-review. (2) yekta 07:05 reset → cx batch'lerine dönülebilir. (3) **GATED (kullanıcı):** Unity restart→scene ışık-rig flip (§A) + F5 feel-lock (A5) + weapon prefab-wire + PixelLab ekran-görselleri + audio Sora/Gemini + git-push.
 
 **Kurallar:** Opus TEK karar verici, SORMA · ax+cx danışman (writer DEĞİL) · kod yazan≠reviewer · placeholder + "yerine ne gelecek" notu · audio ERTELE (Sora+Gemini Pro) · çelişki YOK (floating-island'a uygun hikâye+ışık) · workflow serbest · NLM context.
 
