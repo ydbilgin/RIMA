@@ -1,6 +1,6 @@
 # CURRENT_STATUS
 
-> **Session:** S6 (2026-05-30) — Opus 4.8 FULL AUTONOMOUS. ⭐ **POST-/CLEAR PICKUP = `STAGING/WORK_ORDER_24_48H_S6.md`** (24-48h sıralı otonom üretim emri, BLOCK A'dan başla, her adım dotnet-verify). **Read first:** `.claude/PROJECT_RULES.md` + this file ONLY, then the work order.
+> **Session:** S6 (2026-05-30) — Opus 4.8 FULL AUTONOMOUS. ⭐⭐ **YENİ SESSION PICKUP = `STAGING/NEW_SESSION_WORKLIST_S6.md`** (kullanıcı F5-playtest + Unity MCP console → P0 bug'lar root-caused + fix-ready: EventSystem ESKİ input-module=UI tıklama bozuk, RoomMonolog Canvas-yok). **P0 bug'larla BAŞLA**, sonra P1 playtest (boot-menu/audio/R1-difficulty) → P2 çelişki (boss §2) → NLM (ax-research). Eski emir: `WORK_ORDER_24_48H_S6.md` (A-D DONE) + `AUTONOMOUS_BACKLOG_S6.md`. **Read first:** `.claude/PROJECT_RULES.md` + this file, then the worklist.
 > **Geçmiş session detayı (S106→S112):** `STAGING/_archive/current_status_pre_S114_20260528.md` (tam snapshot, arşiv).
 
 ---
