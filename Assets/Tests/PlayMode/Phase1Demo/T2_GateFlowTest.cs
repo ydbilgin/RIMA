@@ -238,8 +238,10 @@ namespace RIMA.Tests.Phase1Demo
             // (empty pool yields Gold/Heal offers which don't call OnSkillPicked).
             if (DraftManager.Instance != null)
             {
-                DraftManager.Instance.OnSkillPicked.Invoke(null); // null SkillData accepted by HandleSkillPicked
-                Debug.Log("[T2] DraftManager.OnSkillPicked.Invoke(null) — simulating skill pick.");
+                DraftManager.Instance.OnSkillPicked.Invoke(null); // notify Day-1 bridge listeners
+                DraftManager.Instance.HideDraft();                // end the draft (IsDraftActive=false) so the LOCK-1
+                                                                  // UnlockGateAfterDraft wait completes — real picks do this via OnOfferSelected.
+                Debug.Log("[T2] Simulated skill pick: OnSkillPicked + HideDraft.");
             }
             else
             {

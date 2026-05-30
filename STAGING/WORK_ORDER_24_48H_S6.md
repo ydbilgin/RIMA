@@ -47,6 +47,13 @@ Each step: Opus write → dotnet build green → cx or agy review → next.
 - **CHECK A:** dotnet build green + grep no live ref to a dormant duplicate + agy review of A3/A6.
 
 ## BLOCK B — Phase 1 COMBAT-FEEL code (autonomous; FEEL-tune = user F5) ~4-6h
+> 🔄 **B1 + B3 DONE (2026-05-30, build GREEN). B2 GATED.** B1=confirm-only (live `Camera/CameraFollow.cs:36`
+> already reads `ScreenShakeDriver.Instance.CurrentOffset`; VFX/ScreenShake not on live cam; legacy CameraShake
+> read kept for HeatGauge/MarkPulse/ShadowRecall — migrate later). B3=added `pauseDurationFinisher=0.18f` to
+> HitPauseDriver + wired HandleCommitBeat to it (was crit 0.07); ScreenShakeDriver finisher tier already distinct.
+> **B2 GATED:** VFXRouter.entries is `[SerializeField]` (Inspector wiring = Unity) AND hit_default redundant with
+> existing HitImpact hitspark (would double-spawn) → deferred to BLOCK G. agy review (A3v2+A6) folded: RoomLoader
+> OnDestroy leak-guard + T2 test HideDraft fix. **CHECK B: dotnet green ✅. F5 FEEL GATE = USER.**
 - **B1** Camera shake unify: make the LIVE `Camera/CameraFollow.cs` read `ScreenShakeDriver.Instance.CurrentOffset`
   (confirm it does); ensure `VFX/ScreenShake` (rotates camera!) is NOT on the live camera (it isn't per audit) — leave
   [Obsolete]. ~1h

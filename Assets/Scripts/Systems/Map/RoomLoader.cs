@@ -39,6 +39,13 @@ namespace RIMA.Systems.Map
             if (autoStart) LoadFirstRoom();
         }
 
+        private void OnDestroy()
+        {
+            // Scene reload (death / demo-complete) destroys RoomLoader without a room swap —
+            // drop the static fragment-pickup subscriber so it can't leak across the reload (agy A3 review).
+            ClearPendingFragmentPickup();
+        }
+
         public void Load(RoomType type, int depth)
         {
             if (_currentInstance != null) Unload();

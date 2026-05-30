@@ -8,9 +8,11 @@ namespace RIMA.Combat
     {
         public static HitPauseDriver Instance { get; private set; }
 
+        // Canon hitstop tiers (WORK_ORDER B3): hit 0.04 / crit 0.07 / kill 0.12 / finisher 0.18. Feel-tune = user F5.
         [SerializeField] private float pauseDurationHit = 0.04f;
         [SerializeField] private float pauseDurationCrit = 0.07f;
         [SerializeField] private float pauseDurationKill = 0.12f;
+        [SerializeField] private float pauseDurationFinisher = 0.18f; // Beat3 commit finisher — the heaviest player-driven pause.
         [SerializeField] private float pauseDurationBossDeath = 0.20f; // TODO: route boss-death event here when one exists.
         [SerializeField] private float pauseTimeScale = 0f;
         [SerializeField] private float minIcdSeconds = 0.05f;
@@ -76,7 +78,7 @@ namespace RIMA.Combat
                 return;
             }
 
-            TriggerPause(pauseDurationCrit);
+            TriggerPause(pauseDurationFinisher);
         }
 
         private void HandleKill(KillEvent e)
