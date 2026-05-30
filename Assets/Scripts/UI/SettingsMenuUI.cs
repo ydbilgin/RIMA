@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using TMPro;
 
 namespace RIMA
@@ -19,6 +21,17 @@ namespace RIMA
 
         // Re-sync callbacks for live toggles (e.g. aim/dash read PlayerController) — run on Open().
         private readonly List<Action> refreshers = new List<Action>();
+
+        // ── Controls / rebind state ───────────────────────────────────
+        // Maps each rebindable action to the TMP label inside its key button.
+        private readonly Dictionary<GameAction, TextMeshProUGUI> _bindLabels =
+            new Dictionary<GameAction, TextMeshProUGUI>();
+
+        private bool        _listeningActive;
+        private GameAction  _listeningAction;
+        private TextMeshProUGUI _listeningLabel;   // the button label currently showing "..."
+        private bool        _showErrorNextFrame;   // true = restore label text next Update after showing error
+        private bool        _skipFirstPoll;        // swallow the frame that activated listening (the activating click/key)
 
         // ── References (built at runtime) ────────────────────────────
         private Slider masterSlider, musicSlider, sfxSlider;
@@ -100,6 +113,91 @@ namespace RIMA
 
         public bool IsOpen => isOpen;
 
+        // ─── Lifecycle (rebind polling) ──────────────────────────────
+
+        private void Update()
+        {
+            if (!isOpen || !_listeningActive) return;
+
+            // Swallow the frame that started listening so the activating click/key can't bind itself.
+            if (_skipFirstPoll) { _skipFirstPoll = false; return; }
+
+            // Restore label after a one-frame error display
+            if (_showErrorNextFrame)
+            {
+                _showErrorNextFrame = false;
+                if (_listeningLabel != null)
+                    _listeningLabel.text = KeyBindManager.GetKeyName(_listeningAction);
+                _listeningActive = false;
+                _listeningLabel  = null;
+                return;
+            }
+
+            // Esc cancels
+            Keyboard kb = Keyboard.current;
+            if (kb != null && kb.escapeKey.wasPressedThisFrame)
+            {
+                if (_listeningLabel != null)
+                    _listeningLabel.text = KeyBindManager.GetKeyName(_listeningAction);
+                _listeningActive = false;
+                _listeningLabel  = null;
+                return;
+            }
+
+            // Mouse buttons
+            Mouse mouse = Mouse.current;
+            if (mouse != null)
+            {
+                string mousePath = null;
+                if      (mouse.leftButton.wasPressedThisFrame)   mousePath = "<Mouse>/leftButton";
+                else if (mouse.rightButton.wasPressedThisFrame)  mousePath = "<Mouse>/rightButton";
+                else if (mouse.middleButton.wasPressedThisFrame) mousePath = "<Mouse>/middleButton";
+
+                if (mousePath != null)
+                {
+                    ApplyBinding(_listeningAction, mousePath);
+                    return;
+                }
+            }
+
+            // Keyboard keys
+            if (kb != null)
+            {
+                foreach (KeyControl key in kb.allKeys)
+                {
+                    if (!key.wasPressedThisFrame) continue;
+                    // Skip escape (already handled above)
+                    if (key == kb.escapeKey) continue;
+                    string path = "<Keyboard>/" + key.name.ToLowerInvariant();
+                    ApplyBinding(_listeningAction, path);
+                    return;
+                }
+            }
+        }
+
+        private void ApplyBinding(GameAction action, string path)
+        {
+            bool ok = KeyBindManager.TrySetBinding(action, path, out string error);
+            if (ok)
+            {
+                // OnBindingsChanged fires → RefreshBindLabels updates the label
+                _listeningActive = false;
+                _listeningLabel  = null;
+            }
+            else
+            {
+                // Show error text for one frame, then restore
+                if (_listeningLabel != null)
+                    _listeningLabel.text = error ?? "!";
+                _showErrorNextFrame = true;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            KeyBindManager.OnBindingsChanged -= RefreshBindLabels;
+        }
+
         // ─── Build ──────────────────────────────────────────────────
 
         private void BuildUI()
@@ -120,7 +218,7 @@ namespace RIMA
             panel.anchorMin = new Vector2(0.5f, 0.5f);
             panel.anchorMax = new Vector2(0.5f, 0.5f);
             panel.pivot = new Vector2(0.5f, 0.5f);
-            panel.sizeDelta = new Vector2(400f, 500f);
+            panel.sizeDelta = new Vector2(400f, 640f);
             panel.anchoredPosition = Vector2.zero;
 
             var panelImg = panel.gameObject.AddComponent<Image>();
@@ -179,8 +277,38 @@ namespace RIMA
             musicSlider  = AddSliderRow(panel, "Music",  PrefMusic,  ref y);
             sfxSlider    = AddSliderRow(panel, "SFX",    PrefSfx,    ref y);
 
+            // ── Controls Section ─────────────────────────────────────
+            y -= 12f;
+            y = AddSectionHeader(panel, "CONTROLS", y);
+
+            // WASD — read-only display row (non-rebindable movement composite)
+            y = AddReadOnlyRow(panel, "Move", "WASD", y);
+
+            // Rebindable actions in display order
+            y = AddBindRow(panel, "Dash",           GameAction.Dash,           y);
+            y = AddBindRow(panel, "Attack",         GameAction.Attack,         y);
+            y = AddBindRow(panel, "Alt Attack",     GameAction.ClassSecondary, y);
+            y = AddBindRow(panel, "Skill 1",        GameAction.Skill1,         y);
+            y = AddBindRow(panel, "Skill 2",        GameAction.Skill2,         y);
+            y = AddBindRow(panel, "Skill 3",        GameAction.Skill3,         y);
+            y = AddBindRow(panel, "Skill 4",        GameAction.Skill4,         y);
+            y = AddBindRow(panel, "Rift Break",     GameAction.RiftBreak,      y);
+
+            // Reset Controls button
+            y -= 4f;
+            AddButton(panel, "RESET CONTROLS", new Vector2(0f, y), () =>
+            {
+                KeyBindManager.ResetToDefaults();
+                // Refresher will update all labels via OnBindingsChanged → refreshers list
+            });
+            y -= 36f;
+
+            // Subscribe so Open() also re-syncs labels when bindings change externally
+            KeyBindManager.OnBindingsChanged += RefreshBindLabels;
+            refreshers.Add(RefreshBindLabels);
+
             // ── Buttons ──────────────────────────────────────────────
-            y -= 20f;
+            y -= 16f;
             AddButton(panel, "RESUME", new Vector2(0f, y), OnResume);
             y -= 40f;
             AddButton(panel, "QUIT TO MENU", new Vector2(0f, y), OnQuitToMenu);
@@ -421,6 +549,117 @@ namespace RIMA
 
             y -= 26f;
             return slider;
+        }
+
+        // A non-interactive label row (used for the WASD composite).
+        private float AddReadOnlyRow(RectTransform parent, string label, string valueText, float y)
+        {
+            var row = MakeRect($"BindRow_{label}", parent);
+            row.anchorMin = new Vector2(0f, 1f);
+            row.anchorMax = new Vector2(1f, 1f);
+            row.pivot = new Vector2(0f, 1f);
+            row.anchoredPosition = new Vector2(30f, y);
+            row.sizeDelta = new Vector2(-60f, 22f);
+
+            var lbl = MakeTMP("Label", row);
+            var lr = lbl.GetComponent<RectTransform>();
+            lr.anchorMin = Vector2.zero;
+            lr.anchorMax = new Vector2(0.6f, 1f);
+            lr.offsetMin = lr.offsetMax = Vector2.zero;
+            lbl.text = label;
+            lbl.fontSize = 10f;
+            lbl.color = new Color(0.8f, 0.85f, 0.9f, 0.9f);
+            lbl.alignment = TextAlignmentOptions.Left;
+
+            var valLbl = MakeTMP("Value", row);
+            var vr = valLbl.GetComponent<RectTransform>();
+            vr.anchorMin = new Vector2(0.65f, 0f);
+            vr.anchorMax = new Vector2(1f, 1f);
+            vr.offsetMin = vr.offsetMax = Vector2.zero;
+            valLbl.text = valueText;
+            valLbl.fontSize = 10f;
+            valLbl.fontStyle = FontStyles.Bold;
+            valLbl.color = new Color(0.6f, 0.65f, 0.7f, 0.8f);
+            valLbl.alignment = TextAlignmentOptions.Center;
+
+            return y - 26f;
+        }
+
+        // A rebindable key row: "Label : [KeyBtn]"
+        private float AddBindRow(RectTransform parent, string label, GameAction action, float y)
+        {
+            var row = MakeRect($"BindRow_{label}", parent);
+            row.anchorMin = new Vector2(0f, 1f);
+            row.anchorMax = new Vector2(1f, 1f);
+            row.pivot = new Vector2(0f, 1f);
+            row.anchoredPosition = new Vector2(30f, y);
+            row.sizeDelta = new Vector2(-60f, 22f);
+
+            // Action label
+            var lbl = MakeTMP("Label", row);
+            var lr = lbl.GetComponent<RectTransform>();
+            lr.anchorMin = Vector2.zero;
+            lr.anchorMax = new Vector2(0.6f, 1f);
+            lr.offsetMin = lr.offsetMax = Vector2.zero;
+            lbl.text = label;
+            lbl.fontSize = 10f;
+            lbl.color = new Color(0.8f, 0.85f, 0.9f, 0.9f);
+            lbl.alignment = TextAlignmentOptions.Left;
+
+            // Key button
+            var btnGo = new GameObject("KeyBtn", typeof(RectTransform));
+            btnGo.transform.SetParent(row, false);
+            var btnRt = btnGo.GetComponent<RectTransform>();
+            btnRt.anchorMin = new Vector2(0.65f, 0f);
+            btnRt.anchorMax = new Vector2(1f, 1f);
+            btnRt.offsetMin = btnRt.offsetMax = Vector2.zero;
+
+            var btnImg = btnGo.AddComponent<Image>();
+            btnImg.color = new Color(0.15f, 0.15f, 0.2f, 0.7f);
+
+            var btnTxt = MakeTMP("BtnTxt", btnRt);
+            var btRt = btnTxt.GetComponent<RectTransform>();
+            btRt.anchorMin = Vector2.zero;
+            btRt.anchorMax = Vector2.one;
+            btRt.offsetMin = btRt.offsetMax = Vector2.zero;
+            btnTxt.text = KeyBindManager.GetKeyName(action);
+            btnTxt.fontSize = 9f;
+            btnTxt.fontStyle = FontStyles.Bold;
+            btnTxt.color = RimaUITheme.Cyan;
+            btnTxt.alignment = TextAlignmentOptions.Center;
+            btnTxt.raycastTarget = false;
+
+            _bindLabels[action] = btnTxt;
+
+            var btn = btnGo.AddComponent<Button>();
+            GameAction captured = action;
+            btn.onClick.AddListener(() => StartListening(captured, btnTxt));
+
+            return y - 26f;
+        }
+
+        // Re-syncs all key-button labels from the current KeyBindManager state.
+        private void RefreshBindLabels()
+        {
+            foreach (KeyValuePair<GameAction, TextMeshProUGUI> kv in _bindLabels)
+                kv.Value.text = KeyBindManager.GetKeyName(kv.Key);
+        }
+
+        // Enters "press a key" mode for the given action.
+        private void StartListening(GameAction action, TextMeshProUGUI label)
+        {
+            if (_listeningActive)
+            {
+                // Cancel any previous listen first
+                if (_listeningLabel != null)
+                    _listeningLabel.text = KeyBindManager.GetKeyName(_listeningAction);
+            }
+            _listeningAction = action;
+            _listeningLabel  = label;
+            _listeningActive = true;
+            _skipFirstPoll   = true; // don't let the activating click/key bind itself
+            label.text = "...";
+            _showErrorNextFrame = false;
         }
 
         private void AddButton(RectTransform parent, string text, Vector2 pos, UnityEngine.Events.UnityAction onClick)
