@@ -5,7 +5,7 @@ using TMPro;
 namespace RIMA
 {
     /// <summary>
-    /// Boss HP bar — ekranın alt-ortasında, oyun başladığında gizli.
+    /// Boss HP bar — ekranın ÜST-ortasında (skill bar ile yarışmaz, CONTROL_SCHEME §5), oyun başladığında gizli.
     /// PenitentSovereign.Start() → Initialize() → Show() çağırır.
     ///
     /// Hiyerarşi (runtime'da oluşturulur):
@@ -58,25 +58,27 @@ namespace RIMA
 
         private void BuildUI()
         {
-            // Find or create Canvas
-            Canvas canvas = FindAnyObjectByType<Canvas>();
+            // Prefer the HUD canvas (anchor top-center UNDER it); never grab the first arbitrary Canvas (CONTROL_SCHEME §5).
+            Canvas canvas = HUDController.Instance != null
+                ? HUDController.Instance.GetComponentInParent<Canvas>()
+                : null;
             if (canvas == null)
             {
                 var canvasGO = new GameObject("BossCanvas");
                 canvas = canvasGO.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvas.sortingOrder = 50;
+                canvas.sortingOrder = 90; // above the gameplay HUD, below pause/settings overlays
                 canvasGO.AddComponent<CanvasScaler>();
                 canvasGO.AddComponent<GraphicRaycaster>();
             }
 
-            // Panel background
+            // Panel background — TOP-center (must not sit at the bottom competing with the skill bar).
             panel = new GameObject("BossHealthPanel");
             panel.transform.SetParent(canvas.transform, false);
 
             var panelRect = panel.AddComponent<RectTransform>();
-            panelRect.anchorMin = new Vector2(0.2f, 0.02f);
-            panelRect.anchorMax = new Vector2(0.8f, 0.12f);
+            panelRect.anchorMin = new Vector2(0.22f, 0.88f);
+            panelRect.anchorMax = new Vector2(0.78f, 0.96f);
             panelRect.offsetMin = Vector2.zero;
             panelRect.offsetMax = Vector2.zero;
 

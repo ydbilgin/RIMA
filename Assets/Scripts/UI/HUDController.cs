@@ -27,6 +27,8 @@ namespace RIMA
         private Image resourceFillImage;
         private CanvasGroup resourceGroup;
 
+        private Image lowHpVignette;
+
         private TextMeshProUGUI roomNameLabel;
 
         private RectTransform interactionPanel;
@@ -130,6 +132,15 @@ namespace RIMA
                 hpPulseCoroutine = StartCoroutine(PulseBar(hpFillImage, RimaUITheme.HpCritical));
             else if ((pct > 0.3f || pct <= 0f) && isPulsing)
                 StopPulse();
+
+            // Low-HP vignette: fade in below 35% HP, strongest near death.
+            if (lowHpVignette != null)
+            {
+                float vig = (pct > 0f && pct < 0.35f) ? Mathf.InverseLerp(0.35f, 0.08f, pct) * 0.55f : 0f;
+                Color vc = lowHpVignette.color;
+                vc.a = vig;
+                lowHpVignette.color = vc;
+            }
         }
 
         private IEnumerator PulseBar(Image img, Color baseColor)
@@ -283,6 +294,7 @@ namespace RIMA
             var root = transform as RectTransform;
             if (root == null) return;
 
+            BuildLowHpVignette(root); // first → bottom layer (over gameplay, behind the bars)
             BuildHpBar(root);
             BuildResourceBar(root);
             BuildRoomNameLabel(root);
@@ -465,6 +477,29 @@ namespace RIMA
             mapRoot.pivot = new Vector2(1f, 1f);
             mapRoot.anchoredPosition = new Vector2(-10f, -10f);
             mapRoot.sizeDelta = new Vector2(72f, 72f);
+        }
+
+        private void BuildLowHpVignette(RectTransform root)
+        {
+            var go = new GameObject("LowHpVignette", typeof(RectTransform));
+            go.transform.SetParent(root, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
+
+            lowHpVignette = go.AddComponent<Image>();
+            lowHpVignette.sprite = Resources.Load<Sprite>("UI/RIMA/lowhp_vignette");
+            if (lowHpVignette.sprite == null)
+            {
+                // No vignette art imported yet — don't render a full-screen solid; skip the effect.
+                Destroy(go);
+                lowHpVignette = null;
+                return;
+            }
+            lowHpVignette.type = Image.Type.Simple;
+            lowHpVignette.color = new Color(0.7f, 0.05f, 0.08f, 0f); // dark red; alpha driven by HP in OnHPChanged
+            lowHpVignette.raycastTarget = false;
         }
     }
 }

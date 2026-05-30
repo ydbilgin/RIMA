@@ -9,6 +9,7 @@ namespace RIMA
 {
     public class DemoCompleteOverlay : MonoBehaviour
     {
+        // TODO(user, D4): replace app/0 with the real Steam App ID once the store page exists (GATED).
         private const string DefaultSteamWishlistUrl = "https://store.steampowered.com/app/0/";
         private static readonly Color BrandCyan = new Color(0f, 1f, 0.8f, 1f);
         private static readonly Color TarnishedGold = new Color(0.95f, 0.74f, 0.24f, 1f);
@@ -34,7 +35,7 @@ namespace RIMA
 
         private void Build()
         {
-            Time.timeScale = 0.2f;
+            Time.timeScale = 0f; // D1: full freeze — modal victory/CTA screen (UI runs unscaled, buttons still click).
             EnsureEventSystem();
 
             _canvas = gameObject.AddComponent<Canvas>();
@@ -63,8 +64,25 @@ namespace RIMA
 
             RectTransform teaser = CreatePanel("NextClassTeaser", root, new Color(0.04f, 0.05f, 0.08f, 0.55f), new Color(0f, 1f, 0.8f, 0.32f));
             Stretch(teaser, new Vector2(0.18f, 0.35f), new Vector2(0.82f, 0.42f), Vector2.zero, Vector2.zero);
-            TextMeshProUGUI teaserText = CreateText("NextClassTeaserText", teaser, "Next echo: class silhouette placeholder", 14f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
-            Stretch(teaserText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            // D2: show the generated next-class silhouette; fall back to text if the sprite isn't imported.
+            Sprite silhouette = Resources.Load<Sprite>("UI/RIMA/next_class_silhouette");
+            if (silhouette != null)
+            {
+                Image silImg = CreateImage("NextClassSilhouette", teaser, new Color(0f, 1f, 0.8f, 0.85f));
+                silImg.sprite = silhouette;
+                silImg.preserveAspect = true;
+                silImg.raycastTarget = false;
+                Stretch(silImg.rectTransform, new Vector2(0.02f, 0.05f), new Vector2(0.16f, 0.95f), Vector2.zero, Vector2.zero);
+
+                TextMeshProUGUI teaserText = CreateText("NextClassTeaserText", teaser, "Next echo awaits — a new class joins the descent.", 14f, RimaUITheme.TextMuted, TextAlignmentOptions.Left);
+                Stretch(teaserText.rectTransform, new Vector2(0.18f, 0f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero);
+            }
+            else
+            {
+                TextMeshProUGUI teaserText = CreateText("NextClassTeaserText", teaser, "Next echo: a new class awaits the descent.", 14f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
+                Stretch(teaserText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            }
 
             Button wishlist = CreateButton("WishlistButton", root, "WISHLIST ON STEAM", BrandCyan, RimaUITheme.BackgroundDark, 24f);
             Stretch((RectTransform)wishlist.transform, new Vector2(0.24f, 0.22f), new Vector2(0.76f, 0.33f), Vector2.zero, Vector2.zero);
