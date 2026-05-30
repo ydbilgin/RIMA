@@ -413,11 +413,12 @@ namespace RIMA
 
         private IEnumerator ChainMarkerSequence(Vector2 worldPos)
         {
-            // Visual marker (debug)
+            // Marker persists, then explodes. Phase 3 shortens the dodge window too (cx review Q3 — this
+            // windup bypasses Telegraph()), floored at the reaction window so it never becomes unfair.
+            float delay = phase3Active ? Mathf.Max(0.22f, chainExplosionDelay * 0.85f) : chainExplosionDelay;
             float elapsed = 0f;
-            while (elapsed < chainExplosionDelay)
+            while (elapsed < delay)
             {
-                // Debug.DrawRay(worldPos, Vector2.up * 0.5f, Color.magenta); // removed: visible in play mode
                 elapsed += Time.deltaTime;
                 yield return null;
             }
