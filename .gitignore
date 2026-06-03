@@ -67,6 +67,8 @@ CODEX_DONE_history_backup.md
 
 # Binary assets — versioned in PixelLab, not git
 *.png
+# Screenshot .meta — PNGs above are ignored; don't track orphan dev-screenshot metas
+Assets/Screenshots/*.png.meta
 *.jpg
 *.jpeg
 *.gif
