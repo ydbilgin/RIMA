@@ -26,6 +26,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/_IsoGame_Map03.unity
     guid: 2e75401896a522442a8273798b237adf
+  - enabled: 1
+    path: Assets/Scenes/_IsoGame_Map04.unity
+    guid: 4040ef029c754144ab927755d108b502
+  - enabled: 1
+    path: Assets/Scenes/_IsoGame_Map05.unity
+    guid: 86461caef0037f241afca27dc5d70d62
+  - enabled: 1
+    path: Assets/Scenes/_IsoGame_Map06.unity
+    guid: 6e0947dd4556f8c4f92c7cc026239661
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

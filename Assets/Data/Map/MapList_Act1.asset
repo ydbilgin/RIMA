@@ -16,4 +16,7 @@ MonoBehaviour:
   - _IsoGame
   - _IsoGame_Map02
   - _IsoGame_Map03
+  - _IsoGame_Map04
+  - _IsoGame_Map05
+  - _IsoGame_Map06
   startSceneName: _IsoGame
