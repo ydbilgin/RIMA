@@ -20,6 +20,7 @@ namespace RIMA
 
         private bool rewardSpawned;
         private readonly List<(Health health, UnityAction listener)> listeners = new();
+        private static readonly System.Collections.Generic.List<DoorTrigger> pendingExitDoors = new();
         private const string RewardSpritePath = "Assets/Sprites/Environment/Reward/reward_relic.png";
         private const string RuntimeRewardSpritePath = "UI/RIMA/RIMA_UI_Node_Chest";
 
@@ -99,7 +100,7 @@ namespace RIMA
                 RIMA.Environment.Gate gate = door.GetComponent<RIMA.Environment.Gate>();
                 if (gate != null) gate.Unlock();
 
-                door.SetActive(true);
+                pendingExitDoors.Add(door);
                 unlockedDoor = true;
             }
 
@@ -107,6 +108,17 @@ namespace RIMA
 
             foreach (RIMA.Environment.Gate gate in FindObjectsByType<RIMA.Environment.Gate>(FindObjectsSortMode.None))
                 if (gate != null) gate.Unlock();
+        }
+
+        public static void ActivateExitDoors()
+        {
+            foreach (DoorTrigger door in pendingExitDoors)
+            {
+                if (door != null)
+                    door.SetActive(true);
+            }
+
+            pendingExitDoors.Clear();
         }
 
         private void SpawnRewardPickup()

@@ -29,6 +29,7 @@ namespace RIMA
             collected = true;
             Debug.Log("[Reward] collected");
             RunStats.Instance.RecordRewardCollected();
+            RoomClearVictoryTrigger.ActivateExitDoors();
 
             if (RuntimeRoomManager.Instance != null)
                 RuntimeRoomManager.Instance.OpenDoorsAfterReward();
