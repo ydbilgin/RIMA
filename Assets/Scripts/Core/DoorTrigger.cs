@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using RIMA.Systems.Map;
 
 namespace RIMA
 {
@@ -21,6 +22,7 @@ namespace RIMA
         [SerializeField] private DoorDirection direction;
         [SerializeField] private string targetRoomId;
         [SerializeField] private string targetSpawnPoint;
+        [SerializeField] private bool autoEnterOnOverlap = false;
 
         [Header("Visual Feedback")]
         [SerializeField] private SpriteRenderer doorIndicator; // optional: glow/arrow sprite
@@ -37,6 +39,7 @@ namespace RIMA
         private bool triggered;
         private bool playerInRange;
         private bool HasTargetRoom => !string.IsNullOrEmpty(targetRoomId);
+        public DoorDirection Direction => direction;
 
         private void Awake()
         {
@@ -80,6 +83,7 @@ namespace RIMA
         {
             if (!isActive || triggered || !playerInRange) return;
             if (Keyboard.current == null || !Keyboard.current[InteractKey].wasPressedThisFrame) return;
+            if (!IsGateUnlocked()) return;
 
             triggered = true;
             col.enabled = false;
@@ -94,18 +98,50 @@ namespace RIMA
             if (!other.CompareTag("Player")) return;
             if (triggered) return;
 
+            if (autoEnterOnOverlap)
+            {
+                if (!IsGateUnlocked()) return;
+
+                triggered = true;
+                col.enabled = false;
+                ClearPlayerRange();
+
+                TriggerTransition();
+                return;
+            }
+
             playerInRange = true;
             ShowPrompt();
         }
 
         private void TriggerTransition()
         {
-            if (RuntimeRoomManager.Instance == null) return;
+            if (!IsGateUnlocked())
+            {
+                triggered = false;
+                if (col != null) col.enabled = true;
+                return;
+            }
+
+            if (RuntimeRoomManager.Instance == null)
+            {
+                MapFlowManager.ActiveInstance?.GoToNextMap();
+                return;
+            }
 
             if (HasTargetRoom)
                 RuntimeRoomManager.Instance.TransitionToRoom(targetRoomId, targetSpawnPoint);
             else
                 RuntimeRoomManager.Instance.OnPlayerEnteredDoor(direction);
+        }
+
+        private bool IsGateUnlocked()
+        {
+            GateBehavior gateBehavior = GetComponent<GateBehavior>();
+            if (gateBehavior != null) return gateBehavior.IsOpen;
+
+            RIMA.Environment.Gate gate = GetComponent<RIMA.Environment.Gate>();
+            return gate == null || gate.CurrentState == RIMA.Environment.Gate.State.Unlocked;
         }
 
         private void OnTriggerExit2D(Collider2D other)

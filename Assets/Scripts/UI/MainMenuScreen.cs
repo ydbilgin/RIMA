@@ -132,6 +132,10 @@ namespace RIMA
             var bg = root.AddComponent<Image>();
             bg.color = RimaUITheme.BackgroundDark;
 
+            // On-brand Shattered-Keep backdrop (cover/crop, no distortion). Falls back to the flat
+            // dark fill above if the sprite isn't imported. Logo/buttons are added after → draw on top.
+            RimaUITheme.CreateFullScreenBackdrop(root.transform, "UI/Backgrounds/main_menu_bg", RimaUITheme.BackgroundDark);
+
             // ── Logo: "RIMA" ─────────────────────────────────────────
             var logoGo = MakeRect("Logo", root.transform,
                 new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));

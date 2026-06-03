@@ -41,7 +41,7 @@ namespace RIMA.Editor
             "Death Blow"
         };
 
-        [MenuItem("RIMA/Skills/Rebuild Icon Registry")]
+        [MenuItem("RIMA/Utilities/Rebuild Skill Icon Registry")]
         public static void Rebuild()
         {
             EnsureResourcesFolder();

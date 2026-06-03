@@ -1,10 +1,10 @@
 namespace RIMA
 {
-    public enum RewardType { Skill, Gold, Heal }
+    public enum RewardType { Skill, Gold, Heal, CrossClassEcho }
 
     /// <summary>
     /// Bir oda veya sandık ödülünü temsil eder.
-    /// Skill, altın, iyileşme — ileride Item/Relic/Trait eklenebilir.
+    /// Skill, altın, iyileşme, cross-class Echo — ileride Item/Relic/Trait eklenebilir.
     /// </summary>
     public class RewardOffer
     {
@@ -13,20 +13,26 @@ namespace RIMA
         public int        goldAmount;  // RewardType.Gold
         public int        healPercent; // RewardType.Heal (max HP'nin yüzdesi, örn. 20 = %20)
 
+        /// <summary>RewardType.CrossClassEcho — the curated guest binding to activate via
+        /// <see cref="PlayerCrossClassBinding.Bind"/> when this offer is picked (B5).</summary>
+        public CrossClassSkillData crossClass;
+
         // ── Display helpers ──────────────────────────────────────
 
         public string DisplayName => type switch
         {
-            RewardType.Gold  => $"+{goldAmount} Altın",
-            RewardType.Heal  => $"İyileşme +%{healPercent}",
-            _                => skill?.skillName ?? "???"
+            RewardType.Gold           => $"+{goldAmount} Altın",
+            RewardType.Heal           => $"İyileşme +%{healPercent}",
+            RewardType.CrossClassEcho => crossClass != null ? $"Echo of {crossClass.sourceClass}" : "Echo",
+            _                         => skill?.skillName ?? "???"
         };
 
         public string Description => type switch
         {
-            RewardType.Gold => "Sandık ve tüccardan alışveriş için kullanılır.",
-            RewardType.Heal => $"Anında max HP'nin %{healPercent}'ini iyileştirir.",
-            _               => skill?.description ?? ""
+            RewardType.Gold           => "Sandık ve tüccardan alışveriş için kullanılır.",
+            RewardType.Heal           => $"Anında max HP'nin %{healPercent}'ini iyileştirir.",
+            RewardType.CrossClassEcho => crossClass != null ? crossClass.description : "",
+            _                         => skill?.description ?? ""
         };
 
         public SkillTier  Tier      => (type == RewardType.Skill) ? (skill?.tier ?? SkillTier.Common) : SkillTier.Common;
@@ -43,5 +49,8 @@ namespace RIMA
 
         public static RewardOffer FromHeal(int percent) =>
             new RewardOffer { type = RewardType.Heal, healPercent = percent };
+
+        public static RewardOffer FromEcho(CrossClassSkillData echo) =>
+            new RewardOffer { type = RewardType.CrossClassEcho, crossClass = echo };
     }
 }

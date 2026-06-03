@@ -12,7 +12,7 @@ namespace RIMA.MapDesigner.Brush.Editor
         private AssetPoolSO selectedPool;
         private Vector2 scroll;
 
-        [MenuItem("RIMA/Brush/Variant Preview")]
+        [MenuItem("RIMA/Legacy/Brush/Variant Preview")]
         public static void Open()
         {
             GetWindow<BrushVariantPreviewWindow>("Brush Variant Preview");

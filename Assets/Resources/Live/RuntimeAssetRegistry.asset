@@ -21,126 +21,246 @@ MonoBehaviour:
     tile: {fileID: 0}
     prefab: {fileID: 0}
     kind: 1
-  - guid: 366bfe9e05bd10041b1194c2942a971f
-    displayName: cliff_cyan_glow
-    tag: cliff
+  - guid: 02073abab32438b4e9f0aca182ace93f
+    displayName: floor451_0
+    tag: floor
     layer: 0
-    sprite: {fileID: 21300000, guid: 366bfe9e05bd10041b1194c2942a971f, type: 3}
+    sprite: {fileID: 21300000, guid: 02073abab32438b4e9f0aca182ace93f, type: 3}
     tile: {fileID: 0}
     prefab: {fileID: 0}
     kind: 1
-  - guid: c08164f7fa618734897d163dd95333ff
-    displayName: cliff_E
-    tag: cliff
+  - guid: 4acfb31e5f6267e41a7215bd57bd480a
+    displayName: floor451_1
+    tag: floor
     layer: 0
-    sprite: {fileID: 21300000, guid: c08164f7fa618734897d163dd95333ff, type: 3}
+    sprite: {fileID: 21300000, guid: 4acfb31e5f6267e41a7215bd57bd480a, type: 3}
     tile: {fileID: 0}
     prefab: {fileID: 0}
     kind: 1
-  - guid: eff10014d1767a84c99113624ea94080
-    displayName: cliff_N
-    tag: cliff
+  - guid: a901d32d28076914ab2eb960e24dc108
+    displayName: floor451_14
+    tag: floor
     layer: 0
-    sprite: {fileID: 21300000, guid: eff10014d1767a84c99113624ea94080, type: 3}
+    sprite: {fileID: 21300000, guid: a901d32d28076914ab2eb960e24dc108, type: 3}
     tile: {fileID: 0}
     prefab: {fileID: 0}
     kind: 1
-  - guid: 3f3ab8c77a30738418aa094d2ad3efa4
-    displayName: cliff_NE
-    tag: cliff
+  - guid: b5160ab081a2676418c12565cfe14266
+    displayName: floor451_15
+    tag: floor
     layer: 0
-    sprite: {fileID: 21300000, guid: 3f3ab8c77a30738418aa094d2ad3efa4, type: 3}
+    sprite: {fileID: 21300000, guid: b5160ab081a2676418c12565cfe14266, type: 3}
     tile: {fileID: 0}
     prefab: {fileID: 0}
     kind: 1
-  - guid: 62da8f70f5c21fe44999dff49dffcb15
-    displayName: cliff_NW
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: 62da8f70f5c21fe44999dff49dffcb15, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: 2a3d49363e3628c4292a7d2c6f575c9e
-    displayName: cliff_S
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: 0fb53d1598117804fb280f73aa7bffee
-    displayName: cliff_S_new1
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: 0fb53d1598117804fb280f73aa7bffee, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: c83d4e0fd9bbbc84980f65f902822fef
-    displayName: cliff_S_new2
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: c83d4e0fd9bbbc84980f65f902822fef, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: 7483b62a84244a9458965f196815a0aa
-    displayName: cliff_S_new3
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: 7483b62a84244a9458965f196815a0aa, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: 4733d595eb91f4041a3b124836117587
-    displayName: cliff_S_new4
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: 4733d595eb91f4041a3b124836117587, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: 8e059e7d4307669438753289a79c7059
-    displayName: cliff_SE
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: 8e059e7d4307669438753289a79c7059, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: cced08e37b130ad43a4bf86632242964
-    displayName: cliff_SW
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: cced08e37b130ad43a4bf86632242964, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: b8ce4a81b9a8c404a8aaa0c4e92b7211
-    displayName: cliff_W
-    tag: cliff
-    layer: 0
-    sprite: {fileID: 21300000, guid: b8ce4a81b9a8c404a8aaa0c4e92b7211, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: dc62b61716ca8d548a8bde0aaa56a8ba
-    displayName: edge_ao_rim
-    tag: misc
-    layer: 0
-    sprite: {fileID: 21300000, guid: dc62b61716ca8d548a8bde0aaa56a8ba, type: 3}
-    tile: {fileID: 0}
-    prefab: {fileID: 0}
-    kind: 1
-  - guid: 15b27e479b43d084780976c301841918
-    displayName: EdgeAORim_Tile
-    tag: tile
+  - guid: 5f4cf3e6421f2e846839d1b37a5a93d1
+    displayName: floor451_0
+    tag: floor
     layer: 0
     sprite: {fileID: 0}
-    tile: {fileID: 11400000, guid: 15b27e479b43d084780976c301841918, type: 2}
+    tile: {fileID: 11400000, guid: 5f4cf3e6421f2e846839d1b37a5a93d1, type: 2}
     prefab: {fileID: 0}
     kind: 0
+  - guid: 4f967d8fd24ac2a41ba012bd06aaf935
+    displayName: floor451_1
+    tag: floor
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: 4f967d8fd24ac2a41ba012bd06aaf935, type: 2}
+    prefab: {fileID: 0}
+    kind: 0
+  - guid: 586161aba2788f64187e5df2a9cc7e35
+    displayName: floor451_14
+    tag: floor
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: 586161aba2788f64187e5df2a9cc7e35, type: 2}
+    prefab: {fileID: 0}
+    kind: 0
+  - guid: e89aa3b44b1b20b498fac0794595a963
+    displayName: floor451_15
+    tag: floor
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: e89aa3b44b1b20b498fac0794595a963, type: 2}
+    prefab: {fileID: 0}
+    kind: 0
+  - guid: 3b01c9c1419a4b9418230fe6b65126a2
+    displayName: decor_banner
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 3b01c9c1419a4b9418230fe6b65126a2, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 22f10ad00ab266f43af9a043adcaba37
+    displayName: decor_blocks
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 22f10ad00ab266f43af9a043adcaba37, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 54c0ebabf892aee438782f3641d005e9
+    displayName: decor_bones
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 54c0ebabf892aee438782f3641d005e9, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 24960b86f3031914389963ba0de239d7
+    displayName: decor_brazier_lit
+    tag: light
+    layer: 6
+    sprite: {fileID: 21300000, guid: 24960b86f3031914389963ba0de239d7, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 5b308afb050cd5e44a8fde4c132c344a
+    displayName: decor_brazier_unlit
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 5b308afb050cd5e44a8fde4c132c344a, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: fa5bfd6ae7be0f342a66c9df395006b9
+    displayName: decor_bricks
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: fa5bfd6ae7be0f342a66c9df395006b9, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 3c98e4230931db24199ba65014872bd8
+    displayName: decor_foot_debris
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 3c98e4230931db24199ba65014872bd8, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 2a92fbb6c455f4f4193a5a4463f83ad1
+    displayName: decor_moss
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 2a92fbb6c455f4f4193a5a4463f83ad1, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: ec1708b4118d3a24caea0905e773955d
+    displayName: decor_rift_a
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: ec1708b4118d3a24caea0905e773955d, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 4765ba089c0dce142adfa88fac0dc0e4
+    displayName: decor_rift_b
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 4765ba089c0dce142adfa88fac0dc0e4, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 935848a8745f80748b5d8c86d0f5fdec
+    displayName: decor_rubble_a
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 935848a8745f80748b5d8c86d0f5fdec, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 75e4cd4e5bfcaf5488c9b43673127d71
+    displayName: decor_rubble_b
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 75e4cd4e5bfcaf5488c9b43673127d71, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: fa1b91a289228314ebe1ecdf3e7ba55a
+    displayName: decor_rune
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: fa1b91a289228314ebe1ecdf3e7ba55a, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: b1cfa52c06da54e4e96bc3285b27a3f1
+    displayName: decor_sarcophagus
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: b1cfa52c06da54e4e96bc3285b27a3f1, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 0d3daf8bb517aa640983683ba88e0dcd
+    displayName: decor_seal_circle
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 0d3daf8bb517aa640983683ba88e0dcd, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: ee8fed83bad0a3f4dbc0dc22ff57d2f0
+    displayName: decor_slab_crack
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: ee8fed83bad0a3f4dbc0dc22ff57d2f0, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: ea0a80998af65d941b640dbb412a73e1
+    displayName: pl_brazier
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: ea0a80998af65d941b640dbb412a73e1, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: cf502f69dad7c00499de9f3246da3510
+    displayName: pl_floor_solid
+    tag: floor
+    layer: 0
+    sprite: {fileID: 0}
+    tile: {fileID: 11400000, guid: cf502f69dad7c00499de9f3246da3510, type: 2}
+    prefab: {fileID: 0}
+    kind: 0
+  - guid: 34151a3d8584fc549b873b5f4aa8391b
+    displayName: pl_floor_solid
+    tag: floor
+    layer: 0
+    sprite: {fileID: 21300000, guid: 34151a3d8584fc549b873b5f4aa8391b, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: a00241e09e7260c44a320227f189f14a
+    displayName: pl_pillar_broken
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: a00241e09e7260c44a320227f189f14a, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 32024ca5a65c24d4eb9015df131bb78b
+    displayName: pl_rubble
+    tag: prop
+    layer: 4
+    sprite: {fileID: 21300000, guid: 32024ca5a65c24d4eb9015df131bb78b, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
+  - guid: 327af6bff667c0c47a3f8c62862504cb
+    displayName: pl_wall_tower
+    tag: wall
+    layer: 0
+    sprite: {fileID: 21300000, guid: 327af6bff667c0c47a3f8c62862504cb, type: 3}
+    tile: {fileID: 0}
+    prefab: {fileID: 0}
+    kind: 1
   - guid: 6ace68eac50069846afeaec6ff482ec2
     displayName: mounting_00_7227fa35-ade1-406e-af2e-600fb4176af2
     tag: mounting
@@ -528,7 +648,7 @@ MonoBehaviour:
   - guid: 221d203f83ec4e0d8f615c003bf23b3b
     displayName: CliffTile_Hades
     tag: cliff
-    layer: 0
+    layer: 2
     sprite: {fileID: 0}
     tile: {fileID: 11400000, guid: 221d203f83ec4e0d8f615c003bf23b3b, type: 2}
     prefab: {fileID: 0}
@@ -536,7 +656,7 @@ MonoBehaviour:
   - guid: 16ecced5c069db1428c7f1f769143b6a
     displayName: DirectionalCliffTile_Hades
     tag: cliff
-    layer: 0
+    layer: 2
     sprite: {fileID: 0}
     tile: {fileID: 11400000, guid: 16ecced5c069db1428c7f1f769143b6a, type: 2}
     prefab: {fileID: 0}

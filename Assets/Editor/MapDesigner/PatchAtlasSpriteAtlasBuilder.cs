@@ -11,7 +11,7 @@ namespace RIMA.MapDesigner.Brush.Editor
 {
     public static class PatchAtlasSpriteAtlasBuilder
     {
-        [MenuItem("RIMA/MapDesigner/Build SpriteAtlas from PatchAtlas")]
+        [MenuItem("RIMA/Legacy/MapDesigner/Build SpriteAtlas from PatchAtlas")]
         public static void BuildSelectedOrAll()
         {
             PatchAtlasSO[] atlases = GetSelectedAtlases();

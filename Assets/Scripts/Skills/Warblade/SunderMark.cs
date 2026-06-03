@@ -15,7 +15,7 @@ namespace RIMA
         [SerializeField] private float duration = 8f;
         [SerializeField] private int weakenStacks = 2;   // ~%40 zırh kırma
 
-        private DeathBlow deathBlow;
+        private ChainWindowTracker chain;
 
         protected override void Awake()
         {
@@ -23,7 +23,7 @@ namespace RIMA
             skillName = "Sunder Mark";
             cooldown = 14f;
             rageCost = 0;
-            deathBlow = GetComponentInParent<DeathBlow>();
+            chain = ChainWindowTracker.For(this);
         }
 
         protected override void Execute()
@@ -34,7 +34,10 @@ namespace RIMA
             var status = target.GetComponent<StatusEffectSystem>();
             if (status == null) return;
 
-            bool chained = deathBlow != null && deathBlow.CooldownPercent > 0.5f;
+            // A4: 3-stack chain when Death Blow's follow-up window is open (was
+            // `deathBlow.CooldownPercent > 0.5f`). Consume — one Death Blow empowers one Sunder Mark.
+            if (chain == null) chain = ChainWindowTracker.For(this);
+            bool chained = chain != null && chain.Consume(ChainWindowTracker.SunderExecute);
             int stacks = chained ? 3 : weakenStacks;
 
             status.ApplyEffect(StatusEffectType.Weakened, duration, stacks);
@@ -44,7 +47,7 @@ namespace RIMA
 
         private Health FindNearest(float radius)
         {
-            var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Default"));
+            var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Enemy"));
             float best = float.MaxValue;
             Health bestHp = null;
             foreach (var h in hits)

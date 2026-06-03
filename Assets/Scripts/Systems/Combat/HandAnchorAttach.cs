@@ -32,6 +32,10 @@ namespace RIMA
         [SerializeField] private OrientationSync orientationSync;
         [SerializeField] private SpriteRenderer weaponRenderer; // set after spawn; auto-found if null
 
+        [Header("Swing visibility (3-AI verdict R — keep weapon VISIBLE, fade it)")]
+        [Tooltip("Weapon opacity during a swing. NOT hidden (that kills weapon identity / motion tracking — Hades keeps it visible). Faded so the slash VFX reads on top. ~0.3-0.5.")]
+        [SerializeField, Range(0f, 1f)] private float swingWeaponAlpha = 0.4f;
+
         private PlayerController _playerController;
         private PlayerAttack _playerAttack;
         private GameObject _weaponInstance;
@@ -95,6 +99,20 @@ namespace RIMA
 
         private void LateUpdate()
         {
+            // --- Swing visibility (3-AI verdict R, supersedes the old "hide weapon" canon) ---
+            // Keep the weapon VISIBLE but fade it during the swing so the slash VFX dominates while the
+            // weapon's identity + trajectory stay readable. ~0.06s ease so it isn't a hard pop.
+            if (weaponRenderer != null && orientationSync != null)
+            {
+                float targetAlpha = orientationSync.IsSwinging ? swingWeaponAlpha : 1f;
+                Color wc = weaponRenderer.color;
+                if (!Mathf.Approximately(wc.a, targetAlpha))
+                {
+                    wc.a = Mathf.MoveTowards(wc.a, targetAlpha, Time.deltaTime / 0.06f);
+                    weaponRenderer.color = wc;
+                }
+            }
+
             // --- A2: Orientation bridge (Level1Static) ---
             if (attachMode == AttachMode.Level1Static && _playerController != null && orientationSync != null)
             {

@@ -15,9 +15,15 @@ namespace RIMA
         private float elapsed;
         private bool recalled;
 
+        private void Awake()
+        {
+            // Cache here too: Update must never NullRef if a silhouette exists without Init() having run.
+            if (sr == null) sr = GetComponent<SpriteRenderer>();
+        }
+
         public void Init(Sprite sprite, float window)
         {
-            sr = GetComponent<SpriteRenderer>();
+            if (sr == null) sr = GetComponent<SpriteRenderer>();
             sr.sprite  = sprite;
             sr.color   = new Color(0.3f, 0.1f, 0.7f, 0.65f);
             sr.sortingLayerName = "Default";
@@ -27,7 +33,7 @@ namespace RIMA
 
         private void Update()
         {
-            if (recalled) return;
+            if (recalled || sr == null || lifetime <= 0f) return;
             elapsed += Time.deltaTime;
             float t = 1f - Mathf.Clamp01(elapsed / lifetime);
             Color c = sr.color;

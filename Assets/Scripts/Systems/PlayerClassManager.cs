@@ -10,6 +10,7 @@ namespace RIMA
     public class PlayerClassManager : MonoBehaviour
     {
         public static PlayerClassManager Instance { get; private set; }
+        public static ClassType SelectedClass = ClassType.None;
 
         public ClassType PrimaryClass   { get; private set; } = ClassType.Warblade;
         public ClassType SecondaryClass { get; private set; } = ClassType.None;
@@ -18,16 +19,28 @@ namespace RIMA
         public event Action<ClassType> OnSecondaryClassSelected;
         public event Action<ClassType> OnPrimaryClassSet;
 
+        [SerializeField] private bool applyPrimaryOnStart;
+
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
         }
 
+        private void Start()
+        {
+            if (applyPrimaryOnStart)
+            {
+                var chosen = SelectedClass != ClassType.None ? SelectedClass : ClassType.Warblade;
+                SetPrimaryClass(chosen);
+            }
+        }
+
         /// <summary> CharacterSelectScreen calls this at game start to set the primary class. </summary>
         public void SetPrimaryClass(ClassType type)
         {
             if (type == ClassType.None) return;
+            SelectedClass = type;
             PrimaryClass = type;
             ApplyPrimaryClassToPlayer(type);
             OnPrimaryClassSet?.Invoke(type);

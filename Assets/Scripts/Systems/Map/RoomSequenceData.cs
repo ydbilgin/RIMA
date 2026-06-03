@@ -24,6 +24,9 @@ namespace RIMA.Systems.Map
         public GameObject focalElementPrefab;
         public Vector3 focalElementPos;
 
+        [Header("Edge Decor Props")]
+        public DecorProp[] decorProps;
+
         [Header("Cliff Pattern (optional)")]
         public string cliffPatternKey;
 
@@ -41,6 +44,13 @@ namespace RIMA.Systems.Map
             public GameObject prefab;
             public Vector3 position;
             public bool isElite;
+        }
+
+        [Serializable]
+        public class DecorProp
+        {
+            public GameObject prefab;
+            public Vector3 localPosition;
         }
     }
 }

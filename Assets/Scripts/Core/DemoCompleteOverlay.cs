@@ -2,6 +2,7 @@ using RIMA.Systems.Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -46,6 +47,9 @@ namespace RIMA
 
             Image bg = CreateImage("BG", transform, RimaUITheme.OverlayDark);
             Stretch(bg.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            // On-brand throne-room victory backdrop (cover/crop). VictoryRoot is a later sibling → on top.
+            RimaUITheme.CreateFullScreenBackdrop(bg.transform, "UI/Backgrounds/victory_reward_bg", RimaUITheme.OverlayDark);
 
             RectTransform root = CreateRect("VictoryRoot", transform);
             Stretch(root, new Vector2(0.12f, 0.08f), new Vector2(0.88f, 0.92f), Vector2.zero, Vector2.zero);
@@ -112,13 +116,20 @@ namespace RIMA
         private void Restart()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            MapFlowManager.Instance?.ResetRun();
+            SceneManager.LoadScene("MainMenu");
         }
 
         private void LoadMainMenu()
         {
             Time.timeScale = 1f;
+            MapFlowManager.Instance?.ResetRun();
             SceneManager.LoadScene("MainMenu");
+        }
+
+        private void OnDestroy()
+        {
+            Time.timeScale = 1f;
         }
 
         private static string FormatSeconds(float seconds)
@@ -211,7 +222,7 @@ namespace RIMA
 
             GameObject go = new GameObject("EventSystem");
             go.AddComponent<EventSystem>();
-            go.AddComponent<StandaloneInputModule>();
+            go.AddComponent<InputSystemUIInputModule>();
         }
     }
 }

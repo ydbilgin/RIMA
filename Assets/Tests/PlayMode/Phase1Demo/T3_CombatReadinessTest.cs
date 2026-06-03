@@ -34,6 +34,13 @@ namespace RIMA.Tests.Phase1Demo
                 UnityEngine.Object.Destroy(_testMob);
             _testMob = null;
             Time.timeScale = 1f; // restore in case test left it modified
+
+            // Restore cursor-aim: the test body forces CombatAimMode.CharacterFacing for
+            // deterministic facing, but that pref ("AttackAimMode") persists in the Unity
+            // editor and would leak into the live game (attacks aiming in movement direction
+            // instead of at the mouse). Restore the game default (TowardsMouse) here.
+            UnityEngine.PlayerPrefs.SetInt("AttackAimMode", (int)RIMA.CombatAimMode.TowardsMouse);
+            UnityEngine.PlayerPrefs.Save();
         }
 
         [UnityTest]

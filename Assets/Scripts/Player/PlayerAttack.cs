@@ -38,6 +38,22 @@ namespace RIMA
         public bool IsCommitted => CommitTimer > 0f;
 
         /// <summary>
+        /// A2 — finisher (last combo step) hit reach, so the commit-beat BREAK lands exactly
+        /// where the 3rd-hit swing connects. Mirrors BasicAttackBehaviorBase.ApplyMeleeHit:
+        /// hitCenter = transform.position + FacingDirection * range, OverlapCircle(range, radius).
+        /// Returns false if no profile is assigned.
+        /// </summary>
+        public bool TryGetFinisherReach(out Vector2 facing, out float range, out float radius)
+        {
+            facing = controller != null ? controller.FacingDirection : Vector2.right;
+            if (basicAttackProfile == null) { range = 0f; radius = 0f; return false; }
+            int finisherStep = basicAttackProfile.comboLength - 1;
+            range = basicAttackProfile.GetHitRangeForStep(finisherStep);
+            radius = basicAttackProfile.GetHitRadiusForStep(finisherStep);
+            return true;
+        }
+
+        /// <summary>
         /// Duration of the procedural weapon swing for the current attack, spanning the
         /// startup windup through the commitment follow-through. Consumed by the
         /// orientation/mount bridge (HandAnchorAttach) to drive OrientationSync.BeginSwing.

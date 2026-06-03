@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 256890603339688400}
   - component: {fileID: 4106460332951813482}
   - component: {fileID: 4613790420481307006}
+  - component: {fileID: 8594931641887116954}
+  - component: {fileID: 5000874328881574145}
   m_Layer: 0
   m_Name: Penitent
   m_TagString: Enemy
@@ -168,6 +170,8 @@ MonoBehaviour:
   hitRadius: 1
   weakenDuration: 4
   staggerDuration: 0.8
+  useTelegraph: 1
+  telegraphDuration: 0.35
 --- !u!114 &9219052869841983728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,7 +309,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1293760285
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
@@ -316,7 +320,7 @@ SpriteRenderer:
   m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!114 &4613790420481307006
 MonoBehaviour:
@@ -333,3 +337,31 @@ MonoBehaviour:
   color: {r: 1, g: 0.8, b: 0.2, a: 1}
   pixelSize: 32
   shape: 0
+--- !u!114 &8594931641887116954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4281498823748507438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2860fe9f3bedbf44d8ec7399934fe436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
+  knockbackResistance: 0
+--- !u!114 &5000874328881574145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4281498823748507438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db7a0c9aa7c96408ecac530d535b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.HitFlashDriver
+  spriteRenderer: {fileID: 0}
+  flashDuration: 0.08
+  flashColor: {r: 1, g: 1, b: 1, a: 1}

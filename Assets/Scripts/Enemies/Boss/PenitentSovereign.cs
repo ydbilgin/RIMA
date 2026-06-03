@@ -79,6 +79,21 @@ namespace RIMA
         [SerializeField] private Color phase2Color      = new Color(0.7f, 0f, 1f, 1f);   // purple
         [SerializeField] private Color baseColor        = Color.white;
 
+        // ─── Authored phase-break beats ───────────────────────────────────────
+        // Emotional lines tied to the boss's existing phase transitions. EDIT HERE.
+        // Source: STAGING/STORY_REVISION_S6.md §4 (the Sovereign tragedy) + NLM canon
+        // (notebook 30ddffa5, tone = "Vivid Vulnerability": quiet grief, no performed villainy;
+        // EN-first canonical, cyan-whisper styling). These are NARRATIVE only — they do NOT
+        // touch combat (damage / thresholds / patterns); they fire AT the existing transitions.
+        //
+        //   · Fight-open whisper — canon R3 pre-fight line reused as the arena-entry whisper
+        //       canon: "My chains loosen with your steps..." (TR: "Zincirlerim adımlarınla gevşiyor...")
+        //   · 50% chains-break  — STORY_REVISION §4 beat line; canon TR "...artık yetmez." (...no longer enough.)
+        //   · 33% Unleashed     — succumbing to the rift he held back; on-tone with canon death whisper "...finally empty."
+        private const string BeatFightOpen   = "My chains loosen with your steps...";
+        private const string BeatChainsBreak = "Discipline breaks before the chain does.";
+        private const string BeatUnleashed   = "There is nothing left to hold.";
+
         // ─── State ────────────────────────────────────────────────────────────
 
         private enum BossPhase { Phase1, Phase2 }
@@ -142,6 +157,9 @@ namespace RIMA
 
         private IEnumerator BossLoop()
         {
+            // Fight-open beat — fired during the existing intro calm, on top of the room-5 title card.
+            // Pure narrative (RoomMonologController.Say no-ops if no controller / empty text); combat untouched.
+            RoomMonologController.Say(BeatFightOpen);
             yield return new WaitForSeconds(1.0f);   // brief intro calm
 
             while (!dead)
@@ -523,7 +541,7 @@ namespace RIMA
 
             // Transition moment: purple burst
             if (sr != null) sr.color = phase2Color;
-            RoomMonologController.Say("Discipline breaks before the chain does.");
+            RoomMonologController.Say(BeatChainsBreak);   // authored 50% chains-break beat (null-guards itself)
             ScreenShake.Instance?.AddTrauma(0.7f);
             RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.1f); // chains-snap freeze (design §1, 50% beat)
 
@@ -565,7 +583,7 @@ namespace RIMA
             // Shatter moment: seal-energy floods the body cyan-veined (the boss-only cyan exception); monolog + heavy shake + freeze.
             baseColor = Color.Lerp(baseColor, new Color(0f, 1f, 0.8f, 1f), 0.4f);
             if (sr != null) sr.color = Color.white;
-            RoomMonologController.Say("There is nothing left to hold.");
+            RoomMonologController.Say(BeatUnleashed);     // authored 33% Unleashed beat (null-guards itself)
             ScreenShake.Instance?.AddTrauma(0.9f);
             RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.1f);
 

@@ -66,7 +66,7 @@ namespace RIMA.Editor.RoomPainter.LiveTool
 
         // ── Menu ───────────────────────────────────────────────────────────────
 
-        [MenuItem("RIMA/Live Tool/Palette")]
+        [MenuItem("RIMA/Legacy/Live Tool/Palette")]
         public static void Open()
         {
             LiveToolPaletteWindow win = GetWindow<LiveToolPaletteWindow>(false, WindowTitle, true);
@@ -217,7 +217,7 @@ namespace RIMA.Editor.RoomPainter.LiveTool
             };
 
             GUILayout.Label(
-                "Registry is empty.\n\nRun  RIMA → Live Tool → Bake Asset Registry\nthen press Reload.",
+                "Registry is empty.\n\nRun  RIMA → Legacy → Live Tool → Bake Asset Registry\nthen press Reload.",
                 centered);
 
             GUILayout.Space(8);
@@ -226,7 +226,7 @@ namespace RIMA.Editor.RoomPainter.LiveTool
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Bake Asset Registry", GUILayout.Width(160)))
             {
-                EditorApplication.ExecuteMenuItem("RIMA/Live Tool/Bake Asset Registry");
+                EditorApplication.ExecuteMenuItem("RIMA/Legacy/Live Tool/Bake Asset Registry");
                 DestroyOwnedThumbs();
                 EditorApplication.delayCall += () =>
                 {

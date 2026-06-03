@@ -11,7 +11,7 @@ namespace RIMA.MapDesigner.Brush.Editor.Utilities
     {
         public const string DefaultOutputPath = "STAGING/RIMA_BrushTool_Dependencies.md";
 
-        [MenuItem("RIMA/MapDesigner/Brush/Generate Dependency Report")]
+        [MenuItem("RIMA/Legacy/MapDesigner/Brush/Generate Dependency Report")]
         public static void GenerateReportMenu()
         {
             string report = BuildReport();

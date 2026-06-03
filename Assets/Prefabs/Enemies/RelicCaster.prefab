@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 5186393095480317302}
   - component: {fileID: 5079028746924089538}
   - component: {fileID: 2762882587413602758}
+  - component: {fileID: 7549757904255437295}
+  - component: {fileID: 5815682689781037712}
   m_Layer: 0
   m_Name: RelicCaster
   m_TagString: Enemy
@@ -165,6 +167,9 @@ MonoBehaviour:
   spawnOffset: 2
   attackCooldown: 6
   maxBarriers: 2
+  useTelegraph: 1
+  telegraphDuration: 0.5
+  telegraphRadius: 0.9
 --- !u!95 &1535946615339045155
 Animator:
   serializedVersion: 7
@@ -287,19 +292,19 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1293760285
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 7a2f29c39a1fec840b992ed32375e17a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!114 &2762882587413602758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,3 +320,31 @@ MonoBehaviour:
   color: {r: 0.6, g: 0.2, b: 1, a: 1}
   pixelSize: 32
   shape: 0
+--- !u!114 &7549757904255437295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4183381208128310339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2860fe9f3bedbf44d8ec7399934fe436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
+  knockbackResistance: 0
+--- !u!114 &5815682689781037712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4183381208128310339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db7a0c9aa7c96408ecac530d535b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.HitFlashDriver
+  spriteRenderer: {fileID: 0}
+  flashDuration: 0.08
+  flashColor: {r: 1, g: 1, b: 1, a: 1}

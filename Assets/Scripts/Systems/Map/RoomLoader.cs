@@ -31,11 +31,14 @@ namespace RIMA.Systems.Map
 
         private GameObject _currentInstance;
         private GameObject _currentRoomContent;
+        private FragmentDropAnchor _currentFragmentDropAnchor;
+        private Action _clearToUnlockHandler;
 
         public static void RaiseDemoComplete() => OnDemoComplete?.Invoke();
 
         private void Start()
         {
+            ValidateContract(null);
             if (autoStart) LoadFirstRoom();
         }
 
@@ -44,6 +47,7 @@ namespace RIMA.Systems.Map
             // Scene reload (death / demo-complete) destroys RoomLoader without a room swap —
             // drop the static fragment-pickup subscriber so it can't leak across the reload (agy A3 review).
             ClearPendingFragmentPickup();
+            ClearPendingRoomClearUnlock();
         }
 
         public void Load(RoomType type, int depth)
@@ -192,6 +196,8 @@ namespace RIMA.Systems.Map
             // Drop any pending fragment-pickup subscriber before destroying fragments,
             // so a not-yet-collected fragment can't unlock the next room's gate (cx A3 issue 3).
             ClearPendingFragmentPickup();
+            ClearPendingRoomClearUnlock();
+            _currentFragmentDropAnchor = null;
 
             if (_currentRoomContent != null)
             {
@@ -260,6 +266,16 @@ namespace RIMA.Systems.Map
                 Instantiate(data.focalElementPrefab, data.focalElementPos, Quaternion.identity, _currentRoomContent.transform);
             }
 
+            if (data.decorProps != null)
+            {
+                foreach (RoomSequenceData.DecorProp d in data.decorProps)
+                {
+                    if (d == null || d.prefab == null) continue;
+                    Vector3 worldPos = _currentRoomContent.transform.TransformPoint(d.localPosition);
+                    Instantiate(d.prefab, worldPos, Quaternion.identity, _currentRoomContent.transform);
+                }
+            }
+
             // Boss room has no gate — boss death fires RaiseDemoComplete directly.
             if (data.isBossRoom)
             {
@@ -271,10 +287,85 @@ namespace RIMA.Systems.Map
             GameObject gateGO = new GameObject($"Gate_Room{data.roomIndex}_Exit");
             gateGO.transform.position = data.gatePosition;
             gateGO.transform.SetParent(_currentRoomContent.transform);
-            gateGO.AddComponent<SpriteRenderer>();
+            Vector2 gateSize = data.gateSize == Vector2.zero ? new Vector2(1.5f, 2f) : data.gateSize;
+
+            // ── Trigger collider lives on the gate ROOT, UNSCALED, centred on gatePosition. ──
+            // The visual arch scale must NOT touch this collider, or the trigger's world size/centre
+            // would drift off the authored gatePosition (the bug this fixes). Root stays scale 1,
+            // col.size == gateSize, col.offset == 0 → world trigger is exactly gateSize at gatePosition.
             BoxCollider2D col = gateGO.AddComponent<BoxCollider2D>();
-            col.size = data.gateSize == Vector2.zero ? new Vector2(1.5f, 2f) : data.gateSize;
+            col.size = gateSize;
+            // (no col.offset, no root localScale — trigger world size + centre == pre-gate-visual behaviour)
+
+            // Gate requires a SpriteRenderer on its own GO (RequireComponent) and Gate.Awake builds a
+            // grey placeholder when that SR has no sprite. We keep the root SR for Gate's state machine
+            // (tint/alpha/squash) but DISABLE its renderer so the placeholder never draws — the real
+            // on-brand art is a scaled child below. Gate only touches SR.color + col.enabled, never
+            // SR.enabled, so disabling here is safe and leaves Gate's logic untouched.
+            SpriteRenderer rootSr = gateGO.AddComponent<SpriteRenderer>();
+            rootSr.enabled = false;
             Gate gate = gateGO.AddComponent<Gate>();
+
+            // ── Visual child carries the arch scale + offset; root + collider stay put. ──
+            // On-brand visual: cyan-rift stone arch on a "GateVisual" child SpriteRenderer.
+            GameObject visualGO = new GameObject("GateVisual");
+            visualGO.transform.SetParent(gateGO.transform, false);
+            SpriteRenderer archSr = visualGO.AddComponent<SpriteRenderer>();
+            Sprite archSprite = LoadLargestSprite("Environment/Gate/gate_arch");
+            // Arch sub-sprite has a bottom-left pivot; track its scaled span so the arch is recentred
+            // onto gatePosition (centre-X, base-Y of the visible arch) and the barrier can nest inside.
+            float archScale = 1f;
+            Vector2 archUnits = Vector2.zero;
+            if (archSprite != null)
+            {
+                archSr.sprite = archSprite;
+                archUnits = archSprite.bounds.size;                  // world units at the sprite's PPU
+                if (archUnits.y > 0.01f)
+                {
+                    archScale = gateSize.y / archUnits.y;            // uniform fit to target height (no distortion)
+                    visualGO.transform.localScale = Vector3.one * archScale;
+                }
+                // Recentre the bottom-left-pivot arch so its centre-X / base-Y sits on gatePosition.
+                // localPosition is in the parent (root, unscaled) space → use scaled world spans directly.
+                visualGO.transform.localPosition = new Vector3(-archUnits.x * 0.5f * archScale, 0f, 0f);
+            }
+
+            // Custom-Axis Y-sort: layer "Entities", order 0, sort by Pivot (no manual sortingOrder bump).
+            archSr.sortingLayerName = "Entities";
+            archSr.sortingOrder = 0;
+            archSr.spriteSortPoint = SpriteSortPoint.Pivot;
+
+            // Sealed energy barrier: rift-fracture overlay tinted cyan, sitting in the arch opening.
+            // Visible while locked/sealed; hidden when the gate unlocks (via Gate.OnUnlocked hook).
+            // Nested UNDER GateVisual so it inherits the arch scale (its localPosition is in arch space).
+            Sprite barrierSprite = LoadLargestSprite("Environment/Gate/gate_seal_barrier");
+            if (barrierSprite != null)
+            {
+                GameObject barrierGO = new GameObject("SealBarrier");
+                barrierGO.transform.SetParent(visualGO.transform, false);
+                Vector2 barrierUnits = barrierSprite.bounds.size;
+                // Centre the bottom-left-pivot overlay in the arch opening (arch centre-X, sitting up
+                // from the base). localPosition is in the parent (GateVisual) local, pre-scale space.
+                barrierGO.transform.localPosition = new Vector3(
+                    archUnits.x * 0.5f - barrierUnits.x * 0.5f,
+                    (gateSize.y * 0.30f) / Mathf.Max(archScale, 0.0001f),
+                    0f);
+                SpriteRenderer barrierSr = barrierGO.AddComponent<SpriteRenderer>();
+                barrierSr.sprite = barrierSprite;
+                barrierSr.color = new Color(0f, 1f, 0.8f, 0.7f); // cyan #00FFCC, alpha ~0.7
+                barrierSr.sortingLayerName = "Entities";
+                barrierSr.sortingOrder = 0;
+                barrierSr.spriteSortPoint = SpriteSortPoint.Pivot;
+
+                // Hide the barrier when the gate unlocks (one-shot; cleans itself up).
+                Action<Gate> onUnlocked = null;
+                onUnlocked = g =>
+                {
+                    g.OnUnlocked -= onUnlocked;
+                    if (barrierGO != null) barrierGO.SetActive(false);
+                };
+                gate.OnUnlocked += onUnlocked;
+            }
 
             // Wire gate-entered → LoadNext (one-shot: unsubscribe after first entry to prevent double-trigger).
             Action<Gate> onEntered = null;
@@ -285,13 +376,7 @@ namespace RIMA.Systems.Map
             };
             gate.OnPlayerEntered += onEntered;
 
-            if (data.fragmentDropOverride != Vector3.zero)
-            {
-                GameObject anchorGO = new GameObject("FragmentDropAnchor");
-                anchorGO.transform.position = data.fragmentDropOverride;
-                anchorGO.transform.SetParent(_currentRoomContent.transform);
-                anchorGO.AddComponent<FragmentDropAnchor>();
-            }
+            _currentFragmentDropAnchor = CreateFragmentDropAnchor(data);
 
             if (data.isRewardRoom)
             {
@@ -301,15 +386,47 @@ namespace RIMA.Systems.Map
             else
             {
                 // Combat room: mobs dead → drop a fragment; pickup → draft → gate unlock (B3 collect loop).
-                Action clearToUnlock = null;
-                clearToUnlock = () =>
+                ClearPendingRoomClearUnlock();
+                _clearToUnlockHandler = () =>
                 {
-                    OnRoomCleared -= clearToUnlock;
+                    ClearPendingRoomClearUnlock();
                     Debug.Log($"[RoomLoader] Room {data.roomIndex} cleared — spawning fragment before draft/unlock.");
                     SpawnFragmentThenDraftUnlock(gate);
                 };
-                OnRoomCleared += clearToUnlock;
+                OnRoomCleared += _clearToUnlockHandler;
             }
+        }
+
+        private FragmentDropAnchor CreateFragmentDropAnchor(RoomSequenceData data)
+        {
+            GameObject anchorGO = new GameObject("FragmentDropAnchor");
+            anchorGO.transform.position = ResolveFragmentDropPosition(data);
+            anchorGO.transform.SetParent(_currentRoomContent.transform);
+            return anchorGO.AddComponent<FragmentDropAnchor>();
+        }
+
+        private static Vector3 ResolveFragmentDropPosition(RoomSequenceData data)
+        {
+            if (data.fragmentDropOverride != Vector3.zero) return data.fragmentDropOverride;
+            return Vector3.Lerp(data.playerStartPos, data.gatePosition, 0.5f);
+        }
+
+        // Gate art is imported in Multiple sprite-mode (auto-sliced), so Resources.Load<Sprite> can
+        // return an arbitrary sub-sprite. LoadAll + pick-largest reliably grabs the main piece.
+        // Returns null if the resource is missing (caller falls back to the placeholder behaviour).
+        private static Sprite LoadLargestSprite(string resourcePath)
+        {
+            Sprite[] sprites = Resources.LoadAll<Sprite>(resourcePath);
+            if (sprites == null || sprites.Length == 0) return null;
+            Sprite best = null;
+            float bestArea = -1f;
+            foreach (Sprite s in sprites)
+            {
+                if (s == null) continue;
+                float area = s.rect.width * s.rect.height;
+                if (area > bestArea) { bestArea = area; best = s; }
+            }
+            return best;
         }
 
         private IEnumerator UnlockGateAfterDraft(Gate gate)
@@ -337,48 +454,64 @@ namespace RIMA.Systems.Map
         private Action<EnvironmentMapFragment> _pendingFragmentPickup;
 
         // Shared fragment flow (combat + reward rooms): drop one fragment, then
-        // pickup → draft → gate unlock. Drop position = the room's FragmentDropAnchor when it
-        // authored one (reward rooms), else the player's feet (combat assets have
-        // fragmentDropOverride == 0 → no anchor) which is provably reachable, so the player
-        // can always collect it. Direct draft/unlock fallback only if there is no anchor AND
-        // no player, so the gate ALWAYS unlocks (never softlocks).
+        // pickup → draft → gate unlock. Drop position = the room's FragmentDropAnchor.
+        // Combat rooms without an authored override get a deterministic midpoint anchor
+        // between player start and gate instead of hiding the drop under the player.
+        // Direct draft/unlock fallback only if no anchor exists, so the gate never softlocks.
         // LOCK: RoomLoader is the SINGLE fragment-spawn authority — MapFragmentSpawner is a
         // passive prefab helper, driven only from here (no auto-subscribe → no double-spawn).
         private void SpawnFragmentThenDraftUnlock(Gate gate)
         {
             ClearPendingFragmentPickup(); // defensive: drop any stale subscriber
 
-            FragmentDropAnchor anchor = FindFirstObjectByType<FragmentDropAnchor>();
+            // Reward must drop where the player can SEE it. The old midpoint(playerStart, gate)
+            // anchor dropped the fragment off the TOP of the follow-camera view, so it read as
+            // "no reward appeared". Drop at the player's CURRENT position (where the fight ended),
+            // nudged a little toward the gate so it isn't under-foot and leads toward the exit.
+            // An authored fragmentDropOverride still wins; anchor/player are the fallbacks.
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
             Vector3 dropPos;
-            if (anchor != null)
+            if (CurrentRoomData != null && CurrentRoomData.fragmentDropOverride != Vector3.zero)
             {
-                dropPos = anchor.transform.position;
+                dropPos = CurrentRoomData.fragmentDropOverride;
+            }
+            else if (player != null)
+            {
+                Vector3 p = player.transform.position;
+                Vector3 toGate = gate != null ? (gate.transform.position - p) : Vector3.up;
+                Vector3 dir = toGate.sqrMagnitude > 0.01f ? toGate.normalized : Vector3.up;
+                dropPos = p + dir * 2.0f; // ahead of the player (clear of the body), on-screen + reachable
+            }
+            else if (_currentFragmentDropAnchor != null)
+            {
+                dropPos = _currentFragmentDropAnchor.transform.position;
             }
             else
             {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                if (player == null)
-                {
-                    Debug.LogWarning("[RoomLoader] No anchor and no player — draft/unlock fallback (no fragment).");
-                    StartCoroutine(UnlockGateAfterDraft(gate));
-                    return;
-                }
-                dropPos = player.transform.position;
+                Debug.LogWarning("[RoomLoader] No player/anchor — draft/unlock fallback (no fragment).");
+                StartCoroutine(UnlockGateAfterDraft(gate));
+                return;
             }
 
-            // Prefer the prefab-based spawner for visuals when an anchor exists; guarantee a fragment regardless.
-            if (anchor != null)
-            {
-                MapFragmentSpawner spawner = FindFirstObjectByType<MapFragmentSpawner>();
-                if (spawner != null)
-                    spawner.SendMessage("HandleRoomCleared", SendMessageOptions.DontRequireReceiver);
-            }
-
+            // Single deterministic spawn at the visible position. We do NOT route through
+            // MapFragmentSpawner.SendMessage/FindFirstObjectByType anymore — that re-find could
+            // grab a stale scene anchor (e.g. a leftover root PortalSpawnAnchor) and hide the
+            // reward off-room. RoomLoader stays the single spawn authority (one fragment).
             if (FindFirstObjectByType<EnvironmentMapFragment>() == null)
             {
-                var go = new GameObject("MapFragment_Drop");
-                go.transform.position = dropPos;
-                go.AddComponent<EnvironmentMapFragment>();
+                MapFragmentSpawner spawner = FindFirstObjectByType<MapFragmentSpawner>();
+                EnvironmentMapFragment prefab = spawner != null ? spawner.fragmentPrefab : null;
+                if (prefab != null)
+                {
+                    Instantiate(prefab, dropPos, Quaternion.identity);
+                }
+                else
+                {
+                    var go = new GameObject("MapFragment_Drop");
+                    go.transform.position = dropPos;
+                    go.AddComponent<EnvironmentMapFragment>();
+                }
+                Debug.Log($"[RoomLoader] Reward fragment dropped at {dropPos} (player-relative, on-screen).");
             }
 
             // Fragment pickup → draft → gate unlock (one-shot; tracked for teardown-safe unsubscribe).
@@ -400,6 +533,15 @@ namespace RIMA.Systems.Map
             {
                 EnvironmentMapFragment.OnAnyFragmentPickedUp -= _pendingFragmentPickup;
                 _pendingFragmentPickup = null;
+            }
+        }
+
+        private void ClearPendingRoomClearUnlock()
+        {
+            if (_clearToUnlockHandler != null)
+            {
+                OnRoomCleared -= _clearToUnlockHandler;
+                _clearToUnlockHandler = null;
             }
         }
 
@@ -438,11 +580,41 @@ namespace RIMA.Systems.Map
 
         private void ValidateContract(RoomConfig config)
         {
-            if (baseGrid == null) return;
-            if (config.cellSize != baseGrid.cellSize)
-                Debug.LogWarning($"[RoomLoader] cellSize mismatch: {config.cellSize} vs {baseGrid.cellSize}");
-            if (config.gridLayout != baseGrid.cellLayout)
-                Debug.LogWarning($"[RoomLoader] gridLayout mismatch: {config.gridLayout} vs {baseGrid.cellLayout}");
+            Grid grid = ResolveBaseGrid();
+            if (grid == null) return;
+
+            Vector3 cellSize = config != null && config.cellSize != Vector3.zero
+                ? config.cellSize
+                : RoomConfig.IsoCellSize;
+            GridLayout.CellLayout layout = config != null && config.gridLayout == RoomConfig.IsoGridLayout
+                ? config.gridLayout
+                : RoomConfig.IsoGridLayout;
+
+            grid.cellLayout = layout;
+            grid.cellSize = cellSize;
+        }
+
+        private Grid ResolveBaseGrid()
+        {
+            if (baseGrid != null) return baseGrid;
+
+            GameObject go = GameObject.Find("IsoGrid/Ground")
+                ?? GameObject.Find("Room/Floor")
+                ?? GameObject.Find("Grid/BaseTilemap")
+                ?? GameObject.Find("BaseTilemap")
+                ?? GameObject.Find("Floor");
+
+            if (go == null) return null;
+
+            Grid grid = go.GetComponent<Grid>() ?? go.GetComponentInParent<Grid>();
+            if (grid == null)
+            {
+                Tilemap tilemap = go.GetComponent<Tilemap>() ?? go.GetComponentInChildren<Tilemap>();
+                if (tilemap != null) grid = tilemap.GetComponentInParent<Grid>();
+            }
+
+            if (grid != null) baseGrid = grid;
+            return grid;
         }
     }
 }

@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 3130440873732586744}
   - component: {fileID: 2708565152686681995}
   - component: {fileID: 4277393175978355727}
+  - component: {fileID: 3627091931506457044}
+  - component: {fileID: 5004936838434867786}
   m_Layer: 0
   m_Name: SeamCrawler_Elite
   m_TagString: Untagged
@@ -87,7 +89,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1293760285
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
@@ -98,7 +100,7 @@ SpriteRenderer:
   m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!50 &5562331115584529785
 Rigidbody2D:
@@ -218,6 +220,8 @@ MonoBehaviour:
   damage: 14
   attackCooldown: 0.9
   hitRadius: 0.8
+  useTelegraph: 1
+  telegraphDuration: 0.25
 --- !u!114 &2915639148529555394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,3 +282,31 @@ MonoBehaviour:
   color: {r: 0.4, g: 1, b: 0.4, a: 1}
   pixelSize: 32
   shape: 0
+--- !u!114 &3627091931506457044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937228661296602118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2860fe9f3bedbf44d8ec7399934fe436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
+  knockbackResistance: 0
+--- !u!114 &5004936838434867786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937228661296602118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db7a0c9aa7c96408ecac530d535b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.HitFlashDriver
+  spriteRenderer: {fileID: 0}
+  flashDuration: 0.08
+  flashColor: {r: 1, g: 1, b: 1, a: 1}

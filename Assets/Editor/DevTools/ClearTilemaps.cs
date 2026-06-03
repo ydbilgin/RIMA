@@ -8,7 +8,7 @@ namespace RIMA.Editor.DevTools
 {
     public static class ClearTilemaps
     {
-        [MenuItem("RIMA/Clear All Tilemap Tiles")]
+        [MenuItem("RIMA/Utilities/Clear All Tilemap Tiles")]
         public static void ClearAllTilemapTiles()
         {
             Tilemap[] tilemaps = Object.FindObjectsByType<Tilemap>(FindObjectsInactive.Include, FindObjectsSortMode.None);

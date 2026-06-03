@@ -1,421 +1,268 @@
 # CURRENT_STATUS
 
-> **Session:** S6 (2026-05-30) — Opus 4.8 FULL AUTONOMOUS. ⭐⭐ **YENİ SESSION PICKUP = `STAGING/NEW_SESSION_WORKLIST_S6.md`** (kullanıcı F5-playtest + Unity MCP console → P0 bug'lar root-caused + fix-ready: EventSystem ESKİ input-module=UI tıklama bozuk, RoomMonolog Canvas-yok). **P0 bug'larla BAŞLA**, sonra P1 playtest (boot-menu/audio/R1-difficulty) → P2 çelişki (boss §2) → NLM (ax-research). Eski emir: `WORK_ORDER_24_48H_S6.md` (A-D DONE) + `AUTONOMOUS_BACKLOG_S6.md`. **Read first:** `.claude/PROJECT_RULES.md` + this file, then the worklist.
-> **Geçmiş session detayı (S106→S112):** `STAGING/_archive/current_status_pre_S114_20260528.md` (tam snapshot, arşiv).
+## 🆕📋 SESSION PROGRESS (2026-06-02 post-/clear, Opus orchestrator, AGENT-DRIVEN) — 3 İŞ DE DONE+DOĞRULANDI
+**User "sıraya al, agentları kullanarak yap":** queue=`STAGING/QUEUE_CLIFF_REWARD_PORTAL_2026-06-02.md`. cx=laurethayday, ax=3.1Pro/3.5Flash, NLM.
+- **T1 CLIFF OVERFLOW — ✅ ÇÖZÜLDÜ + KULLANICI-ONAYLI (3 sahne, "böyle kalsın").** Uzun iterasyon: VAR3 (heuristik 0 ama yanal taşma kaldı — heuristik sadece üstü ölçüyordu, yanıltıcı) → ax 3.5'in 9-noktalı occlusion-skip'i (taşma gitti ama 28 cliff = boşluklu/seyrek) → **FINAL = "all-front"**: cliff SADECE ön-yüz S/SE/SW kenarlarına (E/W ve arka SKIP), occlusion-skip YOK, ax iç-kaydırma: pos=cellCenter+shift, shift S=(0,0.2925)/SE=(-0.48,0.2925)/SW=(0.48,0.2925), sortLayer Floor order=-30+round(20-pos.y). **FINAL = 57 cliff/sahne (3 sahne, kaydedildi, console 0):** sadece ön-yüz S/SE/SW (E/W+arka skip) + ax iç-kaydırma (shift S=(0,0.2925)/SE=(-0.48,0.2925)/SW=(0.48,0.2925)) + **DAR üst-occlusion guard** (sprite tepesi üstünde floor yoksa=void'e poke→skip; köşe/notch nub'larını siler, 6 hücre atlandı) + **doğal varyasyon** (deterministik per-cell System.Random seed=(x*73856)^(y*19349)^8421: dikey stagger 0..−0.28=çentikli alt, tint 0.82–1.0, %12.5 cliff_cyan_glow damar, S/glow %50 flipX, x-jitter ±0.05). sortLayer Floor order=-30+round(20-pos.y). **Yanal taşma YOK + üst-poke nub YOK + kesintisiz + doğal.** İki ax (3.1Pro+3.5Flash) reçete onayı. Kök-neden: sprite 2×3 birim (128×192@PPU64)→W/E yanal taşar→ön-yüz-only+guard. Screenshot `cliff_natural_v2_isogame.png`. ⚠️ Yan cyan-pillar/horizontal obje clutter'ı (eski placeholder?) temizlenecek. ⚠️ 3 harita aynı ada (P1).
+- **🆕 ASSET'LER ($imagegen, yekta, Unity-FREE, yerleştirilmedi):** portal kemeri/relic/Echo gerçek art → `STAGING/imagegen/assets/{portal_arch_gen,reward_relic_gen,echo_mote_gen}.png` + `PLACEMENT_MANIFEST.md` (nereye: portal→DoorNorth GateBehavior, relic→RoomClearVictoryTrigger.rewardSprite, echo→ileride). User: "yerleştirmeyi birlikte yaparız" → wiring user-onayında. Eski procedural placeholder (portal_arch_cyan/reward_relic_cyan/echo_mote, Assets/Sprites/) → değiştirilecek→_archive~.
+- **T2 REWARD — ✅ KARAR DÖKÜMANI (`STAGING/REWARD_PORTAL_DECISION_2026-06-02.md`), implementasyon BEKLİYOR (user onayı):** NLM canon + ax 3.1Pro + 3.5Flash(adversarial) + Opus. LOCKED: run-çıktısı=Echo(Cartographer)/Map Fragment(elite+treasure)/Boss Fragment(boss→Vrel). Skill Draft=her COMBAT odası rarity-scaled **oda-merkezinde clear'da** (portal'da değil). Relic→Skill Draft pool. treasure heal="Mourne's Tear", "Ferryman's Ledger" lore. **MVP=lean** (clear→merkez Skill Draft popup→portal→next; Echo/fragment/NPC defer). ⚠️ balance: her-oda draft power-creep→playtest-tune. (T2 user'dan "kafa yor"=tasarım istendi→DONE; MVP wiring otonom YAPILMADI, user'a sordum.)
+- **T3 PORTAL — ✅ DİKEY KARAR + MVP ÜRETİLDİ + RUNTIME-DOĞRULANDI.** Karar=VERTICAL (her iki AI+canon). Approach (min-code): Portal'ı sıfırdan kurmak yerine **DoorNorth'u re-skin** (kanıtlanmış clear→`RoomClearVictoryTrigger.UnlockSceneExit`→GateBehavior.Unlock+SetActive→DoorTrigger→`MapFlowManager.GoToNextMap` zincirine dokunmadan). cx: DoorTrigger.cs'e surgical `autoEnterOnOverlap` (default false, press-G korundu) + placeholder dikey cyan rift `Assets/Sprites/Environment/Portal/portal_vertical_placeholder.png` (PPU64, pivot 0.5,0) + 3 sahne DoorNorth (autoEnter=true, GateBehavior.spriteUnlockedBase+spriteRoomCombat=rift, Entities layer, collider 2x2). Compile-clean. **Opus runtime-verify (_IsoGame play):** gate açıkken SR=portal_vertical_placeholder, bounds **1×2 dikey** taban-zeminde; oyuncu portala yürüdü→auto-enter→**aktif sahne _IsoGame_Map03'e geçti** (GoToNextMap çalıştı). ⚠️ timeScale=0 leak (menüsüz standalone play; ForceOpen ile bypass) + MapFlowManager stale-singleton (önceki session'dan persist→victory eşiği). Canon Portal.cs/Fan/Preview=P2/P3 ayrı. Gerçek art+shimmer=birlikte-session(gated).
+- **DURUM:** 3 iş done. ax done. Explore portal-map done. **COMMIT GATED** (cliff fix + DoorTrigger.cs + portal sprite + 3 sahne, hepsi diskte/saved). SIRA(user'a): (a) reward MVP wiring yapayım mı? (b) commit? (c) test artifact temizliği (`_IsoGame_cliffgaptest` + dup screenshot). Task dosyaları=STAGING/cx_task_*.md, _ax_*.md.
 
 ---
 
-## ✅ BLOCK A+B+C+D + HUD + FEEL DONE — full-otonom (2026-05-30, Opus, build GREEN throughout) — ⭐ POST-/CLEAR PICKUP = AUTONOMOUS_BACKLOG_S6
-**Tek cümle:** Demo artık **gerçek-oyun iskeletine** sahip — rooms bağlı (RoomLoader live spine), HUD tam (HP/Rage/SkillBar/BossBar-top-center/minimap/low-HP-vignette), UI ekranları (menu/settings/death/victory), conversion (BLOCK D), combat-juice + player-hit feedback. **8 commit, hepsi 0-hata, 2 cx + 2 ax review folded.** Kullanıcı: tam-otonom, kararları Opus verir, ax/cx reviewer, büyük conflict'te seçenek-rapor.
-- **🆕 Backlog + kararlar:** `STAGING/AUTONOMOUS_BACKLOG_S6.md` (3-track: kod/tasarım/art + gated) · `STAGING/DECISIONS_S6.md` (ax-AGREE: audio=spec-now-produce-after-anim · mob/boss=graybox-now+archive-mobs+gen-boss, cyan=player/rift/telegraph/boss-only). **Design agent ÇALIŞIYOR** (boss 3-phase + mob roster → `BOSS_MOB_DESIGN_S6.md`).
-- **BLOCK D + HUD + FEEL (commit `e580d1ac` + `cb260b06`):** D1 victory timeScale=0 · D2 next-class silhouette wire · D4 Steam-URL TODO(gated) · BossHealthBar **top-center** (§5, arbitrary-canvas fix) · **low-HP vignette** · **player-hit feedback** (0.06s hit-stop + vignette flash, Health.OnDamageTaken). **Kalan: D3 win-test · boss/mob code (design bekliyor) · rebind-UI · art.**
-- **🆕 BOSS + MOB (commit `ab96137f`):** design-agent (Opus, ax-validated) → `BOSS_MOB_DESIGN_S6.md` lock. **Boss "2+1"**: 50% chains-break (live) + **Phase-3 "Unleashed" overlay @33%** (modifier layer: cooldown×0.8, speed×1.15, p3Rotation Strike/Charge-biased, telegraph×0.85 floor 0.22, body floods cyan-veined, monolog, +0.1s hitstop on both snaps). Mob: FractureImp HP 100→60 (snappy swarm). ShardWalker telegraph = zaten warm (agent gizmo'yu yanlış okumuş, doğrulandı). **5-oda pacing curve** spec'li (monotype→+ranged→+tank/mix→rest→boss). cx review `bza90huog` uçuşta.
-- **🆕 BOSS cx-fix (`b95839a0`) + REBIND-UI (`58c53400`):** cx boss FAIL→fix (ChainExplosion dodge-window Phase-3'te kısalıyor). **Controls feature TAM** — Sonnet-yazdı/Opus-reviewed press-to-bind rebind section (SettingsMenuUI): 8 rebindable action + RESET + listening-flow + Opus-fix (`_skipFirstPoll` = activating-click sızmasını önler). Registry C1-C4 artık ESC-menüden kullanıcı-sürülebilir.
-- **13 commit (local, push GATED):** A `72c6f462` · B `b49ff25c` · C1-C3 `5fc4a51f` · C4 `abce81dd` · docs `0d88a0c9` · D+HUD `e580d1ac` · player-hit `cb260b06` · status `6570f3cb` · boss `ab96137f` · status `631aff4c` · boss-fix `b95839a0` · rebind-UI `58c53400`.
-- **✅ AUTONOMOUS KOD BACKLOG BÜYÜK ÖLÇÜDE TÜKENDİ.** Demo = bağlı odalar + tam HUD + UI ekranları (rebind dahil) + conversion + combat/hit feel + 3-beat boss = gerçek-oyun iskeleti. Kalan otonom-kod düşük/gated.
-- **▶ NEXT (otonom, düşük-yoğunluk):** RoomLightingController (controller-kodu; rig gated) · C5 interact (low) · D3 win-test (verify gated) · art (cx/PixelLab gated) · encounter pacing (SO-config gated).
-- **⛔ USER-GATED (asıl kalan değer burada):** **F5 feel-lock** (combat hissi onayı = demo'nun gerçek kilidi) · **NLM re-auth** (`! nlm login`, boss-art canon) · **Unity scene-wiring** (BLOCK G: lighting rig flip, DraftManager/Spawner ref, Player layer, encounter SO counts) · Steam ID · PixelLab/animate · git-push.
-- **BLOCK C (C1-C4 done, C5 deferred):** C1 KeyBindManager→GameAction registry (Move/Dash/Attack/ClassSecondary/RiftBreak/Skill1-4, JSON persist, reserved Esc/Tab + duplicate guard, OnBindingsChanged, legacy slot shim) · C2 PlayerController+PlayerAttack registry-driven + live rebuild · C3 SkillBarUI 7→6 slot + registry labels {LMB,RMB,Q,E,R,F} (Bug-1 killed) · C4 SettingsMenuUI Aim+Dash toggle→PlayerController + Core/SettingsMenu retired/[Obsolete] (Bug-2 killed). **cx C1-C3 review FAIL→fixed:** Q3 SkillBarUI leak (OnEnable/OnDisable), Q5 5 skill controllers live-rebind subscribe. **C5 interact DEFERRED** (spec §3 excludes Interact; demo proximity+G). **Controls/rebind UI section = F5-gated** (press-to-bind).
-- **BLOCK B (B1+B3 done, B2 gated):** B1=confirm (live `CameraFollow:36` zaten `ScreenShakeDriver.CurrentOffset` okuyor) · B3=`pauseDurationFinisher=0.18f` (A6 sinerji) · **B2 GATED** (VFXRouter.entries Inspector + hit_default HitImpact redundant). agy fold: RoomLoader `OnDestroy` leak-guard + T2 `HideDraft` fix. **F5 FEEL GATE = kullanıcı.**
-- **A1** boss phase threshold 0.33→**0.5** (canon chains-break) · **A2** 7 dormant duplicate `[Obsolete]` işaretli (silme YOK) · **A3** combat-oda-clear'da fragment drop (pickup→draft→Gate.Unlock; cx-fix: anchor yoksa **oyuncu ayağına** drop=reachable, event-leak teardown unsubscribe, softlock-yok) · **A4** MapFragment ref konsolidasyon doğrulandı (live=Environment.MapFragment, Core=test-only→koru) · **A5** test scene `_IsoGame`→`PlayableArena_Test01` + legacy RoomFlowTests/PlaytestScenarios `[Ignore]` · **A6** finisher CommitBeat publish (HitPause+ScreenShake+VFXRouter artık LIVE Beat3'te ateşler).
-- **🔗 CHECK A bulgusu — live→dormant kuplaj haritası (pre-existing debt, BLOCK B + ertelenmiş RRM refactor'da migrate):** ScreenShake ← live boss ×6 (→B1) · CameraShake ← live CameraFollow+3 (→B1) · RuntimeRoomManager ← live DraftManager+boss+5 (→ertelendi) · dormant CameraFollow ← SubRoom. **Gerçek-dormant (0 live ref):** BossAI_PenitentSovereign, static RoomLoader, Core/MapFragment.
-- **Reviews:** cx `bkg9p869i`→A3 v2 fix · agy `bo0lgi627`→A3v2+A6 (in-flight). **Commit:** BLOCK A local (push GATED). **Routing:** Opus yazdı, cx+agy review (writer≠reviewer).
+## 🆕🧗 NEW-SESSION PICKUP (2026-06-02 post-/clear) — CLIFF OVERFLOW PROBLEM = İLK İŞ, BURADAN OKU
+
+**Tek cümle:** Q6 (spawn+sınır) ✅, Q5 (clear-drop) ✅, Q4 (cliffler) büyük emek sonrası **sprite-tabanlı çözüme** oturdu ama **bazı cliff'ler "taşıyor"** (floor silüetinin dışına/üstüne çıkıyor) → yeni session'da **taşan cliff'leri tespit + mantığı düzelt** = İLK İŞ.
+
+### 🧗 Q4 CLIFF — şu anki ÇÖZÜM (sprite-based, mesh TERK EDİLDİ)
+- **Mesh/shader yaklaşımı TERK EDİLDİ** (void'de lit-shader siyah render + kırılgan + kullanıcı reddetti). `CliffMeshGenerator`/`CliffOverlayDecorator`/`CliffAutoPlacer` componentleri **disabled**, `CliffTilemap` renderer **disabled+ClearAllTiles**, mesh child'ları silindi. (Componentler+script'ler diskte duruyor, sadece pasif.)
+- **Asset:** `Assets/Sprites/Environment/CliffKit_RefB_pixelified/` (kullanıcı seçti = `STAGING/_archive/s106_overnight/ref_kit_b_pixelified`'ten kopyalandı; 9 sprite cliff_S/SE/SW/E/W/N/NE/NW + cliff_cyan_glow; import: **Sprite/Single, PPU64, Point, TopCenter-pivot, alphaIsTransparency**). 128×192px.
+- **YERLEŞTİRME MANTIĞI (placement script — yeni session bunu re-run/tune eder):** Ground iso tilemap (cellSize 0.96×0.585). İso komşu vektörleri: **S=(-1,-1), SE=(0,-1), SW=(-1,0), E=(1,-1), W=(-1,1)** (N=(1,1),NE=(1,0),NW=(0,1) = arka, KULLANILMIYOR — kamera-açısı optimizasyonu). Her floor hücresi için: void-yüzlü FRONT yönlerden öncelik sırasıyla [S>SE>SW>E>W] **İLK** void-bakan yönü bul → `cliff_<DIR>` sprite'ı **GetCellCenterWorld(cell) + (0, +0.85)** konumuna koy (TopCenter-pivot → aşağı sarkar), **hücre başına 1**, `break`. Sorting: **sortLayer "Floor" (Ground da Floor/0), order = -30 + round(20 - worldY)** → cliff'ler floor'un ARKASINDA → floor tepeyi örter, sadece sarkan kısım görünür. **118 sprite/sahne, 3 sahnede de** (_IsoGame/Map02/Map03), KAYDEDİLDİ. ⚠️ NOT: şu an _IsoGame offset=(0,+0.85), Map02/03 offset=(0,−0.10) [eski] — TUTARSIZ; yeni session overflow-fix'i 3'üne de AYNI nihai mantıkla uygulayıp eşitler. Re-placement her sahne için: load → eski `CliffRing/CliffSprites` sil + generator'ları disabled tut → yeniden yerleştir → save.
+- **Container:** her sahnede `CliffRing/CliffSprites` altında (göründükleri için ACTIVE olmalı — eski bir bug: CliffOverlays inactive kalınca görünmüyordu).
+
+### ⛔ AÇIK PROBLEM (yeni session = İLK İŞ): "TAŞAN" cliff'ler
+- Kullanıcı: "sınırlarını biraz ayarlamışsın ama **taşanlar var**, tespit et önlem al." Örnekler: **cliff_0_10_S, cliff_1_10_W, cliff_1_23_W, cliff_16_21_W** (+ bir sürü). Çoğu **W** yönlü.
+- **REFERANS DOĞRU OLAN:** `cliff_0_7_S` → offset (pos − cellCenter) = **(0, +0.85)** = istenen. Diğerleri buna göre olmalı.
+- **HİPOTEZ (yeni session düşünsün, mantığı güzelce kur):** Uniform (0,+0.85) offset SADECE güney-ön kenarlar için doğru tuck yapıyor; **W/E (yan) kenarlar + convex köşeler** için yetmiyor → cliff floor silüetinin üstüne/yanına taşıyor. **Olası çözüm:** offset'i **floor-İÇİNE doğru (−void-yön)** yap (uniform +y değil) — yani void yönü D ise sprite'ı −D dünya-yönünde k kadar kaydır (+ biraz yukarı), her kenar kendi floor-tarafına tuck olsun. VEYA per-direction sort/offset. VEYA convex/concave köşe özel-durumu. Taşanları tespit etmek için: her cliff'in üst kenarı floor silüetinin üstünde mi (görünür mü) kontrol et.
+- Placement script `STAGING/QUEUE_WEAPONS_CAMERA_ANIMSTATES_2026-06-02.md` Q4-DONE notunda + bu blokta özetli.
+
+### Diğer bu-session işleri (DONE)
+- **Q6 spawn:** Player+RewardSpawnPoint → floor merkezi (1.92,8.19), 3 sahne, runtime-doğrulandı. **Q5:** reward merkezde çıkıyor (Q6 çözdü), play-verified.
+- **ax/agy flash-fix** (PID-based hide, `ax_dispatch.py`) + **cx_dispatch flash-fix** (`CREATE_NO_WINDOW`+STARTUPINFO, `cx_dispatch.py` `_ps_run`) — İKİSİ DE DONE+kullanıcı-doğruladı. Artık ne ax ne cx flash yapar.
+- **Game res:** `Assets/Editor/DevTools/GameViewSetup.cs` sabitleri **1280×720→1920×1080** edit edildi (W=1920,H=1080,Label="RIMA 1920x1080"). **PENDING:** recompile sonrası menü `RIMA/Utilities/Setup Game View` çalıştır (ya da delayCall tetikler) → 1920×1080 uygula.
+- **cx routing:** sıra **laurethayday → yekta → yasinderyabilgin**; laurethayday WEEKLY %100'e dek yakılabilir (user-OK), asıl bak = **5h limit** (`cx limits` ile, tip: 0-byte=cold-start, takılma değil). cx_dispatch artık flash-siz.
+- **COMMIT GATED** — bu session çok iş birikti (Q6/Q5/Q4 + 2 flash-fix + game-res), hepsi diskte/kaydedilmiş, COMMIT'LENMEDİ.
+
+### Sıradaki (cliff-overflow sonrası)
+Q7 (silah üretim-planı, döküman) · Q8 (animasyon state listesi, döküman) · P1 backlog. Hepsi otonom-yapılabilir.
 
 ---
 
-## 🚀 S6 AUTONOMOUS-PRODUCTION CLOSE (2026-05-30) — ⭐ İLK OKU, sonra WORK_ORDER
-**Tek cümle:** Oyunun YÖNÜ NLM-canon'dan kilitlendi + temiz mimari + 4-kaynak roadmap + 24-48h sıralı iş emri hazır → **clear sonrası `WORK_ORDER_24_48H_S6.md` BLOCK A'dan otonom üretime devam.**
+## 🆕🤖🎮 OTONOM PLAYABLE-BUILD RUN (2026-06-02, Opus orchestrator, user-present→autonomous, workflow-chain + cx laurethayday + PixelLab/ax) — (önceki)
 
-**Otonom kurallar:** Opus karar+yazar, SORMA · cx+ax danışman/review (writer≠reviewer) · her kod adımı `dotnet build RIMA.Runtime.csproj` yeşil (~2s) · audio ERTELE · **animate adımı USER-GATED** ([[feedback_never_animate_without_approval]]) · çok-istek→queue+tek-tek, Opus sıralar ([[feedback_queue_decide_order_dont_ask_each]]).
+**Tek cümle:** Workflow-zinciriyle RIMA oynanabilir hale getiriliyor; cliff temiz ada-kenarına çevrildi, 10 sınıf pivot-fix (grounded), MainMenu→CharSelect→_IsoGame→Death/Victory loop + class-carry RUNTIME-DOĞRULANDI, data-driven multi-map (door→random map, RunStats birikir, 3-map→victory, gate-on-clear) RUNTIME-DOĞRULANDI, portal art live.
 
-**🔒 KİLİTLİ KARARLAR (re-litigate etme — hepsi STAGING/ doc):**
-- **Yön:** `RIMA_DIRECTION_LOCK_S6.md` (NLM canon: ~10dk wishlist vertical slice, Warblade+5oda+boss, cursor-aim, draft, cyan-rift, VFX-first/graybox-first pivot, slash=painterly-flipbook).
-- **Mimari+roadmap:** `RIMA_ROADMAP_AND_CLEAN_STRUCTURE_S6.md` (Faz 0-6 + temiz yapı tablosu).
-- **Kontrol:** `CONTROL_SCHEME_SYNTHESIS_S6.md` (cursor-aim KORU, rebind=KeyBindManager genişlet, **4 skill Q/E/R/F**, ultimate V, 3 bug).
-- **VFX:** `VFX_STRATEGY_SYNTHESIS_S6.md` (rol-hibrit; **slash=painterly flipbook canon düzeltmesi**; pixelated-particle 4-kural).
-- **Style-upscale:** `STYLE_PRESERVING_UPSCALE_ANALYSIS_S6.md` (re-authoring, PixelLab Style-Ref + palette-lock; RIMA+studio).
-- **Asset pipeline:** `IMAGEGEN_ASSET_PACK_PLAN_S6.md` (cx üretir + Opus/agy QC; death/lowhp/particles=Python kalır).
+**Backlog + canlı durum = `STAGING/PLAYABLE_WORKFLOW_BACKLOG.md` (W1..W10 + ekler).** Otonom protokol = memory [[feedback-autonomous-workflow-loop-playable-s6]].
 
-**🟢 CANLI OMURGA (cx GUID-trace, kesin — tek demo path):** `PlayableArena_Test01 → Systems.Map.RoomLoader → Phase1_Room5_BossArena → PenitentSovereign.prefab → PenitentSovereign.cs` · MapFragment=`Environment.MapFragment` · boss-death=direct `Health.OnDeath→RoomLoader.RaiseDemoComplete→DemoCompleteOverlay`. **Dormant duplikatlar** (RuntimeRoomManager/BossAI_PenitentSovereign/Core.MapFragment/Player.CameraFollow) ~10 dosyada referanslı → **[Obsolete], MASS-DELETE YOK** (regresyon). Detay = `CODEX_DONE.md` tail "Live Demo Consolidation Safety Map".
+**✅ DONE (hepsi doğrulandı):**
+- **Cliff:** kahverengi→slate (kit repoint CliffKit_RefB) + black-bottom/flush (CliffVoidFade shader alpha-fix + offset) + **STAGE A** (spriteScale.y=0.55 + alpha-melt fade _FadeStart0.78/_FadeEnd0.28 + transformOffset.y=-0.11 + Atmosphere_Fog 0.65) = ince floor-lip, **sütun-perde GİTTİ**. STAGE B (PixelLab düzgün-cliff regen) opsiyonel/kuyrukta.
+- **Tooling:** Game View odd-resolution → 1280x720 (`GameViewSetup.cs` self-heal). Duplicate-global-light warning fix (Ambient Light 2D off, Global→1.4).
+- **Asset integrity:** 10 sınıf × 8-yön idle TAM; 80 sprite **ÖLÇÜM-tabanlı feet-pivot** (`SpritePivotBatchFix.cs` rewrite) → karakter **GROUNDED**. 14 orphan set → `_archive~`. Char actual=64px, canvas büyük=animasyon (kasıtlı, [[project-character-64px-canvas-large-for-animation]]). Capsule re-align.
+- **Game-loop spine (W3, RUNTIME-doğrulandı):** _IsoGame build-settings idx2; CharSelect→_IsoGame; **static `PlayerClassManager.SelectedClass` class-carry** (Ranger taşındı, Warblade'e düşmedi); Death MainMenu butonu; RoomClearVictoryTrigger.
+- **Multi-map (RUNTIME-doğrulandı):** `MapListSO` + `MapFlowManager` (DontDestroyOnLoad, anti-repeat, 3-map victory) + `_IsoGame_Map02/03` + **RunStats blocker-fix** (IsMapTransition gate, her load'da reset YOK) + door/gate wiring. door→random map, RoomReached 1→2→3, floor intact, victory@3, clear→gate-açılır ✓.
+- **Art (PixelLab, TAM):** portal/chasm/passage/stonecolumn **3 sahnede de** (_IsoGame + Map02 + Map03) wire edildi (recipe: PlaceholderSprite kaldır+SR enable+Entities/Decals layer). **Reward-drop sistemi** (RewardPickup.cs + RoomClearVictoryTrigger spawn + RunStats.RewardsCollected). Sadece MOB'lar placeholder.
 
-**✅ BU SESSION DONE:** 5/7 hero imagegen (menu/victory/logo/next-class/boss, cx, QC-pass — `Resources/UI/RIMA/`) · 24 Python placeholder · NLM fix + `nlm_relogin.ps1` · **SkillDraftSystem.cs silindi** (csproj senkron, **build YEŞİL**) · SkillData korundu (workflow false-positive yakalandı) · cx live-path map · 6 sentez doc.
+**🔄 IN-FLIGHT:** YOK — temiz checkpoint (/clear güvenli). Tüm sahneler+assetler kaydedildi, console 0.
 
-**▶ NEXT (otonom, post-clear):** `WORK_ORDER_24_48H_S6.md` → **BLOCK A** (Faz 0: A1 boss 0.33→0.5 · A2 [Obsolete] duplikatlar · A3 fragment-in-combat-room · A5 test-scene · A6 finisher CommitBeat) → B (combat-feel) → C (kontrol/HUD) → D (conversion). Her BLOCK sonu dotnet-green + agy/cx review.
+**🆕 SIRALAMA KARARI (2026-06-02, user-onaylı):** user "önce güvenli işler" seçti → graph/preview (en büyük/riskli, çekirdek döngüye dokunur, sanat+mimari forkları var: sahne-MapFlowManager vs node-DungeonGraph) **user-yanındayken** odaklı session'a ERTELENDİ. **W7 HUD DONE+DOĞRULANDI:** 2 NRE kök-neden = `PlayerResourceBase.OnResourceChanged` açık-generic UnityEvent Unity-serialize EDİLMİYOR→runtime null→Add/RemoveListener NRE; fix = inline `new UnityEvent<int,int>()` (5 resource sınıfını birden kapatır). Play-mode: 0 NullReferenceException, resource bar artık bağlı+güncelleniyor; HP/Rage/minimap(DungeonGraph self-bind)/skill hepsi render+bağlı. Screenshot `Assets/Screenshots/W7_hud_nrefix_v1.png`.
 
-**⛔ USER-GATED (biriktir):** Steam App ID (URL fix) · Unity SCENE wiring (DraftManager/MapFragmentSpawner null, Player layer, GO temizliği) · PixelLab Style-Ref refine + slash-flipbook + boss-sprite + her animate · F5 combat-feel gate · git-push (remote divergence).
+**🔄 W8 UI BACKDROP — DEVAM EDİYOR (2026-06-02):** 4 backdrop (`Assets/UI/Backgrounds/*.png` 1024² Sprite) zaten vardı → `Assets/Resources/UI/Backgrounds/`'e taşındı (Resources-loadable). Paylaşılan helper `RimaUITheme.CreateFullScreenBackdrop` (AspectRatioFitter EnvelopeParent = cover/crop, distortion yok, flat fallback). **Victory backdrop = RENDER DOĞRULANDI** (`W8_victory_backdrop_v1.png`). **MainMenu SAHNESİ** = `MainMenuController` (legacy `MainMenuScreen.cs` DEĞİL): Backdrop eklendi + çirkin flat-cyan-kare `RiftCrack` placeholder KAPATILDI + ezik butonlar düzeltildi (VLG childControlHeight + buton height 0 → LayoutElement prefH=30). Sahne kaydedildi+yapısal doğrulandı. **Death** aynı mekanizmayla wire edildi. HUD pack art (bar_frame/bar_fill) zaten YÜKLENİYOR (W7 notu yanlıştı). **CharSelect** zaten on-brand (`Pack/bg_seal_keep`) — dokunulmadı.
+**⚠️ D3D12 GPU CRASH:** MainMenu play-mode'a girerken Unity kapandı = **GPU/sürücü crash'i** (`Editor-prev.log` stack: `CheckDeviceStatus`→`D3D12CommandList::PrepareExecute`→`GfxTaskExecutorD3D12`; NVIDIA sürücü). **Benim editlerimden DEĞİL** (UI Image+AspectRatioFitter GPU device-lost yapamaz; aynı mekanizma Victory'de sorunsuz render etti). Uzun ağır editor session'ı (2 recompile + çoklu play/stop + bloom) → driver TDR. Unity reaçıldı, sahne+kod sağlam, kayıp YOK. **PENDING:** MainMenu+Death play-mode görsel doğrulama (reopen→play→screenshot).
 
----
+**🆕🆕 USER-GIVEN QUEUE (2026-06-02 aktif) = `STAGING/QUEUE_WEAPONS_CAMERA_ANIMSTATES_2026-06-02.md` (İLK OKU — sıra burada).** DONE: Q1 silah-tespiti (NLM-canonical 10 sınıf tablosu) · X-video @stopsignalart incelendi (kazma+3D-gerçek sıvı=cellular-automata level-equalization + Townscaper smart auto-connect = istenen 2D-Townscaper harita referansı) · Q2 kamera-takip fix (obsolete→live RIMA.CameraSystem.CameraFollow, 3 sahne, RUNTIME-doğrulandı) · Q2b kamera framing (refRes 320→640×360 zoom-out + worldOffset.y+1.2 below-center, 3 sahne, doğrulandı). PENDING: **Q6 sınır+spawn** (player cliff-köşesinde doğuyor, IsoFloorBoundary diamond'a uymuyor) → **Q5 clear-drop** (oda temizlenince yerde ödül çıkmıyor) → **Q4 cliff re-fix** → **Q7 silah üretim-planı** (workflow+cx/ax review, SADECE DÖKÜMAN) → **Q8 animasyon STATE listesi** (PixelLab Add-Animation + Create-State ekranlarına göre: hangi state/hangi animasyon/hangi anim start+end frame; Custom V3 prompt'ları hazırla; MCP/API doc'a bak; SADECE DÖKÜMAN, üretim YOK). PixelLab üretim = birlikte-session.
 
-## 🌙 OVERNIGHT S6 — AKTİF OTONOM (2026-05-30 gece, Opus lead, user AWAY ~10h) — ⭐ PICKUP BURADAN
+**🆕 STATE-AUDIT WORKFLOW (2026-06-02, wf_4bb08d37-81b, 8 ajan) → PLAN = `STAGING/GAME_STATE_AND_PLAN_2026-06-02.md` (P0/P1/P2).** Verdict: "oynanabilir vertical-slice iskelet ama ortası boş". **YENİ P0 BULGULAR:** (1) **PLAY AGAIN soft-lock** (`DemoCompleteOverlay.Restart` aktif buildIndex reload ediyor — ResetRun+MainMenu olmalı) + timeScale leak; (2) dövüş hissi SIFIR = JuiceManager (HitPause/Shake/DamageNumber/CameraPunch) 3 oyun-sahnesinde YOK (sadece PlayableArena_Test01'de) + mob prefab'larda KnockbackReceiver/HitFlashDriver YOK + slashArcVFX `{fileID:0}`; (3) `[Obsolete]` RuntimeRoomManager hâlâ 3 sahnede component olarak CANLI = dual room-clear çakışması; (4) Elite teleport wall-escape (öldürülemez mob → room-clear bloklar); (5) reward sprite AssetDatabase=editor-only→build'de kaybolur; (6) CharacterSelectController 6 bozuk stub sınıf açıyor. **Finisher (Sundered Beat) P1 ama attack animasyon state'i gerektirir → ertelenen-animasyon ile çatışır (karar gerek).**
 
-**Tek cümle:** Kullanıcı "gece boyu otonom çalış, SORMA, Opus karar ver, ax+cx danış, status+memory güncel tut" dedi → büyük **tasarım + kod build** push'u başladı.
+**✅ P0 DONE + DOĞRULANDI (2026-06-02, cx-kod + ben-Unity + review-loop):**
+- **cx kod (laurethayday, compile-clean):** DemoCompleteOverlay (PLAY AGAIN→ResetRun+MainMenu, OnDestroy→timeScale=1) · DeathScreenManager (TRY AGAIN→ResetRun+StartNewRun+_IsoGame) · CharacterSelectController unlock-gate (4 sınıf) · EliteAffix teleport bounds/floor/wall validation (3 deneme, geçersizse iptal) · RoomClearVictoryTrigger reward Resources-fallback (RIMA_UI_Node_Chest) · Beat3CommitTrigger GetComponentInParent.
+- **Ben Unity (3 sahne: _IsoGame/Map02/Map03):** RuntimeRoomManager component KALDIRILDI (→ DoorTrigger MapFlowManager'a düşer) · `CombatJuice.prefab` + `SlashArcVFX.prefab` PlayableArena'dan bake + 3 sahneye instantiate · PlayerAttack.slashArcVFX atandı · rewardSpawnPoint oluşturuldu/atandı · 13 mob prefab'a KnockbackReceiver+HitFlashDriver (FractureImp Flash zaten vardı).
+- **RUNTIME-DOĞRULANDI (_IsoGame play):** console 0 hata · `RuntimeRoomManager.Instance=null` (GOOD) · MapFlowManager.ActiveInstance present · 5 juice driver alive · slashArcVFX set · mob Knock+Flash · damage akıyor (Penitent 100→85) · mob'lar player'a vuruyor (idle player swarm→öldü) · **TRY AGAIN soft-lock FIX doğrulandı** (timeScale 0→1, _IsoGame fresh reload). Screenshot `P0_isogame_play_v1.png`.
+- ⚠️ NOT: _IsoGame Death paneli AUTHORED (backdrop kodu sadece auto-build path'te çalışıyor) → death backdrop görünmüyor ama dimmed-game ölüm ekranı temiz/kabul edilebilir (W8 minor).
 
-**🌅 POST-/CLEAR PICKUP = `STAGING/MORNING_REPORT_S6.md` (ÖNCE BUNU OKU)** + `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md` (İLERLEME LOG). Memory: [[project-overnight-autonomous-designbuild-s6]].
-**Gece özeti:** Tasarım kilitlendi (`DESIGN_LOCK_DEMO_S6.md`) + PHASE 1 combat/UX kodu + impact-frame yazıldı, **hepsi compile-clean.** 3 commit: `698bcec0` (PHASE1+design) · `12755672` (docs+cx_dispatch utf-8 fix) · `a8b47e68` (impact-frame). **Push BLOCKED.**
-**🔁 ROUTING DERSİ (kullanıcı düzeltti):** cx rate-limit'e takılınca DURMA → **Opus-writer + agy-reviewer**'a geç (kullanıcı yetkisi var). cx-yekta 5h-BLOCKED, reset **07:05**; o saate kadar Opus yazar, agy review eder.
-**▶ POST-/CLEAR NEXT (otonom devam, kullanıcı "sonra devam edelim"):** (1) Opus-write kalan .cs: RoomLightingController (per-room mood §2.3, URP Light2D referenceable, RoomLoader.OnRoomChanged Action<int>) + screen-frame wiring (mevcut Resources/UI/RIMA stone-frame asset'leri) — her biri dotnet-build + agy-review. (2) yekta 07:05 reset → cx batch'lerine dönülebilir. (3) **GATED (kullanıcı):** Unity restart→scene ışık-rig flip (§A) + F5 feel-lock (A5) + weapon prefab-wire + PixelLab ekran-görselleri + audio Sora/Gemini + git-push.
+**⏭️ İŞ SIRASI (kaybetme — kilitli; tam plan `STAGING/GAME_STATE_AND_PLAN_2026-06-02.md`):**
+- **P1-OTONOM (ben tek başıma, animasyon/finisher HARİÇ):** (1) IsoSorter'ı 3 sahne Player'dan kaldır (YSort flicker — önce sort-yaklaşımı netleştir: memory "kamera custom-axis, manuel YSort değil") · (2) MainMenu'ye "ses kapalı" notu (ucuz) · (3) HUD Pack sprite import-type doğrula · (4) mob ölüm görseli (KOD: squash/tip-over+fade, sprite-anim DEĞİL) · (5) skill cooldown göstergesi (HUD) · (6) RiftBreak Q-stub→gerçek AoE · (7) VoidThrall death-split prefab wire · (8) 3 haritaya görsel fark.
+- **🎬 ANİMASYON + FİNİSHER = KULLANICI-YANINDA BİRLİKTE SESSION (user 2026-06-02: "animasyonları benimle yapacaksın, sen tek başına yapmayacaksın"):** PixelLab karakter animasyonları (walk+attack min, 8-dir; kapsam=birlikte karar, kredi 1162 gen kaldı) + **Sundered Beat finisher (b)** o session'da (attack-anim'e + sanat onayına bağlı). Otonom YAPMA — sadece zamanı geldiğinde flag at, birlikte otururuz. Karakterler PixelLab'da hazır (warblade 120, elementalist 120, shadowblade/ranger/... 8dir). [[feedback-never-animate-without-approval]] geçerli.
+- **P2:** 10-sınıf skill-list fix (sadece 4 oynanır) · ölü [Obsolete] HitStop/CameraShake GO temizliği · orphan PlayerStats.cs + Map/Runtime/RoomLoader.cs arşiv · HollowMite ölüm polish.
+- **ERTELENDİ (sahibi):** animasyon (idle dışı), audio, StS graph/preview/orb (user-yanında), mob görsel upgrade.
+- **Risk notları:** hitstop unscaled-time kullanmazsa timeScale-leak tekrarlar · juice over-saturation tuning · D3D12 GPU crash tekrarlayabilir (play-mode min tut). **WrongStack = SKIP.**
 
-**Kurallar:** Opus TEK karar verici, SORMA · ax+cx danışman (writer DEĞİL) · kod yazan≠reviewer · placeholder + "yerine ne gelecek" notu · audio ERTELE (Sora+Gemini Pro) · çelişki YOK (floating-island'a uygun hikâye+ışık) · workflow serbest · NLM context.
-
-**Quota/routing (02:1x):** cx=**yekta** (week %14 sağlıklı; diğer Codex %90-97 dolu) · ax 5 hesap ~%100 boş (review/research) · Opus=karar+zor kod+sentez · Sonnet=mekanik alt.
-
-**✅ PHASE 0 DESIGN-LOCK BİTTİ → `STAGING/DESIGN_LOCK_DEMO_S6.md` (RATIFIED, §9 Opus kararları).** 3-kaynak converge (workflow `wf_b87f702d` + cx `DESIGN_CONSULT_CX_RESULT.md` + agy `AGY_DONE_ydbilgin.md`). Çekirdek premise: floor = mühüre-bağlı severed seal-keep fragment'i (NLM canon 61237986); cyan=mühür enerjisi; gaz-lamba→cyan-rift ışık; tek biome "Sundered Brink" + rift-threshold gate; Penitent Sovereign=zincirli trajik koruyucu (33% chains-break). 8 açık soru Opus-kararlandı (§9): cyan-split demo'da kalır · boss class-select fix=Batch A · audio=Sora+Gemini ertelendi · boss-art=text-card placeholder (gated) · tek shared backdrop · skill-hit feel parity EKLE.
-
-**🔨 BUILD İLERLEMESİ (gece, hepsi cx-yekta yazdı + Opus review + compile-clean `dotnet build RIMA.Runtime` 0-err):**
-- ✅ **PHASE 1 A** boss-race bypass + death-screen scale-0 fix + VFXRouter.entries(4) · **B** juice (hitstop tier + ters kamera kick + ScreenShakeDriver→offset) · **C** attack-buffer + dash cliff-grace + skill-hit OnHit parity (tüm sınıflar) · **D** Victory+Death Wishlist CTA (self-build UI, steam-url placeholder).
-- ✅ **PHASE 2 story** RoomMonologController (R2-R5 + boss title-card + phase-2 33%) · **PHASE 3 audio** Resources/Audio override loader + Dash/Finisher/Shatter hook.
-- ✅ **Docs:** `IMAGEGEN_PACK_S6.md` (ekran asset prompt+px) · `SCENE_WIRING_RUNBOOK_S6.md` (gated iş adım-adım).
-- ⚠️ **UnityMCP read/play timeout** (gece boyu) → scene-rig/prefab/play-verify GATED. Compile-verify = Editor.log + dotnet build. **Detaylı ilerleme+kalan = `STAGING/MASTER_PLAN_S6_AUTONOMOUS.md` İLERLEME LOG.**
-- ▶ **KULLANICI DÖNÜNCE:** `SCENE_WIRING_RUNBOOK_S6.md` izle → A ışık-rig flip (en büyük görsel) → F5 play-verify (A5 feel gate) → B weapon-wire → C screen-images. Unity MCP takılıysa ÖNCE Unity restart.
-
-**✅ agy design özeti (AGY_DONE_ydbilgin.md):** Hikâye=**Shattered Keep** (Rift March'ı tutan yapı, "Fracturing" ile void'e düştü; cyan rift=gerçeklik yaraları/çözülen mühür; **Penitent Sovereign**=zincirli eski koruyucu; run=Mühür "Shattered Echoes" toplat). Işık=gaz-lamba YOK → emissive cyan-rift #00FFCC + deep-purple #3A1A4A→black void, abyss unlit. Map=floating-bridge + cyan rift-gateway + iron-chain landmark + slate palette + cyan≤15% + progresif erozyon (R1 sağlam→Boss kırık). Screens=slate+pulsing-cyan; death "The rift remembers. You won't."; victory=dikey neon-cyan kapı. Feel=chromatic-impact-frame + cliff-dust + emissive-weapon-trail + boss chain-break time-freeze (66%/33%).
-
-**NEXT (Opus, otonom):** cx-consult+workflow bitince → `DESIGN_LOCK_S6.md` yaz → PHASE 1 kod başlat (1.1 boss-race bypass + death-screen scale-0 fix → 1.6 audio loader). Her batch writer≠reviewer + Unity compile-verify.
+**🔑 ROUTING/DURUM:** cx=laurethayday (bg; recompile=MCP reload-disconnect→poll+retry). ax=ydbilginn/Gemini-3.5-Flash-High/`--no-swap`. PixelLab=create_map_object (~1160 gen). **commit GATED** (her şey diskte+saved, commit'lenmemiş). Asset asla silinme→`_archive~`. **STANDING: her iş sonrası CURRENT_STATUS+memory güncelle (resumability).**
 
 ---
 
-## 🆕🆕 S6 SESSION CLOSE — İLK OKU (2026-05-29, Opus otonom uzun build + workflow'lar)
+## 🗺️🎮 OYNANABİLİR İSO MAP + FLOOR/CLIFF TEMİZLİK + TOOLING FIX (2026-06-01 gece·3, Opus orchestrator, user-present, cx/ax/Sonnet/Opus-agents + 6-ajan WORKFLOW) — (önceki)
 
-**Tek cümle:** S6 = büyük otonom analiz+build. **4-kaynak (2 workflow + cx + agy) converge** → demo'nun gerçek durumu + tam yol haritası net; çekirdek fix'ler yazıldı (UNCOMMITTED, compile-clean, cx-reviewed). **NEXT SESSION = `STAGING/MOMENT_SPEC_S6.md` rank-1'den otonom kur.**
+**Tek cümle:** `_IsoGame` artık temiz DÜZ granit floor (cyan-yarık+kahve YOK) + matematik koyu cliff (void derinliği) + iso boundary + 4 fonksiyonel mob (combat F5-doğrulandı) ile oynanabilir; Map Designer'a granit variant-grup + brush-size [1/3/5/10] geldi; F2 designer'a "ground" floor-fix + iso-overview kamera cx'te DEVAM EDİYOR.
 
-### 🚧 S6-EXEC PROGRESS — ⭐ POST-/CLEAR PICKUP BURADAN (2026-05-30, Opus otonom)
-**Demo-loop sistemleri sahneye kuruldu (hepsi commit'li). NEXT = `MOMENT_SPEC_S6.md` kalan rank'lar + F5 görsel playtest.**
-- **Commit'ler (6, local baseline):** `ab23ec75` combat/demo core · `b3755115` S5 cliff/scene · `50512251` S6 docs · `2883fe5c` rank-1 HUD + rank-3 wiring · `5f6c3938` rank-3 hitspark + rank-4 SkillBar + rank-6 transition (+ bu close commit'i). **Push BLOCKED** (remote divergence — kullanıcı kararı).
-- ✅ **NLM** çözüldü + çalışıyor (full-reset → OAuth, valid/11 notebook).
-- ✅ **RANK-1 HUD** + gizli ön-koşul **`PlayerClassManager` sahneye** — PLAY-VERIFIED (HP+Rage bar build, Health+RageSystem abone, 0 NullRef). (cx'in "RageSystem yok" notu yanlıştı — zaten Player'daydı.)
-- ✅ **RANK-3 hit-confirm üçlüsü WIRED:** #4 SlashArc (Player child + `ParticleAdditive.mat` + PlayerAttack.slashArcVFX) · #5 white-flash (`HitFlashDriver`→`Health.OnDamageTaken`, FractureImp.prefab) · #3 hitspark (`HitSpark.prefab`→HitImpact.hitSparkPrefab). compile 0-err. ⚠️ **GÖRSEL PLAY-VERIFY = F5** (slash 0.2s/flash 0.08s/spark çok kısa → statik screenshot'ta yakalanmaz, canlı izle).
-- ✅ **RANK-4 SkillBar** — HUD_Canvas altı bottom-center child, SkillBarUI self-build 7 hex slot. PLAY-VERIFIED (Slot_LMB build, 0 NullRef).
-- ✅ **RANK-6 transition** — `RoomLoader.LoadRoomByIndex` (JumpToRoom/F1) artık `RoomTransitionFX` black-fade + room-banner (ReenableAfterFade pattern'i).
-- ✅ **TOOLING TAMAMEN BİTTİ** (cx/ax/cxs/ags + 2 GitHub repo temiz, sadece ydbilgin) — ayrıntı [[reference_cx_agy_share_bundle]]. RIMA'ya dokunmadı; tek RIMA-fix = `STAGING/cx_limits.py` auto-discover (cxs artık 5 hesabı gösteriyor).
-- **▶ POST-/CLEAR NEXT (RIMA oyun, otonom-güvenli sıra):** (1) **rank-2 draft play-verify** — DraftManager #1 fix gerçek skill listeliyor mu (oda temizle→draft) · (2) **rank-5a death-screen** zero-scale (cx: ÖNCE play-verify, DeathScreen panel 110996 var) + **5b Victory Wishlist-CTA** · (3) **rank-7 boss** (BossHealthBar + boss-death→DemoComplete + ⚠️**class-select BYPASS**; boss sprite YOK) · (4) **rank-9** duplicate "Systems" GO (111142 inactive + 111438) temizliği · (5) **F5 görsel playtest** (hit-confirm üçlüsünü gözle doğrula). **cx critical ön-koşul (PlayerClassManager sahnede) ✅ ÇÖZÜLDÜ.**
+**✅ BU SESSION DONE:**
+- **FLOOR:** 451bbfd8 granit (16 tile → sadece grup **0,1,14,15 AKTİF**; non-granit 12+cyan-overlay → `Assets/_archive~/PixelLabFloor451_nongranite/`, Sonnet, GUID korundu). 752-hücre solid iso elmas, granit varyant boyama. **Asıl karartıcı = Ground tilemap tint %43-gri** → beyaza çekildi + Global Light 1.2 cool-slate. **Cyan yarıklar + "Room Light" turuncu ışıklar KAPATILDI** (user "düz uniform"). **Tile'lar DÜZLEŞTİRİLDİ** (kontrast %40, 3D-bump gitti; yedek `STAGING/_orig_granite/`).
+- **CLIFF:** kahverengi ref_kit cliff PNG'leri **koyu slate'e recolor** (in-place, GUID korundu) → CliffAutoPlacer matematik placement 52 cliff ön/alt kenar (S/SE/SW tek-yön yeter — ax+cx). `CliffTilemap` Ground:-50 tint beyaz.
+- **BOUNDARY:** `IsoGrid/IsoFloorBoundary` 4-köşe iso-elmas EdgeCollider2D (Default layer; runtime Player(10)xDefault=True). WalkabilityMap _IsoGame'de YOK'tu = sınır yoktu.
+- **MOB:** 4 fonksiyonel düşman (`Assets/Prefabs/Enemies/` SeamCrawler/HollowMite/HalfThrall/Penitent = Health+BaseMobBehavior) `Mobs_Authored` altında kuzeyde. **Combat ÇALIŞIYOR (F5)**. ⚠️ PixelLab `enemy_XX` prefabları SADECE görsel (gameplay yok); fonksiyonel mob'lar `PlaceholderSprite` (runtime renkli kare) → görsel upgrade KALAN.
+- **MAP DESIGNER (Unity, UnifiedMapDesigner):** Registry re-bake → granit grubu kayıtlı (74 floor entry, GetByTag("floor"), floor451 8 entry). **Brush-size [1][3][5][10]** eklendi (cx compile-clean: `UnifiedDesignerCore.BrushSize`+NxN Paint/Erase+GUI). Oda: Library→New Room (MCP'den de yaratıldı). ⚠️ **cx her recompile editor pencerelerini KAPATIR** → Map Designer boşalması + "Cannot access a disposed object" MCP uyarıları HEP BUNDAN (gerçek hata DEĞİL, transport noise).
+- **PIXELART KARARI (cx+ax+opus):** PixelLab=8-renk gerçek pixel-art (quantize gereksiz). imagegen=6000+renk HD (import-öncesi quantize ŞART). Tool YOK — `Tools/pixel_cleanup/pixel_cleanup.py --snap_to_palette --palette rima_shattered_keep.json` + `--downscale_ppu` flag. cyan #00DDFF↔#00FFCC doğrulanacak.
+- **ASSET:** portal_rift+6rune+reward_relic (codex $imagegen, `STAGING/imagegen/portal_reward/`, QC-PASS, import-pending). UI pack main_menu/charselect/death/victory (ax/agy → `Assets/UI/Backgrounds/` Sprite, QC-PASS, wire-pending).
+- **GAP WORKFLOW (6-ajan):** görsel+gameplay backlog → `...tasks/wtxb6wkjz.output` (P0'lar aşağıda).
 
-### 📋 CANONICAL DELIVERABLES (sırayla oku)
-- **`STAGING/MOMENT_SPEC_S6.md`** ⭐ — moment-to-moment master spec (UI/UX + OYNANIŞ), 4-kaynak sentez. **= NEXT-EXECUTION (rank 1-9).**
-- `STAGING/INTEGRATION_BACKLOG_S6.md` — 19-item ROI backlog (workflow audit 114 bulgu).
-- `STRATEGIC_SYNTHESIS_S6.md` · `EXECUTION_WORKFLOWS_S6.md` (W1-W11 + map/gate tasarım) · `MOB_PRODUCTION_PLAN_S6.md`.
+**✅ F2 FIX DONE (cx laurethayday, compile-clean 0 hata):** `InPlayMapPaintOverlay.DiscoverTilemaps` artık **"ground" tanıyor** (F2 "<no Floor tilemap found>" ÇÖZÜLDÜ — iso floor adı "Ground"idi) + F2'de **iso OVERVIEW kamera** (`EnterOverviewCamera`/`ExitOverviewCamera`, orthographicSize odayı sığdırır, PPC overview'da disable, top-down DEĞİL). → /clear sonrası **F5→F2** test: tüm iso oda üstten görünür + Ground floor'a tile basılabilir olmalı.
 
-### ✅ DONE (UNCOMMITTED, compile-clean, cx-reviewed)
-- **#1 skill-equip fix** — DraftManager: SkillDatabase + Warblade_SkillController self-heal + AssignActive/HandlePassivePick AddComponent. (Önceden picks no-op'tu; play-verify: draft gerçek skill listeliyor.)
-- **#2 boss-death race fix** — RoomLoader.WireBossDeathListener 30-frame poll (win-softlock önler).
-- **Gate.Unlock idempotence** · **EliteAffix Shielded SetMaxHP+initialized guard** · **PlayerAttack behavior+InputAction self-heal** (recompile-during-play NRE).
-- **MapProgressController.cs** (orphan MapPanelUI'yi RoomLoader'a bağlar: 5-oda path + reveal + M-toggle, self-bootstrap).
-- **W2 AudioManager.cs** (prosedürel SFX + Health/Draft/Gate hook). cx flag (KALAN): clips private→Resources/Audio/ auto-load ekle + Hit-spam/lethal-double/debounce tune.
+**⛔ P0 KUYRUK (gap workflow + user):**
+1. **Juice wiring** — HitPause/ScreenShake/CameraPunch/DamageNumber _IsoGame'e bağla (vuruş düz).
+2. **CombatHandler Warblade'e yok** (finisher ölü) + mob'lara HitFlash/Knockback.
+3. **Mob görselleri** placeholder→PixelLab enemy sprite bağla.
+4. **UI backdrop wire** (4 ekran) + portal/reward import (quantize'dan geçir).
+5. **CAPSULE/PIVOT:** warblade pivot canvas-altında (feet 0.469u yukarıda=karakter "yüzüyor"). Capsule'ler görünen feet/body'ye hizalandı (instance) AMA kök-fix = 8-yön sprite pivot'unu ayağa taşı.
+6. **AUDIO=ERTELE** (user "boşver"; AudioManager kasıtlı mute, gerçek ses animasyon sonrası).
+7. **Loop-spine:** _IsoGame RRM-only (graph-aware, çalışıyor) → RRM KAL, RoomLoader sokma (RRM [Obsolete] ama gerçek tek loader).
 
-### 🎯 NEXT SESSION OTONOM SIRA (MOMENT_SPEC_S6 rank)
-**(agy FEEL-FIRST reorder — combat hissi HUD/Draft'tan ÖNCE):**
-3 **hit-confirm üçlüsü** (SlashArc field ata + VFXRouter.entries doldur + HitFlashDriver enemy+Health.TakeDamage) → 8 **player-hit feedback** (vignette 0.6→0/0.2s + flash + **player-hit-stop 0.08s**: HitPauseDriver VAR, player-damage event'e bağla=0-cost) → 1 HUD → 2 draft play-verify + 4 SkillBarUI → 9 bug-temizlik → 6 RoomTransitionFX + boss-telegraph → 7 boss (BossHealthBar + death→DemoComplete + class-select bypass) → 5a death-scale → 5b **Victory Wishlist-CTA** (slowmo 0.2 + zoom + `steam://openurl`).
-**Tune (agy):** hitstop normal 0.04 / finisher 0.10 / player-hit 0.08 · **directional shake** (knockback-vektör, amp 0.2→0.05s sönüm) · crit dmg-num 1.5x sarı DOScale-pop.
-**Her batch: Opus yaz → cx/agy review → play-verify.**
-**✅ ZATEN ÇALIŞIYOR (REDO ETME, 4-kaynak doğruladı):** hitstop 0.04s · shake · floating damage-number · RageSystem · combo+knockback · dash i-frame/cancel.
-
-### 🔴 BUG'LAR
-~~MapFragment namespace çakışması~~ **cx: YANLIŞ** (RoomLoader+Spawner ikisi de `Environment.MapFragment`; `Core.MapFragment` AYRI legacy pipeline — KOVALANMASIN) · **boss-death→class-select Victory ile çakışıyor (cx CONFIRMED: PenitentSovereign.cs:571 TriggerClassSelection + RoomLoader:346 race) → boss demo'da class-select BYPASS** · duplicate "Systems" GO (ESKİ CameraShake/HitStop; modern CombatJuice ayrı — cleanup, düşük) + stale Gate_Room0_Exit.
-
-### 🔒 GATED (kullanıcı kararı)
-- **Mob/boss sanatı:** A=arşiv-restore (`ARCHIVE/Sprites_Enemies_old/`, 0-gen, OTONOM) / B=PixelLab / **RTX-local (Flux infra var)**. agy: temel-mob=A, boss=kaliteli-gen. → "renkli kareler" sıçraması.
-- **Audio:** gerçek klip (RTX-local) → `Resources/Audio/<sfx>.wav` (AudioManager auto-load eklenince).
-- **NLM:** ✅✅ S6 ÇÖZÜLDÜ + DOĞRULANDI (2026-05-29). Tam reset (`.notebooklm-mcp-cli` rename → `.bak_20260529_230247`) + kullanıcı fresh `nlm login` (49 cookie, OAuth) → `login --check`=valid/11 notebook + canonical sorgu çalışıyor. `--clear` yetmiyordu çünkü cookies.json+auth.json'a dokunmuyor (loop sebebi). Detay [[reference_nlm_auth_recovery_manual_cookie]].
-- **git-commit:** ✅ S6 round COMMIT'LENDİ (2026-05-29 kullanıcı onayı): `ab23ec75` (combat/demo core: skill-equip+boss-race+AudioManager+MapProgress+SkillIconRegistry, 19 dosya) · `b3755115` (S5 cliff/depth+scene+prefab-vis+livetool, 26 dosya). Junk (CODEX_DONE/tmp_/.agy_detached/Screenshots .png.meta) commit'lenmedi. **PUSH hâlâ BLOCKED** (remote divergence — kullanıcı kararı).
-
-### Routing (HARD)
-Opus yazar+karar · **cx+agy review+fikir (writer DEĞİL)** · agy DAİMA `agy_detached.ps1` wrapper (flash-free) · cx `cx_dispatch.py --profile yekta`. Memory: [[feedback_opus_decides_codex_agy_review_s6]] · [[feedback_agy_always_detached_wrapper]] · [[reference_nlm_auth_recovery_manual_cookie]] · [[project_s6_autonomous_build_s114]].
-
-### ⏳ Bu close anında PENDING (yeni session ÖNCE bunu kontrol et)
-agy + cx final review ✅ **İKİSİ DE FOLDED.** **cx kritik düzeltmeler (yeni session UYGULA):** (1) ✅ **ÇÖZÜLDÜ (rank-1'de):** PlayerClassManager + HUD_Canvas sahneye kondu, play-verified. (RageSystem zaten Player'daydı — cx notu yanlıştı.) (2) **HitFlash + player-hit feedback `Health.OnDamageTaken` bridge** gerektirir (sadece BasicAttack CombatEventBus yetmez → direkt-damage path'leri hit-confirm'i atlar). (3) **DeathScreen zero-scale UNVERIFIED** — fix'lemeden ÖNCE play-verify (DeathScreenManager named-children auto-find ediyor). (4) DamageNumber/HitPause/ScreenShake scene-wired DOĞRULANDI; **RageSystem code-only (NOT scene-wired)**. Workflow script'leri: `.../workflows/scripts/rima-*-wf_*.js`.
+**🔑 ROUTING/DURUM:** cx=laurethayday (kod; recompile=editor-window kapatır) · ax=Gemini (research/imagegen/design) · Sonnet-agent (arşiv) · Opus-judge (mimari) · commit HÂLÂ GATED · `_IsoGame.unity` kaydedildi · MCP "disposed"=noise · Screenshots `Assets/Screenshots/showcase_*_v*.png`+`F5_playmode_v*.png`. Memory: [[project-playable-iso-map-s6]].
 
 ---
 
-## 🆕 S6 PICKUP — İLK OKU (S114 S5 son round kapanış, 2026-05-29, Opus otonom + triple-AI)
+## 🆕🎮🏝️ PLAYABLE İSO CONCEPT ODA + WARBLADE + KAHVERENGİ→KOYU CLIFF + VOID BG (2026-06-01 gece·2, Opus orchestrator, user present→away, cx/ax agents) — (önceki gece·2)
 
-**Tek cümle:** Cliff/depth **demo-kabul (A)** seviyesine geldi, T3 live-editor **full scaffold STAGING'de hazır**, cx-dispatch **otomatize edildi**, prefab-görünürlük bug'ı düzeldi — **gelecek session = BÜYÜK OTONOM İŞ** (kullanıcı direktifi).
+**Tek cümle:** `_IsoGame` artık F5'te OYNANABİLİR concept-yönlü iso oda: koyu slate floor + PARLAYAN cyan çatlak + koyu taş cliff (kahverengi GİTTİ) + mor void bg + Warblade (WASD hareket/yön). Tüm iş cx (kod) + ax (analiz/karar) ile, Opus review etti. Commit HÂLÂ GATED.
 
-### ✅ Bu round DONE (hepsi kaydedildi, compile temiz, review'lı)
-- **Cliff #1 → demo-A:** sorting floor-altı + tek varyant + **robust exterior-void cut** (agy N/NE/NW + protrusion veto, diagonal veto YOK=over-cut sebebi) + organik yükseklik (Perlin) + AO contact-shadow + **köşe geometri-round (1 pass) + dark-fade softener** + floor collision GAPS=0. Detay [[project-cliff-depth-resolution-s114s5]].
-- **Backdrop → TEK görsel** (RoomBackgroundRig L1_Nebula, 5-katman kapatıldı). **Kullanıcı kararı: tek ANİMASYONLU abyss görseli (PixelLab üretecek, L1_Nebula sprite'ını swap).**
-- **Cliff live-reload no-op KAPANDI** (verified, LiveTool EditMode PASS) + **RuntimeAssetRegistry baked (67)**.
-- **Live Editor T3 FULL scaffold** (8 dosya STAGING/livetool_t3/ + review + runbook, **Assets/'a entegre DEĞİL** — Unity-care gerek). Giriş: `STAGING/livetool_t3/00_T3_STATUS.md`. [[project-livetool-t3-scaffold-s114s5]].
-- **Prefab-görünürlük fix:** RewardPickup→Entities, StoneColumn/Chasm/NarrowPassage→Props (Default'taydı=görünmezdi). PrefabHealthTests 10/10 PASS.
-- **cx-dispatch OTOMATİZE:** hardcoded liste YOK → `cx accounts` logged-in'ler auto-keşif + `cx_profiles.local.json` (disabled/priority). `cx add`=otomatik gelir. [[feedback-cx-dispatch-auto-discover]].
+**✅ BU SESSION DONE (hepsi cx, F5 görsel doğrulandı):**
+- **Sahne "kaybı" = panik yok:** Unity boş sahne açmıştı; kaybolan = restart-öncesi kaydedilmeyen scratch demo (kasıtlı). `_IsoGame` diskte sağlamdı.
+- **PLAYABLE FIX (cx):** F5'te `RuntimeRoomManager.StartRoom→largeMapPainter.PaintForRoom→LargeDungeonMapPainterBase:361 ClearAllTiles` authored IsoGrid'i silip flat prosedürel oda kuruyordu. FIX = `useAuthoredSceneRoom` flag (default false, sadece _IsoGame'de AÇIK) → prosedürel atlanır, authored floor451 iso ada (560 hücre) korunur. Regression yok (PlayableArena_Test01 sağlam).
+- **WARBLADE (cx):** kırmızı-kare kök-neden = PlayerClassManager default class F5'te uygulanmıyordu + stale sprite GUID. FIX = `applyPrimaryOnStart` flag (sadece _IsoGame) + warblade_idle_SE + Warblade.controller + 8 idle klip onarımı + **bottom pivot** (ayak tile'da). WASD hareket/yön doğrulandı.
+- **CONCEPT-LOOK BUILD + TUNE (cx, ax planına göre):** koyu slate floor (Ground tint, **Global Light2D AÇILDI** #2A2840 int~0.85, Ambient kısıldı) · cyan çatlak floor451_2 %5 (28/560) GÖRÜNÜR+bloom-PARLIYOR · KOYU taş cliff #3C3C42 44 tile (**kahverengi ref_kit_b GİTTİ**, CliffAutoPlacer floorTilemap Walls→Ground düzeltildi) · `Void_BG` mor void (bg_L0_void, kamera-child, order -100) · Global Volume Bloom (1.5/1.0). Tune turunda: floor siyahlıktan açıldı + **KIRMIZI KARE düzeltildi** + cyan parladı. custom-axis (0,1,0) KORUNDU.
+- **ART-DIRECTION LOCK:** concept odaları (`STAGING/imagegen/concept0{1,3,5,7}_*_ISO.png`) = north star (koyu granit + cyan derz + kalın koyu taş cliff + mor void + kırık keep/rune/zincir/portal). [[project-senior-design-report-s6]] planında detaylı.
+- **AX ANALİZLERİ (`STAGING/agy_*.md`):** (1) D2/16-dir sprite videosu → RIMA 8-yön kal + flat-lit+Light2D + smear-frame 10-12fps; (2) iso-tileset videosu (TRANSCRIPT'le gerçek) → Rule-of-2, AI'dan "düz üst-elmas" üret + cliff Unity'de extrude/karart, Diamond-mask crop tool; (3) BUILD KARARI = **(A) modüler tile + Light2D + bloom** (gameplay/procedural/z-sort korunur).
+- **SENIOR-DESIGN RAPOR:** ara rapor (`ARA_RAPOR_RIMA.docx`) → `STAGING/SENIOR_DESIGN_REPORT_DRAFT.md` kopyalandı; plan+art-lock+"ne tool yaptık"+"eklenebilir"+screenshot listesi = `STAGING/SENIOR_DESIGN_REPORT_PLAN.md`. **Karakter artık 64px** (not edildi; 4→8 yön düzelt). Draft = playable demo lock SONRASI, cx/agy ile.
 
-### 🔒 LOCKED kararlar (triple-AI)
-- **Cliff demo = mevcut sprite + placement-fix (DONE).** **Kalite = yeni 128×128 dual-grid edge-art seti** (~14 parça: S/SE/SW düz + dış/iç köşe + cap + alçak-arka-rim; ÖNCE 3-4 parça prototip, sanat dili onayla). PixelLab, FUTURE.
-- **Küçük iç-delik (1-2 hücre) bu açıda derinlik gösteremez → dark-pit/backdrop-through.** Gerçek chasm = min 3×3 + kameraya-bakan kısa rim.
-- **Köşe naturalness = COMBO illüzyon** (dark-fade DONE; mist/rock-cap daha güçlü, FUTURE). Geometri-round DAHA fazla yapma (basamak artar).
+**🆕 KULLANICI FİKİRLERİ (değerlendirildi):** (a) Imagen tek organik platform → "pek iyi değil" (chroma-keyed `STAGING/imagegen/organic_iso_platform_*_keyed.png` mevcut). (b) Imagen platformu iso **9-slice** (orta tile uzat + kenar cliff) = mantıklı, DirectionalCliff'e oturur — painterly-vs-tile gap için ileri tur.
 
-### 🎯 GELECEK SESSION = BÜYÜK OTONOM İŞ (kullanıcı: "büyük iş otonom") — aday track'ler
-1. **T3 live-editor entegrasyonu** (scaffold STAGING'de hazır → Assets/ + asmdef + ToolMain.unity + compile-verify + smoke). Runbook: `REVIEW_AND_INTEGRATION.md §4`. **En "hazır" büyük iş.**
-2. **Demo loop tamamlama** — boss (PenitentSovereign sprite YOK→üret) + mob variety + fragment-drop + 5-oda E2E playable.
-3. **Weapon system live-test** — mount kodu LIVE/uncommitted → import (cyan greatsword `31ee0f73`) + WeaponDatabase + 8-dir/swing/VFX verify.
-4. **Audio** (en büyük boşluk) — müzik+SFX iskeleti, his/maliyet en yüksek.
-- **Gated (kullanıcı):** A5 combat-feel playtest (F5) = demo'nun gerçek kilidi · PixelLab gen (edge-art/backdrop/weapon/boss) · git-push.
-- **cx artık otomatik yekta** (priority başta; geçici→bench: `cx_profiles.local.json` disabled'a ekle).
+**⛔ KUYRUKTA / KALAN:**
+1. Concept'e TAM ulaşmak: daha zengin granit doku (PixelLab daha iyi tile / concept-stili regen), daha fazla cyan yoğunluğu + kırık keep duvarı + rune/portal/zincir oda öğeleri.
+2. Çok-odalı prosedürel + portal/preview/orb sistemi (gameplay döngüsü).
+3. Rapor draftını yaz (cx/agy, Opus review) — demo lock sonrası.
+4. 9-slice / Imagen-organik-ada deneyini değerlendir.
+
+**🔑 ROUTING/DURUM:** cx=yasinderyabilgin (laurethayday 1 kez timeout=profil-spesifik) · ax=Gemini 3.1 Pro (ConPTY) · Opus orchestrator+review (user "claude limitim az" → bulk cx/ax) · commit **STILL GATED** · `_IsoGame.unity` = playable concept demo (kaydedildi, isDirty=false) · F5 final screenshot `Assets/Screenshots/screenshot-20260601-205302.png`. Memory: [[project-senior-design-report-s6]].
 
 ---
 
-## 🆕 YENİ SESSION — İLK OKU (S114 S5 kapanış, 2026-05-29)
+## 🆕🧩🏝️ MODÜLER PIPELINE + BÜYÜK İSO ODA DEMO + CLIFF SİSTEMİ (2026-06-01 gece, Opus, user-present, PC RESTART öncesi) — (önceki)
 
-**Tek cümle:** PlayableArena_Test01 artık **oynanabilir** (player ışıklı floating-ada üzerinde stabil, kamera takip, combat çalışıyor, parallax live, temiz boot) — AMA **cliff'lerin görseli HÂLÂ SAÇMA** (kullanıcı onaylamadı), rework gerek.
+**Tek cümle:** "Daha büyük" = **büyük ORGANİK iso odalar** (modüler tile dizimiyle); 10 konsept görsel iso yönünü kazandırdı; elimizdeki asset'lerle (floor451 + ref_kit_b cliff + ref_kit_c bg) büyük yüzen iso ada demo'su kuruldu; cliff "generate" sistemi haritalandı ama asset eksik. **PC restart öncesi her şey diske + memory'ye yazıldı; build/dispatch YAPILMADI (restart background'u öldürür).**
 
-### ✅ Bu session ÇÖZÜLEN (8 playtest bug + overnight suite) — hepsi commit'li, play-verified
-| Bug | Fix | Commit |
-|---|---|---|
-| Kamera takip etmiyor | CameraPunchController transform-pin → offset-pattern; CameraFollow base+fx | b9771e01 |
-| Live parallax yok | ParallaxRig 6 layer canonical factor + target | b9771e01 |
-| Boot arşiv sahneye | CharacterSelect.gameSceneName → PlayableArena_Test01 | b9771e01 |
-| F5 tool crash | play-mode toggle+guard | b9771e01 |
-| Mob çeşitliliği yok | HollowHulk_GB + ShardWalker_GB graybox → Room2/3 | 71b0b4b7 |
-| Boot menü dondurması | MainMenuScreen "_IsoGame" whitelist'e PlayableArena | 5d2407b6 |
-| **Player void'e düşüyor** | **Player(10)/Enemy(11) layer ayrımı + IgnoreLayerCollision** (kinematic düşman dynamic player'ı itiyordu) | afe02014 |
-| DamageNumberDriver NullRef | redundant TextMesh sil | f27f068c→ |
+**✅ BU SESSION DONE:**
+- **AntigravityAuthManager fix commit+push** (`ad31ec1` → main): ax.ps1 `$switch`→`$switchScript` + .gitignore ax-runtime artifacts. (kullanıcı adına, Claude-trailer yok)
+- **10 KONSEPT GÖRSEL** üretildi (`STAGING/imagegen/concept01-10_*.png`, ax laurethayday→agy/Imagen, refs=Elementalist_SE+floor451_0). **İSO yön net kazandı** (hero-oda·Sundered Beat·portal+chest·boss·void-map). agy/Imagen=sanat-yönü north star.
+- **FLOOR-FIX (cx, compile-clean, F5 GATED):** `RoomLoader` artık runtime'da iso Grid uyguluyor (`RoomConfig.IsoCellSize/IsoGridLayout` sabitleri + `ValidateContract` apply, eskiden warn-only). KÖK-NEDEN: PlayableArena_Test01'de "Floor" root Grid'i Rectangular(1,1,1) idi; painter component'i yok. STEP-2 follow-up (tile kaynağı→floor451) Unity-gated.
+- **MODÜLER PIPELINE PLANI** (agy+cx+Opus sentez): `STAGING/MODULAR_PIPELINE_MASTER.md`. ANA HEDEF=büyük iso odalar. Araç kararları: floor=`create_tiles_pro`(iso) NOT topdown-Wang; prop/edge=`create_1_direction_object` batch; create_map(pixflux)=sahne-baked SKIP; edit_image_pro=sonradan tema-yayma (ikincil). 7 katman, cyan=ayrı decal+Light2D (%5-8). Memory=[[project-modular-pixellab-pipeline-s6]].
+- **BÜYÜK ODA DEMO (elimizdeki asset, scratch sahne):** floor451 + ref_kit_b cliff + ref_kit_c bg ile büyük yüzen iso ada. Screenshot `Assets/Screenshots/screenshot-20260601-19*.png`. **Modüler→büyük oda kanıtlandı.** Bulgu: floor451 16-varyant cyan-AŞIRI (hepsini kullanınca cyan her yer; floor451_0 tek=temiz granit) → cyan ayrı decal şart.
+- **IMPORT edildi:** `Assets/Sprites/Environment/CliffKit_RefB/` (9 cliff S/SE/SW/E/W/N/NE/NW+cyan_glow, 128×192 PPU64 pivot0.84) + `BgKit_RefC/` (7 bg L0_void..L4_fog 1254px). Kaynak=STAGING/_archive/s106_overnight (scene_v7 önceki kanıtlı kompozisyon).
+- **CLIFF SİSTEMİ HARİTALANDI:** `CliffAutoPlacer.Regenerate()`=mantıksal yerleşim (kamera-bakan dış-void kenar + filtreler); `DirectionalCliffTile`=komşuya göre yön sprite seçer (hasN→spritesS...); buton=`CliffGenerateAction.cs`. **BLOCKER:** `Assets/ScriptableObjects/Environment/` YOK → `DirectionalCliffTile_Hades.asset`+`CliffPlacementRules_Hades.asset` eksik → buton boş. ref_kit_b sprite'ları 8 yöne 1:1 oturuyor.
 
-DamageNumberDriver fix `df7bf637` içinde. Overnight tasarım: N1-N9 + N10 dev-tools + N8 cliff-live-reload (`STAGING/N*_*.md`).
+**🆕 YENİ DESIGN DİREKTİFLERİ (kullanıcı):**
+1. Odalar **ORGANİK** (kare/elmas değil, doğal blob şekli) → generate-cliff organik kenarı takip eder.
+2. **Layer C: sadece BİR mantıklı katman** kullan (hepsini stack'leme); layer C gerekirse sonra yeniden üretilir.
+3. **PORTAL/PREVIEW/ORB** (re-confirm): run'ın rastgele odaları void'de **aşağıda GERÇEK preview-ada** olarak (layer C ile cliff arasındaki bantta) görünür, cyan-orb ile **ışınlanma**. (Spec=`STAGING/PORTAL_PREVIEW_SYSTEM_SPEC_S6.md`)
+4. **Kamera YAKIN** gameplay zoom (640×360 PPC, hero ~%17.8) — son demo çok uzaktı.
 
-### 🟢 #1 — CLIFF GÖRSELİ BÜYÜK İLERLEME (S114 S5, Opus otonom + triple-AI, kullanıcı iteratif onay)
-Kök neden bulundu+çözüldü: cliff `Decor_Cliff`(12) sorting = floor ÜSTÜNDE → kule gibi dikiliyordu. **Fix stack (hepsi kaydedildi, compile temiz):** cliff `Ground` layer floor ALTINA (occlusion → sadece sarkma görünür, PPU korundu) + tek coherent varyant (cliff_S) + organik yükseklik varyasyonu (DirectionalCliffTile Perlin+jitter) + **robust exterior-void cut rule** (CliffAutoPlacer FloodExteriorVoid + monotonic-south, notch/peninsula keser, **diagonal veto YOK = diamond over-cut sebebiydi**, 78 cell) + AO contact-shadow (EdgeFX_Auto) + floor collision GAPS=0 + **depth backdrop** (RoomBackgroundRig nebula/void açıldı, gerçek boyut, unlit, snapToPixel=false jitter-fix). Tüm ada artık abyss'te yüzen-ada gibi okunuyor. Detay: [[project-cliff-depth-resolution-s114s5]] + `STAGING/CLIFF_DEPTH_SYNTHESIS_S114S5.md`.
-**KALAN (kullanıcı sanat gözü / PixelLab next task):** final doğal-yargı + AO gücü · seamless/tileable BG üretimi (688×384/512×288, "yürüdükçe devam") + coherent cliff varyant ailesi (3 yükseklik × doku) · cliff_S.png pixel temizliği (kullanıcı) · per-map BG preset sistemi (RoomBackgroundController, RoomLoader.OnRoomChanged hook). Demo gap (spawn kuzeyi) depth gösteriyor.
+**⛔ KUYRUKTA — RESTART SONRASI (önce ÇALIŞTIRMA, restart background öldürür):**
+1. **ax + cx düşünsün (design):** (a) **CLIFF TAŞMA** — yerleşim matematiksel doğru ama cliff sprite (128×192=2×3 hücre) floor tile'dan (64=1 hücre) BÜYÜK → ada silüetini taşıyor. Çözüm? (scale-down / crop / per-cell clip / void'e vs floor'a yerleştir / spriteScale tuning). (b) **Tek-yön cliff yeter mi** 8-yön yerine (high-top-down iso'da arka/yan yüzler görünür mü)? görsel-doğruluk vs üretim-basitliği.
+2. Sonra build: organik oda + generate-cliff aktive (ref_kit_b'den `DirectionalCliffTile_RefB` asset yarat — execute_code `AssetDatabase.DeleteAsset` BLOKLU, safety_checks=false veya temiz path'e CreateAsset) + 1 bg + preview-ada'lar + yakın kamera.
 
-### 🆕 YENİ DEV-TOOL'LAR (kullan)
-**F5** = açık sahneyi kaydet + PlayableArena aç + Play. **F1** (play'de) = Debug panel (Kill All / God / Speed / Force-Clear / Restart / **Jump Room 1-5**). RoomLoader.JumpToRoom(i) live.
-
-### 📋 KALAN (polish/tech-debt, demo-blocker DEĞİL)
-- **Cliff rework** (#1 yukarıda — kullanıcı eli) · void-bg gradient (N3 art-spec hazır) · camera room-bounds (agy/Codex flag) · 2 CameraFollow + 2 PlayerController duplicate merge · Warblade.prefab PMC disable (scene override var, layer-fix zaten drift'i çözdü) · legacy `_IsoGame` test triage (obsolete, demo Phase1Demo testleri GEÇİYOR) · statue#9.
-- **Gated (kullanıcı):** A5 combat-feel playtest (F5 ile aç) · git-push (remote divergence) · weapon batch gen (paused) · asset-delete (`SAFE_DELETE_AUDIT_S114.md`).
-
-### Memory yeni kayıtlar
-`feedback_kinematic_enemy_shoves_dynamic_player` (drift kök neden+fix) · `reference_nlm_conflict_resolution_s114` · STAGING N3/N4/N5/N6/N9 design docs.
-**S5 otonom (2026-05-29):** `project_cliff_depth_resolution_s114s5` (cliff#1 büyük ilerleme) · `project_livetool_t3_scaffold_s114s5` (T3 scaffold+mimari, giriş `STAGING/livetool_t3/00_T3_STATUS.md`).
-
-### 🤖 S114 S5 OTONOM OTURUM (Opus, kullanıcı AWAY) — KAPANIŞ
-Triple-AI (workflow+Codex+agy) review'lı. **Kapatılanlar:** (1) Cliff visual+depth #1 büyük ilerleme — sorting floor-altı + tek varyant + robust exterior-void cut (diagonal veto YOK) + organik yükseklik + AO + depth backdrop (RoomBackgroundRig nebula açık, snapToPixel=false) + floor collision GAPS=0. (2) Cliff live-reload no-op KAPANDI (verified, LiveTool EditMode PASS). (3) RuntimeAssetRegistry baked (67). (4) **Live Editor T3 FULL scaffold** — 6 bileşen + 2 runtime twin (C6/C7) STAGING/livetool_t3/'te, triple-AI mimari kilidi, asmdef root-cause çözüldü (tek RIMA.LiveTool.asmdef), tam integration runbook (`REVIEW_AND_INTEGRATION.md §4`). **T3 Assets/ entegrasyonu OTONOM YAPILMADI** (bilinçli — C7 blind, asmdef+scene+compile = red-console riski, rehberli yapılmalı). **Kullanıcı dönünce:** cliff/depth'i görsel onayla (`cliff_s5_robust_overview.png`) + cliff_S.png pixel temizle + T3 integration runbook'u izle. Açık güvenli kuyruk (`/tasks` #2-4 + menü): camera-bounds · AO-regen-bind · prefab-sorting-fix (PrefabHealthTest flag) · abyss-blend · per-map-BG.
+**🔑 ROUTING/DURUM:** commit **STILL GATED** (1166+ uncommitted; floor-fix F5 + token-cleanup + modüler docs paketi). cx=yasinderyabilgin (quota-auto), ax=laurethayday (image). Scratch demo sahnesi KAYDEDİLMEDİ (restart'ta gider, kasıtlı). PlayableArena_Test01 diskte temiz. Memory: [[project-modular-pixellab-pipeline-s6]], [[project-portal-preview-orb-system-s6]].
 
 ---
 
-## 🌙 S114 OVERNIGHT AUTONOMOUS (2026-05-29 gece, Opus 4.8 lead, user AWAY)
+## 🆕🛑🎯 İSO EDIT-MODE PASS + PLAY-MODE FLOOR BUG BULUNDU + İMAGE TASK KUYRUKTA (2026-06-01 akşam·2, Opus, user-present, PC RESTART öncesi) — (önceki)
 
-### 🔥 PLAYTEST BUG FIX WAVE (2026-05-29, Opus-yazımı, kullanıcı playtest-raporu üzerine)
-Kullanıcı gerçek playtest'te bug bildirdi → Opus yazdı, play'de DOĞRULANDI, Codex+agy review:
-- ✅ **Kamera takip etmiyordu → FIXED+verified.** Kök neden: `CameraPunchController.cs` her frame kamerayı yakalanan origin'e PINLİYOR (transform yazıp CameraFollow ile kavga). Fix: punch transform yazmaz, `CurrentOffset` expose eder; `CameraFollow` (CameraSystem) base'i ayrı SmoothDamp + shake/punch offset üstüne ekler + target auto-find. Play: cam (12,6) player'ı izledi. agy review 4/5 AGREE.
-- ✅ **Live parallax çalışmıyordu → FIXED+verified.** ParallaxRig 6 layer factor'ları canonical set edildi (void 0.03→foreground 0.55). Play: BG'ler kamera ile hareket etti. Scene SAVED.
-- ✅ **Boot-flow kırık → FIXED.** CharacterSelect.gameSceneName 'RoomPipelineTest' (ARŞİV) → 'PlayableArena_Test01' (kod default + scene serialized). MainMenu→Select→gerçek arena.
-- ✅ **F5 tool crash → FIXED.** RimaDevShortcuts play-mode'da SaveOpenScenes exception → toggle+guard (playing ise stop).
-- ✅ **Cliff rebuild + lighting → FIXED+verified (commit 8df5e49d).** cliffTilemap ref kırıktı (cliff'ler silinince) → CliffTilemap_Auto kuruldu (Decor_Cliff ord40) + CliffAutoPlacer.Regenerate() = 90 cliff cell ada edge'lerinde. Play: cyan-tint lit cliff'ler adayı çerçeveliyor. 16/16 Light2D zaten Decor_Cliff hedefliyor (black-cliff yok).
-- ✅ **ND3 mob variety (commit 71b0b4b7):** HollowHulk_GB (tank hp280) + ShardWalker_GB (skirmisher hp55) FractureImp-stack klonu, Room2/Room3 SO'lara assign. JumpToRoom ile play-verified.
-- ✅ **ND6 clean arena-boot (commit 5d2407b6):** MainMenuScreen whitelist'i hardcoded "_IsoGame" → PlayableArena_Test01 eklendi (prosedürel menü arena'da spawn olup timeScale=0 donduruyordu). + legacy PlayerMovementController disable (PlayerController canonical). Play: timeScale=1, menü yok.
-- 🟢 **GÖRSEL DOĞRULAMA:** screenshot = player **lit-floor adasında + cliff'ler çerçeveliyor + cyan ışık + void** → "floating island" doğru okunuyor. Camera+parallax+cliff+lighting+menu hepsi birleşti.
-- ✅ **#1 KRİTİK BUG — player drift → ÇÖZÜLDÜ (commit afe02014, Codex xhigh + Opus).** Kök neden: chasing KINEMATIC düşmanlar (useFullKinematicContacts) DYNAMIC player ile **aynı Default collision layer'da** → düşman chase-hızını (-3) PlayerController vel=0 yazdıktan SONRA contact ile player'a transfer ediyordu; drag=0 → kalıcı → void'e kayma + mob chase feedback. Player(10)/Enemy(11) layer'ları tanımlı ama atanmamıştı. Fix: PlayerController.Awake→layer=Player, BaseMobBehavior.Awake→layer=Enemy + IgnoreLayerCollision. Combat hasarı overlap/trigger (body-collision değil) → bozulmadı. **Play-verified: player (0,-3.5) sabit, düşmanlar yanında saldırıyor, void'e kaymıyor.** DEMO ARTIK OYNANABİLİR.
-- **Reviews:** camera fix agy 4/5 + Codex 4/5 AGREE. Tech-debt: 2 CameraFollow + 2 PlayerController-benzeri controller (duplicate pattern). Merge=follow-up.
-- **Commits bu wave:** b9771e01 (camera/parallax/boot/F5) · 8df5e49d (cliff+lighting) · 71b0b4b7 (mob) · 5d2407b6 (UI-boot+PMC).
+**Tek cümle:** İso fix edit-mode'da **tam doğrulandı (PASS)**, ama F5/play'de **runtime sistemi elle kurduğumuz IsoGrid+floor451'i yok edip eski DÜZ top-down floor'la prosedürel oda kuruyor** → "ürettiğimiz tile'lar yok" bug'ı kök-nedeniyle bulundu. Kullanıcı PC restart ediyor; her şey dosyalara yazıldı, commit hâlâ GATED.
 
-### ☀️ SABAH ÖZET (önceki overnight) — 15 item tamam, demo bir adım daha yakın
-**Büyük adım atıldı.** Combat sistemi canlı-doğrulandı + 1 gerçek bug fix + live-editor ilerledi + 3 yeni dev-tool + tam tasarım seti. Hepsi `STAGING/` doc + memory index'te. Local checkpoint'lerle korumalı.
+**✅ İSO EDIT-MODE DOĞRULAMA (Opus, MCP — hepsi PASS):**
+- IsoGrid cellSize **(0.960, 0.585, 1.000) Isometric** ✓ · tüm transform scale **(1,1,1) = squash YOK** ✓
+- Ground tilemap **560 hücre, hepsi `floor451_0.asset`** ✓ · Walls 192 (Wall.asset) · Obstacle 24 (Column.asset)
+- Sahne-view + game-lit screenshot: **seamless iso granit floating-island, yassılaşma yok** ✓ (kanıt: `Assets/Screenshots/screenshot-20260601-1714*.png`)
+- **UnifiedDesignerTests 9/9 PASS** · konsol 0 hata/uyarı · ışık OK (Global+Ambient 1.0; edit-game-view karanlığı = statik kamera floor merkezine (Y≈8.2) bakmıyordu, ışık değil)
 
-**Bu gece BİTEN (15):**
-- **Tasarım (triple-AI: her biri Codex+agy review→Opus final, fallback çalıştı):** N1 canon+**2 saçmalık** (mixel-boss→PPU64 / weapon-swing KORU) · N3 ışık reçetesi · N4 çatlak üretim-spec · N5 ambiyans-bible · N6 live-editor gap · N9 UX-tool · N2 envanter-tutarlılık. → `STAGING/N{1..9}_*.md`
-- **Demo sistem (Unity, canlı-doğrulandı):** ND1 audit · **ND2 combat VERIFIED** (mob HP 100→0, 0-error) + **DamageNumberDriver.cs:114 NullRef FIXED** · ND4 PlayMode-test (demo testleri GEÇTİ; 25 fail=legacy `_IsoGame` infra) · **N8 cliff live-reload fix** (schema 1.1, no-op kapandı) · **N10 3 dev-tool** (Play-From-Here/Debug-F1/Sandbox-Launcher — JumpToRoom canlı-test PASS)
-- **FILL:** #41 envanter sentez · #42 safe-delete audit
+**🛑 PLAY-MODE BUG (KÖK NEDEN BULUNDU, FIX SIRADAKİ):**
+- F5'te runtime hiyerarşide **`IsoGrid` ve `Ground` YOK** (yok ediliyor/atlanıyor). Yerine **`RuntimeRoomManager`/`RoomLoader` prosedürel oda kuruyor + ESKİ DÜZ (flat top-down) gri floor** kullanıyor → bizim iso floor451 görünmüyor. Screenshot kanıt: `screenshot-20260601-171956.png` (düz gri floor + cyan damar, karakter/HUD/minimap/pickup çalışıyor).
+- **Suçlu adaylar:** `Assets/Scripts/Core/RuntimeRoomManager.cs` · `Assets/Scripts/Systems/Map/RoomLoader.cs` + `Assets/Scripts/Map/Runtime/RoomLoader.cs` (İKİ RoomLoader!) · `Assets/Scripts/Map/RoomBuilder.cs`.
+- **Kullanıcı kararı:** "bu ekranı sil gerekirse düzgün ilerleyelim" = runtime oda-kurma yaklaşımını gerekirse scrap/yeniden-yap OK. **FIX (Codex, restart sonrası):** runtime RoomManager/RoomLoader ya authored _IsoGame odasını YÜKLESİN ya da prosedürel build floor451 iso + IsoGrid kullansın (eski flat floor'u bırak).
 
-**🛠️ HEMEN KULLANABİLECEĞİN YENİ TOOL'LAR:**
-- **F5** = açık sahneyi kaydet + PlayableArena_Test01 aç + Play (her yerden tek tuş)
-- **F1** (play'de) = Debug panel: Kill All / God Mode / Speed / Force Clear / Restart / **Jump Room 1-5** (demo'yu baştan oynamadan oda-test → ND2'deki menü-boot derdini bypass eder)
+**📋 KUYRUKTA — 10 KONSEPT GÖRSEL (başlatılmadı, restart background'u öldürür):**
+- **Amaç:** RIMA temasını **isometric vs top-down 3/4** karşılaştırması olarak göster, kullanıcı yön seçsin.
+- Mekanizma: `ax laurethayday` (switch) → `ax dispatch --no-swap` → agy/Imagen (1024² opak). Refs (ImagePaths ≤3): `Assets/Resources/Characters/Elementalist/elementalist_idle_SE.png` + `Assets/Sprites/Environment/PixelLabFloor451/floor451_0.png`. Çıktı → `STAGING/imagegen/`.
+- 10 plan: eşleşen senaryolar yarı-iso/yarı-TD3⁄4 (hero-odada · Sundered Beat combat · çok-odalı void haritası · cyan portal+chest oda · boss arena · güvenli hub) + 2 "agy's choice". On-brand slate/iron + sparing cyan #00FFCC, painterly konsept (pixel-art değil — PixelLab ayrı). Restart sonrası dispatch et.
 
-**🔴 SENİN KARARIN GEREKEN (gated):**
-- **A5** combat-feel playtest (PlayableArena_Test01, F5 ile aç) — "freeze" dersen art açılır
-- **Asset silme** (`N2_INVENTORY_CONSISTENCY_ACTION.md` A-grubu 3 SAFE dosya — tek "evet")
-- **git-push** (remote divergence, force-push senin kararın) · **weapon batch gen** (paused, "asıl üretim" sırası sende)
-- **UI-boot:** PlayableArena play'de 3 canvas (MainMenu+Settings+Death) aynı anda aktif → menü kapatınca gameplay temiz (ND6 spec hazır)
-
-**📋 SANA HAZIR (spec'li, gece-yapılabilir ama defer ettim):**
-- **ND3 mob variety:** FractureImp stack klonla→ShardWalker/HollowHulk graybox (`DEMO_MOB_AUDIT_S114.md`)
-- **ND5 black-cliff:** Scene_Lighting GO + Decor_Cliff light-target (`N3_LIGHTING_DESIGN_FINAL.md` — ⚠️ cliff'ler silinmiş, ÖNCE oda-rebuild)
-- **ND6 UI-boot temizliği · statue#9 kategorizasyon · N7 live-editor tam E2E · çatlak/ışık asset üretimi** (N4/N3 spec hazır, art-fazı)
+**🔑 ROUTING/DURUM:** commit **GATED** (play-mode floor bug + Map Designer F5 şema testi açık) · 1166 uncommitted · Unity instance bağlıydı, restart oluyor · cx=laurethayday kod, ax=laurethayday image (user istedi) → Opus review. Memory: [[project-session-cleanup-iso-tooling-s6]].
 
 ---
 
-**Sözleşme:** Sıralı kuyruk; her item Opus analiz+saçmalık-tarama → Codex+agy review (fallback zorunlu, asla atlama) → Opus final → üretilebilirlik notu → status+memory+index. North-star: **oynanabilir demoya sistemleri kur, "sadece animasyon kalsın".** Error'da durma, ara ara console. Bitince /lint.
+## 🆕🧹🎮 TOKEN-DİYET + TOOLING + Map Designer ŞEMA + İSO FIX (2026-06-01 akşam, Opus, user-present) — (önceki)
 
-**Checkpoint:** `f27f068c` WIP overnight baseline (reviewed combat .cs korundu, `git reset --soft HEAD~1` geri alır).
+**Tek cümle:** Token şişkinliği temizlendi + NLM/ax/agy tooling onarıldı + yeni CLI komutları (`/p`,`/ask_gemini`,`/generate_image`) kuruldu + Map Designer runtime-şema fix'i + iso-perspektif kod/sahne fix'i tamamlandı. **Hepsi dotnet build 0 hata, UNCOMMITTED+gated. Tek kalan kapı: Unity görsel/F5 doğrulaması.**
 
-**PROGRESS LOG:**
-- ✅ **FILL #41** PixelLab envanter sentezi → `STAGING/PIXELLAB_SYNTHESIS_S114.md` (37 KEEP-T1/109 T2/51 DELETE/46 REVIEW, 6 çelişki).
-- ✅ **FILL #42** safe-delete audit → `STAGING/SAFE_DELETE_AUDIT_S114.md` (3 SAFE: _TempReferencePacks+Warblade/south.png / 3 UNSAFE: floor_iso aktif sahne, StoneColumn referanslı / 3 REVIEW). SİLME YOK, sabah onayı.
-- ✅ **N1** NLM conflict sweep → `STAGING/NLM_CONFLICT_RESOLUTION_S114.md` + memory `reference_nlm_conflict_resolution_s114`. Triple-AI 4/4 AGREE: mixel-boss=PPU64 / weapon-swing KORU / cliff 2-stage hibrit / 4 demo-blocker.
-- ✅ **ND1** demo-loop audit: RoomLoader.cs `useFragmentGateFlow` emekli, **clear-to-unlock LIVE** (combat oda: mob clear→gate unlock→enter→LoadNext; reward: fragment-pickup; boss: death→DemoComplete). Mob audit (`STAGING/DEMO_MOB_AUDIT_S114.md`): **1/4 combat-ready** (FractureImp✅ / ShardWalker=script+anim,prefab YOK / HollowHulk=YOK / boss=HP 100vs800 çelişki). 3 combat odası FractureImp spam.
-- ✅ **N3** ışıklandırma tasarımı → `STAGING/N3_LIGHTING_DESIGN_FINAL.md` (triple-AI). Işık reçetesi (global #1E1B2E 0.22 / cyan rim Freeform 1.2 sharp / brazier warm / rune pulse / void unlit). 🔴 4 saçmalık: black-cliff kök=ışıklar inaktif dekor-parent child (→Scene_Lighting GO) + Decor_Cliff light-target eksik + Shadowcaster2D ASLA + pixelSnapping tile-seam 1px bleed. Üretilebilir asset spec'leri hazır (Python-cheap, PixelLab gerekmez). → ND5 task.
-- ✅ **ND2** combat play-mode doğrulama: play **0-error temiz**; **DamageNumberDriver.cs:114 NullRef FIXED** (redundant TextMesh bloğu silindi, TextMeshPro kalır, recompile-clean); Health.TakeDamage çalışıyor (mob 100→0); player+9 enemy canlı; CombatJuice tam. Görsel: floor+cyan ışık havuzları render, void görünür, cliff EKSİK. ⚠️ menü-boot: 3 canvas (MainMenu+Settings+Death) aynı anda aktif timeScale=0 → ND6 (UI-flow polish, combat blocker değil).
-- ✅ **N4** çatlak/patch tasarımı → `STAGING/N4_CRACKS_DESIGN_FINAL.md` (triple-AI). 4 tip (taş-çatlağı/cyan-rift/kenar-erozyon/yama), 32px tile + 48/64 decor, üretim tablosu+promptlar hazır. Saçmalık: %15 yoğunluk limiti / cyan emissive-Light2D-yok / min 2px / erozyon collider değiştirmez. L4 overlay MVP + 4 painter brush. ÜRETİM YOK.
-- ✅ **N6** live-editor gap → `STAGING/LIVE_EDITOR_GAP_S114.md`: %58 kurulu (C2/C3/C4/C10/C11/C12/F7 çalışıyor), Tool.exe yok (T2-hibrit). Cliff no-op kök=`cliff_cells` şemasında tile_guid yok. 2 gece-item: N7 bake+E2E verify (XS), N8 cliff reload fix (S, ~30 satır).
-- ✅ **ND4** PlayMode test: 36 test, demo Phase1Demo (T2_GateFlow+T3_CombatReadiness) GEÇTİ; 25 fail = legacy `_IsoGame` sahnesi build-settings'te yok (test-infra/stale, demo-blocker DEĞİL — demo PlayableArena_Test01 kullanır). Demo loop/combat test-validated.
-- ✅ **N5** ambiyans-bible → `STAGING/N5_AMBIANCE_BIBLE.md` (görsel yığın + 7 mantıksal-güzelleştirme ilkesi + üretim roadmap). ✅ **N2** envanter-tutarlılık → `STAGING/N2_INVENTORY_CONSISTENCY_ACTION.md` (A:3 SAFE-delete kullanıcı-onay / B:UNSAFE-koru / C:51 cloud + tiles_rift_cliff / D:cliff rebuild ekleme). SİLME YOK.
-- ✅ **N8** cliff live-reload fix (Codex writer + Opus review, Unity compile 0-error): `CliffCellData.tile_guid` additive + serializer schema 1.1 (cliff tilemap→cliff_cells+guid) + LiveRoomReloader ApplyCliffTiles no-op→floor-pattern reload, legacy-safe. Live-editor "asıl büyük iş" ilerledi.
-- ✅ **N9** UX-tool ideation (agy+Opus) → `STAGING/N9_UX_TOOLS_FINAL.md`. Gece-build top-3: Play-From-Here / Debug-F1 / Sandbox-Launcher.
-- 🔄 **Çalışıyor (bg):** N10 top-3 dev-tool BUILD (Codex writer, `b9cpzpzgs`).
-- ⏭️ **Sıradaki:** N10 bitince review+compile-verify+play-test · ND5 black-cliff (Scene_Lighting GO + Decor_Cliff light-target, N3) · ND6 UI-boot temizliği · ND3 mob variety · statue#9 · **/lint (kullanıcı direktifi)** · sabah raporu. **N7 live-editor E2E = DEFER** (F7 smoke 29/29 + N8 compile zaten validate; tam Tool.exe-build follow-up). Tamamlanan: N1✅N2✅N3✅N4✅N5✅N6✅N8✅N9✅ + ND1✅ND2✅ND4✅.
+**✅ BU SESSION DONE (compile-clean, hiçbir şey silinmedi=arşiv):**
+- **Token diyeti:** CURRENT_STATUS 125→9KB · global MEMORY 49→6.3KB · CODEX_DONE 120KB→arşiv → session-başı auto-load ~186KB→~26KB (%86↓). Arşiv: `STAGING/_archive/` + `MEMORY_ARCHIVE_2026-06-01.md`.
+- **NLM login Chrome-uyarısı FIX:** config.py patch (bozuk default profil → `default-recovered`, .bak yedek). `nlm login --check`✓+query✓. PR#211 lokal-patch teyit, PR#212 SKIP (studio-only).
+- **ax.ps1 BUG FIX:** `$switch`→`$switchScript` (PowerShell switch otomatik-değişken çakışması) → `ax <N>` hesap-değiştirme çalışıyor. Blob'lar 500B geçerli ("1B" yanlış okumaydı).
+- **Defender exclusion** (RIMA klasörü + agy bin + agy.exe) → agy/indirme false-positive'leri (PowhidSubExec/ClickFix) bitti.
+- **YENİ KOMUTLAR** (`~/.claude/commands`, ax ConPTY dispatch + auto-rotate): `/p` (Gemini 3.5 Flash High; ham→net prompt, ben üzerine iş yaparım) · `/ask_gemini` (Gemini 3.1 Pro High; Q&A verbatim) · `/generate_image` (Imagen→`STAGING/imagegen`). **ax=switch hızlı(~1s), agy=cevap ~20-25s (ConPTY şart). imagegen=1024² OPAK sadece (boyut/şeffaf YOK)→backdrop/UI; sprite/karakter=PixelLab.** Detay [[reference-ax-agy-cli-mechanism]].
+- **Map Designer ŞEMA FIX (cx):** `LiveRoomReloader`→`RoomDataDTO` (şema uyumsuzluğu = kaydedilen oda F5'te görünmüyordu) + editör→`StreamingAssets/live/room_current.json` köprüsü + ToolBootstrap. RoomLayoutData korundu (router'lar kullanıyor). dotnet build 0 hata.
+- **🎯 İSO FIX TAMAM (ax diagnoz + cx uygula):** Sahne `_IsoGame.unity` (cellSize 0.94→**0.96×0.585** · **Y=0.5 squash KALDIRILDI→(1,1,1)** · Ground→**PixelLabFloor451**) + **KÖK-NEDEN: kod runtime'da squash'ı geri zorluyordu** → `RoomBuilder.cs:328`+`RoomConfig.cs:30`+`RIMAWallChainBuilderMenu.cs:421` iso recetesine çekildi (sweep temiz). Map Designer default floor→`floor451`. dotnet build 0 hata.
+- **STAGING temizliği:** 31 kapalı-sprint dizini + 45 AUTO_TEST json → `_archive` (top-level 50→19 dizin). ~530 gevşek .md kaldı (opsiyonel ileri tur).
 
----
+**⛔ SIRADAKİ (Unity GEREKİR):**
+1. **🎯 Unity görsel doğrulama (ASIL KAPI):** `_IsoGame` aç → 451 iso granit seamless mi, squash yok mu, karakter ayağı elmas-merkezde mi · `RoomBuilder.Build`/DungeonSetup rebuild'de değerler korunuyor mu. **+ Map Designer F5:** oda boya→kaydet→F5'te görünüyor mu (şema fix testi). `UnifiedDesignerTests` çalıştır.
+2. **Ertelenen cleanup (Unity açık):** fazla floor'ları 451'e **repoint→arşiv** + sahne `[RoomPreview_Generated]`/duplike obje temizliği. Plan=`AGY_DONE_ydbilgin.md` (A/B bölümleri).
+3. **COMMIT** (Unity-doğrulama SONRASI): paket = token-cleanup + Map Designer şema + STAGING + iso. ydbilgin, Claude-trailer YOK; push remote-divergence ayrı karar.
 
-## 🟢 S114 — AKTİF (post-/clear pickup buradan)
-
-**Tek cümle:** 10 commit atıldı (local baseline temiz), push BLOCKED (remote divergence — kullanıcı kararı), roadmap LIVE. Faz 1 demo combat'a odaklan. **EN GÜNCEL DURUM = aşağıdaki "S114 SESSION 3 PROGRESS".**
+**🔑 ROUTING:** cx=laurethayday (kod)→Opus review (writer≠reviewer) · ax=ydbilgin (analiz, `agy_detached.ps1`) — **bu session ax, RoomBuilder squash'ını yakaladı/cx kaçırmıştı = çift-bakış değerli** · dotnet build csproj compile-verify (Unity-MCP'siz) · commit GATED. Memory: [[project-session-cleanup-iso-tooling-s6]].
 
 ---
 
-### ✅ S114 SESSION 4 PICKUP (2026-05-29, Opus 4.8) — ⭐ /CLEAR PICKUP BURADAN
+## 🆕🔧🎯 MAP DESIGNER REGRESYON KURTARMA + İSO FLOOR ÇÖZÜLDÜ (2026-06-01 gündüz, Opus, user-present) — (önceki; iso bu session kod-yollarıyla TAMAMLANDI)
 
-**Tek cümle:** Weapon mount kodu LIVE (workflow impl + 3-AI review + fix, compile-clean 0 err, UNCOMMITTED); weapon size/style/3-batch kararları LOCKED; flash-fix + dispatch fixes DONE. Yeni session = aşağıdaki OTONOM TASK QUEUE'yu sırayla yap.
+**Tek cümle:** Kullanıcı Unity'yi restart etti → crash'te yarım kalan işler doğrulandı (compile-clean + re-bake 186 + EditMode 474/486) + baker dialog-storm fix → sonra kullanıcı **"Unified Designer rewrite çalışan özellikleri bozdu"** dedi (boyama çalışmıyor + varyant gruplama gitti + top-down look) → cx(laurethayday)+ax teşhis → **fix-forward Adım 1-3 DONE** + **iso floor kök-neden çözüldü (cellSize'ı tile elmas oranına ÖLÇ, tahmin/squash etme).**
 
-**🔓 KULLANICI YETKİSİ (kritik, ban override):** Kullanıcı Claude'a **PixelLab MCP ile silah üretme yetkisi verdi** (S114 S4). `feedback_pixellab_mcp_halt_strict` ban'ı **SADECE bu weapon-gen görevi için** kalktı, **3 batch ile SINIRLI**. Diğer MCP gen (character/animate/tile) YASAK kalır.
+**✅ BU SESSION DONE (hepsi compile-clean + Opus-doğrulandı):**
+- **Unity restart:** compile temiz (önceki crash-yarım menü/baker/cliff edit'leri OK). **Registry re-bake 122→186 entry** (floor tag 98, cliff 14, prop 18; iso+451 floor kayıtlı). Menü konsolidasyonu disk-doğrulandı (RIMA/ üstte sadece Map Designer+F5+F6; ⚠️ `Tools/RIMA/*` ~10 giriş + `RIMA/Map/*` 3 giriş hâlâ ayrı duruyor — küçük).
+- **EditMode test GERÇEK:** 486 koştu → **474 PASS / 12 FAIL**. 12'si pre-existing (eksik STAGING PNG/dir · MCP method-imza drift · perf-anti-pattern scanner tech-debt 71-dosya · 1 play-mode-API-in-editor). UnifiedDesignerTests GEÇTİ. (Memory'deki "363" YANLIŞTI, geri çekildi.)
+- **RuntimeAssetRegistryBaker dialog-storm FIX:** `EditorUtility.DisplayDialog` (blocking modal) → MCP execute_menu_item timeout sanıyor → komutu re-queue → her OK'ta yeni dialog (STORM). Kaldırıldı (sadece Debug.Log). **DERS: editor menü item'ında blocking modal = MCP otomasyonuyla çatışır.**
+- **MAP DESIGNER REGRESYON FIX-FORWARD** (cx laurethayday yazdı → Opus review + Unity compile/test):
+  - **Adım1+2:** `UnifiedMapDesigner.OnCoreChanged` → her paint sonrası `_composer.Compose` + `SceneView.RepaintAll` (anında görünür) · `RoomDataComposer` TileBase floor/cliff'i **Tilemap'e render** (önceden sadece prefab/sprite → tile asset'ler render OLMUYORDU = "boyama olmuyor" sebebi). DOĞRULANDI: 49/49 tile render, Floor/0 sorting.
+  - **Adım3:** yeni `UnifiedPaintVariantResolver` (`rima-material://` grup-id, displayName-prefix grup, **stable spatial hash** — RNG/GetHashCode YOK, `FloorWangResolver` neighbor-context, cell+8-komşu re-resolve) + `RoomData.TileCellRecord.sourceGroupId` (additive) + palette **tek-swatch-per-grup** + Floor default iso. DOĞRULANDI: 49 cell→9 varyant, deterministik, group-leak yok. → **"varyant gruplama + duruma-göre boyama" GERİ GELDİ.**
+- **🎯 İSO FLOOR KÖK-NEDEN (en kritik durable ders):** Floor top-down okuyordu çünkü (a) `flat_tile`(ce6f15c7) `tile_view_angle:90`=top-down üretilmiş, (b) **`flatten_floor_tiles.py` iso derinliğini SİLİYOR** (pl_floor flattened=düz), (c) **cellSize tile'ın elmas oranına eşitlenmemiş.** ÇÖZÜM: iso-projeksiyonlu tile kullan (en iyi=**`451bbfd8` ORİJİNAL flatten'sız granit**) + **cellSize = elmas W:H ÖLÇ** (451 elmas=62×38px@PPU64 → **(0.96, 0.585)**; 0.94,0.94 dikey boşluk verir çünkü elmas enden geniş). **MATEMATİKSEL SQUASH (root scale Y=0.5) YAPMA = yapay, kullanıcı reddetti.** cellSize `RoomDataComposer.ComposeInto`'ya gömüldü → her boyama seamless. Karakter (Elementalist 120px PPU64=1.88u boy) sahneye kondu, ölçek doğrulandı. Sonuç=seamless iso floating-island. Screenshot'lar `Assets/Screenshots/demomap_s6_*` (en iyi=`451_measured_cellsize` + `with_character2`).
+- **451bbfd8 indirme:** backblaze storage_urls oturum ortasında DÜŞTÜ → **`https://api.pixellab.ai/mcp/tiles-pro/{id}/download` = ZIP (auth'suz çalışır)**. `Assets/Sprites/Environment/PixelLabFloor451/floor451_0-15` + Tiles/.
+- **PixelLab tool-seçimi notu** (cold-start vs style-expand) → [[reference-pixellab-knowledge-base-s114]] + LaurethStudio `05_RESEARCH/2026_06_01_pixellab_tool_selection.md`.
 
-**Bu session DONE:**
-- **Weapon mount kodu** (workflow `wpmonw5vi`: impl + Codex+agy+Opus paralel review + fix): `OrientationSync` per-dir flipY (W/NW/SW) + procedural swing (`BeginSwing`, strike-frame=attackStartup'a hizalı) + `HandAnchorAttach` combo-step trigger + slash VFX hook. 4 dosya, +363 satır, **compile 0 err (verified read_console)**. Review GERÇEK timing bug yakaladı (swing vuruştan 50-150ms geç) → düzeltildi + mid-swing facing desync + dropped-hit guard. **UNCOMMITTED.**
-- **Weapon kararları LOCKED** (KB §4 + `STAGING/WEAPON_BATCH_PLAN.md`): 1 sprite/silah, 8-yön KOD (rotation+flipY+sort), PPU 64, karakter 64px. Boyut: küçük 32-40px / orta-büyük 64px. Tool=`create_1_direction_object`. ŞEMA KISITI: size+style_images birlikte VERİLEMEZ, en büyük style-img çıktı boyutunu belirler → ref'i hedef px'te hazırla. style_images=mevcut-weapon(stil/boyut)+downscale-karakter(sınıf rengi).
-- **Mevcut weapon:** cyan greatsword `31ee0f73` (Warblade demo, ✅ on-brand 64px) + katana `a032d9b5`/staff `4bde2642`/dagger `9312ea86`/pistol `894bba4a`/bow `ebc33ebf`. 8dir-baked YANLIŞ format (sil).
-- **flash-fix DONE** (Task Scheduler S4U, no-flash kullanıcı-verified) + **agy priority+fallback** (ydbilgin>ydbilginn>yasinderyabilgin>laurethayday>laurethgame) + **Codex cx_dispatch STATUS-anchor fix**. Memory: [[feedback-codex-agy-dispatch-invocation-fix]].
-- **parallax L4:** buton eklendi AMA pre-existing CRITICAL (inspector `asset.parallaxFactor` bake'e bağlı değil — placer window-tier okuyor) → toggle runtime ETKİSİZ. Tek-kaynak kararı gerek (DEFER — demo parallax istemez).
+**❌ 2 GÜN ÖNCEKİ SAHNE:** kurtarılamadı (commit'siz + crash + Temp/git-stash/.unity~ YOK — agresif arandı, kanıtlı). Kullanıcının "temiz tuval, yeniden çiz" kararı geçerli kalır.
 
-**📋 OTONOM TASK QUEUE (yeni session, Unity AÇIK, sırayla):**
-1. **T-W1 Weapon batch gen (YETKİLİ, MCP):** `STAGING/WEAPON_BATCH_PLAN.md` 3 batch'i üret. Akış: style-ref base64 hazırla (mevcut weapon + downscale karakter, hedef px) → `create_1_direction_object` → review → `get_object` → `select_object_frames`. SADECE 3 batch. Öncelik eksikler: Ravager greataxe, Elementalist staff, Summoner tome, Brawler gauntlet + swap varyantları.
-2. **T-W2 Demo weapon live-test:** cyan greatsword `31ee0f73` download → Unity import (PPU 64, point/no-compress) → weapon prefab → `Resources/WeaponDatabase.asset` Warblade/Base entry → play: 8-dir flipY + swing + slash VFX doğrula + screenshot QC.
-3. **T-W3 Player.prefab re-save:** yeni OrientationSync alanları (weaponRenderer, swingBackswing=45, swingFollowThrough=90, strikeFraction) Inspector'da görünür/tunable.
-4. **T-W4 Tune:** handOffsets/weaponRotations/swing değerleri play mode göz ayarı (A5-feel).
-5. **(DEFER):** Parallax tek-kaynak fix · statue kategorizasyon #3 · combat .cs commit (kullanıcı isterse).
+**⛔ AÇIK / SIRADAKİ (kullanıcı yeni session'da yönlendirecek):**
+1. **Kullanıcı Map Designer'ı deneyecek:** RIMA→Map Designer→Floor tab→`floor451` grubu→boya. Palette DOLU (floor grupları: flat·flat_tile·iso_floor·**floor451**·pl_floor_solid). ⚠️ Window GUI etkileşimi MCP'den doğrulanamıyor (bileşenler doğrulandı); boşsa window'u canlı debug.
+2. **Cyan tuning:** floor451/iso_floor gruplarında cyan-vein varyant var → grupla boyamada ~%25 cyan (bütçe %5-8). Granit-only base + cyan-accent grubu ayır.
+3. **Fix-forward Adım 4-5 (cx planı, KALAN):** directional cliff Wang (cliff render var ama yön Wang yok — `DirectionalCliffTile` cross-tilemap neighbor göremiyor); **`RoomDataJson`↔`LiveRoomReloader` runtime şema köprüsü** (kaydedilen oda runtime/F5'te görünmesi için — şu an şemalar uyumsuz).
+4. **Oda boyutu:** karakter ~1.88u, büyütme opsiyonu (kullanıcı "odalar 64px char'a göre biraz büyük olmalı").
+5. **Top-down contingency:** kullanıcı "iso olmazsa top-down yaparım" dedi → `STAGING/RESEARCH_CX_TOPDOWN_IMAGEGEN_S6.md` HAZIR (dispatch EDİLMEDİ): imagegen araçları/Codex-Plus/Gemini/bulk-vs-modular/64px-oda-boyutu.
+6. baker AssetPack dedup reorder TODO (eski, düşük-pri).
 
-**Combat .cs UNCOMMITTED** (reviewed+fixed+compile-clean) — git-recoverable, kullanıcı onayıyla commit.
-
----
-
-### ✅ S114 SESSION 3 PROGRESS (2026-05-28 gece, Opus 4.8 + workflow/agy)
-
-**Bu session locklananlar (hepsi memory'de):**
-- **Routing KATMANLI** ([[feedback-sonnet-default-opus-exception]] güncellendi): Orchestrator + zor/multi-system kod + kritik review = **Opus 4.8**; mekanik bulk = Sonnet/Codex. Opus 4.8 farkları: tool-calling verimli, kod hatası 4× az kaçırma, plana itiraz, desteksiz iddia 4× az. Fast mode = HIZ oyunu (2× pahalı, tasarruf değil). Dispatch'te `model` explicit.
-- **Weapon/anim CONVERGED** ([[project-weapon-anim-converged-s114]]): silah 8 yöne BAKE EDİLMEZ → weaponless body + HandAnchor child SR + OrientationSync, PPU 64. N-facing = VFX-first. agy+Claude+endüstri+memory converge (CoM postmortem = bake death spiral kanıtı).
-- **Silah ÜRETİM aracı kararı:** `create_1_direction_object` batch (size≤85→16 item, `item_descriptions[]` + `style_images[]`) tüm sınıf silahları tek batch; hero greatsword için `create_image_pro` (512² max). create_object map-prop yönelimli, hero için zayıf.
-- **State-anchored anim** (Karar #145 öğrenildi): mid-walk state → animate, `first_frame`+`enhance` ON. ⚠️ warblade'in HENÜZ state'i YOK (sadece 8 idle rotation, `animations: none`) → demo = 5 south state üret + her birinden anim (~25-35 gen). char id: `2656075d-d113-4f18-a6c1-94b5a6b8bf65`.
-- **Demo asset locks** ([[project-demo-asset-locks-s114]]): mob seti = FractureImp + ShardWalker + HollowHulk + **PenitentSovereign (boss, sprite YOK→üret 128-192px)**. PixelLab T1~35/T2~100 KEEP, 51 DELETE. Player.prefab'a Animator EKLE.
-- **PixelLab Knowledge Base LIVE:** `STAGING/PIXELLAB_KNOWLEDGE_BASE.md` ([[reference-pixellab-knowledge-base-s114]]) — tool matrix (batch yetenekleri) + state workflow + prompt grammar + Discord legal gap.
-- **Dynamic workflows** ([[reference-dynamic-workflows-usage]]): Claude `Workflow` tool kullanabilir ("workflow" kelimesiyle opt-in). ultracode = oturum ayarı (kullanıcı `/effort ultracode`, Claude tetikleyemez). Bu session 2 workflow koştu.
-
-**Scene (PlayableArena_Test01, KAYDEDİLDİ):** loose cliff sprite (14)+stray silindi · drop-shadow açık · braziers sütun ÜSTÜNE taşındı · floor **bounded ada R=14**'e trimlendi (2365→615 hücre). ⚠️ **Kullanıcı sonra cliff'leri SİLDİ** → oda rebuild bekliyor (task #2).
-
-**🔓 AÇIK KARARLAR (kullanıcı — /clear sonrası ilk gündem):**
-1. ✅ **ÇÖZÜLDÜ 2026-05-28 (kod-doğrulamalı):** Body = **8 baked directional sprite, runtime flipX YOK** (`PlayerAnimator.cs:103` flipX=false + DirX/DirY blend tree). Mirror = ÜRETİM kararı: W/SW/NW'yi PixelLab Mirror Horizontal ile bake et (mevcut karakterlerde 8 yön var → hazır). Silah `OrientationSync` 8 explicit offset ile decoupled — counter-flip gerekmez. (İlk "5+3 Unity flipX" lock'u kod ile düzeltildi.)
-2. ✅ **ÇÖZÜLDÜ 2026-05-28:** interpolation_v2 canvas = **256 max** (v3); create_character size = 128 max (ayrı limit). G10 schema-doğrulandı. **→ PixelLab pipeline LOCKED.**
-3. AssetPool vs RuntimeAssetRegistry statue kategorizasyon (11 boş AssetPoolSO). **← tek açık kalan.**
-
-**📋 AÇIK TASK QUEUE:**
-- **#2 Doğal oda rebuild:** organik (kare DEĞİL) tile şekli + cliff'ler tile ALTINA katmanlı (Decor_Cliff < Floor sorting) + en arkaya **KitC_BG parallax** (`Assets/Sprites/Environment/KitC_BG/` bg_L0_void→L4_fog, codex/PixelLab BG kiti) derinlik için.
-- **#3 Unity asset silme:** güvenli junk audit'te HAZIR → `Assets/Sprites/AssetPackV3/floor_iso_pixellab_35deg/` (16, Karar#150 ihlali) · `Assets/Art/AssetPacks/Act1_ShatteredKeep/floor_tiles/iso/` (3) · `Assets/Art/_TempReferencePacks/` (2) · `Assets/Art/Characters/Warblade/south.png` (dupe) · void-dışı StoneColumn'lar. **Referans-check sonrası sil** (git-recoverable). Riskli 3 (Phase0_ScaleTest, rift_pool violet, floor_large/walls violet) + PixelLab cloud 51 = kullanıcı nod/web-UI.
-- ✅ **#5 agy flash-fix ÇÖZÜLDÜ 2026-05-28 (kullanıcı no-flash teyit):** non-Unity dispatch Task Scheduler S4U (non-interactive) session'da → flash gorunecek masaustu yok. `agy_detached_runner.py` + `agy_detached.ps1` + tek-seferlik admin `Register-ScheduledTask RIMA_agy_detached`. Sonra her tetik admin'siz. Unity dispatch hâlâ `agy_dispatch.cmd` (minik flash OS limiti). Ayrıca agy priority+auto-fallback eklendi (ydbilgin>ydbilginn>yasinderyabilgin>laurethayday>laurethgame). Codex `cx_dispatch` false-fail FIXED (STATUS-anchor). Memory: [[feedback-codex-agy-dispatch-invocation-fix]].
-
-**Discord:** scrape = ToS ihlali, YAPILMADI. Kullanıcı help-support'ta legal soru postladı (resmi bot/API/export var mı). Manuel küratörlük + docs/YouTube yolu. İzlenecek video: Character States `oCJWxfEwX-o`.
+**🔑 ROUTING:** cx=laurethayday (kod writer) → **Opus review (writer≠reviewer)** · ax=ydbilgin (tasarım/research, agy_detached.ps1) · **execute_code `action:"execute"` zorunlu + `using` direktifi YASAK** (sub-namespace tam-nitelikli: `UnityEngine.Tilemaps.*`, `UnityEditor.SceneManagement.*`) · Unity instance `RIMA@ed023e0b` · composed preview root adı **`[RoomPreview_Generated]`** · **669+ uncommitted, commit/push GATED** · MCP'den EditorWindow GUI görülemiyor (bileşen-test ile doğrula). Memory: [[project-designer-regression-iso-fix-s6]].
 
 ---
 
-### ⚠️ PUSH BLOCKED — kullanıcı kararı gerek
-- `origin/master` diverge: tepe `05e15540 "Initial check-in"` = **kullanıcının 23 May, 3350-file line-ending normalization** commit'i (parent `32f204b7`).
-- Local: ortak atadan **19 commit ileri** (gerçek iş + bugünkü 10). Fast-forward DEĞİL.
-- Seçenekler: (a) `git rebase origin/master` — line-ending conflict riski yüksek; (b) merge — aynı risk; (c) **force-push** — master'a TEHLİKELİ + "Initial check-in"i siler, SADECE kullanıcı explicit onayıyla. **Claude force-push YAPMAZ.** Kullanıcı seçecek.
 
-### ✅ İlk dalga DONE — sonuçlar + post-clear next action
-| İş | Sonuç | Next action |
-|---|---|---|
-| **Cliff siyah teşhisi** (`STAGING/CLIFF_BLACK_LAYER_DIAGNOSIS.md`) | KÖK NEDEN: `Decor_Cliff` sorting layer hiçbir Light2D target'ında YOK (D2'de eklendi, ışıklar önce yapılandırıldı) → 0 ışık → Lit material siyah. Layer atamaları DOĞRU. 2ndary bug: `DirectionalCliffTile.GetTileData` yön çözümü `#if UNITY_EDITOR` içinde → Play'de hep güney yüz. | **FIX (kullanıcı onayı sonrası, Sonnet+Codex review):** Light2D `m_ApplyToSortingLayers`'a Decor_Cliff(12)+Decor_Floor(13) ekle (Global+4 autolight); inactive `RimLight_*_Cyan`+`Brazier` aktive (brand cyan-rim). P2: DirectionalCliffTile `#if UNITY_EDITOR` kaldır. |
-| **A1 WeaponDB** (`STAGING/A1_WEAPONDB_CLARIFY.md`) | Canonical = `Resources/WeaponDatabase.asset` (Player.prefab HandAnchorAttach.weaponDatabase). `WeaponDatabaseSO.asset` orphan→sil. `OrientationSync.Sync(FacingDir8)`=A2 mount API→**WIRE**, WeaponSorter→sil. | **A2 mount bridge** başlat: `HandAnchorAttach.cs`. ⚠️ Verify: Player.prefab `bodyRenderer` null (Level2 için ata) + canonical `handOffsets[]` boş (orphan'da değer var). |
-| **SkillOfferUI icon wire** (`STAGING/D_SKILLOFFERUI_ICON_WIRE_DONE.md`) | ✅ 4 satır, 0 err. `Data/Skills/*.asset` skills icon gösterir; SkillDatabase runtime placeholder (no regression). | `SkillOfferUI.cs` **uncommitted** → sonraki commit batch'e. |
-
-### 📋 MASTER PLAN (CANONICAL — kaybetme): `STAGING/MASTER_EXECUTION_PLAN.md`
-Tüm açık işlerin tek sıralı master planı (Opus sentez + agy validate, S114). Faz 0 baseline → 1a combat → 1b art → 1c demo + paralel FILL track'leri + 3 gate (A5/D3/git-push). Session pickup'ta ÖNCE bunu oku. Companion bağımlılık grafiği: aşağıdaki roadmap.
-
-### ✅ S114 SESSION 2 PROGRESS (2026-05-28, Sonnet impl + Opus review)
-Master plan Faz 0 + Faz 1a kritik path TAMAM (autonomous, sıralı, her adım Opus review'lı):
-- **Faz 0:** cliff black fix (16/16 Light2D Decor_Cliff hedefliyor + rim/brazier aktive, kök neden `RIMA_Cycle2_Dressing` parent kapalı) · DirectionalCliffTile `#if UNITY_EDITOR` kaldırıldı (runtime yön) · WeaponDatabaseSO orphan silindi (8 handOffsets `A1_WEAPONDB_CLARIFY.md §7`'ye kaydedildi).
-- **A2 mount bridge:** silah ele mount + 8-dir orient (VectorToDir8 + OrientationSync), per-dir sorting, WeaponSorter silindi. ⚠️ Player.prefab *asset*'inde PlayerController yok (sahne instance'ında var; teleport-transition demo'da güvenli, prefab re-instantiate kırar).
-- **A3 timing:** hit artık 80ms startup (windup) sonrası iniyor; `attackStartup` knob (A5-tunable); ApplyMeleeHit imzası korundu; PublishHit/Kill zaten wired'dı.
-- **A4 juice:** `CombatJuice` GO sahneye eklendi (HitPause/ScreenShake/CameraPunch/DamageNumber/VFXRouter) — kod zaten vardı, sadece sahneye bağlı değildi. Dash → PublishDash (PlayerController.TryDash). FeelToggle default'lar ON. VFXRouter.entries boş = D placeholder.
-- **FILL T3-MVP F2:** `Assets/Scripts/Live/RuntimeAssetRegistry.cs` (C4, API dondurulmuş: Get/GetSprite/GetTile/GetPrefab/GetByTag/GetByLayer/Contains) + C3 baker (menü). F1 (RoomLayoutSerializer/RoomManifestSO) zaten vardı. F3-F7 = T3-Polish (demo sonrası).
-- **FILL statue:** `AssetPool_WallBlocker_Statues.asset` oluşturuldu (14 statue, cat=WallBlocker). ⚠️ Diğer 11 AssetPoolSO boş — statue'nin asıl kategorizasyon yolu (pool vs RuntimeAssetRegistry keyword/RoomLayer) belirsiz, kullanıcı doğrulaması iyi olur.
-- **FILL T3-Polish F3-F7 TAMAM** (Session 2, "hepsi sırayla" otonom — Sonnet write + rima-qc review + fix loop): Live editor inşa edildi. F3 palette (`LiveToolPaletteWindow`+`RuntimeBrushPalette`+`RuntimeAssetLoader`, nullable layer-filter), F4 `RuntimeColliderHandles` (ColliderShapeSwapper reuse), F5 `Assets/Scripts/Live/` `LiveRoomReloader`+`JsonFileWatcher`+`RoomLayoutData` (self-bootstrap RoomLoader.OnRoomLoaded, `#if DEVELOPMENT_BUILD||UNITY_EDITOR`, thread-marshal), F6 `LiveToolLauncher` (Process.Start Tool+Game.exe, try/finally define-guard) + painter toolbar buton, F7 `Assets/Tests/EditMode/LiveToolSmokeTests.cs` (29/29 PASS). **DEFER:** cliff tile live-reload no-op (floor+prop reload çalışıyor; cliff GUID-reconstruction + CliffCell direction/manual field ayrı iş) · T3 spec doc §F1 schema camelCase yazıyor ama impl snake_case (impl tutarlı, doc stale).
-- **Demo skeleton SCOPED (implementasyon ertelendi):** `STAGING/DEMO_SKELETON_PLAN.md`. Room-seq+gate+fragment KODU var; eksik = gate-flow wire (`useFragmentGateFlow=false`) + mob çeşitliliği + fragment drop. **3 KARAR gerek:** fragment-gated mi clear-gate mi · A5 sahnesine dokunma onayı (yoksa Demo_Skeleton.unity duplicate) · 4 mob fonksiyonel mi. Otonom motor burada durdu (A5 sahnesini + tasarımı kullanıcı onayı olmadan rewire etmemek için).
-- **⛔ A5 BEKLİYOR:** kullanıcı combat feel playtest (PlayableArena_Test01). "freeze" → B/C/D art açılır; "tune" → değerler değişir.
-- **Otonom run STOP noktası:** Faz 0 + A2-A4 + T3-Polish(F3-F7) + statue bitti. Kalan otonom-güvenli iş tükendi — demo skeleton (kullanıcı 3 karar) / decor-parallax #18 (underspecified, scope gerek) / #41 (pixellab-doc) / A2 hardening (min-code ihlali, atlandı). Sıra A5 verdict'inde.
-
-### 🗺️ Roadmap: `STAGING/FORWARD_EXECUTION_ROADMAP.md`
-- **Kritik path (combat, seri):** A1→A2 mount bridge→A3 graybox→A4 juice→**A5 ⛔ timing-freeze (kullanıcı gate)**→B/C/D weapon art→**D3 ⛔ playtest**→demo loop.
-- **Paralel:** B=T3 live tool (F2-F7, C4 registry-first) / C=parallax+cliff / D=asset hygiene. A5/PixelLab beklerken fill.
-- **Demo'ya en kısa yol:** T3/parallax/hygiene'e İHTİYAÇ YOK — room-transition loop LIVE. Track A + playtest yeter.
-- **Scene-save dikkat:** A4 + T3-C10 ikisi de PlayableArena'ya dokunabilir — aynı anda SAVE etme; LiveRoomReloader self-bootstrap.
-
-### ✅ 10 commit (local baseline, fe697247'e kadar)
-dispatch-ignore+cookie guard / docs-status-lean+conflict-locks / docs-staging-locks / feat-editor-parallax-preview+painter / chore-project-sorting-layers / feat-content-camera-640×360 / chore-tools-cx_dispatch+painter-suite / chore-deps-MCP-9.7.1 / chore-tools-agy-scripts.
-
-### Gate'ler (kullanıcı-manuel, akışı bekletir)
-- **A5** combat timing-freeze · **PixelLab gen** (MCP otonom YASAK) · **D3** playtest · **Cliff fix** onayı (diagnosis sonrası).
-
-### Carry (eski S114, hâlâ açık ama Track'lere folded)
-- PixelLab sentez (#41) + cleanup (#42 delete) → Track D. Master: `PIXELLAB_INVENTORY_MASTER.md` (Tier 2, 1208 gen).
-- Cliff F path manuel wire (F1 slot + F4 GO) + Unity restart compile verify + oda transitions playtest.
-- **Opus animasyon flow:** sade body + HandAnchor weapon + Painterly VFX + juice telafi.
-
----
-
-## 🎮 Referans-oyun araştırması (2026-05-28, Codex + Antigravity)
-
-- **Blades of Mirage** (`STAGING/BLADES_OF_MIRAGE_PIPELINE_REPORT.md`): Gerçek-zamanlı 3D isometric ARPG. **RIMA 2D/2.5D KAL — 3D'ye pivot ETME.** Sadece ödünç al: isometric okunabilirlik, net silhouette, biome palet kimliği, su/VFX disiplini. (Antigravity'nin "Unreal/GAS" iddiası doğrulanmadı.)
-- **Colossus - Eternal Blight** (`STAGING/COLOSSUS_ETERNAL_BLIGHT_RIMA_WEAPON_REPORT.md`): 2D pixel ARPG, RIMA ölçeğine çok yakın. **"VFX-first weapon → sonra attached sprite"**, silahı her yöne bake ETME, **2 rhythm (quick/heavy) > class switching**, **Blight corruption = power-at-cost roguelite hook.** HandAnchor lock + Opus hibrit kararıyla **3 bağımsız kaynak aynı yöne** işaret ediyor.
-- RIMA çıkarımları memory'de: [[project-reference-games-weapon-combat-takeaways]].
-
----
-
-## 🔒 Çözülen çelişkiler — canonical lock (2026-05-28, NLM tespit + kullanıcı onayı)
-
-NLM 7 çelişki tespit etti, kullanıcı tek tek onayladı. Eski doc'lara SUPERSEDED banner eklendi.
-
-| # | Konu | CANONICAL | Eski (bannerlı) |
-|---|---|---|---|
-| 1 | Parallax factor | **0.05–1.10** 6-katman (`F3_PARALLAX_6LAYER_DONE`) | 0.03–0.14 (`BG_LAYER_ARCHITECTURE_VERDICT`) |
-| 2 | Weapon PPU | **64** (body uyumlu, `WEAPON_ANIM_VFX_PRODUCTION_LOCK`) | 100 (`WEAPONLESS_ANIM_..._PLAN`) |
-| 3 | Asset layer | **6-layer L1-L6** (`d2_layer_arch_lock`) | 4/5 (`RIMA_LIVE_TOOL_DECISION`, T3 banner'lı) |
-| 4 | Kamera | **High Top-Down 3/4 ~70-80°** (iso-art OK, iso-MATH değil). **Zoom LOCKED: PixelPerfectCamera refResolution 640×360 + upscaleRT ON + pixelSnapping OFF** (assetsPPU 64, ~%17.8 hero scale, 1080p=3x/2K=4x/4K=6x integer). pixelSnapping OFF kritik — painterly VFX/shake jitter önler (multi-res araştırma doğruladı). orthographicSize'a dokunma — PPC override eder. Ref: `STAGING/CAMERA_ZOOM_RECOMMENDATION.md` + `STAGING/MULTI_RESOLUTION_SCALING_RESEARCH.md` | 1280×720 (çok geniş) / diamond-iso terminoloji (`ROOM_DESIGN_PHILOSOPHY` 04-30) |
-| 5 | Live tool | **T3 full standalone** (`T3_TOOL_FULL_DESIGN`) | T2 (`RIMA_LIVE_TOOL_DECISION`, banner'lı) |
-| 6 | Character canvas | **64px içerik / 120px canvas** (animasyon headroom, "64 olarak düşün") | 64-only / 252→128 crop |
-| 7 | Hexer silah | **Grimoire / Cursed Totem / Scepter** (`weapon_master_spec_10_class`) | "Whip" (agy AI hatası, not'landı) |
-
-**Ders:** NLM recency'de %100 güvenilir değil — #6 canvas'ta eski guide'ı current gösterdi, PROJECT_RULES (05-24) ile cross-check düzeltti.
-
----
-
-## ✅ S113 KAPANIŞ özet
-
-**22 task tamam** (4 design + 8 impl + 5 review + 5 fix iter). Detay: arşiv snapshot.
-
-**LIVE özellikler:**
-- **Painter unification D2-D5.5:** `RimaRoomPainterWindow` 4 mode tab + L1-L6 filter + Prefab Mode collider drag-handle (`ColliderShapeSwapper`) + `DirectionalCliffTile` + `DecorCliffPainter` (Shift+Click).
-- **Cliff F path FINAL (F1-F7):** `AdaptiveClusterFilter` (283→128) + drop shadow + 6-katman parallax + dust particle + face idle anim + culling.
-- **Oda transitions LIVE:** `RoomLoader.LoadNext` + 5 `RoomSequenceData` SO + Y offset teleport + `RoomTransitionFX` fade + `DemoCompleteOverlay`.
-- **T3-F1:** JSON schema 1.0 + `RoomLayoutSerializer` + `RoomManifestSO.schemaVersion` + `StreamingAssets/live/`.
-- **Animation catalog:** 11 anim + 6 Apex state, weaponless (`STAGING/ANIMATION_PROMPT_CATALOG.md`).
-
-### Locked decisions
-| Karar | Lock | Ref |
-|---|---|---|
-| Live tool tier | **T3 full standalone** | `STAGING/RIMA_LIVE_TOOL_DECISION.md` |
-| Asset layer count | **6-layer** (L1 Floor / L2 Cliff base / L3 Cliff face decor / L4 Walkable decor / L5 Wall blocker / L6 Gameplay) | D2 LIVE |
-| Mounting pivot | **Top-center** | D2 |
-| Phase order | **Hybrid** (cliff Fix 0 → layer arch) | D2 |
-| Collider workflow | **Option A** (Prefab Mode) | D4 |
-| Save format | **JSON** default | D6 |
-| Migration scope | **Phase 1 critical ~30 prefab** | D2 |
-
-### Aktif HARD rules (S112-S113, detay auto-memory'de)
-- `feedback_autonomous_no_block` — otonom akış, kritik soruda sor ama durdurma
-- `feedback_code_writer_rotation` — yazan ≠ reviewer rotation
-- `feedback_triple_ai_inside_subagent_synthesis` — triple-AI subagent içinde, sentez orchestrator'a döner
-- `feedback_codex_agy_profile_race` — Codex + agy ayrı profile zorunlu
-- `feedback_sonnet_default_opus_exception` — Sonnet DEFAULT, Opus sadece 2+ system deep judgment + reviewer
-- `feedback_legacy_script_kinematic_override` — physics debug ilk adım `grep "rb.bodyType"`
-
----
-
-## ⚙️ Sonraki büyük scope (kullanıcı onayı sonrası)
-- **T3-F2..F7** (~5-7 gün, ~1130 LOC) — `STAGING/T3_TOOL_FULL_DESIGN.md` (509 satır spec).
-- **Animation production B2-B7** (PixelLab Web UI manuel) — `STAGING/ANIMATION_PROMPT_CATALOG.md`. Cost: 4f=1 / 6-8f=2 / 10-12f=3 / 14-16f=4 gen per dir. Phase 1 ucuz başla (Idle 4f=1 gen).
-- **Weapon Block A2-D3** — `STAGING/WEAPONLESS_ANIM_WEAPON_MOUNT_PLAN.md`.
+## 📚 Arşiv (token diet 2026-06-01)
+Eski session-log blokları arşivlendi: `STAGING/_archive/CURRENT_STATUS_archive_2026-06-01.md`.
+Kanonik tasarım detayı = NLM notebook 30ddffa5-292f-4248-8e77-68074af901be.
+Arşivlenen bloklar (başlık + tarih):
+- ## 🆕🆕🆕🆕🆕🆕🆕🆕🆕 DEMO MAP PIPELINE — KOD/DATA DONE, SAHNE+TEST UNITY-CRASH YÜZÜNDEN YARIM (2026-06-01 gece, Opus tam-otonom) — (önceki)
+- ## 🆕🆕🆕🆕🆕🆕🆕🆕 UNIFIED DESIGNER İNŞA EDİLDİ (2026-06-01, ultracode, Opus) — (önceki)
+- ## 🆕🆕🆕🆕🆕🆕🆕 POST-CRASH PICKUP (2026-05-31 PM·6, ⭐ PORTAL/PREVIEW SİSTEMİ KİLİTLENDİ + SAHNE KAYBI → TEMİZ TUVAL KARARI) — (önceki)
+- ## 🛠️ UNIFIED DESIGNER görevi ALINDI — DETECTION fazında (2026-05-31 PM·6, BAŞLAMA bekleniyor)
+- ## 🆕🆕🆕🆕🆕🆕 POST-/CLEAR PICKUP (2026-05-31 PM·5, ⭐ FINAL DIRECTION LOCK: İZO CLIFF-FLOATING-ISLAND + OBJELER + PixelLab floor) — İLK OKU BURADAN
+- ## 🆕🆕🆕🆕🆕 POST-/CLEAR PICKUP (2026-05-31 PM·3, PIVOT → Townscaper-2D MAP TOOL) — ⭐ İLK OKU BURADAN
+- ## 🆕🆕🆕🆕 POST-/CLEAR PICKUP (2026-05-31 PM·2, connected-walls + depth + drag-place + ENCLOSURE + pause-editor DONE) — (önceki, supersede)
+- ## 🆕🆕🆕 POST-/CLEAR PICKUP (2026-05-31 PM, room build + gameplay pivot) — ESKİ (bir önceki, supersede edildi yukarıda)
+- ## ⭐⭐⭐⭐ S6 PERSPECTIVE-LOCK + LOOP-FIX SESSION (2026-05-31 PM, Opus, USER PRESENT)
+- ## 🌙🌙 S6 OVERNIGHT AUTONOMOUS BULK BUILD (2026-05-31 LATE, Opus, user AWAY — NO QUESTIONS) — ⭐ PICKUP BURADAN
+- ## ⭐⭐⭐⭐ NEW SESSION PICKUP (2026-05-31, T3 INTEGRATED + characters refreshed + UI pack decided) — READ FIRST, POST-/CLEAR BURADAN
+- ## ⭐⭐⭐ S6 CLOSE (2026-05-30 LATE, Opus autonomous, user playtesting live via MCP) — POST-/CLEAR PICKUP BURADAN
+- ## ✅ BLOCK A+B+C+D + HUD + FEEL DONE — full-otonom (2026-05-30, Opus, build GREEN throughout) — ⭐ POST-/CLEAR PICKUP = AUTONOMOUS_BACKLOG_S6
+- ## 🚀 S6 AUTONOMOUS-PRODUCTION CLOSE (2026-05-30) — ⭐ İLK OKU, sonra WORK_ORDER
+- ## 🌙 OVERNIGHT S6 — AKTİF OTONOM (2026-05-30 gece, Opus lead, user AWAY ~10h) — ⭐ PICKUP BURADAN
+- ## 🆕🆕 S6 SESSION CLOSE — İLK OKU (2026-05-29, Opus otonom uzun build + workflow'lar)
+- ## 🆕 S6 PICKUP — İLK OKU (S114 S5 son round kapanış, 2026-05-29, Opus otonom + triple-AI)
+- ## 🆕 YENİ SESSION — İLK OKU (S114 S5 kapanış, 2026-05-29)
+- ## 🌙 S114 OVERNIGHT AUTONOMOUS (2026-05-29 gece, Opus 4.8 lead, user AWAY)
+- ## 🟢 S114 — AKTİF (post-/clear pickup buradan)
+- ## 🎮 Referans-oyun araştırması (2026-05-28, Codex + Antigravity)
+- ## 🔒 Çözülen çelişkiler — canonical lock (2026-05-28, NLM tespit + kullanıcı onayı)
+- ## ✅ S113 KAPANIŞ özet
+- ## ⚙️ Sonraki büyük scope (kullanıcı onayı sonrası)

@@ -1,0 +1,22 @@
+copy=Assets/Scenes/_IsoGame_cliffgaptest.unity
+gapNote=Satisfied western/eastern third, 3-cell boundary clearance, and 6-cell separation constraints.
+holeA=5,14;5,15;5,16
+holeB=21,3;22,3;21,4;22,4
+VAR0 total=136 overflow=136
+S: cliff_0_0_S, cliff_1_0_S, cliff_2_0_S, cliff_3_0_S, cliff_4_0_S, cliff_5_0_S, cliff_6_0_S, cliff_7_0_S
+SE: cliff_15_2_SE, cliff_21_5_SE, cliff_30_13_SE, cliff_5_17_SE
+SW: cliff_23_3_SW, cliff_2_11_SW, cliff_6_14_SW, cliff_17_22_SW
+E: cliff_14_1_E, cliff_31_1_E, cliff_14_2_E, cliff_31_2_E, cliff_31_3_E, cliff_20_4_E, cliff_31_4_E, cliff_20_5_E
+W: cliff_22_2_W, cliff_23_2_W, cliff_1_10_W, cliff_2_10_W, cliff_6_13_W, cliff_16_21_W, cliff_17_21_W, cliff_1_23_W
+VAR1 total=136 overflow=136
+S: cliff_0_0_S, cliff_1_0_S, cliff_2_0_S, cliff_3_0_S, cliff_4_0_S, cliff_5_0_S, cliff_6_0_S, cliff_7_0_S
+SE: cliff_15_2_SE, cliff_21_5_SE, cliff_30_13_SE, cliff_5_17_SE
+SW: cliff_23_3_SW, cliff_2_11_SW, cliff_6_14_SW, cliff_17_22_SW
+E: cliff_14_1_E, cliff_31_1_E, cliff_14_2_E, cliff_31_2_E, cliff_31_3_E, cliff_20_4_E, cliff_31_4_E, cliff_20_5_E
+W: cliff_22_2_W, cliff_23_2_W, cliff_1_10_W, cliff_2_10_W, cliff_6_13_W, cliff_16_21_W, cliff_17_21_W, cliff_1_23_W
+VAR2 total=136 overflow=61
+S:
+SE:
+SW:
+E: cliff_14_1_E, cliff_31_1_E, cliff_14_2_E, cliff_31_2_E, cliff_31_3_E, cliff_20_4_E, cliff_31_4_E, cliff_20_5_E
+W: cliff_22_2_W, cliff_23_2_W, cliff_6_13_W, cliff_16_21_W, cliff_17_21_W, cliff_1_23_W, cliff_2_23_W, cliff_3_23_W

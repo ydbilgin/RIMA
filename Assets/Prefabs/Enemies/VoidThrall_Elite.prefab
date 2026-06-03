@@ -20,6 +20,8 @@ GameObject:
   - component: {fileID: 2598837747751166447}
   - component: {fileID: 7453102482068017429}
   - component: {fileID: 4335275069703869298}
+  - component: {fileID: 8898329875508631962}
+  - component: {fileID: 6267767939343198019}
   m_Layer: 0
   m_Name: VoidThrall_Elite
   m_TagString: Untagged
@@ -88,7 +90,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1293760285
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
@@ -99,7 +101,7 @@ SpriteRenderer:
   m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!50 &2260581137185331059
 Rigidbody2D:
@@ -219,9 +221,13 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   damage: 12
   projectileSpeed: 7
+  projectileLife: 5
   attackCooldown: 1.8
   throwCount: 1
   spreadAngle: 20
+  useTelegraph: 1
+  telegraphDuration: 0.35
+  telegraphWidth: 0.45
 --- !u!114 &2297327486139136581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,3 +304,31 @@ MonoBehaviour:
   color: {r: 0.8, g: 0.1, b: 1, a: 1}
   pixelSize: 32
   shape: 0
+--- !u!114 &8898329875508631962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6956110836233044407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2860fe9f3bedbf44d8ec7399934fe436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
+  knockbackResistance: 0
+--- !u!114 &6267767939343198019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6956110836233044407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db7a0c9aa7c96408ecac530d535b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.HitFlashDriver
+  spriteRenderer: {fileID: 0}
+  flashDuration: 0.08
+  flashColor: {r: 1, g: 1, b: 1, a: 1}

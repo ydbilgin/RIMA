@@ -46,7 +46,10 @@ namespace RIMA
             instance = FindFirstObjectByType<RoomMonologController>(FindObjectsInactive.Include);
             if (instance != null) return instance;
 
-            var go = new GameObject("RoomMonologController_Auto");
+            // Construct WITH the canvas components: AddComponent<Canvas>() inside the Awake that is itself
+            // triggered by AddComponent<RoomMonologController>() returns null (Unity gotcha) → renderMode NRE.
+            var go = new GameObject("RoomMonologController_Auto",
+                typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             instance = go.AddComponent<RoomMonologController>();
             return instance;
         }

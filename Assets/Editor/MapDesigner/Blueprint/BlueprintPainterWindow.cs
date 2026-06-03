@@ -36,7 +36,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         private readonly BlueprintCanvas canvas = new BlueprintCanvas();
         private Vector2Int hoverCell = new Vector2Int(-1, -1);
 
-        [MenuItem("Tools/RIMA/Map Designer/Blueprint Painter")]
+        [MenuItem("RIMA/Legacy/Blueprint Painter")]
         public static void ShowWindow()
         {
             var window = GetWindow<BlueprintPainterWindow>("Blueprint Painter");

@@ -19,6 +19,9 @@ namespace RIMA
 
         // ── Card tracking ────────────────────────────────────────────
         private readonly List<GameObject> cards = new List<GameObject>();
+        // A5 chain-UI: skillNames of skills offered in the CURRENT draft, so a card can detect a
+        // Sundered-Beat interlock with a sibling card (not just an already-owned skill).
+        private readonly List<string> currentOfferNames = new List<string>();
         private GameObject panel;
         private Transform cardContainer;
         private TextMeshProUGUI titleLabel;
@@ -50,6 +53,14 @@ namespace RIMA
             string title = roomNumber > 0 ? $"ODA {roomNumber}  —  ODUL SEC" : "ODUL SEC";
             if (titleLabel != null) titleLabel.text = title;
             if (subtitleLabel != null) subtitleLabel.text = "Birini sec — digerleri kaybolur";
+
+            // A5 chain-UI: snapshot the offered skillNames so each card can detect a chain with a sibling card.
+            currentOfferNames.Clear();
+            for (int i = 0; i < offers.Count; i++)
+            {
+                var nm = offers[i]?.skill?.skillName;
+                if (!string.IsNullOrEmpty(nm)) currentOfferNames.Add(nm);
+            }
 
             for (int i = 0; i < offers.Count; i++)
                 BuildRewardCard(offers[i], i, offers.Count);
@@ -209,6 +220,14 @@ namespace RIMA
                 tierTag = "HEAL";
                 tierColor = new Color(0.28f, 0.78f, 0.45f);
             }
+            else if (offer.type == RewardType.CrossClassEcho)
+            {
+                // B5: distinct cyan ECHO treatment (cyan = echo / seal energy).
+                name = (offer.crossClass != null ? $"Echo of {offer.crossClass.sourceClass}" : "Echo").ToUpperInvariant();
+                desc = offer.crossClass?.description ?? "Cagir bir yankisi (C).";
+                tierTag = "ECHO";
+                tierColor = RimaUITheme.Cyan;
+            }
             else
             {
                 name = offer.skill?.skillName?.ToUpperInvariant() ?? "???";
@@ -216,7 +235,8 @@ namespace RIMA
                 tierTag = offer.skill?.tier.ToString().ToUpperInvariant() ?? "";
             }
 
-            var card = BuildSkillCard(name, offer.skill?.tier ?? SkillTier.Common, desc, index, total, offer.skill?.icon);
+            var card = BuildSkillCard(name, offer.skill?.tier ?? SkillTier.Common, desc, index, total,
+                offer.type == RewardType.CrossClassEcho ? offer.crossClass?.icon : offer.skill?.icon);
 
             // Select button
             var btn = card.GetComponentInChildren<Button>();
@@ -253,6 +273,80 @@ namespace RIMA
             chipTxt.fontStyle = FontStyles.Bold;
             chipTxt.color = Color.white;
             chipTxt.alignment = TextAlignmentOptions.Center;
+
+            // A5 chain-UI: if this offered skill interlocks (Sundered-Beat chain) with another
+            // offered card OR an already-owned active, show a cyan "pairs with X" chip.
+            string partner = FindChainPartner(offer.skill?.skillName);
+            if (!string.IsNullOrEmpty(partner))
+                BuildChainChip(card, partner);
+        }
+
+        // ─── A5 Chain Chip (Sundered-Beat interlock tell) ───────────
+
+        /// <summary>Find a skill that the given offered skill chains with — either a sibling offered
+        /// card or an already-owned active. Uses the static ChainWindowTracker producer↔consumer table
+        /// (no runtime state). Checks BOTH directions so the chip shows whether this card is the
+        /// producer OR the consumer of the chain. Returns the partner's display name, or null.</summary>
+        private string FindChainPartner(string skillName)
+        {
+            if (string.IsNullOrEmpty(skillName)) return null;
+
+            // Sibling offered cards (skip self), then already-owned actives.
+            for (int i = 0; i < currentOfferNames.Count; i++)
+            {
+                string other = currentOfferNames[i];
+                if (string.IsNullOrEmpty(other) || other == skillName) continue;
+                if (Chains(skillName, other)) return other;
+            }
+
+            var owned = DraftManager.Instance?.OwnedActiveSkillNames;
+            if (owned != null)
+            {
+                for (int i = 0; i < owned.Count; i++)
+                {
+                    string other = owned[i];
+                    if (string.IsNullOrEmpty(other) || other == skillName) continue;
+                    if (Chains(skillName, other)) return other;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>True if skills a and b form a Sundered-Beat chain in either order.</summary>
+        private static bool Chains(string a, string b)
+            => ChainWindowTracker.ChainsWith(a, b) || ChainWindowTracker.ChainsWith(b, a);
+
+        /// <summary>Cyan synergy chip pinned to the card's bottom-right — "⟂ pairs with {partner}".
+        /// Mirrors the TierChip build pattern; cyan = RIMA seal/synergy energy (distinct from the
+        /// red/orange enemy break tells).</summary>
+        private void BuildChainChip(GameObject card, string partner)
+        {
+            var chipGo = new GameObject("ChainChip", typeof(RectTransform));
+            chipGo.transform.SetParent(card.transform, false);
+            var chipRt = chipGo.GetComponent<RectTransform>();
+            chipRt.anchorMin = new Vector2(0.5f, 0f);
+            chipRt.anchorMax = new Vector2(0.5f, 0f);
+            chipRt.pivot = new Vector2(0.5f, 0f);
+            chipRt.anchoredPosition = new Vector2(0f, 44f); // just above the SEC button
+            chipRt.sizeDelta = new Vector2(CardWidth - 16f, 14f);
+
+            var chipImg = chipGo.AddComponent<Image>();
+            chipImg.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.18f);
+            chipImg.raycastTarget = false;
+
+            var chipTxt = MakeTMP("ChainTxt", chipRt);
+            var ctr = chipTxt.GetComponent<RectTransform>();
+            ctr.anchorMin = Vector2.zero;
+            ctr.anchorMax = Vector2.one;
+            ctr.offsetMin = ctr.offsetMax = Vector2.zero;
+            chipTxt.text = $"⟂ pairs with {partner.ToUpperInvariant()}";
+            chipTxt.fontSize = 7.5f;
+            chipTxt.fontStyle = FontStyles.Bold;
+            chipTxt.color = RimaUITheme.Cyan;
+            chipTxt.alignment = TextAlignmentOptions.Center;
+            chipTxt.enableWordWrapping = false;
+            chipTxt.overflowMode = TextOverflowModes.Ellipsis;
         }
 
         // ─── Shared Card Builder ────────────────────────────────────
@@ -392,12 +486,14 @@ namespace RIMA
             foreach (var c in cards)
                 if (c != null) Destroy(c);
             cards.Clear();
+            currentOfferNames.Clear();
         }
 
         private Color TierColor(RewardOffer offer)
         {
             if (offer.type == RewardType.Gold) return RimaUITheme.Gold;
             if (offer.type == RewardType.Heal) return new Color(0.28f, 0.78f, 0.45f);
+            if (offer.type == RewardType.CrossClassEcho) return RimaUITheme.Cyan;
             if (offer.skill == null) return RimaUITheme.TierCommon;
 
             return offer.skill.tier switch

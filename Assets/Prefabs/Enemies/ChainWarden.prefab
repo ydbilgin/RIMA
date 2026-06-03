@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 783420738381692470}
   - component: {fileID: 2199554062377737055}
   - component: {fileID: 6950604196215897426}
+  - component: {fileID: 1426721835825036788}
+  - component: {fileID: 5488898585825634702}
   m_Layer: 0
   m_Name: ChainWarden
   m_TagString: Enemy
@@ -165,6 +167,9 @@ MonoBehaviour:
   followupDmg: 18
   followupDelay: 0.5
   attackCooldown: 4
+  useTelegraph: 1
+  telegraphDuration: 0.45
+  telegraphWidth: 0.35
 --- !u!95 &8040182426048433490
 Animator:
   serializedVersion: 7
@@ -287,7 +292,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1293760285
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
@@ -298,7 +303,7 @@ SpriteRenderer:
   m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!114 &6950604196215897426
 MonoBehaviour:
@@ -315,3 +320,31 @@ MonoBehaviour:
   color: {r: 0.2, g: 0.6, b: 1, a: 1}
   pixelSize: 32
   shape: 0
+--- !u!114 &1426721835825036788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6211813241942336705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2860fe9f3bedbf44d8ec7399934fe436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
+  knockbackResistance: 0
+--- !u!114 &5488898585825634702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6211813241942336705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db7a0c9aa7c96408ecac530d535b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.HitFlashDriver
+  spriteRenderer: {fileID: 0}
+  flashDuration: 0.08
+  flashColor: {r: 1, g: 1, b: 1, a: 1}

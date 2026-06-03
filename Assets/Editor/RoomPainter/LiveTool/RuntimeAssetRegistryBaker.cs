@@ -32,7 +32,9 @@ namespace RIMA.Editor.RoomPainter.LiveTool
         private static readonly (string Folder, bool Recursive)[] ScanRoots =
         {
             ("Assets/Sprites/Environment/PixelLab_Selected_Assets", true),
-            ("Assets/Sprites/Environment/KitB_Cliff",               true),
+            ("Assets/Sprites/Environment/PixelLabFloor451",          true),
+            ("Assets/Sprites/Environment/IsoKit/decor",              true),
+            ("Assets/Sprites/Environment/PixelLabKit",               true),
             ("Assets/Prefabs/Props/ShatteredKeep_PixelLab",         true),
             ("Assets/Prefabs/Environment/Walls/AssetPackV3",        true),
             ("Assets/Prefabs/Obstacles",                            true),
@@ -41,16 +43,15 @@ namespace RIMA.Editor.RoomPainter.LiveTool
 
         // ── Menu entry ─────────────────────────────────────────────────────────
 
-        [MenuItem("RIMA/Live Tool/Bake Asset Registry")]
+        [MenuItem("RIMA/Legacy/Live Tool/Bake Asset Registry")]
         public static void BakeFromMenu()
         {
             RuntimeAssetRegistry registry = Bake();
             int count = registry != null ? registry.Count : 0;
-            Debug.Log($"[RuntimeAssetRegistryBaker] Bake complete — {count} entries. Asset: {RegistryAssetPath}");
-            EditorUtility.DisplayDialog(
-                "Registry Baked",
-                $"RuntimeAssetRegistry baked successfully.\n{count} entries registered.\nAsset: {RegistryAssetPath}",
-                "OK");
+            // Non-blocking feedback only. A modal EditorUtility.DisplayDialog here blocks Unity's
+            // main thread, which (a) trips MCP execute_menu_item timeouts and (b) can spawn a dialog
+            // "storm" when the bridge re-queues the timed-out command. Console log is sufficient.
+            Debug.Log($"[RuntimeAssetRegistryBaker] Bake complete — {count} entries registered. Asset: {RegistryAssetPath}");
         }
 
         // ── Core bake ─────────────────────────────────────────────────────────
@@ -119,6 +120,7 @@ namespace RIMA.Editor.RoomPainter.LiveTool
                 }
             }
 
+            AddAssetPackEntries(entries, seenGuids);
             return entries;
         }
 
@@ -146,13 +148,14 @@ namespace RIMA.Editor.RoomPainter.LiveTool
 
             string displayName = Path.GetFileNameWithoutExtension(assetPath);
             string tag         = ResolveTag(assetPath);
+            RoomLayer layer    = ResolveLayer(tag, cfg.layer);
 
             return new RegistryEntry
             {
                 guid        = guid,
                 displayName = displayName,
                 tag         = tag,
-                layer       = cfg.layer,
+                layer       = layer,
                 sprite      = sprite,
                 tile        = tile,
                 prefab      = prefab,
@@ -160,35 +163,150 @@ namespace RIMA.Editor.RoomPainter.LiveTool
             };
         }
 
+        private static void AddAssetPackEntries(List<RegistryEntry> entries, HashSet<string> seenGuids)
+        {
+            string[] packGuids = AssetDatabase.FindAssets("t:AssetPackSO");
+            foreach (string packGuid in packGuids)
+            {
+                string packPath = AssetDatabase.GUIDToAssetPath(packGuid);
+                AssetPackSO pack = AssetDatabase.LoadAssetAtPath<AssetPackSO>(packPath);
+                if (pack == null || pack.entries == null) continue;
+
+                foreach (AssetPackSO.Entry packEntry in pack.entries)
+                {
+                    RegistryEntry entry = BuildEntry(packEntry);
+                    if (entry == null || string.IsNullOrEmpty(entry.guid) || seenGuids.Contains(entry.guid)) continue;
+
+                    seenGuids.Add(entry.guid);
+                    entries.Add(entry);
+                }
+            }
+        }
+
+        private static RegistryEntry BuildEntry(AssetPackSO.Entry packEntry)
+        {
+            if (packEntry == null) return null;
+
+            string guid = ResolvePackGuid(packEntry);
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            if (string.IsNullOrEmpty(assetPath)) return null;
+
+            Sprite sprite = packEntry.sprite != null ? packEntry.sprite : AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+            TileBase tile = packEntry.tile != null ? packEntry.tile : AssetDatabase.LoadAssetAtPath<TileBase>(assetPath);
+            GameObject prefab = packEntry.prefab != null ? packEntry.prefab : AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+
+            if (sprite == null && tile == null && prefab == null) return null;
+
+            AssetKind kind;
+            if (tile != null && sprite != null) kind = AssetKind.TileAndSprite;
+            else if (tile != null) kind = AssetKind.Tile;
+            else if (sprite != null) kind = AssetKind.Sprite;
+            else kind = AssetKind.Prefab;
+
+            string tag = !string.IsNullOrEmpty(packEntry.registryTag)
+                ? packEntry.registryTag
+                : DesignerCategoryMap.RegistryTag(packEntry.category);
+
+            RoomLayer fallbackLayer = DesignerCategoryMap.LayerFor(packEntry.category);
+            RoomLayer layer = ResolvePackLayer(packEntry.layer, tag, fallbackLayer);
+
+            return new RegistryEntry
+            {
+                guid = guid,
+                displayName = Path.GetFileNameWithoutExtension(assetPath),
+                tag = tag,
+                layer = layer,
+                sprite = sprite,
+                tile = tile,
+                prefab = prefab,
+                kind = kind,
+            };
+        }
+
+        private static string ResolvePackGuid(AssetPackSO.Entry packEntry)
+        {
+            if (!string.IsNullOrEmpty(packEntry.guid)) return packEntry.guid;
+            Object asset = packEntry.prefab != null
+                ? (Object)packEntry.prefab
+                : packEntry.tile != null
+                    ? packEntry.tile
+                    : packEntry.sprite;
+
+            if (asset == null) return string.Empty;
+            string path = AssetDatabase.GetAssetPath(asset);
+            return string.IsNullOrEmpty(path) ? string.Empty : AssetDatabase.AssetPathToGUID(path);
+        }
+
         // ── Tag resolution ─────────────────────────────────────────────────────
 
         /// <summary>
         /// Derive a palette tag from the asset filename.
-        /// Mirrors RoomPainterPhysicsRules keyword priority order so both systems agree.
+        /// Designer palette tags win first; legacy tags remain as fallback for existing tools.
         /// </summary>
-        private static readonly string[] TagKeywords =
-        {
-            "mounting", "vine", "chain",
-            "rune_circle", "bone_cluster",
-            "statue", "pedestal", "plinth",
-            "wall", "cliff", "pillar", "column", "door",
-            "altar", "brazier", "banner",
-            "prop", "ritual", "enemy", "npc",
-            "pickup", "item", "coin", "chest",
-            "floor", "decal", "moss", "crack",
-            "parallax", "bg", "rift", "sky",
-            "torch", "lamp", "light", "glow", "flame", "ember",
-            "trigger", "zone", "tile", "wang16",
-            "dirt", "sand", "stone", "cobble",
-        };
-
         private static string ResolveTag(string assetPath)
         {
             string filename = Path.GetFileNameWithoutExtension(assetPath)?.ToLowerInvariant() ?? string.Empty;
-            foreach (string kw in TagKeywords)
-                if (filename.IndexOf(kw, System.StringComparison.Ordinal) >= 0)
-                    return kw;
+            if (HasAny(filename, "flat_", "floor", "pl_floor")) return "floor";
+            // glow/rim/fade overlays live in the cliff kit folder but are decals, not cliff faces (ax review)
+            if (HasAny(filename, "glow", "_rim", "edge_ao", "corner_fade")) return "decal";
+            if (HasAny(filename, "cliff")) return "cliff";
+            if (HasAny(filename, "portal", "gate")) return "portal";
+            if (HasAny(filename, "brazier_lit", "light", "lamp", "torch")) return "light";
+            if (HasAny(
+                    filename,
+                    "decor_", "pillar", "brazier", "rubble", "banner", "sarcophagus",
+                    "bones", "moss", "rune", "seal", "slab", "rift", "debris",
+                    "blocks", "bricks"))
+                return "prop";
+            if (HasAny(filename, "decal", "crack")) return "decal";
+            if (HasAny(filename, "mounting", "vine", "chain")) return FirstMatch(filename, "mounting", "vine", "chain");
+            if (HasAny(filename, "rune_circle", "bone_cluster")) return FirstMatch(filename, "rune_circle", "bone_cluster");
+            if (HasAny(filename, "statue", "pedestal", "plinth")) return FirstMatch(filename, "statue", "pedestal", "plinth");
+            if (HasAny(filename, "wall", "column", "door")) return FirstMatch(filename, "wall", "column", "door");
+            if (HasAny(filename, "altar")) return "altar";
+            if (HasAny(filename, "ritual", "enemy", "npc")) return FirstMatch(filename, "ritual", "enemy", "npc");
+            if (HasAny(filename, "pickup", "item", "coin", "chest")) return FirstMatch(filename, "pickup", "item", "coin", "chest");
+            if (HasAny(filename, "parallax", "bg", "sky")) return FirstMatch(filename, "parallax", "bg", "sky");
+            if (HasAny(filename, "glow", "flame", "ember")) return FirstMatch(filename, "glow", "flame", "ember");
+            if (HasAny(filename, "trigger", "zone", "tile", "wang16")) return FirstMatch(filename, "trigger", "zone", "tile", "wang16");
+            if (HasAny(filename, "dirt", "sand", "stone", "cobble")) return FirstMatch(filename, "dirt", "sand", "stone", "cobble");
             return "misc";
+        }
+
+        private static bool HasAny(string filename, params string[] keywords)
+        {
+            foreach (string keyword in keywords)
+                if (filename.IndexOf(keyword, System.StringComparison.Ordinal) >= 0)
+                    return true;
+            return false;
+        }
+
+        private static string FirstMatch(string filename, params string[] keywords)
+        {
+            foreach (string keyword in keywords)
+                if (filename.IndexOf(keyword, System.StringComparison.Ordinal) >= 0)
+                    return keyword;
+            return "misc";
+        }
+
+        private static RoomLayer ResolvePackLayer(string layer, string tag, RoomLayer fallback)
+        {
+            if (!string.IsNullOrEmpty(layer) && System.Enum.TryParse(layer, true, out RoomLayer parsed))
+                return parsed;
+            return ResolveLayer(tag, fallback);
+        }
+
+        private static RoomLayer ResolveLayer(string tag, RoomLayer fallback)
+        {
+            switch (tag)
+            {
+                case "floor":  return RoomLayer.Floor;
+                case "cliff":  return RoomLayer.Cliff;
+                case "prop":   return RoomLayer.Props;
+                case "portal": return RoomLayer.Props;
+                case "light":  return RoomLayer.Lighting;
+                default:       return fallback;
+            }
         }
 
         // ── Manifest writer ────────────────────────────────────────────────────

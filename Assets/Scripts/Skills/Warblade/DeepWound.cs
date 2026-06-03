@@ -21,7 +21,7 @@ namespace RIMA
 
         protected override void Execute()
         {
-            var hits = Physics2D.OverlapCircleAll(transform.position, range, LayerMask.GetMask("Default"));
+            var hits = Physics2D.OverlapCircleAll(transform.position, range, LayerMask.GetMask("Enemy"));
             float best = float.MaxValue;
             Health target = null;
             foreach (var h in hits)

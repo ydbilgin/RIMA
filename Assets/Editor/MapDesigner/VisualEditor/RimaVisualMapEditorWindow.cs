@@ -39,7 +39,7 @@ namespace RIMA.MapDesigner.VisualEditor
             SceneView.RepaintAll();
         }
 
-        [MenuItem("RIMA/Visual Map Designer (New)", priority = 21)]
+        [MenuItem("RIMA/Legacy/Visual Map Designer", priority = 21)]
         public static void Open()
         {
             var w = GetWindow<RimaVisualMapEditorWindow>("Visual Map Designer");

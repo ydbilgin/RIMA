@@ -13,20 +13,25 @@ MonoBehaviour:
   m_Name: DirectionalCliffTile_Hades
   m_EditorClassIdentifier: 
   spritesS:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+  - {fileID: 21300000, guid: fd6c19aa87b9dbd45b3d7379c0e13020, type: 3}
   spritesSE:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+  - {fileID: 21300000, guid: 966eeef99c0371a4a9a9353f3abdc53d, type: 3}
   spritesSW:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+  - {fileID: 21300000, guid: c0b94ed4ccd2b52428deb02be16fac87, type: 3}
   spritesE:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+  - {fileID: 21300000, guid: 29ef1e6a4fe247f41ae13bb7c83a0d34, type: 3}
   spritesW:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+  - {fileID: 21300000, guid: 4be547bac2e6f6d4c9e656814c03abba, type: 3}
   spritesN:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+  - {fileID: 21300000, guid: 864807baaa441d14cbc0b8fda1861940, type: 3}
   spritesNE:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
+  - {fileID: 21300000, guid: f673660045cf56c468d96a0faed1aa31, type: 3}
   spritesNW:
-  - {fileID: 21300000, guid: 2a3d49363e3628c4292a7d2c6f575c9e, type: 3}
-  transformOffset: {x: 0, y: 0, z: 0}
-  spriteScale: {x: 1, y: 1}
+  - {fileID: 21300000, guid: 1e2ffd0de0e011343abe330077b8c376, type: 3}
+  transformOffset: {x: 0, y: -0.11, z: 0}
+  spriteScale: {x: 1, y: 0.55}
+  heightVariation: 0
+  clusterFrequency: 0.14
+  maxLift: 1.1
+  randomness: 0.7
+  gridJitter: 0.1

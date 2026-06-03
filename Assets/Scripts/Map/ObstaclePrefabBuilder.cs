@@ -8,7 +8,7 @@ namespace RIMA
     {
         private const string PrefabDir = "Assets/Prefabs/Obstacles";
 
-        [MenuItem("RIMA/4. Create Obstacle Prefabs")]
+        [MenuItem("RIMA/Utilities/Create Obstacle Prefabs")]
         public static void CreatePrefabs()
         {
             EnsureFolder(PrefabDir);

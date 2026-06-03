@@ -20,7 +20,7 @@ namespace RIMA.MapDesigner.Editor.Workflow
         private const string WorkflowDocPath = "STAGING/UNITY_TILE_PALETTE_WORKFLOW.md";
         private const string DonePath = "STAGING/CODEX_TASK_enable_tile_palette_DONE.md";
 
-        [MenuItem("Tools/RIMA/Map Designer/Open Tile Palette")]
+        [MenuItem("RIMA/Legacy/Open Tile Palette")]
         public static void OpenTilePalette()
         {
             Type windowType = Type.GetType("UnityEditor.Tilemaps.GridPaintPaletteWindow,Unity.2D.Tilemap.Editor")
@@ -34,7 +34,7 @@ namespace RIMA.MapDesigner.Editor.Workflow
             EditorWindow.GetWindow(windowType);
         }
 
-        [MenuItem("Tools/RIMA/Map Designer/Rebuild v15g Tile Palette Assets")]
+        [MenuItem("RIMA/Legacy/Rebuild v15g Tile Palette Assets")]
         public static void RebuildV15gTilePaletteAssets()
         {
             GenerateAssets();

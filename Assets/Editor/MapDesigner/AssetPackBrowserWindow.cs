@@ -64,7 +64,7 @@ namespace RIMA.MapDesigner.Editor
             set => thumbnailSize = ClampThumbnailSize(value);
         }
 
-        [MenuItem("Tools/RIMA/Map Designer/Asset Pack Browser")]
+        [MenuItem("RIMA/Legacy/Asset Pack Browser")]
         public static void Open()
         {
             var window = GetWindow<AssetPackBrowserWindow>("Asset Pack Browser");

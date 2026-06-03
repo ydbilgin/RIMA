@@ -135,6 +135,18 @@ def _ps_run(cx_args, timeout=30):
 
     ps_cmd = "& " + ps_quote(CX_CMD) + " " + " ".join(ps_quote(a) for a in cx_args)
 
+    # Suppress the powershell.exe console window FLASH on Windows. CREATE_NO_WINDOW
+    # stops the conhost window from being allocated; STARTUPINFO SW_HIDE is a
+    # belt-and-suspenders hidden-window state. capture_output pipes stdout/stderr,
+    # so no visible console is needed.
+    _run_kwargs = {}
+    if sys.platform == "win32":
+        _si = subprocess.STARTUPINFO()
+        _si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        _si.wShowWindow = 0  # SW_HIDE
+        _run_kwargs["startupinfo"] = _si
+        _run_kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+
     return subprocess.run(
         [
             "powershell",
@@ -150,6 +162,7 @@ def _ps_run(cx_args, timeout=30):
         errors="replace",
         timeout=timeout,
         env=_clean_env(),
+        **_run_kwargs,
     )
 
 

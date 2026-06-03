@@ -16,9 +16,15 @@ namespace RIMA.Audio
     {
         public static AudioManager Instance { get; private set; }
 
+        // Demo: procedural placeholder SFX read as noise ("sesler manasız"), so they stay muted.
+        // Real clips dropped into Resources/Audio/<Sfx>.wav override + auto-unmute per cue.
+        // Real audio is produced after animation (DECISIONS_S6); flip false only to A/B the synth.
+        [SerializeField] private bool muteProceduralFallback = true;
+
         private AudioSource src;
         private AudioSource musicSrc;
         private readonly Dictionary<Sfx, AudioClip> clips = new Dictionary<Sfx, AudioClip>();
+        private readonly HashSet<Sfx> realClips = new HashSet<Sfx>();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -45,6 +51,8 @@ namespace RIMA.Audio
         public static void Play(Sfx sfx, float volume = 1f)
         {
             if (Instance == null || Instance.src == null) return;
+            // Hold the cue but stay silent while only the procedural placeholder exists.
+            if (Instance.muteProceduralFallback && !Instance.realClips.Contains(sfx)) return;
             if (Instance.clips.TryGetValue(sfx, out var clip) && clip != null)
                 Instance.src.PlayOneShot(clip, Mathf.Clamp01(volume));
         }
@@ -68,7 +76,10 @@ namespace RIMA.Audio
             {
                 AudioClip clip = Resources.Load<AudioClip>("Audio/" + sfx);
                 if (clip != null)
+                {
                     clips[sfx] = clip;
+                    realClips.Add(sfx);  // real clip present → this cue unmutes
+                }
             }
         }
 

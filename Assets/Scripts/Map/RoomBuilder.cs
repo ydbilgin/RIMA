@@ -71,10 +71,10 @@ namespace RIMA
         private const string PfbChasm         = "Assets/Prefabs/Obstacles/Chasm.prefab";
 
         // ─── Menu items ───────────────────────────────────────────────────
-        [MenuItem("RIMA/3. Build Room")]
+        [MenuItem("RIMA/Utilities/Build Room")]
         public static void BuildDefault() => Build(42);
 
-        [MenuItem("RIMA/3b. Build Room (New Seed)")]
+        [MenuItem("RIMA/Utilities/Build Room (New Seed)")]
         public static void BuildNewSeed() => Build(Random.Range(0, 999_999));
 
         // ─── Entry point ──────────────────────────────────────────────────
@@ -323,10 +323,10 @@ namespace RIMA
 
             if (!go.TryGetComponent<Grid>(out var grid)) grid = go.AddComponent<Grid>();
 
-            // Isometric layout + RIMA cell size (0.94 x 0.94) + scaled Y
+            // Isometric layout + RIMA cell size (0.96 x 0.585), no root squash
             grid.cellLayout = GridLayout.CellLayout.Isometric;
-            grid.cellSize   = new Vector3(0.94f, 0.94f, 1f);
-            go.transform.localScale = new Vector3(1f, 0.5f, 1f);
+            grid.cellSize   = new Vector3(0.96f, 0.585f, 1f);
+            go.transform.localScale = new Vector3(1f, 1f, 1f);
 
             return go;
         }

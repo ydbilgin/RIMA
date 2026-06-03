@@ -32,6 +32,7 @@ namespace RIMA
         [SerializeField] private int roomHeight = 24;
         [SerializeField] private int wallThickness = 2;
         [SerializeField] private int doorWidth = 2;
+        [SerializeField] private bool useAuthoredSceneRoom;
 
         [Header("Spawn Settings")]
         [SerializeField] private GameObject[] enemyPrefabs;
@@ -161,7 +162,7 @@ namespace RIMA
                 var floorGO = GameObject.Find("IsoGrid/Ground") ?? GameObject.Find("Room/Floor");
                 if (floorGO != null) floorTilemap = floorGO.GetComponent<Tilemap>();
             }
-            if (largeMapPainter == null)
+            if (!useAuthoredSceneRoom && largeMapPainter == null)
             {
                 largeMapPainter = FindAnyObjectByType<LargeDungeonMapPainter>();
             }
@@ -176,7 +177,7 @@ namespace RIMA
                 return;
             }
 
-            if (worldBuilder != null) worldBuilder.BuildWorld();
+            if (!useAuthoredSceneRoom && worldBuilder != null) worldBuilder.BuildWorld();
 
             // Start first room
             currentRoomIndex = 0;
@@ -376,21 +377,21 @@ namespace RIMA
                 : (currentRoomIndex == bossRoomNumber);
             RoomType roomType = DungeonGraph.Instance?.CurrentNode.roomType ?? RoomType.Combat;
 
-            if (!isBossRoom && TryStartEncounterRoom(DungeonGraph.Instance?.CurrentNode, roomType))
+            if (!useAuthoredSceneRoom && !isBossRoom && TryStartEncounterRoom(DungeonGraph.Instance?.CurrentNode, roomType))
                 return;
 
-            if (largeMapPainter != null)
+            if (!useAuthoredSceneRoom && largeMapPainter != null)
             {
                 largeMapPainter.PaintForRoom(currentRoomIndex, isBossRoom ? RoomType.Boss : roomType);
                 roomWidth = largeMapPainter.RoomWidth;
                 roomHeight = largeMapPainter.RoomHeight;
             }
 
-            if (playerTransform != null)
+            if (!useAuthoredSceneRoom && playerTransform != null)
                 playerTransform.position = GetRoomEntrancePosition();
 
             // Close all doors (tilemap + triggers + gates)
-            CloseAllDoors();
+            if (!useAuthoredSceneRoom) CloseAllDoors();
             SetAllDoorTriggersInactive();
             HideAllGates();
 
@@ -399,7 +400,7 @@ namespace RIMA
             ClearActiveRewards();
 
             // Apply floor tint based on room type
-            ApplyRoomTint(isBossRoom ? RoomType.Boss : roomType);
+            if (!useAuthoredSceneRoom) ApplyRoomTint(isBossRoom ? RoomType.Boss : roomType);
 
             if (isBossRoom && bossPrefab != null)
             {

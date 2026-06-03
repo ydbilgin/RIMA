@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using RIMA.Environment;
+using RIMA.RoomPainter;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -7,6 +8,14 @@ using UnityEngine.Tilemaps;
 
 namespace RIMA.Editor.MapDesigner
 {
+    /// <summary>
+    /// Logical cliff generation for the Map Designer. Root cause of the old "button does nothing":
+    /// an existing CliffRing/CliffAutoPlacer with MISSING refs was never repaired (the action only
+    /// auto-created when none existed), and the floor tilemap was auto-picked as "first tilemap".
+    /// This version ALWAYS repairs the placer's references before generating, resolves the floor
+    /// tilemap by name/context, surfaces the readiness reason, and normalizes the cliff sorting
+    /// through <see cref="RoomDepthStack"/> (one source of truth, no scattered -50/"Ground" magic).
+    /// </summary>
     internal static class CliffGenerateAction
     {
         private const string RulesAssetPath = "Assets/ScriptableObjects/Environment/CliffPlacementRules_Hades.asset";
@@ -16,65 +25,77 @@ namespace RIMA.Editor.MapDesigner
         {
             CliffAutoPlacer placer = Object.FindObjectOfType<CliffAutoPlacer>();
 
+            // Always (re)wire references — repairs an existing-but-unready placer instead of
+            // silently no-opping (the historical failure mode).
             if (placer == null)
             {
-                GUIContent createContent = new GUIContent(
-                    "🪨 Create CliffAutoPlacer + Generate",
-                    "Sahnede CliffAutoPlacer yok — tikla, otomatik olustur ve cliff'leri uret.");
-                if (GUILayout.Button(createContent, GUILayout.Height(height)))
+                if (GUILayout.Button(new GUIContent("Create CliffAutoPlacer + Generate",
+                        "No CliffAutoPlacer in scene — create one, wire floor/cliff tilemap + tile, and generate."),
+                        GUILayout.Height(height)))
                 {
-                    CliffAutoPlacer created = AutoCreatePlacer();
-                    if (created == null)
-                    {
-                        Debug.LogWarning("[CliffGenerate] Could not create CliffAutoPlacer.");
-                        return;
-                    }
-
-                    EditorSceneManager.MarkSceneDirty(created.gameObject.scene);
-
-                    if (created.IsReady)
-                    {
-                        created.Regenerate();
-                        EditorUtility.SetDirty(created.gameObject);
-                        Debug.Log($"[CliffGenerate] Created + generated {created.LastGeneratedCount} cliff tiles.");
-                    }
-                    else
-                    {
-                        Selection.activeGameObject = created.gameObject;
-                        Debug.LogWarning("[CliffGenerate] Placer created but not ready — assign floorTilemap + cliffTilemap + cliffTile on CliffRing then click again.");
-                    }
+                    placer = EnsurePlacer();
+                    if (placer != null) Generate(placer);
                 }
                 return;
             }
 
+            EnsureReferences(placer); // repair on every draw so the button is never dead
+
             using (new EditorGUILayout.HorizontalScope())
             {
-                bool enabled = placer.IsReady;
-
-                using (new EditorGUI.DisabledScope(!enabled))
+                bool ready = placer.IsReady;
+                using (new EditorGUI.DisabledScope(!ready))
                 {
-                    GUIContent content = new GUIContent(
-                        "Generate Cliffs",
-                        enabled
-                            ? $"Auto-place {placer.CountPreviewPlacements()} cliff tiles based on current floor shape"
-                            : "Assign floorTilemap + cliffTilemap + cliffTile on CliffRing to enable");
-                    if (GUILayout.Button(content, GUILayout.Height(height)))
+                    string tip = ready
+                        ? $"Auto-place {placer.CountPreviewPlacements()} cliff tiles from the current floor shape"
+                        : "Could not resolve floor/cliff tilemap or cliff tile — see status";
+                    if (GUILayout.Button(new GUIContent("Generate Cliffs", tip), GUILayout.Height(height)))
                     {
-                        placer.Regenerate();
-                        EditorUtility.SetDirty(placer.gameObject);
-                        EditorSceneManager.MarkSceneDirty(placer.gameObject.scene);
-                        Debug.Log($"[CliffGenerate] {placer.LastGeneratedCount} cliff tiles generated.");
+                        Generate(placer);
                     }
                 }
 
-                if (!enabled)
+                if (!ready)
                 {
-                    EditorGUILayout.LabelField("Placer not ready", EditorStyles.miniLabel, GUILayout.Width(180f));
+                    EditorGUILayout.LabelField(ReadinessReason(placer), EditorStyles.miniLabel, GUILayout.Width(220f));
                 }
+            }
+
+            if (placer.IsReady)
+            {
+                EditorGUILayout.LabelField(
+                    $"Floor: {SafeName(placer.floorTilemap)}   Cliff: {SafeName(placer.cliffTilemap)}   Preview: {placer.CountPreviewPlacements()}",
+                    EditorStyles.miniLabel);
             }
         }
 
-        private static CliffAutoPlacer AutoCreatePlacer()
+        private static void Generate(CliffAutoPlacer placer)
+        {
+            if (!placer.IsReady)
+            {
+                Selection.activeGameObject = placer.gameObject;
+                Debug.LogWarning($"[CliffGenerate] Placer not ready: {ReadinessReason(placer)}");
+                return;
+            }
+
+            placer.Regenerate();
+            EditorUtility.SetDirty(placer);
+            EditorUtility.SetDirty(placer.gameObject);
+            EditorSceneManager.MarkSceneDirty(placer.gameObject.scene);
+            Debug.Log($"[CliffGenerate] {placer.LastGeneratedCount} cliff tiles generated.");
+        }
+
+        private static string ReadinessReason(CliffAutoPlacer placer)
+        {
+            if (placer.floorTilemap == null) return "No floor tilemap found";
+            if (placer.cliffTilemap == null) return "No cliff tilemap";
+            if (placer.cliffTile == null) return "No cliff tile asset";
+            return "Ready";
+        }
+
+        private static string SafeName(Object o) => o != null ? o.name : "<none>";
+
+        private static CliffAutoPlacer EnsurePlacer()
         {
             GameObject ringGO = GameObject.Find("CliffRing");
             if (ringGO == null)
@@ -84,47 +105,76 @@ namespace RIMA.Editor.MapDesigner
             }
 
             CliffAutoPlacer placer = ringGO.GetComponent<CliffAutoPlacer>();
-            if (placer == null)
-            {
-                placer = Undo.AddComponent<CliffAutoPlacer>(ringGO);
-            }
+            if (placer == null) placer = Undo.AddComponent<CliffAutoPlacer>(ringGO);
 
+            EnsureReferences(placer);
+            EditorUtility.SetDirty(placer);
+            EditorSceneManager.MarkSceneDirty(placer.gameObject.scene);
+            return placer;
+        }
+
+        /// <summary>
+        /// Repair every missing reference on an existing OR new placer. Safe to call every frame
+        /// (only assigns when a field is null). This is the fix for "existing placer never repaired".
+        /// </summary>
+        private static void EnsureReferences(CliffAutoPlacer placer)
+        {
             if (placer.floorTilemap == null)
             {
-                Tilemap[] tilemaps = Object.FindObjectsOfType<Tilemap>();
-                foreach (Tilemap tm in tilemaps)
-                {
-                    if (tm == null) continue;
-                    string n = tm.gameObject.name.ToLowerInvariant();
-                    if (n.Contains("void")) continue;
-                    if (n.Contains("cliff")) continue;
-                    placer.floorTilemap = tm;
-                    break;
-                }
+                placer.floorTilemap = ResolveFloorTilemap();
             }
 
-            if (placer.cliffTilemap == null)
+            if (placer.cliffTilemap == null && placer.floorTilemap != null)
             {
-                placer.cliffTilemap = EnsureCliffTilemap(ringGO, placer.floorTilemap);
+                placer.cliffTilemap = EnsureCliffTilemap(placer.gameObject, placer.floorTilemap);
             }
 
             if (placer.cliffTile == null)
             {
                 placer.cliffTile = AssetDatabase.LoadAssetAtPath<TileBase>(TileAssetPath);
-                if (placer.cliffTile == null)
-                {
-                    Debug.LogWarning($"[CliffGenerate] CliffTile asset not found at {TileAssetPath}.");
-                    Selection.activeGameObject = ringGO;
-                }
             }
 
             if (placer.rules == null)
             {
                 placer.rules = AssetDatabase.LoadAssetAtPath<CliffPlacementRules>(RulesAssetPath);
             }
+        }
 
-            EditorUtility.SetDirty(placer);
-            return placer;
+        /// <summary>
+        /// Resolve the floor tilemap by NAME/context rather than "first tilemap". Prefers a tilemap
+        /// whose name contains "floor"; falls back to the first tilemap that is neither void nor cliff.
+        /// </summary>
+        private static Tilemap ResolveFloorTilemap()
+        {
+            Tilemap[] tilemaps = Object.FindObjectsOfType<Tilemap>();
+
+            // 1) explicit "floor" name
+            foreach (Tilemap tm in tilemaps)
+            {
+                if (tm == null) continue;
+                if (tm.gameObject.name.ToLowerInvariant().Contains("floor")) return tm;
+            }
+
+            // 2) first non-void / non-cliff tilemap that actually has tiles
+            foreach (Tilemap tm in tilemaps)
+            {
+                if (tm == null) continue;
+                string n = tm.gameObject.name.ToLowerInvariant();
+                if (n.Contains("void") || n.Contains("cliff")) continue;
+                tm.CompressBounds();
+                if (tm.GetUsedTilesCount() > 0) return tm;
+            }
+
+            // 3) any non-void / non-cliff tilemap
+            foreach (Tilemap tm in tilemaps)
+            {
+                if (tm == null) continue;
+                string n = tm.gameObject.name.ToLowerInvariant();
+                if (n.Contains("void") || n.Contains("cliff")) continue;
+                return tm;
+            }
+
+            return null;
         }
 
         private static Tilemap EnsureCliffTilemap(GameObject ringGO, Tilemap floorReference)
@@ -147,10 +197,12 @@ namespace RIMA.Editor.MapDesigner
 
             TilemapRenderer tr = tmGO.GetComponent<TilemapRenderer>();
             if (tr == null) tr = Undo.AddComponent<TilemapRenderer>(tmGO);
-            tr.sortingLayerName = "Ground";
-            tr.sortingOrder = -50;
 
-            // Parent CliffRing to floor's Grid so cellSize/layout match
+            // One source of truth for the cliff depth slot (L2 under floor).
+            RoomDepthStack.DepthSlot slot = RoomDepthStack.SlotFor(RoomLayer.Cliff);
+            tr.sortingLayerName = slot.sortingLayer;
+            tr.sortingOrder = slot.sortingOrder;
+
             if (floorReference != null && floorReference.layoutGrid != null)
             {
                 Transform grid = floorReference.layoutGrid.transform;

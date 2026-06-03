@@ -61,6 +61,20 @@ namespace RIMA
         private void Awake()
         {
             if (Instance == null) Instance = this;
+            EnsureScreenSpaceOverlay();
+        }
+
+        // HUD_Canvas was scene-misconfigured as World Space (no Event Camera) — UI floats/scales wrong and
+        // raycasts break. A combat HUD must be screen-space overlay; enforce at runtime so a bad scene value
+        // can't make the game "look wrong". (Also fix the scene value to clear the edit-mode warning.)
+        private void EnsureScreenSpaceOverlay()
+        {
+            var cv = GetComponent<Canvas>();
+            if (cv != null && cv.renderMode != RenderMode.ScreenSpaceOverlay)
+            {
+                cv.renderMode = RenderMode.ScreenSpaceOverlay;
+                cv.worldCamera = null;
+            }
         }
 
         private void Start()
@@ -350,6 +364,40 @@ namespace RIMA
             BuildMiniMap(root);
         }
 
+        // ── On-brand UI pack (iron-stone bar socket + cyan energy fill). ──
+        // Loaded LAZILY on first use (from BuildHUD/Start context). Resources.Load is NOT allowed in a
+        // field initializer / constructor, so we defer it; null-guarded so a missing import keeps the flat fallback.
+        private static Sprite _packBarFrame;
+        private static Sprite _packBarFill;
+        private static bool _packLoaded;
+
+        private static void EnsurePackLoaded()
+        {
+            if (_packLoaded) return;
+            _packLoaded = true;
+            _packBarFrame = Resources.Load<Sprite>("UI/RIMA/Pack/bar_frame_9slice");
+            _packBarFill  = Resources.Load<Sprite>("UI/RIMA/Pack/bar_fill");
+        }
+
+        // Drop the on-brand iron-stone socket onto a bar's background Image (9-slice). No-op if art missing.
+        private static void ApplyPackSocket(Image socket)
+        {
+            EnsurePackLoaded();
+            if (socket == null || _packBarFrame == null) return;
+            socket.sprite = _packBarFrame;
+            socket.type   = Image.Type.Sliced;
+            socket.color  = Color.white; // let the iron-stone art show; trough is empty-center
+        }
+
+        // Drop the on-brand cyan-energy fill shape onto a bar's fill Image (sprite only; color set by value logic).
+        private static void ApplyPackFill(Image fill)
+        {
+            EnsurePackLoaded();
+            if (fill == null || _packBarFill == null) return;
+            fill.sprite = _packBarFill;
+            fill.type   = Image.Type.Simple;
+        }
+
         private void BuildHpBar(RectTransform root)
         {
             // HP track (empty bg)
@@ -365,6 +413,7 @@ namespace RIMA
             var trackImg = trackGo.AddComponent<Image>();
             trackImg.color = RimaUITheme.HpEmpty;
             trackImg.raycastTarget = false;
+            ApplyPackSocket(trackImg); // iron-stone trough (overrides flat-color when art present)
 
             // HP fill
             var fillGo = new GameObject("HPFill", typeof(RectTransform));
@@ -379,6 +428,9 @@ namespace RIMA
             hpFillImage = fillGo.AddComponent<Image>();
             hpFillImage.color = RimaUITheme.HpHealthy;
             hpFillImage.raycastTarget = false;
+            // Share the on-brand fill SHAPE; tint stays health-red/warm (value-driven thresholds in
+            // OnHPChanged), never cyan — cyan is reserved for the resource/seal bar.
+            ApplyPackFill(hpFillImage);
 
             // HP number label (left of bar)
             var labelGo = new GameObject("HPLabel", typeof(RectTransform));
@@ -418,6 +470,7 @@ namespace RIMA
             var trackImg = groupGo.AddComponent<Image>();
             trackImg.color = RimaUITheme.HpEmpty;
             trackImg.raycastTarget = false;
+            ApplyPackSocket(trackImg); // iron-stone trough (overrides flat-color when art present)
 
             // Fill
             var fillGo = new GameObject("ResFill", typeof(RectTransform));
@@ -432,6 +485,8 @@ namespace RIMA
             resourceFillImage = fillGo.AddComponent<Image>();
             resourceFillImage.color = RimaUITheme.RageDefault;
             resourceFillImage.raycastTarget = false;
+            // Cyan seal-energy fill — this is its home. Color still set by OnResourceChanged (class tint).
+            ApplyPackFill(resourceFillImage);
         }
 
         private static PlayerResourceBase ResolveResource(GameObject player, ClassType cls)

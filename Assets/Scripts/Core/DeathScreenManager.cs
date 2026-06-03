@@ -1,8 +1,10 @@
 using System.Collections;
+using RIMA.Systems.Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -27,6 +29,7 @@ namespace RIMA
         [SerializeField] private TextMeshProUGUI deathTitle;
         [SerializeField] private TextMeshProUGUI deathStats;
         [SerializeField] private Button restartButton;
+        [SerializeField] private Button mainMenuButton;
 
         [Header("Settings")]
         [SerializeField] private float fadeInDuration = 0.8f;
@@ -70,6 +73,12 @@ namespace RIMA
 
             if (Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
                 RestartRun();
+        }
+
+        private void OnDisable()
+        {
+            if (isDead)
+                Time.timeScale = 1f;
         }
 
         /// <summary>Track kills for death/victory stats.</summary>
@@ -134,7 +143,21 @@ namespace RIMA
         {
             Time.timeScale = 1f;
             if (Application.isPlaying)
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            {
+                MapFlowManager.Instance?.ResetRun();
+                RunStats.Instance?.StartNewRun();
+                SceneManager.LoadScene("_IsoGame");
+            }
+        }
+
+        private void LoadMainMenu()
+        {
+            Time.timeScale = 1f;
+            if (Application.isPlaying)
+            {
+                MapFlowManager.Instance?.ResetRun();
+                SceneManager.LoadScene("MainMenu");
+            }
         }
 
         private void OpenWishlist()
@@ -197,6 +220,9 @@ namespace RIMA
             Image bg = CreateImage("DeathScreen", parent, RimaUITheme.OverlayDark);
             Stretch(bg.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
+            // On-brand cracked-seal death backdrop (cover/crop). DeathPanel is added after → on top.
+            RimaUITheme.CreateFullScreenBackdrop(bg.transform, "UI/Backgrounds/death_screen_bg", RimaUITheme.OverlayDark);
+
             RectTransform panel = CreatePanel("DeathPanel", bg.transform, RimaUITheme.PanelTint, new Color(0f, 1f, 0.8f, 0.45f));
             Stretch(panel, new Vector2(0.22f, 0.16f), new Vector2(0.78f, 0.84f), Vector2.zero, Vector2.zero);
             return bg.gameObject;
@@ -212,6 +238,9 @@ namespace RIMA
 
             if (restartButton == null)
                 restartButton = FindChildComponent<Button>("RestartButton");
+
+            if (mainMenuButton == null)
+                mainMenuButton = FindChildComponent<Button>("MainMenuButton");
 
             Transform contentRoot = FindChildRecursive(deathPanel.transform, "DeathPanel") ?? deathPanel.transform;
 
@@ -244,7 +273,7 @@ namespace RIMA
                 if (copySeedButton == null)
                 {
                     copySeedButton = CreateButton("CopyBuildSeedButton", contentRoot, "COPY BUILD SEED", RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 13f);
-                    Stretch((RectTransform)copySeedButton.transform, new Vector2(0.18f, 0.19f), new Vector2(0.48f, 0.27f), Vector2.zero, Vector2.zero);
+                    Stretch((RectTransform)copySeedButton.transform, new Vector2(0.18f, 0.20f), new Vector2(0.40f, 0.28f), Vector2.zero, Vector2.zero);
                 }
                 copySeedButton.onClick.AddListener(CopyBuildSeed);
             }
@@ -252,8 +281,15 @@ namespace RIMA
             if (restartButton == null)
             {
                 restartButton = CreateButton("RestartButton", contentRoot, "TRY AGAIN [R]", RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 13f);
-                Stretch((RectTransform)restartButton.transform, new Vector2(0.52f, 0.19f), new Vector2(0.82f, 0.27f), Vector2.zero, Vector2.zero);
+                Stretch((RectTransform)restartButton.transform, new Vector2(0.42f, 0.20f), new Vector2(0.62f, 0.28f), Vector2.zero, Vector2.zero);
             }
+
+            if (mainMenuButton == null)
+            {
+                mainMenuButton = CreateButton("MainMenuButton", contentRoot, "MAIN MENU", RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 13f);
+                Stretch((RectTransform)mainMenuButton.transform, new Vector2(0.64f, 0.20f), new Vector2(0.86f, 0.28f), Vector2.zero, Vector2.zero);
+            }
+            mainMenuButton.onClick.AddListener(LoadMainMenu);
 
             if (FindChildRecursive(contentRoot, "NextClassTeaser") == null)
             {
@@ -390,7 +426,7 @@ namespace RIMA
 
             GameObject go = new GameObject("EventSystem");
             go.AddComponent<EventSystem>();
-            go.AddComponent<StandaloneInputModule>();
+            go.AddComponent<InputSystemUIInputModule>();
         }
     }
 }

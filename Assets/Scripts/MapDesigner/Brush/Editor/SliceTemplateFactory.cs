@@ -10,7 +10,7 @@ namespace RIMA.MapDesigner.Brush.Editor
     {
         private const string Folder = "Assets/Data/Brush/SliceTemplates";
 
-        [MenuItem("RIMA/Brush/Create Default Slice Templates")]
+        [MenuItem("RIMA/Legacy/Brush/Create Default Slice Templates")]
         public static void CreateAll()
         {
             EnsureFolder();

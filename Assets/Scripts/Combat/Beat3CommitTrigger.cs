@@ -14,7 +14,7 @@ public class Beat3CommitTrigger : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo info, int layerIndex)
     {
         _fired = false;
-        _combat = animator.GetComponent<CombatHandler>();
+        _combat = animator.GetComponentInParent<CombatHandler>();
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo info, int layerIndex)

@@ -106,20 +106,21 @@ namespace RIMA
             _                      => "RAGE",
         };
 
-        // Character anchor image path (Resources/Characters/Anchors/)
+        // Character idle sprite path under Resources/Characters/<Class>/ (new canonical PixelLab set, 2026-05-31).
+        // Previously pointed to Characters/Anchors/<class>_anchor which never existed under Resources -> white-box bug.
         public static string AnchorPath(ClassType c) => c switch
         {
-            ClassType.Warblade     => "Characters/Anchors/warblade_anchor",
-            ClassType.Elementalist => "Characters/Anchors/elementalist_anchor",
-            ClassType.Shadowblade  => "Characters/Anchors/shadowblade_anchor",
-            ClassType.Ranger       => "Characters/Anchors/ranger_anchor",
-            ClassType.Ravager      => "Characters/Anchors/ravager_anchor",
-            ClassType.Ronin        => "Characters/Anchors/ronin_anchor",
-            ClassType.Gunslinger   => "Characters/Anchors/gunslinger_anchor",
-            ClassType.Brawler      => "Characters/Anchors/brawler_anchor",
-            ClassType.Summoner     => "Characters/Anchors/summoner_anchor",
-            ClassType.Hexer        => "Characters/Anchors/hexer_anchor",
-            _                      => "Characters/Anchors/warblade_anchor",
+            ClassType.Warblade     => "Characters/Warblade/warblade_idle_south",
+            ClassType.Elementalist => "Characters/Elementalist/elementalist_idle_south",
+            ClassType.Shadowblade  => "Characters/Shadowblade/shadowblade_idle_south",
+            ClassType.Ranger       => "Characters/Ranger/ranger_idle_south",
+            ClassType.Ravager      => "Characters/Ravager/ravager_idle_south",
+            ClassType.Ronin        => "Characters/Ronin/ronin_idle_south",
+            ClassType.Gunslinger   => "Characters/Gunslinger/gunslinger_idle_south",
+            ClassType.Brawler      => "Characters/Brawler/brawler_idle_south",
+            ClassType.Summoner     => "Characters/Summoner/summoner_idle_south",
+            ClassType.Hexer        => "Characters/Hexer/hexer_idle_south",
+            _                      => "Characters/Warblade/warblade_idle_south",
         };
 
         // Class description keywords for CharacterSelect
@@ -171,6 +172,48 @@ namespace RIMA
 
         /// <summary>Full-screen menu background — still loads the PNG if present.</summary>
         public static Sprite MenuDungeonBackground => RimaGeneratedSpriteCache.Load(MenuDungeonBackgroundPath);
+
+        // ── Full-screen backdrop (cover/crop, never distort) ──────────────
+        /// <summary>
+        /// Create a full-bleed backdrop Image under <paramref name="parent"/>, loaded from
+        /// Resources/<paramref name="resourcePath"/>. Uses an AspectRatioFitter (EnvelopeParent) so a
+        /// square painting COVERS a 16:9 screen by cropping overflow — never stretch-distorted.
+        /// Inserted as the first sibling (drawn behind sibling content); non-raycast. Because the
+        /// parent's own graphic draws before its children, an opaque backdrop child cleanly hides the
+        /// parent's flat fill. Falls back to a flat <paramref name="fallbackTint"/> fill if the sprite
+        /// is missing, so a not-yet-imported backdrop keeps the prior flat-color look.
+        /// </summary>
+        public static UnityEngine.UI.Image CreateFullScreenBackdrop(Transform parent, string resourcePath, Color fallbackTint)
+        {
+            var go = new GameObject("Backdrop", typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            go.transform.SetAsFirstSibling();
+            var rt = go.GetComponent<RectTransform>();
+            var img = go.AddComponent<UnityEngine.UI.Image>();
+            img.raycastTarget = false;
+
+            var spr = RimaGeneratedSpriteCache.Load(resourcePath);
+            if (spr != null)
+            {
+                // Center-anchored; the AspectRatioFitter drives size to cover the parent rect.
+                rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+                rt.pivot = new Vector2(0.5f, 0.5f);
+                rt.anchoredPosition = Vector2.zero;
+                img.sprite = spr;
+                img.type   = UnityEngine.UI.Image.Type.Simple;
+                img.color  = Color.white;
+                var fitter = go.AddComponent<UnityEngine.UI.AspectRatioFitter>();
+                fitter.aspectMode   = UnityEngine.UI.AspectRatioFitter.AspectMode.EnvelopeParent;
+                fitter.aspectRatio  = spr.rect.width / Mathf.Max(1f, spr.rect.height);
+            }
+            else
+            {
+                rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+                rt.offsetMin = rt.offsetMax = Vector2.zero;
+                img.color = fallbackTint;
+            }
+            return img;
+        }
 
         public static Sprite NodeIcon(RoomType type)
         {

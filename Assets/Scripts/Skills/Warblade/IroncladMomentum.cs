@@ -16,7 +16,7 @@ namespace RIMA
         [SerializeField] private float chainDamageReduction = 0.5f;  // %50 azaltma (War Stomp chain)
 
         private Health playerHealth;
-        private WarStomp warStomp;
+        private ChainWindowTracker chain;
 
         protected override void Awake()
         {
@@ -25,12 +25,15 @@ namespace RIMA
             cooldown = 14f;
             rageCost = 0;
             playerHealth = GetComponentInParent<Health>();
-            warStomp = GetComponentInParent<WarStomp>();
+            chain = ChainWindowTracker.For(this);
         }
 
         protected override void Execute()
         {
-            bool chained = warStomp != null && warStomp.CooldownPercent > 0.7f;
+            // A4: chained when War Stomp's follow-up window is open (was
+            // `warStomp.CooldownPercent > 0.7f`). Consume — one stomp empowers one momentum cast.
+            if (chain == null) chain = ChainWindowTracker.For(this);
+            bool chained = chain != null && chain.Consume(ChainWindowTracker.WarStompFollowup);
             float mult = chained ? chainDamageReduction : damageReduction;
             StartCoroutine(ApplyBuff(mult));
         }

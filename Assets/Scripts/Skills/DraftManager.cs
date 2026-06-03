@@ -45,6 +45,11 @@ namespace RIMA
         private const int ForgeRoom2 = 8;
         private const float RoomClearDraftDelay = 2f;
 
+        // ── Cross-class Echo (B5) acquisition cadence (NLM canon: ~1 per 3 combat rooms, capped) ──
+        private const int EchoOfferEveryRooms = 3;  // offer an Echo card on rooms 3, 6, 9…
+        private const int EchoMaxPerRun       = 4;  // canon cap (one slot per Act)
+        private int echoOffersTaken;                // how many Echoes the player has bound this run
+
         private Warblade_SkillController skillController;
         private GameObject               player;
         private RoomConfig               currentRoomConfig;
@@ -196,6 +201,9 @@ namespace RIMA
                 };
             }
 
+            // B5: on the Echo cadence, swap one offer for a curated "Echo of {Class}" card.
+            MaybeInjectEchoOffer(offers, primary, room);
+
             offerUI.Show(offers, OnOfferSelected, room);
         }
 
@@ -203,6 +211,41 @@ namespace RIMA
         {
             offerUI?.Hide();
             IsDraftActive = false;
+        }
+
+        // ── Cross-class Echo offer (B5) ──────────────────────────
+
+        /// <summary>
+        /// On the Echo cadence (every <see cref="EchoOfferEveryRooms"/> rooms, under the per-run cap, and
+        /// while a curated guest is still available) replace the LAST offer with an "Echo of {Class}" card.
+        /// Reuses the existing 3-card draft flow rather than restructuring the layout for a 4th card —
+        /// the Echo is one option among the standard offers.
+        /// </summary>
+        private void MaybeInjectEchoOffer(List<RewardOffer> offers, ClassType primary, int room)
+        {
+            if (offers == null || offers.Count == 0) return;
+            if (echoOffersTaken >= EchoMaxPerRun) return;
+            if (room < EchoOfferEveryRooms || room % EchoOfferEveryRooms != 0) return;
+
+            // Don't re-offer a guest the player already has bound (single active Echo for the demo).
+            string boundGuest = ResolveEchoBinding(create: false)?.Binding?.guestSkillName;
+            var echo = CrossClassCatalog.PickOffer(primary, boundGuest);
+            if (echo == null) return;
+
+            // Replace the last (typically lowest-priority) offer so the count stays at 3.
+            offers[offers.Count - 1] = RewardOffer.FromEcho(echo);
+            Debug.Log($"[Draft] Echo offer injected: {echo.skillName} (guest skill '{echo.guestSkillName}').");
+        }
+
+        /// <summary>Resolve (and optionally create) the player's single <see cref="PlayerCrossClassBinding"/>.
+        /// Mirrors the on-demand AddComponent pattern used for skills so no scene wiring is required.</summary>
+        private PlayerCrossClassBinding ResolveEchoBinding(bool create)
+        {
+            if (player == null) player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return null;
+            var b = player.GetComponent<PlayerCrossClassBinding>();
+            if (b == null && create) b = player.AddComponent<PlayerCrossClassBinding>();
+            return b;
         }
 
         /// <summary> Sandıktan gelen tek skill için doğrudan draft aç. </summary>
@@ -233,6 +276,26 @@ namespace RIMA
             {
                 var hp = player?.GetComponent<Health>();
                 if (hp != null) hp.Heal(Mathf.RoundToInt(hp.MaxHP * chosen.healPercent / 100f));
+                offerUI.Hide();
+                IsDraftActive = false;
+                return;
+            }
+
+            // Cross-class Echo reward (B5) — bind the curated guest to the Echo key (C).
+            if (chosen.type == RewardType.CrossClassEcho)
+            {
+                if (chosen.crossClass != null)
+                {
+                    var binding = ResolveEchoBinding(create: true);
+                    if (binding != null)
+                    {
+                        binding.Bind(chosen.crossClass);
+                        echoOffersTaken++;
+                        RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.DraftSelect);
+                        Debug.Log($"[Draft] Echo bound: {chosen.crossClass.skillName} → key C.");
+                    }
+                    else Debug.LogWarning("[Draft] Echo picked but no Player found to bind onto.");
+                }
                 offerUI.Hide();
                 IsDraftActive = false;
                 return;
@@ -415,5 +478,22 @@ namespace RIMA
         }
 
         public bool HasSkill(SkillData s) => currentActiveSkills.Contains(s);
+
+        /// <summary>A5 chain-UI: skillNames of the currently-owned active skills, so the draft card
+        /// builder can detect Sundered-Beat interlocks (via ChainWindowTracker) against what the
+        /// player already runs. Read-only snapshot — never the live mutable list.</summary>
+        public IReadOnlyList<string> OwnedActiveSkillNames
+        {
+            get
+            {
+                var names = new List<string>(currentActiveSkills.Count);
+                for (int i = 0; i < currentActiveSkills.Count; i++)
+                {
+                    var n = currentActiveSkills[i]?.skillName;
+                    if (!string.IsNullOrEmpty(n)) names.Add(n);
+                }
+                return names;
+            }
+        }
     }
 }

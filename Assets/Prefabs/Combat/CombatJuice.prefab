@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2444225667772955945
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3866992662937737148}
+  - component: {fileID: 5473847047162067009}
+  - component: {fileID: 2823108166467034437}
+  - component: {fileID: 8310961712382423551}
+  - component: {fileID: 3027939507711703360}
+  - component: {fileID: 5056791841627072144}
+  m_Layer: 0
+  m_Name: CombatJuice
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3866992662937737148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444225667772955945}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5473847047162067009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444225667772955945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd6d30d5ead8a6e4e8d0766d3e4eddb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.HitPauseDriver
+  pauseDurationHit: 0.04
+  pauseDurationCrit: 0.08
+  pauseDurationKill: 0.14
+  pauseDurationFinisher: 0.18
+  pauseDurationBossDeath: 0.2
+  pauseTimeScale: 0
+  minIcdSeconds: 0.05
+--- !u!114 &2823108166467034437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444225667772955945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514d73ca8e97cfa499cefa335c180985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.ScreenShakeDriver
+  hitMagnitude: 0.05
+  hitDuration: 0.1
+  critMagnitude: 0.12
+  critDuration: 0.18
+  commitBeat3Magnitude: 0.15
+  commitBeat3Duration: 0.2
+  killMagnitude: 0.1
+  killDuration: 0.15
+  dashMagnitude: 0.04
+  dashDuration: 0.08
+  minIcdSeconds: 0.04
+--- !u!114 &8310961712382423551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444225667772955945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddf02a16e35103247af2f2ac0c758708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.Juice.CameraPunchController
+  impulseHit: 0.08
+  impulseCrit: 0.16
+  impulseKill: 0.22
+  impulseDash: 0.1
+  decayPerSecond: 6
+  maxOffset: 0.5
+--- !u!114 &3027939507711703360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444225667772955945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c65417d5131306345a29280a6565c16d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.VFXRouter
+  entries:
+  - tag: hit_default
+    prefab: {fileID: 3847315595652856162, guid: 5b5efa99ec8c39a41ae4a3e01aa899b5, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
+  - tag: kill_default
+    prefab: {fileID: 3816650666168744509, guid: 60fa4482bc483ec448f12bf833dea127, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
+  - tag: dash_default
+    prefab: {fileID: 3257891575806903289, guid: 7af854c39d614434cb76ebcf675841ec, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
+  - tag: status_default
+    prefab: {fileID: 7748907302331696808, guid: 387e760c3b07d24479fac44f8bf6118f, type: 3}
+    soundEffect: {fileID: 0}
+    lifetime: 2
+  poolSize: 16
+--- !u!114 &5056791841627072144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444225667772955945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d921bc73a94947428d9997b221cf07e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.Combat.DamageNumberDriver
+  poolSize: 24
+  lifetime: 1.2
+  floatDistance: 0.5
+  baseFontSize: 3
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  critColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

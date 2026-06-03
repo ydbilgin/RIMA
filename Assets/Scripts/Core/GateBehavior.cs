@@ -72,6 +72,7 @@ namespace RIMA
         // ─── Public API ──────────────────────────────────────────────────────────
 
         public DoorDirection Direction => direction;
+        public bool IsOpen => state == GateState.Open;
 
         /// <summary>
         /// RuntimeRoomManager çağırır — bu kapı aktif bir çıkış.

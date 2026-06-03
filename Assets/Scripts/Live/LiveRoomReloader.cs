@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using RIMA.RoomPainter;
 using RIMA.Systems.Map;
 
 namespace RIMA.Live
@@ -41,7 +42,7 @@ namespace RIMA.Live
 
         // ── Config ─────────────────────────────────────────────────────────────
 
-        /// <summary>Path watched for JSON changes. Matches RoomLayoutSerializer.CurrentJsonPath.</summary>
+        /// <summary>Path watched for JSON changes. Matches the RoomDataDTO live bridge path.</summary>
         private static string JsonPath =>
             Path.Combine(Application.streamingAssetsPath, "live", "room_current.json");
 
@@ -60,7 +61,7 @@ namespace RIMA.Live
             new Dictionary<string, GameObject>(StringComparer.Ordinal);
 
         // Last snapshot for diffing.
-        private RoomLayoutData _lastData;
+        private RoomDataDTO _lastData;
 
         // ── MonoBehaviour lifecycle ────────────────────────────────────────────
 
@@ -156,8 +157,8 @@ namespace RIMA.Live
             }
 
             // Parse.
-            RoomLayoutData data = RoomLayoutData.FromJson(json);
-            if (data == null) return; // error logged inside FromJson
+            RoomDataDTO data = ParseRoomDataDto(json);
+            if (data == null) return; // error logged inside ParseRoomDataDto
 
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -186,32 +187,30 @@ namespace RIMA.Live
 
         // ── Tilemap application ────────────────────────────────────────────────
 
-        private void ApplyFloorTiles(RoomLayoutData data)
+        private void ApplyFloorTiles(RoomDataDTO data)
         {
-            if (_floorTilemap == null || data.floor_tiles == null || data.floor_tiles.Count == 0) return;
+            if (_floorTilemap == null || data.floorCells == null || data.floorCells.Count == 0) return;
 
             _floorTilemap.ClearAllTiles();
 
-            foreach (FloorTileData ft in data.floor_tiles)
+            foreach (RoomData.TileCellRecord ft in data.floorCells)
             {
-                if (ft.cell == null || ft.cell.Length < 3) continue;
-                Vector3Int pos = new Vector3Int(ft.cell[0], ft.cell[1], ft.cell[2]);
-
-                TileBase tile = ResolveTile(ft.tile_guid);
+                Vector3Int pos = ft.cell;
+                TileBase tile = ResolveTile(ft.assetGuidOrName);
                 if (tile != null)
                     _floorTilemap.SetTile(pos, tile);
                 // graceful-degrade: missing tile guid → skip (no crash)
             }
         }
 
-        private void ApplyCliffTiles(RoomLayoutData data)
+        private void ApplyCliffTiles(RoomDataDTO data)
         {
-            if (_cliffTilemap == null || data.cliff_cells == null || data.cliff_cells.Count == 0) return;
+            if (_cliffTilemap == null || data.cliffCells == null || data.cliffCells.Count == 0) return;
 
             bool hasExplicitGuid = false;
-            foreach (CliffCellData ct in data.cliff_cells)
+            foreach (RoomData.TileCellRecord ct in data.cliffCells)
             {
-                if (!string.IsNullOrEmpty(ct.tile_guid))
+                if (!string.IsNullOrEmpty(ct.assetGuidOrName))
                 {
                     hasExplicitGuid = true;
                     break;
@@ -221,12 +220,10 @@ namespace RIMA.Live
 
             _cliffTilemap.ClearAllTiles();
 
-            foreach (CliffCellData ct in data.cliff_cells)
+            foreach (RoomData.TileCellRecord ct in data.cliffCells)
             {
-                if (ct.cell == null || ct.cell.Length < 3) continue;
-                Vector3Int pos = new Vector3Int(ct.cell[0], ct.cell[1], ct.cell[2]);
-
-                TileBase tile = ResolveTile(ct.tile_guid);
+                Vector3Int pos = ct.cell;
+                TileBase tile = ResolveTile(ct.assetGuidOrName);
                 if (tile != null)
                     _cliffTilemap.SetTile(pos, tile);
                 // graceful-degrade: legacy cliff cell without tile_guid -> skip
@@ -235,23 +232,23 @@ namespace RIMA.Live
 
         // ── Prop diff ─────────────────────────────────────────────────────────
 
-        private void ApplyPropDiff(RoomLayoutData data)
+        private void ApplyPropDiff(RoomDataDTO data)
         {
-            if (data.prop_instances == null) return;
+            if (data.propPlacements == null) return;
 
             // Build a set of desired stable ids from new data.
             HashSet<string> desired = new HashSet<string>(StringComparer.Ordinal);
 
-            for (int i = 0; i < data.prop_instances.Count; i++)
+            for (int i = 0; i < data.propPlacements.Count; i++)
             {
-                PropData p = data.prop_instances[i];
+                RoomData.PropPlacement p = data.propPlacements[i];
                 string id = StableId(p, i);
                 desired.Add(id);
 
                 if (_activeProps.TryGetValue(id, out GameObject existing))
                 {
                     // Move if position/rotation changed.
-                    Vector3 wantPos = ToVector3(p.position);
+                    Vector3 wantPos = p.position;
                     Quaternion wantRot = Quaternion.Euler(0f, 0f, p.rotation);
                     if (existing.transform.position != wantPos ||
                         existing.transform.rotation != wantRot)
@@ -262,10 +259,10 @@ namespace RIMA.Live
                 else
                 {
                     // Instantiate new prop.
-                    GameObject prefab = ResolvePrefab(p.prefab_guid);
+                    GameObject prefab = ResolvePrefab(p.assetGuidOrName);
                     if (prefab == null) continue; // graceful-degrade
 
-                    GameObject instance = Instantiate(prefab, ToVector3(p.position),
+                    GameObject instance = Instantiate(prefab, p.position,
                         Quaternion.Euler(0f, 0f, p.rotation),
                         _roomRoot != null ? _roomRoot.transform : null);
                     _activeProps[id] = instance;
@@ -368,16 +365,38 @@ namespace RIMA.Live
         /// This means adding a prop in the middle of the list will not cause
         /// all subsequent props to be recreated — only truly new ones are added.
         /// </summary>
-        private static string StableId(PropData p, int fallbackIndex)
+        private static RoomDataDTO ParseRoomDataDto(string json)
         {
-            if (!string.IsNullOrEmpty(p.instance_id)) return p.instance_id;
-            return $"{p.prefab_guid}_{fallbackIndex}";
+            if (string.IsNullOrEmpty(json))
+            {
+                UnityEngine.Debug.LogError("[LiveRoomReloader] RoomDataDTO parse called with empty JSON.");
+                return null;
+            }
+
+            try
+            {
+                RoomDataDTO data = JsonUtility.FromJson<RoomDataDTO>(json);
+                if (data == null)
+                {
+                    UnityEngine.Debug.LogError("[LiveRoomReloader] JsonUtility.FromJson<RoomDataDTO> returned null.");
+                    return null;
+                }
+
+                if (data.floorCells == null) data.floorCells = new List<RoomData.TileCellRecord>();
+                if (data.cliffCells == null) data.cliffCells = new List<RoomData.TileCellRecord>();
+                if (data.propPlacements == null) data.propPlacements = new List<RoomData.PropPlacement>();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogError($"[LiveRoomReloader] RoomDataDTO JSON parse error: {ex.Message}");
+                return null;
+            }
         }
 
-        private static Vector3 ToVector3(float[] v)
+        private static string StableId(RoomData.PropPlacement p, int fallbackIndex)
         {
-            if (v == null || v.Length < 3) return Vector3.zero;
-            return new Vector3(v[0], v[1], v[2]);
+            return $"{p.assetGuidOrName}_{fallbackIndex}";
         }
 
         private static bool TilemapNameContains(Tilemap tilemap, string token)
@@ -395,27 +414,27 @@ namespace RIMA.Live
                    value.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        private static void CountDiff(RoomLayoutData prev, RoomLayoutData next,
+        private static void CountDiff(RoomDataDTO prev, RoomDataDTO next,
             out int added, out int removed, out int moved)
         {
             added   = 0;
             removed = 0;
             moved   = 0;
 
-            if (prev == null || prev.prop_instances == null)
+            if (prev == null || prev.propPlacements == null)
             {
-                added = next?.prop_instances?.Count ?? 0;
+                added = next?.propPlacements?.Count ?? 0;
                 return;
             }
 
             HashSet<string> prevIds = new HashSet<string>(StringComparer.Ordinal);
-            for (int i = 0; i < prev.prop_instances.Count; i++)
-                prevIds.Add(StableId(prev.prop_instances[i], i));
+            for (int i = 0; i < prev.propPlacements.Count; i++)
+                prevIds.Add(StableId(prev.propPlacements[i], i));
 
             HashSet<string> nextIds = new HashSet<string>(StringComparer.Ordinal);
-            if (next?.prop_instances != null)
-                for (int i = 0; i < next.prop_instances.Count; i++)
-                    nextIds.Add(StableId(next.prop_instances[i], i));
+            if (next?.propPlacements != null)
+                for (int i = 0; i < next.propPlacements.Count; i++)
+                    nextIds.Add(StableId(next.propPlacements[i], i));
 
             foreach (string id in nextIds) if (!prevIds.Contains(id)) added++;
             foreach (string id in prevIds) if (!nextIds.Contains(id)) removed++;

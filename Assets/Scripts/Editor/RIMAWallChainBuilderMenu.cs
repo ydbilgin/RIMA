@@ -417,8 +417,8 @@ namespace RIMA.Editor
             GameObject gridGo = new GameObject("Grid");
             gridGo.transform.SetParent(worldRoot.transform, false);
             Grid grid = gridGo.AddComponent<Grid>();
-            grid.cellLayout = GridLayout.CellLayout.IsometricZAsY;
-            grid.cellSize = new Vector3(1f, 0.5f, 1f);
+            grid.cellLayout = GridLayout.CellLayout.Isometric;
+            grid.cellSize = new Vector3(0.96f, 0.585f, 1f);
             grid.cellSwizzle = GridLayout.CellSwizzle.XYZ;
 
             GameObject floorGo = new GameObject("Floor Tilemap");

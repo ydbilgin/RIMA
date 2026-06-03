@@ -25,7 +25,7 @@ namespace RIMA
         private static int DoorXStart => (RoomW - DoorDW) / 2; // 11
         private static int DoorYStart => (RoomH - DoorDW) / 2; // 8
 
-        [MenuItem("RIMA/4. Dungeon Wiring")]
+        [MenuItem("RIMA/Utilities/Dungeon Wiring")]
         public static void Run()
         {
             int changes = 0;
@@ -122,7 +122,7 @@ namespace RIMA
                       "Ctrl+S ile kaydet, ardından RIMA → Combat Test Setup → Play.");
         }
 
-        [MenuItem("RIMA/4. Dungeon Wiring", true)]
+        [MenuItem("RIMA/Utilities/Dungeon Wiring", true)]
         private static bool Validate() => !Application.isPlaying;
 
         // ─── Helpers ──────────────────────────────────────────────────────────

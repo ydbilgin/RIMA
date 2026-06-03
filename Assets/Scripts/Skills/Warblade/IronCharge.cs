@@ -39,6 +39,10 @@ namespace RIMA
             charging = true;
             chargeTimer = chargeDuration;
             hitTargets.Clear();
+
+            // A4: open the follow-up chain window read by Crippling Blow / Gravity Cleave
+            // (replaces their old `ironCharge.CooldownPercent > 0.85f` proxy).
+            ChainWindowTracker.For(this)?.OpenWindow(ChainWindowTracker.IronChargeNextHit);
         }
 
         private void FixedUpdate()
@@ -51,7 +55,7 @@ namespace RIMA
             // Yoldaki düşmanları bul ve vur
             var hits = Physics2D.CircleCastAll(
                 rb.position, hitRadius, chargeDir, 0.05f,
-                LayerMask.GetMask("Default")
+                LayerMask.GetMask("Enemy")
             );
 
             foreach (var hit in hits)

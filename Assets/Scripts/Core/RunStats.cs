@@ -15,6 +15,7 @@ namespace RIMA
         private Health playerHealth;
         private int kills;
         private int roomsCleared;
+        private int rewardsCollected;
         private int roomReached = 1;
         private float runTimeSeconds;
         private bool runStarted;
@@ -33,6 +34,7 @@ namespace RIMA
         public static float RunTimeSeconds => Instance.runTimeSeconds;
         public static int RoomReached => Instance.GetRoomReached();
         public static int RoomsCleared => Instance.roomsCleared;
+        public static int RewardsCollected => Instance.rewardsCollected;
         public static string BuildName => Instance.GetBuildName();
         public static string BuildSeed => Instance.GetBuildSeed();
 
@@ -91,7 +93,10 @@ namespace RIMA
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            ResetRun();
+            if (!MapFlowManager.IsMapTransition) return;
+
+            MapFlowManager.IsMapTransition = false;
+            AdvanceRoom();
         }
 
         private void ResetRun()
@@ -99,11 +104,24 @@ namespace RIMA
             countedKills.Clear();
             kills = 0;
             roomsCleared = 0;
+            rewardsCollected = 0;
             roomReached = 1;
             runTimeSeconds = 0f;
             runStarted = false;
             frozen = false;
             UnhookPlayerHealth();
+        }
+
+        public void StartNewRun()
+        {
+            ResetRun();
+            StartRunIfNeeded();
+        }
+
+        public void AdvanceRoom()
+        {
+            StartRunIfNeeded();
+            roomReached++;
         }
 
         private void StartRunIfNeeded()
@@ -128,6 +146,12 @@ namespace RIMA
         {
             if (!runStarted) StartRunIfNeeded();
             roomsCleared++;
+        }
+
+        public void RecordRewardCollected()
+        {
+            if (!runStarted) StartRunIfNeeded();
+            rewardsCollected++;
         }
 
         private void OnKill(KillEvent e)
@@ -163,10 +187,7 @@ namespace RIMA
 
         private int GetRoomReached()
         {
-            int reached = roomReached;
-            if (RuntimeRoomManager.Instance != null)
-                reached = Mathf.Max(reached, RuntimeRoomManager.Instance.CurrentRoom + 1);
-            return Mathf.Max(1, reached);
+            return Mathf.Max(1, roomReached);
         }
 
         private string GetBuildName()

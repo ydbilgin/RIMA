@@ -13,7 +13,10 @@ namespace RIMA
         public abstract int Max { get; }
         public float Percent => Max > 0 ? (float)Current / Max : 0f;
 
-        public UnityEvent<int, int> OnResourceChanged;
+        // Open-generic UnityEvent<int,int> is NOT Unity-serialized, so a SerializeField/inspector value
+        // never populates it → it is null at runtime. Initialize inline (runs in ctor, before Awake) so
+        // HUDController's Add/RemoveListener and subclass Invoke calls never NRE. (Health does the ??= variant.)
+        public UnityEvent<int, int> OnResourceChanged = new UnityEvent<int, int>();
 
         public abstract bool TrySpend(int amount);
         public abstract void Add(int amount);

@@ -1,72 +1,167 @@
-﻿# RuntimeAssetRegistry manifest — 2026-05-29 11:50:55 UTC
-# Total: 67 entries
+﻿# RuntimeAssetRegistry manifest — 2026-06-02 06:52:57 UTC
+# Total: 82 entries
 
-+  7523d338e326abe4987f0d898ace7c38  alabaster_decal_5ccc5721-3007-4d9a-8fce-86e99bc6a078  [Sprite] [Floor]
-+  366bfe9e05bd10041b1194c2942a971f  cliff_cyan_glow  [Sprite] [Floor]
-+  c08164f7fa618734897d163dd95333ff  cliff_E  [Sprite] [Floor]
-+  eff10014d1767a84c99113624ea94080  cliff_N  [Sprite] [Floor]
-+  3f3ab8c77a30738418aa094d2ad3efa4  cliff_NE  [Sprite] [Floor]
-+  62da8f70f5c21fe44999dff49dffcb15  cliff_NW  [Sprite] [Floor]
-+  2a3d49363e3628c4292a7d2c6f575c9e  cliff_S  [Sprite] [Floor]
-+  0fb53d1598117804fb280f73aa7bffee  cliff_S_new1  [Sprite] [Floor]
-+  c83d4e0fd9bbbc84980f65f902822fef  cliff_S_new2  [Sprite] [Floor]
-+  7483b62a84244a9458965f196815a0aa  cliff_S_new3  [Sprite] [Floor]
-+  4733d595eb91f4041a3b124836117587  cliff_S_new4  [Sprite] [Floor]
-+  8e059e7d4307669438753289a79c7059  cliff_SE  [Sprite] [Floor]
-+  cced08e37b130ad43a4bf86632242964  cliff_SW  [Sprite] [Floor]
-+  b8ce4a81b9a8c404a8aaa0c4e92b7211  cliff_W  [Sprite] [Floor]
-+  dc62b61716ca8d548a8bde0aaa56a8ba  edge_ao_rim  [Sprite] [Floor]
-+  15b27e479b43d084780976c301841918  EdgeAORim_Tile  [Tile] [Floor]
-+  6ace68eac50069846afeaec6ff482ec2  mounting_00_7227fa35-ade1-406e-af2e-600fb4176af2  [Prefab] [Cliff]
-+  56779108dd0bb2649b133ff57f2b849a  mounting_01_f7763267-747e-4a7f-b30a-1dec04273cd7  [Prefab] [Cliff]
-+  4b52046174cafce4583755906ba8ded6  mounting_02_f88e821a-18c0-4c04-a63a-a7849409ffff  [Prefab] [Cliff]
-+  d8905739873ac5f458e5d39c774ae765  mounting_03_98bc117a-cb56-4584-8646-09cc505aeed2  [Prefab] [Cliff]
-+  8e5d1bd077901cf46a5f83054cc79606  mounting_04_7ab5ec96-9435-4b45-82e0-000df92fb863  [Prefab] [Cliff]
-+  509c34bf99629d94b973d03b80ecfb91  mounting_05_50257aa7-2641-4a3a-b353-976d56749a39  [Prefab] [Cliff]
-+  a84d15c3e500d524d97842e923722214  mounting_06_bf737208-ede4-4eb4-a39a-eee024142932  [Prefab] [Cliff]
-+  18466d4d047d8ff44968fcece493772e  mounting_07_1802229f-d853-4917-adc7-c3467e862d0d  [Prefab] [Cliff]
-+  b2cdbad821680864bbe906685b4f7119  mounting_08_173aa624-c2c2-498a-8145-38331cf6f3c8  [Prefab] [Cliff]
-+  aec9115399aa3d041bea924baae1325e  mounting_09_bb34bab3-7d82-479e-a04d-f7bb00750696  [Prefab] [Cliff]
-+  c037ce68746780d469a8bbd993de4015  mounting_10_de169bda-f674-4c1b-b060-489acc81b508  [Prefab] [Cliff]
-+  c3e1a15e2bbb4884d97555bffc8b751d  mounting_11_e4ff0cfa-4880-4915-87ed-3469e4e071bf  [Prefab] [Cliff]
-+  7e9c7c1ff06e77848bf8ea89d2782b99  mounting_12_4fce26a7-38a9-47a6-9a8d-0ce8c04bf692  [Prefab] [Cliff]
-+  fd82ee0b68582524c8bd3de9fbfb50dd  mounting_13_ebd1307e-ae6a-45cf-a583-2ad53425ec61  [Prefab] [Cliff]
-+  7e12539b980d35d4cb81b3ecece61b89  mounting_14_41342e20-39a8-4482-9775-48abf9f05262  [Prefab] [Cliff]
-+  58ae3f00b2c714444a82e04749e88b73  statue_00_e899a33d-e043-4f51-860d-ff0c046f89f3  [Prefab] [Wall]
-+  aa59bd56ee5d9674b91105fc112a6532  statue_01_a0da1143-2fc6-4c43-9d8d-9c46ed8b6be1  [Prefab] [Wall]
-+  12e732a09af8101409cd5754d6755ca6  statue_02_1ecd6d55-f064-40e5-8bd4-80db80a29b52  [Prefab] [Wall]
-+  ce59b8651a7692542a3e07c078bfcc7a  statue_03_f1ed6cce-ab50-4185-bd0f-3c24c63c10f3  [Prefab] [Wall]
-+  57da1d82e2519cd4a8a0d070b3db3d35  statue_04_3675a661-2609-46de-98b0-247871a36643  [Prefab] [Wall]
-+  bd874b249e038334a9834b9ccbb4a218  statue_05_11f9b270-ead0-4120-b6cd-02550afa6dd0  [Prefab] [Wall]
-+  e27395d0e5b8e8c4e9e63a4e76452ebb  statue_06_cdc9ceb0-3f82-4299-8c12-dabe91a70b15  [Prefab] [Wall]
-+  ac5e19623d1e29e4e94336826c492210  statue_07_a7d8dd6d-a8e6-4340-9f92-0399ef4b64b0  [Prefab] [Wall]
-+  145fa9750c050ae40a5ff25c09a462c1  statue_08_8b0f8790-ce97-444c-9304-c3ebf0d2b4f1  [Prefab] [Wall]
-+  b3838662ddefb4e44b4bde6de7df360e  statue_09_f75b1fa4-3fc4-43bf-b5e5-a31886bb7cbc  [Prefab] [Wall]
-+  35759119d775b91479aaa293e57fb08c  statue_10_a2fb0a7f-1d03-424b-816a-6863bd0abac8  [Prefab] [Wall]
-+  1a0696a88934e50458b71d558a665f8b  statue_11_d5574785-18cb-4ce8-b1f4-ed9f5dafac87  [Prefab] [Wall]
-+  93540ff3731928f47b84d32095fcf8d9  statue_12_52e58d14-e20f-46a4-99a3-fee58d332a2d  [Prefab] [Wall]
-+  3ff4cdd0e2074a8409f359bbdfb8c6f4  statue_13_c5711681-d7f9-4fdc-9a20-00200bcccd1d  [Prefab] [Wall]
-+  dede57f7d841d4740af2349b8d95dacd  01_straight  [Prefab] [Floor]
-+  fc271c733ae52d84097b4c34db89bfcb  02_outer_corner  [Prefab] [Floor]
-+  821d17ba108b65042956c32201ec1947  03_inner_corner  [Prefab] [Floor]
-+  2bccde6ce5cb0bb44a1843111cd7335e  04_end  [Prefab] [Floor]
-+  a1efc74a1d50c2b49adf3a2e3382aa2d  05_door_l  [Prefab] [Floor]
-+  595eee1788b2f104faeab0cc9b7c3838  06_door_r  [Prefab] [Floor]
-+  8ab0fbf80acc88447a3b8e522b50ae4c  07_alcove  [Prefab] [Floor]
-+  6c2503ec3882d5c44a81db3892b72dac  08_protrusion  [Prefab] [Floor]
-+  ea88a0bc9f86321429553f9e47ce82af  piece_01  [Prefab] [Floor]
-+  4e58fd7dfb5b4594a9f6dd05c5646f65  piece_02  [Prefab] [Floor]
-+  f7424b33f829c2945928a5b7e361bcad  piece_03  [Prefab] [Floor]
-+  ad954dbe1796d65439aa61d6cec0d5e2  piece_04  [Prefab] [Floor]
-+  ff9d8786708d35f4db27aeb26c91a26c  wp_door_arch_2x_real  [Prefab] [Floor]
-+  98df23d891531a54fb1b105c3ba41d4b  wp_low_front_outer_corner_real  [Prefab] [Floor]
-+  0ac1984ba36d5d5448dc21d6e063e9f1  wp_rear_wall_2x_real  [Prefab] [Floor]
-+  89c6e96afcbe8eb4a99306f2f1dde621  wp_side_wall_stepped_2x_real  [Prefab] [Floor]
-+  933bbb0a8c11b314c9d82da7a7fedc51  Chasm  [Prefab] [Floor]
-+  ca61d0b0dba04854db6b258b2a4cbb8d  NarrowPassage  [Prefab] [Floor]
-+  995cb83b025364a4481d9b13ac077bed  StoneColumn  [Prefab] [Floor]
-+  221d203f83ec4e0d8f615c003bf23b3b  CliffTile_Hades  [Tile] [Floor]
-+  16ecced5c069db1428c7f1f769143b6a  DirectionalCliffTile_Hades  [Tile] [Floor]
-+  593542b3f40d5734fbb3945812390b10  VoidBlocker_Tile  [Tile] [Floor]
+-  366bfe9e05bd10041b1194c2942a971f  (removed)
+-  c08164f7fa618734897d163dd95333ff  (removed)
+-  eff10014d1767a84c99113624ea94080  (removed)
+-  3f3ab8c77a30738418aa094d2ad3efa4  (removed)
+-  62da8f70f5c21fe44999dff49dffcb15  (removed)
+-  2a3d49363e3628c4292a7d2c6f575c9e  (removed)
+-  0fb53d1598117804fb280f73aa7bffee  (removed)
+-  c83d4e0fd9bbbc84980f65f902822fef  (removed)
+-  7483b62a84244a9458965f196815a0aa  (removed)
+-  4733d595eb91f4041a3b124836117587  (removed)
+-  8e059e7d4307669438753289a79c7059  (removed)
+-  cced08e37b130ad43a4bf86632242964  (removed)
+-  b8ce4a81b9a8c404a8aaa0c4e92b7211  (removed)
+-  da59b87208a62d14abe469ae31dbf778  (removed)
+-  dc62b61716ca8d548a8bde0aaa56a8ba  (removed)
+-  15b27e479b43d084780976c301841918  (removed)
+-  850157054c33d984095eb1dc9c6bc47a  (removed)
+-  dc49049c97a27bb4fb49fc6320f87d67  (removed)
+-  d8b3d40660ba6c042a7e826fd1a3cf36  (removed)
+-  26d0cc6d1e8ea934ca45f8c409aca001  (removed)
+-  405b672ed1ddadf49be3c2046a4b5102  (removed)
+-  8016829ee9bbd4941874f43065dcc326  (removed)
+-  50613f97f3c5db94c878bfbe973d89e4  (removed)
+-  4bf4fc8be49899242b00709960a2c113  (removed)
+-  efcb34e59f402e4499152f0b828a2a8c  (removed)
+-  a1bc8ea89fe3079478017af2a3329bf3  (removed)
+-  e60d65fd5b7b1884eb9f30b887b77387  (removed)
+-  d48336dea04dda54684193cb963ea10a  (removed)
+-  9b5b7dcc3445f404ebc22b6a41ce2f7b  (removed)
+-  3bb6bf24bdb3d5946ac04214f234ae2d  (removed)
+-  bbda448ec31b992459d24f0f0bfb4a79  (removed)
+-  1678f603aa618eb4b85b9d42063c67c5  (removed)
+-  9c72ab19011e4a68b03b936d3327d7ac  (removed)
+-  4374a68b18314494b617cacd1312acea  (removed)
+-  d32eba7085954473b48d5aba2d30cc73  (removed)
+-  99c10e8b9931415b9266c47f43e3653b  (removed)
+-  9458e3b9f5ab45fc81ac73037d6f05ec  (removed)
+-  13ce774344d4463ea23c05aff30e816e  (removed)
+-  e2e13de3d0c746bc9f1024bf00e5ae77  (removed)
+-  63e9e88c44474a24b0710d63e534fbe9  (removed)
+-  09abce6315164df0b72afac0cc93f43b  (removed)
+-  11a260a4416d425e96f3416ba84ad1ae  (removed)
+-  3645a04bdb1e493491a100694b1595de  (removed)
+-  d12a95d07c414c6c84e365cbdc6cd89a  (removed)
+-  5ab993dde9ff4c848adbc2bca98f54ef  (removed)
+-  e60ae42437c54f78bbd18bf8c7086734  (removed)
+-  197d3348df8244a98aa500bb7e78ea03  (removed)
+-  681676d4bb0a4e95a407c6852541c26f  (removed)
+-  0e54997ab8eb77f468b01776fdb8c6e8  (removed)
+-  49ea49551b8a8514b9128d9ea0995793  (removed)
+-  29423fe9f909ee342bdab04617048981  (removed)
+-  a08b1cabe69733040b23040c5bdd88c1  (removed)
+-  928efcba32bbbe24981953a279c826c8  (removed)
+-  5355c11bd2c29c746bab5f998b9875a0  (removed)
+-  641904b4739b75b49a5e7744a37d9b5e  (removed)
+-  62d3a8bd04052404bb9a835d7ef64f9b  (removed)
+-  840869f58e7bdec4ba14b442ae986527  (removed)
+-  8bec7264b43e1f94b898730cb61d3401  (removed)
+-  0a4c69aabe37dba4ba60db0f9159704c  (removed)
+-  d292f37933849b1408122c8d8c632cbd  (removed)
+-  09acd62e4ae827043abf42f486dd268f  (removed)
+-  92ea30496a73a4d47aec79713ade6551  (removed)
+-  016f2f44b0b08dd4fb18444daabd2e2d  (removed)
+-  ec9aae0bec7e87840aba6cb7ce121d11  (removed)
+-  783b0a15cc611e24090e15b015a345e1  (removed)
+-  7e9377251e6ae2a47bbca9b40940f0cd  (removed)
+-  581bde8d0e4183542913d44f737ee95b  (removed)
+-  2cda4b151d688fd44966841e8023cd30  (removed)
+-  14866774d5d7cfc48a0ae7ab69796a2c  (removed)
+-  0ef4e202a3a69244eb16af7d69e5d571  (removed)
+-  42858a255227ab445a53903561e090f2  (removed)
+-  da89a1d38cb5ee04a89ac15fb79fa49a  (removed)
+-  243f426ce845d33488ff342685b30fc5  (removed)
+-  3151abf22336a034fa10143e5edfba4c  (removed)
+-  d0e5608e12a75734ea5a1aa683f7c0be  (removed)
+-  536a8a84629cf02499d28edd87223f80  (removed)
+-  c67fc77fa47681b45b69f46999522959  (removed)
+-  dcd7cfc411951954199f5c22a4fac1f3  (removed)
+-  aa82a6b60a3683f4ca7330f4c74d4c70  (removed)
+-  3e7632a157bca15488bd4d99073b473d  (removed)
+   7523d338e326abe4987f0d898ace7c38  alabaster_decal_5ccc5721-3007-4d9a-8fce-86e99bc6a078  [Sprite] [Floor] [decal]
+   02073abab32438b4e9f0aca182ace93f  floor451_0  [Sprite] [Floor] [floor]
+   4acfb31e5f6267e41a7215bd57bd480a  floor451_1  [Sprite] [Floor] [floor]
+   a901d32d28076914ab2eb960e24dc108  floor451_14  [Sprite] [Floor] [floor]
+   b5160ab081a2676418c12565cfe14266  floor451_15  [Sprite] [Floor] [floor]
+   5f4cf3e6421f2e846839d1b37a5a93d1  floor451_0  [Tile] [Floor] [floor]
+   4f967d8fd24ac2a41ba012bd06aaf935  floor451_1  [Tile] [Floor] [floor]
+   586161aba2788f64187e5df2a9cc7e35  floor451_14  [Tile] [Floor] [floor]
+   e89aa3b44b1b20b498fac0794595a963  floor451_15  [Tile] [Floor] [floor]
+   3b01c9c1419a4b9418230fe6b65126a2  decor_banner  [Sprite] [Props] [prop]
+   22f10ad00ab266f43af9a043adcaba37  decor_blocks  [Sprite] [Props] [prop]
+   54c0ebabf892aee438782f3641d005e9  decor_bones  [Sprite] [Props] [prop]
+   24960b86f3031914389963ba0de239d7  decor_brazier_lit  [Sprite] [Lighting] [light]
+   5b308afb050cd5e44a8fde4c132c344a  decor_brazier_unlit  [Sprite] [Props] [prop]
+   fa5bfd6ae7be0f342a66c9df395006b9  decor_bricks  [Sprite] [Props] [prop]
+   3c98e4230931db24199ba65014872bd8  decor_foot_debris  [Sprite] [Props] [prop]
+   2a92fbb6c455f4f4193a5a4463f83ad1  decor_moss  [Sprite] [Props] [prop]
+   ec1708b4118d3a24caea0905e773955d  decor_rift_a  [Sprite] [Props] [prop]
+   4765ba089c0dce142adfa88fac0dc0e4  decor_rift_b  [Sprite] [Props] [prop]
+   935848a8745f80748b5d8c86d0f5fdec  decor_rubble_a  [Sprite] [Props] [prop]
+   75e4cd4e5bfcaf5488c9b43673127d71  decor_rubble_b  [Sprite] [Props] [prop]
+   fa1b91a289228314ebe1ecdf3e7ba55a  decor_rune  [Sprite] [Props] [prop]
+   b1cfa52c06da54e4e96bc3285b27a3f1  decor_sarcophagus  [Sprite] [Props] [prop]
+   0d3daf8bb517aa640983683ba88e0dcd  decor_seal_circle  [Sprite] [Props] [prop]
+   ee8fed83bad0a3f4dbc0dc22ff57d2f0  decor_slab_crack  [Sprite] [Props] [prop]
+   ea0a80998af65d941b640dbb412a73e1  pl_brazier  [Sprite] [Props] [prop]
+   cf502f69dad7c00499de9f3246da3510  pl_floor_solid  [Tile] [Floor] [floor]
+   34151a3d8584fc549b873b5f4aa8391b  pl_floor_solid  [Sprite] [Floor] [floor]
+   a00241e09e7260c44a320227f189f14a  pl_pillar_broken  [Sprite] [Props] [prop]
+   32024ca5a65c24d4eb9015df131bb78b  pl_rubble  [Sprite] [Props] [prop]
+   327af6bff667c0c47a3f8c62862504cb  pl_wall_tower  [Sprite] [Floor] [wall]
+   6ace68eac50069846afeaec6ff482ec2  mounting_00_7227fa35-ade1-406e-af2e-600fb4176af2  [Prefab] [Cliff] [mounting]
+   56779108dd0bb2649b133ff57f2b849a  mounting_01_f7763267-747e-4a7f-b30a-1dec04273cd7  [Prefab] [Cliff] [mounting]
+   4b52046174cafce4583755906ba8ded6  mounting_02_f88e821a-18c0-4c04-a63a-a7849409ffff  [Prefab] [Cliff] [mounting]
+   d8905739873ac5f458e5d39c774ae765  mounting_03_98bc117a-cb56-4584-8646-09cc505aeed2  [Prefab] [Cliff] [mounting]
+   8e5d1bd077901cf46a5f83054cc79606  mounting_04_7ab5ec96-9435-4b45-82e0-000df92fb863  [Prefab] [Cliff] [mounting]
+   509c34bf99629d94b973d03b80ecfb91  mounting_05_50257aa7-2641-4a3a-b353-976d56749a39  [Prefab] [Cliff] [mounting]
+   a84d15c3e500d524d97842e923722214  mounting_06_bf737208-ede4-4eb4-a39a-eee024142932  [Prefab] [Cliff] [mounting]
+   18466d4d047d8ff44968fcece493772e  mounting_07_1802229f-d853-4917-adc7-c3467e862d0d  [Prefab] [Cliff] [mounting]
+   b2cdbad821680864bbe906685b4f7119  mounting_08_173aa624-c2c2-498a-8145-38331cf6f3c8  [Prefab] [Cliff] [mounting]
+   aec9115399aa3d041bea924baae1325e  mounting_09_bb34bab3-7d82-479e-a04d-f7bb00750696  [Prefab] [Cliff] [mounting]
+   c037ce68746780d469a8bbd993de4015  mounting_10_de169bda-f674-4c1b-b060-489acc81b508  [Prefab] [Cliff] [mounting]
+   c3e1a15e2bbb4884d97555bffc8b751d  mounting_11_e4ff0cfa-4880-4915-87ed-3469e4e071bf  [Prefab] [Cliff] [mounting]
+   7e9c7c1ff06e77848bf8ea89d2782b99  mounting_12_4fce26a7-38a9-47a6-9a8d-0ce8c04bf692  [Prefab] [Cliff] [mounting]
+   fd82ee0b68582524c8bd3de9fbfb50dd  mounting_13_ebd1307e-ae6a-45cf-a583-2ad53425ec61  [Prefab] [Cliff] [mounting]
+   7e12539b980d35d4cb81b3ecece61b89  mounting_14_41342e20-39a8-4482-9775-48abf9f05262  [Prefab] [Cliff] [mounting]
+   58ae3f00b2c714444a82e04749e88b73  statue_00_e899a33d-e043-4f51-860d-ff0c046f89f3  [Prefab] [Wall] [statue]
+   aa59bd56ee5d9674b91105fc112a6532  statue_01_a0da1143-2fc6-4c43-9d8d-9c46ed8b6be1  [Prefab] [Wall] [statue]
+   12e732a09af8101409cd5754d6755ca6  statue_02_1ecd6d55-f064-40e5-8bd4-80db80a29b52  [Prefab] [Wall] [statue]
+   ce59b8651a7692542a3e07c078bfcc7a  statue_03_f1ed6cce-ab50-4185-bd0f-3c24c63c10f3  [Prefab] [Wall] [statue]
+   57da1d82e2519cd4a8a0d070b3db3d35  statue_04_3675a661-2609-46de-98b0-247871a36643  [Prefab] [Wall] [statue]
+   bd874b249e038334a9834b9ccbb4a218  statue_05_11f9b270-ead0-4120-b6cd-02550afa6dd0  [Prefab] [Wall] [statue]
+   e27395d0e5b8e8c4e9e63a4e76452ebb  statue_06_cdc9ceb0-3f82-4299-8c12-dabe91a70b15  [Prefab] [Wall] [statue]
+   ac5e19623d1e29e4e94336826c492210  statue_07_a7d8dd6d-a8e6-4340-9f92-0399ef4b64b0  [Prefab] [Wall] [statue]
+   145fa9750c050ae40a5ff25c09a462c1  statue_08_8b0f8790-ce97-444c-9304-c3ebf0d2b4f1  [Prefab] [Wall] [statue]
+   b3838662ddefb4e44b4bde6de7df360e  statue_09_f75b1fa4-3fc4-43bf-b5e5-a31886bb7cbc  [Prefab] [Wall] [statue]
+   35759119d775b91479aaa293e57fb08c  statue_10_a2fb0a7f-1d03-424b-816a-6863bd0abac8  [Prefab] [Wall] [statue]
+   1a0696a88934e50458b71d558a665f8b  statue_11_d5574785-18cb-4ce8-b1f4-ed9f5dafac87  [Prefab] [Wall] [statue]
+   93540ff3731928f47b84d32095fcf8d9  statue_12_52e58d14-e20f-46a4-99a3-fee58d332a2d  [Prefab] [Wall] [statue]
+   3ff4cdd0e2074a8409f359bbdfb8c6f4  statue_13_c5711681-d7f9-4fdc-9a20-00200bcccd1d  [Prefab] [Wall] [statue]
+   dede57f7d841d4740af2349b8d95dacd  01_straight  [Prefab] [Floor] [misc]
+   fc271c733ae52d84097b4c34db89bfcb  02_outer_corner  [Prefab] [Floor] [misc]
+   821d17ba108b65042956c32201ec1947  03_inner_corner  [Prefab] [Floor] [misc]
+   2bccde6ce5cb0bb44a1843111cd7335e  04_end  [Prefab] [Floor] [misc]
+   a1efc74a1d50c2b49adf3a2e3382aa2d  05_door_l  [Prefab] [Floor] [door]
+   595eee1788b2f104faeab0cc9b7c3838  06_door_r  [Prefab] [Floor] [door]
+   8ab0fbf80acc88447a3b8e522b50ae4c  07_alcove  [Prefab] [Floor] [misc]
+   6c2503ec3882d5c44a81db3892b72dac  08_protrusion  [Prefab] [Floor] [misc]
+   ea88a0bc9f86321429553f9e47ce82af  piece_01  [Prefab] [Floor] [misc]
+   4e58fd7dfb5b4594a9f6dd05c5646f65  piece_02  [Prefab] [Floor] [misc]
+   f7424b33f829c2945928a5b7e361bcad  piece_03  [Prefab] [Floor] [misc]
+   ad954dbe1796d65439aa61d6cec0d5e2  piece_04  [Prefab] [Floor] [misc]
+   ff9d8786708d35f4db27aeb26c91a26c  wp_door_arch_2x_real  [Prefab] [Floor] [door]
+   98df23d891531a54fb1b105c3ba41d4b  wp_low_front_outer_corner_real  [Prefab] [Floor] [misc]
+   0ac1984ba36d5d5448dc21d6e063e9f1  wp_rear_wall_2x_real  [Prefab] [Floor] [wall]
+   89c6e96afcbe8eb4a99306f2f1dde621  wp_side_wall_stepped_2x_real  [Prefab] [Floor] [wall]
+   933bbb0a8c11b314c9d82da7a7fedc51  Chasm  [Prefab] [Floor] [misc]
+   ca61d0b0dba04854db6b258b2a4cbb8d  NarrowPassage  [Prefab] [Floor] [misc]
+   995cb83b025364a4481d9b13ac077bed  StoneColumn  [Prefab] [Floor] [column]
+   221d203f83ec4e0d8f615c003bf23b3b  CliffTile_Hades  [Tile] [Cliff] [cliff]
+   16ecced5c069db1428c7f1f769143b6a  DirectionalCliffTile_Hades  [Tile] [Cliff] [cliff]
+   593542b3f40d5734fbb3945812390b10  VoidBlocker_Tile  [Tile] [Floor] [tile]
 
-# Added: 67  Dropped: 0
+# Added: 0  Dropped: 80

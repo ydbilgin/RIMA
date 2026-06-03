@@ -10,7 +10,7 @@ namespace RIMA
     /// </summary>
     public static class CombatTestSetup
     {
-        [MenuItem("RIMA/Combat Test Setup")]
+        [MenuItem("RIMA/Utilities/Combat Test Setup")]
         public static void Run()
         {
             int changes = 0;
@@ -149,7 +149,7 @@ namespace RIMA
             }
         }
 
-        [MenuItem("RIMA/Combat Test Setup", true)]
+        [MenuItem("RIMA/Utilities/Combat Test Setup", true)]
         private static bool ValidateRun()
         {
             // Edit modunda çalış

@@ -66,7 +66,7 @@ namespace RIMA
         {
             int damage = Mathf.RoundToInt(baseDamage * damageMultiplier);
 
-            var hits = Physics2D.OverlapCircleAll(transform.position, counterRange, LayerMask.GetMask("Default"));
+            var hits = Physics2D.OverlapCircleAll(transform.position, counterRange, LayerMask.GetMask("Enemy"));
             float best = float.MaxValue;
             Health target = null;
 

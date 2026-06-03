@@ -36,6 +36,9 @@ namespace RIMA.Environment
         /// <summary>Fired when a player enters an Unlocked gate.</summary>
         public event Action<Gate> OnPlayerEntered;
 
+        /// <summary>Fired when the gate transitions to Unlocked (lets the sealed barrier overlay hide).</summary>
+        public event Action<Gate> OnUnlocked;
+
         // ── Private refs ──────────────────────────────────────────────────────────
 
         private SpriteRenderer _sr;
@@ -63,19 +66,34 @@ namespace RIMA.Environment
         private static Sprite BuildPlaceholderSprite()
         {
             if (_cachedPlaceholder != null) return _cachedPlaceholder;
-            const int size = 8;
-            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            const int width = 64;
+            const int height = 96;
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false)
             {
                 name       = "GatePlaceholderTex",
                 filterMode = FilterMode.Point,
                 wrapMode   = TextureWrapMode.Clamp,
                 hideFlags  = HideFlags.DontSave
             };
-            var pixels = new Color32[size * size];
-            for (int i = 0; i < pixels.Length; i++) pixels[i] = new Color32(200, 200, 200, 255); // grey
+            var pixels = new Color32[width * height];
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    bool arch = x >= 12 && x <= 51 && y >= 8 && y <= 86;
+                    bool archTop = (x - 31) * (x - 31) + (y - 59) * (y - 59) <= 20 * 20 && y >= 58;
+                    bool opening = x >= 22 && x <= 41 && y >= 8 && y <= 58;
+                    bool edge = arch && (x <= 14 || x >= 49 || y <= 10 || y >= 84 || archTop);
+                    Color32 color = new Color32(0, 0, 0, 0);
+                    if (arch && !opening) color = new Color32(90, 96, 104, 255);
+                    if (edge) color = new Color32(200, 200, 200, 255);
+                    if (opening) color = new Color32(0, 255, 204, 90);
+                    pixels[y * width + x] = color;
+                }
+            }
             tex.SetPixels32(pixels);
             tex.Apply(false, true);
-            _cachedPlaceholder = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
+            _cachedPlaceholder = Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 64f);
             _cachedPlaceholder.name      = "GatePlaceholderSprite";
             _cachedPlaceholder.hideFlags = HideFlags.DontSave;
             return _cachedPlaceholder;
@@ -119,6 +137,7 @@ namespace RIMA.Environment
         {
             if (CurrentState == State.Unlocked) return;   // Codex: idempotence — repeated calls replay SFX + restart anim
             SetState(State.Unlocked);
+            OnUnlocked?.Invoke(this);
             RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.GateOpen);
             StartCoroutine(OpenAnimCoroutine());
         }

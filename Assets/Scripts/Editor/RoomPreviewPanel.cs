@@ -10,7 +10,7 @@ namespace RIMA.Editor
         private int selectedIndex;
         private Vector2 scroll;
 
-        [MenuItem("RIMA/Scene View/Room Preview Panel")]
+        [MenuItem("RIMA/Utilities/Room Preview Panel")]
         public static void Open()
         {
             var window = GetWindow<RoomPreviewPanel>("RIMA Rooms");
@@ -118,4 +118,3 @@ namespace RIMA.Editor
     }
 }
 #endif
-

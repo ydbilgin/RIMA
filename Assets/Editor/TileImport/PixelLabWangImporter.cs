@@ -30,7 +30,7 @@ namespace RIMA.Editor.TileImport
             new Vector3Int(-1, 1, 0)
         };
 
-        [MenuItem("RIMA/PixelLab Wang Tileset Importer")]
+        [MenuItem("RIMA/Utilities/PixelLab Wang Tileset Importer")]
         public static void ImportFromMenu()
         {
             string selected = EditorUtility.OpenFilePanel("PixelLab Wang Tileset Importer", "Assets/Art/Tiles/F1", "png");

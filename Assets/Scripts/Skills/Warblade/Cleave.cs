@@ -16,6 +16,10 @@ namespace RIMA
         [SerializeField] private float knockbackForce = 5f;
         [SerializeField] private int ragePerHit = 8;
 
+        // Echo (Feature B): Cleave is a clean melee circle-strike guest — the AoE is cast at
+        // SkillOrigin, so a Shadow Echo can perform it ON the target mob it dashed to.
+        public override bool SupportsEchoOrigin => true;
+
         protected override void Awake()
         {
             base.Awake();
@@ -29,14 +33,15 @@ namespace RIMA
             float rageBonus = rage != null ? rage.RagePercent * enrageBonusPerRage : 0f;
             int finalDamage = Mathf.RoundToInt(baseDamage * (1f + rageBonus));
 
+            Vector3 origin = SkillOrigin;
             var hits = Physics2D.CircleCastAll(
-                transform.position, radius, Vector2.zero, 0f,
-                LayerMask.GetMask("Default")
+                origin, radius, Vector2.zero, 0f,
+                LayerMask.GetMask("Enemy")
             );
 
             foreach (var hit in hits)
             {
-                if (hit.collider.gameObject == player.gameObject) continue;
+                if (player != null && hit.collider.gameObject == player.gameObject) continue;
                 var hp = hit.collider.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
 
@@ -46,7 +51,7 @@ namespace RIMA
                 var enemyRb = hit.collider.GetComponent<Rigidbody2D>();
                 if (enemyRb != null)
                 {
-                    Vector2 dir = ((Vector2)hit.collider.transform.position - (Vector2)transform.position).normalized;
+                    Vector2 dir = ((Vector2)hit.collider.transform.position - (Vector2)origin).normalized;
                     enemyRb.AddForce(dir * knockbackForce, ForceMode2D.Impulse);
                 }
             }

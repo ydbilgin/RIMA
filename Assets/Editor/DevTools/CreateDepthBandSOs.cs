@@ -7,7 +7,7 @@ using RIMA.Systems.Map;
 
 public static class CreateDepthBandSOs
 {
-    [MenuItem("RIMA/Create DepthBand SOs")]
+    [MenuItem("RIMA/Utilities/Create DepthBand SOs")]
     public static void CreateAll()
     {
         string outDir = "Assets/Resources/Map/DepthBands";

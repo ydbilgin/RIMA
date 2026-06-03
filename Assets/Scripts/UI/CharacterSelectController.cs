@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using RIMA.Systems.Map;
 
 namespace RIMA.UI
 {
@@ -22,7 +23,7 @@ namespace RIMA.UI
         [SerializeField] private TMP_Text selectedClassFlavor;
         [SerializeField] private TMP_Text selectedClassFooter;
         [SerializeField] private Button confirmButton;
-        [SerializeField] private string gameSceneName = "RoomPipelineTest";
+        [SerializeField] private string gameSceneName = "_IsoGame";
 
         [Header("Class Grid")]
         [SerializeField] private Transform classButtonContainer;
@@ -67,11 +68,13 @@ namespace RIMA.UI
 
                 var btn = go.GetComponent<Button>();
                 var label = go.GetComponentInChildren<TMP_Text>();
-                if (label != null) label.text = classes[i].className;
+                bool unlocked = IsUnlocked(classes[i]);
+                if (label != null) label.text = unlocked ? classes[i].className : classes[i].className + "\nLOCKED";
 
                 if (btn != null)
                 {
                     btn.onClick.AddListener(() => SelectClass(idx));
+                    btn.interactable = unlocked;
                     classButtons[i] = btn;
                 }
             }
@@ -83,10 +86,12 @@ namespace RIMA.UI
 
             selectedIndex = index;
             var c = classes[index];
+            bool selectedUnlocked = IsUnlocked(c);
             if (selectedClassName != null) selectedClassName.text = c.className;
             if (selectedClassRole != null) selectedClassRole.text = c.role;
             if (selectedClassFlavor != null) selectedClassFlavor.text = c.flavorText;
-            if (selectedClassFooter != null) selectedClassFooter.text = c.className;
+            if (selectedClassFooter != null) selectedClassFooter.text = selectedUnlocked ? c.className : c.className + " LOCKED";
+            if (confirmButton != null) confirmButton.interactable = selectedUnlocked;
 
             if (classButtons == null) return;
 
@@ -94,21 +99,31 @@ namespace RIMA.UI
             {
                 if (classButtons[i] == null) continue;
 
+                bool unlocked = IsUnlocked(classes[i]);
                 var colors = classButtons[i].colors;
-                colors.normalColor = i == selectedIndex
+                colors.normalColor = !unlocked
+                    ? new Color(0.05f, 0.05f, 0.06f, 0.85f)
+                    : i == selectedIndex
                     ? new Color(0f, 1f, 0.8f, 0.30f)
                     : new Color(0.16f, 0.16f, 0.16f, 1f);
-                colors.highlightedColor = new Color(0.22f, 0.22f, 0.22f, 1f);
-                colors.pressedColor = new Color(0.10f, 0.10f, 0.10f, 1f);
+                colors.highlightedColor = unlocked ? new Color(0.22f, 0.22f, 0.22f, 1f) : colors.normalColor;
+                colors.pressedColor = unlocked ? new Color(0.10f, 0.10f, 0.10f, 1f) : colors.normalColor;
                 classButtons[i].colors = colors;
 
                 var feedback = classButtons[i].GetComponent<RimaUIButtonFeedback>();
-                if (feedback != null) feedback.SetSelected(i == selectedIndex);
+                if (feedback != null) feedback.SetSelected(unlocked && i == selectedIndex);
             }
         }
 
         public void OnConfirmClicked()
         {
+            if (classes == null || selectedIndex < 0 || selectedIndex >= classes.Length) return;
+            if (!IsUnlocked(classes[selectedIndex]))
+            {
+                Debug.LogWarning("[CharacterSelectController] Locked class selected; start blocked.");
+                return;
+            }
+
             ApplySelectedClass();
             SceneManager.LoadScene(gameSceneName);
         }
@@ -118,14 +133,31 @@ namespace RIMA.UI
         private void ApplySelectedClass()
         {
             if (classes == null || selectedIndex < 0 || selectedIndex >= classes.Length) return;
-            if (PlayerClassManager.Instance == null) return;
 
             string className = classes[selectedIndex].className;
             if (System.Enum.TryParse(className, out ClassType classType))
             {
-                PlayerClassManager.Instance.SetPrimaryClass(classType);
+                PlayerClassManager.SelectedClass = classType;
+                if (PlayerClassManager.Instance != null)
+                    PlayerClassManager.Instance.SetPrimaryClass(classType);
             }
+
+            RunStats.Instance?.StartNewRun();
+            MapFlowManager.Instance?.ResetRun();
         }
+
+        private static bool IsUnlocked(ClassData data)
+        {
+            if (data == null) return false;
+            if (!System.Enum.TryParse(data.className, out ClassType cls)) return false;
+            return IsUnlocked(cls);
+        }
+
+        private static bool IsUnlocked(ClassType cls) =>
+            cls == ClassType.Warblade ||
+            cls == ClassType.Elementalist ||
+            cls == ClassType.Ranger ||
+            cls == ClassType.Shadowblade;
 
         private ClassData[] GetDefaultClasses() => new ClassData[]
         {

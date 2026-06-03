@@ -39,7 +39,7 @@ namespace RIMA
             chargeTimer -= Time.fixedDeltaTime;
             rb.linearVelocity = chargeDir * chargeSpeed;
 
-            var hits = Physics2D.CircleCastAll(rb.position, hitRadius, chargeDir, 0.05f, LayerMask.GetMask("Default"));
+            var hits = Physics2D.CircleCastAll(rb.position, hitRadius, chargeDir, 0.05f, LayerMask.GetMask("Enemy"));
             foreach (var hit in hits)
             {
                 if (hit.collider.gameObject == rb.gameObject) continue;

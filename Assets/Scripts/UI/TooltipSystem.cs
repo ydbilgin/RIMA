@@ -123,8 +123,8 @@ namespace RIMA
                 Mathf.Min(textSize.y + padding * 2f, 400f)
             );
 
-            // Position
-            Vector2 pos = screenPosition ?? (Vector2)Input.mousePosition;
+            // Position (new Input System — legacy Input.mousePosition throws under InputSystem package)
+            Vector2 pos = screenPosition ?? MousePos();
             PositionTooltip(pos);
 
             tooltipPanel.SetActive(true);
@@ -167,8 +167,15 @@ namespace RIMA
             // Update position while visible (follows mouse)
             if (isVisible && tooltipPanel != null && tooltipPanel.activeSelf)
             {
-                PositionTooltip(Input.mousePosition);
+                PositionTooltip(MousePos());
             }
+        }
+
+        /// <summary>Pointer position via the new Input System (legacy Input.mousePosition throws under the InputSystem package).</summary>
+        private static Vector2 MousePos()
+        {
+            var m = UnityEngine.InputSystem.Mouse.current;
+            return m != null ? m.position.ReadValue() : Vector2.zero;
         }
 
         // ── Content Formatters ──────────────────────────────────

@@ -33,6 +33,14 @@ namespace RIMA
         DeathPrevention,        // ölümü bir kez engeller
     }
 
+    /// <summary>
+    /// Feature B (Shadow / Sundered Echo) archetype that drives the silhouette's spawn position.
+    /// Derived from the guest SkillData's <see cref="SkillTag"/>s — NOT hardcoded per class
+    /// (design spec: "read from the guest skill's own metadata"). Canon positioning:
+    /// Melee → on enemy · Ranged → over player's shoulder · Zone → at cursor · SelfBuff → on player.
+    /// </summary>
+    public enum EchoArchetype { Melee, Ranged, Zone, SelfBuff }
+
     [CreateAssetMenu(menuName = "RIMA/CrossClassSkill", fileName = "CCS_New")]
     public class CrossClassSkillData : ScriptableObject
     {
@@ -55,5 +63,22 @@ namespace RIMA
         [Header("Condition")]
         [Tooltip("Bu skill'in tetiklenmesi için gereken koşul (opsiyonel açıklama)")]
         public string conditionNote;
+
+        // ─────────────────────────────────────────────────────────────────────────
+        // Feature B — Shadow Echo (transient actor that PERFORMS a guest skill).
+        // These are the ONLY fields the echo path reads; the passive ApplyEffect stub
+        // above is a separate (legacy) mechanic and is bypassed by CrossClassEcho.
+        // ─────────────────────────────────────────────────────────────────────────
+        [Header("Echo (Feature B — guest skill performed by a silhouette)")]
+        [Tooltip("skillName of the guest SkillData this echo performs (resolved via SkillDatabase.FindByName). " +
+                 "e.g. \"Fireball\", \"Cleave\". Empty = legacy passive-only entry, not echo-capable.")]
+        public string guestSkillName;
+
+        [Tooltip("Drives silhouette spawn position. Set from the guest skill's SkillTag when bound; " +
+                 "Melee→on enemy, Ranged→over shoulder, Zone→cursor, SelfBuff→on player.")]
+        public EchoArchetype archetype = EchoArchetype.Ranged;
+
+        /// <summary>True when this entry can be performed as a Shadow Echo (has a guest skill ref).</summary>
+        public bool IsEcho => !string.IsNullOrEmpty(guestSkillName);
     }
 }

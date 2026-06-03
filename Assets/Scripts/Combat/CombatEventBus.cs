@@ -94,6 +94,9 @@ namespace RIMA.Combat
         public Vector3 worldPos;
         public GameObject attacker;
         public int beatIndex;
+        /// <summary>A2 — the enemy the commit-beat (3rd-hit finisher) actually struck, resolved by
+        /// CombatHandler. Null if the swing hit nothing. Additive — existing subscribers ignore it.</summary>
+        public GameObject target;
     }
 
     public struct TelegraphEvent

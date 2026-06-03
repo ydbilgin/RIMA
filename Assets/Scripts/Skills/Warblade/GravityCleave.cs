@@ -16,7 +16,7 @@ namespace RIMA
         [SerializeField] private float slowDuration = 0.8f;
         [SerializeField] private int rageOnUse = 10;
 
-        private IronCharge ironCharge;
+        private ChainWindowTracker chain;
 
         protected override void Awake()
         {
@@ -24,14 +24,17 @@ namespace RIMA
             skillName = "Gravity Cleave";
             cooldown = 9f;
             rageCost = 25;
-            ironCharge = GetComponentInParent<IronCharge>();
+            chain = ChainWindowTracker.For(this);
         }
 
         protected override void Execute()
         {
-            bool chained = ironCharge != null && ironCharge.CooldownPercent > 0.85f;
+            // A4: chained when Iron Charge's follow-up window is open (was
+            // `ironCharge.CooldownPercent > 0.85f`). Read-only so it shares the window with Crippling Blow.
+            if (chain == null) chain = ChainWindowTracker.For(this);
+            bool chained = chain != null && chain.IsOpen(ChainWindowTracker.IronChargeNextHit);
 
-            var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Default"));
+            var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Enemy"));
             foreach (var h in hits)
             {
                 if (h.gameObject == player.gameObject) continue;

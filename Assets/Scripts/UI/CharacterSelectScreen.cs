@@ -5,9 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using RIMA.Systems.Map;
 
 namespace RIMA
 {
@@ -19,10 +17,18 @@ namespace RIMA
     public class CharacterSelectScreen : MonoBehaviour
     {
         [Header("Scene")]
-        [SerializeField] private string gameSceneName = "PlayableArena_Test01";
+        [SerializeField] private string gameSceneName = "_IsoGame";
 
         [Header("Optional Overrides")]
         [SerializeField] private Canvas targetCanvas;
+
+        // ── On-brand UI Pack (Resources/UI/RIMA/Pack/*) ──────────────────
+        // Loaded once in BuildScreen; any may be null (sprite missing) -> wiring
+        // silently skips that graphic and the prior flat-color visual remains.
+        private const string PackBackdrop   = "UI/RIMA/Pack/bg_seal_keep";       // 1920x1080 full-screen backdrop
+        private const string PackPedestal   = "UI/RIMA/Pack/pedestal_seal";      // 512 circular seal platform
+        private const string PackCardFrame  = "UI/RIMA/Pack/card_frame_9slice";  // 256x384 portrait card frame (border 28)
+        private const string PackButton     = "UI/RIMA/Pack/button_9slice";      // 192x64 filled button bg (border 16)
 
         // ── Internal layout state ─────────────────────────────────────────
         private ClassType selectedClass = ClassType.Warblade;
@@ -94,11 +100,24 @@ namespace RIMA
                 return;
             }
 
-            // Full-screen dark overlay
+            // Full-screen dark overlay (also the parent container for all content).
             var bg = MakePanel("CSS_Background", root);
+            bg.SetAsFirstSibling(); // keep backdrop behind any pre-existing canvas content
             bg.anchorMin = Vector2.zero; bg.anchorMax = Vector2.one;
             bg.offsetMin = bg.offsetMax = Vector2.zero;
             SetImg(bg, RimaUITheme.BackgroundDark);
+
+            // On-brand seal-keep backdrop (Simple, white). Falls back to the flat
+            // dark tint above if the sprite is missing.
+            var backdropSprite = Resources.Load<Sprite>(PackBackdrop);
+            if (backdropSprite != null)
+            {
+                var bgImg = bg.GetComponent<Image>();
+                bgImg.sprite          = backdropSprite;
+                bgImg.type            = Image.Type.Simple;
+                bgImg.preserveAspect  = false; // stretch to fill the whole screen
+                bgImg.color           = Color.white;
+            }
 
             // Title
             var title = MakeText("RIMA  —  SELECT YOUR CLASS", bg, 30, FontStyles.Bold, RimaUITheme.Cyan);
@@ -207,6 +226,23 @@ namespace RIMA
             var captured = cls;
             btn.onClick.AddListener(() => SelectClass(captured));
 
+            // On-brand 9-slice card frame overlaid on the edges (transparent center
+            // lets the portrait/text show through). Non-raycast so the card Button
+            // still works. Added last -> drawn on top. Skipped if sprite missing.
+            var cardFrameSprite = Resources.Load<Sprite>(PackCardFrame);
+            if (cardFrameSprite != null)
+            {
+                var frame = MakePanel("CardFrame", cardRoot);
+                frame.SetAsLastSibling();
+                frame.anchorMin = Vector2.zero; frame.anchorMax = Vector2.one;
+                frame.offsetMin = frame.offsetMax = Vector2.zero;
+                var frameImg = frame.GetComponent<Image>();
+                frameImg.sprite        = cardFrameSprite;
+                frameImg.type          = Image.Type.Sliced;
+                frameImg.color         = Color.white;
+                frameImg.raycastTarget = false;
+            }
+
             cards[cls] = new CardEntry
             {
                 root = cardRoot, bg = bg, accentLine = accentImg,
@@ -219,6 +255,26 @@ namespace RIMA
 
         private void BuildCenterPanel(RectTransform parent)
         {
+            // Seal-stone pedestal UNDER the character's feet. Added first so it
+            // renders behind the portrait; skipped entirely if the sprite is missing.
+            var pedestalSprite = Resources.Load<Sprite>(PackPedestal);
+            if (pedestalSprite != null)
+            {
+                var pedestal = MakePanel("Pedestal", parent);
+                pedestal.SetAsFirstSibling(); // behind the portrait/labels
+                pedestal.anchorMin = new Vector2(0.5f, 0.28f); // ~feet level of the portrait
+                pedestal.anchorMax = new Vector2(0.5f, 0.28f);
+                pedestal.pivot     = new Vector2(0.5f, 0.5f);
+                pedestal.anchoredPosition = Vector2.zero;
+                pedestal.sizeDelta = new Vector2(360f, 360f); // ~360px wide circular platform
+                var pedImg = pedestal.GetComponent<Image>();
+                pedImg.sprite         = pedestalSprite;
+                pedImg.type           = Image.Type.Simple;
+                pedImg.preserveAspect = true;
+                pedImg.color          = Color.white;
+                pedImg.raycastTarget  = false;
+            }
+
             // Portrait fills 80% of center height
             var portraitRoot = MakePanel("PortraitRoot", parent);
             SetStretch(portraitRoot, new Vector2(0.05f, 0.28f), new Vector2(0.95f, 0.98f), Vector2.zero, Vector2.zero);
@@ -317,7 +373,10 @@ namespace RIMA
             btnRoot.sizeDelta = new Vector2(340f, 54f);
 
             var bgImg = btnRoot.GetComponent<Image>();
-            bgImg.sprite = RimaUITheme.ResourceFrame;
+            // On-brand 9-slice button background (filled center). Falls back to the
+            // procedural ResourceFrame if the Pack sprite is missing.
+            var buttonSprite = Resources.Load<Sprite>(PackButton);
+            bgImg.sprite = buttonSprite != null ? buttonSprite : RimaUITheme.ResourceFrame;
             bgImg.type = Image.Type.Sliced;
             bgImg.color = RimaUITheme.ClassAccent(ClassType.Warblade);
             bgImg.raycastTarget = true;
@@ -391,8 +450,11 @@ namespace RIMA
             if (!IsUnlocked(selectedClass)) return;
 
             UIManager.Instance?.ResumeGame();
+            PlayerClassManager.SelectedClass = selectedClass;
             if (PlayerClassManager.Instance != null)
                 PlayerClassManager.Instance.SetPrimaryClass(selectedClass);
+            RunStats.Instance?.StartNewRun();
+            MapFlowManager.Instance?.ResetRun();
             SceneManager.LoadScene(gameSceneName);
             Destroy(gameObject); // Cleanup select screen when moving to game
         }
@@ -448,22 +510,9 @@ namespace RIMA
 
         private static Sprite LoadCanonicalSprite(ClassType cls)
         {
-#if UNITY_EDITOR
-            string path = CanonicalSpritePath(cls);
-            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-            if (sprite != null) return sprite;
-#endif
-            var tex = Resources.Load<Texture2D>(RimaUITheme.AnchorPath(cls));
-            return tex != null
-                ? Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0f))
-                : null;
-        }
-
-        private static string CanonicalSpritePath(ClassType cls)
-        {
-            string className = cls.ToString();
-            string lower = className.ToLowerInvariant();
-            return $"Assets/Art/Characters/{className}/Rotations/{lower}_south.png";
+            // Load the imported sprite directly so Editor and build share the same native pivot and PPU64
+            // (avoids the Sprite.Create pivot mismatch that shifted characters vertically in builds).
+            return Resources.Load<Sprite>(RimaUITheme.AnchorPath(cls));
         }
 
         // ─── Helpers ──────────────────────────────────────────────────────

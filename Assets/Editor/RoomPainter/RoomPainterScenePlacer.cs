@@ -153,7 +153,7 @@ namespace RIMA.RoomPainter.Editor
             }
             else
             {
-                go.name = "Cliff_" + GetAssetName(selectedAsset);
+                go.name = targetLayer + "_" + GetAssetName(selectedAsset);
                 string sortingLayer = metadata != null && !string.IsNullOrEmpty(metadata.defaultSortingLayer) ? metadata.defaultSortingLayer : "Floor";
                 int sortingOrder = metadata != null ? metadata.defaultOrder : 5;
                 ConfigureSorting(go, sortingLayer, sortingOrder);

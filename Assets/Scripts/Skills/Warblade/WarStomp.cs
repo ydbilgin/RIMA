@@ -17,6 +17,10 @@ namespace RIMA
         [SerializeField] private float stunDuration = 2f;
         [SerializeField] private int rageOnUse = 25;
 
+        // Echo (Feature B): War Stomp is a clean melee radial AoE cast at SkillOrigin — a Shadow Echo
+        // can slam it down ON the target cluster.
+        public override bool SupportsEchoOrigin => true;
+
         protected override void Awake()
         {
             base.Awake();
@@ -27,10 +31,11 @@ namespace RIMA
 
         protected override void Execute()
         {
-            var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Default"));
+            Vector3 origin = SkillOrigin;
+            var hits = Physics2D.OverlapCircleAll(origin, radius, LayerMask.GetMask("Enemy"));
             foreach (var h in hits)
             {
-                if (h.gameObject == player.gameObject) continue;
+                if (player != null && h.gameObject == player.gameObject) continue;
                 var hp = h.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
 
@@ -40,7 +45,7 @@ namespace RIMA
                 var rb = h.GetComponent<Rigidbody2D>();
                 if (rb != null)
                 {
-                    Vector2 dir = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
+                    Vector2 dir = ((Vector2)h.transform.position - (Vector2)origin).normalized;
                     rb.AddForce(dir * knockbackForce, ForceMode2D.Impulse);
                     StartCoroutine(StunRigidbody(rb, stunDuration));
                 }
@@ -51,6 +56,10 @@ namespace RIMA
             }
 
             rage?.AddRage(rageOnUse);
+
+            // A4: open the follow-up window read by Ironclad Momentum (was Ironclad Momentum reading
+            // `warStomp.CooldownPercent > 0.7f`). WarStomp CD=10s, old proxy gave ~3s — match that.
+            ChainWindowTracker.For(this)?.OpenWindow(ChainWindowTracker.WarStompFollowup, 3f);
         }
 
         private IEnumerator StunRigidbody(Rigidbody2D rb, float duration)

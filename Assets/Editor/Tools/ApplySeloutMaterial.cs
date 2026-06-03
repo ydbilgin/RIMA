@@ -6,7 +6,7 @@ public static class ApplySeloutMaterial
     private const string CharacterSearchFolder = "Assets/Resources/Characters";
     private const string SeloutMaterialPath = "Assets/Art/Materials/SeloutSprite.mat";
 
-    [MenuItem("RIMA/Tools/Apply Selout to All Characters")]
+    [MenuItem("RIMA/Utilities/Apply Selout to All Characters")]
     public static void ApplyToAllCharacters()
     {
         Material material = AssetDatabase.LoadAssetAtPath<Material>(SeloutMaterialPath);

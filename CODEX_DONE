@@ -1,0 +1,4 @@
+MAJOR / Assets/Editor/RoomPainter/Inspector/Sections/ParallaxSection.cs:197 / Stick to Map writes factor 0 while the required authoring mapping says stick-to-map -> factor 1.0 and stick-to-camera -> factor 0. / Swap the preset assignments, labels/tooltips, and disabled-state checks to match the required mapping.
+MAJOR / Assets/Scripts/Background/ParallaxLayer.cs:21 / StickToMapFactor is defined as 0 and StickToCameraFactor as 1.0, contradicting the required toggle contract. / Define StickToCameraFactor as 0f and StickToMapFactor as 1.0f, then update comments/tooltips to match.
+MAJOR / Assets/Editor/RoomPainter/Inspector/Sections/ParallaxSection.cs:10 / Depth slider still allows 0.01-1.50 instead of the canonical 0.05-1.10 range. / Use ParallaxLayer.CanonicalMinFactor and CanonicalMaxFactor for custom slider clamping, with only the camera-lock preset allowed to clamp to 0.
+STATUS: CONCERNS

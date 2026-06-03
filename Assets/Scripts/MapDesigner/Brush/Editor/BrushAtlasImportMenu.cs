@@ -9,7 +9,7 @@ namespace RIMA.MapDesigner.Brush.Editor
 {
     public static class BrushAtlasImportMenu
     {
-        [MenuItem("RIMA/Brush/Import Atlas...")]
+        [MenuItem("RIMA/Legacy/Brush/Import Atlas...")]
         public static void OpenImportDialog()
         {
             string startDir = Path.Combine(Application.dataPath, "Art/BrushAtlas/Intake");
@@ -45,7 +45,7 @@ namespace RIMA.MapDesigner.Brush.Editor
             ReportResult(result, poolName, template);
         }
 
-        [MenuItem("RIMA/Brush/Validate Sorting Layers")]
+        [MenuItem("RIMA/Legacy/Brush/Validate Sorting Layers")]
         public static void ValidateSortingLayers()
         {
             // RimaSortingLayerValidator runs via [InitializeOnLoad] (RIMA.Editor asmdef, see Assets/Editor/RimaSortingLayerValidator.cs).

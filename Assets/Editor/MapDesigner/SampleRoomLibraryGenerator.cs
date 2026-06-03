@@ -10,7 +10,7 @@ namespace RIMA.Editor.MapDesigner
 {
     public static class SampleRoomLibraryGenerator
     {
-        private const string MenuPath = "RIMA/MapDesigner/Brush/Generate Sample Library v1";
+        private const string MenuPath = "RIMA/Legacy/MapDesigner/Brush/Generate Sample Library v1";
         private const string LibraryPath = "Assets/Data/Rooms/Library";
         private const string BarrelPath = "Assets/Data/Brush/Props/Barrel/barrel_001.asset";
         private const string BiomeId = "ShatteredKeep";

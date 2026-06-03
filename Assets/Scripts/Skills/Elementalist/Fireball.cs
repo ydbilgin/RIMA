@@ -20,6 +20,10 @@ namespace RIMA
         private float consecutiveWindow = 3f;
         private float lastCastTime;
 
+        // Echo (Feature B): Fireball is a clean ranged-projectile guest — fires from SkillOrigin
+        // toward SkillAim, so a Shadow Echo can launch it over the player's shoulder at the target.
+        public override bool SupportsEchoOrigin => true;
+
         protected override void Awake()
         {
             base.Awake();
@@ -49,18 +53,19 @@ namespace RIMA
 
         private void FireProjectile()
         {
-            Vector2 dir = player != null ? player.FacingDirection : Vector2.right;
+            Vector2 dir = SkillAim;
+            Vector3 origin = SkillOrigin;
             var go = projectilePrefab != null
-                ? Instantiate(projectilePrefab, transform.position, Quaternion.identity)
-                : CreateRuntimeFireball();
+                ? Instantiate(projectilePrefab, origin, Quaternion.identity)
+                : CreateRuntimeFireball(origin);
             var proj = go.GetComponent<PlayerProjectile>();
             if (proj != null) proj.Init(dir * projectileSpeed, damage, applyBurning: true, burnDuration: burnDuration, life: 3f);
         }
 
-        private GameObject CreateRuntimeFireball()
+        private GameObject CreateRuntimeFireball(Vector3 origin)
         {
             var go = new GameObject("Fireball_Runtime");
-            go.transform.position = transform.position;
+            go.transform.position = origin;
 
             var rb = go.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0f;

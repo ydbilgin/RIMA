@@ -13,8 +13,7 @@ namespace RIMA.RoomPainter.Editor
         private const float GridScrollbarReserve = 18f;
         private const string DefaultFolderPath = "Assets/Sprites/Environment";
         private const string OtherFilter = "Other";
-        private const int GameplayCliffsTab = 0;
-        private const int ParallaxCliffsTab = 1;
+        private const int PaletteFloorTab = 0;
         private const float MinWindowWidth = 1180f;
         private const float MinWindowHeight = 700f;
         private const float SplitterWidth = 5f;
@@ -51,6 +50,14 @@ namespace RIMA.RoomPainter.Editor
 
         private static readonly string[] ModeNames = { "Tile", "Cliff", "Decor", "Object" };
         private static readonly string[] LayerFilterNames = { "Floor", "Edge", "Cliff", "Wall", "Props", "Decals", "Lighting", "Collision", "Occlusion", "Parallax" };
+        private static readonly string[] AuthoringPaletteTabNames = { "Floor", "Cliff", "Wall", "Prop" };
+        private static readonly RoomLayer[] AuthoringPaletteTabLayers =
+        {
+            RoomLayer.Floor,
+            RoomLayer.Cliff,
+            RoomLayer.Wall,
+            RoomLayer.Props
+        };
 
         private static readonly RoomLayer[] HighlightedFilterLayers =
         {
@@ -95,12 +102,13 @@ namespace RIMA.RoomPainter.Editor
 
         [SerializeField] private AssetEntry _selectedAsset;
         [SerializeField] private RoomLayer _targetLayer = RoomLayer.Cliff;
-        [SerializeField] private int _activePaletteTab = GameplayCliffsTab;
+        [SerializeField] private int _activePaletteTab = PaletteFloorTab;
         [SerializeField] private int _selectedParallaxTier = 2;
         [SerializeField] private string _filterCategory = string.Empty;
         [SerializeField] private string _folderPath = DefaultFolderPath;
         [SerializeField] private List<AssetEntry> _assetCache = new List<AssetEntry>();
         [SerializeField] private Vector2 _paletteScroll;
+        [SerializeField] private Vector2 _roomLibraryScroll;
         [SerializeField] private float _paletteWidth = DefaultPaletteWidth;
         [SerializeField] private float _previewWidth = DefaultPreviewWidth;
         [SerializeField] private float _inspectorWidth = DefaultInspectorWidth;
@@ -115,11 +123,14 @@ namespace RIMA.RoomPainter.Editor
         private RoomPainterScenePlacer _scenePlacer;
         private RoomPainterInspectorPanel _inspectorPanel;
         private RoomPainterPreviewPane _previewPane;
+        private RoomDataAuthoringController _roomController;
+        private RoomDataComposer _roomComposer;
+        private RoomDataPlacementSink _roomPlacementSink;
         private int _activeSplitter = -1;
         private float _lastSplitterMouseX;
         private GUIStyle _modeStatusLabelStyle;
 
-        [MenuItem("RIMA/Room Painter")]
+        [MenuItem("RIMA/Legacy/Room Painter (classic)")]
         public static void ShowWindow()
         {
             EditorWindow window = GetWindow(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType, false, "RIMA Room Painter");
@@ -127,7 +138,7 @@ namespace RIMA.RoomPainter.Editor
             window.Show();
         }
 
-        [MenuItem("RIMA/Room Painter Tools/Toggle Visual Collider Edit (SceneView)")]
+        [MenuItem("RIMA/Legacy/Room Painter Tools/Toggle Visual Collider Edit (SceneView)")]
         public static void ToggleVisualColliderEdit()
         {
             RoomPainterColliderEditor.Enabled = !RoomPainterColliderEditor.Enabled;
@@ -135,7 +146,7 @@ namespace RIMA.RoomPainter.Editor
         }
 
         // D3: Menu surface for 4 modes (4-surface visibility hard rule)
-        [MenuItem("RIMA/Room Painter Tools/Mode/Tile (1)")]
+        [MenuItem("RIMA/Legacy/Room Painter Tools/Mode/Tile (1)")]
         public static void SetModeTileMenu()
         {
             foreach (RimaRoomPainterWindow w in Resources.FindObjectsOfTypeAll<RimaRoomPainterWindow>())
@@ -144,7 +155,7 @@ namespace RIMA.RoomPainter.Editor
             }
         }
 
-        [MenuItem("RIMA/Room Painter Tools/Mode/Cliff (2)")]
+        [MenuItem("RIMA/Legacy/Room Painter Tools/Mode/Cliff (2)")]
         public static void SetModeCliffMenu()
         {
             foreach (RimaRoomPainterWindow w in Resources.FindObjectsOfTypeAll<RimaRoomPainterWindow>())
@@ -153,7 +164,7 @@ namespace RIMA.RoomPainter.Editor
             }
         }
 
-        [MenuItem("RIMA/Room Painter Tools/Mode/Decor (3)")]
+        [MenuItem("RIMA/Legacy/Room Painter Tools/Mode/Decor (3)")]
         public static void SetModeDecorMenu()
         {
             foreach (RimaRoomPainterWindow w in Resources.FindObjectsOfTypeAll<RimaRoomPainterWindow>())
@@ -162,7 +173,7 @@ namespace RIMA.RoomPainter.Editor
             }
         }
 
-        [MenuItem("RIMA/Room Painter Tools/Mode/Object (4)")]
+        [MenuItem("RIMA/Legacy/Room Painter Tools/Mode/Object (4)")]
         public static void SetModeObjectMenu()
         {
             foreach (RimaRoomPainterWindow w in Resources.FindObjectsOfTypeAll<RimaRoomPainterWindow>())
@@ -171,7 +182,7 @@ namespace RIMA.RoomPainter.Editor
             }
         }
 
-        [MenuItem("RIMA/Room Painter Tools/Generate Metadata for All Sprites")]
+        [MenuItem("RIMA/Legacy/Room Painter Tools/Generate Metadata for All Sprites")]
         public static void GenerateMetadataForAllSprites()
         {
             int created = 0;
@@ -226,6 +237,23 @@ namespace RIMA.RoomPainter.Editor
             {
                 _previewPane = new RoomPainterPreviewPane();
             }
+
+            if (_roomController == null)
+            {
+                _roomController = new RoomDataAuthoringController();
+            }
+
+            if (_roomComposer == null)
+            {
+                _roomComposer = new RoomDataComposer();
+            }
+
+            if (_roomPlacementSink == null)
+            {
+                _roomPlacementSink = new RoomDataPlacementSink();
+            }
+
+            _roomController.RefreshLibrary();
 
             SceneView.duringSceneGui -= OnSceneGui;
             SceneView.duringSceneGui += OnSceneGui;
@@ -341,6 +369,8 @@ namespace RIMA.RoomPainter.Editor
                     GUILayout.Label(warningContent, GUILayout.Width(22f), GUILayout.Height(18f));
                 }
 
+                GUILayout.Space(10f);
+                DrawRoomToolbarControls();
                 GUILayout.FlexibleSpace();
 
                 bool editEnabled = RoomPainterColliderEditor.Enabled;
@@ -384,6 +414,60 @@ namespace RIMA.RoomPainter.Editor
 
                 GUI.backgroundColor = prevBg;
             }
+        }
+
+        private void DrawRoomToolbarControls()
+        {
+            if (_roomController == null)
+            {
+                return;
+            }
+
+            RoomData activeRoom = _roomController.ActiveRoom;
+            string roomLabel = activeRoom != null
+                ? ((_roomController.IsDirty ? "* " : string.Empty) + activeRoom.displayName)
+                : "No RoomData";
+            GUILayout.Label(roomLabel, EditorStyles.miniLabel, GUILayout.Width(180f));
+
+            using (new EditorGUI.DisabledScope(activeRoom == null))
+            {
+                if (GUILayout.Button("Save", EditorStyles.toolbarButton, GUILayout.Width(54f)))
+                {
+                    SaveActiveRoom();
+                }
+
+                Color previousColor = GUI.backgroundColor;
+                GUI.backgroundColor = new Color(0.35f, 0.95f, 0.55f, 1f);
+                if (GUILayout.Button("Playtest", EditorStyles.toolbarButton, GUILayout.Width(74f)))
+                {
+                    PlaytestActiveRoom();
+                }
+
+                GUI.backgroundColor = previousColor;
+            }
+        }
+
+        private void SaveActiveRoom()
+        {
+            if (_roomController == null || _roomComposer == null || _roomController.ActiveRoom == null)
+            {
+                return;
+            }
+
+            _roomController.SaveActiveRoom(_roomComposer);
+            Repaint();
+        }
+
+        private void PlaytestActiveRoom()
+        {
+            if (_roomController == null || _roomComposer == null || _roomController.ActiveRoom == null)
+            {
+                return;
+            }
+
+            _roomController.SaveActiveRoom(_roomComposer);
+            _roomComposer.ComposeIntoPlaytestRoot(_roomController.ActiveRoom);
+            EditorApplication.isPlaying = true;
         }
 
         private void DrawModeToolbar()
@@ -494,11 +578,124 @@ namespace RIMA.RoomPainter.Editor
         {
             using (new EditorGUILayout.VerticalScope(GUILayout.Width(width), GUILayout.ExpandHeight(true)))
             {
+                DrawRoomLibraryPanel(width);
+                GUILayout.Space(4f);
                 DrawPaletteTabs();
                 _paletteScroll = EditorGUILayout.BeginScrollView(_paletteScroll, false, true);
                 DrawAssetGrid();
                 EditorGUILayout.EndScrollView();
             }
+        }
+
+        private void DrawRoomLibraryPanel(float width)
+        {
+            if (_roomController == null)
+            {
+                return;
+            }
+
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.Width(width)))
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.Label("Map Library", EditorStyles.boldLabel);
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Refresh", EditorStyles.miniButton, GUILayout.Width(58f)))
+                    {
+                        _roomController.RefreshLibrary();
+                    }
+                }
+
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (GUILayout.Button("New", EditorStyles.miniButtonLeft))
+                    {
+                        OpenRoomInAuthoring(_roomController.CreateNewRoom());
+                    }
+
+                    using (new EditorGUI.DisabledScope(_roomController.ActiveRoom == null))
+                    {
+                        if (GUILayout.Button("Duplicate", EditorStyles.miniButtonMid))
+                        {
+                            OpenRoomInAuthoring(_roomController.DuplicateRoom(_roomController.ActiveRoom));
+                        }
+
+                        if (GUILayout.Button("Delete", EditorStyles.miniButtonRight))
+                        {
+                            _roomController.DeleteRoom(_roomController.ActiveRoom);
+                            if (_roomComposer != null)
+                            {
+                                _roomComposer.ClearPreview();
+                            }
+                        }
+                    }
+                }
+
+                IReadOnlyList<RoomLibraryEntry> entries = _roomController.LibraryEntries;
+                if (entries.Count == 0)
+                {
+                    EditorGUILayout.HelpBox("No RoomData assets under Assets/Data/Rooms.", MessageType.Info);
+                    return;
+                }
+
+                _roomLibraryScroll = EditorGUILayout.BeginScrollView(_roomLibraryScroll, GUILayout.Height(152f));
+                for (int i = 0; i < entries.Count; i++)
+                {
+                    DrawRoomLibraryRow(entries[i]);
+                }
+                EditorGUILayout.EndScrollView();
+            }
+        }
+
+        private void DrawRoomLibraryRow(RoomLibraryEntry entry)
+        {
+            if (entry == null || entry.room == null)
+            {
+                return;
+            }
+
+            bool active = _roomController.ActiveRoom == entry.room;
+            Color previousColor = GUI.backgroundColor;
+            if (active)
+            {
+                GUI.backgroundColor = new Color(0.35f, 0.9f, 1f, 1f);
+            }
+
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+            {
+                Texture thumbnail = entry.thumbnail != null
+                    ? entry.thumbnail
+                    : EditorGUIUtility.ObjectContent(entry.room, typeof(RoomData)).image;
+                GUILayout.Label(thumbnail, GUILayout.Width(42f), GUILayout.Height(42f));
+
+                using (new EditorGUILayout.VerticalScope())
+                {
+                    GUILayout.Label(entry.DisplayName, EditorStyles.boldLabel);
+                    GUILayout.Label(entry.room.roomId, EditorStyles.miniLabel);
+                }
+
+                if (GUILayout.Button(active ? "Active" : "Open", GUILayout.Width(52f), GUILayout.Height(32f)))
+                {
+                    _roomController.OpenRoom(entry.room, entry.path);
+                    OpenRoomInAuthoring(entry.room);
+                }
+            }
+
+            GUI.backgroundColor = previousColor;
+        }
+
+        private void OpenRoomInAuthoring(RoomData room)
+        {
+            if (room == null || _roomComposer == null)
+            {
+                return;
+            }
+
+            room.EnsureDefaults();
+            _roomComposer.Compose(room);
+            _roomComposer.FocusTopDown();
+            SceneView.RepaintAll();
+            Repaint();
         }
 
         private int ComputeGridColumns()
@@ -513,29 +710,22 @@ namespace RIMA.RoomPainter.Editor
             using (new EditorGUILayout.HorizontalScope())
             {
                 Color previousColor = GUI.backgroundColor;
-                GUI.backgroundColor = _activePaletteTab == GameplayCliffsTab ? new Color(0.4f, 0.9f, 1f, 1f) : previousColor;
-                if (GUILayout.Toggle(_activePaletteTab == GameplayCliffsTab, "Gameplay Cliffs", EditorStyles.miniButtonLeft, GUILayout.Height(22f)))
+                for (int i = 0; i < AuthoringPaletteTabNames.Length; i++)
                 {
-                    SetPaletteTab(GameplayCliffsTab);
-                }
-
-                GUI.backgroundColor = _activePaletteTab == ParallaxCliffsTab ? new Color(0.8f, 0.5f, 1f, 1f) : previousColor;
-                if (GUILayout.Toggle(_activePaletteTab == ParallaxCliffsTab, "Parallax BG Cliffs", EditorStyles.miniButtonRight, GUILayout.Height(22f)))
-                {
-                    SetPaletteTab(ParallaxCliffsTab);
+                    bool active = _activePaletteTab == i;
+                    GUI.backgroundColor = active ? new Color(0.4f, 0.9f, 1f, 1f) : previousColor;
+                    GUIStyle style = i == 0
+                        ? EditorStyles.miniButtonLeft
+                        : i == AuthoringPaletteTabNames.Length - 1
+                            ? EditorStyles.miniButtonRight
+                            : EditorStyles.miniButtonMid;
+                    if (GUILayout.Toggle(active, AuthoringPaletteTabNames[i], style, GUILayout.Height(22f)) && !active)
+                    {
+                        SetPaletteTab(i);
+                    }
                 }
 
                 GUI.backgroundColor = previousColor;
-            }
-
-            if (_activePaletteTab == ParallaxCliffsTab)
-            {
-                EditorGUI.BeginChangeCheck();
-                _selectedParallaxTier = EditorGUILayout.Popup("Tier", _selectedParallaxTier, ParallaxTierOptions);
-                if (EditorGUI.EndChangeCheck())
-                {
-                    SceneView.RepaintAll();
-                }
             }
         }
 
@@ -954,31 +1144,40 @@ namespace RIMA.RoomPainter.Editor
 
             SyncTargetLayerWithTab();
 
-            // D5.5: In Cliff mode with Shift held → route to DecorCliffPainter (free-form)
-            if (_currentMode == RoomPainterMode.Cliff)
+            if (_roomController != null && _roomController.ActiveRoom != null)
             {
-                RIMA.Environment.CliffAutoPlacer placer =
-                    Object.FindAnyObjectByType<RIMA.Environment.CliffAutoPlacer>();
-                TileBase cliffTile = placer != null ? placer.cliffTile : null;
-
-                bool consumed = DecorCliffPainter.OnSceneGui(sceneView, cliffTile);
-                if (consumed)
+                if (_roomPlacementSink == null)
                 {
-                    Repaint(); // refresh statusbar counter
-                    return;
+                    _roomPlacementSink = new RoomDataPlacementSink();
                 }
+
+                if (_roomComposer == null)
+                {
+                    _roomComposer = new RoomDataComposer();
+                }
+
+                if (HasSelection())
+                {
+                    EnsureMetadataForSelection();
+                }
+
+                _roomPlacementSink.OnSceneGUI(
+                    sceneView,
+                    _roomController,
+                    _roomComposer,
+                    _selectedAsset,
+                    _targetLayer);
+                Repaint();
+                return;
             }
 
-            _scenePlacer.OnSceneGUI(
-                sceneView,
-                _selectedAsset,
-                _targetLayer,
-                GetCurrentParallaxTierName(),
-                GetCurrentParallaxTierValue(),
-                _selectedParallaxTier,
-                _filterCategory,
-                _assetCache,
-                SelectAssetFromScene);
+            Event current = Event.current;
+            if (current != null && current.type == EventType.Repaint)
+            {
+                Handles.Label(Vector3.zero, "Room Painter: open or create a RoomData before painting.");
+            }
+
+            return;
         }
 
         private void SelectAssetFromScene(AssetEntry entry)
@@ -1015,7 +1214,12 @@ namespace RIMA.RoomPainter.Editor
 
         private void SyncTargetLayerWithTab()
         {
-            _targetLayer = _activePaletteTab == ParallaxCliffsTab ? RoomLayer.Parallax : RoomLayer.Cliff;
+            if (_activePaletteTab < 0 || _activePaletteTab >= AuthoringPaletteTabLayers.Length)
+            {
+                _activePaletteTab = PaletteFloorTab;
+            }
+
+            _targetLayer = AuthoringPaletteTabLayers[_activePaletteTab];
 
             if (_selectedParallaxTier < 0 || _selectedParallaxTier >= ParallaxTierValues.Length)
             {

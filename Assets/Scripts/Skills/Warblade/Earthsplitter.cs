@@ -11,6 +11,10 @@ namespace RIMA
         [SerializeField] private int rageOnUse = 25;
         [SerializeField] private float stunDuration = 2f;
 
+        // Echo (Feature B): Earthsplitter projects 3 ground-crack waves FROM SkillOrigin toward
+        // SkillAim and applies Broken — an ideal Shadow Echo guest (cross-class Sundered-Beat assist).
+        public override bool SupportsEchoOrigin => true;
+
         protected override void Awake()
         {
             base.Awake();
@@ -26,10 +30,11 @@ namespace RIMA
 
         private IEnumerator WaveRoutine()
         {
-            Vector2 dir = player != null ? player.FacingDirection : Vector2.right;
+            Vector2 dir = SkillAim;
+            Vector2 castOrigin = SkillOrigin;
             for (int wave = 0; wave < 3; wave++)
             {
-                Vector2 origin = (Vector2)transform.position + dir * (wave * 1.2f);
+                Vector2 origin = castOrigin + dir * (wave * 1.2f);
                 foreach (var health in SkillRuntime.EnemiesInLine(origin, dir, length, width))
                 {
                     SkillRuntime.DealDamage(health, damage);

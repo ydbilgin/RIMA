@@ -16,7 +16,7 @@ namespace RIMA
         [SerializeField] private float healReduction = 0.5f;   // normal: %50 iyileşme
         [SerializeField] private float healReductionDuration = 6f;
 
-        private IronCharge ironCharge;
+        private ChainWindowTracker chain;
 
         protected override void Awake()
         {
@@ -24,7 +24,7 @@ namespace RIMA
             skillName = "Crippling Blow";
             cooldown = 7f;
             rageCost = 0;
-            ironCharge = GetComponentInParent<IronCharge>();
+            chain = ChainWindowTracker.For(this);
         }
 
         protected override void Execute()
@@ -35,10 +35,18 @@ namespace RIMA
             SkillRuntime.DealDamage(target, baseDamage, this);
             rage?.AddRage(10);
 
-            bool chained = ironCharge != null && ironCharge.CooldownPercent > 0.85f;
+            // A4: chained when Iron Charge's follow-up window is open (was
+            // `ironCharge.CooldownPercent > 0.85f`). Read-only (IsOpen) — the original proxy let any
+            // follow-up skill chain off one charge, so Gravity Cleave can also benefit; don't consume.
+            if (chain == null) chain = ChainWindowTracker.For(this);
+            bool chained = chain != null && chain.IsOpen(ChainWindowTracker.IronChargeNextHit);
             float reduction = chained ? 0f : healReduction;
 
             StartCoroutine(ApplyHealReduction(target, reduction, healReductionDuration));
+
+            // A4: open the follow-up window read by Death Blow (was Death Blow reading
+            // `cripplingBlow.CooldownPercent > 0.5f`). Generous window preserves the old loose feel.
+            chain?.OpenWindow(ChainWindowTracker.CripplingExecute, 5f);
         }
 
         private IEnumerator ApplyHealReduction(Health hp, float multiplier, float duration)
@@ -51,7 +59,7 @@ namespace RIMA
 
         private Health FindNearest(float radius)
         {
-            var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Default"));
+            var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Enemy"));
             float best = float.MaxValue;
             Health bestHp = null;
             foreach (var h in hits)

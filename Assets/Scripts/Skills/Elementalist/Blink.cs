@@ -41,7 +41,7 @@ namespace RIMA
 
             // Geçilen yoldaki düşmanları vur
             var hits = Physics2D.CircleCastAll(start, 0.4f, dir,
-                Vector2.Distance(start, end), LayerMask.GetMask("Default"));
+                Vector2.Distance(start, end), LayerMask.GetMask("Enemy"));
 
             foreach (var h in hits)
             {

@@ -16,7 +16,7 @@ namespace RIMA.Editor.TileImport
         private const int PixelsPerUnit = 32;
         private const string OutputRoot = "Assets/Art/Tiles";
 
-        [MenuItem("RIMA/PixelLab PNG Sheet Importer")]
+        [MenuItem("RIMA/Utilities/PixelLab PNG Sheet Importer")]
         public static void ImportFolder()
         {
             string selected = EditorUtility.OpenFolderPanel("PixelLab PNG Sheet Importer", "STAGING/TILESET_OUTPUT", string.Empty);

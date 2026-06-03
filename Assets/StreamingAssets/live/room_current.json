@@ -1,0 +1,8828 @@
+{
+  "schema_version": "1.1",
+  "room_id": "PlayableArena_Test01",
+  "metadata": {
+    "name": "PlayableArena_Test01",
+    "created": "2026-05-30T22:35:02Z",
+    "modified": "2026-05-30T22:35:02Z"
+  },
+  "floor_tiles": [
+    {
+      "cell": [
+        -13,
+        -14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        -14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -11,
+        -14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        -14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        -14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -8,
+        -14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        -14,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        -14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        -14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        -14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        -14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -2,
+        -14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        -13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        -13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -12,
+        -13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -11,
+        -13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -10,
+        -13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        -13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        -13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        -13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        -13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        -13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        -13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -3,
+        -13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -2,
+        -13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        -13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        3,
+        -13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        -13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        -12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        -12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        -12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -11,
+        -12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        -12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        -12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -8,
+        -12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        -12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -6,
+        -12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -5,
+        -12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -4,
+        -12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        -12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -2,
+        -12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        -12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        0,
+        -12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        1,
+        -12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        2,
+        -12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        -12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        -12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -14,
+        -11,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -13,
+        -11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        -11,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -11,
+        -11,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        -11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -9,
+        -11,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -8,
+        -11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        -11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        -11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -5,
+        -11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -4,
+        -11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -3,
+        -11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        -11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -1,
+        -11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        0,
+        -11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        1,
+        -11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        2,
+        -11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        -11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -14,
+        -10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -13,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        -10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -11,
+        -10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -8,
+        -10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -7,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -6,
+        -10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -5,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -4,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        -10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -2,
+        -10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -1,
+        -10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        -10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        2,
+        -10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        -10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        -9,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        -9,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        -9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -11,
+        -9,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        -9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        -9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -8,
+        -9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        -9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        -9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        -9,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -4,
+        -9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -3,
+        -9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        -9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -1,
+        -9,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        0,
+        -9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        1,
+        -9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        2,
+        -9,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        -9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        -8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -12,
+        -8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        -8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -10,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        -8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        -8,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -6,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -5,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -4,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -2,
+        -8,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -1,
+        -8,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        0,
+        -8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        1,
+        -8,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        2,
+        -8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        3,
+        -8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        -7,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -13,
+        -7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        -7,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -11,
+        -7,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -9,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -8,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -6,
+        -7,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -5,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        -7,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -3,
+        -7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -2,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -1,
+        -7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        2,
+        -7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        -7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -14,
+        -6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -11,
+        -6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        -6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -8,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        -6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -5,
+        -6,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        -6,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -3,
+        -6,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        -6,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -1,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        -6,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        -6,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        2,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        -6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        4,
+        -6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        -5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        -5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        -5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -11,
+        -5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -10,
+        -5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        -5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -8,
+        -5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        -5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -6,
+        -5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        -5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        -5,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -3,
+        -5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -2,
+        -5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        -5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        -5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        1,
+        -5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        2,
+        -5,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        3,
+        -5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        -5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -14,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -13,
+        -4,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -11,
+        -4,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        -4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -9,
+        -4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        -4,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -6,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        -4,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -4,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        -4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        -4,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -1,
+        -4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        -4,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        1,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        2,
+        -4,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        -4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -14,
+        -3,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        -3,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -10,
+        -3,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        -3,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -8,
+        -3,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        -3,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -6,
+        -3,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -4,
+        -3,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -1,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        -3,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        -3,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        2,
+        -3,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        4,
+        -3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -13,
+        -2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        -2,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -11,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -10,
+        -2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -9,
+        -2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -8,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -7,
+        -2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -6,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -5,
+        -2,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -4,
+        -2,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -3,
+        -2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -2,
+        -2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        -2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        -2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        2,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        3,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        4,
+        -2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -12,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -11,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -9,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -8,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        -1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -6,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -5,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        -1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -2,
+        -1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        -1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        1,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        2,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        5,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        6,
+        -1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        7,
+        -1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        8,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        9,
+        -1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        10,
+        -1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        11,
+        -1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        12,
+        -1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        13,
+        -1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -11,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -10,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -8,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        0,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -4,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -3,
+        0,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -1,
+        0,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        1,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        2,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        5,
+        0,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        6,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        7,
+        0,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        8,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        9,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        10,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        11,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        12,
+        0,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        13,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        14,
+        0,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -14,
+        1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -11,
+        1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -10,
+        1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -8,
+        1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -5,
+        1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -4,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -2,
+        1,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        0,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        2,
+        1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        3,
+        1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        4,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        5,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        6,
+        1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        7,
+        1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        8,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        10,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        11,
+        1,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        12,
+        1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        13,
+        1,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        14,
+        1,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -13,
+        2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -11,
+        2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -9,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -5,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -4,
+        2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -1,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        2,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        2,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        2,
+        2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        4,
+        2,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        13,
+        2,
+        0
+      ],
+      "tile_guid": "44db6e88b1d025642a0a9d7ea8f20e99"
+    },
+    {
+      "cell": [
+        -14,
+        3,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -12,
+        3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -10,
+        3,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        3,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -8,
+        3,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        3,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -6,
+        3,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -5,
+        3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -4,
+        3,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        3,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -2,
+        3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -1,
+        3,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        0,
+        3,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        1,
+        3,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -13,
+        4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -12,
+        4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        4,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -8,
+        4,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        4,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -6,
+        4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -5,
+        4,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -4,
+        4,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -3,
+        4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -2,
+        4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -1,
+        4,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        4,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        1,
+        4,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -14,
+        5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        5,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -11,
+        5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        5,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -9,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -8,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -5,
+        5,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -4,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -3,
+        5,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -2,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -1,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        1,
+        5,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        13,
+        5,
+        0
+      ],
+      "tile_guid": "44db6e88b1d025642a0a9d7ea8f20e99"
+    },
+    {
+      "cell": [
+        -14,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -11,
+        6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -10,
+        6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -8,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        6,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        6,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        6,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        6,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        6,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        6,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        1,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        2,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        6,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        4,
+        6,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        13,
+        6,
+        0
+      ],
+      "tile_guid": "44db6e88b1d025642a0a9d7ea8f20e99"
+    },
+    {
+      "cell": [
+        14,
+        6,
+        0
+      ],
+      "tile_guid": "44db6e88b1d025642a0a9d7ea8f20e99"
+    },
+    {
+      "cell": [
+        -14,
+        7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -13,
+        7,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -12,
+        7,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -11,
+        7,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -9,
+        7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -8,
+        7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -7,
+        7,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -5,
+        7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        7,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -1,
+        7,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        0,
+        7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        1,
+        7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        2,
+        7,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        4,
+        7,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        8,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -12,
+        8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -11,
+        8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        8,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -9,
+        8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        8,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        8,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -6,
+        8,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        8,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -4,
+        8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -3,
+        8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -2,
+        8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -1,
+        8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        0,
+        8,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        1,
+        8,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        2,
+        8,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        8,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -13,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -12,
+        9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -11,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -10,
+        9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -9,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        9,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -2,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -1,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        9,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        2,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        3,
+        9,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        4,
+        9,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -13,
+        10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -12,
+        10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -11,
+        10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -10,
+        10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -9,
+        10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -8,
+        10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -7,
+        10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -3,
+        10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -2,
+        10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -1,
+        10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        0,
+        10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        1,
+        10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        2,
+        10,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        3,
+        10,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        4,
+        10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        5,
+        10,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        9,
+        10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        10,
+        10,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -13,
+        11,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -12,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -10,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -9,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -7,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -6,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -5,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -4,
+        11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -3,
+        11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -2,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -1,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        1,
+        11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        2,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        11,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        4,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        5,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        6,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        7,
+        11,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        8,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        9,
+        11,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        10,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        11,
+        11,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        12,
+        11,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -14,
+        12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -13,
+        12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -12,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -10,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -9,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -7,
+        12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -5,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -4,
+        12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -2,
+        12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        0,
+        12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        2,
+        12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        3,
+        12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        5,
+        12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        6,
+        12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        7,
+        12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        8,
+        12,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        9,
+        12,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        10,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        11,
+        12,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        12,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        13,
+        12,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -14,
+        13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -9,
+        13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -8,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -6,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -5,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -2,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -1,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        0,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        2,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        4,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        5,
+        13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        6,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        7,
+        13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        8,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        9,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        10,
+        13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        11,
+        13,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        12,
+        13,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        13,
+        13,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        14,
+        13,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -13,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -12,
+        14,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -11,
+        14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -10,
+        14,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -9,
+        14,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        -8,
+        14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -7,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        -6,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -5,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -4,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -3,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        -2,
+        14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -1,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        0,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        1,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        2,
+        14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        3,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        4,
+        14,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        5,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        6,
+        14,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        7,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        8,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        9,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        10,
+        14,
+        0
+      ],
+      "tile_guid": "6186063eeb38ed14f84d2e03032590f6"
+    },
+    {
+      "cell": [
+        11,
+        14,
+        0
+      ],
+      "tile_guid": "ba79593f22c42894ab54fc230e3798a0"
+    },
+    {
+      "cell": [
+        12,
+        14,
+        0
+      ],
+      "tile_guid": "170c25dfbb892aa408e8f1d1ba703d52"
+    },
+    {
+      "cell": [
+        13,
+        14,
+        0
+      ],
+      "tile_guid": "8edb440620037294091baea415a15e2e"
+    },
+    {
+      "cell": [
+        -15,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -14,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -13,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -12,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -11,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -10,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -9,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -8,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -7,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -6,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -5,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -4,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -3,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -2,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -1,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        0,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        1,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        2,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        3,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -14,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -1,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        0,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        1,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        2,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        3,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        0,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        1,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        2,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        -1,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        -1,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        -1,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        0,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        0,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        1,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        1,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        1,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        2,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        2,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        3,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        3,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        2,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        3,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        4,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        2,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        3,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        5,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        6,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        7,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        8,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        9,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        10,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        11,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        12,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        13,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -14,
+        14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        14,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -15,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -14,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -13,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -12,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -11,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -10,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -9,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -8,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -7,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -6,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -5,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -4,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -3,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -2,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -1,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        0,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        1,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        2,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        3,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        4,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        5,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        6,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        7,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        8,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        9,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        10,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        11,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        12,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        13,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        14,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        15,
+        15,
+        0
+      ],
+      "tile_guid": "593542b3f40d5734fbb3945812390b10"
+    },
+    {
+      "cell": [
+        -13,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -12,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -11,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -10,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -9,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -8,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -7,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -6,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -5,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -4,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -3,
+        -14,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -13,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -13,
+        -13,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        3,
+        -13,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -12,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        0,
+        -12,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        1,
+        -12,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        2,
+        -12,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -11,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -10,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -9,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -8,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -7,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -6,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -5,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -4,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -3,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -2,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        5,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        6,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        7,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        8,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        9,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        10,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        11,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        12,
+        -1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        0,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        1,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        2,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        3,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        4,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        5,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        6,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        7,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        8,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        9,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        10,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        9,
+        10,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        11,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        6,
+        11,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        7,
+        11,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        8,
+        11,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        9,
+        11,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        11,
+        11,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    },
+    {
+      "cell": [
+        -14,
+        12,
+        0
+      ],
+      "tile_guid": "15b27e479b43d084780976c301841918"
+    }
+  ],
+  "cliff_cells": [
+    {
+      "cell": [
+        -13,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -12,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -11,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -10,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -9,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -8,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -7,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -6,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -5,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -4,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -3,
+        -14,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -13,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -13,
+        -13,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        3,
+        -13,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -12,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        0,
+        -12,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        1,
+        -12,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        2,
+        -12,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -11,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -10,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -9,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -8,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -7,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -6,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -5,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -4,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -3,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -2,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        5,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        6,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        7,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        8,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        9,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        10,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        11,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        12,
+        -1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        0,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        1,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        2,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        3,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        4,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        5,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        6,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        7,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        8,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        9,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        10,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        9,
+        10,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        11,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        6,
+        11,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        7,
+        11,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        8,
+        11,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        9,
+        11,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        11,
+        11,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    },
+    {
+      "cell": [
+        -14,
+        12,
+        0
+      ],
+      "tile_guid": "16ecced5c069db1428c7f1f769143b6a",
+      "is_decor": false
+    }
+  ],
+  "prop_instances": [
+    {
+      "prefab_guid": "51d1b129b77e6f04fbeca10699526625",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "34f9366f44422d54487fd7edd55288d4",
+      "position": [
+        2.0,
+        0.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "995cb83b025364a4481d9b13ac077bed",
+      "position": [
+        -10.0,
+        8.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "995cb83b025364a4481d9b13ac077bed",
+      "position": [
+        -14.0,
+        -5.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "995cb83b025364a4481d9b13ac077bed",
+      "position": [
+        -5.0,
+        -12.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "995cb83b025364a4481d9b13ac077bed",
+      "position": [
+        18.0,
+        7.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "995cb83b025364a4481d9b13ac077bed",
+      "position": [
+        22.0,
+        -4.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "995cb83b025364a4481d9b13ac077bed",
+      "position": [
+        14.0,
+        -10.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "34f9366f44422d54487fd7edd55288d4",
+      "position": [
+        2.5,
+        1.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "34f9366f44422d54487fd7edd55288d4",
+      "position": [
+        -2.5,
+        1.0,
+        0.0
+      ],
+      "rotation": 0.0
+    },
+    {
+      "prefab_guid": "34f9366f44422d54487fd7edd55288d4",
+      "position": [
+        0.0,
+        2.5,
+        0.0
+      ],
+      "rotation": 0.0
+    }
+  ],
+  "collider_overrides": [
+    {
+      "instance_id": "GlobalObjectId_V1-2-e7a9a5b06c574fb2beff599c4f5282f4-1241371184184823233-991388266",
+      "size": [
+        0.45,
+        0.28
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "shape": "Box"
+    },
+    {
+      "instance_id": "GlobalObjectId_V1-2-e7a9a5b06c574fb2beff599c4f5282f4-1241371184184823233-212549917",
+      "size": [
+        0.45,
+        0.28
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "shape": "Box"
+    },
+    {
+      "instance_id": "GlobalObjectId_V1-2-e7a9a5b06c574fb2beff599c4f5282f4-1241371184184823233-2088115131",
+      "size": [
+        0.45,
+        0.28
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "shape": "Box"
+    },
+    {
+      "instance_id": "GlobalObjectId_V1-2-e7a9a5b06c574fb2beff599c4f5282f4-1241371184184823233-6100456",
+      "size": [
+        0.45,
+        0.28
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "shape": "Box"
+    },
+    {
+      "instance_id": "GlobalObjectId_V1-2-e7a9a5b06c574fb2beff599c4f5282f4-1241371184184823233-478507467",
+      "size": [
+        0.45,
+        0.28
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "shape": "Box"
+    },
+    {
+      "instance_id": "GlobalObjectId_V1-2-e7a9a5b06c574fb2beff599c4f5282f4-1241371184184823233-191850560",
+      "size": [
+        0.45,
+        0.28
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "shape": "Box"
+    }
+  ]
+}

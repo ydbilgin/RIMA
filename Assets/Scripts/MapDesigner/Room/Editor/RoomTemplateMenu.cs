@@ -9,7 +9,7 @@ namespace RIMA.MapDesigner.Room.Editor
 {
     public static class RoomTemplateMenu
     {
-        [MenuItem("RIMA/Room/Save Selection as Room Template...")]
+        [MenuItem("RIMA/Legacy/Room/Save Selection as Room Template...")]
         public static void SaveSelectionAsRoom()
         {
             var root = Selection.activeGameObject;
@@ -28,7 +28,7 @@ namespace RIMA.MapDesigner.Room.Editor
             ReportResult(result, template);
         }
 
-        [MenuItem("RIMA/Room/Load Template Into Scene...")]
+        [MenuItem("RIMA/Legacy/Room/Load Template Into Scene...")]
         public static void LoadTemplateIntoScene()
         {
             var template = PromptForTemplate("Pick RoomTemplateSO to load");
@@ -45,7 +45,7 @@ namespace RIMA.MapDesigner.Room.Editor
             }
         }
 
-        [MenuItem("RIMA/Room/Validate Template")]
+        [MenuItem("RIMA/Legacy/Room/Validate Template")]
         public static void ValidateSelectedTemplate()
         {
             var template = Selection.activeObject as RoomTemplateSO;
@@ -61,7 +61,7 @@ namespace RIMA.MapDesigner.Room.Editor
             ReportIssues(issues, template.roomId);
         }
 
-        [MenuItem("RIMA/Room/Validate Bank")]
+        [MenuItem("RIMA/Legacy/Room/Validate Bank")]
         public static void ValidateSelectedBank()
         {
             var bank = Selection.activeObject as RoomBankSO;

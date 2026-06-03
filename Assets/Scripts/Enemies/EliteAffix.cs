@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace RIMA
 {
@@ -37,6 +38,7 @@ namespace RIMA
         [Header("Teleporter")]
         [SerializeField] private float teleportInterval = 4f;
         [SerializeField] private float teleportRadius = 3f;
+        [SerializeField] private float teleportCollisionRadius = 0.3f;
         private float teleportTimer;
 
         [Header("Vampiric")]
@@ -46,6 +48,8 @@ namespace RIMA
         private Health health;
         private BaseMobBehavior mob;
         private SpriteRenderer spriteRenderer;
+        private Tilemap floorTilemap;
+        private Tilemap wallTilemap;
         private Color originalColor;
         private bool initialized;
 
@@ -178,15 +182,56 @@ namespace RIMA
 
         private void Teleport()
         {
-            Vector2 randomOffset = Random.insideUnitCircle * teleportRadius;
-            Vector3 newPos = transform.position + (Vector3)randomOffset;
+            const int maxAttempts = 3;
+            LayerMask wallMask = LayerMask.GetMask("Default");
 
-            // TODO: Add bounds check against room walls
-            transform.position = newPos;
+            for (int attempt = 0; attempt < maxAttempts; attempt++)
+            {
+                Vector2 randomOffset = Random.insideUnitCircle * teleportRadius;
+                Vector3 newPos = transform.position + (Vector3)randomOffset;
 
-            // Brief flash
-            if (spriteRenderer != null)
-                StartCoroutine(TeleportFlash());
+                if (!IsTeleportDestinationValid(newPos, wallMask))
+                    continue;
+
+                transform.position = newPos;
+
+                // Brief flash
+                if (spriteRenderer != null)
+                    StartCoroutine(TeleportFlash());
+                return;
+            }
+        }
+
+        private bool IsTeleportDestinationValid(Vector3 worldPos, LayerMask wallMask)
+        {
+            ResolveTeleportTilemaps();
+
+            if (floorTilemap != null)
+            {
+                Vector3Int cell = floorTilemap.WorldToCell(worldPos);
+                if (floorTilemap.GetTile(cell) == null)
+                    return false;
+
+                if (wallTilemap != null && wallTilemap.GetTile(cell) != null)
+                    return false;
+            }
+
+            return Physics2D.OverlapCircle(worldPos, teleportCollisionRadius, wallMask) == null;
+        }
+
+        private void ResolveTeleportTilemaps()
+        {
+            if (floorTilemap == null)
+                floorTilemap = FindTilemap("IsoGrid/Ground") ?? FindTilemap("Room/Ground") ?? FindTilemap("Grid/GroundTilemap") ?? FindTilemap("GroundTilemap");
+
+            if (wallTilemap == null)
+                wallTilemap = FindTilemap("IsoGrid/Walls") ?? FindTilemap("Room/Wall") ?? FindTilemap("Grid/WallsTilemap") ?? FindTilemap("WallsTilemap");
+        }
+
+        private static Tilemap FindTilemap(string path)
+        {
+            GameObject go = GameObject.Find(path);
+            return go != null ? go.GetComponent<Tilemap>() : null;
         }
 
         private System.Collections.IEnumerator TeleportFlash()

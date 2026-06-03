@@ -9,7 +9,8 @@ namespace RIMA
     {
         MoveUp, MoveDown, MoveLeft, MoveRight,
         Dash, Attack, ClassSecondary, RiftBreak,
-        Skill1, Skill2, Skill3, Skill4
+        Skill1, Skill2, Skill3, Skill4,
+        CrossClassEcho
     }
 
     /// <summary>
@@ -41,6 +42,7 @@ namespace RIMA
             { GameAction.Skill2,         "<Keyboard>/e" },
             { GameAction.Skill3,         "<Keyboard>/r" },
             { GameAction.Skill4,         "<Keyboard>/f" },
+            { GameAction.CrossClassEcho, "<Keyboard>/c" },
         };
 
         // Reserved control paths — cannot be bound to a gameplay action (overlay/pause routing).

@@ -1,0 +1,10 @@
+{
+  "name": "RIMA.LiveTool",
+  "rootNamespace": "RIMA.LiveTool",
+  "references": ["RIMA.Runtime", "Unity.InputSystem"],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "defineConstraints": ["RIMA_LIVE_TOOL"],
+  "autoReferenced": true,
+  "noEngineReferences": false
+}

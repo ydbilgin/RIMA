@@ -152,13 +152,13 @@ namespace RIMA.Editor.RoomPainter.LiveTool
 
         // ── Menu surface (4-surface visibility rule) ───────────────────────────
 
-        [MenuItem("RIMA/Live Tool/Launch Live Tool")]
+        [MenuItem("RIMA/Legacy/Live Tool/Launch Live Tool")]
         public static void LaunchFromMenu() => Launch();
 
-        [MenuItem("RIMA/Live Tool/Stop Live Tool")]
+        [MenuItem("RIMA/Legacy/Live Tool/Stop Live Tool")]
         public static void StopFromMenu() => StopAll();
 
-        [MenuItem("RIMA/Live Tool/Build Both Targets")]
+        [MenuItem("RIMA/Legacy/Live Tool/Build Both Targets")]
         public static void BuildBothFromMenu()
         {
             string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));

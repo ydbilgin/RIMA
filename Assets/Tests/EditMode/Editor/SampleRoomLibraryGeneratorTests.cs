@@ -9,7 +9,7 @@ namespace RIMA.Tests.Editor
 {
     public sealed class SampleRoomLibraryGeneratorTests
     {
-        private const string MenuPath = "RIMA/MapDesigner/Brush/Generate Sample Library v1";
+        private const string MenuPath = "RIMA/Legacy/MapDesigner/Brush/Generate Sample Library v1";
         private const string LibraryPath = "Assets/Data/Rooms/Library";
 
         private static readonly Dictionary<string, ExpectedRoom> ExpectedRooms = new Dictionary<string, ExpectedRoom>
