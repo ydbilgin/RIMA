@@ -1,8 +1,23 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-03 — /clear sonrası BURADAN DEVAM ET)
+## ⏯️ RESUME (2026-06-03 GECE — /clear sonrası BURADAN DEVAM ET)
 
-**🆕🧗 CLIFF OVERFLOW = GERÇEK FIX (2026-06-03, UNCOMMITTED, 3 sahne saved, console temiz).** User taşmayı yine gördü → kök-neden: yerleştirme çapraz iso kenarlarına DÜZ `cliff_S` koyuyordu (53/57). FIX = void-komşusuna göre yön: −col-void(down-left)→SW→`cliff_SW`, −row-void(down-right)→SE→`cliff_SE`, ikisi→S→`cliff_S`; **içeri tuck shift** (SW=+0.48,+0.29 / SE=−0.48,+0.29 / S=0,+0.29; floor occlusion üstü gizler, maske YOK). 61 cliff/sahne (25SW/33SE/3S), _IsoGame+Map02+Map03. User onayladı ("daha iyi, kalabilir"). Recipe=memory `project-cliff-directional-inward-tuck-fix`. Cyan damar SW/SE'de baked→"şimdilik kalsın". A (clutter/cliff) DONE. Eski "cliff DONE+approved all-front" notları SUPERSEDED.
+**✅ BU SESSION HER ŞEY DONE + COMMIT'Lİ + RUNTIME-DOĞRULANDI. Son commit = `2d1a54d4`.** 5 commit: `aebfd4c7` map-pool+cliff-fix · `2a9ef839` reward-draft · `d98608f7` card-juice · `001a58a3` status · `2d1a54d4` staging-docs. Working tree session-işi TEMİZ (kalan = orphan screenshot `.meta` + TMP churn, gitignore'landı/atlandı). **⚠️ AŞAĞIDAKİ DETAY NOTLARDAKİ "UNCOMMITTED" ETİKETLERİ ARTIK GEÇERSİZ.**
+
+**Yapılanlar (özet):** A=cliff overflow GERÇEK fix (yönlü SW/SE + içeri-tuck, [[project-cliff-directional-inward-tuck-fix]]) · C=Hades 3-kart reward draft (RewardPickup→ShowDraft) · C+=kart juice (SkillOfferUI hover/select/glow, cx) · B=6-harita havuzu (bridge/cross/ell/hourglass/donut + elmas, genel boundary-tracer, Sonnet subagent) · Mekanik 4-ajan sentezi (`STAGING/MECHANIC_ADDITIONS_SYNTHESIS_2026-06-03.md`; 61-mekanik dosyası tamamlandı [[reference-mechanic-bank-youtube60]]).
+
+**SIRA (user seçecek — hiçbiri bloklu değil):**
+1. **Mekanik uygula:** `#14 Dynamic-Wave` = EN HIZLI kazanım (cx: TRIVIAL — `EncounterController.nextWaveKillFraction=0.5` ZATEN var, sadece wiring+diegetic spawn) → `#26 Card-Weight` (EASY, `SkillOfferGenerator.WeightedPick` var) → `#17 Echo-Mote-Heal` (EASY, "oda-içi heal yok" açığı). Detay = sentez raporu §1/§5.
+2. **Cilalama:** kart-anim minör tuning (bring-to-front order/glow/bg-dim) · harita ambiance "E" (kenar trim + dikey gradient + floor decal — Gemini fikirleri sentez/CURRENT_STATUS'ta) · mob görselleri (PixelLab=SENİNLE) · yan-cyan-pillar clutter (varsa).
+3. **Büyük:** "Cyan Echo Anchor" sistemi (sentez §2; #7+#33 Sundered-Counter sonrası).
+
+**STANDING kurallar (bu session eklendi):** karar öncesi **Gemini 3.5 Flash High'a danış** [[feedback-consult-gemini-flash-before-decisions]] · orchestrator HER işi delege et + zorluğa göre route (mekanik→Sonnet/ax-Flash, kod→cx, zor-sentez→Opus) [[feedback-orchestrator-delegate-route-by-difficulty]] · animasyon/PixelLab gen = SENİNLE [[feedback-never-animate-without-approval]] · cx=laurethayday→yekta · Gemini=settings.json model alanı (2 ax paralel ÇAKIŞIR → sıralı ya da Sonnet-subagent ikame).
+
+---
+
+### 📜 Detay arşiv (bu session — referans; "UNCOMMITTED" etiketleri artık geçersiz)
+
+**🆕🧗 CLIFF OVERFLOW = GERÇEK FIX (2026-06-03, 3 sahne saved, console temiz).** User taşmayı yine gördü → kök-neden: yerleştirme çapraz iso kenarlarına DÜZ `cliff_S` koyuyordu (53/57). FIX = void-komşusuna göre yön: −col-void(down-left)→SW→`cliff_SW`, −row-void(down-right)→SE→`cliff_SE`, ikisi→S→`cliff_S`; **içeri tuck shift** (SW=+0.48,+0.29 / SE=−0.48,+0.29 / S=0,+0.29; floor occlusion üstü gizler, maske YOK). 61 cliff/sahne (25SW/33SE/3S), _IsoGame+Map02+Map03. User onayladı ("daha iyi, kalabilir"). Recipe=memory `project-cliff-directional-inward-tuck-fix`. Cyan damar SW/SE'de baked→"şimdilik kalsın". A (clutter/cliff) DONE. Eski "cliff DONE+approved all-front" notları SUPERSEDED.
 
 **🆕🃏 C (Hades 3-kart reward draft) = DONE + RUNTIME-DOĞRULANDI (UNCOMMITTED).** 3-kart draft UI/logic ZATEN vardı (`SkillOfferUI.Show` 3-kart slide-in + `DraftManager.ShowDraft` offer-gen, skill-pool boşsa gold/heal fallback). Tek değişiklik: `Assets/Scripts/Core/RewardPickup.cs` — relic collect artık direkt kapı açmıyor, `DraftManager.ShowDraft()` açıyor + coroutine `DraftThenOpenExit` `IsDraftActive` false olana dek bekleyip sonra `ActivateExitDoors`+`OpenDoorsAfterReward`+destroy. Play-test (_IsoGame): düşman öldür→relic merkeze→collect→**3 gerçek skill kartı açıldı** (EARTHSPLITTER/OPPORTUNISTIC STRIKE…, timeScale 0=zaman durdu)→SEÇ→draft kapandı (timeScale→1, leak yok)→**DoorNorth aktif+collider açık**+RewardPickup destroy. ⚠️ Test sırasında idle player swarm'dan öldü (P0 bilinen, C ile ilgisiz). ⚠️ Reward player'ın tam üstüne spawn olursa+timeScale=0 ise trigger gecikir (normal oyunda player yürüyerek girer, sorun değil).
 
