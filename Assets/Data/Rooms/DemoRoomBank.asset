@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575ee88101c5f0e4a98ea49ba8457f99, type: 3}
+  m_Name: DemoRoomBank
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Room.Data.RoomBankSO
+  combatRooms:
+  - {fileID: 11400000, guid: 2904aa1235e85764993eec449324e92c, type: 2}
+  - {fileID: 11400000, guid: 73a8b1a09bc996d4197a6062258326d1, type: 2}
+  eliteRooms:
+  - {fileID: 11400000, guid: 93ea5a215d421194bae66117b7f853f2, type: 2}
+  bossRooms:
+  - {fileID: 11400000, guid: aef8614a7e828f145ad7245c535b0859, type: 2}
+  merchantRooms: []
+  eventRooms: []

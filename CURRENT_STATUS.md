@@ -1,5 +1,93 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-03 GECE·4 — DEMO B-LITE: BRANCHING RUN-GRAPH + BRANCH-DOORS + M-MAP ÇALIŞIYOR — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Önceki session IN-FLIGHT imagegen job `bu9ldc1lx` TAMAMLANDI (Batch-1 10 asset QC PASS + import). Sonra kullanıcı yönlendirmesiyle TAM DEMO DÖNGÜSÜ inşasına başlandı. Çok uzun session. HER ŞEY UNCOMMITTED (commit GATED).
+
+**DEMO HEDEFİ (kullanıcı vizyonu):** Oda gir → wave-wave mob → clear → SLOW-MO → ödül → kapılar karanlıktan cyan'a döner → kapı sayısı = bir sonraki dal (1/2/3) → kapıya gir → o dalın odası. + M ile run-path haritası + büyük odalar + doğru bg.
+
+**ÇALIŞAN + PLAY-DOĞRULANMIŞ (bu session, ekran görüntüleri `Assets/Screenshots/arena_*`):**
+1. **`_Arena` tek-sahne** (`Assets/Scenes/_Arena.unity`): iso Grid 0.96×0.585 + Ground/Collision tilemap + kamera + Global Light + IsoRoomBuilder + RoomRunDirector + RunMapOverlay + DemoPlayer (warblade placeholder — DÖVÜŞMEZ/HAREKET ETMEZ).
+2. **IsoRoomBuilder.cs** (`Assets/Scripts/MapDesigner/Room/Runtime/`): RoomTemplateSO→iso floor (walkable∪blocking-prop mask) + yönlü cliff (per-hücre SW/SE-void kuralı + GetCellCenterWorld+tuck; kanat/delik/çentik DOLU, kullanıcı onaylı) + Composite boundary + props + **`public BuildExitDoors(IReadOnlyList<RoomType> doorTypes)`**. cx-review 5 bug fix uygulandı.
+3. **DungeonGraph.cs (cx, YENİ):** branching StS-lite. `Generate(seed, depthCount=5)`: depth0=1 Combat(start), ara=2-3 node (Combat55/Elite20/Chest15/Event10), son=1 Boss; her node 1-3 çocuk (=kapı sayısı), planar lane + orphan-fix. `DungeonNode{id,depth,roomType,childIds}`, `ChildrenOf(id)`.
+4. **RoomRunDirector.cs (cx+Opus):** NODE-BAZLI (lineer route KALDIRILDI). `Graph`, `CurrentNodeId`, `CurrentChoices` (=oda-sonu kapıları), `AdvanceTo(choiceIndex)`, `IsRunComplete` (boss=çocuksuz). BuildCurrentRoom→Build + teleport + **BuildExitDoors(choice tipleri)**. DemoRoomBank.asset (combat=Large+Medium, elite=Elite_01, boss=Boss_Intro_01).
+5. **RunMapOverlay.cs (Opus, YENİ):** **M tuşu** StS run-path haritası (OnGUI Event.current — Input System'den bağımsız). Graph'ı depth-bazlı dallı çizer, current=cyan border, tip-renkleri, parent→child edge çizgileri. PLAY-DOĞRULANDI.
+6. **BRANCH-DOORS (kullanıcının ANA isteği — ÇALIŞIYOR):** oda-sonu kapı sayısı = **graph node'un çocuk sayısı** (node0→2 kapı, node2→3 kapı PLAY-DOĞRULANDI), her kapı **hedef-tip rünü** (ExitDoor_Chest/Combat), **yan yana Hades-düzeni** (arka-row floor x-genişliğine sığdırılmış, void'de yüzmez). AdvanceTo→yeni oda+yeni kapılar.
+7. **7 PropDefinitionSO + PropRegistry** (`Assets/Data/Props/`). Combat_Small_01 SADE (props çıkarıldı, kod kalıyor "sonra süsleriz").
+8. **FIX'ler (kullanıcı-driven):** UnityMCP `Input.GetKeyDown` hatası KALDIRILDI (RIMA yeni Input System kullanıyor, eski API her frame exception atıyordu); _Arena edit-mode'da Combat_Large+2 kapı görünümü kaydedildi.
+
+**KARAR DÖKÜMANI** = `STAGING/DEMO_ARCHITECTURE_DECISION_2026-06-03.md` (council Path B-lite; drag-slot/orb-travel/full-DAG DEFER; preview-adaları CORE).
+
+**⏭️ KALAN (sonraki session — EN AĞIR kısım, council "biggest risk" = combat lifecycle leak):**
+- **Combat→clear→slow-mo→reward:** EncounterController (wave mob — `EncounterWaveSO`/`ThreatBudget`/`EncounterBankSO` VAR, EnemyPlaceholder=renkli kare) + RoomTemplateSO.enemySpawnSockets→spawn + clear'da `Time.timeScale` slow-mo + mevcut `RewardPickup`→`DraftManager.ShowDraft` (clear'da ödül-çıkmama bug'ı = bu wiring çözer).
+- **Dark→light kapılar:** ExitDoor'lar başta karanlık → ödül alınınca cyan'a (BuildExitDoors door GO listesi döndürüyor → director tint kontrol eder).
+- **Walk-into-door:** ExitDoor'a collider+trigger → player overlap → `AdvanceTo(index)`. **GERÇEK hareket eden oyuncu gerekir** → mevcut DemoPlayer SADECE görsel placeholder. Gerçek RIMA player prefab + EncounterController + enemy prefab'ları `_Arena`'ya entegre edilecek (Explore A: player skill slot=`Warblade_SkillController[6]` Q/E/R/F/Z/X; drag-slot YOK→DEFER).
+- Sonra: BuildPreview preview-adaları (sıra-6), statik void bg (cx-imagegen), MainMenu "New Run"→_Arena bağla, rima-qc.
+
+**ENTEGRASYON NOTU:** Play'de RIMA bootstrap DontDestroyOnLoad MainMenu spawn ediyor (`MainMenuCanvas`+`[MainMenuScreen]`, _Arena üstüne biner; test için SetActive(false) ile gizlendi). Gerçek demo'da MainMenu "New Run"→_Arena bağlanacak.
+
+**ROUTING:** cx=yekta (OK), kod→cx (saf C# güvenli, `dotnet build RIMA.Runtime.csproj` ile doğruluyor), Unity sahne→Opus, asset→cx-imagegen, design→council. ⚠️ cx diskte dosya yaratınca Unity ImportAsset+Refresh gerekiyor (yeni .cs tipi yüklenmiyor yoksa).
+
+---
+
+## ⏯️ RESUME (2026-06-03 GECE·3 — cx TOOLING RELEASE + P2 IsoRoomBuilder KODU + ASSET PIPELINE — /clear sonrası İLK BURAYI OKU)
+
+**Bu session 3 iş kolu. RIMA-içi her şey UNCOMMITTED (commit GATED). cx-tool repo'su commit+release'li.**
+
+**⚠️ EN ÖNEMLİ — IN-FLIGHT ÜRETİM (yeni session İLK BUNU KONTROL ET):** cx `$imagegen` Batch-1 asset üretimi background'da dispatch edildi (`bu9ldc1lx`, prior-session job → yeni session'a otomatik bildirim GELMEZ). **Yeni session:** `CODEX_DONE.md` / `CODEX_DONE_yekta.md` + `STAGING/imagegen/assets/` klasörüne BAK → üretim bitti mi? Bittiyse: PNG'leri QC (görüntüle: on-brand mı, boyut, transparan) → iyiyse import (PPU64/Point/alpha/pivot) → `ObstacleInstances` + "Room Decor" placeholder temizliği → PropDefinitionSO + GateBehavior wiring. Task=`STAGING/cx_task_imagegen_obstacles_doors_batch1_2026-06-03.md`. Sorun varsa iterate.
+
+**1) cx TOOLING (DONE+COMMIT'Lİ+RELEASE'Lİ):** `cx limits`/`cx list`/`cx_dispatch.py --list` artık **Enabled kolonu** gösterir + yeni **`cx enable/disable <p>`** komutları (tek global kaynak = `~/.codex-profiles/.cx-settings.json`). cx_dispatch seçimi `cx limits`-tabanlı (BLOCKED profili otomatik atlar). **CodexAuthManager repo'suna commit + release `v1.1.0`** (github.com/ydbilgin/CodexAuthManager). ax repo araştırma-çöpü temizlendi. Sebep: laurethayday weekly %100 BLOCKED'tı → sessiz no-op'lar; şimdi yekta seçiliyor. [[feedback-cx-dispatch-auto-discover]]
+
+**2) P2 IsoRoomBuilder KODU (DONE, cx yekta):** `Assets/Scripts/MapDesigner/Room/Runtime/IsoRoomBuilder.cs` + `IsoRoomBuilderTester.cs` (runtime, editor-API yok, derlenir-temiz). `Build(RoomTemplateSO)`: walkableGrid→iso floor + RoomCliffSolver→yönlü cliff + void-ring Composite boundary + door/spawn marker. **PENDING:** Unity compile-verify + `_Arena` sahne kurulumu (iso Grid 0.96×0.585 + Ground/Collision tilemap + cliff_S/SE/SW ataması + Combat_Small_01 test) → play-verify. Pivot: yeni data model YOK, RoomTemplateSO/RoomBankSO ADOPT. [[project-room-system-model-b]]
+
+**3) ASSET PIPELINE (obstacle/door/decor — canon + council + üretim):** Karar=`STAGING/OBSTACLES_DOORS_DECISION_2026-06-03.md` (PART 2 = NLM-canon AUTHORITATIVE). **NLM canon kilidi:** The Fracturing; cyan #00FFCC = Rift Enerjisi + Antik Mühürler (emissive); void-mor #3A1A4A unlit; warm-orange #E89020 = 2.accent (mangal); **⚠️ GÜNEY ÇIKIŞ YOK → kapı = K/B/D** (düz=Kuzey/arka); kemik=failed-containment-bedenleri; canon obstacle tablosu (pillar 1×1 Capsule / wall-stub Box / cage / tombstone / altar / chasm DECAL-only / chain-anchor). Kapı = "Rift Threshold" (taş eşik + cyan rift + rün-ikon), HİBRİT (frame+rift gömük + rün ayrı 32×32 overlay). **Ölçek=64px görünür char** (canvas 120px) [[project-character-64px-canvas-large-for-animation]]. Ref=GERÇEK floor451_0+cliff_S+warblade_idle_SE (concept DEĞİL). **NLM-sync DONE.** [[project-act1-environment-asset-canon]]
+- **POST-PROD wiring follow-up (üretim sonrası kod işi):** (a) `PropColliderAutoBuilder` her zaman Box yaratıyor → `colliderShape` (Capsule/Circle) onurlandır; (b) `GateBehavior` child rift/rün renderer'ı yönetmiyor → küçük sync component (ya da baked-composite fallback); (c) chasm decal-only (dash-gap implement değil).
+
+**SIRADA (yeni session, user "neler yapabiliriz" diyecek):** (a) üretilen asset'leri QC→import→wire · (b) P2 `_Arena` sahne + compile-verify · (c) wiring follow-up'lar · (d) Batch-2/3 asset (cage/altar/chain/torch/urn/banner/map-fragment) · (e) sonra broader. Routing: cx=yekta(OK)→yasinderyabilgin; ax=settings.json model swap (seri); council skill mevcut.
+
+---
+
+## ⏯️ RESUME (2026-06-03 GECE·2 — ROOM-SYSTEM REDESIGN + TOOLING — /clear sonrası İLK BURAYI OKU)
+
+**Bu session = data-driven oda sistemi tasarımı + cx/ax tooling. Hiçbir şey commit'lenmedi (commit GATED).**
+
+**🧩 ROOM SYSTEM (Model B) — KARAR VERİLDİ, build başlamadı. Tam karar = `STAGING/ROOM_SYSTEM_DECISION_2026-06-03.md` (Part 1-2-3 OKU).**
+- Karar: oda = SAHNE değil, DATA. Tek `_Arena` sahnesi + data oda tanımları. "Oda çiz" = data yaz.
+- **PIVOT (Part 3, en önemli):** Sıfırdan `RoomDefinitionSO` KURMA → mevcut **`RoomTemplateSO` + `RoomBankSO`** sistemini ADOPT et (`Assets/Scripts/MapDesigner/Room/`). Zaten var: `walkableGrid` (zemin mask), door/player/enemy socket'leri, roomType, props, validation, tipli Library (`Assets/Data/Rooms/Library/` Combat/Elite/Boss/Treasure/Corridor/Spawn/Shrine), testler. cx audit bunu KAÇIRMIŞTI. Yeni `RoomDefinitionSO` = clutter olurdu (kullanıcı yasakladı).
+- **GERÇEK EKSİK = ISO render.** Mevcut runtime `TileToWorld=(x,y,0)` rectangular/top-down (RoomBankRuntimeTester). RIMA'nın iso görünümü (0.96×0.585 + yönlü cliff) DEĞİL. Yapılacak ana iş = **IsoRoomBuilder** (walkableGrid→iso floor + auto-cliff via mevcut `RoomCliffSolver` + boundary Composite collider → tek `_Arena` sahnesi).
+- **Kullanıcı vizyonu (painter):** nokta-polygon çiz→walkableGrid'e bake; kapı+mob+oyuncu spawn; SOL oda listesi; Generate/Regenerate; HEM otomatik üretim HEM elle düzenleme (ortak veri). Tek canonical tool = `RIMA/Map Designer` (eskiyi Legacy'e indir). Asset düzeni + UI = decision doc Part 2.
+- **Faz sırası:** P2 IsoRoomBuilder (cx) → P3 Painter window (cx) → P4 auto-generator → P5 RoomRunDirector (lineer rota Start→Combat→Combat→Elite→Reward→Combat→Boss, RoomBankSO.Pick) → P6 9-oda demo + cleanup + commit. P1 (RoomDefinitionSO) İPTAL (mevcut SO yeterli).
+
+**🛠️ TOOLING (bu session DONE):**
+- **`/council` skill kuruldu** (`~/.claude/commands/council.md`): "/council \<konu\> + dosya" → cx + Gemini 3.1 Pro + 3.5 Flash danış + Opus sentez. ax serialization + cx tek-instance kuralları gömülü.
+- **`cx_dispatch.py` += `--list`/`--disable`/`--enable`/`--help`** (Opus direkt yazdı+doğruladı; cx flake etti). Profil kayıtlı kalıp dispatch'ten atlanabilir.
+- **🆕 (2026-06-03 GECE·3) cx weekly-aware fix DONE + `--list` artık `cx limits` GÖSTERİR.** Kök neden: seçim kırık backend endpoint (`_fetch_live_limits`→None) kullanıyordu→LastRefresh fallback→priority-0 **laurethayday seçiliyordu = BLOCKED (weekly %100)** = bu session'daki sessiz no-op'ların GERÇEK sebebi. FIX: seçim artık `cx limits` çıktısını parse ediyor (fixed-width header-offset slicing), BLOCKED/RE-AUTH/no-auth atlar, en düşük WEEK%'i seçer. `_fetch_live_limits`+`urllib` SİLİNDİ. `--list` şimdi `PROFILE STATE PRI 5H% WEEK% CX_STATUS WEEK_RESET` birleşik tablo. **yasinderyabilgin ENABLED** (user-OK). Doğrulandı: dispatch artık **yekta** seçiyor. Etkin/OK: yekta→yasinderyabilgin. laurethayday BLOCKED→**Sun 18:32** açılır. laurethgame RE-AUTH gerekli.
+- **🆕 (GECE·3) enabled/disabled HER YERDE görünür + tek GLOBAL kaynak.** User "`cx list`/`cx limits`'te enabled/disabled yazsın" dedi. `cx` = senin kendi PS aracın (`F:\Antigravity Projeler\CodexAuthManager\codex_profile.ps1`; `cx limits`→`dispatch\cx_limits.py`). Disabled artık **global `~/.codex-profiles/.cx-settings.json`** (`disabled:[]`) = TEK kaynak; statusline'ın yanına eklendi (BOM-safe utf-8-sig). Değişiklikler: (1) `cx list`/`cx accounts` → **Enabled kolonu**; (2) `cx limits` (cx_limits.py) → **Enabled kolonu**; (3) yeni **`cx enable <p>` / `cx disable <p>`** komutları; (4) RIMA `cx_dispatch.py` disabled'ı global'den okur+yazar (`--enable`/`--disable` global'e yazar; `_LIMITS_COLS`'a "Enabled" eklendi yoksa parse kayardı; `--list` 60s timeout). Round-trip doğrulandı: disable→3 görünümde DISABLED→enable→geri. Priority hâlâ project-local `cx_profiles.local.json`. **COMMIT DURUMU:** cx-tool değişiklikleri (codex_profile.ps1 + cx_limits.py + README) **CodexAuthManager repo'suna commit+push edildi → release `v1.1.0`** (github.com/ydbilgin/CodexAuthManager, commit aded360). ax repo (AntigravityAuthManager) = tool değişikliği YOK; Mina-video araştırma çöpü (11 untracked dosya: .vtt/transcript/fetch scriptleri/1.1MB metadata) **SİLİNDİ** → working tree temiz (içerik zaten RIMA `STAGING/mechanic_refs/Youtube_Mina_The_Hollower_Full_Transcript.md`'de korunuyor). RIMA-içi `cx_dispatch.py` + `cx_profiles.local.json` hâlâ **UNCOMMITTED** (RIMA commit GATED). `.cx-settings.json` = machine-state, hiçbir repoda değil.
+
+**⚠️ İKİ KRİTİK SORUN (sonraki session çözmeli):**
+1. ~~**cx kod-değişikliği bu session GÜVENİLMEZ**~~ → **ÇÖZÜLDÜ (GECE·3).** Sessiz no-op'ların sebebi cx-flake DEĞİL, dispatcher'ın BLOCKED laurethayday'i seçmesiydi (yukarıdaki TOOLING fix). Artık dispatch otomatik OK+düşük-weekly profil (yekta) seçiyor → büyük cx kod işi (IsoRoomBuilder) için güvenli. (İstersen yine `--profile yekta` zorlayabilirsin.)
+2. **ax 88KB inline prompt agy'yi ASIYOR:** council mekanik 3.1 Pro 68dk 0-byte hung → kill edildi. **Ders: ax/agy prompt'ları KÜÇÜK olmalı YA DA dosyayı PATH ile referansla** (agy dosyayı kendi okur — video subagent böyle başardı). settings.json sağlam, model 3.1 Pro'da kaldı (zararsız).
+
+**🧠 MEKANİK SENTEZ (2 dosya: Mina transcript + 61mech, `STAGING/mechanic_refs/`):** cx DONE (`STAGING/MECHANIC_SYNTHESIS_2docs_2026-06-03.md`). Gemini 3.1/3.5 PENDING (küçük/file-ref ile TEKRAR çalıştır). cx quick-wins: dynamic-wave tune (TRIVIAL, `nextWaveKillFraction` var) · hit/counter time-dilation · shield-enemy-BREAK-açılır · state-gated Echo-Mote heal · self-damage bash. Big bets: Cyan Echo Anchor+Resonator, Void Dread/Death-Card. NOT: 61-dosyası aslında 1-53 içeriyor.
+
+**🎬 VIDEO ANALİZİ (J1TK8oOg6_U Mina):** TOP PICK = **Echo Debt** (Souls-bloodstain: ölünce parayı death-marker'a bırak→sonraki run geri al→2. ölümde kalıcı kaybet; RIMA'nın bone/death-marker planına mekanik). Rapor `STAGING/VIDEO_ANALYSIS_J1TK8oOg6_U_2026-06-03.md`.
+
+**🔬 ax PARALELLİK analizi:** 2×ax aynı anda ÇALIŞAMAZ (Cred Manager tek-slot + settings.json tek-model). Öneri = /council paralelliği **cx ‖ ax ‖ Sonnet-subagent** (option A). Option C (per-process config-dir izolasyonu)=R&D, smoke test'te yokla.
+
+**⏸️ KULLANICI İLE SIRADA:**
+1. **ax SMOKE TEST** (user ax ile hesap değiştirir → Opus "hangi hesaptayım" tespit eder, 2-3 tur). Tespit komutu netleştirilecek (`python <AntigravityAuthManager>/ax_dispatch.py --list-accounts` aktif/state gösterir; ya da cred blob; ya da `ax --no-swap` who-am-I).
+2. ~~**cx weekly-aware fix**~~ → **DONE (GECE·3, yukarı).** `cx limits` tabanlı seçim devreye girdi.
+3. **/council'ı option A'ya güncelle** (onay alındıysa).
+4. **room-system IsoRoomBuilder build** — 🔄 IN-FLIGHT (GECE·3). cx güvenilirliği çözüldü (yekta). P2 task = `STAGING/cx_task_iso_room_builder_2026-06-03.md`. **✅ P2 KOD DONE (cx yekta):** `IsoRoomBuilder.cs` + `IsoRoomBuilderTester.cs` yazıldı (runtime, editor-API yok, derlenir-temiz; Build(RoomTemplateSO): walkableGrid→iso floor + RoomCliffSolver→yönlü cliff + void-ring Composite boundary + door/spawn marker). **Unity compile-verify + `_Arena` sahne kurulumu PENDING** (asset işinden sonra). ⚠️ Recon: RoomCliffSolver yön/sprite yerleştirmez (builder sınıflandırır); directional-tuck reçetesi .cs'de yoktu→builder'a gömüldü; `_Arena` yoktu. Pivot: yeni data model YOK, mevcut RoomTemplateSO/RoomBankSO ADOPT.
+
+5. **🆕🎨 ASSET ÜRETİMİ (obstacle/door/decor) — 🔄 IN-FLIGHT (GECE·3, user-driven).** User: ObstacleInstances + Room Decor placeholder'ları anlamsız → lore-doğru gerçek asset üret. Akış: mockup (ax/Imagen `STAGING/imagegen/img_20260603_194244.png` — on-brand doğrulandı) → **NLM canon çekildi** (The Fracturing; cyan=Rift+Mühür; **GÜNEY ÇIKIŞ YOK→kapı=K/B/D**; warm-orange #E89020 2.accent; kemik=failed-containers; canon obstacle tablosu) → **2× council** (cx+3.1+3.5, doğrulama+prompt taslakları) → karar=`STAGING/OBSTACLES_DOORS_DECISION_2026-06-03.md` (PART 2 AUTHORITATIVE) → **NLM-sync DONE**. **ÜRETİM DISPATCH (cx $imagegen, bg `bu9ldc1lx`):** Batch-1 8 asset + 2 rün (gate_north/west 128×144, pillar 64×96, wall_stub 128×80, chasm 192×128 DECAL-only, floor_riftcrack, brazier warm-orange, bones, rune_combat/elite 32×32). Ref=GERÇEK floor451_0+cliff_S+warblade_idle_SE (concept DEĞİL). **Ölçek=64px char** (canvas 120px). Kapı=HİBRİT (frame+rift gömük + rün ayrı overlay). **POST-PROD wiring follow-up:** (a) `PropColliderAutoBuilder` colliderShape onurlandır (Box-only→Capsule/Circle), (b) `GateBehavior` child rift/rün sync component, (c) chasm decal-only. Üretim bitince: QC → import (PPU64/Point/alpha/pivot) → PropDefinitionSO + GateBehavior wiring. Tüm task/council dosyaları STAGING/`cx_task_imagegen_*` + `_council_*obs2*`.
+
+**🎮 GAME-LOOP (bu session doğrulandı + 1 fix):** MapFlowManager run-başına rastgele-oda ÇALIŞIYOR (kanıtlandı). **FIX: `Assets/Resources/Map/MapList_Act1.asset` 3→6 harita** (Map04/05/06 artık rotasyonda — runtime önce Resources'u yüklüyordu, 3'tü). UNCOMMITTED. Not: ilk oda HEP `_IsoGame`; bir run'da harita tekrar gelebilir (sadece anti-immediate-repeat var).
+
+**UNCOMMITTED bu session:** `Resources/Map/MapList_Act1.asset` (3→6) · `cx_dispatch.py` (flags) · `~/.claude/commands/council.md` (yeni, repo-dışı) · STAGING dokümanları + mechanic_refs. **Commit GATED.**
+
+---
+
 ## ⏯️ RESUME (2026-06-03 GECE — /clear sonrası BURADAN DEVAM ET)
 
 **✅ BU SESSION HER ŞEY DONE + COMMIT'Lİ + RUNTIME-DOĞRULANDI. Son commit = `2d1a54d4`.** 5 commit: `aebfd4c7` map-pool+cliff-fix · `2a9ef839` reward-draft · `d98608f7` card-juice · `001a58a3` status · `2d1a54d4` staging-docs. Working tree session-işi TEMİZ (kalan = orphan screenshot `.meta` + TMP churn, gitignore'landı/atlandı). **⚠️ AŞAĞIDAKİ DETAY NOTLARDAKİ "UNCOMMITTED" ETİKETLERİ ARTIK GEÇERSİZ.**

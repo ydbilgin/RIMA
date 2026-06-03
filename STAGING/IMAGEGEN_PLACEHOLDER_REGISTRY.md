@@ -33,3 +33,13 @@ Status legend: 🟡 placeholder (awaiting PixelLab) · 🟢 replaced by PixelLab
 | 2026-05-31 | Iso room-to-room transition concept | `STAGING/iso_raw/concept_room_transition.png` | concept render, 1536x1024 | placeholder |
 | 2026-05-31 | Iso dungeon overhead map concept | `STAGING/iso_raw/concept_map_overhead.png` | concept render, 1536x1024 | placeholder |
 | 2026-05-31 | Iso combat room concept | `STAGING/iso_raw/concept_room_combat.png` | concept render, 1536x1024 | placeholder |
+| 2026-06-03 | gate_north | `STAGING/imagegen/assets/gate_north.png` | door threshold, 128x144, pivot bottom-center, north room gate | placeholder |
+| 2026-06-03 | gate_west | `STAGING/imagegen/assets/gate_west.png` | door threshold, 128x144, pivot bottom-center, west room gate; east via flipX | placeholder |
+| 2026-06-03 | rune_combat | `STAGING/imagegen/assets/rune_combat.png` | UI rune icon, 32x32, pivot center, combat room marker | placeholder |
+| 2026-06-03 | rune_elite | `STAGING/imagegen/assets/rune_elite.png` | UI rune icon, 32x32, pivot center, elite room marker | placeholder |
+| 2026-06-03 | obstacle_pillar | `STAGING/imagegen/assets/obstacle_pillar.png` | obstacle, 64x96, pivot bottom-center, cracked obelisk blocker | placeholder |
+| 2026-06-03 | obstacle_wall_stub | `STAGING/imagegen/assets/obstacle_wall_stub.png` | obstacle, 128x80, pivot bottom-center, broken L wall blocker | placeholder |
+| 2026-06-03 | chasm_gap | `STAGING/imagegen/assets/chasm_gap.png` | floor decal, 192x128, pivot center, visual chasm decal | placeholder |
+| 2026-06-03 | floor_riftcrack | `STAGING/imagegen/assets/floor_riftcrack.png` | floor decal, 64x48, pivot center, cyan crack decal | placeholder |
+| 2026-06-03 | brazier | `STAGING/imagegen/assets/brazier.png` | decor, 64x80, pivot bottom-center, warm flame marker | placeholder |
+| 2026-06-03 | bones_marker | `STAGING/imagegen/assets/bones_marker.png` | floor decor, 64x48, pivot center, failed containment body marker; re-roll: clearer high-contrast skull/bones | placeholder |

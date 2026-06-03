@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eadab68046b5e248832b245a557779f, type: 3}
+  m_Name: PropRegistry
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Props.PropRegistrySO
+  allProps:
+  - {fileID: 11400000, guid: b50be24c830a450ba0ccd36625e57c31, type: 2}
+  - {fileID: 11400000, guid: f39d32fa19793394dab9cda4a588e1fe, type: 2}
+  - {fileID: 11400000, guid: c8d6352c766cc994495a3e58bddbe73a, type: 2}
+  - {fileID: 11400000, guid: 31584569852247147a66f81a91b4fbe4, type: 2}
+  - {fileID: 11400000, guid: 4193dd8caa840684fb876815e3780064, type: 2}
+  - {fileID: 11400000, guid: 08928e45111a42946957e4406bc4799d, type: 2}
+  - {fileID: 11400000, guid: 598541325ade87f4a89a619c4a2be4c6, type: 2}
