@@ -16,9 +16,10 @@
 **ÇALIŞMA REÇETESİ (sonraki session test çalıştırmak isterse):** Unity açık → `mcp__UnityMCP__run_tests` mode=EditMode/PlayMode + `group_names:["RoomRuntimeDungeonGraphTests","RoomRunDirectorTests"]` / `["IsoRoomBuilderTests"]` → `get_test_job` ile poll. Test dosyası eklersen `refresh_unity compile=request` + `read_console types=error filter=CS` ile compile-doğrula.
 
 **⏭️ KALAN / SIRADA (kullanıcı dönünce — TEST kapsamı tamamlandı, bunlar opsiyonel):**
-- **Görsel play-verify** (M-map/branch-doors): önceki session ZATEN play-doğruladı + altlarındaki mantık artık unit-testli. İstenirse `_Arena` play + screenshot ile taze doğrulama (combat wire'lı değil, tam playthrough yok).
-- **Eski-DungeonGraph rename** (çakışma temizliği) — ayrı küçük iş.
-- **Asıl büyük kalan = combat lifecycle** (GECE·4 RESUME, aşağıda): encounter→clear→slow-mo→reward→dark-light kapılar→walk-into-door (gerçek hareket eden player gerekir). Test edilince bunlara da PlayMode integration testi eklenebilir.
+**✅ GÖRSEL PLAY-VERIFY DONE (bu session, taze `_Arena` play, execute_code + 3 screenshot):** DungeonGraph 10-node/maxDepth4 · RoomRunDirector node0/choices=2/template=Combat_Large_01 · IsoRoomBuilder 120 floor+25 cliff+spawnMarker · **branch-doors 2 GO** (`ExitDoor_0_Chest`+`ExitDoor_1_Combat` = graph dalları, yan yana cyan rift gate — görsel onaylı) · **RunMapOverlay M-map** (StS dallı graf: start=0 cyan-border altta, Boss=9 üstte, tip-renkleri, edge'ler yukarı — tüm matris kabul kriterleri karşılandı). Screenshot'lar `Assets/Screenshots/arena_test_*` (gitignored, local). Quirk: standalone `_Arena` play'de MainMenu bootstrap DontDestroyOnLoad biner → temiz şpt için SetActive(false) ile gizlendi; gerçek demo MainMenu→New Run→_Arena.
+**⏭️ KALAN (TEST kapsamı TAMAMLANDI — bunlar test değil):**
+- **Eski-DungeonGraph rename = BİLİNÇLİ YAPILMADI (karar).** 7 dosyalık çalışan legacy kod (Core/DungeonGraph + RuntimeRoomManager/MiniMap/DungeonWorldBuilder/MapFragment/DungeonMapUI/RoomData) etkiler; çakışma compile-hatası DEĞİL (farklı namespace) + alias/doküman ile zaten azaltılmış. Cerrahi/minimum-kod kuralı + regresyon riski (legacy sistemlerin testi yok) → ancak kullanıcı açıkça isterse.
+- **Asıl büyük kalan = combat lifecycle** (inşa işi, test değil; GECE·4 RESUME aşağıda): encounter→clear→slow-mo→reward→dark-light kapılar→walk-into-door (gerçek hareket eden player gerekir). Wire'lanınca PlayMode integration testi eklenebilir.
 
 **ROUTING:** cx=yekta/yasinderyabilgin (quota-aware auto), kod→cx, Unity→Opus(MCP), council=cx‖ax-3.1‖ax-3.5. Bu session cx test-yazımı GÜVENİLİR çalıştı.
 
