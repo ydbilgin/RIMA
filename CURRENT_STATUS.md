@@ -1,5 +1,29 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-03 GECE·5 — DEMO B-LITE TEST SUITE: 10/10 YEŞİL + COMMIT'Lİ — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı "demo bileşenlerini agentlarla/otomasyonla test et, gerekirse /council" dedi → "önce council ile test matrisi" seçti → sonra "otonom devam et, ben gidiyorum" dedi. Otonom tamamlandı. **İKİ COMMIT atıldı (commit artık GATED DEĞİL — kullanıcı "commitle kaydet, hata alırsak geri döneriz" dedi):**
+- `ef64aa27` = **güvenli checkpoint** (önceki session'ın TÜM uncommitted demo B-lite işi: 5 runtime script + _Arena + Props/DemoRoomBank + door/decal sprite + 6-map pool + STAGING dokümanları, 80 dosya).
+- `5fc5197e` = **test paketi** (10 test, hepsi YEŞİL).
+
+**YAPILAN — TEST SUITE (council-tasarımlı, Unity Test Runner ile DOĞRULANDI):**
+- **Yöntem:** /council = cx (feasibility/reuse) + ax Gemini 3.1 Pro (deep test-architecture) + ax Gemini 3.5 Flash (lean) → Opus sentez. Karar = `STAGING/DEMO_TEST_MATRIX_DECISION_2026-06-03.md`.
+- **EditMode** (`Assets/Tests/EditMode/Room/`): `RoomRuntimeDungeonGraphTests` (4: determinizm + 200-kombinasyon structure-invariants property test [tek-Combat-start, tek-childsız-Boss, orphan-yok, full-reachability, outdegree 1-3] + depthCount clamp + seed 0/negatif) · `RoomRunDirectorTests` (4: BeginRun navigable, AdvanceTo geçerli/geçersiz, IsRunComplete@Boss — null-builder + `LogAssert.Expect`).
+- **PlayMode** (`Assets/Tests/PlayMode/Room/`): `IsoRoomBuilderTests` (2: kod-kurulu Grid → 25 floor + PlayerSpawnMarker, BuildExitDoors kapı-başı-1-GO). Reflection ile private [SerializeField] enjekte; `_Arena` sahnesi GEREKMEDİ.
+- **⚠️ İSİM ÇAKIŞMASI (cx doğruladı, kritik):** İKİ `DungeonGraph` var — eski `RIMA.DungeonGraph` (`Assets/Scripts/Core/`, MonoBehaviour, HÂLÂ kullanımda: RuntimeRoomManager/DungeonMapUI/MiniMap/DungeonWorldBuilder/MapFragment) + yeni `RIMA.MapDesigner.Room.Runtime.DungeonGraph` (saf class). Mevcut `DungeonGraphTests.cs` ESKİ'yi test ediyor. Yeni testler `using RuntimeDungeonGraph = ...` alias kullanıyor. **Eski class'a DOKUNULMADI** (rename/deprecate ayrı iş — RİSK FLAG'İ).
+- **BİLİNÇLİ YAZILMADI (3.5 Flash over-engineering kritiği):** RunMapOverlay OnGUI renk/koordinat/M-tuş testleri · cliff tuck/sortOrder float matematiği · CompositeCollider2D fizik settling · player.position teleport matematiği. Bunlar = oynak görsel, manuel/agent play-verify (kabul kriterleri karar dökümanında).
+
+**ÇALIŞMA REÇETESİ (sonraki session test çalıştırmak isterse):** Unity açık → `mcp__UnityMCP__run_tests` mode=EditMode/PlayMode + `group_names:["RoomRuntimeDungeonGraphTests","RoomRunDirectorTests"]` / `["IsoRoomBuilderTests"]` → `get_test_job` ile poll. Test dosyası eklersen `refresh_unity compile=request` + `read_console types=error filter=CS` ile compile-doğrula.
+
+**⏭️ KALAN / SIRADA (kullanıcı dönünce — TEST kapsamı tamamlandı, bunlar opsiyonel):**
+- **Görsel play-verify** (M-map/branch-doors): önceki session ZATEN play-doğruladı + altlarındaki mantık artık unit-testli. İstenirse `_Arena` play + screenshot ile taze doğrulama (combat wire'lı değil, tam playthrough yok).
+- **Eski-DungeonGraph rename** (çakışma temizliği) — ayrı küçük iş.
+- **Asıl büyük kalan = combat lifecycle** (GECE·4 RESUME, aşağıda): encounter→clear→slow-mo→reward→dark-light kapılar→walk-into-door (gerçek hareket eden player gerekir). Test edilince bunlara da PlayMode integration testi eklenebilir.
+
+**ROUTING:** cx=yekta/yasinderyabilgin (quota-aware auto), kod→cx, Unity→Opus(MCP), council=cx‖ax-3.1‖ax-3.5. Bu session cx test-yazımı GÜVENİLİR çalıştı.
+
+---
+
 ## ⏯️ RESUME (2026-06-03 GECE·4 — DEMO B-LITE: BRANCHING RUN-GRAPH + BRANCH-DOORS + M-MAP ÇALIŞIYOR — /clear sonrası İLK BURAYI OKU)
 
 **BAĞLAM:** Önceki session IN-FLIGHT imagegen job `bu9ldc1lx` TAMAMLANDI (Batch-1 10 asset QC PASS + import). Sonra kullanıcı yönlendirmesiyle TAM DEMO DÖNGÜSÜ inşasına başlandı. Çok uzun session. HER ŞEY UNCOMMITTED (commit GATED).
