@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 using RIMA.Combat.Skills;
 
@@ -19,6 +20,7 @@ namespace RIMA
 
         // ── Card tracking ────────────────────────────────────────────
         private readonly List<GameObject> cards = new List<GameObject>();
+        private readonly List<CardJuiceState> cardJuiceStates = new List<CardJuiceState>();
         // A5 chain-UI: skillNames of skills offered in the CURRENT draft, so a card can detect a
         // Sundered-Beat interlock with a sibling card (not just an already-owned skill).
         private readonly List<string> currentOfferNames = new List<string>();
@@ -26,6 +28,8 @@ namespace RIMA
         private Transform cardContainer;
         private TextMeshProUGUI titleLabel;
         private TextMeshProUGUI subtitleLabel;
+        private Image screenFlash;
+        private bool isConfirmingPick;
 
         // ── Layout constants ─────────────────────────────────────────
         private const float CardWidth  = 180f;
@@ -33,6 +37,13 @@ namespace RIMA
         private const float CardGap    = 20f;
         private const float SlideInDuration = 0.3f;
         private const float StaggerDelay    = 0.08f;
+        private const float HoverDuration = 0.12f;
+        private const float HoverScale = 1.08f;
+        private const float IdleGlowMinAlpha = 0.15f;
+        private const float IdleGlowMaxAlpha = 0.35f;
+        private const float HoverGlowAlpha = 0.75f;
+        private const float IdleGlowScale = 0.95f;
+        private const float HoverGlowScale = 1.12f;
 
         private void Awake()
         {
@@ -236,7 +247,8 @@ namespace RIMA
             }
 
             var card = BuildSkillCard(name, offer.skill?.tier ?? SkillTier.Common, desc, index, total,
-                offer.type == RewardType.CrossClassEcho ? offer.crossClass?.icon : offer.skill?.icon);
+                offer.type == RewardType.CrossClassEcho ? offer.crossClass?.icon : offer.skill?.icon,
+                tierColor);
 
             // Select button
             var btn = card.GetComponentInChildren<Button>();
@@ -246,7 +258,7 @@ namespace RIMA
                 var captured = offer;
                 btn.onClick.AddListener(() =>
                 {
-                    onPick?.Invoke(captured, idx);
+                    BeginConfirmPick(captured, idx, card);
                 });
             }
 
@@ -351,7 +363,7 @@ namespace RIMA
 
         // ─── Shared Card Builder ────────────────────────────────────
 
-        private GameObject BuildSkillCard(string skillName, SkillTier tier, string description, int index, int total, Sprite icon = null)
+        private GameObject BuildSkillCard(string skillName, SkillTier tier, string description, int index, int total, Sprite icon = null, Color? glowTintOverride = null)
         {
             var cardGo = new GameObject($"Card_{index}", typeof(RectTransform));
             cardGo.transform.SetParent(cardContainer, false);
@@ -364,11 +376,59 @@ namespace RIMA
 
             rt.anchoredPosition = new Vector2(x, -CardHeight); // start below (for slide-in)
             rt.sizeDelta = new Vector2(CardWidth, CardHeight);
+            rt.localScale = Vector3.one;
+
+            var cardCanvas = cardGo.AddComponent<Canvas>();
+            cardCanvas.overrideSorting = false;
+            cardCanvas.sortingOrder = 0;
+            cardGo.AddComponent<GraphicRaycaster>();
+
+            var cardGroup = cardGo.AddComponent<CanvasGroup>();
+            cardGroup.alpha = 1f;
+            cardGroup.interactable = true;
+            cardGroup.blocksRaycasts = true;
+
+            var glowGo = new GameObject("CyanGlow", typeof(RectTransform));
+            glowGo.transform.SetParent(cardGo.transform, false);
+            var glowRt = glowGo.GetComponent<RectTransform>();
+            glowRt.anchorMin = new Vector2(0.5f, 0.5f);
+            glowRt.anchorMax = new Vector2(0.5f, 0.5f);
+            glowRt.pivot = new Vector2(0.5f, 0.5f);
+            glowRt.anchoredPosition = Vector2.zero;
+            glowRt.sizeDelta = new Vector2(CardWidth + 24f, CardHeight + 24f);
+            glowRt.localScale = Vector3.one * IdleGlowScale;
+
+            var glowImg = glowGo.AddComponent<Image>();
+            Color glowTint = glowTintOverride ?? TierColor(tier);
+            glowImg.color = WithAlpha(glowTint, IdleGlowMinAlpha);
+            glowImg.raycastTarget = false;
 
             // Card background (dark stone)
-            var bgImg = cardGo.AddComponent<Image>();
+            var bgGo = new GameObject("Bg", typeof(RectTransform));
+            bgGo.transform.SetParent(cardGo.transform, false);
+            var bgRt = bgGo.GetComponent<RectTransform>();
+            bgRt.anchorMin = Vector2.zero;
+            bgRt.anchorMax = Vector2.one;
+            bgRt.offsetMin = bgRt.offsetMax = Vector2.zero;
+
+            var bgImg = bgGo.AddComponent<Image>();
             bgImg.sprite = RimaUITheme.SmallPanelFrame;
             bgImg.color = RimaUITheme.PanelTint;
+
+            var juiceState = new CardJuiceState
+            {
+                Card = cardGo,
+                Root = rt,
+                Glow = glowRt,
+                GlowImage = glowImg,
+                Canvas = cardCanvas,
+                CanvasGroup = cardGroup,
+                GlowTint = glowTint,
+                Phase = index
+            };
+            cardJuiceStates.Add(juiceState);
+            AttachCardJuiceHandler(bgGo, juiceState);
+            juiceState.IdleGlow = StartCoroutine(PulseGlow(juiceState));
 
             // Icon placeholder (64x64 centered)
             var iconGo = new GameObject("Icon", typeof(RectTransform));
@@ -432,7 +492,8 @@ namespace RIMA
 
             var btnImg = btnGo.AddComponent<Image>();
             btnImg.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.3f);
-            btnGo.AddComponent<Button>();
+            juiceState.Button = btnGo.AddComponent<Button>();
+            AttachCardJuiceHandler(btnGo, juiceState);
 
             var btnTxt = MakeTMP("BtnLabel", btnRt);
             var btr = btnTxt.GetComponent<RectTransform>();
@@ -478,6 +539,208 @@ namespace RIMA
             rt.anchoredPosition = target;
         }
 
+        private void BeginConfirmPick(RewardOffer offer, int index, GameObject chosenCard)
+        {
+            if (isConfirmingPick) return;
+
+            isConfirmingPick = true;
+            StopAllCoroutines();
+
+            CardJuiceState chosen = null;
+            for (int i = 0; i < cardJuiceStates.Count; i++)
+            {
+                var state = cardJuiceStates[i];
+                state.HoverTween = null;
+                state.IdleGlow = null;
+                state.IsHoverTweening = false;
+                state.Canvas.overrideSorting = state.Card == chosenCard;
+                state.Canvas.sortingOrder = state.Card == chosenCard ? 20 : 0;
+                if (state.Button != null) state.Button.interactable = false;
+
+                if (state.Card == chosenCard) chosen = state;
+            }
+
+            if (chosen == null)
+            {
+                onPick?.Invoke(offer, index);
+                return;
+            }
+
+            StartCoroutine(ConfirmPickRoutine(chosen, offer, index));
+        }
+
+        private IEnumerator ConfirmPickRoutine(CardJuiceState chosen, RewardOffer offer, int index)
+        {
+            EnsureScreenFlash();
+            StartCoroutine(ScreenFlashRoutine());
+
+            float anticipationTime = 0.06f;
+            Vector3 startScale = chosen.Root.localScale;
+            Vector3 squashScale = Vector3.one * 0.94f;
+            float elapsed = 0f;
+            while (elapsed < anticipationTime)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float ease = EaseInQuad(Mathf.Clamp01(elapsed / anticipationTime));
+                chosen.Root.localScale = Vector3.LerpUnclamped(startScale, squashScale, ease);
+                SetGlow(chosen, HoverGlowAlpha, HoverGlowScale);
+                yield return null;
+            }
+
+            Vector2 chosenStartPos = chosen.Root.anchoredPosition;
+            Vector3 chosenStartScale = chosen.Root.localScale;
+            Vector2[] otherStartPositions = new Vector2[cardJuiceStates.Count];
+            float[] otherStartAlphas = new float[cardJuiceStates.Count];
+            for (int i = 0; i < cardJuiceStates.Count; i++)
+            {
+                var state = cardJuiceStates[i];
+                otherStartPositions[i] = state.Root.anchoredPosition;
+                otherStartAlphas[i] = state.CanvasGroup.alpha;
+                if (state != chosen)
+                {
+                    state.CanvasGroup.interactable = false;
+                    state.CanvasGroup.blocksRaycasts = false;
+                }
+            }
+
+            float flyTime = 0.30f;
+            float dropTime = 0.22f;
+            elapsed = 0f;
+            while (elapsed < flyTime)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float flyT = Mathf.Clamp01(elapsed / flyTime);
+                float flyEase = EaseOutBack(flyT);
+
+                chosen.Root.anchoredPosition = Vector2.LerpUnclamped(chosenStartPos, Vector2.zero, flyEase);
+                chosen.Root.localScale = Vector3.LerpUnclamped(chosenStartScale, Vector3.one * 1.25f, flyEase);
+                SetGlow(chosen, HoverGlowAlpha, HoverGlowScale);
+
+                float dropT = Mathf.Clamp01(elapsed / dropTime);
+                float dropEase = EaseInCubic(dropT);
+                for (int i = 0; i < cardJuiceStates.Count; i++)
+                {
+                    var state = cardJuiceStates[i];
+                    if (state == chosen) continue;
+
+                    state.Root.anchoredPosition = Vector2.LerpUnclamped(
+                        otherStartPositions[i],
+                        otherStartPositions[i] + new Vector2(0f, -500f),
+                        dropEase);
+                    state.CanvasGroup.alpha = Mathf.Lerp(otherStartAlphas[i], 0f, dropEase);
+                    SetGlow(state, 0f, IdleGlowScale);
+                }
+
+                yield return null;
+            }
+
+            onPick?.Invoke(offer, index);
+        }
+
+        private IEnumerator ScreenFlashRoutine()
+        {
+            float elapsed = 0f;
+            while (elapsed < 0.04f)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                SetScreenFlashAlpha(Mathf.Lerp(0f, 0.5f, Mathf.Clamp01(elapsed / 0.04f)));
+                yield return null;
+            }
+
+            elapsed = 0f;
+            while (elapsed < 0.16f)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                SetScreenFlashAlpha(Mathf.Lerp(0.5f, 0f, Mathf.Clamp01(elapsed / 0.16f)));
+                yield return null;
+            }
+
+            SetScreenFlashAlpha(0f);
+        }
+
+        private IEnumerator PulseGlow(CardJuiceState state)
+        {
+            while (true)
+            {
+                if (!isConfirmingPick && !state.IsHovered && !state.IsHoverTweening)
+                {
+                    float wave = (Mathf.Sin(Time.unscaledTime * 1.2f + state.Phase) + 1f) * 0.5f;
+                    float alpha = Mathf.Lerp(IdleGlowMinAlpha, IdleGlowMaxAlpha, wave);
+                    SetGlow(state, alpha, IdleGlowScale);
+                }
+
+                yield return null;
+            }
+        }
+
+        private void SetPointerHover(CardJuiceState state, bool entered)
+        {
+            if (state == null || isConfirmingPick) return;
+
+            state.PointerInsideCount += entered ? 1 : -1;
+            if (state.PointerInsideCount < 0) state.PointerInsideCount = 0;
+            RefreshHover(state);
+        }
+
+        private void SetSelectionHover(CardJuiceState state, bool selected)
+        {
+            if (state == null || isConfirmingPick) return;
+
+            state.Selected = selected;
+            RefreshHover(state);
+        }
+
+        private void RefreshHover(CardJuiceState state)
+        {
+            bool shouldHover = state.PointerInsideCount > 0 || state.Selected;
+            if (state.IsHovered == shouldHover) return;
+
+            state.IsHovered = shouldHover;
+            if (state.HoverTween != null) StopCoroutine(state.HoverTween);
+            state.HoverTween = StartCoroutine(TweenHover(state, shouldHover));
+        }
+
+        private IEnumerator TweenHover(CardJuiceState state, bool hover)
+        {
+            state.IsHoverTweening = true;
+            if (hover)
+            {
+                state.Canvas.overrideSorting = true;
+                state.Canvas.sortingOrder = 10;
+            }
+
+            float startScale = state.Root.localScale.x;
+            float targetScale = hover ? HoverScale : 1f;
+            float startGlowAlpha = state.GlowImage.color.a;
+            float targetGlowAlpha = hover ? HoverGlowAlpha : IdleGlowMinAlpha;
+            float startGlowScale = state.Glow.localScale.x;
+            float targetGlowScale = hover ? HoverGlowScale : IdleGlowScale;
+
+            float elapsed = 0f;
+            while (elapsed < HoverDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float ease = EaseOutCubic(Mathf.Clamp01(elapsed / HoverDuration));
+                state.Root.localScale = Vector3.one * Mathf.LerpUnclamped(startScale, targetScale, ease);
+                SetGlow(
+                    state,
+                    Mathf.LerpUnclamped(startGlowAlpha, targetGlowAlpha, ease),
+                    Mathf.LerpUnclamped(startGlowScale, targetGlowScale, ease));
+                yield return null;
+            }
+
+            state.Root.localScale = Vector3.one * targetScale;
+            SetGlow(state, targetGlowAlpha, targetGlowScale);
+            if (!hover)
+            {
+                state.Canvas.sortingOrder = 0;
+                state.Canvas.overrideSorting = false;
+            }
+
+            state.IsHoverTweening = false;
+            state.HoverTween = null;
+        }
+
         // ─── Helpers ────────────────────────────────────────────────
 
         private void ClearCards()
@@ -486,7 +749,10 @@ namespace RIMA
             foreach (var c in cards)
                 if (c != null) Destroy(c);
             cards.Clear();
+            cardJuiceStates.Clear();
             currentOfferNames.Clear();
+            isConfirmingPick = false;
+            SetScreenFlashAlpha(0f);
         }
 
         private Color TierColor(RewardOffer offer)
@@ -506,6 +772,81 @@ namespace RIMA
             };
         }
 
+        private static Color TierColor(SkillTier tier)
+        {
+            return tier switch
+            {
+                SkillTier.Common    => RimaUITheme.TierCommon,
+                SkillTier.Rare      => RimaUITheme.TierRare,
+                SkillTier.Epic      => RimaUITheme.TierEpic,
+                SkillTier.Legendary => RimaUITheme.TierLegendary,
+                _                   => RimaUITheme.TierCommon
+            };
+        }
+
+        private void AttachCardJuiceHandler(GameObject target, CardJuiceState state)
+        {
+            var handler = target.AddComponent<CardJuiceHandler>();
+            handler.Init(this, state);
+        }
+
+        private void EnsureScreenFlash()
+        {
+            if (screenFlash != null) return;
+            if (panel == null) return;
+
+            var flashGo = new GameObject("ScreenFlash", typeof(RectTransform));
+            flashGo.transform.SetParent(panel.transform, false);
+            var flashRt = flashGo.GetComponent<RectTransform>();
+            flashRt.anchorMin = Vector2.zero;
+            flashRt.anchorMax = Vector2.one;
+            flashRt.offsetMin = flashRt.offsetMax = Vector2.zero;
+            screenFlash = flashGo.AddComponent<Image>();
+            screenFlash.color = WithAlpha(RimaUITheme.Cyan, 0f);
+            screenFlash.raycastTarget = false;
+            flashGo.transform.SetAsLastSibling();
+        }
+
+        private void SetScreenFlashAlpha(float alpha)
+        {
+            if (screenFlash == null) return;
+            screenFlash.color = WithAlpha(RimaUITheme.Cyan, alpha);
+        }
+
+        private static void SetGlow(CardJuiceState state, float alpha, float scale)
+        {
+            state.GlowImage.color = WithAlpha(state.GlowTint, alpha);
+            state.Glow.localScale = Vector3.one * scale;
+        }
+
+        private static Color WithAlpha(Color color, float alpha)
+        {
+            color.a = alpha;
+            return color;
+        }
+
+        private static float EaseOutCubic(float t)
+        {
+            return 1f - Mathf.Pow(1f - t, 3f);
+        }
+
+        private static float EaseOutBack(float t)
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1f;
+            return 1f + c3 * Mathf.Pow(t - 1f, 3f) + c1 * Mathf.Pow(t - 1f, 2f);
+        }
+
+        private static float EaseInQuad(float t)
+        {
+            return t * t;
+        }
+
+        private static float EaseInCubic(float t)
+        {
+            return t * t * t;
+        }
+
         private static TextMeshProUGUI MakeTMP(string name, RectTransform parent)
         {
             var go = new GameObject(name, typeof(RectTransform));
@@ -513,6 +854,57 @@ namespace RIMA
             var tmp = go.AddComponent<TextMeshProUGUI>();
             tmp.raycastTarget = false;
             return tmp;
+        }
+
+        private sealed class CardJuiceState
+        {
+            public GameObject Card;
+            public RectTransform Root;
+            public RectTransform Glow;
+            public Image GlowImage;
+            public Canvas Canvas;
+            public CanvasGroup CanvasGroup;
+            public Button Button;
+            public Coroutine HoverTween;
+            public Coroutine IdleGlow;
+            public Color GlowTint;
+            public float Phase;
+            public int PointerInsideCount;
+            public bool Selected;
+            public bool IsHovered;
+            public bool IsHoverTweening;
+        }
+
+        private sealed class CardJuiceHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+        {
+            private SkillOfferUI owner;
+            private CardJuiceState state;
+
+            public void Init(SkillOfferUI owner, CardJuiceState state)
+            {
+                this.owner = owner;
+                this.state = state;
+            }
+
+            public void OnPointerEnter(PointerEventData eventData)
+            {
+                owner?.SetPointerHover(state, true);
+            }
+
+            public void OnPointerExit(PointerEventData eventData)
+            {
+                owner?.SetPointerHover(state, false);
+            }
+
+            public void OnSelect(BaseEventData eventData)
+            {
+                owner?.SetSelectionHover(state, true);
+            }
+
+            public void OnDeselect(BaseEventData eventData)
+            {
+                owner?.SetSelectionHover(state, false);
+            }
         }
     }
 }
