@@ -31,6 +31,7 @@ namespace RIMA
         private const string PackPedestal   = "UI/RIMA/Pack/pedestal_seal";      // 512 circular seal platform
         private const string PackCardFrame  = "UI/RIMA/Pack/card_frame_9slice";  // 256x384 portrait card frame (border 28)
         private const string PackButton     = "UI/RIMA/Pack/button_9slice";      // 192x64 filled button bg (border 16)
+        private const string PackPanelFrame = "UI/RIMA/Pack/panel_frame_9slice";
         private const string RoomBackdrop   = "UI/RIMA/CharacterSelect/room_bg";
         private const int RoomBackdropRetryFrames = 10;
 
@@ -47,6 +48,7 @@ namespace RIMA
         private TMP_Text  identityPlaystyleLabel;
         private TMP_Text  identityResourceLabel;
         private TMP_Text  identityLockLabel;
+        private Image     identityPortraitImage;
         private Button    startButton;
         private TMP_Text  startButtonLabel;
         private TMP_Text  skillEmptyLabel;
@@ -64,16 +66,16 @@ namespace RIMA
 
         private static readonly RoomPlacement[] RosterPlacements =
         {
-            new RoomPlacement(ClassType.Ronin,        new Vector2(0.20f, 0.60f), new Vector2(260f, 360f), 0.85f),
-            new RoomPlacement(ClassType.Hexer,        new Vector2(0.80f, 0.60f), new Vector2(260f, 360f), 0.85f),
-            new RoomPlacement(ClassType.Ravager,      new Vector2(0.32f, 0.55f), new Vector2(260f, 360f), 0.85f),
-            new RoomPlacement(ClassType.Summoner,     new Vector2(0.68f, 0.55f), new Vector2(260f, 360f), 0.85f),
-            new RoomPlacement(ClassType.Gunslinger,   new Vector2(0.44f, 0.52f), new Vector2(260f, 360f), 0.85f),
-            new RoomPlacement(ClassType.Brawler,      new Vector2(0.56f, 0.52f), new Vector2(260f, 360f), 0.85f),
-            new RoomPlacement(ClassType.Warblade,     new Vector2(0.35f, 0.45f), new Vector2(300f, 410f), 1.00f),
-            new RoomPlacement(ClassType.Shadowblade,  new Vector2(0.65f, 0.45f), new Vector2(300f, 410f), 1.00f),
-            new RoomPlacement(ClassType.Elementalist, new Vector2(0.45f, 0.40f), new Vector2(300f, 410f), 1.00f),
-            new RoomPlacement(ClassType.Ranger,       new Vector2(0.55f, 0.40f), new Vector2(300f, 410f), 1.00f),
+            new RoomPlacement(ClassType.Ronin,        new Vector2(0.08f, 0.61f), new Vector2(260f, 360f), 0.84f),
+            new RoomPlacement(ClassType.Hexer,        new Vector2(0.92f, 0.61f), new Vector2(260f, 360f), 0.84f),
+            new RoomPlacement(ClassType.Ravager,      new Vector2(0.25f, 0.57f), new Vector2(260f, 360f), 0.84f),
+            new RoomPlacement(ClassType.Summoner,     new Vector2(0.75f, 0.57f), new Vector2(260f, 360f), 0.84f),
+            new RoomPlacement(ClassType.Gunslinger,   new Vector2(0.42f, 0.54f), new Vector2(260f, 360f), 0.84f),
+            new RoomPlacement(ClassType.Brawler,      new Vector2(0.58f, 0.54f), new Vector2(260f, 360f), 0.84f),
+            new RoomPlacement(ClassType.Warblade,     new Vector2(0.22f, 0.44f), new Vector2(300f, 410f), 0.98f),
+            new RoomPlacement(ClassType.Shadowblade,  new Vector2(0.78f, 0.44f), new Vector2(300f, 410f), 0.98f),
+            new RoomPlacement(ClassType.Elementalist, new Vector2(0.41f, 0.39f), new Vector2(300f, 410f), 0.98f),
+            new RoomPlacement(ClassType.Ranger,       new Vector2(0.59f, 0.39f), new Vector2(300f, 410f), 0.98f),
         };
 
         private readonly struct RoomPlacement
@@ -424,17 +426,42 @@ namespace RIMA
             topBorderImg.color = RimaUITheme.Cyan;
             topBorderImg.raycastTarget = false;
 
-            var identityZone = MakeRect("IdentityZone", parent, new Vector2(0f, 0f), new Vector2(0.25f, 1f));
+            var identityZone = MakeFramedPanel("IdentityZone", parent, new Vector2(0f, 0f), new Vector2(0.25f, 1f));
             identityZone.offsetMin = new Vector2(28f, 18f);
             identityZone.offsetMax = new Vector2(-18f, -16f);
 
-            var skillZone = MakeRect("SkillZone", parent, new Vector2(0.25f, 0f), new Vector2(0.75f, 1f));
-            skillZone.offsetMin = new Vector2(14f, 18f);
-            skillZone.offsetMax = new Vector2(-14f, -16f);
+            var actionZone = MakeFramedPanel("ActionZone", parent, new Vector2(0.25f, 0f), new Vector2(0.45f, 1f));
+            actionZone.offsetMin = new Vector2(14f, 18f);
+            actionZone.offsetMax = new Vector2(-14f, -16f);
 
-            var actionZone = MakeRect("ActionZone", parent, new Vector2(0.75f, 0f), Vector2.one);
-            actionZone.offsetMin = new Vector2(18f, 18f);
-            actionZone.offsetMax = new Vector2(-28f, -16f);
+            var skillZone = MakeFramedPanel("SkillZone", parent, new Vector2(0.45f, 0f), Vector2.one);
+            skillZone.offsetMin = new Vector2(18f, 18f);
+            skillZone.offsetMax = new Vector2(-28f, -16f);
+
+            var portraitFrame = MakePanel("IdentityPortraitFrame", identityZone);
+            portraitFrame.anchorMin = new Vector2(0f, 0.46f); portraitFrame.anchorMax = new Vector2(0f, 0.46f);
+            portraitFrame.pivot = new Vector2(0f, 0.5f);
+            portraitFrame.anchoredPosition = new Vector2(22f, 0f);
+            portraitFrame.sizeDelta = new Vector2(92f, 92f);
+            var portraitFrameImg = portraitFrame.GetComponent<Image>();
+            portraitFrameImg.sprite = RimaUITheme.SmallPanelFrame;
+            portraitFrameImg.type = Image.Type.Sliced;
+            portraitFrameImg.color = new Color(0.02f, 0.01f, 0.04f, 0.78f);
+            portraitFrameImg.raycastTarget = false;
+
+            var portraitMask = MakePanel("IdentityPortraitMask", portraitFrame);
+            SetStretch(portraitMask, Vector2.zero, Vector2.one, new Vector2(6f, 6f), new Vector2(-6f, -6f));
+            portraitMask.gameObject.AddComponent<RectMask2D>();
+            var maskImg = portraitMask.GetComponent<Image>();
+            maskImg.color = Color.clear;
+            maskImg.raycastTarget = false;
+
+            var portraitRt = MakePanel("Portrait", portraitMask);
+            SetStretch(portraitRt, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            identityPortraitImage = portraitRt.GetComponent<Image>();
+            identityPortraitImage.sprite = LoadCanonicalSprite(selectedClass);
+            identityPortraitImage.preserveAspect = true;
+            identityPortraitImage.raycastTarget = false;
 
             var bar = MakePanel("IdentityAccent", identityZone);
             SetStretch(bar, new Vector2(0f, 0.10f), new Vector2(0.012f, 0.92f), Vector2.zero, Vector2.zero);
@@ -444,48 +471,48 @@ namespace RIMA
             classNameLabel = MakeText("WARBLADE", identityZone, 24, FontStyles.Bold, Color.white);
             classNameLabel.alignment = TextAlignmentOptions.Left;
             var cnRt = classNameLabel.transform as RectTransform;
-            cnRt.anchorMin = new Vector2(0.08f, 0.74f); cnRt.anchorMax = new Vector2(1f, 0.96f);
+            cnRt.anchorMin = new Vector2(0.32f, 0.74f); cnRt.anchorMax = new Vector2(1f, 0.96f);
             cnRt.offsetMin = cnRt.offsetMax = Vector2.zero;
 
             tagline1Label = MakeText("HEAVY · MELEE · RAGE", identityZone, 10, FontStyles.Bold, RimaUITheme.TextMuted);
             tagline1Label.alignment = TextAlignmentOptions.Left;
             var t1Rt = tagline1Label.transform as RectTransform;
-            t1Rt.anchorMin = new Vector2(0.08f, 0.62f); t1Rt.anchorMax = new Vector2(1f, 0.74f);
+            t1Rt.anchorMin = new Vector2(0.32f, 0.62f); t1Rt.anchorMax = new Vector2(1f, 0.74f);
             t1Rt.offsetMin = t1Rt.offsetMax = Vector2.zero;
 
             tagline2Label = MakeText("", identityZone, 10, FontStyles.Normal, RimaUITheme.TextMuted);
             tagline2Label.alignment = TextAlignmentOptions.Left;
             tagline2Label.enableWordWrapping = true;
             var t2Rt = tagline2Label.transform as RectTransform;
-            t2Rt.anchorMin = new Vector2(0.08f, 0.50f); t2Rt.anchorMax = new Vector2(1f, 0.62f);
+            t2Rt.anchorMin = new Vector2(0.32f, 0.50f); t2Rt.anchorMax = new Vector2(1f, 0.62f);
             t2Rt.offsetMin = t2Rt.offsetMax = Vector2.zero;
 
             identityMottoLabel = MakeText("", identityZone, 13, FontStyles.Bold, RimaUITheme.Cyan);
             identityMottoLabel.alignment = TextAlignmentOptions.Left;
             identityMottoLabel.enableWordWrapping = true;
             var mottoRt = identityMottoLabel.transform as RectTransform;
-            mottoRt.anchorMin = new Vector2(0.08f, 0.35f); mottoRt.anchorMax = new Vector2(1f, 0.50f);
+            mottoRt.anchorMin = new Vector2(0.32f, 0.35f); mottoRt.anchorMax = new Vector2(1f, 0.50f);
             mottoRt.offsetMin = mottoRt.offsetMax = Vector2.zero;
 
             identityPlaystyleLabel = MakeText("", identityZone, 10, FontStyles.Normal, RimaUITheme.TextMuted);
             identityPlaystyleLabel.alignment = TextAlignmentOptions.TopLeft;
             identityPlaystyleLabel.enableWordWrapping = true;
             var playstyleRt = identityPlaystyleLabel.transform as RectTransform;
-            playstyleRt.anchorMin = new Vector2(0.08f, 0.18f); playstyleRt.anchorMax = new Vector2(1f, 0.35f);
+            playstyleRt.anchorMin = new Vector2(0.32f, 0.18f); playstyleRt.anchorMax = new Vector2(1f, 0.35f);
             playstyleRt.offsetMin = playstyleRt.offsetMax = Vector2.zero;
 
             identityResourceLabel = MakeText("", identityZone, 10, FontStyles.Bold, RimaUITheme.TextPrimary);
             identityResourceLabel.alignment = TextAlignmentOptions.TopLeft;
             identityResourceLabel.enableWordWrapping = true;
             var resourceRt = identityResourceLabel.transform as RectTransform;
-            resourceRt.anchorMin = new Vector2(0.08f, 0.08f); resourceRt.anchorMax = new Vector2(1f, 0.18f);
+            resourceRt.anchorMin = new Vector2(0.32f, 0.08f); resourceRt.anchorMax = new Vector2(1f, 0.18f);
             resourceRt.offsetMin = resourceRt.offsetMax = Vector2.zero;
 
             identityLockLabel = MakeText("", identityZone, 10, FontStyles.Bold, RimaUITheme.TextMuted);
             identityLockLabel.alignment = TextAlignmentOptions.Left;
             identityLockLabel.enableWordWrapping = true;
             var lockRt = identityLockLabel.transform as RectTransform;
-            lockRt.anchorMin = new Vector2(0.08f, 0f); lockRt.anchorMax = new Vector2(1f, 0.08f);
+            lockRt.anchorMin = new Vector2(0.32f, 0f); lockRt.anchorMax = new Vector2(1f, 0.08f);
             lockRt.offsetMin = lockRt.offsetMax = Vector2.zero;
 
             var skillsHeader = MakeText("SKILLS", skillZone, 10, FontStyles.Bold, RimaUITheme.TextMuted);
@@ -586,6 +613,9 @@ namespace RIMA
                 classNameLabel.text  = cls.ToString().ToUpperInvariant();
                 classNameLabel.color = accent;
             }
+
+            if (identityPortraitImage != null)
+                identityPortraitImage.sprite = LoadCanonicalSprite(cls);
 
             var (tl1, tl2) = RimaUITheme.ClassTagline(cls);
             if (tagline1Label != null) tagline1Label.text = tl1;
@@ -942,6 +972,30 @@ namespace RIMA
             var entry = new EventTrigger.Entry { eventID = eventId };
             entry.callback.AddListener(data => callback(data));
             trigger.triggers.Add(entry);
+        }
+
+        private static RectTransform MakeFramedPanel(string name, RectTransform parent, Vector2 anchorMin, Vector2 anchorMax)
+        {
+            var rt = MakePanel(name, parent);
+            rt.anchorMin = anchorMin;
+            rt.anchorMax = anchorMax;
+
+            var img = rt.GetComponent<Image>();
+            img.sprite = Resources.Load<Sprite>(PackPanelFrame) ?? RimaUITheme.SmallPanelFrame;
+            img.type = Image.Type.Sliced;
+            img.color = new Color(0.067f, 0.031f, 0.090f, 0.88f);
+            img.raycastTarget = false;
+
+            var edge = MakePanel("CyanEdge", rt);
+            SetStretch(edge, Vector2.zero, Vector2.one, new Vector2(-2f, -2f), new Vector2(2f, 2f));
+            var edgeImg = edge.GetComponent<Image>();
+            edgeImg.sprite = img.sprite;
+            edgeImg.type = Image.Type.Sliced;
+            edgeImg.color = new Color(0f, 1f, 0.80f, 0.38f);
+            edgeImg.raycastTarget = false;
+
+            edge.SetAsFirstSibling();
+            return rt;
         }
 
         private static RectTransform MakePanel(string name, RectTransform parent)
