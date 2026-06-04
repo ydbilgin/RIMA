@@ -9,10 +9,12 @@ namespace RIMA.UI
 {
     public class MainMenuController : MonoBehaviour
     {
+        private static readonly Color Cyan = new Color(0f, 1f, 0.8f, 1f);
+        private static readonly Color WarmOrange = new Color(0.91f, 0.56f, 0.13f, 1f);
+
         [SerializeField] private string characterSelectScene = "CharacterSelect";
 
         private RectTransform runtimeRoot;
-        private GameObject settingsOverlay;
 
         private void Start()
         {
@@ -35,8 +37,10 @@ namespace RIMA.UI
 
         public void OnSettingsClicked()
         {
-            Debug.Log("[MainMenu] Ayarlar yakında.");
-            ShowSettingsOverlay();
+            if (UIManager.Instance != null)
+                UIManager.Instance.OpenSettings();
+            else
+                FindFirstObjectByType<SettingsMenuUI>()?.Open();
         }
 
         private void BuildRuntimeMenu()
@@ -48,6 +52,8 @@ namespace RIMA.UI
                 Debug.LogError("[MainMenu] Runtime menu build failed: Canvas not found.");
                 return;
             }
+
+            EnsureRuntimeScaler(canvas);
 
             var raycaster = canvas.GetComponent<GraphicRaycaster>();
             if (raycaster == null) canvas.gameObject.AddComponent<GraphicRaycaster>();
@@ -63,6 +69,17 @@ namespace RIMA.UI
             AddVignette(runtimeRoot);
             AddTitleColumn(runtimeRoot);
             AddVersion(runtimeRoot);
+        }
+
+        private static void EnsureRuntimeScaler(Canvas canvas)
+        {
+            var scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
         }
 
         private void DisableAuthoredRoot(Transform canvasTransform)
@@ -110,13 +127,14 @@ namespace RIMA.UI
 
         private void AddTitleColumn(RectTransform parent)
         {
-            var column = MakeRect("InkTitleColumn", parent, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f));
-            column.pivot = new Vector2(0f, 0.5f);
-            column.anchoredPosition = new Vector2(100f, 56f);
-            column.sizeDelta = new Vector2(520f, 520f);
+            var column = MakeRect("InkTitleColumn", parent, Vector2.zero, Vector2.zero);
+            column.pivot = Vector2.zero;
+            column.anchoredPosition = new Vector2(112f, 116f);
+            column.sizeDelta = new Vector2(560f, 470f);
 
             var title = AddText(column, "Title_RIMA", "RIMA", 82f, RimaUITheme.TextPrimary, TextAlignmentOptions.Left);
             title.fontStyle = FontStyles.Bold;
+            title.characterSpacing = 16f;
             var titleRt = title.rectTransform;
             titleRt.anchorMin = titleRt.anchorMax = new Vector2(0f, 1f);
             titleRt.pivot = new Vector2(0f, 1f);
@@ -138,15 +156,36 @@ namespace RIMA.UI
 
             var whisper = AddText(column, "Whisper_YineGeldin", "Yine geldin.", 12f, WithAlpha(RimaUITheme.TextMuted, 0.58f), TextAlignmentOptions.Left);
             whisper.fontStyle = FontStyles.Italic;
+            whisper.color = WarmOrange;
             var whisperRt = whisper.rectTransform;
             whisperRt.anchorMin = whisperRt.anchorMax = new Vector2(0f, 1f);
             whisperRt.pivot = new Vector2(0f, 1f);
-            whisperRt.anchoredPosition = new Vector2(4f, -198f);
+            whisperRt.anchoredPosition = new Vector2(4f, -214f);
             whisperRt.sizeDelta = new Vector2(260f, 24f);
 
-            AddNakedButton(column, "Button_Basla", "BAŞLA", new Vector2(0f, -244f), OnStartClicked);
-            AddNakedButton(column, "Button_Ayarlar", "AYARLAR", new Vector2(0f, -292f), OnSettingsClicked);
-            AddNakedButton(column, "Button_Cikis", "ÇIKIŞ", new Vector2(0f, -340f), OnQuitClicked);
+            AddCyanDivider(column, new Vector2(0f, -248f), 146f);
+            AddNakedButton(column, "Button_Basla", "BAŞLA", new Vector2(18f, -242f), OnStartClicked);
+            AddNakedButton(column, "Button_Ayarlar", "AYARLAR", new Vector2(18f, -292f), OnSettingsClicked);
+            AddNakedButton(column, "Button_Cikis", "ÇIKIŞ", new Vector2(18f, -342f), OnQuitClicked);
+        }
+
+        private void AddCyanDivider(RectTransform parent, Vector2 position, float height)
+        {
+            AddDividerSegment(parent, "CyanDivider_TopFade", position, 18f, WithAlpha(Cyan, 0.24f));
+            AddDividerSegment(parent, "CyanDivider_Core", new Vector2(position.x, position.y - 18f), height - 36f, WithAlpha(Cyan, 0.92f));
+            AddDividerSegment(parent, "CyanDivider_BottomFade", new Vector2(position.x, position.y - height + 18f), 18f, WithAlpha(Cyan, 0.24f));
+        }
+
+        private void AddDividerSegment(RectTransform parent, string name, Vector2 position, float height, Color color)
+        {
+            var rt = MakeRect(name, parent, new Vector2(0f, 1f), new Vector2(0f, 1f));
+            rt.pivot = new Vector2(0.5f, 1f);
+            rt.anchoredPosition = position;
+            rt.sizeDelta = new Vector2(2f, height);
+
+            var image = rt.gameObject.AddComponent<Image>();
+            image.color = color;
+            image.raycastTarget = false;
         }
 
         private TMP_Text AddText(RectTransform parent, string name, string text, float size, Color color, TextAlignmentOptions alignment)
@@ -183,7 +222,7 @@ namespace RIMA.UI
             button.colors = colors;
             button.onClick.AddListener(onClick);
 
-            var arrow = AddText(rt, "HoverArrow", ">", 20f, new Color(0f, 1f, 0.8f, 1f), TextAlignmentOptions.Left);
+            var arrow = AddText(rt, "HoverArrow", ">", 20f, Cyan, TextAlignmentOptions.Left);
             arrow.fontStyle = FontStyles.Bold;
             var arrowRt = arrow.rectTransform;
             arrowRt.anchorMin = arrowRt.anchorMax = new Vector2(0f, 0.5f);
@@ -192,7 +231,7 @@ namespace RIMA.UI
             arrowRt.sizeDelta = new Vector2(22f, 28f);
             arrow.gameObject.SetActive(false);
 
-            var label = AddText(rt, "Label", text, 22f, WithAlpha(RimaUITheme.TextMuted, 0.88f), TextAlignmentOptions.Left);
+            var label = AddText(rt, "Label", text, 22f, WithAlpha(RimaUITheme.TextPrimary, 0.70f), TextAlignmentOptions.Left);
             label.fontStyle = FontStyles.Bold;
             var labelRt = label.rectTransform;
             labelRt.anchorMin = labelRt.anchorMax = new Vector2(0f, 0.5f);
@@ -212,42 +251,6 @@ namespace RIMA.UI
             rt.pivot = new Vector2(1f, 0f);
             rt.anchoredPosition = new Vector2(-18f, 14f);
             rt.sizeDelta = new Vector2(180f, 18f);
-        }
-
-        private void ShowSettingsOverlay()
-        {
-            if (runtimeRoot == null) return;
-
-            if (settingsOverlay == null)
-            {
-                settingsOverlay = BuildSettingsOverlay(runtimeRoot);
-            }
-
-            settingsOverlay.SetActive(true);
-            settingsOverlay.transform.SetAsLastSibling();
-        }
-
-        private GameObject BuildSettingsOverlay(RectTransform parent)
-        {
-            var rt = MakeRect("SettingsSoonOverlay", parent, Vector2.zero, Vector2.one);
-            var img = rt.gameObject.AddComponent<Image>();
-            img.color = new Color(0.03f, 0.02f, 0.05f, 0.80f);
-            img.raycastTarget = true;
-
-            var button = rt.gameObject.AddComponent<Button>();
-            button.targetGraphic = img;
-            button.onClick.AddListener(() => rt.gameObject.SetActive(false));
-
-            var label = AddText(rt, "Label", "Yakında.", 28f, new Color(0f, 1f, 0.8f, 1f), TextAlignmentOptions.Center);
-            label.fontStyle = FontStyles.Bold;
-            var labelRt = label.rectTransform;
-            labelRt.anchorMin = labelRt.anchorMax = new Vector2(0.5f, 0.5f);
-            labelRt.pivot = new Vector2(0.5f, 0.5f);
-            labelRt.anchoredPosition = Vector2.zero;
-            labelRt.sizeDelta = new Vector2(320f, 48f);
-
-            rt.gameObject.SetActive(false);
-            return rt.gameObject;
         }
 
         private static RectTransform MakeRect(string name, Transform parent, Vector2 anchorMin, Vector2 anchorMax)
@@ -297,7 +300,8 @@ namespace RIMA.UI
             private TMP_Text label;
             private TMP_Text arrow;
             private Color normalColor;
-            private readonly Color hoverColor = new Color(0f, 1f, 0.8f, 1f);
+            private bool hovering;
+            private bool pressed;
 
             public void Bind(TMP_Text labelText, TMP_Text arrowText)
             {
@@ -309,28 +313,34 @@ namespace RIMA.UI
 
             public void OnPointerEnter(PointerEventData eventData)
             {
+                hovering = true;
                 Apply(true);
             }
 
             public void OnPointerExit(PointerEventData eventData)
             {
+                hovering = false;
+                pressed = false;
                 Apply(false);
             }
 
             public void OnPointerDown(PointerEventData eventData)
             {
-                if (label != null) label.transform.localPosition += new Vector3(2f, 0f, 0f);
+                pressed = true;
+                Apply(hovering);
             }
 
             public void OnPointerUp(PointerEventData eventData)
             {
-                if (label != null) label.transform.localPosition -= new Vector3(2f, 0f, 0f);
+                pressed = false;
+                Apply(hovering);
             }
 
             private void Apply(bool hovering)
             {
-                if (label != null) label.color = hovering ? hoverColor : normalColor;
+                if (label != null) label.color = pressed ? WarmOrange : (hovering ? Cyan : normalColor);
                 if (arrow != null) arrow.gameObject.SetActive(hovering);
+                transform.localScale = hovering ? Vector3.one * 1.08f : Vector3.one;
             }
         }
     }

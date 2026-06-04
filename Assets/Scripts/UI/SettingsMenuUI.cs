@@ -76,7 +76,12 @@ namespace RIMA
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 1100;
 
-            canvasGo.AddComponent<CanvasScaler>();
+            var scaler = canvasGo.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
+
             canvasGo.AddComponent<GraphicRaycaster>();
             canvasGo.AddComponent<SettingsMenuUI>();
         }
@@ -244,6 +249,7 @@ namespace RIMA
             // ── Gameplay Section ─────────────────────────────────────
             y = AddSectionHeader(panel, "GAMEPLAY", y);
             // Aim/Dash toggles drive PlayerController directly (Bug-2: the old aim toggle only wrote a dead pref key).
+            RectTransform aimRow;
             y = AddBoolToggleRow(panel, "Aim Mode", "MOUSE", "FACING",
                 () => Player != null && Player.AttackAimMode == CombatAimMode.TowardsMouse,
                 on =>
@@ -251,7 +257,10 @@ namespace RIMA
                     if (Player == null) return;
                     Player.AttackAimMode = on ? CombatAimMode.TowardsMouse : CombatAimMode.CharacterFacing;
                     PlayerPrefs.Save();
-                }, y);
+                }, y, out aimRow);
+            RegisterGameplayOnlyRow(aimRow);
+
+            RectTransform dashRow;
             y = AddBoolToggleRow(panel, "Dash Mode", "MOUSE", "FACING",
                 () => Player != null && Player.DashMode == DashMode.TowardsMouse,
                 on =>
@@ -259,7 +268,8 @@ namespace RIMA
                     if (Player == null) return;
                     Player.DashMode = on ? DashMode.TowardsMouse : DashMode.FacingDirection;
                     PlayerPrefs.Save();
-                }, y);
+                }, y, out dashRow);
+            RegisterGameplayOnlyRow(dashRow);
 
             // ── Accessibility Section ────────────────────────────────
             y -= 12f;
@@ -396,9 +406,9 @@ namespace RIMA
 
         // A toggle row backed by live getter/setter callbacks (e.g. PlayerController aim/dash), not just a pref.
         private float AddBoolToggleRow(RectTransform parent, string label, string onText, string offText,
-            Func<bool> get, Action<bool> set, float y)
+            Func<bool> get, Action<bool> set, float y, out RectTransform row)
         {
-            var row = MakeRect($"Toggle_{label}", parent);
+            row = MakeRect($"Toggle_{label}", parent);
             row.anchorMin = new Vector2(0f, 1f);
             row.anchorMax = new Vector2(1f, 1f);
             row.pivot = new Vector2(0f, 1f);
@@ -452,6 +462,18 @@ namespace RIMA
             });
 
             return y - 26f;
+        }
+
+        private void RegisterGameplayOnlyRow(RectTransform row)
+        {
+            void ApplyMenuContext()
+            {
+                bool hasPlayer = GameObject.FindGameObjectWithTag("Player") != null;
+                row.gameObject.SetActive(hasPlayer);
+            }
+
+            ApplyMenuContext();
+            refreshers.Add(ApplyMenuContext);
         }
 
         private Slider AddSliderRow(RectTransform parent, string label, string prefKey, ref float y)
