@@ -1,0 +1,24 @@
+[
+  {
+    "roomId": "combat_sample_cross_01",
+    "roomType": "Combat",
+    "width": 10,
+    "height": 8,
+    "grid": [
+      "   ....   ",
+      "   .e..   ",
+      " .......  ",
+      " ..P...e  ",
+      " .......  ",
+      "   ..e.   ",
+      "   ....   ",
+      "   ....   "
+    ],
+    "doors": [
+      { "dir": "N", "x": 5, "y": 0 },
+      { "dir": "W", "x": 0, "y": 3 },
+      { "dir": "E", "x": 9, "y": 3 }
+    ],
+    "notes": "small compile/import sample; copy to STAGING/chatgpt_rooms.json or select this file from the menu for a dry import test"
+  }
+]
