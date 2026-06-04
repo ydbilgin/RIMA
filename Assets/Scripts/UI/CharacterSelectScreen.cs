@@ -32,6 +32,7 @@ namespace RIMA
         private const string PackCardFrame  = "UI/RIMA/Pack/card_frame_9slice";  // 256x384 portrait card frame (border 28)
         private const string PackButton     = "UI/RIMA/Pack/button_9slice";      // 192x64 filled button bg (border 16)
         private const string RoomBackdrop   = "UI/RIMA/CharacterSelect/room_bg";
+        private const int RoomBackdropRetryFrames = 10;
 
         // ── Internal layout state ─────────────────────────────────────────
         private ClassType selectedClass = ClassType.Warblade;
@@ -192,7 +193,10 @@ namespace RIMA
         private void BuildRosterRoom(RectTransform parent)
         {
             roomEntries.Clear();
-            RimaUITheme.CreateFullScreenBackdrop(parent, RoomBackdrop, RimaUITheme.BackgroundDark);
+            Image backdropImage = RimaUITheme.CreateFullScreenBackdrop(parent, RoomBackdrop, RimaUITheme.BackgroundDark);
+            NameRoomBackdropSprite(backdropImage);
+            if (backdropImage != null && backdropImage.sprite == null)
+                StartCoroutine(RetryLoadRoomBackdrop(backdropImage));
 
             foreach (var placement in RosterPlacements.OrderByDescending(p => p.anchor.y))
                 BuildRoomCharacter(parent, placement);
@@ -203,6 +207,79 @@ namespace RIMA
             flashRt.offsetMin = flashRt.offsetMax = Vector2.zero;
             showcaseFlashImage.color = Color.clear;
             showcaseFlashImage.raycastTarget = false;
+        }
+
+        private IEnumerator RetryLoadRoomBackdrop(Image backdropImage)
+        {
+            for (int frame = 0; frame < RoomBackdropRetryFrames; frame++)
+            {
+                yield return null;
+
+                if (backdropImage == null)
+                    yield break;
+
+                Sprite spr = LoadRoomBackdropSprite();
+                if (spr == null)
+                    continue;
+
+                ApplyRoomBackdropSprite(backdropImage, spr);
+                yield break;
+            }
+        }
+
+        private static Sprite LoadRoomBackdropSprite()
+        {
+            Sprite spr = Resources.Load<Sprite>(RoomBackdrop);
+            if (spr != null)
+            {
+                NameRoomBackdropSprite(spr);
+                return spr;
+            }
+
+            Texture2D tex = Resources.Load<Texture2D>(RoomBackdrop);
+            if (tex == null)
+                return null;
+
+            spr = Sprite.Create(
+                tex,
+                new Rect(0f, 0f, tex.width, tex.height),
+                new Vector2(0.5f, 0.5f),
+                100f,
+                0,
+                SpriteMeshType.FullRect);
+            spr.name = tex.name;
+            return spr;
+        }
+
+        private static void NameRoomBackdropSprite(Image backdropImage)
+        {
+            if (backdropImage != null)
+                NameRoomBackdropSprite(backdropImage.sprite);
+        }
+
+        private static void NameRoomBackdropSprite(Sprite spr)
+        {
+            if (spr != null && string.IsNullOrEmpty(spr.name) && spr.texture != null)
+                spr.name = spr.texture.name;
+        }
+
+        private static void ApplyRoomBackdropSprite(Image backdropImage, Sprite spr)
+        {
+            if (backdropImage == null || spr == null)
+                return;
+
+            RectTransform rt = backdropImage.rectTransform;
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = Vector2.zero;
+
+            backdropImage.sprite = spr;
+            backdropImage.color = Color.white;
+            backdropImage.type = Image.Type.Simple;
+
+            var fitter = backdropImage.GetComponent<AspectRatioFitter>() ?? backdropImage.gameObject.AddComponent<AspectRatioFitter>();
+            fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+            fitter.aspectRatio = spr.rect.width / Mathf.Max(1f, spr.rect.height);
         }
 
         private void BuildRoomCharacter(RectTransform parent, RoomPlacement placement)
