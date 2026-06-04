@@ -8,10 +8,12 @@ namespace RIMA
 {
     /// <summary>
     /// Main menu — Ashen Glyph spec.
-    /// Dark background, "RIMA" logo with cyan glow, 3 buttons: NEW RUN, SETTINGS, QUIT.
+    /// Dark background, "RIMA" logo with quiet cyan whisper, 2 buttons: NEW RUN, QUIT.
     /// </summary>
     public class MainMenuScreen : MonoBehaviour
     {
+        private const string PackButtonPath = "UI/RIMA/Pack/button_9slice";
+
         private static bool _gameStarted = false;
         private static bool _eventSystemHooked = false;
 
@@ -161,35 +163,35 @@ namespace RIMA
             subRt.sizeDelta = new Vector2(400f, 24f);
 
             var subTmp = subGo.AddComponent<TextMeshProUGUI>();
-            subTmp.text = "THE SEAL BENEATH THE KEEP";
-            subTmp.fontSize = 12f;
-            subTmp.color = RimaUITheme.Cyan;
+            subTmp.text = "Yine geldin.";
+            subTmp.fontSize = 11f;
+            subTmp.fontStyle = FontStyles.Italic;
+            subTmp.color = WithAlpha(RimaUITheme.Cyan, 0.78f);
             subTmp.alignment = TextAlignmentOptions.Center;
             subTmp.raycastTarget = false;
 
             // ── Buttons ──────────────────────────────────────────────
             float y = -20f;
-            AddMenuButton(root.transform, "NEW RUN", y, OnPlayClicked);
-            AddMenuButton(root.transform, "SETTINGS", y - 50f, OnSettings);
-            AddMenuButton(root.transform, "QUIT", y - 100f, OnQuit);
+            AddMenuButton(root.transform, "NEW RUN", y, OnPlayClicked, true);
+            AddMenuButton(root.transform, "QUIT", y - 54f, OnQuit, false);
 
             // Version
             var verGo = MakeRect("Version", root.transform,
-                new Vector2(0f, 0f), new Vector2(0f, 0f));
+                new Vector2(1f, 0f), new Vector2(1f, 0f));
             var verRt = verGo.GetComponent<RectTransform>();
-            verRt.pivot = new Vector2(0f, 0f);
-            verRt.anchoredPosition = new Vector2(16f, 12f);
-            verRt.sizeDelta = new Vector2(200f, 20f);
+            verRt.pivot = new Vector2(1f, 0f);
+            verRt.anchoredPosition = new Vector2(-16f, 12f);
+            verRt.sizeDelta = new Vector2(180f, 18f);
 
             var verTmp = verGo.AddComponent<TextMeshProUGUI>();
             verTmp.text = "S43 Dev Build";
-            verTmp.fontSize = 10f;
-            verTmp.color = new Color(0.3f, 0.35f, 0.4f, 0.6f);
-            verTmp.alignment = TextAlignmentOptions.Left;
+            verTmp.fontSize = 8f;
+            verTmp.color = WithAlpha(RimaUITheme.TextMuted, 0.35f);
+            verTmp.alignment = TextAlignmentOptions.Right;
             verTmp.raycastTarget = false;
         }
 
-        private void AddMenuButton(Transform parent, string text, float yOffset, UnityEngine.Events.UnityAction onClick)
+        private void AddMenuButton(Transform parent, string text, float yOffset, UnityEngine.Events.UnityAction onClick, bool primary)
         {
             var btnGo = MakeRect($"Btn_{text}", parent,
                 new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
@@ -199,22 +201,29 @@ namespace RIMA
             btnRt.sizeDelta = new Vector2(220f, 40f);
 
             var btnImg = btnGo.AddComponent<Image>();
-            btnImg.sprite = RimaUITheme.ResourceFrame;
-            btnImg.color = RimaUITheme.PanelTint;
+            var packButton = Resources.Load<Sprite>(PackButtonPath);
+            btnImg.sprite = packButton != null ? packButton : RimaUITheme.ResourceFrame;
+            btnImg.type = Image.Type.Sliced;
+            btnImg.color = primary
+                ? WithAlpha(RimaUITheme.Cyan, 0.22f)
+                : WithAlpha(RimaUITheme.PanelTint, 0.30f);
 
             var btn = btnGo.AddComponent<Button>();
+            btn.targetGraphic = btnImg;
             var colors = btn.colors;
-            colors.normalColor      = RimaUITheme.PanelTint;
-            colors.highlightedColor = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.35f);
-            colors.pressedColor     = new Color(RimaUITheme.Cyan.r * 0.7f, RimaUITheme.Cyan.g * 0.7f, RimaUITheme.Cyan.b * 0.7f, 0.5f);
+            colors.normalColor      = primary ? WithAlpha(RimaUITheme.Cyan, 0.22f) : WithAlpha(RimaUITheme.PanelTint, 0.30f);
+            colors.highlightedColor = WithAlpha(RimaUITheme.Cyan, primary ? 0.42f : 0.30f);
+            colors.pressedColor     = WithAlpha(RimaUITheme.Cyan, primary ? 0.56f : 0.44f);
+            colors.selectedColor    = WithAlpha(RimaUITheme.Cyan, primary ? 0.42f : 0.30f);
+            colors.disabledColor    = WithAlpha(RimaUITheme.TextMuted, 0.18f);
             btn.colors = colors;
 
             var lblGo = MakeRect("Label", btnGo.transform, Vector2.zero, Vector2.one);
             var lbl = lblGo.AddComponent<TextMeshProUGUI>();
             lbl.text = text;
-            lbl.fontSize = 16f;
+            lbl.fontSize = primary ? 17f : 15f;
             lbl.fontStyle = FontStyles.Bold;
-            lbl.color = Color.white;
+            lbl.color = primary ? RimaUITheme.TextPrimary : WithAlpha(RimaUITheme.TextPrimary, 0.86f);
             lbl.alignment = TextAlignmentOptions.Center;
             lbl.raycastTarget = false;
 
@@ -230,13 +239,6 @@ namespace RIMA
             var go = new GameObject("[CharacterSelectScreen]");
             DontDestroyOnLoad(go);
             go.AddComponent<CharacterSelectScreen>();
-        }
-
-        private void OnSettings()
-        {
-            // Show the settings menu if available
-            var settings = FindAnyObjectByType<SettingsMenuUI>();
-            if (settings != null) settings.Open();
         }
 
         private void OnQuit()
@@ -257,6 +259,12 @@ namespace RIMA
             rt.anchorMax = ancMax;
             rt.offsetMin = rt.offsetMax = Vector2.zero;
             return go;
+        }
+
+        private static Color WithAlpha(Color color, float alpha)
+        {
+            color.a = alpha;
+            return color;
         }
     }
 }
