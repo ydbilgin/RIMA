@@ -1,5 +1,25 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-04 — PLAYTEST FIXES: SOFT-LOCK + KAMERA-ZOOM + DRAFT/HUD REDESIGN + REWARD-G + PASİF-İKON — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı _IsoGame'i oynayıp bug/UX şikayetleri verdi; council + cx `laurethayday` + Opus ile otonom çözüldü. **8 commit, working tree temiz.** Her şey play-mode'da doğrulandı (ekran görüntüleri `Assets/Screenshots/`).
+
+**YAPILAN + COMMIT'Lİ + PLAY-DOĞRULANDI:**
+1. **Soft-lock fix** (`fd713c7c`): "mob temizledim ama devam etmiyor" = 2 katman. (a) `RoomClearVictoryTrigger` mob-sayacı bir düşman OnDeath'siz sahneden çıkınca takılıyordu → Update telafi ağı (tüm tracked düşman gidince clear). (b) `MapFlowManager.ActiveInstance` null olabiliyordu → `FindFirstObjectByType` fallback. Kanıt: 3 düşman Object.Destroy (OnDeath yok) → clear+reward+kapı.
+2. **Kamera zoom** (`95e744e3`→`f91db128`): "tak tak" = PPC tamsayı-quantize. Çözüm: scroll'da PPC kapalı + orthoSize glide; durunca **en yakın crisp integer pixel-ratio'ya EASE + PPC re-enable = POP YOK**. Default zoom **1.0** (eski 2.0 çok uzaktı), range 0.7–1.6 (serialized). Kanıt: 0.78→crisp 0.8 (refResY 144=H/5, ortho exact). Dosya `Assets/Scripts/Camera/CameraZoom.cs`.
+3. **Draft kart redesign** (`16051851`): jitter + "Seç çalışmıyor" = AYNI kök (HoverScale kart ROOT'unu ölçekliyordu → raycast-target kursör altından kayıyor). Çözüm: **sabit full-size raycast HITBOX + child `VisualRoot`; hover sadece VisualRoot'u ölçekler** → jitter biter, Seç tıklaması target sabit kaldığı için çalışır. Kart 280×400, ortalı, okunaklı font. `DraftManager.ShowDraftDelayed` `WaitForSecondsRealtime` (timeScale=0 stall fix).
+4. **Premium görsel wiring** (`f91db128`): MEVCUT premium Pack wire'landı (üretim değil!) — `Pack/card_frame_9slice` (obsidian+cyan kart frame) + `rarity_glow_*` + `card_select_flash` + skill bar `RIMA_UI_SkillSlotFrame` + `Pack/bar_frame_9slice` backing (slot 56/44px). Path'ler `RimaUITheme`'de.
+5. **RewardPickup G-trigger** (`e4ec1c61`): otomatik-collect → **G tuşu** (DoorTrigger pattern; "Topla: G" prompt). collect zinciri korundu.
+6. **Pasif kart ikonları** (`2b54e7e5`+`3f9ded49`): pasifler ikonsuzdu (gri) → cx `$imagegen` 16-ikon on-brand pack (`Resources/UI/RIMA/PassiveIcons/passive_icons_sheet_4x4_96.png`, ⚠️ *.png gitignore→`git add -f`). `RimaUITheme.PassiveIcon(name)` runtime Sprite.Create ile 16 alt-sprite + isim-hash atar; `SkillOfferUI` `icon==null` olunca kullanır. Kanıt: Deep Wound/Predator's Eye/Sunder Mark ikon gösteriyor.
+
+**Council karar dökümanı** = `STAGING/UI_UX_REDESIGN_DECISION_2026-06-04.md` (advisor çıktıları `_council_*ux_camera_cards*` + `CODEX_DONE_laurethayday.md`).
+
+**⏭️ KULLANICI FEEL-TEST ETMELİ (mekanizma doğrulandı, his sübjektif):** G-tuşu ile ödül toplama · "Seç" tıklayınca skill bar'a düşme (yapısal fix, gerçek tık testi) · scroll-zoom hissi · hover öne-çıkma. **NLM auth expired** → `! nlm login` (cx canon çekemiyor, palet biliniyor, bloklamıyor).
+
+**ROUTING:** cx=**laurethayday** (kullanıcı-set bu session) → quota biterse yekta. Asset=cx `$imagegen`. Önce REUSE (Resources/UI/RIMA/Pack zengin) sonra üret.
+
+---
+
 ## ⏯️ RESUME (2026-06-03 GECE·5 — DEMO B-LITE TEST SUITE: 10/10 YEŞİL + COMMIT'Lİ — /clear sonrası İLK BURAYI OKU)
 
 **BAĞLAM:** Kullanıcı "demo bileşenlerini agentlarla/otomasyonla test et, gerekirse /council" dedi → "önce council ile test matrisi" seçti → sonra "otonom devam et, ben gidiyorum" dedi. Otonom tamamlandı. **İKİ COMMIT atıldı (commit artık GATED DEĞİL — kullanıcı "commitle kaydet, hata alırsak geri döneriz" dedi):**
