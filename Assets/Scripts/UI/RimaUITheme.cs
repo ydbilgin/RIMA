@@ -152,6 +152,51 @@ namespace RIMA
             _                      => ("UNKNOWN", ""),
         };
 
+        public static (string motto, string playstyle, string resource) ClassIdentity(ClassType cls) => cls switch
+        {
+            ClassType.Warblade => (
+                "Yaklaş. Sabitle. Zırh kır. İnfaz et.",
+                "Ağır zırh-kırıcı iki el kılıcı ve parry ile ritmi dikte eder.",
+                "Rage 0-100 · sadece vurarak/CC ile dolar; Sundered sonrası infaz."),
+            ClassType.Ranger => (
+                "Sana ulaşamazlar. Her saniye kayıp veriyorsun.",
+                "Mesafe disiplinini, tuzakları ve Mark baskısını aynı hatta tutar.",
+                "Focus · 4m+ mesafede dolar, yakında erir."),
+            ClassType.Shadowblade => (
+                "Görmeden önce hissedilir.",
+                "Hızlı pozisyonel oyun, Phase pencereleri ve toplu infaz üstüne kurulur.",
+                "Energy + Combo · Rift Scar/Sever karar anı."),
+            ClassType.Elementalist => (
+                "Her şeyi yakıyorum. Ama önce ritmi buluyorum.",
+                "Fire/Frost ritmini kurar, doğru döngüde Lightbreak ile alanı kırar.",
+                "Mana + Elemental State · element ritmi güç biriktirir."),
+            ClassType.Ravager => (
+                "Az canken daha tehlikeliyim.",
+                "Düşük HP momentumuyla çift balta kan-furyasını büyütür.",
+                "Fury · sadece hasar alarak dolar; düşük HP daha hızlı."),
+            ClassType.Ronin => (
+                "Çek. Kes. Kın. Bir nefeste.",
+                "Iaido bekle-cezalandır temposu, hareketsizlik ve tek temiz kesiş ister.",
+                "Tension · kın ve hareketsiz kalınca birikir."),
+            ClassType.Gunslinger => (
+                "Mermin yok. Senin zamanın da yok.",
+                "Kinetik run-and-gun oynar; ısıyı yönetip kusursuz soğutma arar.",
+                "Heat · mükemmel Sıfır soğutma ile tempo sıfırlanır."),
+            ClassType.Brawler => (
+                "Düşersen kalk. Ama önce yumruğum kalkar.",
+                "Silahsız ritmik kombo, yakın baskı ve whiff-punish üstüne kurulur.",
+                "Charge 0-5 · Shattered pencereleri yumruk gücüne döner."),
+            ClassType.Summoner => (
+                "Ben savaşmıyorum. Feda ediyorum.",
+                "Minyon kondüktörü gibi oynar; çağırır, konumlandırır, feda-burst açar.",
+                "Charges 0-4 · çağır ve feda et."),
+            ClassType.Hexer => (
+                "Sabır. 10'a gelince sen bitiyorsun.",
+                "Lanet biriktirir, yayar ve doğru karar anında patlatır.",
+                "Hex Stacks 0-10 · Hexblast ile karar anı."),
+            _ => ("UNKNOWN", "", ""),
+        };
+
         // ── Sprites ───────────────────────────────────────────────────────
         // Procedural rounded-rect sprites instead of AI-generated PNGs.
         // Clean, resolution-independent, 9-slice compatible.

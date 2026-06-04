@@ -39,6 +39,11 @@ namespace RIMA
         private TMP_Text  tagline1Label;
         private TMP_Text  tagline2Label;
         private Image     accentBar;
+        private Image     identityAccentBar;
+        private TMP_Text  identityMottoLabel;
+        private TMP_Text  identityPlaystyleLabel;
+        private TMP_Text  identityResourceLabel;
+        private TMP_Text  identityLockLabel;
         private Button    startButton;
         private TMP_Text  startButtonLabel;
 
@@ -329,38 +334,38 @@ namespace RIMA
             hRt.anchoredPosition = new Vector2(0f, -16f);
             hRt.sizeDelta = new Vector2(0f, 20f);
 
-            string[] slotNames =
-            {
-                "LMB  BASIC ATTACK", "SKILL  1",
-                "SKILL  2",          "SKILL  3",
-                "SKILL  4",          "IDENTITY PASSIVE"
-            };
+            var bar = MakePanel("IdentityAccent", parent);
+            SetStretch(bar, new Vector2(0.06f, 0.78f), new Vector2(0.08f, 0.88f), Vector2.zero, Vector2.zero);
+            identityAccentBar = bar.GetComponent<Image>();
+            identityAccentBar.raycastTarget = false;
 
-            float rowH   = 0.120f;
-            float rowPad = 0.012f;
-            float top    = 0.88f;
+            identityMottoLabel = MakeText("", parent, 18, FontStyles.Bold, RimaUITheme.Cyan);
+            identityMottoLabel.alignment = TextAlignmentOptions.Left;
+            identityMottoLabel.enableWordWrapping = true;
+            var mottoRt = identityMottoLabel.transform as RectTransform;
+            mottoRt.anchorMin = new Vector2(0.12f, 0.72f); mottoRt.anchorMax = new Vector2(0.92f, 0.88f);
+            mottoRt.offsetMin = mottoRt.offsetMax = Vector2.zero;
 
-            for (int i = 0; i < slotNames.Length; i++)
-            {
-                float y2 = top - i * (rowH + rowPad);
-                float y1 = y2 - rowH;
-                var row = MakePanel($"SkillRow_{i}", parent);
-                SetStretch(row, new Vector2(0.04f, y1), new Vector2(0.96f, y2), Vector2.zero, Vector2.zero);
-                
-                var img = row.GetComponent<Image>();
-                img.sprite = RimaUITheme.SmallPanelFrame;
-                img.type = Image.Type.Sliced;
-                img.color = RimaUITheme.SlotLocked;
+            identityPlaystyleLabel = MakeText("", parent, 13, FontStyles.Normal, RimaUITheme.TextMuted);
+            identityPlaystyleLabel.alignment = TextAlignmentOptions.TopLeft;
+            identityPlaystyleLabel.enableWordWrapping = true;
+            var playstyleRt = identityPlaystyleLabel.transform as RectTransform;
+            playstyleRt.anchorMin = new Vector2(0.08f, 0.43f); playstyleRt.anchorMax = new Vector2(0.92f, 0.68f);
+            playstyleRt.offsetMin = playstyleRt.offsetMax = Vector2.zero;
 
-                bool isPrimary = (i == 0 || i == 5);
-                var lbl = MakeText(slotNames[i], row, 10,
-                    isPrimary ? FontStyles.Bold : FontStyles.Normal,
-                    isPrimary ? RimaUITheme.Cyan : RimaUITheme.TextMuted);
-                lbl.alignment = TextAlignmentOptions.Left;
-                var lRt = lbl.transform as RectTransform;
-                lRt.anchorMin = Vector2.zero; lRt.anchorMax = Vector2.one;
-                lRt.offsetMin = new Vector2(10f, 0f); lRt.offsetMax = new Vector2(-6f, 0f);
-            }
+            identityResourceLabel = MakeText("", parent, 13, FontStyles.Bold, RimaUITheme.TextPrimary);
+            identityResourceLabel.alignment = TextAlignmentOptions.TopLeft;
+            identityResourceLabel.enableWordWrapping = true;
+            var resourceRt = identityResourceLabel.transform as RectTransform;
+            resourceRt.anchorMin = new Vector2(0.08f, 0.27f); resourceRt.anchorMax = new Vector2(0.92f, 0.40f);
+            resourceRt.offsetMin = resourceRt.offsetMax = Vector2.zero;
+
+            identityLockLabel = MakeText("", parent, 11, FontStyles.Bold, RimaUITheme.TextMuted);
+            identityLockLabel.alignment = TextAlignmentOptions.Left;
+            identityLockLabel.enableWordWrapping = true;
+            var lockRt = identityLockLabel.transform as RectTransform;
+            lockRt.anchorMin = new Vector2(0.08f, 0.18f); lockRt.anchorMax = new Vector2(0.92f, 0.25f);
+            lockRt.offsetMin = lockRt.offsetMax = Vector2.zero;
         }
 
         private void BuildStartButton(RectTransform parent)
@@ -423,6 +428,7 @@ namespace RIMA
             var (tl1, tl2) = RimaUITheme.ClassTagline(cls);
             tagline1Label.text = tl1;
             tagline2Label.text = tl2;
+            RefreshIdentityPanel(cls);
 
             // Portrait
             if (portraitImage != null)
@@ -442,6 +448,26 @@ namespace RIMA
                     startButtonLabel.text = IsUnlocked(cls) ? "START RUN" : LockedButtonText(cls).ToUpperInvariant();
                     startButtonLabel.fontSize = IsUnlocked(cls) ? 20f : 13f;
                 }
+            }
+        }
+
+        private void RefreshIdentityPanel(ClassType cls)
+        {
+            var accent = RimaUITheme.ClassAccent(cls);
+            var (motto, playstyle, resource) = RimaUITheme.ClassIdentity(cls);
+
+            if (identityAccentBar != null) identityAccentBar.color = accent;
+            if (identityMottoLabel != null)
+            {
+                identityMottoLabel.text = motto;
+                identityMottoLabel.color = accent;
+            }
+            if (identityPlaystyleLabel != null) identityPlaystyleLabel.text = playstyle;
+            if (identityResourceLabel != null) identityResourceLabel.text = resource;
+            if (identityLockLabel != null)
+            {
+                identityLockLabel.text = IsUnlocked(cls) ? "" : IdentityLockText(cls);
+                identityLockLabel.color = RimaUITheme.TextMuted;
             }
         }
 
@@ -478,6 +504,13 @@ namespace RIMA
             return cls == ClassType.Hexer
                 ? "250 Echoes + Elementalist run"
                 : $"{UnlockCost(cls)} Echoes required";
+        }
+
+        private static string IdentityLockText(ClassType cls)
+        {
+            return cls == ClassType.Hexer
+                ? "250 Echoes + Elementalist run gerekli"
+                : $"{UnlockCost(cls)} Echoes gerekli";
         }
 
         private static int UnlockCost(ClassType cls) => cls switch
