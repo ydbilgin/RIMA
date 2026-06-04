@@ -49,6 +49,8 @@ namespace RIMA
         private TMP_Text  identityResourceLabel;
         private TMP_Text  identityLockLabel;
         private Image     identityPortraitImage;
+        private CanvasGroup identityPanelGroup;
+        private Coroutine identityFadeRoutine;
         private Button    startButton;
         private TMP_Text  startButtonLabel;
         private TMP_Text  skillEmptyLabel;
@@ -66,16 +68,16 @@ namespace RIMA
 
         private static readonly RoomPlacement[] RosterPlacements =
         {
-            new RoomPlacement(ClassType.Ronin,        new Vector2(0.08f, 0.61f), new Vector2(260f, 360f), 0.84f),
-            new RoomPlacement(ClassType.Hexer,        new Vector2(0.92f, 0.61f), new Vector2(260f, 360f), 0.84f),
-            new RoomPlacement(ClassType.Ravager,      new Vector2(0.25f, 0.57f), new Vector2(260f, 360f), 0.84f),
-            new RoomPlacement(ClassType.Summoner,     new Vector2(0.75f, 0.57f), new Vector2(260f, 360f), 0.84f),
-            new RoomPlacement(ClassType.Gunslinger,   new Vector2(0.42f, 0.54f), new Vector2(260f, 360f), 0.84f),
-            new RoomPlacement(ClassType.Brawler,      new Vector2(0.58f, 0.54f), new Vector2(260f, 360f), 0.84f),
-            new RoomPlacement(ClassType.Warblade,     new Vector2(0.22f, 0.44f), new Vector2(300f, 410f), 0.98f),
-            new RoomPlacement(ClassType.Shadowblade,  new Vector2(0.78f, 0.44f), new Vector2(300f, 410f), 0.98f),
-            new RoomPlacement(ClassType.Elementalist, new Vector2(0.41f, 0.39f), new Vector2(300f, 410f), 0.98f),
-            new RoomPlacement(ClassType.Ranger,       new Vector2(0.59f, 0.39f), new Vector2(300f, 410f), 0.98f),
+            new RoomPlacement(ClassType.Ronin,        new Vector2(0.270f, 0.62f), new Vector2(200f, 285f), 0.74f),
+            new RoomPlacement(ClassType.Ravager,      new Vector2(0.375f, 0.62f), new Vector2(200f, 285f), 0.74f),
+            new RoomPlacement(ClassType.Gunslinger,   new Vector2(0.480f, 0.62f), new Vector2(200f, 285f), 0.74f),
+            new RoomPlacement(ClassType.Brawler,      new Vector2(0.585f, 0.62f), new Vector2(200f, 285f), 0.74f),
+            new RoomPlacement(ClassType.Summoner,     new Vector2(0.690f, 0.62f), new Vector2(200f, 285f), 0.74f),
+            new RoomPlacement(ClassType.Hexer,        new Vector2(0.790f, 0.62f), new Vector2(200f, 285f), 0.74f),
+            new RoomPlacement(ClassType.Warblade,     new Vector2(0.340f, 0.34f), new Vector2(250f, 350f), 0.92f),
+            new RoomPlacement(ClassType.Elementalist, new Vector2(0.470f, 0.34f), new Vector2(250f, 350f), 0.92f),
+            new RoomPlacement(ClassType.Ranger,       new Vector2(0.610f, 0.34f), new Vector2(250f, 350f), 0.92f),
+            new RoomPlacement(ClassType.Shadowblade,  new Vector2(0.730f, 0.34f), new Vector2(250f, 350f), 0.92f),
         };
 
         private readonly struct RoomPlacement
@@ -102,6 +104,10 @@ namespace RIMA
             public Button        button;
             public Image         seal;
             public Image         glow;
+            public RectTransform selectionVfxRoot;
+            public Image         selectionGlowDisk;
+            public Image         selectionRing;
+            public Image[]       selectionMotes;
             public Image         lockGlyph;
             public TMP_Text      costChip;
             public CanvasGroup   canvasGroup;
@@ -160,13 +166,25 @@ namespace RIMA
             var root = MakeRect("RuntimeRoot_CharSelect", targetCanvas.transform, Vector2.zero, Vector2.one);
             root.offsetMin = root.offsetMax = Vector2.zero;
 
-            var roomLayer = MakeRect("RoomLayer", root, new Vector2(0f, 0.25f), Vector2.one);
+            var roomLayer = MakeRect("RoomLayer", root, Vector2.zero, Vector2.one);
             roomLayer.offsetMin = roomLayer.offsetMax = Vector2.zero;
             BuildRosterRoom(roomLayer);
 
-            var bottomStrip = MakePanel("BottomHUDStrip", root);
-            SetStretch(bottomStrip, Vector2.zero, new Vector2(1f, 0.25f), Vector2.zero, Vector2.zero);
-            BuildSkillDetailPanel(bottomStrip);
+            var identityPanel = MakeFramedPanel("IdentityPopupPanel", root, new Vector2(0.012f, 0.34f), new Vector2(0.175f, 0.84f));
+            identityPanel.offsetMin = new Vector2(10f, 8f);
+            identityPanel.offsetMax = new Vector2(-8f, -8f);
+            BuildIdentityPanel(identityPanel);
+
+            var skillPanel = MakeFramedPanel("SkillZone", root, new Vector2(0.86f, 0.14f), new Vector2(0.988f, 0.96f));
+            skillPanel.offsetMin = new Vector2(6f, 6f);
+            skillPanel.offsetMax = new Vector2(-8f, -8f);
+            BuildSkillPanel(skillPanel);
+
+            var bottomStrip = MakePanel("BottomActionStrip", root);
+            SetStretch(bottomStrip, Vector2.zero, new Vector2(1f, 0.11f), Vector2.zero, Vector2.zero);
+            BuildActionStrip(bottomStrip);
+            BuildBackButton(root);
+            BuildStartButton(root);
         }
 
         private static void EnsureRuntimeScaler(Canvas canvas)
@@ -317,6 +335,14 @@ namespace RIMA
             seal.preserveAspect = true;
             seal.raycastTarget = false;
 
+            var selectionVfxRoot = BuildSelectionVfx(root, placement.size);
+            var selectionVfxImages = selectionVfxRoot.GetComponentsInChildren<Image>(true);
+            var selectionGlowDisk = selectionVfxRoot.Find("PulseGlowDisk").GetComponent<Image>();
+            var selectionRing = selectionVfxRoot.Find("RotatingCyanRing").GetComponent<Image>();
+            var selectionMotes = selectionVfxImages
+                .Where(img => img != null && img.name.StartsWith("GlowMote", StringComparison.Ordinal))
+                .ToArray();
+
             var spriteRt = MakePanel("Sprite", root);
             spriteRt.anchorMin = new Vector2(0.5f, 0f); spriteRt.anchorMax = new Vector2(0.5f, 0f);
             spriteRt.pivot = new Vector2(0.5f, 0f);
@@ -361,7 +387,11 @@ namespace RIMA
             costRt.offsetMin = costRt.offsetMax = Vector2.zero;
 
             var hitRt = MakePanel("Hit", root);
-            SetStretch(hitRt, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            hitRt.anchorMin = new Vector2(0.5f, 0f);
+            hitRt.anchorMax = new Vector2(0.5f, 0f);
+            hitRt.pivot = new Vector2(0.5f, 0.5f);
+            hitRt.anchoredPosition = new Vector2(0f, placement.size.y * 0.38f);
+            hitRt.sizeDelta = new Vector2(placement.size.x * 0.45f, placement.size.y * 0.70f);
             var hit = hitRt.GetComponent<Image>();
             hit.color = Color.clear;
             hit.raycastTarget = true;
@@ -386,6 +416,10 @@ namespace RIMA
                 button = button,
                 seal = seal,
                 glow = glow,
+                selectionVfxRoot = selectionVfxRoot,
+                selectionGlowDisk = selectionGlowDisk,
+                selectionRing = selectionRing,
+                selectionMotes = selectionMotes,
                 lockGlyph = lockImg,
                 costChip = costChip,
                 canvasGroup = canvasGroup,
@@ -412,37 +446,64 @@ namespace RIMA
             ApplyRoomEntryVisual(entry, false);
         }
 
-        private void BuildSkillDetailPanel(RectTransform parent)
+        private static RectTransform BuildSelectionVfx(RectTransform parent, Vector2 characterSize)
         {
-            var bg = parent.GetComponent<Image>();
-            bg.sprite = RimaUITheme.SmallPanelFrame;
-            bg.type = Image.Type.Sliced;
-            bg.color = new Color(0.07f, 0.03f, 0.09f, 0.90f);
-            bg.raycastTarget = false;
+            var root = MakeRect("SelectionUIGlowVFX", parent, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f));
+            root.pivot = new Vector2(0.5f, 0.5f);
+            root.anchoredPosition = new Vector2(0f, 32f);
+            root.sizeDelta = new Vector2(characterSize.x * 0.92f, 96f);
 
-            var topBorder = MakePanel("CyanTopBorder", parent);
-            SetStretch(topBorder, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -2f), Vector2.zero);
-            var topBorderImg = topBorder.GetComponent<Image>();
-            topBorderImg.color = RimaUITheme.Cyan;
-            topBorderImg.raycastTarget = false;
+            var glowDisk = MakePanel("PulseGlowDisk", root);
+            glowDisk.anchorMin = new Vector2(0.5f, 0.5f); glowDisk.anchorMax = new Vector2(0.5f, 0.5f);
+            glowDisk.pivot = new Vector2(0.5f, 0.5f);
+            glowDisk.anchoredPosition = Vector2.zero;
+            glowDisk.sizeDelta = new Vector2(characterSize.x * 0.90f, 76f);
+            var glowDiskImg = glowDisk.GetComponent<Image>();
+            glowDiskImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
+            glowDiskImg.type = Image.Type.Simple;
+            glowDiskImg.preserveAspect = true;
+            glowDiskImg.color = new Color(0f, 1f, 0.80f, 0.0f);
+            glowDiskImg.raycastTarget = false;
 
-            var identityZone = MakeFramedPanel("IdentityZone", parent, new Vector2(0f, 0f), new Vector2(0.25f, 1f));
-            identityZone.offsetMin = new Vector2(28f, 18f);
-            identityZone.offsetMax = new Vector2(-18f, -16f);
+            var ring = MakePanel("RotatingCyanRing", root);
+            ring.anchorMin = new Vector2(0.5f, 0.5f); ring.anchorMax = new Vector2(0.5f, 0.5f);
+            ring.pivot = new Vector2(0.5f, 0.5f);
+            ring.anchoredPosition = Vector2.zero;
+            ring.sizeDelta = new Vector2(characterSize.x * 0.74f, 64f);
+            var ringImg = ring.GetComponent<Image>();
+            ringImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
+            ringImg.type = Image.Type.Simple;
+            ringImg.preserveAspect = true;
+            ringImg.color = new Color(0f, 1f, 0.80f, 0.0f);
+            ringImg.raycastTarget = false;
 
-            var actionZone = MakeFramedPanel("ActionZone", parent, new Vector2(0.25f, 0f), new Vector2(0.45f, 1f));
-            actionZone.offsetMin = new Vector2(14f, 18f);
-            actionZone.offsetMax = new Vector2(-14f, -16f);
+            for (int i = 0; i < 3; i++)
+            {
+                var mote = MakePanel("GlowMote" + i, root);
+                mote.anchorMin = new Vector2(0.5f, 0.5f); mote.anchorMax = new Vector2(0.5f, 0.5f);
+                mote.pivot = new Vector2(0.5f, 0.5f);
+                mote.sizeDelta = new Vector2(12f, 12f);
+                var moteImg = mote.GetComponent<Image>();
+                moteImg.sprite = RimaUITheme.SmallPanelFrame;
+                moteImg.type = Image.Type.Sliced;
+                moteImg.color = new Color(0f, 1f, 0.80f, 0.0f);
+                moteImg.raycastTarget = false;
+            }
 
-            var skillZone = MakeFramedPanel("SkillZone", parent, new Vector2(0.45f, 0f), Vector2.one);
-            skillZone.offsetMin = new Vector2(18f, 18f);
-            skillZone.offsetMax = new Vector2(-28f, -16f);
+            root.gameObject.SetActive(false);
+            return root;
+        }
 
-            var portraitFrame = MakePanel("IdentityPortraitFrame", identityZone);
-            portraitFrame.anchorMin = new Vector2(0f, 0.46f); portraitFrame.anchorMax = new Vector2(0f, 0.46f);
-            portraitFrame.pivot = new Vector2(0f, 0.5f);
-            portraitFrame.anchoredPosition = new Vector2(22f, 0f);
-            portraitFrame.sizeDelta = new Vector2(92f, 92f);
+        private void BuildIdentityPanel(RectTransform parent)
+        {
+            identityPanelGroup = parent.gameObject.AddComponent<CanvasGroup>();
+            identityPanelGroup.alpha = 0f;
+
+            var portraitFrame = MakePanel("IdentityPortraitFrame", parent);
+            portraitFrame.anchorMin = new Vector2(0.5f, 1f); portraitFrame.anchorMax = new Vector2(0.5f, 1f);
+            portraitFrame.pivot = new Vector2(0.5f, 1f);
+            portraitFrame.anchoredPosition = new Vector2(0f, -28f);
+            portraitFrame.sizeDelta = new Vector2(118f, 118f);
             var portraitFrameImg = portraitFrame.GetComponent<Image>();
             portraitFrameImg.sprite = RimaUITheme.SmallPanelFrame;
             portraitFrameImg.type = Image.Type.Sliced;
@@ -463,84 +524,100 @@ namespace RIMA
             identityPortraitImage.preserveAspect = true;
             identityPortraitImage.raycastTarget = false;
 
-            var bar = MakePanel("IdentityAccent", identityZone);
-            SetStretch(bar, new Vector2(0f, 0.10f), new Vector2(0.012f, 0.92f), Vector2.zero, Vector2.zero);
+            var bar = MakePanel("IdentityAccent", parent);
+            SetStretch(bar, new Vector2(0f, 0.05f), new Vector2(0.012f, 0.96f), Vector2.zero, Vector2.zero);
             identityAccentBar = bar.GetComponent<Image>();
             identityAccentBar.raycastTarget = false;
 
-            classNameLabel = MakeText("WARBLADE", identityZone, 24, FontStyles.Bold, Color.white);
-            classNameLabel.alignment = TextAlignmentOptions.Left;
+            classNameLabel = MakeText("WARBLADE", parent, 25, FontStyles.Bold, Color.white);
+            classNameLabel.alignment = TextAlignmentOptions.Center;
             var cnRt = classNameLabel.transform as RectTransform;
-            cnRt.anchorMin = new Vector2(0.32f, 0.74f); cnRt.anchorMax = new Vector2(1f, 0.96f);
+            cnRt.anchorMin = new Vector2(0.05f, 0.66f); cnRt.anchorMax = new Vector2(0.95f, 0.75f);
             cnRt.offsetMin = cnRt.offsetMax = Vector2.zero;
 
-            tagline1Label = MakeText("HEAVY · MELEE · RAGE", identityZone, 10, FontStyles.Bold, RimaUITheme.TextMuted);
-            tagline1Label.alignment = TextAlignmentOptions.Left;
+            tagline1Label = MakeText("HEAVY · MELEE · RAGE", parent, 11, FontStyles.Bold, RimaUITheme.TextMuted);
+            tagline1Label.alignment = TextAlignmentOptions.Center;
             var t1Rt = tagline1Label.transform as RectTransform;
-            t1Rt.anchorMin = new Vector2(0.32f, 0.62f); t1Rt.anchorMax = new Vector2(1f, 0.74f);
+            t1Rt.anchorMin = new Vector2(0.05f, 0.59f); t1Rt.anchorMax = new Vector2(0.95f, 0.66f);
             t1Rt.offsetMin = t1Rt.offsetMax = Vector2.zero;
 
-            tagline2Label = MakeText("", identityZone, 10, FontStyles.Normal, RimaUITheme.TextMuted);
-            tagline2Label.alignment = TextAlignmentOptions.Left;
+            tagline2Label = MakeText("", parent, 11, FontStyles.Normal, RimaUITheme.TextMuted);
+            tagline2Label.alignment = TextAlignmentOptions.Center;
             tagline2Label.enableWordWrapping = true;
             var t2Rt = tagline2Label.transform as RectTransform;
-            t2Rt.anchorMin = new Vector2(0.32f, 0.50f); t2Rt.anchorMax = new Vector2(1f, 0.62f);
+            t2Rt.anchorMin = new Vector2(0.08f, 0.49f); t2Rt.anchorMax = new Vector2(0.92f, 0.59f);
             t2Rt.offsetMin = t2Rt.offsetMax = Vector2.zero;
 
-            identityMottoLabel = MakeText("", identityZone, 13, FontStyles.Bold, RimaUITheme.Cyan);
+            identityMottoLabel = MakeText("", parent, 13, FontStyles.Bold, RimaUITheme.Cyan);
             identityMottoLabel.alignment = TextAlignmentOptions.Left;
             identityMottoLabel.enableWordWrapping = true;
             var mottoRt = identityMottoLabel.transform as RectTransform;
-            mottoRt.anchorMin = new Vector2(0.32f, 0.35f); mottoRt.anchorMax = new Vector2(1f, 0.50f);
+            mottoRt.anchorMin = new Vector2(0.08f, 0.35f); mottoRt.anchorMax = new Vector2(0.92f, 0.48f);
             mottoRt.offsetMin = mottoRt.offsetMax = Vector2.zero;
 
-            identityPlaystyleLabel = MakeText("", identityZone, 10, FontStyles.Normal, RimaUITheme.TextMuted);
+            identityPlaystyleLabel = MakeText("", parent, 10, FontStyles.Normal, RimaUITheme.TextMuted);
             identityPlaystyleLabel.alignment = TextAlignmentOptions.TopLeft;
             identityPlaystyleLabel.enableWordWrapping = true;
             var playstyleRt = identityPlaystyleLabel.transform as RectTransform;
-            playstyleRt.anchorMin = new Vector2(0.32f, 0.18f); playstyleRt.anchorMax = new Vector2(1f, 0.35f);
+            playstyleRt.anchorMin = new Vector2(0.08f, 0.20f); playstyleRt.anchorMax = new Vector2(0.92f, 0.34f);
             playstyleRt.offsetMin = playstyleRt.offsetMax = Vector2.zero;
 
-            identityResourceLabel = MakeText("", identityZone, 10, FontStyles.Bold, RimaUITheme.TextPrimary);
+            identityResourceLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.TextPrimary);
             identityResourceLabel.alignment = TextAlignmentOptions.TopLeft;
             identityResourceLabel.enableWordWrapping = true;
             var resourceRt = identityResourceLabel.transform as RectTransform;
-            resourceRt.anchorMin = new Vector2(0.32f, 0.08f); resourceRt.anchorMax = new Vector2(1f, 0.18f);
+            resourceRt.anchorMin = new Vector2(0.08f, 0.09f); resourceRt.anchorMax = new Vector2(0.92f, 0.19f);
             resourceRt.offsetMin = resourceRt.offsetMax = Vector2.zero;
 
-            identityLockLabel = MakeText("", identityZone, 10, FontStyles.Bold, RimaUITheme.TextMuted);
+            identityLockLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.TextMuted);
             identityLockLabel.alignment = TextAlignmentOptions.Left;
             identityLockLabel.enableWordWrapping = true;
             var lockRt = identityLockLabel.transform as RectTransform;
-            lockRt.anchorMin = new Vector2(0.32f, 0f); lockRt.anchorMax = new Vector2(1f, 0.08f);
+            lockRt.anchorMin = new Vector2(0.08f, 0.02f); lockRt.anchorMax = new Vector2(0.92f, 0.08f);
             lockRt.offsetMin = lockRt.offsetMax = Vector2.zero;
+        }
 
-            var skillsHeader = MakeText("SKILLS", skillZone, 10, FontStyles.Bold, RimaUITheme.TextMuted);
+        private void BuildSkillPanel(RectTransform parent)
+        {
+            var skillsHeader = MakeText("SKILLS", parent, 13, FontStyles.Bold, RimaUITheme.Cyan);
             skillsHeader.alignment = TextAlignmentOptions.Left;
             var shRt = skillsHeader.transform as RectTransform;
-            shRt.anchorMin = new Vector2(0f, 0.84f); shRt.anchorMax = new Vector2(1f, 1f);
-            shRt.offsetMin = shRt.offsetMax = Vector2.zero;
+            shRt.anchorMin = new Vector2(0f, 0.93f); shRt.anchorMax = new Vector2(1f, 1f);
+            shRt.offsetMin = new Vector2(14f, 0f); shRt.offsetMax = new Vector2(-8f, 0f);
 
-            skillContent = MakeSkillStripArea(skillZone, "SkillStripArea");
+            skillContent = MakeSkillStripArea(parent, "SkillStripArea");
 
-            skillEmptyLabel = MakeText("Yetenekler yakinda", skillZone, 13, FontStyles.Normal, RimaUITheme.TextMuted);
+            skillEmptyLabel = MakeText("Yetenekler yakinda", parent, 13, FontStyles.Normal, RimaUITheme.TextMuted);
             skillEmptyLabel.alignment = TextAlignmentOptions.Center;
             var emptyRt = skillEmptyLabel.transform as RectTransform;
-            emptyRt.anchorMin = new Vector2(0f, 0f); emptyRt.anchorMax = new Vector2(1f, 0.82f);
-            emptyRt.offsetMin = emptyRt.offsetMax = Vector2.zero;
+            emptyRt.anchorMin = new Vector2(0f, 0f); emptyRt.anchorMax = new Vector2(1f, 0.92f);
+            emptyRt.offsetMin = new Vector2(10f, 0f); emptyRt.offsetMax = new Vector2(-10f, 0f);
+        }
 
-            BuildStartButton(actionZone);
-            BuildBackButton(actionZone);
+        private void BuildActionStrip(RectTransform parent)
+        {
+            var bg = parent.GetComponent<Image>();
+            bg.sprite = RimaUITheme.SmallPanelFrame;
+            bg.type = Image.Type.Sliced;
+            bg.color = new Color(0.05f, 0.03f, 0.07f, 0.86f);
+            bg.raycastTarget = false;
+
+            var topBorder = MakePanel("CyanTopBorder", parent);
+            SetStretch(topBorder, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -2f), Vector2.zero);
+            var topBorderImg = topBorder.GetComponent<Image>();
+            topBorderImg.color = RimaUITheme.Cyan;
+            topBorderImg.raycastTarget = false;
+
         }
 
         private void BuildStartButton(RectTransform parent)
         {
             var btnRoot = MakePanel("StartButton", parent);
-            btnRoot.anchorMin = new Vector2(0.5f, 0.58f);
-            btnRoot.anchorMax = new Vector2(0.5f, 0.58f);
+            btnRoot.anchorMin = new Vector2(0.50f, 0.06f);
+            btnRoot.anchorMax = new Vector2(0.50f, 0.06f);
             btnRoot.pivot = new Vector2(0.5f, 0.5f);
             btnRoot.anchoredPosition = Vector2.zero;
-            btnRoot.sizeDelta = new Vector2(340f, 68f);
+            btnRoot.sizeDelta = new Vector2(360f, 52f);
 
             var bgImg = btnRoot.GetComponent<Image>();
             // On-brand 9-slice button background (filled center). Falls back to the
@@ -573,11 +650,11 @@ namespace RIMA
         private void BuildBackButton(RectTransform parent)
         {
             var btnRoot = MakePanel("BackButton", parent);
-            btnRoot.anchorMin = new Vector2(0.5f, 0.22f);
-            btnRoot.anchorMax = new Vector2(0.5f, 0.22f);
+            btnRoot.anchorMin = new Vector2(0.28f, 0.06f);
+            btnRoot.anchorMax = new Vector2(0.28f, 0.06f);
             btnRoot.pivot = new Vector2(0.5f, 0.5f);
             btnRoot.anchoredPosition = Vector2.zero;
-            btnRoot.sizeDelta = new Vector2(340f, 44f);
+            btnRoot.sizeDelta = new Vector2(180f, 44f);
 
             var bgImg = btnRoot.GetComponent<Image>();
             bgImg.sprite = Resources.Load<Sprite>(PackButton) ?? RimaUITheme.ResourceFrame;
@@ -621,6 +698,7 @@ namespace RIMA
             if (tagline1Label != null) tagline1Label.text = tl1;
             if (tagline2Label != null) tagline2Label.text = tl2;
             RefreshIdentityPanel(cls);
+            ShowIdentityPopup();
             RefreshSkillList(cls);
             selectFlashTimer = 0.28f;
 
@@ -658,6 +736,31 @@ namespace RIMA
             }
         }
 
+        private void ShowIdentityPopup()
+        {
+            if (identityPanelGroup == null) return;
+
+            if (identityFadeRoutine != null)
+                StopCoroutine(identityFadeRoutine);
+
+            identityFadeRoutine = StartCoroutine(FadeIdentityPopup());
+        }
+
+        private IEnumerator FadeIdentityPopup()
+        {
+            const float duration = 0.15f;
+            float startAlpha = identityPanelGroup.alpha;
+
+            for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+            {
+                identityPanelGroup.alpha = Mathf.Lerp(startAlpha, 1f, Mathf.Clamp01(elapsed / duration));
+                yield return null;
+            }
+
+            identityPanelGroup.alpha = 1f;
+            identityFadeRoutine = null;
+        }
+
         private void RefreshSkillList(ClassType cls)
         {
             if (skillContent == null) return;
@@ -687,12 +790,12 @@ namespace RIMA
         private void BuildSkillRow(RectTransform parent, SkillData skill, ClassType cls)
         {
             var row = MakePanel("Skill_" + SkillIconRegistry.Normalize(skill.skillName), parent);
-            row.sizeDelta = new Vector2(176f, 112f);
+            row.sizeDelta = new Vector2(204f, 76f);
             var layoutElement = row.gameObject.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = 176f;
-            layoutElement.minWidth = 176f;
-            layoutElement.preferredHeight = 112f;
-            layoutElement.minHeight = 112f;
+            layoutElement.preferredWidth = 204f;
+            layoutElement.minWidth = 188f;
+            layoutElement.preferredHeight = 76f;
+            layoutElement.minHeight = 76f;
             var rowImg = row.GetComponent<Image>();
             rowImg.sprite = RimaUITheme.SmallPanelFrame;
             rowImg.type = Image.Type.Sliced;
@@ -703,8 +806,8 @@ namespace RIMA
             iconFrame.anchorMin = new Vector2(0f, 1f);
             iconFrame.anchorMax = new Vector2(0f, 1f);
             iconFrame.pivot = new Vector2(0.5f, 0.5f);
-            iconFrame.anchoredPosition = new Vector2(34f, -34f);
-            iconFrame.sizeDelta = new Vector2(48f, 48f);
+            iconFrame.anchoredPosition = new Vector2(28f, -28f);
+            iconFrame.sizeDelta = new Vector2(40f, 40f);
             var frameImg = iconFrame.GetComponent<Image>();
             frameImg.sprite = RimaUITheme.SmallPanelFrame;
             frameImg.type = Image.Type.Sliced;
@@ -719,21 +822,21 @@ namespace RIMA
             iconImg.color = Color.white;
             iconImg.raycastTarget = false;
 
-            var name = MakeText(skill.skillName.ToUpperInvariant(), row, 12, FontStyles.Bold, RimaUITheme.ClassAccent(cls));
+            var name = MakeText(skill.skillName?.ToUpperInvariant() ?? "UNKNOWN", row, 10, FontStyles.Bold, RimaUITheme.ClassAccent(cls));
             name.alignment = TextAlignmentOptions.TopLeft;
             name.enableWordWrapping = true;
             name.overflowMode = TextOverflowModes.Ellipsis;
             var nameRt = name.transform as RectTransform;
-            nameRt.anchorMin = new Vector2(0f, 0.50f); nameRt.anchorMax = new Vector2(1f, 0.95f);
-            nameRt.offsetMin = new Vector2(66f, 0f); nameRt.offsetMax = new Vector2(-10f, 0f);
+            nameRt.anchorMin = new Vector2(0f, 0.56f); nameRt.anchorMax = new Vector2(1f, 0.94f);
+            nameRt.offsetMin = new Vector2(54f, 0f); nameRt.offsetMax = new Vector2(-6f, 0f);
 
-            var desc = MakeText(skill.description, row, 10, FontStyles.Normal, new Color(1f, 1f, 1f, 0.75f));
+            var desc = MakeText(skill.description, row, 8, FontStyles.Normal, new Color(1f, 1f, 1f, 0.75f));
             desc.alignment = TextAlignmentOptions.TopLeft;
             desc.enableWordWrapping = true;
             desc.overflowMode = TextOverflowModes.Ellipsis;
             var descRt = desc.transform as RectTransform;
-            descRt.anchorMin = new Vector2(0f, 0.08f); descRt.anchorMax = new Vector2(1f, 0.48f);
-            descRt.offsetMin = new Vector2(12f, 0f); descRt.offsetMax = new Vector2(-10f, 0f);
+            descRt.anchorMin = new Vector2(0f, 0.08f); descRt.anchorMax = new Vector2(1f, 0.55f);
+            descRt.offsetMin = new Vector2(54f, 0f); descRt.offsetMax = new Vector2(-6f, 0f);
         }
 
         private void OnStartRun()
@@ -831,6 +934,24 @@ namespace RIMA
                 entry.glow.color = WithAlpha(accent, selected ? 0.32f : 0.0f);
             }
 
+            if (entry.selectionVfxRoot != null)
+                entry.selectionVfxRoot.gameObject.SetActive(selected);
+
+            if (entry.selectionGlowDisk != null)
+                entry.selectionGlowDisk.color = new Color(0f, 1f, 0.80f, selected ? 0.22f : 0.0f);
+
+            if (entry.selectionRing != null)
+                entry.selectionRing.color = new Color(0f, 1f, 0.80f, selected ? 0.46f : 0.0f);
+
+            if (entry.selectionMotes != null)
+            {
+                foreach (var mote in entry.selectionMotes)
+                {
+                    if (mote != null)
+                        mote.color = new Color(0f, 1f, 0.80f, 0.0f);
+                }
+            }
+
             if (entry.lockGlyph != null)
             {
                 entry.lockGlyph.gameObject.SetActive(!unlocked);
@@ -879,6 +1000,37 @@ namespace RIMA
                     float sealScale = Mathf.Lerp(0.98f, 1.04f, pulse);
                     selected.seal.rectTransform.localScale = new Vector3(sealScale, sealScale, 1f);
                 }
+
+                if (selected.selectionGlowDisk != null)
+                {
+                    float glowScale = Mathf.Lerp(0.96f, 1.10f, pulse);
+                    selected.selectionGlowDisk.rectTransform.localScale = new Vector3(glowScale, glowScale, 1f);
+                    selected.selectionGlowDisk.color = new Color(0f, 1f, 0.80f, Mathf.Lerp(0.16f, 0.34f, pulse));
+                }
+
+                if (selected.selectionRing != null)
+                {
+                    selected.selectionRing.rectTransform.localEulerAngles = new Vector3(0f, 0f, t * -28f);
+                    selected.selectionRing.color = new Color(0f, 1f, 0.80f, Mathf.Lerp(0.34f, 0.56f, pulse));
+                }
+
+                if (selected.selectionMotes != null)
+                {
+                    for (int i = 0; i < selected.selectionMotes.Length; i++)
+                    {
+                        var mote = selected.selectionMotes[i];
+                        if (mote == null)
+                            continue;
+
+                        float phase = Mathf.Repeat(t * 0.45f + i * 0.33f, 1f);
+                        float angle = (i / 3f) * Mathf.PI * 2f + t * 0.38f;
+                        float radius = Mathf.Lerp(40f, 92f, phase);
+                        float y = Mathf.Lerp(-10f, 42f, phase);
+                        mote.rectTransform.anchoredPosition = new Vector2(Mathf.Cos(angle) * radius, y);
+                        mote.rectTransform.localScale = Vector3.one * Mathf.Lerp(0.78f, 1.15f, 1f - phase);
+                        mote.color = new Color(0f, 1f, 0.80f, Mathf.Sin(phase * Mathf.PI) * 0.42f);
+                    }
+                }
             }
 
             if (selectFlashTimer > 0f)
@@ -916,7 +1068,7 @@ namespace RIMA
         private static RectTransform MakeSkillStripArea(RectTransform parent, string name)
         {
             var root = MakePanel(name, parent);
-            SetStretch(root, new Vector2(0f, 0f), new Vector2(1f, 0.82f), Vector2.zero, Vector2.zero);
+            SetStretch(root, new Vector2(0f, 0f), new Vector2(1f, 0.92f), new Vector2(10f, 8f), new Vector2(-10f, -4f));
             var rootImg = root.GetComponent<Image>();
             rootImg.color = new Color(0f, 0f, 0f, 0f);
             rootImg.raycastTarget = false;
@@ -928,32 +1080,32 @@ namespace RIMA
             viewportImg.color = new Color(0f, 0f, 0f, 0.20f);
             viewportImg.raycastTarget = true;
 
-            var content = new GameObject("Content", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(ContentSizeFitter));
+            var content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
             content.transform.SetParent(viewport, false);
             var contentRt = content.GetComponent<RectTransform>();
-            contentRt.anchorMin = new Vector2(0f, 0.5f);
-            contentRt.anchorMax = new Vector2(0f, 0.5f);
-            contentRt.pivot = new Vector2(0f, 0.5f);
+            contentRt.anchorMin = new Vector2(0f, 1f);
+            contentRt.anchorMax = new Vector2(1f, 1f);
+            contentRt.pivot = new Vector2(0.5f, 1f);
             contentRt.anchoredPosition = Vector2.zero;
             contentRt.sizeDelta = Vector2.zero;
 
-            var layout = content.GetComponent<HorizontalLayoutGroup>();
+            var layout = content.GetComponent<VerticalLayoutGroup>();
             layout.padding = new RectOffset(0, 0, 0, 0);
             layout.spacing = 8f;
-            layout.childAlignment = TextAnchor.MiddleLeft;
-            layout.childControlWidth = false;
-            layout.childControlHeight = true;
+            layout.childAlignment = TextAnchor.UpperCenter;
+            layout.childControlWidth = true;
+            layout.childControlHeight = false;
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
 
             var fitter = content.GetComponent<ContentSizeFitter>();
-            fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             var scroll = root.gameObject.AddComponent<ScrollRect>();
             scroll.viewport = viewport;
             scroll.content = contentRt;
-            scroll.horizontal = true;
-            scroll.vertical = false;
+            scroll.horizontal = false;
+            scroll.vertical = true;
             scroll.movementType = ScrollRect.MovementType.Clamped;
             scroll.scrollSensitivity = 24f;
 
@@ -1022,8 +1174,8 @@ namespace RIMA
         private static TMP_Text MakeText(string text, RectTransform parent, float size,
             FontStyles style, Color color)
         {
-            int maxLen = Mathf.Min(text.Length, 14);
-            var go = new GameObject("Lbl_" + text.Substring(0, maxLen), typeof(RectTransform));
+            int maxLen = Mathf.Min((text ?? "").Length, 14);
+            var go = new GameObject("Lbl_" + (text ?? "").Substring(0, maxLen), typeof(RectTransform));
             go.transform.SetParent(parent, false);
             var tmp = go.AddComponent<TextMeshProUGUI>();
             tmp.text = text;
