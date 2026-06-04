@@ -14,7 +14,19 @@
 
 **⚠️ DERSLER (yeni):** (a) **structural verify ≠ visual** — runtime UI'da "yeni içerik VAR MI" yetmez; "eski authored root DISABLED mı (activeInHierarchy=false)" da kontrol et, yoksa false-PASS (eski UI üstte render eder) [[feedback-ui-verify-authored-disabled]]. (b) MCP overlay-UI screenshot ALAMAZ → görsel his kullanıcıda; verification = council üyeleri sırayla (cx Unity play-observe + ax code-review). (c) **2 cx PARALEL çalışır** — farklı `--profile` → `cx_dispatch.py` otomatik `CODEX_DONE_<profil>.md` ayrı dosyaya yazar (single-instance kuralı = SADECE aynı profil). (d) imagegen (ax/agy Imagen via `/generate_image`) = HER ZAMAN 1024² opaque RGB; env-backdrop için OK, characters=PixelLab. (e) **Gemma 4 12B = kullanıcı için GEREKSİZ** (bol Gemini filosu + yerel GPU Unity ile VRAM çakışır) — kurulmadı.
 
-**⏭️ KALAN / SIRADA:**
+**⏭️ KALAN / SIRADA:** (🆕 YENİ SESSION — BURADAN BAŞLA)
+
+**✅ CharSelect FONKSİYONEL DONE+COMMIT'Lİ (`567b8c75`):** **class-carry BUG ÇÖZÜLDÜ** (SelectClass→`PlayerClassManager.SelectedClass` anında yazılıyor; eskiden her zaman Warblade geliyordu) + demo **200 Echo** + çalışan **unlock** (KİLİDİ AÇ→Echo harca→aç→oynanabilir) + **locked-seçilemez** + **siyah-silüet** (açılınca normale). cx-probe + ax-review dual-PASS.
+
+**🎨 CHARSELECT GÖRSEL REDESIGN = HTML-FIRST AKIŞI (kullanıcı: "Unity-direct UI kötü çıkıyor"):** HTML mockup HAZIR = `STAGING/mockups/charselect_mockup.html` (tarayıcıda aç → gör). **AKIŞ:** kullanıcı mockup'ı aç → reaksiyon → HTML iterasyon → onay → **cx Unity'yi mockup'a benzetir** (net görsel-spec ile). ax-3.5 oyun-örnek araştırması yapıldı (Hades/Dead-Cells/Death's-Gambit/Blasphemous pattern'leri: diegetic keep-roster, Echo-rift silüet, energy-circuit skill-tree, double-gothic framing).
+
+**🆕 YENİ İSTEKLER (kullanıcı, sonraki session — NOT EDİLDİ):**
+1. **Run-içi sol açılır-kapanır skill paneli** — bir TUŞLA aç/kapa; o run'da seçili/equipped skilleri gösterir (in-game HUD).
+2. **ESC → CODEX-tarzı detaylı skill ekranı** — oyunu durdurup TÜM karaktere-özel skilleri görme (build/theorycraft için; "codex gibi").
+3. **⚠️ CURRENCY ADI = KARAR AÇIK** — kullanıcı "Echo" adından emin DEĞİL; isim kararı gerek (kod+mockup şu an geçici "Echo"). NLM canon'da currency adı sorgulanmalı.
+
+**🤔 MOCKUP AÇIK SORULARI (kullanıcıdan):** detaylı skill ekranı = sağ-panel mi / tam-ekran mı · currency adı.
+
 - **Kullanıcı CharSelect v2'yi görsel feel-test edecek** (kolon oranları/karakter yerleşimi/seçim hissi). Tweak isterse arc koordinatları/scale ayarlanır.
 - **Skill ikonları:** demo'da **mevcut ikonlar reuse** (Warblade+Elementalist 8 skill ikonu `Assets/Sprites/UI/Icons`'ta VAR). Production = **PixelLab create_image_pro + style-ref + no-text HARD-RULE, 64px, 16'lı (4×4 sheet) batch, per-class**, GATED (kullanıcıyla). Karar=`STAGING/SPELLVFX_SKILLICON_DECISION_2026-06-04.md`.
 - **Track 2 — gameplay demo (Elementalist + Warblade):** büyü VFX **Phase-1 = Unity code/particle** (reuse `PlayerProjectile`/`SlashArcVFX`/`Combat-Juice`; Fireball zaten projectile spawn ediyor; GlacialSpike/Meteor'a VFX insertion-point hazır) → Phase-2 ax-3.1 "white core + shader tint" hibrit (grayscale sprite + URP-2D-Lit pixel-particle gradient + 2D light) → Phase-3 PixelLab anim (GATED). Karar=`STAGING/SPELLVFX_SKILLICON_DECISION_2026-06-04.md`.
