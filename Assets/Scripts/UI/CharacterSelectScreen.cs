@@ -34,6 +34,11 @@ namespace RIMA
         private const string PackPanelFrame = "UI/RIMA/Pack/panel_frame_9slice";
         private const string RoomBackdrop   = "UI/RIMA/CharacterSelect/room_bg";
         private const int RoomBackdropRetryFrames = 10;
+        private const int DemoStartingEcho = 200;
+        private const string EchoBalancePrefsKey = "rima_demo_echo_balance";
+        private const string ClassUnlockPrefsPrefix = "rima_class_unlocked_";
+        private const string HexerElementalistRunPrefsKey = "rima_hexer_elementalist_run";
+        private static readonly Color LockedSilhouetteColor = new(0.039f, 0.020f, 0.063f, 1f);
 
         // ── Internal layout state ─────────────────────────────────────────
         private ClassType selectedClass = ClassType.Warblade;
@@ -53,6 +58,7 @@ namespace RIMA
         private Coroutine identityFadeRoutine;
         private Button    startButton;
         private TMP_Text  startButtonLabel;
+        private TMP_Text  echoBalanceLabel;
         private TMP_Text  skillEmptyLabel;
         private RectTransform skillContent;
 
@@ -125,8 +131,12 @@ namespace RIMA
 
         private void Start()
         {
+            EnsureDemoEchoBalance();
             BuildScreen();
-            SelectClass(ClassType.Warblade);
+            // Default to the previously-selected class (if still unlocked) instead of force-overwriting to Warblade,
+            // since SelectClass now writes PlayerClassManager.SelectedClass immediately.
+            var defaultClass = PlayerClassManager.SelectedClass;
+            SelectClass(IsUnlocked(defaultClass) ? defaultClass : ClassType.Warblade);
         }
 
         private void Update()
@@ -608,6 +618,24 @@ namespace RIMA
             topBorderImg.color = RimaUITheme.Cyan;
             topBorderImg.raycastTarget = false;
 
+            var echoChip = MakePanel("EchoBalanceChip", parent);
+            echoChip.anchorMin = new Vector2(0.66f, 0.50f);
+            echoChip.anchorMax = new Vector2(0.66f, 0.50f);
+            echoChip.pivot = new Vector2(0.5f, 0.5f);
+            echoChip.anchoredPosition = Vector2.zero;
+            echoChip.sizeDelta = new Vector2(156f, 34f);
+            var echoChipImg = echoChip.GetComponent<Image>();
+            echoChipImg.sprite = RimaUITheme.SmallPanelFrame;
+            echoChipImg.type = Image.Type.Sliced;
+            echoChipImg.color = new Color(0.03f, 0.02f, 0.05f, 0.90f);
+            echoChipImg.raycastTarget = false;
+
+            echoBalanceLabel = MakeText("", echoChip, 12f, FontStyles.Bold, RimaUITheme.Cyan);
+            echoBalanceLabel.alignment = TextAlignmentOptions.Center;
+            var echoRt = echoBalanceLabel.transform as RectTransform;
+            echoRt.anchorMin = Vector2.zero; echoRt.anchorMax = Vector2.one;
+            echoRt.offsetMin = echoRt.offsetMax = Vector2.zero;
+            RefreshEchoLabel();
         }
 
         private void BuildStartButton(RectTransform parent)
@@ -679,6 +707,10 @@ namespace RIMA
         {
             selectedClass = cls;
             var accent = RimaUITheme.ClassAccent(cls);
+            bool unlocked = IsUnlocked(cls);
+
+            if (unlocked)
+                PlayerClassManager.SelectedClass = cls;
 
             foreach (var kv in roomEntries)
                 ApplyRoomEntryVisual(kv.Value, kv.Key == cls);
@@ -692,7 +724,13 @@ namespace RIMA
             }
 
             if (identityPortraitImage != null)
+            {
                 identityPortraitImage.sprite = LoadCanonicalSprite(cls);
+                float portraitAlpha = identityPortraitImage.color.a;
+                identityPortraitImage.color = unlocked
+                    ? Color.white
+                    : WithAlpha(LockedSilhouetteColor, portraitAlpha);
+            }
 
             var (tl1, tl2) = RimaUITheme.ClassTagline(cls);
             if (tagline1Label != null) tagline1Label.text = tl1;
@@ -706,12 +744,14 @@ namespace RIMA
             if (startButton != null)
             {
                 var img = startButton.GetComponent<Image>();
-                if (img != null) img.color = IsUnlocked(cls) ? accent : new Color(0.08f, 0.13f, 0.16f, 0.88f);
-                startButton.interactable = IsUnlocked(cls);
+                bool canUnlock = CanUnlock(cls);
+                if (img != null) img.color = unlocked ? accent : new Color(0.08f, 0.13f, 0.16f, 0.88f);
+                startButton.interactable = unlocked || canUnlock;
                 if (startButtonLabel != null)
                 {
-                    startButtonLabel.text = IsUnlocked(cls) ? "SEÇ" : $"KİLİDİ AÇ — {LockedButtonText(cls)}";
-                    startButtonLabel.fontSize = IsUnlocked(cls) ? 21f : 12f;
+                    startButtonLabel.text = unlocked ? "SEÇ" : $"KİLİDİ AÇ — {LockedButtonText(cls)}";
+                    startButtonLabel.fontSize = unlocked ? 21f : 12f;
+                    startButtonLabel.color = unlocked || canUnlock ? Color.white : RimaUITheme.TextMuted;
                 }
             }
         }
@@ -841,7 +881,11 @@ namespace RIMA
 
         private void OnStartRun()
         {
-            if (!IsUnlocked(selectedClass)) return;
+            if (!IsUnlocked(selectedClass))
+            {
+                TryUnlockSelectedClass();
+                return;
+            }
 
             UIManager.Instance?.ResumeGame();
             PlayerClassManager.SelectedClass = selectedClass;
@@ -864,21 +908,24 @@ namespace RIMA
             cls == ClassType.Warblade ||
             cls == ClassType.Elementalist ||
             cls == ClassType.Ranger ||
-            cls == ClassType.Shadowblade;
+            cls == ClassType.Shadowblade ||
+            PlayerPrefs.GetInt(UnlockPrefKey(cls), 0) == 1;
+
+        private static string UnlockPrefKey(ClassType cls) => ClassUnlockPrefsPrefix + cls;
 
         private static string CardActionText(ClassType cls)
         {
             if (IsUnlocked(cls)) return "Click to Start";
             return cls == ClassType.Hexer
-                ? "Unlock for 250 Echoes\nElementalist ile 1 run yap"
-                : $"Unlock for {UnlockCost(cls)} Echoes";
+                ? "Unlock for 250 Echo\nElementalist ile 1 run yap"
+                : $"Unlock for {UnlockCost(cls)} Echo";
         }
 
         private static string LockedButtonText(ClassType cls)
         {
             return cls == ClassType.Hexer
-                ? "250 Echoes + Elementalist run"
-                : $"{UnlockCost(cls)} Echoes required";
+                ? "250 Echo + Elementalist run"
+                : $"{UnlockCost(cls)} Echo";
         }
 
         private static string IdentityLockText(ClassType cls)
@@ -899,11 +946,54 @@ namespace RIMA
             _ => 0,
         };
 
+        private static void EnsureDemoEchoBalance()
+        {
+            if (PlayerPrefs.HasKey(EchoBalancePrefsKey)) return;
+
+            PlayerPrefs.SetInt(EchoBalancePrefsKey, DemoStartingEcho);
+            PlayerPrefs.Save();
+        }
+
+        private static int GetEchoBalance()
+        {
+            EnsureDemoEchoBalance();
+            return PlayerPrefs.GetInt(EchoBalancePrefsKey, DemoStartingEcho);
+        }
+
+        private static bool HasHexerPrerequisite() =>
+            PlayerPrefs.GetInt(HexerElementalistRunPrefsKey, 0) == 1;
+
+        private static bool CanUnlock(ClassType cls)
+        {
+            if (IsUnlocked(cls)) return false;
+            if (cls == ClassType.Hexer && !HasHexerPrerequisite()) return false;
+            return GetEchoBalance() >= UnlockCost(cls);
+        }
+
+        private void TryUnlockSelectedClass()
+        {
+            if (!CanUnlock(selectedClass)) return;
+
+            int cost = UnlockCost(selectedClass);
+            PlayerPrefs.SetInt(EchoBalancePrefsKey, GetEchoBalance() - cost);
+            PlayerPrefs.SetInt(UnlockPrefKey(selectedClass), 1);
+            PlayerPrefs.Save();
+
+            RefreshEchoLabel();
+            SelectClass(selectedClass);
+        }
+
+        private void RefreshEchoLabel()
+        {
+            if (echoBalanceLabel != null)
+                echoBalanceLabel.text = $"{GetEchoBalance()} ECHO";
+        }
+
         private static void ApplyRoomEntryVisual(RoomEntry entry, bool selected)
         {
             bool unlocked = IsUnlocked(entry.classType);
             var accent = RimaUITheme.ClassAccent(entry.classType);
-            float alpha = selected ? 1f : (unlocked ? 0.75f : 0.40f);
+            float alpha = selected ? 1f : (unlocked ? 0.75f : 0.88f);
             float scale = entry.baseScale * (selected ? 1.12f : 1f);
 
             if (entry.root != null)
@@ -917,9 +1007,10 @@ namespace RIMA
 
             if (entry.sprite != null)
             {
+                float spriteAlpha = entry.sprite.color.a;
                 entry.sprite.color = unlocked
                     ? Color.white
-                    : new Color(0.42f, 0.30f, 0.55f, 0.92f);
+                    : WithAlpha(LockedSilhouetteColor, spriteAlpha);
             }
 
             if (entry.seal != null)

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>RIMA — Character Select Mockup</title>
+<style>
+  :root{
+    --cyan:#00ffcc; --cyan-dim:#0b9c83; --void:#2a1438; --void-deep:#120518;
+    --void-deeper:#0a0510; --orange:#e89020; --parch:#e8dcc8; --ink:#cfd6e6;
+    --frame:#1a1a24; --accent:#ff6a3d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+  body{background:#000;display:flex;justify-content:center;align-items:center;min-height:100vh;color:var(--ink)}
+  /* 16:9 stage */
+  .stage{position:relative;width:min(96vw,1280px);aspect-ratio:16/9;
+    background:radial-gradient(120% 90% at 50% 35%,#1c0f2e 0%,#0a0510 75%);
+    overflow:hidden;border:1px solid #241634;box-shadow:0 0 60px #000}
+  .bg{position:absolute;inset:0;background:url('../../Assets/Resources/UI/RIMA/CharacterSelect/room_bg.png') center/cover no-repeat;opacity:.82}
+  .bg-vig{position:absolute;inset:0;background:radial-gradient(110% 80% at 50% 40%,transparent 45%,rgba(10,5,16,.85) 100%)}
+
+  /* top bar */
+  .topbar{position:absolute;top:0;left:0;right:0;height:8%;display:flex;align-items:center;justify-content:space-between;padding:0 2.5%;z-index:6}
+  .title{font-weight:700;letter-spacing:.32em;font-size:clamp(11px,1.5vw,20px);color:#aeb6c6}
+  .title b{color:var(--cyan);text-shadow:0 0 10px rgba(0,255,204,.6)}
+  .echo{display:flex;align-items:center;gap:.4em;font-weight:700;font-size:clamp(11px,1.4vw,18px);
+    color:var(--cyan);background:rgba(10,5,16,.7);border:1px solid #2b6;border-radius:4px;padding:.3em .7em;
+    box-shadow:0 0 12px rgba(0,255,204,.25)}
+  .echo .gem{filter:drop-shadow(0 0 4px var(--cyan))}
+
+  /* roster area */
+  .roster{position:absolute;inset:8% 23% 24% 22%;z-index:3}
+  .char{position:absolute;transform:translate(-50%,-100%);text-align:center;cursor:pointer;transition:.15s}
+  .char .body{width:clamp(38px,5vw,72px);height:clamp(54px,7vw,100px);margin:0 auto;position:relative}
+  .char img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;position:relative;z-index:2}
+  .char .ph{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;font-size:clamp(30px,4vw,60px);line-height:1;color:#3a2b52;z-index:1}
+  .char .nm{font-size:clamp(7px,.85vw,11px);letter-spacing:.12em;color:#9aa3b5;margin-top:.2em;text-shadow:0 1px 2px #000}
+  /* selection seal under feet */
+  .char .seal{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);width:90%;height:26%;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(0,255,204,.55),transparent);opacity:0;z-index:0;animation:pulse 1.8s infinite}
+  .char .ring{position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);width:78%;aspect-ratio:1/.42;border-radius:50%;
+    border:2px solid var(--cyan);opacity:0;z-index:0;box-shadow:0 0 14px var(--cyan);animation:spin 6s linear infinite}
+  @keyframes pulse{0%,100%{opacity:.35}50%{opacity:.8}}
+  @keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+  /* states */
+  .char.unlocked .nm{color:var(--parch)}
+  .char.selected{transform:translate(-50%,-100%) scale(1.12)}
+  .char.selected .nm{color:var(--cyan);text-shadow:0 0 8px var(--cyan)}
+  .char.selected .seal,.char.selected .ring{opacity:1}
+  /* locked = black silhouette */
+  .char.locked img,.char.locked .ph{filter:brightness(.04) drop-shadow(0 0 1px #1c2b4a);color:#0a0510}
+  .char.locked .ph{color:#100a18}
+  .char.locked .nm{color:#5a4a72}
+  .char .lock{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--cyan);
+    text-shadow:0 0 6px var(--cyan);display:none}
+  .char.locked .lock{display:block}
+  .char .cost{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:clamp(7px,.8vw,10px);
+    color:var(--cyan);background:rgba(10,5,16,.8);border:1px solid #2b6;border-radius:3px;padding:1px 5px;white-space:nowrap;display:none}
+  .char.locked .cost{display:block}
+
+  /* side panels — diegetic obsidian + cyan edge */
+  .panel{position:absolute;z-index:5;background:linear-gradient(180deg,rgba(18,8,24,.92),rgba(10,5,16,.95));
+    border:1px solid #34304a;border-radius:6px;box-shadow:0 0 0 1px rgba(0,255,204,.18),0 6px 24px rgba(0,0,0,.6);padding:14px}
+  .panel .edge{position:absolute;inset:0;border-radius:6px;border:1px solid rgba(0,255,204,.35);pointer-events:none;
+    box-shadow:inset 0 0 18px rgba(0,255,204,.08)}
+  .ph-h{font-size:11px;letter-spacing:.28em;color:#7c869a;margin-bottom:10px;border-bottom:1px solid #2a2840;padding-bottom:6px}
+
+  /* LEFT identity (bigger / readable) */
+  .identity{left:1.5%;top:14%;width:20.5%;bottom:24%}
+  .identity .portrait{width:100%;aspect-ratio:1/1.05;background:linear-gradient(160deg,#241634,#0c0714);
+    border:1px solid #3a3656;border-radius:5px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;margin-bottom:10px;position:relative}
+  .identity .portrait img{width:86%;image-rendering:pixelated;filter:drop-shadow(0 4px 8px #000)}
+  .identity .portrait .seal2{position:absolute;bottom:6px;width:70%;height:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,255,204,.45),transparent)}
+  .identity .cname{font-size:clamp(15px,2vw,26px);font-weight:800;letter-spacing:.05em;color:#fff;text-shadow:0 0 10px rgba(0,255,204,.5)}
+  .identity .tags{font-size:clamp(9px,1.1vw,13px);font-weight:700;letter-spacing:.16em;color:var(--cyan);margin:4px 0 10px}
+  .identity .motto{font-size:clamp(10px,1.2vw,14px);font-style:italic;color:var(--orange);line-height:1.35;margin-bottom:8px}
+  .identity .desc{font-size:clamp(9px,1.05vw,12px);color:#9aa3b5;line-height:1.4;margin-bottom:8px}
+  .identity .res{font-size:clamp(9px,1.05vw,12px);color:#b9c2d4}
+  .identity .res b{color:var(--accent)}
+
+  /* RIGHT skills (vertical, open + locked) */
+  .skills{right:1.5%;top:14%;width:21%;bottom:13%;display:flex;flex-direction:column}
+  .skills .list{overflow:auto;flex:1;display:flex;flex-direction:column;gap:7px;padding-right:2px}
+  .sec{font-size:9px;letter-spacing:.22em;color:#6c768a;margin:6px 0 2px}
+  .skill{display:flex;gap:8px;align-items:flex-start;background:rgba(0,255,204,.05);border:1px solid #2c3a52;border-radius:4px;padding:6px 7px}
+  .skill .ico{width:clamp(26px,3vw,40px);height:clamp(26px,3vw,40px);flex:none;border-radius:4px;
+    background:radial-gradient(closest-side,rgba(0,255,204,.4),#0c1422);border:1px solid #2b6;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .skill .nm2{font-size:clamp(9px,1.05vw,12px);font-weight:700;color:var(--cyan)}
+  .skill .ds{font-size:clamp(7px,.85vw,10px);color:#8a93a6;line-height:1.3;margin-top:2px}
+  .skill.locked{background:rgba(20,12,28,.6);border-color:#241c34}
+  .skill.locked .ico{background:#140c1c;border-color:#3a2b52;color:#3a2b52}
+  .skill.locked .nm2{color:#5a4a72}
+  .skill.locked .ds{color:#4a4262}
+
+  /* bottom buttons */
+  .bottom{position:absolute;left:0;right:0;bottom:2%;height:9%;display:flex;justify-content:center;align-items:center;gap:18px;z-index:6}
+  .btn{min-width:150px;text-align:center;font-weight:800;letter-spacing:.14em;padding:.7em 1.4em;border-radius:5px;cursor:pointer;font-size:clamp(11px,1.3vw,16px)}
+  .btn.sec{background:var(--cyan);color:#08231d;box-shadow:0 0 18px rgba(0,255,204,.5)}
+  .btn.geri{background:transparent;color:#8a93a6;border:1px solid #3a3656}
+  .btn.unlock{background:linear-gradient(90deg,#0b9c83,#00ffcc);color:#08231d;box-shadow:0 0 18px rgba(0,255,204,.5)}
+
+  .note{position:fixed;bottom:6px;left:8px;font-size:11px;color:#667;max-width:90vw}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="bg"></div><div class="bg-vig"></div>
+
+  <div class="topbar">
+    <div class="title">RIMA <b>— KARAKTER SEÇ</b></div>
+    <div class="echo"><span class="gem">◈</span> 200 ECHO</div>
+  </div>
+
+  <!-- ROSTER: front row 4 unlocked, back row 6 locked silhouettes -->
+  <div class="roster">
+    <!-- back row (locked, y~25%) -->
+    <div class="char locked" style="left:8%;top:30%"><div class="lock">🔒</div><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Ronin/ronin_idle_south.png" onerror="this.remove()"></div><div class="nm">RONIN</div><div class="cost">◈120</div></div>
+    <div class="char locked" style="left:25%;top:24%"><div class="lock">🔒</div><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Ravager/ravager_idle_south.png" onerror="this.remove()"></div><div class="nm">RAVAGER</div><div class="cost">◈120</div></div>
+    <div class="char locked" style="left:42%;top:21%"><div class="lock">🔒</div><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Gunslinger/gunslinger_idle_south.png" onerror="this.remove()"></div><div class="nm">GUNSLINGER</div><div class="cost">◈180</div></div>
+    <div class="char locked" style="left:58%;top:21%"><div class="lock">🔒</div><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Brawler/brawler_idle_south.png" onerror="this.remove()"></div><div class="nm">BRAWLER</div><div class="cost">◈180</div></div>
+    <div class="char locked" style="left:75%;top:24%"><div class="lock">🔒</div><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Summoner/summoner_idle_south.png" onerror="this.remove()"></div><div class="nm">SUMMONER</div><div class="cost">◈180</div></div>
+    <div class="char locked" style="left:92%;top:30%"><div class="lock">🔒</div><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Hexer/hexer_idle_south.png" onerror="this.remove()"></div><div class="nm">HEXER</div><div class="cost">◈250</div></div>
+    <!-- front row (unlocked, y~78%) -->
+    <div class="char unlocked selected" style="left:20%;top:88%"><div class="seal"></div><div class="ring"></div><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Warblade/warblade_idle_south.png" onerror="this.remove()"></div><div class="nm">WARBLADE</div></div>
+    <div class="char unlocked" style="left:42%;top:84%"><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Elementalist/elementalist_idle_south.png" onerror="this.remove()"></div><div class="nm">ELEMENTALIST</div></div>
+    <div class="char unlocked" style="left:60%;top:84%"><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Ranger/ranger_idle_south.png" onerror="this.remove()"></div><div class="nm">RANGER</div></div>
+    <div class="char unlocked" style="left:80%;top:88%"><div class="body"><div class="ph">🧍</div><img src="../../Assets/Resources/Characters/Shadowblade/shadowblade_idle_south.png" onerror="this.remove()"></div><div class="nm">SHADOWBLADE</div></div>
+  </div>
+
+  <!-- LEFT identity popup -->
+  <div class="panel identity"><div class="edge"></div>
+    <div class="portrait"><img src="../../Assets/Resources/Characters/Warblade/warblade_idle_south.png" onerror="this.remove()"><div class="seal2"></div></div>
+    <div class="cname">WARBLADE</div>
+    <div class="tags">HEAVY · MELEE · RAGE</div>
+    <div class="motto">"Yaklaş. Sabitle. Zırh kır. İnfaz et."</div>
+    <div class="desc">Ağır zırh-kırıcı iki el kılıcı ve parry ile ritmi dikte eder.</div>
+    <div class="res">Kaynak: <b>Rage</b> 0-100 · vurarak/CC ile dolar; Sundered sonrası infaz.</div>
+  </div>
+
+  <!-- RIGHT skills (open + locked) -->
+  <div class="panel skills"><div class="edge"></div>
+    <div class="ph-h">YETENEKLER</div>
+    <div class="list">
+      <div class="sec">AÇIK</div>
+      <div class="skill"><div class="ico">⚔️</div><div><div class="nm2">IRON CHARGE</div><div class="ds">Bakış yönüne fırla, yoldaki düşmanlara hasar + geri it. Rage +15.</div></div></div>
+      <div class="skill"><div class="ico">🌀</div><div><div class="nm2">CLEAVE</div><div class="ds">2.2m döner saldırı. Rage'in %30'u ekstra hasar.</div></div></div>
+      <div class="skill"><div class="ico">🩸</div><div><div class="nm2">DEEP WOUND</div><div class="ds">Anında 20 hasar + 8s kanama. Rage +20.</div></div></div>
+      <div class="sec">KİLİTLİ</div>
+      <div class="skill locked"><div class="ico">🔒</div><div><div class="nm2">SUNDER MARK</div><div class="ds">İlerleme ile açılır.</div></div></div>
+      <div class="skill locked"><div class="ico">🔒</div><div><div class="nm2">EARTHSPLITTER</div><div class="ds">İlerleme ile açılır.</div></div></div>
+      <div class="skill locked"><div class="ico">🔒</div><div><div class="nm2">GRAVITY CLEAVE</div><div class="ds">İlerleme ile açılır.</div></div></div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="btn geri">GERİ</div>
+    <div class="btn sec">SEÇ</div>
+    <!-- when a LOCKED char is selected, SEÇ is replaced by: -->
+    <!-- <div class="btn unlock">KİLİDİ AÇ — ◈120</div> -->
+  </div>
+</div>
+<div class="note">RIMA CharSelect mockup · gerçek backdrop + idle sprite'lar (varsa) · Warblade SEÇİLİ · arka sıra = siyah-silüet kilitli + Echo cost · sağ panel = açık/kilitli skiller · sol = kimlik. Locked seçilince SEÇ→"KİLİDİ AÇ ◈120" olur.</div>
+</body>
+</html>
