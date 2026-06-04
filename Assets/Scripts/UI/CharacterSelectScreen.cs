@@ -99,6 +99,8 @@ namespace RIMA
 
         private void BuildScreen()
         {
+            EnsureSkillDatabase();
+
             var root = (targetCanvas != null ? targetCanvas.transform : transform) as RectTransform;
 
             if (targetCanvas == null)
@@ -600,7 +602,11 @@ namespace RIMA
             if (skillContent == null) return;
 
             for (int i = skillContent.childCount - 1; i >= 0; i--)
-                Destroy(skillContent.GetChild(i).gameObject);
+            {
+                var c = skillContent.GetChild(i);
+                c.SetParent(null, false);
+                Destroy(c.gameObject);
+            }
 
             var database = EnsureSkillDatabase();
             var skills = database != null
@@ -807,14 +813,24 @@ namespace RIMA
 
         private static SkillDatabase EnsureSkillDatabase()
         {
-            if (SkillDatabase.Instance != null) return SkillDatabase.Instance;
+            if (SkillDatabase.Instance != null)
+            {
+                SkillDatabase.Instance.EnsureBuilt();
+                return SkillDatabase.Instance;
+            }
 
             var existing = FindAnyObjectByType<SkillDatabase>();
-            if (existing != null) return existing;
+            if (existing != null)
+            {
+                existing.EnsureBuilt();
+                return existing;
+            }
 
             var go = new GameObject("SkillDatabase_Auto");
             DontDestroyOnLoad(go);
-            return go.AddComponent<SkillDatabase>();
+            var db = go.AddComponent<SkillDatabase>();
+            db.EnsureBuilt();
+            return db;
         }
 
         private static RectTransform MakeScrollArea(RectTransform parent, string name)

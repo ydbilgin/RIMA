@@ -13,6 +13,7 @@ namespace RIMA
 
         private readonly List<SkillData> db = new List<SkillData>();
         private SkillIconRegistry iconRegistry;
+        private bool built;
 
         private void Awake()
         {
@@ -26,6 +27,10 @@ namespace RIMA
         // ─────────────────────────────────────────────────────────
         private void Build()
         {
+            if (built) return;
+            built = true;
+            db.Clear();
+
             iconRegistry = Resources.Load<SkillIconRegistry>("SkillIconRegistry");
 
             WB("Iron Charge",
@@ -331,6 +336,8 @@ namespace RIMA
         }
 
         // ── Query ────────────────────────────────────────────────
+
+        public void EnsureBuilt() { if (!built) Build(); }
 
         public List<SkillData> GetAll() => db;
 

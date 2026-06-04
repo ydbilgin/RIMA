@@ -249,27 +249,31 @@ namespace RIMA
             // ── Gameplay Section ─────────────────────────────────────
             y = AddSectionHeader(panel, "GAMEPLAY", y);
             // Aim/Dash toggles drive PlayerController directly (Bug-2: the old aim toggle only wrote a dead pref key).
-            RectTransform aimRow;
-            y = AddBoolToggleRow(panel, "Aim Mode", "MOUSE", "FACING",
-                () => Player != null && Player.AttackAimMode == CombatAimMode.TowardsMouse,
-                on =>
-                {
-                    if (Player == null) return;
-                    Player.AttackAimMode = on ? CombatAimMode.TowardsMouse : CombatAimMode.CharacterFacing;
-                    PlayerPrefs.Save();
-                }, y, out aimRow);
-            RegisterGameplayOnlyRow(aimRow);
+            bool hasGameplayPlayer = GameObject.FindGameObjectWithTag("Player") != null;
+            if (hasGameplayPlayer)
+            {
+                RectTransform aimRow;
+                y = AddBoolToggleRow(panel, "Aim Mode", "MOUSE", "FACING",
+                    () => Player != null && Player.AttackAimMode == CombatAimMode.TowardsMouse,
+                    on =>
+                    {
+                        if (Player == null) return;
+                        Player.AttackAimMode = on ? CombatAimMode.TowardsMouse : CombatAimMode.CharacterFacing;
+                        PlayerPrefs.Save();
+                    }, y, out aimRow);
+                RegisterGameplayOnlyRow(aimRow);
 
-            RectTransform dashRow;
-            y = AddBoolToggleRow(panel, "Dash Mode", "MOUSE", "FACING",
-                () => Player != null && Player.DashMode == DashMode.TowardsMouse,
-                on =>
-                {
-                    if (Player == null) return;
-                    Player.DashMode = on ? DashMode.TowardsMouse : DashMode.FacingDirection;
-                    PlayerPrefs.Save();
-                }, y, out dashRow);
-            RegisterGameplayOnlyRow(dashRow);
+                RectTransform dashRow;
+                y = AddBoolToggleRow(panel, "Dash Mode", "MOUSE", "FACING",
+                    () => Player != null && Player.DashMode == DashMode.TowardsMouse,
+                    on =>
+                    {
+                        if (Player == null) return;
+                        Player.DashMode = on ? DashMode.TowardsMouse : DashMode.FacingDirection;
+                        PlayerPrefs.Save();
+                    }, y, out dashRow);
+                RegisterGameplayOnlyRow(dashRow);
+            }
 
             // ── Accessibility Section ────────────────────────────────
             y -= 12f;
