@@ -17,6 +17,10 @@ namespace RIMA
 
         // ── References (built at runtime) ────────────────────────────────
         [SerializeField] private bool buildRuntimeTemplate = true;
+        // Minimap disabled for now (user decision 2026-06-04): corner MiniMap was bound to the legacy
+        // DungeonGraph and did not reflect MapFlowManager progression. Re-enable via this flag once the
+        // DungeonGraph unification lands and the map reflects real run progress.
+        [SerializeField] private bool showMiniMap = false;
         [SerializeField] private MiniMap miniMap;
 
         private RectTransform hpFill;
@@ -361,7 +365,16 @@ namespace RIMA
             BuildResourceBar(root);
             BuildRoomNameLabel(root);
             BuildInteractionPrompt(root);
-            BuildMiniMap(root);
+            if (showMiniMap)
+            {
+                BuildMiniMap(root);
+            }
+            else
+            {
+                // Disable any authored MiniMapPanel child (present in the scene HUD) while the minimap is off.
+                var existing = GetComponentInChildren<MiniMap>(true);
+                if (existing != null) existing.gameObject.SetActive(false);
+            }
         }
 
         // ── On-brand UI pack (iron-stone bar socket + cyan energy fill). ──
