@@ -484,9 +484,12 @@ namespace RIMA
             iconRt.sizeDelta = new Vector2(100f, 100f);
 
             var iconImg = iconGo.AddComponent<Image>();
-            if (icon != null)
+            // Active skills carry their own icon; passives/relics fall back to a stable
+            // on-brand icon from the generated passive pack (by skill-name hash).
+            Sprite resolvedIcon = icon != null ? icon : RimaUITheme.PassiveIcon(skillName);
+            if (resolvedIcon != null)
             {
-                iconImg.sprite = icon;
+                iconImg.sprite = resolvedIcon;
                 iconImg.color = Color.white;
             }
             else

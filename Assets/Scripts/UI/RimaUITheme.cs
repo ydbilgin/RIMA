@@ -195,6 +195,39 @@ namespace RIMA
             Resources.Load<Sprite>(SkillBarBackingPath) ?? Resources.Load<Sprite>(SkillBarBackingFallbackPath);
         public static bool SkillBarBackingIsSliced => Resources.Load<Sprite>(SkillBarBackingPath) != null;
 
+        // ── Passive draft-card icons (16-cell 4x4 sheet, runtime-sliced) ──
+        // Active skills carry their own icon; passives/relics have none, so we
+        // give each a stable on-brand icon from this generated pack by name hash.
+        public const string PassiveIconSheetPath = "UI/RIMA/PassiveIcons/passive_icons_sheet_4x4_96";
+        private const int PassiveIconCols = 4, PassiveIconRows = 4, PassiveIconCell = 96;
+        private static Sprite[] _passiveIcons;
+
+        public static Sprite PassiveIcon(string key)
+        {
+            EnsurePassiveIcons();
+            if (_passiveIcons == null || _passiveIcons.Length == 0) return null;
+            int h = 0;
+            if (!string.IsNullOrEmpty(key)) foreach (char ch in key) h = h * 31 + ch;
+            return _passiveIcons[(h & 0x7fffffff) % _passiveIcons.Length];
+        }
+
+        private static void EnsurePassiveIcons()
+        {
+            if (_passiveIcons != null) return;
+            Sprite sheet = Resources.Load<Sprite>(PassiveIconSheetPath);
+            Texture2D tex = sheet != null ? sheet.texture : Resources.Load<Texture2D>(PassiveIconSheetPath);
+            if (tex == null) { _passiveIcons = System.Array.Empty<Sprite>(); return; }
+            var list = new System.Collections.Generic.List<Sprite>(PassiveIconCols * PassiveIconRows);
+            for (int r = 0; r < PassiveIconRows; r++)
+                for (int c = 0; c < PassiveIconCols; c++)
+                {
+                    // Reading order (top-left first); texture origin is bottom-left so flip the row.
+                    var rect = new Rect(c * PassiveIconCell, (PassiveIconRows - 1 - r) * PassiveIconCell, PassiveIconCell, PassiveIconCell);
+                    list.Add(Sprite.Create(tex, rect, new Vector2(0.5f, 0.5f), 96f));
+                }
+            _passiveIcons = list.ToArray();
+        }
+
         // ── Full-screen backdrop (cover/crop, never distort) ──────────────
         /// <summary>
         /// Create a full-bleed backdrop Image under <paramref name="parent"/>, loaded from
