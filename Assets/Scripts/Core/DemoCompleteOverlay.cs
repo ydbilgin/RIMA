@@ -103,7 +103,7 @@ namespace RIMA
 
         private string BuildRunSummary()
         {
-            return $"Room reached: {RunStats.RoomReached}\nKills: {RunStats.Kills}\nTime: {FormatSeconds(RunStats.RunTimeSeconds)}\nBuild: {RunStats.BuildName}";
+            return $"Room reached: {RunStats.RoomReached}\nKills: {RunStats.Kills}\nTime: {FormatSeconds(RunStats.RunTimeSeconds)}";
         }
 
         private void OpenWishlist()

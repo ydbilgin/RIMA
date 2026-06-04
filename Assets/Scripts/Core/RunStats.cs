@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
 using RIMA.Combat;
 using RIMA.Systems.Map;
 using UnityEngine;
@@ -35,8 +34,6 @@ namespace RIMA
         public static int RoomReached => Instance.GetRoomReached();
         public static int RoomsCleared => Instance.roomsCleared;
         public static int RewardsCollected => Instance.rewardsCollected;
-        public static string BuildName => Instance.GetBuildName();
-        public static string BuildSeed => Instance.GetBuildSeed();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Bootstrap()
@@ -190,137 +187,5 @@ namespace RIMA
             return Mathf.Max(1, roomReached);
         }
 
-        private string GetBuildName()
-        {
-            ClassType primary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.Warblade;
-            ClassType secondary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.SecondaryClass : ClassType.None;
-            List<string> skills = GetEquippedSkillNames();
-
-            string className = secondary == ClassType.None ? primary.ToString() : primary + " / " + secondary;
-            if (skills.Count == 0) return className + " + 0 skills";
-            return className + " + " + string.Join(", ", skills);
-        }
-
-        private string GetBuildSeed()
-        {
-            ClassType primary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.Warblade;
-            ClassType secondary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.SecondaryClass : ClassType.None;
-            List<string> skills = GetEquippedSkillNames();
-
-            StringBuilder builder = new StringBuilder("RIMA-");
-            builder.Append(ClassCode(primary));
-            if (secondary != ClassType.None)
-                builder.Append(ClassCode(secondary));
-
-            int tokenCount = Mathf.Min(skills.Count, 4);
-            for (int i = 0; i < tokenCount; i++)
-            {
-                builder.Append('-');
-                builder.Append(SkillToken(skills[i]));
-            }
-
-            builder.Append('x');
-            builder.Append(skills.Count);
-            return builder.ToString();
-        }
-
-        private static string ClassCode(ClassType type)
-        {
-            return type switch
-            {
-                ClassType.Warblade => "WB",
-                ClassType.Elementalist => "EL",
-                ClassType.Shadowblade => "SB",
-                ClassType.Ranger => "RG",
-                ClassType.Ravager => "RV",
-                ClassType.Ronin => "RN",
-                ClassType.Gunslinger => "GS",
-                ClassType.Brawler => "BR",
-                ClassType.Summoner => "SM",
-                ClassType.Hexer => "HX",
-                _ => "NO"
-            };
-        }
-
-        private static string SkillToken(string skillName)
-        {
-            if (string.IsNullOrWhiteSpace(skillName)) return "SK";
-
-            StringBuilder token = new StringBuilder(4);
-            bool takeNext = true;
-            for (int i = 0; i < skillName.Length && token.Length < 4; i++)
-            {
-                char c = skillName[i];
-                if (!char.IsLetterOrDigit(c))
-                {
-                    takeNext = true;
-                    continue;
-                }
-
-                if (takeNext || char.IsDigit(c))
-                {
-                    token.Append(char.ToUpperInvariant(c));
-                    takeNext = false;
-                }
-            }
-
-            if (token.Length == 0)
-            {
-                for (int i = 0; i < skillName.Length && token.Length < 4; i++)
-                {
-                    char c = skillName[i];
-                    if (char.IsLetterOrDigit(c))
-                        token.Append(char.ToUpperInvariant(c));
-                }
-            }
-
-            return token.Length > 0 ? token.ToString() : "SK";
-        }
-
-        private static List<string> GetEquippedSkillNames()
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            List<string> names = new List<string>();
-            if (player == null) return names;
-
-            ClassType primary = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.Warblade;
-            switch (primary)
-            {
-                case ClassType.Elementalist:
-                    AddSlots(player.GetComponent<Elementalist_SkillController>()?.GetAllSlots(), names);
-                    break;
-                case ClassType.Shadowblade:
-                    AddSlots(player.GetComponent<Shadowblade_SkillController>()?.GetAllSlots(), names);
-                    break;
-                case ClassType.Ranger:
-                    AddSlots(player.GetComponent<Ranger_SkillController>()?.GetAllSlots(), names);
-                    break;
-                case ClassType.Ronin:
-                    AddSlots(player.GetComponent<RoninController>()?.GetAllSlots(), names);
-                    break;
-                default:
-                    AddSlots(player.GetComponent<Warblade_SkillController>()?.GetAllSlots(), names);
-                    break;
-            }
-
-            return names;
-        }
-
-        private static void AddSlots(SkillBase[] slots, List<string> names)
-        {
-            if (slots == null) return;
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                SkillBase skill = slots[i];
-                if (skill == null) continue;
-
-                string skillName = !string.IsNullOrWhiteSpace(skill.skillName)
-                    ? skill.skillName
-                    : skill.GetType().Name;
-                if (!names.Contains(skillName))
-                    names.Add(skillName);
-            }
-        }
     }
 }
