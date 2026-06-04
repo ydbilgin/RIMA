@@ -101,28 +101,31 @@ namespace RIMA
         {
             EnsureSkillDatabase();
 
-            var root = (targetCanvas != null ? targetCanvas.transform : transform) as RectTransform;
-
             if (targetCanvas == null)
             {
                 var canvasGO = new GameObject("CharacterSelectCanvas");
                 canvasGO.transform.SetParent(transform);
-                var canvas = canvasGO.AddComponent<Canvas>();
-                canvas.renderMode   = RenderMode.ScreenSpaceOverlay;
-                canvas.sortingOrder = 100;
-                var scaler = canvasGO.AddComponent<CanvasScaler>();
-                scaler.uiScaleMode         = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-                scaler.referenceResolution = new Vector2(1920, 1080);
-                scaler.matchWidthOrHeight  = 0.5f;
+                targetCanvas = canvasGO.AddComponent<Canvas>();
+                targetCanvas.renderMode   = RenderMode.ScreenSpaceOverlay;
+                targetCanvas.sortingOrder = 100;
                 canvasGO.AddComponent<GraphicRaycaster>();
-                root = canvasGO.transform as RectTransform;
             }
 
-            if (root == null)
+            if (targetCanvas == null)
             {
-                Debug.LogWarning("[CharacterSelectScreen] BuildScreen: root RectTransform null, aborting build.");
+                Debug.LogWarning("[CharacterSelectScreen] BuildScreen: target Canvas null, aborting build.");
                 return;
             }
+
+            EnsureRuntimeScaler(targetCanvas);
+            if (targetCanvas.GetComponent<GraphicRaycaster>() == null)
+                targetCanvas.gameObject.AddComponent<GraphicRaycaster>();
+
+            RemoveExistingRuntimeRoot(targetCanvas.transform);
+            DisableAuthoredCanvasChildren(targetCanvas.transform);
+
+            var root = MakeRect("RuntimeRoot_CharSelect", targetCanvas.transform, Vector2.zero, Vector2.one);
+            root.offsetMin = root.offsetMax = Vector2.zero;
 
             // Full-screen dark overlay (also the parent container for all content).
             var bg = MakePanel("CSS_Background", root);
@@ -167,6 +170,29 @@ namespace RIMA
             BuildRosterList(leftPanel);
             BuildCenterPanel(centerPanel);
             BuildSkillDetailPanel(rightPanel);
+        }
+
+        private static void EnsureRuntimeScaler(Canvas canvas)
+        {
+            var scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
+        }
+
+        private static void RemoveExistingRuntimeRoot(Transform canvasTransform)
+        {
+            Transform oldRoot = canvasTransform.Find("RuntimeRoot_CharSelect");
+            if (oldRoot != null) Destroy(oldRoot.gameObject);
+        }
+
+        private static void DisableAuthoredCanvasChildren(Transform canvasTransform)
+        {
+            foreach (Transform child in canvasTransform)
+                child.gameObject.SetActive(false);
         }
 
         private void BuildRosterList(RectTransform parent)
@@ -893,6 +919,17 @@ namespace RIMA
             var rt = go.GetComponent<RectTransform>();
             rt.anchoredPosition = Vector2.zero;
             rt.sizeDelta = Vector2.zero;
+            return rt;
+        }
+
+        private static RectTransform MakeRect(string name, Transform parent, Vector2 anchorMin, Vector2 anchorMax)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = anchorMin;
+            rt.anchorMax = anchorMax;
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
             return rt;
         }
 
