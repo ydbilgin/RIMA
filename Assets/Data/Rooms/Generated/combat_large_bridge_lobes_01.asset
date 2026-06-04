@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8327912b217024d419a4075a30f37874, type: 3}
+  m_Name: combat_large_bridge_lobes_01
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Room.Data.RoomTemplateSO
+  schemaVersion: 1.0
+  roomId: combat_large_bridge_lobes_01
+  biomeId: ShatteredKeep
+  roomType: 0
+  bounds:
+    x: 0
+    y: 0
+    width: 30
+    height: 18
+  doorSockets:
+  - socketId: door_N_01
+    position: {x: 8, y: 17}
+    direction: 0
+    widthInTiles: 2
+    isExit: 1
+  - socketId: door_W_02
+    position: {x: 0, y: 9}
+    direction: 3
+    widthInTiles: 2
+    isExit: 1
+  - socketId: door_E_03
+    position: {x: 29, y: 9}
+    direction: 2
+    widthInTiles: 2
+    isExit: 1
+  playerSpawn:
+    socketId: player_spawn_01
+    position: {x: 8, y: 16}
+    facing: 1
+  enemySpawnSockets:
+  - socketId: enemy_spawn_01
+    position: {x: 6, y: 11}
+    tierHint: standard
+    avoidRadius: 1.5
+  - socketId: enemy_spawn_02
+    position: {x: 22, y: 11}
+    tierHint: standard
+    avoidRadius: 1.5
+  - socketId: enemy_spawn_03
+    position: {x: 15, y: 9}
+    tierHint: standard
+    avoidRadius: 1.5
+  - socketId: enemy_spawn_04
+    position: {x: 11, y: 7}
+    tierHint: standard
+    avoidRadius: 1.5
+  - socketId: enemy_spawn_05
+    position: {x: 24, y: 6}
+    tierHint: standard
+    avoidRadius: 1.5
+  cameraBounds:
+    tileRect:
+      x: 0
+      y: 0
+      width: 30
+      height: 18
+  prefabRef: {fileID: 0}
+  backgroundLayers: []
+  encounterTags:
+  - json_imported
+  - json_notes_present
+  - combat
+  difficultyTags: []
+  blockerTags: []
+  props: []
+  walkableGrid: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000100000000000000000000000101010101010101010000000000010101010101010101000000000000010101010101010101010100000001010101010101010101000000000000010101010101010101010101000101010101010101010101010100000101010101010101010101010101010101010101010101010101010101000101010101010101010101010101010100010101010101010101010101000101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101000101010101010101010101010101010101010101010101010101010101000101010101010101010101000101010101010101010101010101010101000001010101010101010101010101010101010101010101010101010001000001010101010101010101010101010101010101010101010101010100000000010101010101010101010100010001010101010101010101010000000000000101010101010101010000010000010101010101010101000000000000000000010101010101010101010101010101010101010000000000000000000000000101010100000000000000000000000000000000000000

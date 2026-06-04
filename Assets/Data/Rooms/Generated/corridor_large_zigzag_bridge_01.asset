@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8327912b217024d419a4075a30f37874, type: 3}
+  m_Name: corridor_large_zigzag_bridge_01
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.Room.Data.RoomTemplateSO
+  schemaVersion: 1.0
+  roomId: corridor_large_zigzag_bridge_01
+  biomeId: ShatteredKeep
+  roomType: 8
+  bounds:
+    x: 0
+    y: 0
+    width: 8
+    height: 20
+  doorSockets:
+  - socketId: door_N_01
+    position: {x: 4, y: 19}
+    direction: 0
+    widthInTiles: 2
+    isExit: 1
+  - socketId: door_W_02
+    position: {x: 0, y: 7}
+    direction: 3
+    widthInTiles: 2
+    isExit: 1
+  playerSpawn:
+    socketId: player_spawn_01
+    position: {x: 4, y: 18}
+    facing: 1
+  enemySpawnSockets:
+  - socketId: enemy_spawn_01
+    position: {x: 2, y: 11}
+    tierHint: standard
+    avoidRadius: 1.5
+  - socketId: enemy_spawn_02
+    position: {x: 3, y: 4}
+    tierHint: standard
+    avoidRadius: 1.5
+  cameraBounds:
+    tileRect:
+      x: 0
+      y: 0
+      width: 8
+      height: 20
+  prefabRef: {fileID: 0}
+  backgroundLayers: []
+  encounterTags:
+  - json_imported
+  - json_notes_present
+  - corridor
+  difficultyTags: []
+  blockerTags: []
+  props: []
+  walkableGrid: 00000101010000000000010101000000000101010101000000010101010100000001010101010000010101010101000001010101000000000101010101000000010101010000000001010101010000000001010101000000000101010100000000010101010000000001010101010000000001010101000000000101010100000000010101010000000001010101000000000101010100000000000101010000

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RIMA Room Layout",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "roomId",
+      "roomType",
+      "width",
+      "height",
+      "grid",
+      "doors",
+      "notes"
+    ],
+    "properties": {
+      "roomId": {
+        "type": "string"
+      },
+      "roomType": {
+        "enum": [
+          "Spawn",
+          "Combat",
+          "CombatLarge",
+          "Elite",
+          "Boss",
+          "Chest",
+          "Corridor"
+        ]
+      },
+      "width": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "height": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "grid": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "doors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "dir",
+            "x",
+            "y"
+          ],
+          "properties": {
+            "dir": {
+              "enum": [
+                "N",
+                "E",
+                "W"
+              ]
+            },
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "notes": {
+        "type": "string"
+      }
+    }
+  }
+}
