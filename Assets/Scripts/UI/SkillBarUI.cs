@@ -22,6 +22,7 @@ namespace RIMA
         private const float PrimarySize   = 56f;
         private const float SecondarySize = 44f;
         private const float SlotGap       = 8f;
+        private const float ReadyFlashDuration = 0.18f;
 
         // Bar slots → gameplay actions (CONTROL_SCHEME_SYNTHESIS_S6 §7): LMB, RMB, Q, E, R, F.
         private static readonly GameAction[] SlotActions =
@@ -36,6 +37,9 @@ namespace RIMA
         // ── Slots ───────────────────────────────────────────────────
         private const int SlotCount = 6;
         private SlotUI[] slots = new SlotUI[SlotCount];
+        private bool[] wasOnCooldown = new bool[SlotCount];
+        private float[] readyFlashTimers = new float[SlotCount];
+        private Color cachedClassAccent = RimaUITheme.ClassAccent(ClassType.Warblade);
         private bool controllersResolved;
         private GameObject cachedPlayer;
 
@@ -60,6 +64,7 @@ namespace RIMA
 
             if (PlayerClassManager.Instance != null)
             {
+                cachedClassAccent = RimaUITheme.ClassAccent(PlayerClassManager.Instance.PrimaryClass);
                 PlayerClassManager.Instance.OnPrimaryClassSet += OnPrimaryClassSet;
                 PlayerClassManager.Instance.OnSecondaryClassSelected += OnSecondaryPicked;
             }
@@ -95,8 +100,9 @@ namespace RIMA
                 if (slots[i].keyLabel != null) slots[i].keyLabel.text = SlotLabel(i);
         }
 
-        private void OnPrimaryClassSet(ClassType _)
+        private void OnPrimaryClassSet(ClassType primaryClass)
         {
+            cachedClassAccent = RimaUITheme.ClassAccent(primaryClass);
             controllersResolved = false;
             cachedPlayer = null;
             warbladeCtrl = null;
@@ -130,7 +136,7 @@ namespace RIMA
             var backingImg = backingGo.AddComponent<Image>();
             backingImg.sprite = RimaUITheme.SkillBarBacking;
             backingImg.type = RimaUITheme.SkillBarBackingIsSliced ? Image.Type.Sliced : Image.Type.Simple;
-            backingImg.color = backingImg.sprite != null ? new Color(1f, 1f, 1f, 0.78f) : new Color(0.03f, 0.04f, 0.08f, 0.58f);
+            backingImg.color = backingImg.sprite != null ? new Color(1f, 1f, 1f, 0.12f) : new Color(0.03f, 0.04f, 0.08f, 0.14f);
             backingImg.raycastTarget = false;
             backingGo.transform.SetAsFirstSibling();
 
@@ -149,6 +155,10 @@ namespace RIMA
                 var bgImg = slotGo.AddComponent<Image>();
                 bgImg.color = RimaUITheme.SlotHexBg;
                 bgImg.raycastTarget = false;
+                var bgShadow = slotGo.AddComponent<Shadow>();
+                bgShadow.effectColor = new Color(0f, 0f, 0f, 0.46f);
+                bgShadow.effectDistance = new Vector2(2f, -3f);
+                bgShadow.useGraphicAlpha = true;
 
                 var frameGo = MakeChild(slotGo.transform, "Frame", size, size);
                 var frameImg = frameGo.AddComponent<Image>();
@@ -167,7 +177,7 @@ namespace RIMA
                 // CD overlay (radial fill, clockwise)
                 var cdGo = MakeChild(slotGo.transform, "CD", size * 0.82f, size * 0.82f);
                 var cdImg = cdGo.AddComponent<Image>();
-                cdImg.color = new Color(0.03f, 0.04f, 0.10f, 0.70f);
+                cdImg.color = new Color(0.02f, 0.025f, 0.07f, 0.88f);
                 cdImg.type = Image.Type.Filled;
                 cdImg.fillMethod = Image.FillMethod.Radial360;
                 cdImg.fillOrigin = (int)Image.Origin360.Top;
@@ -175,7 +185,7 @@ namespace RIMA
                 cdImg.fillAmount = 0f;
                 cdImg.raycastTarget = false;
 
-                // Glow border (1px cyan, only when active)
+                // Glow border (class accent, only when ready)
                 var glowGo = MakeChild(slotGo.transform, "Glow", size + 2f, size + 2f);
                 var glowImg = glowGo.AddComponent<Image>();
                 glowImg.sprite = RimaUITheme.SkillSlotFrameAsset;
@@ -184,15 +194,21 @@ namespace RIMA
                 glowImg.raycastTarget = false;
                 glowGo.transform.SetAsFirstSibling();
 
-                // Key label (lower-right corner, tiny)
-                var keyGo = MakeChild(slotGo.transform, "Key", size * 0.42f, size * 0.24f);
+                // Key label (lower-right corner)
+                var keyGo = MakeChild(slotGo.transform, "Key", size * 0.54f, size * 0.32f);
                 var keyTxt = keyGo.AddComponent<TextMeshProUGUI>();
                 keyTxt.text = SlotLabel(i);
-                keyTxt.fontSize = i < 2 ? 10f : 8f;
+                keyTxt.fontSize = i < 2 ? 13f : 10f;
                 keyTxt.fontStyle = FontStyles.Bold;
-                keyTxt.color = new Color(0.72f, 0.82f, 0.92f, 0.65f);
+                keyTxt.color = new Color(0.86f, 0.92f, 0.96f, 0.92f);
                 keyTxt.alignment = TextAlignmentOptions.BottomRight;
+                keyTxt.outlineColor = new Color(0f, 0f, 0f, 0.82f);
+                keyTxt.outlineWidth = 0.18f;
                 keyTxt.raycastTarget = false;
+                var keyShadow = keyGo.AddComponent<Shadow>();
+                keyShadow.effectColor = new Color(0f, 0f, 0f, 0.72f);
+                keyShadow.effectDistance = new Vector2(1f, -1f);
+                keyShadow.useGraphicAlpha = true;
                 var keyRt = keyGo.GetComponent<RectTransform>();
                 keyRt.anchorMin = new Vector2(1f, 0f);
                 keyRt.anchorMax = new Vector2(1f, 0f);
@@ -252,17 +268,29 @@ namespace RIMA
             // Cooldown
             float cdPct = skill.CooldownPercent;
             ui.cdOverlay.fillAmount = cdPct;
+            if (readyFlashTimers[i] > 0f)
+                readyFlashTimers[i] = Mathf.Max(0f, readyFlashTimers[i] - Time.deltaTime);
 
             if (cdPct > 0f)
             {
+                wasOnCooldown[i] = true;
+                readyFlashTimers[i] = 0f;
+
                 // On cooldown: dim icon
                 ui.icon.color = new Color(ui.icon.color.r, ui.icon.color.g, ui.icon.color.b, 0.30f);
-                ui.glowBorder.color = Color.clear;
+                ui.glowBorder.color = new Color(cachedClassAccent.r, cachedClassAccent.g, cachedClassAccent.b, 0.18f);
             }
             else
             {
-                // Ready: cyan glow (1px)
-                ui.glowBorder.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.5f);
+                if (wasOnCooldown[i])
+                {
+                    readyFlashTimers[i] = ReadyFlashDuration;
+                    wasOnCooldown[i] = false;
+                }
+
+                float flashT = readyFlashTimers[i] / ReadyFlashDuration;
+                float alpha = Mathf.Lerp(0.5f, 0.95f, flashT);
+                ui.glowBorder.color = new Color(cachedClassAccent.r, cachedClassAccent.g, cachedClassAccent.b, alpha);
             }
         }
 
@@ -275,6 +303,8 @@ namespace RIMA
             ui.icon.color = new Color(0.3f, 0.3f, 0.4f, 0.3f);
             ui.cdOverlay.fillAmount = 0f;
             ui.glowBorder.color = Color.clear;
+            wasOnCooldown[i] = false;
+            readyFlashTimers[i] = 0f;
         }
 
         // ─── Controller resolution ──────────────────────────────────
