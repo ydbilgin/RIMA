@@ -30,15 +30,19 @@ namespace RIMA
         private TextMeshProUGUI subtitleLabel;
         private Image screenFlash;
         private bool isConfirmingPick;
+        private int hoverSerial;
 
         // ── Layout constants ─────────────────────────────────────────
-        private const float CardWidth  = 180f;
-        private const float CardHeight = 260f;
-        private const float CardGap    = 20f;
+        private const float CardWidth  = 280f;
+        private const float CardHeight = 400f;
+        private const float CardGap    = 36f;
         private const float SlideInDuration = 0.3f;
         private const float StaggerDelay    = 0.08f;
         private const float HoverDuration = 0.12f;
-        private const float HoverScale = 1.08f;
+        private const float HoverScale = 1.05f;
+        private const float DimmedScale = 0.95f;
+        private const float HoverLift = 20f;
+        private const float DimmedAlpha = 0.4f;
         private const float IdleGlowMinAlpha = 0.15f;
         private const float IdleGlowMaxAlpha = 0.35f;
         private const float HoverGlowAlpha = 0.75f;
@@ -179,8 +183,8 @@ namespace RIMA
             trt.anchorMax = new Vector2(0.5f, 1f);
             trt.pivot = new Vector2(0.5f, 1f);
             trt.anchoredPosition = new Vector2(0f, -30f);
-            trt.sizeDelta = new Vector2(400f, 30f);
-            titleLabel.fontSize = 18f;
+            trt.sizeDelta = new Vector2(600f, 44f);
+            titleLabel.fontSize = 34f;
             titleLabel.fontStyle = FontStyles.Bold;
             titleLabel.color = RimaUITheme.Gold;
             titleLabel.alignment = TextAlignmentOptions.Center;
@@ -192,8 +196,8 @@ namespace RIMA
             srt.anchorMax = new Vector2(0.5f, 1f);
             srt.pivot = new Vector2(0.5f, 1f);
             srt.anchoredPosition = new Vector2(0f, -58f);
-            srt.sizeDelta = new Vector2(400f, 20f);
-            subtitleLabel.fontSize = 11f;
+            srt.sizeDelta = new Vector2(600f, 24f);
+            subtitleLabel.fontSize = 15f;
             subtitleLabel.color = new Color(0.6f, 0.65f, 0.7f, 0.85f);
             subtitleLabel.alignment = TextAlignmentOptions.Center;
 
@@ -205,8 +209,8 @@ namespace RIMA
             crt.anchorMin = new Vector2(0.5f, 0.5f);
             crt.anchorMax = new Vector2(0.5f, 0.5f);
             crt.pivot = new Vector2(0.5f, 0.5f);
-            crt.anchoredPosition = new Vector2(0f, -20f);
-            crt.sizeDelta = new Vector2(600f, CardHeight);
+            crt.anchoredPosition = Vector2.zero;
+            crt.sizeDelta = new Vector2(3f * CardWidth + 2f * CardGap, CardHeight);
         }
 
         // ─── Reward Card ────────────────────────────────────────────
@@ -264,16 +268,17 @@ namespace RIMA
 
             // Tier chip
             var chipGo = new GameObject("TierChip", typeof(RectTransform));
-            chipGo.transform.SetParent(card.transform, false);
+            chipGo.transform.SetParent(GetCardVisualRoot(card), false);
             var chipRt = chipGo.GetComponent<RectTransform>();
             chipRt.anchorMin = new Vector2(0f, 1f);
             chipRt.anchorMax = new Vector2(0f, 1f);
             chipRt.pivot = new Vector2(0f, 1f);
-            chipRt.anchoredPosition = new Vector2(8f, -8f);
-            chipRt.sizeDelta = new Vector2(60f, 16f);
+            chipRt.anchoredPosition = new Vector2(10f, -10f);
+            chipRt.sizeDelta = new Vector2(80f, 22f);
 
             var chipImg = chipGo.AddComponent<Image>();
             chipImg.color = tierColor;
+            chipImg.raycastTarget = false;
 
             var chipTxt = MakeTMP("ChipTxt", chipRt);
             var ctr = chipTxt.GetComponent<RectTransform>();
@@ -281,7 +286,7 @@ namespace RIMA
             ctr.anchorMax = Vector2.one;
             ctr.offsetMin = ctr.offsetMax = Vector2.zero;
             chipTxt.text = tierTag;
-            chipTxt.fontSize = 7f;
+            chipTxt.fontSize = 10f;
             chipTxt.fontStyle = FontStyles.Bold;
             chipTxt.color = Color.white;
             chipTxt.alignment = TextAlignmentOptions.Center;
@@ -335,13 +340,13 @@ namespace RIMA
         private void BuildChainChip(GameObject card, string partner)
         {
             var chipGo = new GameObject("ChainChip", typeof(RectTransform));
-            chipGo.transform.SetParent(card.transform, false);
+            chipGo.transform.SetParent(GetCardVisualRoot(card), false);
             var chipRt = chipGo.GetComponent<RectTransform>();
             chipRt.anchorMin = new Vector2(0.5f, 0f);
             chipRt.anchorMax = new Vector2(0.5f, 0f);
             chipRt.pivot = new Vector2(0.5f, 0f);
-            chipRt.anchoredPosition = new Vector2(0f, 44f); // just above the SEC button
-            chipRt.sizeDelta = new Vector2(CardWidth - 16f, 14f);
+            chipRt.anchoredPosition = new Vector2(0f, 76f); // just above the SEC button
+            chipRt.sizeDelta = new Vector2(CardWidth - 20f, 22f);
 
             var chipImg = chipGo.AddComponent<Image>();
             chipImg.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.18f);
@@ -353,7 +358,7 @@ namespace RIMA
             ctr.anchorMax = Vector2.one;
             ctr.offsetMin = ctr.offsetMax = Vector2.zero;
             chipTxt.text = $"⟂ pairs with {partner.ToUpperInvariant()}";
-            chipTxt.fontSize = 7.5f;
+            chipTxt.fontSize = 10f;
             chipTxt.fontStyle = FontStyles.Bold;
             chipTxt.color = RimaUITheme.Cyan;
             chipTxt.alignment = TextAlignmentOptions.Center;
@@ -378,18 +383,25 @@ namespace RIMA
             rt.sizeDelta = new Vector2(CardWidth, CardHeight);
             rt.localScale = Vector3.one;
 
-            var cardCanvas = cardGo.AddComponent<Canvas>();
-            cardCanvas.overrideSorting = false;
-            cardCanvas.sortingOrder = 0;
-            cardGo.AddComponent<GraphicRaycaster>();
-
             var cardGroup = cardGo.AddComponent<CanvasGroup>();
             cardGroup.alpha = 1f;
             cardGroup.interactable = true;
             cardGroup.blocksRaycasts = true;
 
+            var hitboxImg = cardGo.AddComponent<Image>();
+            hitboxImg.color = new Color(1f, 1f, 1f, 0f);
+            hitboxImg.raycastTarget = true;
+
+            var visualRootGo = new GameObject("VisualRoot", typeof(RectTransform));
+            visualRootGo.transform.SetParent(cardGo.transform, false);
+            var visualRoot = visualRootGo.GetComponent<RectTransform>();
+            visualRoot.anchorMin = Vector2.zero;
+            visualRoot.anchorMax = Vector2.one;
+            visualRoot.offsetMin = visualRoot.offsetMax = Vector2.zero;
+            visualRoot.localScale = Vector3.one;
+
             var glowGo = new GameObject("CyanGlow", typeof(RectTransform));
-            glowGo.transform.SetParent(cardGo.transform, false);
+            glowGo.transform.SetParent(visualRoot, false);
             var glowRt = glowGo.GetComponent<RectTransform>();
             glowRt.anchorMin = new Vector2(0.5f, 0.5f);
             glowRt.anchorMax = new Vector2(0.5f, 0.5f);
@@ -405,7 +417,7 @@ namespace RIMA
 
             // Card background (dark stone)
             var bgGo = new GameObject("Bg", typeof(RectTransform));
-            bgGo.transform.SetParent(cardGo.transform, false);
+            bgGo.transform.SetParent(visualRoot, false);
             var bgRt = bgGo.GetComponent<RectTransform>();
             bgRt.anchorMin = Vector2.zero;
             bgRt.anchorMax = Vector2.one;
@@ -414,31 +426,34 @@ namespace RIMA
             var bgImg = bgGo.AddComponent<Image>();
             bgImg.sprite = RimaUITheme.SmallPanelFrame;
             bgImg.color = RimaUITheme.PanelTint;
+            bgImg.raycastTarget = false;
 
             var juiceState = new CardJuiceState
             {
                 Card = cardGo,
                 Root = rt,
+                VisualRoot = visualRoot,
+                BaseVisualPosition = visualRoot.anchoredPosition,
                 Glow = glowRt,
                 GlowImage = glowImg,
-                Canvas = cardCanvas,
                 CanvasGroup = cardGroup,
                 GlowTint = glowTint,
-                Phase = index
+                Phase = index,
+                OriginalSiblingIndex = cardGo.transform.GetSiblingIndex()
             };
             cardJuiceStates.Add(juiceState);
-            AttachCardJuiceHandler(bgGo, juiceState);
+            AttachCardJuiceHandler(cardGo, juiceState);
             juiceState.IdleGlow = StartCoroutine(PulseGlow(juiceState));
 
-            // Icon placeholder (64x64 centered)
+            // Icon placeholder (100x100 centered)
             var iconGo = new GameObject("Icon", typeof(RectTransform));
-            iconGo.transform.SetParent(cardGo.transform, false);
+            iconGo.transform.SetParent(visualRoot, false);
             var iconRt = iconGo.GetComponent<RectTransform>();
             iconRt.anchorMin = new Vector2(0.5f, 1f);
             iconRt.anchorMax = new Vector2(0.5f, 1f);
             iconRt.pivot = new Vector2(0.5f, 1f);
-            iconRt.anchoredPosition = new Vector2(0f, -30f);
-            iconRt.sizeDelta = new Vector2(64f, 64f);
+            iconRt.anchoredPosition = new Vector2(0f, -56f);
+            iconRt.sizeDelta = new Vector2(100f, 100f);
 
             var iconImg = iconGo.AddComponent<Image>();
             if (icon != null)
@@ -453,47 +468,46 @@ namespace RIMA
             iconImg.raycastTarget = false;
 
             // Skill name
-            var nameTmp = MakeTMP("Name", rt);
+            var nameTmp = MakeTMP("Name", visualRoot);
             var nrt = nameTmp.GetComponent<RectTransform>();
             nrt.anchorMin = new Vector2(0f, 1f);
             nrt.anchorMax = new Vector2(1f, 1f);
             nrt.pivot = new Vector2(0.5f, 1f);
-            nrt.anchoredPosition = new Vector2(0f, -100f);
-            nrt.sizeDelta = new Vector2(0f, 22f);
+            nrt.anchoredPosition = new Vector2(0f, -178f);
+            nrt.sizeDelta = new Vector2(-24f, 30f);
             nameTmp.text = skillName?.ToUpperInvariant() ?? "???";
-            nameTmp.fontSize = 14f;
+            nameTmp.fontSize = 22f;
             nameTmp.fontStyle = FontStyles.Bold;
             nameTmp.color = Color.white;
             nameTmp.alignment = TextAlignmentOptions.Center;
 
             // Description
-            var descTmp = MakeTMP("Desc", rt);
+            var descTmp = MakeTMP("Desc", visualRoot);
             var drt = descTmp.GetComponent<RectTransform>();
             drt.anchorMin = new Vector2(0f, 1f);
             drt.anchorMax = new Vector2(1f, 1f);
             drt.pivot = new Vector2(0.5f, 1f);
-            drt.anchoredPosition = new Vector2(0f, -126f);
-            drt.sizeDelta = new Vector2(-16f, 60f);
+            drt.anchoredPosition = new Vector2(0f, -220f);
+            drt.sizeDelta = new Vector2(-32f, 72f);
             descTmp.text = description ?? "";
-            descTmp.fontSize = 9f;
+            descTmp.fontSize = 14f;
             descTmp.color = new Color(0.7f, 0.75f, 0.8f, 0.9f);
             descTmp.alignment = TextAlignmentOptions.Center;
             descTmp.enableWordWrapping = true;
 
             // Select button
             var btnGo = new GameObject("Btn", typeof(RectTransform));
-            btnGo.transform.SetParent(cardGo.transform, false);
+            btnGo.transform.SetParent(visualRoot, false);
             var btnRt = btnGo.GetComponent<RectTransform>();
             btnRt.anchorMin = new Vector2(0.5f, 0f);
             btnRt.anchorMax = new Vector2(0.5f, 0f);
             btnRt.pivot = new Vector2(0.5f, 0f);
-            btnRt.anchoredPosition = new Vector2(0f, 12f);
-            btnRt.sizeDelta = new Vector2(120f, 28f);
+            btnRt.anchoredPosition = new Vector2(0f, 24f);
+            btnRt.sizeDelta = new Vector2(160f, 40f);
 
             var btnImg = btnGo.AddComponent<Image>();
             btnImg.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.3f);
             juiceState.Button = btnGo.AddComponent<Button>();
-            AttachCardJuiceHandler(btnGo, juiceState);
 
             var btnTxt = MakeTMP("BtnLabel", btnRt);
             var btr = btnTxt.GetComponent<RectTransform>();
@@ -501,7 +515,7 @@ namespace RIMA
             btr.anchorMax = Vector2.one;
             btr.offsetMin = btr.offsetMax = Vector2.zero;
             btnTxt.text = "SEC";
-            btnTxt.fontSize = 11f;
+            btnTxt.fontSize = 15f;
             btnTxt.fontStyle = FontStyles.Bold;
             btnTxt.color = Color.white;
             btnTxt.alignment = TextAlignmentOptions.Center;
@@ -553,8 +567,6 @@ namespace RIMA
                 state.HoverTween = null;
                 state.IdleGlow = null;
                 state.IsHoverTweening = false;
-                state.Canvas.overrideSorting = state.Card == chosenCard;
-                state.Canvas.sortingOrder = state.Card == chosenCard ? 20 : 0;
                 if (state.Button != null) state.Button.interactable = false;
 
                 if (state.Card == chosenCard) chosen = state;
@@ -566,6 +578,7 @@ namespace RIMA
                 return;
             }
 
+            chosen.Card.transform.SetAsLastSibling();
             StartCoroutine(ConfirmPickRoutine(chosen, offer, index));
         }
 
@@ -575,20 +588,21 @@ namespace RIMA
             StartCoroutine(ScreenFlashRoutine());
 
             float anticipationTime = 0.06f;
-            Vector3 startScale = chosen.Root.localScale;
+            Vector3 startScale = chosen.VisualRoot.localScale;
             Vector3 squashScale = Vector3.one * 0.94f;
             float elapsed = 0f;
             while (elapsed < anticipationTime)
             {
                 elapsed += Time.unscaledDeltaTime;
                 float ease = EaseInQuad(Mathf.Clamp01(elapsed / anticipationTime));
-                chosen.Root.localScale = Vector3.LerpUnclamped(startScale, squashScale, ease);
+                chosen.VisualRoot.localScale = Vector3.LerpUnclamped(startScale, squashScale, ease);
                 SetGlow(chosen, HoverGlowAlpha, HoverGlowScale);
                 yield return null;
             }
 
             Vector2 chosenStartPos = chosen.Root.anchoredPosition;
-            Vector3 chosenStartScale = chosen.Root.localScale;
+            Vector2 chosenStartVisualPos = chosen.VisualRoot.anchoredPosition;
+            Vector3 chosenStartScale = chosen.VisualRoot.localScale;
             Vector2[] otherStartPositions = new Vector2[cardJuiceStates.Count];
             float[] otherStartAlphas = new float[cardJuiceStates.Count];
             for (int i = 0; i < cardJuiceStates.Count; i++)
@@ -613,7 +627,8 @@ namespace RIMA
                 float flyEase = EaseOutBack(flyT);
 
                 chosen.Root.anchoredPosition = Vector2.LerpUnclamped(chosenStartPos, Vector2.zero, flyEase);
-                chosen.Root.localScale = Vector3.LerpUnclamped(chosenStartScale, Vector3.one * 1.25f, flyEase);
+                chosen.VisualRoot.anchoredPosition = Vector2.LerpUnclamped(chosenStartVisualPos, Vector2.zero, flyEase);
+                chosen.VisualRoot.localScale = Vector3.LerpUnclamped(chosenStartScale, Vector3.one * 1.25f, flyEase);
                 SetGlow(chosen, HoverGlowAlpha, HoverGlowScale);
 
                 float dropT = Mathf.Clamp01(elapsed / dropTime);
@@ -696,21 +711,51 @@ namespace RIMA
             if (state.IsHovered == shouldHover) return;
 
             state.IsHovered = shouldHover;
-            if (state.HoverTween != null) StopCoroutine(state.HoverTween);
-            state.HoverTween = StartCoroutine(TweenHover(state, shouldHover));
+            if (shouldHover) state.HoverOrder = ++hoverSerial;
+            RefreshAllHoverTweens();
         }
 
-        private IEnumerator TweenHover(CardJuiceState state, bool hover)
+        private void RefreshAllHoverTweens()
         {
-            state.IsHoverTweening = true;
-            if (hover)
+            CardJuiceState active = null;
+            for (int i = 0; i < cardJuiceStates.Count; i++)
             {
-                state.Canvas.overrideSorting = true;
-                state.Canvas.sortingOrder = 10;
+                var state = cardJuiceStates[i];
+                if (state.IsHovered && (active == null || state.HoverOrder > active.HoverOrder))
+                {
+                    active = state;
+                }
             }
 
-            float startScale = state.Root.localScale.x;
-            float targetScale = hover ? HoverScale : 1f;
+            for (int i = 0; i < cardJuiceStates.Count; i++)
+            {
+                var state = cardJuiceStates[i];
+                bool hovered = state == active;
+                bool dimmed = active != null && !hovered;
+
+                if (state.HoverTween != null) StopCoroutine(state.HoverTween);
+                state.HoverTween = StartCoroutine(TweenHover(
+                    state,
+                    hovered,
+                    dimmed ? DimmedScale : hovered ? HoverScale : 1f,
+                    dimmed ? DimmedAlpha : 1f,
+                    hovered ? HoverLift : 0f));
+            }
+        }
+
+        private IEnumerator TweenHover(CardJuiceState state, bool hover, float targetScale, float targetAlpha, float targetLift)
+        {
+            state.IsHoverTweening = true;
+            if (hover && !state.IsRaised)
+            {
+                state.OriginalSiblingIndex = state.Card.transform.GetSiblingIndex();
+                state.Card.transform.SetAsLastSibling();
+                state.IsRaised = true;
+            }
+
+            float startScale = state.VisualRoot.localScale.x;
+            float startAlpha = state.CanvasGroup.alpha;
+            float startLift = state.VisualRoot.anchoredPosition.y - state.BaseVisualPosition.y;
             float startGlowAlpha = state.GlowImage.color.a;
             float targetGlowAlpha = hover ? HoverGlowAlpha : IdleGlowMinAlpha;
             float startGlowScale = state.Glow.localScale.x;
@@ -721,7 +766,9 @@ namespace RIMA
             {
                 elapsed += Time.unscaledDeltaTime;
                 float ease = EaseOutCubic(Mathf.Clamp01(elapsed / HoverDuration));
-                state.Root.localScale = Vector3.one * Mathf.LerpUnclamped(startScale, targetScale, ease);
+                state.VisualRoot.localScale = Vector3.one * Mathf.LerpUnclamped(startScale, targetScale, ease);
+                state.VisualRoot.anchoredPosition = state.BaseVisualPosition + new Vector2(0f, Mathf.LerpUnclamped(startLift, targetLift, ease));
+                state.CanvasGroup.alpha = Mathf.LerpUnclamped(startAlpha, targetAlpha, ease);
                 SetGlow(
                     state,
                     Mathf.LerpUnclamped(startGlowAlpha, targetGlowAlpha, ease),
@@ -729,12 +776,14 @@ namespace RIMA
                 yield return null;
             }
 
-            state.Root.localScale = Vector3.one * targetScale;
+            state.VisualRoot.localScale = Vector3.one * targetScale;
+            state.VisualRoot.anchoredPosition = state.BaseVisualPosition + new Vector2(0f, targetLift);
+            state.CanvasGroup.alpha = targetAlpha;
             SetGlow(state, targetGlowAlpha, targetGlowScale);
-            if (!hover)
+            if (!hover && state.IsRaised)
             {
-                state.Canvas.sortingOrder = 0;
-                state.Canvas.overrideSorting = false;
+                state.Card.transform.SetSiblingIndex(Mathf.Min(state.OriginalSiblingIndex, cardContainer.childCount - 1));
+                state.IsRaised = false;
             }
 
             state.IsHoverTweening = false;
@@ -752,6 +801,7 @@ namespace RIMA
             cardJuiceStates.Clear();
             currentOfferNames.Clear();
             isConfirmingPick = false;
+            hoverSerial = 0;
             SetScreenFlashAlpha(0f);
         }
 
@@ -825,6 +875,11 @@ namespace RIMA
             return color;
         }
 
+        private static RectTransform GetCardVisualRoot(GameObject card)
+        {
+            return card.transform.Find("VisualRoot") as RectTransform ?? card.transform as RectTransform;
+        }
+
         private static float EaseOutCubic(float t)
         {
             return 1f - Mathf.Pow(1f - t, 3f);
@@ -860,9 +915,10 @@ namespace RIMA
         {
             public GameObject Card;
             public RectTransform Root;
+            public RectTransform VisualRoot;
+            public Vector2 BaseVisualPosition;
             public RectTransform Glow;
             public Image GlowImage;
-            public Canvas Canvas;
             public CanvasGroup CanvasGroup;
             public Button Button;
             public Coroutine HoverTween;
@@ -873,6 +929,9 @@ namespace RIMA
             public bool Selected;
             public bool IsHovered;
             public bool IsHoverTweening;
+            public bool IsRaised;
+            public int OriginalSiblingIndex;
+            public int HoverOrder;
         }
 
         private sealed class CardJuiceHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler

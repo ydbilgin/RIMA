@@ -98,7 +98,7 @@ namespace RIMA
 
         private IEnumerator ShowDraftDelayed(float delay)
         {
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSecondsRealtime(delay);
             ShowDraft();
         }
 
