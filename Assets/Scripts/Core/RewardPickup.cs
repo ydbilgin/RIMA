@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace RIMA
 {
@@ -6,7 +8,12 @@ namespace RIMA
     [RequireComponent(typeof(Collider2D))]
     public class RewardPickup : MonoBehaviour
     {
+        [SerializeField] private Canvas promptCanvas;
+        [SerializeField] private Text promptText;
+
+        private const Key InteractKey = Key.G;
         private bool collected;
+        private bool playerInRange;
 
         public bool WasCollected => collected;
 
@@ -14,6 +21,7 @@ namespace RIMA
         {
             Collider2D trigger = GetComponent<Collider2D>();
             if (trigger != null) trigger.isTrigger = true;
+            EnsurePromptVisuals();
         }
 
         private void Reset()
@@ -22,11 +30,34 @@ namespace RIMA
             if (trigger != null) trigger.isTrigger = true;
         }
 
+        private void Update()
+        {
+            if (!playerInRange || collected) return;
+            if (Keyboard.current == null || !Keyboard.current[InteractKey].wasPressedThisFrame) return;
+
+            Collect();
+        }
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (collected || other == null || !other.CompareTag("Player")) return;
 
+            playerInRange = true;
+            ShowPrompt();
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other == null || !other.CompareTag("Player")) return;
+            ClearPlayerRange();
+        }
+
+        private void Collect()
+        {
+            if (collected) return;
+
             collected = true;
+            ClearPlayerRange();
             Debug.Log("[Reward] collected — opening skill draft");
             RunStats.Instance.RecordRewardCollected();
 
@@ -38,6 +69,62 @@ namespace RIMA
             if (col != null) col.enabled = false;
 
             StartCoroutine(DraftThenOpenExit());
+        }
+
+        private void ShowPrompt()
+        {
+            if (promptCanvas != null)
+            {
+                if (Camera.main != null) promptCanvas.worldCamera = Camera.main;
+                promptCanvas.enabled = true;
+            }
+
+            if (promptText != null)
+                promptText.text = "Topla: G";
+
+            HUDController.Instance?.SetInteractionPrompt("Topla: G");
+        }
+
+        private void ClearPlayerRange()
+        {
+            if (!playerInRange) return;
+
+            playerInRange = false;
+            if (promptCanvas != null) promptCanvas.enabled = false;
+            HUDController.Instance?.HideInteractionPrompt();
+        }
+
+        private void EnsurePromptVisuals()
+        {
+            if (promptCanvas != null) return;
+
+            GameObject canvasGO = new GameObject("RewardPromptCanvas");
+            canvasGO.transform.SetParent(transform, false);
+            canvasGO.transform.localPosition = new Vector3(0f, 1.25f, 0f);
+            canvasGO.transform.localScale = Vector3.one * 0.01f;
+
+            promptCanvas = canvasGO.AddComponent<Canvas>();
+            promptCanvas.renderMode = RenderMode.WorldSpace;
+            promptCanvas.sortingOrder = 80;
+
+            RectTransform canvasRt = canvasGO.GetComponent<RectTransform>();
+            canvasRt.sizeDelta = new Vector2(180f, 36f);
+
+            GameObject textGO = new GameObject("PromptText");
+            textGO.transform.SetParent(canvasGO.transform, false);
+            promptText = textGO.AddComponent<Text>();
+            promptText.text = "Topla: G";
+            promptText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            promptText.fontSize = 18;
+            promptText.alignment = TextAnchor.MiddleCenter;
+            promptText.color = Color.white;
+
+            RectTransform textRt = textGO.GetComponent<RectTransform>();
+            textRt.anchorMin = Vector2.zero;
+            textRt.anchorMax = Vector2.one;
+            textRt.offsetMin = Vector2.zero;
+            textRt.offsetMax = Vector2.zero;
+            promptCanvas.enabled = false;
         }
 
         private System.Collections.IEnumerator DraftThenOpenExit()
@@ -66,4 +153,3 @@ namespace RIMA
         }
     }
 }
-
