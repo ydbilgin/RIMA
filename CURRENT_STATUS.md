@@ -1,5 +1,27 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-04 GECE·2 — UI REDESIGN DEVAMI + CHARSELECT v2 "ROSTER ROOM" + cx PARALEL/ROUTING — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı 3 ekranı (MainMenu/Settings/CharSelect) redesign + sonra CharSelect'i **diegetic "roster room"**a evirdi (Image #9 referansı: karakterler bir odada durur, tıklayınca seçilir). Council-driven (cx + ax-3.1-Pro + ax-3.5-Flash → Opus sentez). Her iş play-verified + **dual-QC** (council üyeleri sırayla onayladı). Hepsi commit'li.
+
+**✅ DONE + COMMIT'Lİ + DUAL-VERIFIED (D3D11):**
+1. **MainMenu** (`84a438af`): sol-alt kompozisyon (RIMA başlık tracked + cyan divider + hover→cyan+`>` caret), **CanvasScaler 480→1920 fix** (4K bozulma kök-nedeni), AYARLAR→"Yakında" stub KALDIRILDI→gerçek `SettingsMenuUI` (rebindable tuşlar zaten var). authored Root disable doğrulandı.
+2. **Settings**: mevcut tam-fonksiyonel `SettingsMenuUI` (Gameplay/Accessibility/Audio + Controls click-to-rebind, KeyBindManager defaults WASD/Q-E-R-F/...) menüye bağlandı + menü-context guard (Player yoksa Aim/Dash row skip).
+3. **CharSelect 3-kolon** (`84a438af`) → **ax-QC fix** (`6ba3081e`: skill-DB race + row-accum Destroy-defer + settings-gap) → **AUTHORED-DISABLE fix** (`6e21b098`: eski authored tek-panel runtime UI ÜSTÜNDE render ediyordu → `RuntimeRoot_CharSelect` + `DisableAuthoredCanvasChildren`, MainMenuController pattern).
+4. **CharSelect v2 "ROSTER ROOM"** (`e83bcc00`): **ax-imagegen üretilen iso harap-kale backdrop** (`Resources/UI/RIMA/CharacterSelect/room_bg.png`, QC PASS on-brand) + 10 gerçek `idle_south` karakter odada (depth-arc) + per-char tıkla-seç + `pedestal_seal` halka/glow seçilinin altında + others dim + bottom HUD strip + **kilitli sınıf: dim+lock+Echo-cost, SEÇ→"KİLİDİ AÇ — {cost} Echo" disabled**. → **backdrop resilient-load** (`cf6f757b`: cold-Resources-index frame-0 lag → retry-coroutine). → **REFINEMENT** (`d00bab9b`): bottom HUD = **3 framed 9-slice box** (panel_frame_9slice + cyan edge): **Identity | Action | Skills** (skiller en sağ x.45-1.0) + sol-box **seçili karakter portresi** + **geniş 2-sıra yayılım** (x .08-.92, eski .20-.80; front 4 unlocked .22/.41/.59/.78, back 6 locked .08/.25/.42/.58/.75/.92) + label-anchor fix (portre çakışması yok).
+
+**⚠️ DERSLER (yeni):** (a) **structural verify ≠ visual** — runtime UI'da "yeni içerik VAR MI" yetmez; "eski authored root DISABLED mı (activeInHierarchy=false)" da kontrol et, yoksa false-PASS (eski UI üstte render eder) [[feedback-ui-verify-authored-disabled]]. (b) MCP overlay-UI screenshot ALAMAZ → görsel his kullanıcıda; verification = council üyeleri sırayla (cx Unity play-observe + ax code-review). (c) **2 cx PARALEL çalışır** — farklı `--profile` → `cx_dispatch.py` otomatik `CODEX_DONE_<profil>.md` ayrı dosyaya yazar (single-instance kuralı = SADECE aynı profil). (d) imagegen (ax/agy Imagen via `/generate_image`) = HER ZAMAN 1024² opaque RGB; env-backdrop için OK, characters=PixelLab. (e) **Gemma 4 12B = kullanıcı için GEREKSİZ** (bol Gemini filosu + yerel GPU Unity ile VRAM çakışır) — kurulmadı.
+
+**⏭️ KALAN / SIRADA:**
+- **Kullanıcı CharSelect v2'yi görsel feel-test edecek** (kolon oranları/karakter yerleşimi/seçim hissi). Tweak isterse arc koordinatları/scale ayarlanır.
+- **Skill ikonları:** demo'da **mevcut ikonlar reuse** (Warblade+Elementalist 8 skill ikonu `Assets/Sprites/UI/Icons`'ta VAR). Production = **PixelLab create_image_pro + style-ref + no-text HARD-RULE, 64px, 16'lı (4×4 sheet) batch, per-class**, GATED (kullanıcıyla). Karar=`STAGING/SPELLVFX_SKILLICON_DECISION_2026-06-04.md`.
+- **Track 2 — gameplay demo (Elementalist + Warblade):** büyü VFX **Phase-1 = Unity code/particle** (reuse `PlayerProjectile`/`SlashArcVFX`/`Combat-Juice`; Fireball zaten projectile spawn ediyor; GlacialSpike/Meteor'a VFX insertion-point hazır) → Phase-2 ax-3.1 "white core + shader tint" hibrit (grayscale sprite + URP-2D-Lit pixel-particle gradient + 2D light) → Phase-3 PixelLab anim (GATED). Karar=`STAGING/SPELLVFX_SKILLICON_DECISION_2026-06-04.md`.
+- **B-11 combat lifecycle + B-12 production RoomBank** = aşağıdaki GECE bloğu HÂLÂ geçerli (asıl büyük kalan).
+
+**ROUTING:** cx=**laurethayday (force, limiti bitene kadar)** → yasinderyabilgin → yekta; **laurethgame DISABLED**; priority `cx_profiles.local.json`'da. **2-cx-paralel OK** (farklı profil). council = cx ‖ ax-3.1-Pro ‖ ax-3.5-Flash → Opus. asset bg = ax imagegen (`/generate_image`). Unity **D3D11**. Kararlar = `STAGING/UI_REDESIGN_3SCREENS_DECISION` + `ASSET_PIPELINE_DECISION` + `SPELLVFX_SKILLICON_DECISION` + `CHARSELECT_ROSTERROOM_DECISION` + `CHARSELECT_REFINE_DECISION` (hepsi 2026-06-04).
+
+---
+
 ## ⏯️ RESUME (2026-06-04 GECE — UI REDESIGN (4 EKRAN) + D3D11 CRASH-FIX + MINIMAP-OFF + ODA-POOL PLANI — /clear sonrası İLK BURAYI OKU)
 
 **BAĞLAM:** Kullanıcı "bensiz neler yapabilirsin, bütün işleri listele" + sonra otonom mandate: minimap kararı, UI redesign (council ile), clutter temizliği, **oda sayısı artsın (10-15, random → pool genişlet)**, combat lifecycle, DungeonGraph birleştirme. Build seed YOK. Animasyon/PixelLab gen = GATED (kullanıcıyla). Commit = her doğrulanmış iş sonrası (GATED DEĞİL).
