@@ -1,5 +1,28 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-04 GECE — UI REDESIGN (4 EKRAN) + D3D11 CRASH-FIX + MINIMAP-OFF + ODA-POOL PLANI — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı "bensiz neler yapabilirsin, bütün işleri listele" + sonra otonom mandate: minimap kararı, UI redesign (council ile), clutter temizliği, **oda sayısı artsın (10-15, random → pool genişlet)**, combat lifecycle, DungeonGraph birleştirme. Build seed YOK. Animasyon/PixelLab gen = GATED (kullanıcıyla). Commit = her doğrulanmış iş sonrası (GATED DEĞİL).
+
+**⚠️ EN KRİTİK — UNITY CRASH ÇÖZÜLDÜ AMA RESTART GEREKİR:** Play-mode'da Unity crash ediyordu = **RTX 5080 + Unity 6 D3D12 backend device-removed/TDR** (crash log stack: `CheckDeviceStatus→D3D12CommandList::PrepareExecute→GfxTaskExecutorD3D12`, nvwgf2umx.dll). FIX = Editor graphics API **D3D11'e geçirildi** (`PlayerSettings`, ProjectSettings'e yazıldı, UseDefault=false, D3D11 ilk). **Kullanıcı Unity'yi bir kez kapat-aç → D3D11 aktif → play crash'leri biter.** O zamana kadar PLAY-MODE'A GİRME (compile/edit D3D12'de sorunsuz, sadece play crash).
+
+**✅ DONE + COMMIT'Lİ (compile-clean; play-verify D3D11 restart SONRASI):**
+1. **Minimap OFF** (`85333a33`): `HUDController.showMiniMap` flag (default off) + authored MiniMapPanel runtime-disable. Sebep: köşe minimap eski DungeonGraph'a bağlıydı, MapFlowManager ilerleyişini yansıtmıyordu. B-12 sonrası geri açılır.
+2. **4 EKRAN UI REDESIGN** (council: cx + ax 3.1 Pro + kullanıcı cevapları → Opus sentez; karar=`STAGING/UI_REDESIGN_SCREENS_DECISION_2026-06-04.md` + brief=`STAGING/UI_REDESIGN_BRIEF_2026-06-04.md`). Canon = "Vivid Vulnerability / UI yoktur sadece bilgi vardır" (opak kutu YASAK, ink-on-paper, renk=anlam). REUSE-only (imagegen gerekmedi, death_screen_bg+main_menu_bg zaten var). cx (yasinderyabilgin) yazdı, Opus QC+commit:
+   - **Death** (`f03ad214`): translucent panel+soft vignette (donmuş combat görünür), ortada dikey (canon ölüm satırı + cyan hairline + ODA·KILLS·SÜRE + 2 eşit buton TEKRAR DENE[R]/ANA MENÜ). **BUILD SEED tamamen kaldırıldı** (CopyBuildSeed + RunStats.BuildSeed/GetBuildSeed/SkillToken/BuildName dead members + DemoCompleteOverlay "Build:" satırı), wishlist + NextClassTeaser kaldırıldı (kullanıcı).
+   - **CharSelect** (`75ca2854`): sağ panel artık DİNAMİK sınıf kimliği (accent bar + motto[accent] + playstyle[muted] + resource[primary] + lock note), `SelectClass→RefreshIdentityPanel`. Yeni `RimaUITheme.ClassIdentity(cls)` (10 sınıf NLM kimlikleri). Skill listesi YOK (kullanıcı+council). ClassTagline dokunulmadı.
+   - **SkillBar** (`95079cce`): class-accent ready-glow (cyan sabit yerine), backing alpha düşük+per-slot drop-shadow (kutu yok, slotlar yüzüyor), koyu radial CD + accent-edge + 0.18s ready-flash (sayı YOK), büyük okunur key label (outline+shadow).
+   - **MainMenu** (`14ec0d43`): tagline "Yine geldin." (epik slogan yok), SETTINGS gizlendi (NEW RUN+QUIT), version sağ-alt %35, Pack button cyan hover.
+
+**⏭️ KALAN (otonom devam):**
+- **ODA POOL GENİŞLETME (kullanıcı aktif):** ChatGPT'ye oda tasarlatıyor — prompt=`STAGING/CHATGPT_ROOM_DESIGN_PROMPT.md` (ASCII-grid+JSON, 10 oda tipi, canon: güney-kapı-yok N/E/W, iso floating island). Kullanıcı JSON dönünce → JSON→`RoomTemplateSO` converter → IsoRoomBuilder + auto-cliff → MapList havuzu. SONRA `MapFlowManager.mapsPerRun` 3→~12 (şimdi artırma, 6 haritayla tekrar olur). Bu = B-12'nin (iki DungeonGraph) doğal çözümü: veri-bazlı `_Arena`/RoomTemplateSO sistemi asıl oyun, sahne-bazlı haritalar emekli.
+- **A güvenli polish:** mob ölüm görseli (kod squash/fade) · skill cooldown HUD · #14 Dynamic-Wave · #26 Card-Weight · #17 Echo-Mote-Heal · 3 haritaya görsel fark · VoidThrall death-split + RiftBreak AoE · CLUTTER temizliği (build settings'te `_FazMVP_Demo_s99`+`PlayableArena_Test01` gereksiz; ölü kod; orphan).
+- **B-11 combat lifecycle** (_Arena: encounter→clear→slow-mo→reward→dark/light kapı→walk-into-door) · **B-12 DungeonGraph birleştirme** (yukarıdaki veri-yolu ile birleşiyor).
+
+**ROUTING:** cx=yasinderyabilgin (UI redesign'da güvenilir çalıştı, sırayla 4 görev). council=cx‖ax-3.1‖(3.5 atlandı, konsensüs netti). Görev listesi = TaskCreate (in-session). Kararlar = STAGING/UI_REDESIGN_*. **Unity tek-instance, D3D12 (restart→D3D11).**
+
+---
+
 ## ⏯️ RESUME (2026-06-04 — PLAYTEST FIXES: SOFT-LOCK + KAMERA-ZOOM + DRAFT/HUD REDESIGN + REWARD-G + PASİF-İKON — /clear sonrası İLK BURAYI OKU)
 
 **BAĞLAM:** Kullanıcı _IsoGame'i oynayıp bug/UX şikayetleri verdi; council + cx `laurethayday` + Opus ile otonom çözüldü. **8 commit, working tree temiz.** Her şey play-mode'da doğrulandı (ekran görüntüleri `Assets/Screenshots/`).
