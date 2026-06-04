@@ -400,23 +400,24 @@ namespace RIMA
             visualRoot.offsetMin = visualRoot.offsetMax = Vector2.zero;
             visualRoot.localScale = Vector3.one;
 
-            var glowGo = new GameObject("CyanGlow", typeof(RectTransform));
+            var glowGo = new GameObject("RarityGlow", typeof(RectTransform));
             glowGo.transform.SetParent(visualRoot, false);
             var glowRt = glowGo.GetComponent<RectTransform>();
             glowRt.anchorMin = new Vector2(0.5f, 0.5f);
             glowRt.anchorMax = new Vector2(0.5f, 0.5f);
             glowRt.pivot = new Vector2(0.5f, 0.5f);
             glowRt.anchoredPosition = Vector2.zero;
-            glowRt.sizeDelta = new Vector2(CardWidth + 24f, CardHeight + 24f);
+            glowRt.sizeDelta = new Vector2(CardWidth + 40f, CardHeight + 40f);
             glowRt.localScale = Vector3.one * IdleGlowScale;
 
             var glowImg = glowGo.AddComponent<Image>();
-            Color glowTint = glowTintOverride ?? TierColor(tier);
+            glowImg.sprite = RimaUITheme.RarityGlow(tier);
+            glowImg.type = Image.Type.Simple;
+            Color glowTint = Color.white;
             glowImg.color = WithAlpha(glowTint, IdleGlowMinAlpha);
             glowImg.raycastTarget = false;
 
-            // Card background (dark stone)
-            var bgGo = new GameObject("Bg", typeof(RectTransform));
+            var bgGo = new GameObject("Frame", typeof(RectTransform));
             bgGo.transform.SetParent(visualRoot, false);
             var bgRt = bgGo.GetComponent<RectTransform>();
             bgRt.anchorMin = Vector2.zero;
@@ -424,9 +425,35 @@ namespace RIMA
             bgRt.offsetMin = bgRt.offsetMax = Vector2.zero;
 
             var bgImg = bgGo.AddComponent<Image>();
-            bgImg.sprite = RimaUITheme.SmallPanelFrame;
-            bgImg.color = RimaUITheme.PanelTint;
+            bgImg.sprite = RimaUITheme.DraftCardFrame;
+            bgImg.type = Image.Type.Sliced;
+            bgImg.color = bgImg.sprite != null ? Color.white : RimaUITheme.PanelTint;
             bgImg.raycastTarget = false;
+
+            var shadeGo = new GameObject("InnerShade", typeof(RectTransform));
+            shadeGo.transform.SetParent(visualRoot, false);
+            var shadeRt = shadeGo.GetComponent<RectTransform>();
+            shadeRt.anchorMin = Vector2.zero;
+            shadeRt.anchorMax = Vector2.one;
+            shadeRt.offsetMin = new Vector2(18f, 18f);
+            shadeRt.offsetMax = new Vector2(-18f, -18f);
+
+            var shadeImg = shadeGo.AddComponent<Image>();
+            shadeImg.color = new Color(0.02f, 0.025f, 0.04f, 0.42f);
+            shadeImg.raycastTarget = false;
+
+            var selectFlashGo = new GameObject("SelectFlash", typeof(RectTransform));
+            selectFlashGo.transform.SetParent(visualRoot, false);
+            var selectFlashRt = selectFlashGo.GetComponent<RectTransform>();
+            selectFlashRt.anchorMin = Vector2.zero;
+            selectFlashRt.anchorMax = Vector2.one;
+            selectFlashRt.offsetMin = selectFlashRt.offsetMax = Vector2.zero;
+
+            var selectFlashImg = selectFlashGo.AddComponent<Image>();
+            selectFlashImg.sprite = RimaUITheme.CardSelectFlash;
+            selectFlashImg.type = Image.Type.Simple;
+            selectFlashImg.color = Color.clear;
+            selectFlashImg.raycastTarget = false;
 
             var juiceState = new CardJuiceState
             {
@@ -436,6 +463,7 @@ namespace RIMA
                 BaseVisualPosition = visualRoot.anchoredPosition,
                 Glow = glowRt,
                 GlowImage = glowImg,
+                SelectFlash = selectFlashImg,
                 CanvasGroup = cardGroup,
                 GlowTint = glowTint,
                 Phase = index,
@@ -586,6 +614,7 @@ namespace RIMA
         {
             EnsureScreenFlash();
             StartCoroutine(ScreenFlashRoutine());
+            SetSelectFlash(chosen, 0.85f);
 
             float anticipationTime = 0.06f;
             Vector3 startScale = chosen.VisualRoot.localScale;
@@ -630,6 +659,7 @@ namespace RIMA
                 chosen.VisualRoot.anchoredPosition = Vector2.LerpUnclamped(chosenStartVisualPos, Vector2.zero, flyEase);
                 chosen.VisualRoot.localScale = Vector3.LerpUnclamped(chosenStartScale, Vector3.one * 1.25f, flyEase);
                 SetGlow(chosen, HoverGlowAlpha, HoverGlowScale);
+                SetSelectFlash(chosen, Mathf.Lerp(0.85f, 0f, flyT));
 
                 float dropT = Mathf.Clamp01(elapsed / dropTime);
                 float dropEase = EaseInCubic(dropT);
@@ -649,6 +679,7 @@ namespace RIMA
                 yield return null;
             }
 
+            SetSelectFlash(chosen, 0f);
             onPick?.Invoke(offer, index);
         }
 
@@ -869,6 +900,12 @@ namespace RIMA
             state.Glow.localScale = Vector3.one * scale;
         }
 
+        private static void SetSelectFlash(CardJuiceState state, float alpha)
+        {
+            if (state.SelectFlash == null) return;
+            state.SelectFlash.color = WithAlpha(Color.white, alpha);
+        }
+
         private static Color WithAlpha(Color color, float alpha)
         {
             color.a = alpha;
@@ -919,6 +956,7 @@ namespace RIMA
             public Vector2 BaseVisualPosition;
             public RectTransform Glow;
             public Image GlowImage;
+            public Image SelectFlash;
             public CanvasGroup CanvasGroup;
             public Button Button;
             public Coroutine HoverTween;

@@ -11,6 +11,19 @@ namespace RIMA
         public const string RoomBannerFramePath      = "UI/RIMA/RIMA_UI_RoomBannerFrame";
         public const string SmallPanelFramePath      = "UI/RIMA/RIMA_UI_SmallPanelFrame";
         public const string MenuDungeonBackgroundPath = "UI/RIMA/RIMA_MenuDungeonBackground";
+        public const string DraftCardFramePath       = "UI/RIMA/Pack/card_frame_9slice";
+        public const string CardSelectFlashPath      = "UI/RIMA/card_select_flash";
+        public const string SkillSlotFrameFallbackPath = "UI/RIMA/icon_frame_hex";
+        public const string SkillBarBackingPath      = "UI/RIMA/Pack/bar_frame_9slice";
+        public const string SkillBarBackingFallbackPath = "UI/RIMA/Pack/pedestal_seal";
+
+        public static string RarityGlowPath(SkillTier tier) => tier switch
+        {
+            SkillTier.Rare      => "UI/RIMA/rarity_glow_rare",
+            SkillTier.Epic      => "UI/RIMA/rarity_glow_epic",
+            SkillTier.Legendary => "UI/RIMA/rarity_glow_legendary",
+            _                   => "UI/RIMA/rarity_glow_common",
+        };
 
         // ── Base Colors ───────────────────────────────────────────────────
         public static readonly Color PanelTint    = new Color(0.06f, 0.07f, 0.10f, 0.88f);
@@ -172,6 +185,15 @@ namespace RIMA
 
         /// <summary>Full-screen menu background — still loads the PNG if present.</summary>
         public static Sprite MenuDungeonBackground => RimaGeneratedSpriteCache.Load(MenuDungeonBackgroundPath);
+
+        public static Sprite DraftCardFrame => Resources.Load<Sprite>(DraftCardFramePath);
+        public static Sprite CardSelectFlash => Resources.Load<Sprite>(CardSelectFlashPath);
+        public static Sprite RarityGlow(SkillTier tier) => Resources.Load<Sprite>(RarityGlowPath(tier));
+        public static Sprite SkillSlotFrameAsset =>
+            Resources.Load<Sprite>(SkillSlotFramePath) ?? Resources.Load<Sprite>(SkillSlotFrameFallbackPath);
+        public static Sprite SkillBarBacking =>
+            Resources.Load<Sprite>(SkillBarBackingPath) ?? Resources.Load<Sprite>(SkillBarBackingFallbackPath);
+        public static bool SkillBarBackingIsSliced => Resources.Load<Sprite>(SkillBarBackingPath) != null;
 
         // ── Full-screen backdrop (cover/crop, never distort) ──────────────
         /// <summary>

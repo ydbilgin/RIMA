@@ -19,9 +19,9 @@ namespace RIMA
         private RoninController              roninCtrl;
 
         // ── Layout constants (Ashen Glyph spec) ─────────────────────
-        private const float PrimarySize   = 20f;
-        private const float SecondarySize = 16f;
-        private const float SlotGap       = 5f;
+        private const float PrimarySize   = 56f;
+        private const float SecondarySize = 44f;
+        private const float SlotGap       = 8f;
 
         // Bar slots → gameplay actions (CONTROL_SCHEME_SYNTHESIS_S6 §7): LMB, RMB, Q, E, R, F.
         private static readonly GameAction[] SlotActions =
@@ -126,6 +126,14 @@ namespace RIMA
             float totalW = 2 * PrimarySize + 4 * SecondarySize + 5 * SlotGap;
             float x = -totalW / 2f;
 
+            var backingGo = MakeChild(container, "HUDBacking", totalW + 32f, PrimarySize + 28f);
+            var backingImg = backingGo.AddComponent<Image>();
+            backingImg.sprite = RimaUITheme.SkillBarBacking;
+            backingImg.type = RimaUITheme.SkillBarBackingIsSliced ? Image.Type.Sliced : Image.Type.Simple;
+            backingImg.color = backingImg.sprite != null ? new Color(1f, 1f, 1f, 0.78f) : new Color(0.03f, 0.04f, 0.08f, 0.58f);
+            backingImg.raycastTarget = false;
+            backingGo.transform.SetAsFirstSibling();
+
             for (int i = 0; i < SlotCount; i++)
             {
                 float size = i < 2 ? PrimarySize : SecondarySize;
@@ -142,15 +150,22 @@ namespace RIMA
                 bgImg.color = RimaUITheme.SlotHexBg;
                 bgImg.raycastTarget = false;
 
+                var frameGo = MakeChild(slotGo.transform, "Frame", size, size);
+                var frameImg = frameGo.AddComponent<Image>();
+                frameImg.sprite = RimaUITheme.SkillSlotFrameAsset;
+                frameImg.type = Image.Type.Simple;
+                frameImg.color = frameImg.sprite != null ? Color.white : new Color(0.28f, 0.82f, 1f, 0.35f);
+                frameImg.raycastTarget = false;
+
                 // Icon (centered, slightly smaller)
-                float iconSize = size * 0.65f;
+                float iconSize = size * 0.72f;
                 var iconGo = MakeChild(slotGo.transform, "Icon", iconSize, iconSize);
                 var iconImg = iconGo.AddComponent<Image>();
                 iconImg.color = new Color(0.3f, 0.3f, 0.4f, 0.5f); // empty
                 iconImg.raycastTarget = false;
 
                 // CD overlay (radial fill, clockwise)
-                var cdGo = MakeChild(slotGo.transform, "CD", size * 0.85f, size * 0.85f);
+                var cdGo = MakeChild(slotGo.transform, "CD", size * 0.82f, size * 0.82f);
                 var cdImg = cdGo.AddComponent<Image>();
                 cdImg.color = new Color(0.03f, 0.04f, 0.10f, 0.70f);
                 cdImg.type = Image.Type.Filled;
@@ -163,15 +178,17 @@ namespace RIMA
                 // Glow border (1px cyan, only when active)
                 var glowGo = MakeChild(slotGo.transform, "Glow", size + 2f, size + 2f);
                 var glowImg = glowGo.AddComponent<Image>();
+                glowImg.sprite = RimaUITheme.SkillSlotFrameAsset;
+                glowImg.type = Image.Type.Simple;
                 glowImg.color = Color.clear;
                 glowImg.raycastTarget = false;
                 glowGo.transform.SetAsFirstSibling();
 
                 // Key label (lower-right corner, tiny)
-                var keyGo = MakeChild(slotGo.transform, "Key", 16f, 10f);
+                var keyGo = MakeChild(slotGo.transform, "Key", size * 0.42f, size * 0.24f);
                 var keyTxt = keyGo.AddComponent<TextMeshProUGUI>();
                 keyTxt.text = SlotLabel(i);
-                keyTxt.fontSize = i < 2 ? 6f : 5f;
+                keyTxt.fontSize = i < 2 ? 10f : 8f;
                 keyTxt.fontStyle = FontStyles.Bold;
                 keyTxt.color = new Color(0.72f, 0.82f, 0.92f, 0.65f);
                 keyTxt.alignment = TextAlignmentOptions.BottomRight;
