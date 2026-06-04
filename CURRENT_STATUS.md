@@ -14,7 +14,7 @@
 
 **Council karar dökümanı** = `STAGING/UI_UX_REDESIGN_DECISION_2026-06-04.md` (advisor çıktıları `_council_*ux_camera_cards*` + `CODEX_DONE_laurethayday.md`).
 
-**⏭️ KULLANICI FEEL-TEST ETMELİ (mekanizma doğrulandı, his sübjektif):** G-tuşu ile ödül toplama · "Seç" tıklayınca skill bar'a düşme (yapısal fix, gerçek tık testi) · scroll-zoom hissi · hover öne-çıkma. **NLM auth expired** → `! nlm login` (cx canon çekemiyor, palet biliniyor, bloklamıyor).
+**⏭️ KULLANICI FEEL-TEST ETMELİ (mekanizma doğrulandı, his sübjektif):** G-tuşu ile ödül toplama · "Seç" tıklayınca skill bar'a düşme (yapısal fix, gerçek tık testi) · scroll-zoom hissi · hover öne-çıkma. **NLM auth = OK** (2026-06-04 `nlm login` yapıldı, 49 cookie + CSRF; cx/sub-agent canon çekebilir).
 
 **ROUTING:** cx=**laurethayday** (kullanıcı-set bu session) → quota biterse yekta. Asset=cx `$imagegen`. Önce REUSE (Resources/UI/RIMA/Pack zengin) sonra üret.
 
