@@ -3479,6 +3479,12 @@ MonoBehaviour:
   builder: {fileID: 249395367}
   roomBank: {fileID: 11400000, guid: 7ca285014daeffd49a1bea3b9e5574c9, type: 2}
   player: {fileID: 1133594560}
+  playerPrefab: {fileID: 6045311534637519706, guid: 51d1b129b77e6f04fbeca10699526625, type: 3}
+  arenaCamera: {fileID: 702644023}
+  encounterBank: {fileID: 11400000, guid: 862f5e6b00674fe4bd4c16c9afe249c4, type: 2}
+  encounterDifficulty: 10
+  enemyContainer: {fileID: 0}
+  cameraPadding: 1.25
   fallbackTemplate: {fileID: 11400000, guid: 2904aa1235e85764993eec449324e92c, type: 2}
   runSeed: 12345
   buildOnStart: 1

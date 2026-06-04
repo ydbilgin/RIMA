@@ -138,14 +138,34 @@ namespace RIMA
 
             if (basicAttackProfile == null)
             {
-                Debug.LogError($"[PlayerAttack] No BasicAttackProfile assigned on {gameObject.name}. " +
-                    "Assign a class-specific profile in the Inspector.", this);
-                enabled = false;
-                return;
+                basicAttackProfile = LoadDefaultBasicAttackProfile();
+                if (basicAttackProfile == null)
+                {
+                    Debug.LogError($"[PlayerAttack] No BasicAttackProfile assigned on {gameObject.name}. " +
+                        "Assign a class-specific profile in the Inspector.", this);
+                    enabled = false;
+                    return;
+                }
             }
 
             behavior = basicAttackProfile.CreateBehavior();
             BuildInputActions();
+        }
+
+        private static BasicAttackProfile LoadDefaultBasicAttackProfile()
+        {
+            ClassType type = PlayerClassManager.SelectedClass != ClassType.None
+                ? PlayerClassManager.SelectedClass
+                : ClassType.Warblade;
+            BasicAttackProfile profile = Resources.Load<BasicAttackProfile>($"Combat/BasicAttack/BasicAttackProfile_{type}");
+
+#if UNITY_EDITOR
+            if (profile == null && type == ClassType.Ronin)
+                profile = UnityEditor.AssetDatabase.LoadAssetAtPath<BasicAttackProfile>(
+                    "Assets/Data/Combat/Profiles/Ronin_BasicAttackProfile.asset");
+#endif
+
+            return profile;
         }
 
         // Recreates any null InputActions (Awake-created fields are nulled by a mid-play domain reload)

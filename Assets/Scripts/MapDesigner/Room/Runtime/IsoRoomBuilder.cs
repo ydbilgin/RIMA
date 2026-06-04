@@ -61,6 +61,9 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         // Set during BuildMarkers; lets a run director teleport the player onto the new room.
         public Transform PlayerSpawnMarker { get; private set; }
+        public IReadOnlyList<Transform> EnemySpawnMarkers => enemySpawnMarkers;
+
+        private readonly List<Transform> enemySpawnMarkers = new List<Transform>();
 
         public void Build(RoomTemplateSO template)
         {
@@ -459,6 +462,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         private void BuildMarkers(RoomTemplateSO template)
         {
             PlayerSpawnMarker = null;
+            enemySpawnMarkers.Clear();
             if (template.playerSpawn != null)
             {
                 PlayerSpawnMarker = CreateMarker("PlayerSpawn", template.playerSpawn.position).transform;
@@ -475,7 +479,7 @@ namespace RIMA.MapDesigner.Room.Runtime
                     }
 
                     string socketId = string.IsNullOrEmpty(socket.socketId) ? i.ToString() : socket.socketId;
-                    CreateMarker($"EnemySpawn_{socketId}", socket.position);
+                    enemySpawnMarkers.Add(CreateMarker($"EnemySpawn_{socketId}", socket.position).transform);
                 }
             }
 
@@ -502,6 +506,34 @@ namespace RIMA.MapDesigner.Room.Runtime
             Vector3 markerCenter = grid.GetCellCenterWorld(new Vector3Int(tilePosition.x, tilePosition.y, 0));
             marker.transform.position = new Vector3(markerCenter.x, markerCenter.y, 0f);
             return marker;
+        }
+
+        public bool TryGetLastFloorWorldBounds(out Bounds bounds)
+        {
+            bounds = default;
+            if (LastFloorCells == null || LastFloorCells.Count == 0 || grid == null)
+            {
+                return false;
+            }
+
+            bool initialized = false;
+            foreach (Vector3Int cell in LastFloorCells)
+            {
+                Vector3 world = grid.GetCellCenterWorld(cell);
+                if (!initialized)
+                {
+                    bounds = new Bounds(world, Vector3.zero);
+                    initialized = true;
+                }
+                else
+                {
+                    bounds.Encapsulate(world);
+                }
+            }
+
+            Vector3 cellSize = grid.cellSize;
+            bounds.Expand(new Vector3(Mathf.Max(0.5f, cellSize.x), Mathf.Max(0.5f, cellSize.y), 0f));
+            return true;
         }
 
         // Spawns obstacle/decor props authored in template.props at iso cell centers.
