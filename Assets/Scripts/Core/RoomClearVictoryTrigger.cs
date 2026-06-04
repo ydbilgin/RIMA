@@ -19,6 +19,8 @@ namespace RIMA
         [SerializeField] private float rewardColliderRadius = 0.45f;
 
         private bool rewardSpawned;
+        private int initialMobCount;
+        private float reconcileTimer;
         private readonly List<(Health health, UnityAction listener)> listeners = new();
         private static readonly System.Collections.Generic.List<DoorTrigger> pendingExitDoors = new();
         private const string RewardSpritePath = "Assets/Sprites/Environment/Reward/reward_relic.png";
@@ -54,8 +56,37 @@ namespace RIMA
                 listeners.Add((health, listener));
             }
 
+            initialMobCount = remainingMobs;
+
             if (remainingMobs == 0 && !victoryRaised)
             {
+                victoryRaised = true;
+                HandleRoomCleared();
+            }
+        }
+
+        private void Update()
+        {
+            // Safety net against a soft-lock: a tracked enemy can leave play (fall into the
+            // void, get Destroyed directly) without ever firing Health.OnDeath, which strands
+            // remainingMobs above zero so the room never reports cleared. Periodically reconcile
+            // against the enemies we actually tracked and raise victory once they are all gone.
+            if (victoryRaised || initialMobCount == 0) return;
+
+            reconcileTimer += Time.unscaledDeltaTime;
+            if (reconcileTimer < 0.5f) return;
+            reconcileTimer = 0f;
+
+            int live = 0;
+            for (int i = 0; i < listeners.Count; i++)
+            {
+                Health h = listeners[i].health;
+                if (h != null && !h.IsDead) live++;
+            }
+
+            if (live == 0)
+            {
+                remainingMobs = 0;
                 victoryRaised = true;
                 HandleRoomCleared();
             }

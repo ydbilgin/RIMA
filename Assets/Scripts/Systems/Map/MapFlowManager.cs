@@ -21,7 +21,11 @@ namespace RIMA.Systems.Map
         private int mapsCleared;
 
         public static bool IsMapTransition { get; set; }
-        public static MapFlowManager ActiveInstance => instance;
+        // Lazily recover the singleton if the static ref was never set or got cleared
+        // (e.g. a run launched without the normal MainMenu bootstrap). Consumers like
+        // RoomClearVictoryTrigger rely on this to unlock exits / spawn rewards.
+        public static MapFlowManager ActiveInstance =>
+            instance != null ? instance : (instance = FindFirstObjectByType<MapFlowManager>());
 
         public static MapFlowManager Instance
         {
