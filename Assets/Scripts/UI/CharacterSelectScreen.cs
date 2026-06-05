@@ -59,29 +59,41 @@ namespace RIMA
         private TMP_Text  echoBalanceLabel;
         private TMP_Text  skillEmptyLabel;
         private RectTransform skillContent;
+        private RectTransform identityStatsRoot;
 
         private Image showcaseFlashImage;
         private float selectFlashTimer;
 
+        [Header("Roster Layout")]
+        [SerializeField] private Vector2[] frontRowAnchors =
+        {
+            new(0.22f, 0.73f), new(0.37f, 0.73f), new(0.52f, 0.73f), new(0.67f, 0.73f), new(0.82f, 0.73f)
+        };
+
+        [SerializeField] private Vector2[] backRowAnchors =
+        {
+            new(0.28f, 0.51f), new(0.43f, 0.51f), new(0.58f, 0.51f), new(0.73f, 0.51f), new(0.88f, 0.51f)
+        };
+
+        [SerializeField] private Vector2 hitPaddingScale = new(1.15f, 1.10f);
+
+        private const float VisibleCharacterHeight = 127f;
+
         private static readonly ClassType[] AllClasses =
         {
-            ClassType.Warblade, ClassType.Elementalist, ClassType.Shadowblade,
-            ClassType.Ranger, ClassType.Ravager, ClassType.Ronin,
+            ClassType.Warblade, ClassType.Elementalist, ClassType.Ranger,
+            ClassType.Shadowblade, ClassType.Ronin, ClassType.Ravager,
             ClassType.Gunslinger, ClassType.Brawler, ClassType.Summoner, ClassType.Hexer
         };
 
-        private static readonly RoomPlacement[] RosterPlacements =
+        private static readonly ClassType[] FrontRowClasses =
         {
-            new RoomPlacement(ClassType.Ronin,        new Vector2(0.270f, 0.62f), new Vector2(200f, 285f), 0.74f),
-            new RoomPlacement(ClassType.Ravager,      new Vector2(0.375f, 0.62f), new Vector2(200f, 285f), 0.74f),
-            new RoomPlacement(ClassType.Gunslinger,   new Vector2(0.480f, 0.62f), new Vector2(200f, 285f), 0.74f),
-            new RoomPlacement(ClassType.Brawler,      new Vector2(0.585f, 0.62f), new Vector2(200f, 285f), 0.74f),
-            new RoomPlacement(ClassType.Summoner,     new Vector2(0.690f, 0.62f), new Vector2(200f, 285f), 0.74f),
-            new RoomPlacement(ClassType.Hexer,        new Vector2(0.790f, 0.62f), new Vector2(200f, 285f), 0.74f),
-            new RoomPlacement(ClassType.Warblade,     new Vector2(0.340f, 0.34f), new Vector2(250f, 350f), 0.92f),
-            new RoomPlacement(ClassType.Elementalist, new Vector2(0.470f, 0.34f), new Vector2(250f, 350f), 0.92f),
-            new RoomPlacement(ClassType.Ranger,       new Vector2(0.610f, 0.34f), new Vector2(250f, 350f), 0.92f),
-            new RoomPlacement(ClassType.Shadowblade,  new Vector2(0.730f, 0.34f), new Vector2(250f, 350f), 0.92f),
+            ClassType.Warblade, ClassType.Elementalist, ClassType.Ranger, ClassType.Shadowblade, ClassType.Ronin
+        };
+
+        private static readonly ClassType[] BackRowClasses =
+        {
+            ClassType.Ravager, ClassType.Gunslinger, ClassType.Brawler, ClassType.Summoner, ClassType.Hexer
         };
 
         private readonly struct RoomPlacement
@@ -118,6 +130,44 @@ namespace RIMA
             public ClassType     classType;
             public Vector2       basePosition;
             public float         baseScale;
+        }
+
+        private readonly struct CharacterFit
+        {
+            public readonly float canvas;
+            public readonly float visibleHeight;
+            public readonly float feetGap;
+            public readonly float xBias;
+            public readonly float visibleWidth;
+
+            public CharacterFit(float canvas, float visibleHeight, float feetGap, float xBias, float visibleWidth)
+            {
+                this.canvas = canvas;
+                this.visibleHeight = visibleHeight;
+                this.feetGap = feetGap;
+                this.xBias = xBias;
+                this.visibleWidth = visibleWidth;
+            }
+        }
+
+        private readonly struct SkillPresentation
+        {
+            public readonly string name;
+            public readonly string description;
+            public readonly string iconText;
+            public readonly bool locked;
+            public readonly string condition;
+            public readonly Sprite iconSprite;
+
+            public SkillPresentation(string name, string description, string iconText, bool locked, string condition, Sprite iconSprite = null)
+            {
+                this.name = name;
+                this.description = description;
+                this.iconText = iconText;
+                this.locked = locked;
+                this.condition = condition;
+                this.iconSprite = iconSprite;
+            }
         }
 
         // ─── Lifecycle ────────────────────────────────────────────────────
@@ -178,14 +228,16 @@ namespace RIMA
             roomLayer.offsetMin = roomLayer.offsetMax = Vector2.zero;
             BuildRosterRoom(roomLayer);
 
-            var identityPanel = MakeFramedPanel("IdentityPopupPanel", root, new Vector2(0.012f, 0.34f), new Vector2(0.175f, 0.84f));
-            identityPanel.offsetMin = new Vector2(10f, 8f);
-            identityPanel.offsetMax = new Vector2(-8f, -8f);
+            BuildTopBar(root);
+
+            var identityPanel = MakeFramedPanel("IdentityPopupPanel", root, new Vector2(0.000f, 0.137f), new Vector2(0.212f, 0.866f));
+            identityPanel.offsetMin = new Vector2(0f, 0f);
+            identityPanel.offsetMax = new Vector2(-8f, 0f);
             BuildIdentityPanel(identityPanel);
 
-            var skillPanel = MakeFramedPanel("SkillZone", root, new Vector2(0.86f, 0.14f), new Vector2(0.988f, 0.96f));
-            skillPanel.offsetMin = new Vector2(6f, 6f);
-            skillPanel.offsetMax = new Vector2(-8f, -8f);
+            var skillPanel = MakeFramedPanel("SkillZone", root, new Vector2(0.754f, 0.137f), new Vector2(1.000f, 0.866f));
+            skillPanel.offsetMin = new Vector2(8f, 0f);
+            skillPanel.offsetMax = Vector2.zero;
             BuildSkillPanel(skillPanel);
 
             var bottomStrip = MakePanel("BottomActionStrip", root);
@@ -226,7 +278,7 @@ namespace RIMA
             if (backdropImage != null && backdropImage.sprite == null)
                 StartCoroutine(RetryLoadRoomBackdrop(backdropImage));
 
-            foreach (var placement in RosterPlacements.OrderByDescending(p => p.anchor.y))
+            foreach (var placement in BuildRosterPlacements().OrderByDescending(p => p.anchor.y))
                 BuildRoomCharacter(parent, placement);
 
             showcaseFlashImage = MakePanel("SelectionFlash", parent).GetComponent<Image>();
@@ -235,6 +287,90 @@ namespace RIMA
             flashRt.offsetMin = flashRt.offsetMax = Vector2.zero;
             showcaseFlashImage.color = Color.clear;
             showcaseFlashImage.raycastTarget = false;
+        }
+
+        private IEnumerable<RoomPlacement> BuildRosterPlacements()
+        {
+            for (int i = 0; i < FrontRowClasses.Length; i++)
+            {
+                Vector2 anchor = i < frontRowAnchors.Length ? frontRowAnchors[i] : new Vector2(0.22f + 0.15f * i, 0.73f);
+                var fit = FitFor(FrontRowClasses[i]);
+                yield return new RoomPlacement(FrontRowClasses[i], UnityAnchorFromMockup(anchor), DisplaySizeFor(fit), 1f);
+            }
+
+            for (int i = 0; i < BackRowClasses.Length; i++)
+            {
+                Vector2 anchor = i < backRowAnchors.Length ? backRowAnchors[i] : new Vector2(0.28f + 0.15f * i, 0.51f);
+                var fit = FitFor(BackRowClasses[i]);
+                yield return new RoomPlacement(BackRowClasses[i], UnityAnchorFromMockup(anchor), DisplaySizeFor(fit), 1f);
+            }
+        }
+
+        private static Vector2 UnityAnchorFromMockup(Vector2 mockupAnchor) =>
+            new(Mathf.Clamp01(mockupAnchor.x), Mathf.Clamp01(1f - mockupAnchor.y));
+
+        private static Vector2 DisplaySizeFor(CharacterFit fit)
+        {
+            float imageSize = VisibleCharacterHeight * (fit.canvas / Mathf.Max(1f, fit.visibleHeight));
+            return new Vector2(imageSize, imageSize);
+        }
+
+        private Vector2 HitSizeFor(CharacterFit fit)
+        {
+            float width = VisibleCharacterHeight * fit.visibleWidth / Mathf.Max(1f, fit.visibleHeight) * hitPaddingScale.x;
+            float height = VisibleCharacterHeight * hitPaddingScale.y;
+            return new Vector2(width, height);
+        }
+
+        private static CharacterFit FitFor(ClassType cls) => cls switch
+        {
+            ClassType.Warblade     => new CharacterFit(120f, 61f, 30f, -0.5f, 38f),
+            ClassType.Elementalist => new CharacterFit(120f, 60f, 30f, -0.5f, 30f),
+            ClassType.Ranger       => new CharacterFit(128f, 61f, 34f, -3.0f, 35f),
+            ClassType.Shadowblade  => new CharacterFit(124f, 61f, 32f, -0.5f, 30f),
+            ClassType.Ronin        => new CharacterFit(128f, 62f, 34f, -0.5f, 28f),
+            ClassType.Ravager      => new CharacterFit(124f, 60f, 32f, -0.5f, 38f),
+            ClassType.Gunslinger   => new CharacterFit(124f, 61f, 32f, -0.5f, 36f),
+            ClassType.Brawler      => new CharacterFit(120f, 60f, 30f, -0.5f, 34f),
+            ClassType.Summoner     => new CharacterFit(124f, 61f, 32f, -2.0f, 33f),
+            ClassType.Hexer        => new CharacterFit(124f, 61f, 32f, -0.5f, 32f),
+            _                      => new CharacterFit(120f, 61f, 30f, -0.5f, 38f),
+        };
+
+        private void BuildTopBar(RectTransform root)
+        {
+            var bar = MakePanel("TopBar", root);
+            SetStretch(bar, new Vector2(0f, 0.92f), Vector2.one, Vector2.zero, Vector2.zero);
+            var bg = bar.GetComponent<Image>();
+            bg.sprite = RimaUITheme.SmallPanelFrame;
+            bg.type = Image.Type.Sliced;
+            bg.color = new Color(0.016f, 0.035f, 0.051f, 0.78f);
+            bg.raycastTarget = false;
+
+            var title = MakeText("RIMA - KARAKTER SEÇ", bar, 22f, FontStyles.Bold, RimaUITheme.TextPrimary);
+            title.alignment = TextAlignmentOptions.Left;
+            title.characterSpacing = 18f;
+            var titleRt = title.transform as RectTransform;
+            titleRt.anchorMin = new Vector2(0f, 0f); titleRt.anchorMax = new Vector2(0.58f, 1f);
+            titleRt.offsetMin = new Vector2(50f, 0f); titleRt.offsetMax = Vector2.zero;
+
+            var wallet = MakePanel("TopEchoBalanceChip", bar);
+            wallet.anchorMin = new Vector2(1f, 0.5f); wallet.anchorMax = new Vector2(1f, 0.5f);
+            wallet.pivot = new Vector2(1f, 0.5f);
+            wallet.anchoredPosition = new Vector2(-50f, 0f);
+            wallet.sizeDelta = new Vector2(300f, 42f);
+            var walletImg = wallet.GetComponent<Image>();
+            walletImg.sprite = RimaUITheme.SmallPanelFrame;
+            walletImg.type = Image.Type.Sliced;
+            walletImg.color = new Color(0.016f, 0.035f, 0.051f, 0.88f);
+            walletImg.raycastTarget = false;
+
+            echoBalanceLabel = MakeText("", wallet, 14f, FontStyles.Bold, RimaUITheme.Cyan);
+            echoBalanceLabel.alignment = TextAlignmentOptions.Center;
+            var echoRt = echoBalanceLabel.transform as RectTransform;
+            echoRt.anchorMin = Vector2.zero; echoRt.anchorMax = Vector2.one;
+            echoRt.offsetMin = echoRt.offsetMax = Vector2.zero;
+            RefreshEchoLabel();
         }
 
         private IEnumerator RetryLoadRoomBackdrop(Image backdropImage)
@@ -313,8 +449,12 @@ namespace RIMA
         private void BuildRoomCharacter(RectTransform parent, RoomPlacement placement)
         {
             var cls = placement.classType;
+            var fit = FitFor(cls);
+            Vector2 pivot = new(
+                Mathf.Clamp01(0.5f + fit.xBias / Mathf.Max(1f, fit.canvas)),
+                Mathf.Clamp01(fit.feetGap / Mathf.Max(1f, fit.canvas)));
             var root = MakeRect($"RoomCharacter_{cls}", parent, placement.anchor, placement.anchor);
-            root.pivot = new Vector2(0.5f, 0f);
+            root.pivot = pivot;
             root.anchoredPosition = Vector2.zero;
             root.sizeDelta = placement.size;
             root.localScale = new Vector3(placement.baseScale, placement.baseScale, 1f);
@@ -324,7 +464,7 @@ namespace RIMA
             var glowRt = MakePanel("HoverGlow", root);
             glowRt.anchorMin = new Vector2(0.5f, 0f); glowRt.anchorMax = new Vector2(0.5f, 0f);
             glowRt.pivot = new Vector2(0.5f, 0.5f);
-            glowRt.anchoredPosition = new Vector2(0f, 34f);
+            glowRt.anchoredPosition = new Vector2(0f, 0f);
             glowRt.sizeDelta = new Vector2(250f, 92f);
             var glow = glowRt.GetComponent<Image>();
             glow.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
@@ -335,7 +475,7 @@ namespace RIMA
             var sealRt = MakePanel("PedestalSeal", root);
             sealRt.anchorMin = new Vector2(0.5f, 0f); sealRt.anchorMax = new Vector2(0.5f, 0f);
             sealRt.pivot = new Vector2(0.5f, 0.5f);
-            sealRt.anchoredPosition = new Vector2(0f, 28f);
+            sealRt.anchoredPosition = new Vector2(0f, 0f);
             sealRt.sizeDelta = new Vector2(210f, 74f);
             var seal = sealRt.GetComponent<Image>();
             seal.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
@@ -346,14 +486,14 @@ namespace RIMA
             var selectionVfxRoot = BuildSelectionVfx(root, placement.size);
             var selectionVfxImages = selectionVfxRoot.GetComponentsInChildren<Image>(true);
             var selectionGlowDisk = selectionVfxRoot.Find("PulseGlowDisk").GetComponent<Image>();
-            var selectionRing = selectionVfxRoot.Find("RotatingCyanRing").GetComponent<Image>();
+            var selectionRing = selectionVfxRoot.Find("StaticCyanRing").GetComponent<Image>();
             var selectionMotes = selectionVfxImages
                 .Where(img => img != null && img.name.StartsWith("GlowMote", StringComparison.Ordinal))
                 .ToArray();
 
             var spriteRt = MakePanel("Sprite", root);
             spriteRt.anchorMin = new Vector2(0.5f, 0f); spriteRt.anchorMax = new Vector2(0.5f, 0f);
-            spriteRt.pivot = new Vector2(0.5f, 0f);
+            spriteRt.pivot = pivot;
             spriteRt.anchoredPosition = Vector2.zero;
             spriteRt.sizeDelta = placement.size;
             var sprite = spriteRt.GetComponent<Image>();
@@ -380,26 +520,27 @@ namespace RIMA
             var chipRt = MakePanel("CostChip", root);
             chipRt.anchorMin = new Vector2(0.5f, 0f); chipRt.anchorMax = new Vector2(0.5f, 0f);
             chipRt.pivot = new Vector2(0.5f, 0.5f);
-            chipRt.anchoredPosition = new Vector2(0f, -18f);
-            chipRt.sizeDelta = new Vector2(150f, 30f);
+            chipRt.anchoredPosition = new Vector2(0f, -26f);
+            chipRt.sizeDelta = new Vector2(188f, 38f);
             var chipImg = chipRt.GetComponent<Image>();
             chipImg.sprite = RimaUITheme.SmallPanelFrame;
             chipImg.type = Image.Type.Sliced;
             chipImg.color = new Color(0.03f, 0.02f, 0.05f, 0.90f);
             chipImg.raycastTarget = false;
 
-            var costChip = MakeText($"{UnlockCost(cls)} Echo", chipRt, 11f, FontStyles.Bold, RimaUITheme.Cyan);
+            var costChip = MakeText(UnlockOrPathText(cls), chipRt, 8.5f, FontStyles.Bold, RimaUITheme.Cyan);
             costChip.alignment = TextAlignmentOptions.Center;
+            costChip.enableWordWrapping = true;
             var costRt = costChip.transform as RectTransform;
             costRt.anchorMin = Vector2.zero; costRt.anchorMax = Vector2.one;
-            costRt.offsetMin = costRt.offsetMax = Vector2.zero;
+            costRt.offsetMin = new Vector2(4f, 2f); costRt.offsetMax = new Vector2(-4f, -2f);
 
             var hitRt = MakePanel("Hit", root);
             hitRt.anchorMin = new Vector2(0.5f, 0f);
             hitRt.anchorMax = new Vector2(0.5f, 0f);
             hitRt.pivot = new Vector2(0.5f, 0.5f);
-            hitRt.anchoredPosition = new Vector2(0f, placement.size.y * 0.38f);
-            hitRt.sizeDelta = new Vector2(placement.size.x * 0.45f, placement.size.y * 0.70f);
+            hitRt.anchoredPosition = new Vector2(0f, VisibleCharacterHeight * 0.5f);
+            hitRt.sizeDelta = HitSizeFor(fit);
             var hit = hitRt.GetComponent<Image>();
             hit.color = Color.clear;
             hit.raycastTarget = true;
@@ -458,14 +599,14 @@ namespace RIMA
         {
             var root = MakeRect("SelectionUIGlowVFX", parent, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f));
             root.pivot = new Vector2(0.5f, 0.5f);
-            root.anchoredPosition = new Vector2(0f, 32f);
-            root.sizeDelta = new Vector2(characterSize.x * 0.92f, 96f);
+            root.anchoredPosition = Vector2.zero;
+            root.sizeDelta = new Vector2(characterSize.x * 0.82f, 80f);
 
             var glowDisk = MakePanel("PulseGlowDisk", root);
             glowDisk.anchorMin = new Vector2(0.5f, 0.5f); glowDisk.anchorMax = new Vector2(0.5f, 0.5f);
             glowDisk.pivot = new Vector2(0.5f, 0.5f);
             glowDisk.anchoredPosition = Vector2.zero;
-            glowDisk.sizeDelta = new Vector2(characterSize.x * 0.90f, 76f);
+            glowDisk.sizeDelta = new Vector2(characterSize.x * 0.78f, 58f);
             var glowDiskImg = glowDisk.GetComponent<Image>();
             glowDiskImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
             glowDiskImg.type = Image.Type.Simple;
@@ -473,30 +614,17 @@ namespace RIMA
             glowDiskImg.color = new Color(0f, 1f, 0.80f, 0.0f);
             glowDiskImg.raycastTarget = false;
 
-            var ring = MakePanel("RotatingCyanRing", root);
+            var ring = MakePanel("StaticCyanRing", root);
             ring.anchorMin = new Vector2(0.5f, 0.5f); ring.anchorMax = new Vector2(0.5f, 0.5f);
             ring.pivot = new Vector2(0.5f, 0.5f);
             ring.anchoredPosition = Vector2.zero;
-            ring.sizeDelta = new Vector2(characterSize.x * 0.74f, 64f);
+            ring.sizeDelta = new Vector2(characterSize.x * 0.64f, 46f);
             var ringImg = ring.GetComponent<Image>();
             ringImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
             ringImg.type = Image.Type.Simple;
             ringImg.preserveAspect = true;
             ringImg.color = new Color(0f, 1f, 0.80f, 0.0f);
             ringImg.raycastTarget = false;
-
-            for (int i = 0; i < 3; i++)
-            {
-                var mote = MakePanel("GlowMote" + i, root);
-                mote.anchorMin = new Vector2(0.5f, 0.5f); mote.anchorMax = new Vector2(0.5f, 0.5f);
-                mote.pivot = new Vector2(0.5f, 0.5f);
-                mote.sizeDelta = new Vector2(12f, 12f);
-                var moteImg = mote.GetComponent<Image>();
-                moteImg.sprite = RimaUITheme.SmallPanelFrame;
-                moteImg.type = Image.Type.Sliced;
-                moteImg.color = new Color(0f, 1f, 0.80f, 0.0f);
-                moteImg.raycastTarget = false;
-            }
 
             root.gameObject.SetActive(false);
             return root;
@@ -510,8 +638,8 @@ namespace RIMA
             var portraitFrame = MakePanel("IdentityPortraitFrame", parent);
             portraitFrame.anchorMin = new Vector2(0.5f, 1f); portraitFrame.anchorMax = new Vector2(0.5f, 1f);
             portraitFrame.pivot = new Vector2(0.5f, 1f);
-            portraitFrame.anchoredPosition = new Vector2(0f, -28f);
-            portraitFrame.sizeDelta = new Vector2(118f, 118f);
+            portraitFrame.anchoredPosition = new Vector2(0f, -20f);
+            portraitFrame.sizeDelta = new Vector2(86f, 86f);
             var portraitFrameImg = portraitFrame.GetComponent<Image>();
             portraitFrameImg.sprite = RimaUITheme.SmallPanelFrame;
             portraitFrameImg.type = Image.Type.Sliced;
@@ -540,54 +668,63 @@ namespace RIMA
             classNameLabel = MakeText("WARBLADE", parent, 25, FontStyles.Bold, Color.white);
             classNameLabel.alignment = TextAlignmentOptions.Center;
             var cnRt = classNameLabel.transform as RectTransform;
-            cnRt.anchorMin = new Vector2(0.05f, 0.66f); cnRt.anchorMax = new Vector2(0.95f, 0.75f);
+            cnRt.anchorMin = new Vector2(0.05f, 0.72f); cnRt.anchorMax = new Vector2(0.95f, 0.80f);
             cnRt.offsetMin = cnRt.offsetMax = Vector2.zero;
 
             tagline1Label = MakeText("HEAVY · MELEE · RAGE", parent, 11, FontStyles.Bold, RimaUITheme.TextMuted);
             tagline1Label.alignment = TextAlignmentOptions.Center;
             var t1Rt = tagline1Label.transform as RectTransform;
-            t1Rt.anchorMin = new Vector2(0.05f, 0.59f); t1Rt.anchorMax = new Vector2(0.95f, 0.66f);
+            t1Rt.anchorMin = new Vector2(0.05f, 0.65f); t1Rt.anchorMax = new Vector2(0.95f, 0.72f);
             t1Rt.offsetMin = t1Rt.offsetMax = Vector2.zero;
 
             tagline2Label = MakeText("", parent, 11, FontStyles.Normal, RimaUITheme.TextMuted);
             tagline2Label.alignment = TextAlignmentOptions.Center;
             tagline2Label.enableWordWrapping = true;
             var t2Rt = tagline2Label.transform as RectTransform;
-            t2Rt.anchorMin = new Vector2(0.08f, 0.49f); t2Rt.anchorMax = new Vector2(0.92f, 0.59f);
+            t2Rt.anchorMin = new Vector2(0.08f, 0.55f); t2Rt.anchorMax = new Vector2(0.92f, 0.65f);
             t2Rt.offsetMin = t2Rt.offsetMax = Vector2.zero;
 
             identityMottoLabel = MakeText("", parent, 13, FontStyles.Bold, RimaUITheme.Cyan);
             identityMottoLabel.alignment = TextAlignmentOptions.Left;
             identityMottoLabel.enableWordWrapping = true;
             var mottoRt = identityMottoLabel.transform as RectTransform;
-            mottoRt.anchorMin = new Vector2(0.08f, 0.35f); mottoRt.anchorMax = new Vector2(0.92f, 0.48f);
+            mottoRt.anchorMin = new Vector2(0.08f, 0.43f); mottoRt.anchorMax = new Vector2(0.92f, 0.54f);
             mottoRt.offsetMin = mottoRt.offsetMax = Vector2.zero;
 
             identityPlaystyleLabel = MakeText("", parent, 10, FontStyles.Normal, RimaUITheme.TextMuted);
             identityPlaystyleLabel.alignment = TextAlignmentOptions.TopLeft;
             identityPlaystyleLabel.enableWordWrapping = true;
             var playstyleRt = identityPlaystyleLabel.transform as RectTransform;
-            playstyleRt.anchorMin = new Vector2(0.08f, 0.20f); playstyleRt.anchorMax = new Vector2(0.92f, 0.34f);
+            playstyleRt.anchorMin = new Vector2(0.08f, 0.30f); playstyleRt.anchorMax = new Vector2(0.92f, 0.42f);
             playstyleRt.offsetMin = playstyleRt.offsetMax = Vector2.zero;
 
             identityResourceLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.TextPrimary);
             identityResourceLabel.alignment = TextAlignmentOptions.TopLeft;
             identityResourceLabel.enableWordWrapping = true;
             var resourceRt = identityResourceLabel.transform as RectTransform;
-            resourceRt.anchorMin = new Vector2(0.08f, 0.09f); resourceRt.anchorMax = new Vector2(0.92f, 0.19f);
+            resourceRt.anchorMin = new Vector2(0.08f, 0.22f); resourceRt.anchorMax = new Vector2(0.92f, 0.29f);
             resourceRt.offsetMin = resourceRt.offsetMax = Vector2.zero;
 
             identityLockLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.TextMuted);
             identityLockLabel.alignment = TextAlignmentOptions.Left;
             identityLockLabel.enableWordWrapping = true;
             var lockRt = identityLockLabel.transform as RectTransform;
-            lockRt.anchorMin = new Vector2(0.08f, 0.02f); lockRt.anchorMax = new Vector2(0.92f, 0.08f);
+            lockRt.anchorMin = new Vector2(0.08f, 0.15f); lockRt.anchorMax = new Vector2(0.92f, 0.21f);
             lockRt.offsetMin = lockRt.offsetMax = Vector2.zero;
+
+            identityStatsRoot = MakeRect("StatBars", parent, new Vector2(0.08f, 0.025f), new Vector2(0.92f, 0.145f));
+            identityStatsRoot.offsetMin = identityStatsRoot.offsetMax = Vector2.zero;
+            var statLayout = identityStatsRoot.gameObject.AddComponent<VerticalLayoutGroup>();
+            statLayout.spacing = 4f;
+            statLayout.childControlWidth = true;
+            statLayout.childControlHeight = false;
+            statLayout.childForceExpandWidth = true;
+            statLayout.childForceExpandHeight = false;
         }
 
         private void BuildSkillPanel(RectTransform parent)
         {
-            var skillsHeader = MakeText("SKILLS", parent, 13, FontStyles.Bold, RimaUITheme.Cyan);
+            var skillsHeader = MakeText("YETENEKLER", parent, 13, FontStyles.Bold, RimaUITheme.Cyan);
             skillsHeader.alignment = TextAlignmentOptions.Left;
             var shRt = skillsHeader.transform as RectTransform;
             shRt.anchorMin = new Vector2(0f, 0.93f); shRt.anchorMax = new Vector2(1f, 1f);
@@ -600,6 +737,8 @@ namespace RIMA
             var emptyRt = skillEmptyLabel.transform as RectTransform;
             emptyRt.anchorMin = new Vector2(0f, 0f); emptyRt.anchorMax = new Vector2(1f, 0.92f);
             emptyRt.offsetMin = new Vector2(10f, 0f); emptyRt.offsetMax = new Vector2(-10f, 0f);
+
+            EnsureTooltipSystem();
         }
 
         private void BuildActionStrip(RectTransform parent)
@@ -616,24 +755,6 @@ namespace RIMA
             topBorderImg.color = RimaUITheme.Cyan;
             topBorderImg.raycastTarget = false;
 
-            var echoChip = MakePanel("EchoBalanceChip", parent);
-            echoChip.anchorMin = new Vector2(0.66f, 0.50f);
-            echoChip.anchorMax = new Vector2(0.66f, 0.50f);
-            echoChip.pivot = new Vector2(0.5f, 0.5f);
-            echoChip.anchoredPosition = Vector2.zero;
-            echoChip.sizeDelta = new Vector2(156f, 34f);
-            var echoChipImg = echoChip.GetComponent<Image>();
-            echoChipImg.sprite = RimaUITheme.SmallPanelFrame;
-            echoChipImg.type = Image.Type.Sliced;
-            echoChipImg.color = new Color(0.03f, 0.02f, 0.05f, 0.90f);
-            echoChipImg.raycastTarget = false;
-
-            echoBalanceLabel = MakeText("", echoChip, 12f, FontStyles.Bold, RimaUITheme.Cyan);
-            echoBalanceLabel.alignment = TextAlignmentOptions.Center;
-            var echoRt = echoBalanceLabel.transform as RectTransform;
-            echoRt.anchorMin = Vector2.zero; echoRt.anchorMax = Vector2.one;
-            echoRt.offsetMin = echoRt.offsetMax = Vector2.zero;
-            RefreshEchoLabel();
         }
 
         private void BuildStartButton(RectTransform parent)
@@ -747,7 +868,11 @@ namespace RIMA
                 startButton.interactable = unlocked || canUnlock;
                 if (startButtonLabel != null)
                 {
-                    startButtonLabel.text = unlocked ? "SEÇ" : $"KİLİDİ AÇ — {LockedButtonText(cls)}";
+                    startButtonLabel.text = unlocked
+                        ? "SEÇ"
+                        : canUnlock
+                            ? $"KİLİDİ AÇ — {LockedButtonText(cls)}"
+                            : "YETERSİZ";
                     startButtonLabel.fontSize = unlocked ? 21f : 12f;
                     startButtonLabel.color = unlocked || canUnlock ? Color.white : RimaUITheme.TextMuted;
                 }
@@ -771,6 +896,60 @@ namespace RIMA
             {
                 identityLockLabel.text = IsUnlocked(cls) ? "" : IdentityLockText(cls);
                 identityLockLabel.color = RimaUITheme.TextMuted;
+            }
+            RefreshStatBars(cls);
+        }
+
+        private void RefreshStatBars(ClassType cls)
+        {
+            if (identityStatsRoot == null) return;
+
+            for (int i = identityStatsRoot.childCount - 1; i >= 0; i--)
+            {
+                var c = identityStatsRoot.GetChild(i);
+                c.SetParent(null, false);
+                Destroy(c.gameObject);
+            }
+
+            var stats = RimaUITheme.ClassStats(cls);
+            BuildStatRow(identityStatsRoot, "HASAR", stats.damage);
+            BuildStatRow(identityStatsRoot, "DAYANIK", stats.durability);
+            BuildStatRow(identityStatsRoot, "HIZ", stats.speed);
+            BuildStatRow(identityStatsRoot, "KONTROL", stats.control);
+            BuildStatRow(identityStatsRoot, "ZORLUK", stats.difficulty);
+        }
+
+        private static void BuildStatRow(RectTransform parent, string label, int value)
+        {
+            var row = MakeRect("Stat_" + label, parent, Vector2.zero, Vector2.one);
+            row.sizeDelta = new Vector2(0f, 15f);
+            var layoutElement = row.gameObject.AddComponent<LayoutElement>();
+            layoutElement.preferredHeight = 15f;
+            layoutElement.minHeight = 15f;
+
+            var labelText = MakeText(label, row, 7.5f, FontStyles.Bold, RimaUITheme.TextMuted);
+            labelText.alignment = TextAlignmentOptions.Left;
+            var labelRt = labelText.transform as RectTransform;
+            labelRt.anchorMin = new Vector2(0f, 0f); labelRt.anchorMax = new Vector2(0.36f, 1f);
+            labelRt.offsetMin = labelRt.offsetMax = Vector2.zero;
+
+            var bar = MakeRect("Segments", row, new Vector2(0.40f, 0.18f), new Vector2(1f, 0.82f));
+            bar.offsetMin = bar.offsetMax = Vector2.zero;
+            var grid = bar.gameObject.AddComponent<GridLayoutGroup>();
+            grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            grid.constraintCount = 10;
+            grid.spacing = new Vector2(2f, 0f);
+            grid.cellSize = new Vector2(10f, 8f);
+
+            int clamped = Mathf.Clamp(value, 0, 10);
+            for (int i = 0; i < 10; i++)
+            {
+                var seg = MakePanel("Seg_" + i, bar);
+                var img = seg.GetComponent<Image>();
+                img.color = i < clamped
+                    ? new Color(0f, 1f, 0.80f, 0.88f)
+                    : new Color(0f, 0f, 0f, 0.38f);
+                img.raycastTarget = false;
             }
         }
 
@@ -810,71 +989,119 @@ namespace RIMA
                 Destroy(c.gameObject);
             }
 
-            var database = EnsureSkillDatabase();
-            var skills = database != null
-                ? database.GetAll()
-                    .Where(s => s != null && s.classType == cls && !s.isPassive)
-                    .ToList()
-                : new List<SkillData>();
-
+            var skills = SkillPresentationFor(cls);
             bool hasSkills = skills.Count > 0;
             if (skillEmptyLabel != null) skillEmptyLabel.gameObject.SetActive(!hasSkills);
             if (!hasSkills) return;
 
-            foreach (var skill in skills)
-                BuildSkillRow(skillContent, skill, cls);
+            int featuredCount = Mathf.Min(3, skills.Count);
+            for (int i = 0; i < featuredCount; i++)
+                BuildSkillRow(skillContent, skills[i], cls, true);
+
+            if (skills.Count > featuredCount)
+            {
+                var section = MakeText("TAM LİSTE", skillContent, 8.5f, FontStyles.Bold, RimaUITheme.TextMuted);
+                section.alignment = TextAlignmentOptions.Left;
+                var sectionRt = section.transform as RectTransform;
+                sectionRt.sizeDelta = new Vector2(0f, 18f);
+                var sectionLayout = section.gameObject.AddComponent<LayoutElement>();
+                sectionLayout.preferredHeight = 18f;
+                sectionLayout.minHeight = 18f;
+
+                for (int i = featuredCount; i < skills.Count; i++)
+                    BuildSkillRow(skillContent, skills[i], cls, false);
+            }
         }
 
-        private void BuildSkillRow(RectTransform parent, SkillData skill, ClassType cls)
+        private void BuildSkillRow(RectTransform parent, SkillPresentation skill, ClassType cls, bool featured)
         {
-            var row = MakePanel("Skill_" + SkillIconRegistry.Normalize(skill.skillName), parent);
-            row.sizeDelta = new Vector2(204f, 76f);
+            var row = MakePanel("Skill_" + SkillIconRegistry.Normalize(skill.name), parent);
+            row.sizeDelta = new Vector2(0f, featured ? 48f : 25f);
             var layoutElement = row.gameObject.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = 204f;
-            layoutElement.minWidth = 188f;
-            layoutElement.preferredHeight = 76f;
-            layoutElement.minHeight = 76f;
+            layoutElement.preferredWidth = 0f;
+            layoutElement.minWidth = 0f;
+            layoutElement.preferredHeight = featured ? 48f : 25f;
+            layoutElement.minHeight = featured ? 48f : 25f;
             var rowImg = row.GetComponent<Image>();
             rowImg.sprite = RimaUITheme.SmallPanelFrame;
             rowImg.type = Image.Type.Sliced;
-            rowImg.color = new Color(0.06f, 0.07f, 0.10f, 0.72f);
-            rowImg.raycastTarget = false;
+            rowImg.color = skill.locked
+                ? new Color(0f, 0f, 0f, 0.42f)
+                : new Color(0.016f, 0.035f, 0.051f, featured ? 0.76f : 0.54f);
+            rowImg.raycastTarget = !skill.locked;
 
             var iconFrame = MakePanel("IconFrame", row);
             iconFrame.anchorMin = new Vector2(0f, 1f);
             iconFrame.anchorMax = new Vector2(0f, 1f);
             iconFrame.pivot = new Vector2(0.5f, 0.5f);
-            iconFrame.anchoredPosition = new Vector2(28f, -28f);
-            iconFrame.sizeDelta = new Vector2(40f, 40f);
+            iconFrame.anchoredPosition = new Vector2(featured ? 24f : 15f, featured ? -24f : -12.5f);
+            iconFrame.sizeDelta = featured ? new Vector2(34f, 34f) : new Vector2(18f, 18f);
             var frameImg = iconFrame.GetComponent<Image>();
             frameImg.sprite = RimaUITheme.SmallPanelFrame;
             frameImg.type = Image.Type.Sliced;
-            frameImg.color = WithAlpha(RimaUITheme.ClassAccent(cls), 0.28f);
+            frameImg.color = skill.locked
+                ? new Color(0.10f, 0.09f, 0.14f, 0.70f)
+                : WithAlpha(RimaUITheme.ClassAccent(cls), 0.28f);
             frameImg.raycastTarget = false;
 
-            var iconRt = MakePanel("Icon", iconFrame);
-            SetStretch(iconRt, Vector2.zero, Vector2.one, new Vector2(4f, 4f), new Vector2(-4f, -4f));
-            var iconImg = iconRt.GetComponent<Image>();
-            iconImg.sprite = skill.icon != null ? skill.icon : RimaUITheme.PassiveIcon(skill.skillName);
-            iconImg.preserveAspect = true;
-            iconImg.color = Color.white;
-            iconImg.raycastTarget = false;
+            if (skill.iconSprite != null && !skill.locked)
+            {
+                var iconRt = MakePanel("Icon", iconFrame);
+                SetStretch(iconRt, Vector2.zero, Vector2.one, new Vector2(3f, 3f), new Vector2(-3f, -3f));
+                var iconImg = iconRt.GetComponent<Image>();
+                iconImg.sprite = skill.iconSprite;
+                iconImg.preserveAspect = true;
+                iconImg.color = Color.white;
+                iconImg.raycastTarget = false;
+            }
+            else
+            {
+                var iconLabel = MakeText(skill.locked ? "?" : skill.iconText, iconFrame, featured ? 12f : 8f, FontStyles.Bold,
+                    skill.locked ? RimaUITheme.TextMuted : RimaUITheme.Cyan);
+                iconLabel.alignment = TextAlignmentOptions.Center;
+                var iconLabelRt = iconLabel.transform as RectTransform;
+                iconLabelRt.anchorMin = Vector2.zero; iconLabelRt.anchorMax = Vector2.one;
+                iconLabelRt.offsetMin = iconLabelRt.offsetMax = Vector2.zero;
+            }
 
-            var name = MakeText(skill.skillName?.ToUpperInvariant() ?? "UNKNOWN", row, 10, FontStyles.Bold, RimaUITheme.ClassAccent(cls));
+            var name = MakeText(skill.name?.ToUpperInvariant() ?? "UNKNOWN", row, featured ? 10f : 8f, FontStyles.Bold,
+                skill.locked ? new Color(0.42f, 0.38f, 0.48f, 1f) : RimaUITheme.ClassAccent(cls));
             name.alignment = TextAlignmentOptions.TopLeft;
-            name.enableWordWrapping = true;
+            name.enableWordWrapping = false;
             name.overflowMode = TextOverflowModes.Ellipsis;
             var nameRt = name.transform as RectTransform;
-            nameRt.anchorMin = new Vector2(0f, 0.56f); nameRt.anchorMax = new Vector2(1f, 0.94f);
-            nameRt.offsetMin = new Vector2(54f, 0f); nameRt.offsetMax = new Vector2(-6f, 0f);
+            if (featured)
+            {
+                nameRt.anchorMin = new Vector2(0f, 0.56f); nameRt.anchorMax = new Vector2(1f, 0.94f);
+                nameRt.offsetMin = new Vector2(48f, 0f); nameRt.offsetMax = new Vector2(-6f, 0f);
 
-            var desc = MakeText(skill.description, row, 8, FontStyles.Normal, new Color(1f, 1f, 1f, 0.75f));
-            desc.alignment = TextAlignmentOptions.TopLeft;
-            desc.enableWordWrapping = true;
-            desc.overflowMode = TextOverflowModes.Ellipsis;
-            var descRt = desc.transform as RectTransform;
-            descRt.anchorMin = new Vector2(0f, 0.08f); descRt.anchorMax = new Vector2(1f, 0.55f);
-            descRt.offsetMin = new Vector2(54f, 0f); descRt.offsetMax = new Vector2(-6f, 0f);
+                var desc = MakeText(OneLine(skill.description), row, 7.5f, FontStyles.Normal, new Color(1f, 1f, 1f, 0.75f));
+                desc.alignment = TextAlignmentOptions.TopLeft;
+                desc.enableWordWrapping = false;
+                desc.overflowMode = TextOverflowModes.Ellipsis;
+                var descRt = desc.transform as RectTransform;
+                descRt.anchorMin = new Vector2(0f, 0.10f); descRt.anchorMax = new Vector2(1f, 0.54f);
+                descRt.offsetMin = new Vector2(48f, 0f); descRt.offsetMax = new Vector2(-6f, 0f);
+            }
+            else
+            {
+                nameRt.anchorMin = new Vector2(0f, 0f); nameRt.anchorMax = skill.locked ? new Vector2(0.58f, 1f) : new Vector2(1f, 1f);
+                nameRt.offsetMin = new Vector2(30f, 0f); nameRt.offsetMax = new Vector2(-4f, 0f);
+
+                if (skill.locked)
+                {
+                    var condition = MakeText(skill.condition, row, 7f, FontStyles.Normal, new Color(0.61f, 0.49f, 0.36f, 1f));
+                    condition.alignment = TextAlignmentOptions.Right;
+                    condition.enableWordWrapping = false;
+                    condition.overflowMode = TextOverflowModes.Ellipsis;
+                    var conditionRt = condition.transform as RectTransform;
+                    conditionRt.anchorMin = new Vector2(0.58f, 0f); conditionRt.anchorMax = Vector2.one;
+                    conditionRt.offsetMin = new Vector2(2f, 0f); conditionRt.offsetMax = new Vector2(-4f, 0f);
+                }
+            }
+
+            if (!skill.locked && !string.IsNullOrWhiteSpace(skill.description))
+                AddSkillTooltip(row.gameObject, $"<b>{skill.name}</b>\n{skill.description}");
         }
 
         private void OnStartRun()
@@ -914,35 +1141,46 @@ namespace RIMA
         private static string CardActionText(ClassType cls)
         {
             if (IsUnlocked(cls)) return "Click to Start";
-            return cls == ClassType.Hexer
-                ? "Unlock for 250 Echo\nElementalist ile 1 run yap"
-                : $"Unlock for {UnlockCost(cls)} Echo";
+            return $"{UnlockCost(cls)} SHATTERED ECHO veya {UnlockConditionText(cls)}";
         }
 
         private static string LockedButtonText(ClassType cls)
         {
-            return cls == ClassType.Hexer
-                ? "250 Echo + Elementalist run"
-                : $"{UnlockCost(cls)} Echo";
+            return $"{UnlockCost(cls)} SHATTERED ECHO";
         }
 
         private static string IdentityLockText(ClassType cls)
         {
-            return cls == ClassType.Hexer
-                ? "250 Echoes + Elementalist run gerekli"
-                : $"{UnlockCost(cls)} Echoes gerekli";
+            return $"{UnlockCost(cls)} SHATTERED ECHO · veya {UnlockConditionText(cls)}";
         }
 
         private static int UnlockCost(ClassType cls) => cls switch
         {
-            ClassType.Ronin => 120,
-            ClassType.Ravager => 120,
-            ClassType.Gunslinger => 180,
-            ClassType.Brawler => 180,
-            ClassType.Summoner => 180,
+            ClassType.Ronin => 150,
+            ClassType.Ravager => 150,
+            ClassType.Gunslinger => 200,
+            ClassType.Brawler => 200,
+            ClassType.Summoner => 200,
             ClassType.Hexer => 250,
             _ => 0,
         };
+
+        private static string UnlockConditionText(ClassType cls) => cls switch
+        {
+            ClassType.Ravager => "Act2 boss'u Warblade ile",
+            ClassType.Ronin => "Act2 boss'u Shadowblade ile",
+            ClassType.Gunslinger => "Ranger ile Act2'ye ulaş",
+            ClassType.Brawler => "Ravager ile Act2'ye ulaş",
+            ClassType.Summoner => "art arda 3 run Act2",
+            ClassType.Hexer => "Elementalist ile run bitir",
+            _ => "",
+        };
+
+        private static string UnlockOrPathText(ClassType cls)
+        {
+            int cost = UnlockCost(cls);
+            return cost <= 0 ? "" : $"{cost} SHATTERED ECHO · veya {UnlockConditionText(cls)}";
+        }
 
         private static bool HasHexerPrerequisite() =>
             PlayerPrefs.GetInt(HexerElementalistRunPrefsKey, 0) == 1;
@@ -950,7 +1188,6 @@ namespace RIMA
         private static bool CanUnlock(ClassType cls)
         {
             if (IsUnlocked(cls)) return false;
-            if (cls == ClassType.Hexer && !HasHexerPrerequisite()) return false;
             return EchoWallet.Balance >= UnlockCost(cls);
         }
 
@@ -971,7 +1208,7 @@ namespace RIMA
         private void RefreshEchoLabel()
         {
             if (echoBalanceLabel != null)
-                echoBalanceLabel.text = $"{EchoWallet.Balance} ECHO";
+                echoBalanceLabel.text = $"{EchoWallet.Balance} SHATTERED ECHO";
         }
 
         private static void ApplyRoomEntryVisual(RoomEntry entry, bool selected)
@@ -979,7 +1216,7 @@ namespace RIMA
             bool unlocked = IsUnlocked(entry.classType);
             var accent = RimaUITheme.ClassAccent(entry.classType);
             float alpha = selected ? 1f : (unlocked ? 0.75f : 0.88f);
-            float scale = entry.baseScale * (selected ? 1.12f : 1f);
+            float scale = entry.baseScale;
 
             if (entry.root != null)
             {
@@ -1037,7 +1274,7 @@ namespace RIMA
             if (entry.costChip != null)
             {
                 entry.costChip.transform.parent.gameObject.SetActive(!unlocked);
-                entry.costChip.text = entry.classType == ClassType.Hexer ? "250 Echo" : $"{UnlockCost(entry.classType)} Echo";
+                entry.costChip.text = UnlockOrPathText(entry.classType);
                 entry.costChip.color = selected ? RimaUITheme.Cyan : RimaUITheme.TextMuted;
             }
 
@@ -1059,52 +1296,38 @@ namespace RIMA
 
         private void AnimateRoomSelection()
         {
-            float t = Time.unscaledTime;
-            float pulse = 0.5f + 0.5f * Mathf.Sin(t * 3.4f);
-
             if (roomEntries.TryGetValue(selectedClass, out var selected))
             {
-                float bob = Mathf.Sin(t * 2.25f) * 8f;
                 if (selected.root != null)
-                    selected.root.anchoredPosition = selected.basePosition + new Vector2(0f, bob);
+                    selected.root.anchoredPosition = selected.basePosition;
 
                 if (selected.glow != null)
-                    selected.glow.color = new Color(0f, 1f, 0.80f, Mathf.Lerp(0.18f, 0.38f, pulse));
+                    selected.glow.color = new Color(0f, 1f, 0.80f, 0.30f);
 
                 if (selected.seal != null)
-                {
-                    float sealScale = Mathf.Lerp(0.98f, 1.04f, pulse);
-                    selected.seal.rectTransform.localScale = new Vector3(sealScale, sealScale, 1f);
-                }
+                    selected.seal.rectTransform.localScale = Vector3.one;
 
                 if (selected.selectionGlowDisk != null)
                 {
-                    float glowScale = Mathf.Lerp(0.96f, 1.10f, pulse);
-                    selected.selectionGlowDisk.rectTransform.localScale = new Vector3(glowScale, glowScale, 1f);
-                    selected.selectionGlowDisk.color = new Color(0f, 1f, 0.80f, Mathf.Lerp(0.16f, 0.34f, pulse));
+                    selected.selectionGlowDisk.rectTransform.localScale = Vector3.one;
+                    selected.selectionGlowDisk.color = new Color(0f, 1f, 0.80f, 0.24f);
                 }
 
                 if (selected.selectionRing != null)
                 {
-                    selected.selectionRing.rectTransform.localEulerAngles = new Vector3(0f, 0f, t * -28f);
-                    selected.selectionRing.color = new Color(0f, 1f, 0.80f, Mathf.Lerp(0.34f, 0.56f, pulse));
+                    selected.selectionRing.rectTransform.localEulerAngles = Vector3.zero;
+                    selected.selectionRing.color = new Color(0f, 1f, 0.80f, 0.52f);
                 }
 
                 if (selected.selectionMotes != null)
                 {
-                    for (int i = 0; i < selected.selectionMotes.Length; i++)
+                    foreach (var mote in selected.selectionMotes)
                     {
-                        var mote = selected.selectionMotes[i];
                         if (mote == null)
                             continue;
 
-                        float phase = Mathf.Repeat(t * 0.45f + i * 0.33f, 1f);
-                        float angle = (i / 3f) * Mathf.PI * 2f + t * 0.38f;
-                        float radius = Mathf.Lerp(40f, 92f, phase);
-                        float y = Mathf.Lerp(-10f, 42f, phase);
-                        mote.rectTransform.anchoredPosition = new Vector2(Mathf.Cos(angle) * radius, y);
-                        mote.rectTransform.localScale = Vector3.one * Mathf.Lerp(0.78f, 1.15f, 1f - phase);
-                        mote.color = new Color(0f, 1f, 0.80f, Mathf.Sin(phase * Mathf.PI) * 0.42f);
+                        mote.rectTransform.localScale = Vector3.one;
+                        mote.color = new Color(0f, 1f, 0.80f, 0.0f);
                     }
                 }
             }
@@ -1141,6 +1364,178 @@ namespace RIMA
             return db;
         }
 
+        private static List<SkillPresentation> SkillPresentationFor(ClassType cls)
+        {
+            var fallback = FallbackSkills(cls);
+            var database = EnsureSkillDatabase();
+            var dbSkills = database != null
+                ? database.GetAll()
+                    .Where(s => s != null && s.classType == cls)
+                    .ToDictionary(s => s.skillName, StringComparer.OrdinalIgnoreCase)
+                : new Dictionary<string, SkillData>(StringComparer.OrdinalIgnoreCase);
+
+            var result = new List<SkillPresentation>(fallback.Length + dbSkills.Count);
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var item in fallback)
+            {
+                if (!string.IsNullOrEmpty(item.name))
+                    seen.Add(item.name);
+
+                if (!item.locked && dbSkills.TryGetValue(item.name, out var db))
+                {
+                    result.Add(new SkillPresentation(
+                        db.skillName,
+                        string.IsNullOrWhiteSpace(db.description) ? item.description : db.description,
+                        IconText(db.skillName),
+                        false,
+                        "",
+                        db.icon != null ? db.icon : RimaUITheme.PassiveIcon(db.skillName)));
+                    continue;
+                }
+
+                result.Add(item);
+            }
+
+            foreach (var db in dbSkills.Values)
+            {
+                if (seen.Contains(db.skillName)) continue;
+                result.Add(new SkillPresentation(
+                    db.skillName,
+                    db.description,
+                    IconText(db.skillName),
+                    false,
+                    "",
+                    db.icon != null ? db.icon : RimaUITheme.PassiveIcon(db.skillName)));
+            }
+
+            return result;
+        }
+
+        private static SkillPresentation OpenSkill(string name, string description) =>
+            new(name, description, IconText(name), false, "");
+
+        private static SkillPresentation LockedSkill(string name, string condition) =>
+            new(name, "", IconText(name), true, condition);
+
+        private static string IconText(string name) =>
+            string.IsNullOrEmpty(name) ? "*" : name.Substring(0, 1).ToUpperInvariant();
+
+        private static SkillPresentation[] FallbackSkills(ClassType cls) => cls switch
+        {
+            ClassType.Warblade => new[]
+            {
+                OpenSkill("Iron Charge", "Bakış yönüne fırla, isabette Rage kazan."),
+                OpenSkill("Cleave", "Çevresel döner darbe, Rage ile güçlenir."),
+                OpenSkill("Deep Wound", "Yakın hedefe ani hasar ve kanama uygular."),
+                OpenSkill("Sunder Mark", "En yakın düşmanı işaretle, zırhını kır."),
+                OpenSkill("Crippling Blow", "Yakındaki düşmanı yavaşlat ve sersemlet."),
+                LockedSkill("Earthsplitter", "Açılış: Act 1'i Warblade ile bitir"),
+                LockedSkill("Blade Rush", "Açılış: 3 odada hasar almadan ilerle"),
+                LockedSkill("Gravity Cleave", "Açılış: 40 düşmanı Sundered halde yen"),
+                LockedSkill("Iron Counter", "Açılış: 20 saldırıyı parry ile boz"),
+                LockedSkill("Iron Crush", "Açılış: Act 2 elitini Warblade ile yen"),
+                LockedSkill("Ironclade Momentum", "Açılış: 60 sn combo kaybetme"),
+                OpenSkill("Blood Drinker", "Her öldürme sonrası can yeniler."),
+                LockedSkill("Wrath Protocol", "Açılış: HP %50 altında oda temizle"),
+                LockedSkill("Tempered Fury", "Açılış: Rage'i 80+ tutarak boss yen"),
+                OpenSkill("Berserker's Resolve", "Knockback aldığında Rage üretir."),
+                LockedSkill("Battle Surge", "Açılış: Act 2 bossunu Warblade ile yen"),
+                LockedSkill("Death Blow", "Açılış: 25 execute zinciri tamamla"),
+            },
+            ClassType.Elementalist => new[]
+            {
+                OpenSkill("Fireball", "Hedef noktada patlama ve kısa yanma uygular."),
+                OpenSkill("Glacial Spike", "Buz hattı yavaşlatır ve Frost state kurar."),
+                OpenSkill("Living Bomb", "Fitil patlayınca alana hasar verir."),
+                OpenSkill("Chain Lightning", "İlk düşmandan hedeflere atlayan yıldırım."),
+                OpenSkill("Blink", "İmleç konumuna anında ışınlan."),
+                LockedSkill("Arcane Blast", "Açılış: 3 farklı elementi aynı odada kullan"),
+                LockedSkill("Frozen Orb", "Açılış: 40 düşmanı Chill altında yen"),
+                LockedSkill("Prism Beam", "Açılış: Act 1'i Elementalist ile bitir"),
+                LockedSkill("Meteor", "Açılış: Frozen hedefe boss hasarı ver"),
+                LockedSkill("Frost Wall", "Açılış: 25 projectile engelle"),
+                LockedSkill("Solar Flare", "Açılış: Light stack ile 50 düşman yen"),
+                LockedSkill("Blizzard", "Açılış: Act 2'ye Elementalist ile ulaş"),
+            },
+            ClassType.Ranger => new[]
+            {
+                OpenSkill("Aimed Shot", "Nişanlı yüksek hasar, dolu Focus'ta kritik."),
+                OpenSkill("Pinning Shot", "Root ve mark uygulayan rift oku."),
+                OpenSkill("Marked Detonate", "Marked hedefleri patlatır."),
+                OpenSkill("Hunter's Step", "Kısa reposition dash ve crit penceresi."),
+                OpenSkill("Bone Trap", "Öne trap zone kurar ve hedefleri rootlar."),
+                OpenSkill("Disengage", "Geri atla, yavaşlatma bırak."),
+                LockedSkill("Multi Shot", "Açılış: 5 hedefi tek atışta vur"),
+                LockedSkill("Sweep Volley", "Açılış: Act 1'i Ranger ile bitir"),
+                LockedSkill("Predator's Mark", "Açılış: 60 mark tetikle"),
+                LockedSkill("Final Strike", "Açılış: Trapped boss execute et"),
+                LockedSkill("Wireline Trap", "Açılış: Act 2'ye Ranger ile ulaş"),
+            },
+            ClassType.Shadowblade => new[]
+            {
+                OpenSkill("Backstab", "Arkadan vuruşta katlı hasar."),
+                OpenSkill("Phase Step", "Çizgide scar bırakan phase dash."),
+                OpenSkill("Backstab Mark", "Mark ve scar kurar."),
+                OpenSkill("Death Mark", "Gecikmeli patlama mark'ı koyar."),
+                OpenSkill("Shadow Clone", "Kısa süreli decoy phantom."),
+                OpenSkill("Shadow Pin", "Dagger projectile ile root ve scar."),
+                LockedSkill("Shadow Step", "Açılış: Act 1'i Shadowblade ile bitir"),
+                LockedSkill("Fan of Knives", "Açılış: 30 kanama uygula"),
+                LockedSkill("Veil Burst", "Açılış: 4 hedefe phase zinciri"),
+                LockedSkill("Severance", "Açılış: 80 scar collapse et"),
+                LockedSkill("Smoke Veil", "Açılış: hasar almadan 3 oda"),
+                LockedSkill("Chain Cull", "Açılış: Act 2 bossunu Shadowblade ile yen"),
+                LockedSkill("Night Aperture", "Açılış: 6 scar'i aynı anda taşıt"),
+            },
+            ClassType.Ronin => PlaceholderSkills(
+                "Quickdraw", "Iaido Stance", "Sakura Veil", "Final Draw", "Moon Cut", "Still Water", "Petal Riposte", "Last Sheath"),
+            ClassType.Ravager => PlaceholderSkills(
+                "Rend Hook", "Bone Maw", "Armor Split", "Red Wake", "Hook Slam", "Gore Path", "Fury Sink", "Last Roar"),
+            ClassType.Gunslinger => PlaceholderSkills(
+                "Deadeye", "Quick Reload", "Ricochet", "Smoke Round", "Fan Hammer", "Silver Mark", "Pierce Shot", "Last Bullet"),
+            ClassType.Brawler => PlaceholderSkills(
+                "Jawbreaker", "Shoulder In", "Ground Lock", "Counter Jab", "Iron Guard", "Ring Step", "Uppercut", "No Mercy"),
+            ClassType.Summoner => PlaceholderSkills(
+                "Wisp Call", "Bone Pact", "Rift Totem", "Twin Shade", "Offering", "Grave Door", "Rift Swarm", "Last Familiar"),
+            ClassType.Hexer => PlaceholderSkills(
+                "Wither", "Hex Brand", "Black Thread", "Mire Curse", "Glass Bone", "Dread Bloom", "Witch Knot", "Last Omen"),
+            _ => Array.Empty<SkillPresentation>(),
+        };
+
+        private static SkillPresentation[] PlaceholderSkills(params string[] names)
+        {
+            var descriptions = new[] { "Başlangıç aktif yetenek.", "Ritim kuran sınıf aracı.", "Kontrol penceresi açar." };
+            var result = new SkillPresentation[names.Length];
+            for (int i = 0; i < names.Length; i++)
+            {
+                result[i] = i < 3
+                    ? OpenSkill(names[i], descriptions[i])
+                    : LockedSkill(names[i], "Açılış: sınıf deed'i tamamla");
+            }
+            return result;
+        }
+
+        private static string OneLine(string value) =>
+            string.IsNullOrWhiteSpace(value) ? "" : value.Replace('\n', ' ').Replace('\r', ' ');
+
+        private static void EnsureTooltipSystem()
+        {
+            if (TooltipSystem.Instance != null) return;
+
+            var go = new GameObject("TooltipSystem_Runtime");
+            go.AddComponent<TooltipSystem>();
+        }
+
+        private static void AddSkillTooltip(GameObject target, string content)
+        {
+            AddEventTrigger(target, EventTriggerType.PointerEnter, _ =>
+            {
+                EnsureTooltipSystem();
+                TooltipSystem.Instance?.Show(content);
+            });
+            AddEventTrigger(target, EventTriggerType.PointerExit, _ => TooltipSystem.Instance?.Hide());
+        }
+
         private static RectTransform MakeSkillStripArea(RectTransform parent, string name)
         {
             var root = MakePanel(name, parent);
@@ -1149,41 +1544,25 @@ namespace RIMA
             rootImg.color = new Color(0f, 0f, 0f, 0f);
             rootImg.raycastTarget = false;
 
-            var viewport = MakePanel("Viewport", root);
-            SetStretch(viewport, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-            viewport.gameObject.AddComponent<Mask>().showMaskGraphic = false;
-            var viewportImg = viewport.GetComponent<Image>();
-            viewportImg.color = new Color(0f, 0f, 0f, 0.20f);
-            viewportImg.raycastTarget = true;
+            root.gameObject.AddComponent<RectMask2D>();
 
-            var content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
-            content.transform.SetParent(viewport, false);
+            var content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup));
+            content.transform.SetParent(root, false);
             var contentRt = content.GetComponent<RectTransform>();
-            contentRt.anchorMin = new Vector2(0f, 1f);
-            contentRt.anchorMax = new Vector2(1f, 1f);
+            contentRt.anchorMin = Vector2.zero;
+            contentRt.anchorMax = Vector2.one;
             contentRt.pivot = new Vector2(0.5f, 1f);
-            contentRt.anchoredPosition = Vector2.zero;
-            contentRt.sizeDelta = Vector2.zero;
+            contentRt.offsetMin = Vector2.zero;
+            contentRt.offsetMax = Vector2.zero;
 
             var layout = content.GetComponent<VerticalLayoutGroup>();
             layout.padding = new RectOffset(0, 0, 0, 0);
-            layout.spacing = 8f;
+            layout.spacing = 3f;
             layout.childAlignment = TextAnchor.UpperCenter;
             layout.childControlWidth = true;
             layout.childControlHeight = false;
-            layout.childForceExpandWidth = false;
+            layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
-
-            var fitter = content.GetComponent<ContentSizeFitter>();
-            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-            var scroll = root.gameObject.AddComponent<ScrollRect>();
-            scroll.viewport = viewport;
-            scroll.content = contentRt;
-            scroll.horizontal = false;
-            scroll.vertical = true;
-            scroll.movementType = ScrollRect.MovementType.Clamped;
-            scroll.scrollSensitivity = 24f;
 
             return contentRt;
         }
@@ -1211,7 +1590,7 @@ namespace RIMA
             var img = rt.GetComponent<Image>();
             img.sprite = Resources.Load<Sprite>(PackPanelFrame) ?? RimaUITheme.SmallPanelFrame;
             img.type = Image.Type.Sliced;
-            img.color = new Color(0.067f, 0.031f, 0.090f, 0.88f);
+            img.color = new Color(0.016f, 0.035f, 0.051f, 0.95f);
             img.raycastTarget = false;
 
             var edge = MakePanel("CyanEdge", rt);

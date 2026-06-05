@@ -197,6 +197,21 @@ namespace RIMA
             _ => ("UNKNOWN", "", ""),
         };
 
+        public static (int damage, int durability, int speed, int control, int difficulty) ClassStats(ClassType cls) => cls switch
+        {
+            ClassType.Warblade     => (8, 8, 4, 6, 3),
+            ClassType.Elementalist => (7, 3, 5, 9, 7),
+            ClassType.Ranger       => (6, 4, 8, 8, 4),
+            ClassType.Shadowblade  => (8, 3, 9, 6, 8),
+            ClassType.Ronin        => (8, 5, 7, 6, 7),
+            ClassType.Ravager      => (9, 9, 3, 5, 6),
+            ClassType.Gunslinger   => (8, 4, 7, 7, 7),
+            ClassType.Brawler      => (7, 8, 6, 5, 5),
+            ClassType.Summoner     => (5, 4, 4, 9, 8),
+            ClassType.Hexer        => (6, 3, 5, 10, 9),
+            _                      => (0, 0, 0, 0, 0),
+        };
+
         // ── Sprites ───────────────────────────────────────────────────────
         // Procedural rounded-rect sprites instead of AI-generated PNGs.
         // Clean, resolution-independent, 9-slice compatible.
