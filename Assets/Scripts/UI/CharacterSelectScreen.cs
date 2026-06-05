@@ -65,18 +65,18 @@ namespace RIMA
         private float selectFlashTimer;
 
         [Header("Roster Layout")]
-        [SerializeField] private Vector2[] frontRowAnchors =
+        [Tooltip("Backdrop-normalized anchors by class order: 0 Warblade, 1 Elementalist, 2 Ranger, 3 Shadowblade, 4 Ronin, 5 Ravager, 6 Gunslinger, 7 Brawler, 8 Summoner, 9 Hexer.")]
+        [SerializeField] private Vector2[] rosterAnchors =
         {
-            new(0.22f, 0.73f), new(0.37f, 0.73f), new(0.52f, 0.73f), new(0.67f, 0.73f), new(0.82f, 0.73f)
-        };
-
-        [SerializeField] private Vector2[] backRowAnchors =
-        {
-            new(0.28f, 0.51f), new(0.43f, 0.51f), new(0.58f, 0.51f), new(0.73f, 0.51f), new(0.88f, 0.51f)
+            new(0.28f, 0.69f), new(0.42f, 0.69f), new(0.56f, 0.69f), new(0.70f, 0.69f),
+            new(0.35f, 0.54f), new(0.29f, 0.40f), new(0.41f, 0.40f), new(0.53f, 0.40f),
+            new(0.65f, 0.40f), new(0.59f, 0.54f)
         };
 
         [SerializeField] private Vector2 hitPaddingScale = new(1.15f, 1.10f);
 
+        private const float RosterBandMinX = 0.225f;
+        private const float RosterBandMaxX = 0.745f;
         private const float VisibleCharacterHeight = 127f;
 
         private static readonly ClassType[] AllClasses =
@@ -84,16 +84,6 @@ namespace RIMA
             ClassType.Warblade, ClassType.Elementalist, ClassType.Ranger,
             ClassType.Shadowblade, ClassType.Ronin, ClassType.Ravager,
             ClassType.Gunslinger, ClassType.Brawler, ClassType.Summoner, ClassType.Hexer
-        };
-
-        private static readonly ClassType[] FrontRowClasses =
-        {
-            ClassType.Warblade, ClassType.Elementalist, ClassType.Ranger, ClassType.Shadowblade, ClassType.Ronin
-        };
-
-        private static readonly ClassType[] BackRowClasses =
-        {
-            ClassType.Ravager, ClassType.Gunslinger, ClassType.Brawler, ClassType.Summoner, ClassType.Hexer
         };
 
         private readonly struct RoomPlacement
@@ -124,7 +114,7 @@ namespace RIMA
             public Image         selectionGlowDisk;
             public Image         selectionRing;
             public Image[]       selectionMotes;
-            public Image         lockGlyph;
+            public Image         lockChip;
             public TMP_Text      costChip;
             public CanvasGroup   canvasGroup;
             public ClassType     classType;
@@ -278,8 +268,11 @@ namespace RIMA
             if (backdropImage != null && backdropImage.sprite == null)
                 StartCoroutine(RetryLoadRoomBackdrop(backdropImage));
 
+            var rosterContainer = MakeRect("RosterContainer", parent, new Vector2(RosterBandMinX, 0f), new Vector2(RosterBandMaxX, 1f));
+            rosterContainer.offsetMin = rosterContainer.offsetMax = Vector2.zero;
+
             foreach (var placement in BuildRosterPlacements().OrderByDescending(p => p.anchor.y))
-                BuildRoomCharacter(parent, placement);
+                BuildRoomCharacter(rosterContainer, placement);
 
             showcaseFlashImage = MakePanel("SelectionFlash", parent).GetComponent<Image>();
             var flashRt = showcaseFlashImage.transform as RectTransform;
@@ -291,28 +284,50 @@ namespace RIMA
 
         private IEnumerable<RoomPlacement> BuildRosterPlacements()
         {
-            for (int i = 0; i < FrontRowClasses.Length; i++)
+            for (int i = 0; i < AllClasses.Length; i++)
             {
-                Vector2 anchor = i < frontRowAnchors.Length ? frontRowAnchors[i] : new Vector2(0.22f + 0.15f * i, 0.73f);
-                var fit = FitFor(FrontRowClasses[i]);
-                yield return new RoomPlacement(FrontRowClasses[i], UnityAnchorFromMockup(anchor), DisplaySizeFor(fit), 1f);
-            }
-
-            for (int i = 0; i < BackRowClasses.Length; i++)
-            {
-                Vector2 anchor = i < backRowAnchors.Length ? backRowAnchors[i] : new Vector2(0.28f + 0.15f * i, 0.51f);
-                var fit = FitFor(BackRowClasses[i]);
-                yield return new RoomPlacement(BackRowClasses[i], UnityAnchorFromMockup(anchor), DisplaySizeFor(fit), 1f);
+                var cls = AllClasses[i];
+                Vector2 anchor = i < rosterAnchors.Length ? rosterAnchors[i] : DefaultRosterAnchor(cls);
+                var fit = FitFor(cls);
+                yield return new RoomPlacement(cls, UnityAnchorInRosterBand(anchor), DisplaySizeFor(fit), 1f);
             }
         }
 
-        private static Vector2 UnityAnchorFromMockup(Vector2 mockupAnchor) =>
-            new(Mathf.Clamp01(mockupAnchor.x), Mathf.Clamp01(1f - mockupAnchor.y));
+        private static Vector2 DefaultRosterAnchor(ClassType cls) => cls switch
+        {
+            ClassType.Warblade     => new Vector2(0.28f, 0.69f),
+            ClassType.Elementalist => new Vector2(0.42f, 0.69f),
+            ClassType.Ranger       => new Vector2(0.56f, 0.69f),
+            ClassType.Shadowblade  => new Vector2(0.70f, 0.69f),
+            ClassType.Ronin        => new Vector2(0.35f, 0.54f),
+            ClassType.Ravager      => new Vector2(0.29f, 0.40f),
+            ClassType.Gunslinger   => new Vector2(0.41f, 0.40f),
+            ClassType.Brawler      => new Vector2(0.53f, 0.40f),
+            ClassType.Summoner     => new Vector2(0.65f, 0.40f),
+            ClassType.Hexer        => new Vector2(0.59f, 0.54f),
+            _                      => new Vector2(0.50f, 0.54f),
+        };
+
+        private static Vector2 UnityAnchorInRosterBand(Vector2 mockupAnchor)
+        {
+            float x = Mathf.InverseLerp(RosterBandMinX, RosterBandMaxX, mockupAnchor.x);
+            return new Vector2(Mathf.Clamp01(x), Mathf.Clamp01(1f - mockupAnchor.y));
+        }
 
         private static Vector2 DisplaySizeFor(CharacterFit fit)
         {
             float imageSize = VisibleCharacterHeight * (fit.canvas / Mathf.Max(1f, fit.visibleHeight));
             return new Vector2(imageSize, imageSize);
+        }
+
+        private static Vector2 BoxSizeFor(Vector2 displaySize)
+        {
+            return new Vector2(Mathf.Max(248f, displaySize.x + 18f), displaySize.y + 70f);
+        }
+
+        private static float FootYInBox(Vector2 boxSize, Vector2 displaySize, Vector2 spritePivot)
+        {
+            return -boxSize.y * 0.5f + 50f + spritePivot.y * displaySize.y;
         }
 
         private Vector2 HitSizeFor(CharacterFit fit)
@@ -450,21 +465,24 @@ namespace RIMA
         {
             var cls = placement.classType;
             var fit = FitFor(cls);
+            bool unlocked = IsUnlocked(cls);
             Vector2 pivot = new(
                 Mathf.Clamp01(0.5f + fit.xBias / Mathf.Max(1f, fit.canvas)),
                 Mathf.Clamp01(fit.feetGap / Mathf.Max(1f, fit.canvas)));
+            Vector2 boxSize = BoxSizeFor(placement.size);
+            float footY = FootYInBox(boxSize, placement.size, pivot);
             var root = MakeRect($"RoomCharacter_{cls}", parent, placement.anchor, placement.anchor);
-            root.pivot = pivot;
+            root.pivot = new Vector2(0.5f, 0.5f);
             root.anchoredPosition = Vector2.zero;
-            root.sizeDelta = placement.size;
+            root.sizeDelta = boxSize;
             root.localScale = new Vector3(placement.baseScale, placement.baseScale, 1f);
 
             var canvasGroup = root.gameObject.AddComponent<CanvasGroup>();
 
             var glowRt = MakePanel("HoverGlow", root);
-            glowRt.anchorMin = new Vector2(0.5f, 0f); glowRt.anchorMax = new Vector2(0.5f, 0f);
+            glowRt.anchorMin = new Vector2(0.5f, 0.5f); glowRt.anchorMax = new Vector2(0.5f, 0.5f);
             glowRt.pivot = new Vector2(0.5f, 0.5f);
-            glowRt.anchoredPosition = new Vector2(0f, 0f);
+            glowRt.anchoredPosition = new Vector2(0f, footY);
             glowRt.sizeDelta = new Vector2(250f, 92f);
             var glow = glowRt.GetComponent<Image>();
             glow.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
@@ -473,9 +491,9 @@ namespace RIMA
             glow.raycastTarget = false;
 
             var sealRt = MakePanel("PedestalSeal", root);
-            sealRt.anchorMin = new Vector2(0.5f, 0f); sealRt.anchorMax = new Vector2(0.5f, 0f);
+            sealRt.anchorMin = new Vector2(0.5f, 0.5f); sealRt.anchorMax = new Vector2(0.5f, 0.5f);
             sealRt.pivot = new Vector2(0.5f, 0.5f);
-            sealRt.anchoredPosition = new Vector2(0f, 0f);
+            sealRt.anchoredPosition = new Vector2(0f, footY);
             sealRt.sizeDelta = new Vector2(210f, 74f);
             var seal = sealRt.GetComponent<Image>();
             seal.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
@@ -483,7 +501,7 @@ namespace RIMA
             seal.preserveAspect = true;
             seal.raycastTarget = false;
 
-            var selectionVfxRoot = BuildSelectionVfx(root, placement.size);
+            var selectionVfxRoot = BuildSelectionVfx(root, placement.size, footY);
             var selectionVfxImages = selectionVfxRoot.GetComponentsInChildren<Image>(true);
             var selectionGlowDisk = selectionVfxRoot.Find("PulseGlowDisk").GetComponent<Image>();
             var selectionRing = selectionVfxRoot.Find("StaticCyanRing").GetComponent<Image>();
@@ -492,54 +510,65 @@ namespace RIMA
                 .ToArray();
 
             var spriteRt = MakePanel("Sprite", root);
-            spriteRt.anchorMin = new Vector2(0.5f, 0f); spriteRt.anchorMax = new Vector2(0.5f, 0f);
+            spriteRt.anchorMin = new Vector2(0.5f, 0.5f); spriteRt.anchorMax = new Vector2(0.5f, 0.5f);
             spriteRt.pivot = pivot;
-            spriteRt.anchoredPosition = Vector2.zero;
+            spriteRt.anchoredPosition = new Vector2(0f, footY);
             spriteRt.sizeDelta = placement.size;
             var sprite = spriteRt.GetComponent<Image>();
             sprite.sprite = LoadCanonicalSprite(cls);
             sprite.preserveAspect = true;
             sprite.raycastTarget = false;
 
-            var lockRt = MakePanel("LockGlyph", root);
-            lockRt.anchorMin = new Vector2(0.5f, 1f); lockRt.anchorMax = new Vector2(0.5f, 1f);
-            lockRt.pivot = new Vector2(0.5f, 0.5f);
-            lockRt.anchoredPosition = new Vector2(0f, -28f);
-            lockRt.sizeDelta = new Vector2(58f, 34f);
-            var lockImg = lockRt.GetComponent<Image>();
-            lockImg.sprite = RimaUITheme.SmallPanelFrame;
-            lockImg.type = Image.Type.Sliced;
-            lockImg.raycastTarget = false;
+            var nameLabel = MakeText(cls.ToString().ToUpperInvariant(), root, 11f, FontStyles.Bold, RimaUITheme.TextPrimary);
+            nameLabel.alignment = TextAlignmentOptions.Center;
+            nameLabel.enableWordWrapping = false;
+            nameLabel.overflowMode = TextOverflowModes.Ellipsis;
+            var nameRt = nameLabel.transform as RectTransform;
+            nameRt.anchorMin = new Vector2(0.5f, 0.5f); nameRt.anchorMax = new Vector2(0.5f, 0.5f);
+            nameRt.pivot = new Vector2(0.5f, 0.5f);
+            nameRt.anchoredPosition = new Vector2(0f, footY - 31f);
+            nameRt.sizeDelta = new Vector2(boxSize.x - 22f, 18f);
 
-            var lockLabel = MakeText("LOCK", lockRt, 10f, FontStyles.Bold, RimaUITheme.Cyan);
-            lockLabel.alignment = TextAlignmentOptions.Center;
-            var lockLabelRt = lockLabel.transform as RectTransform;
-            lockLabelRt.anchorMin = Vector2.zero; lockLabelRt.anchorMax = Vector2.one;
-            lockLabelRt.offsetMin = lockLabelRt.offsetMax = Vector2.zero;
+            Image lockImg = null;
+            TMP_Text costChip = null;
+            if (!unlocked)
+            {
+                var lockRt = MakePanel("LockChip", root);
+                lockRt.anchorMin = new Vector2(0.5f, 0.5f); lockRt.anchorMax = new Vector2(0.5f, 0.5f);
+                lockRt.pivot = new Vector2(0.5f, 0.5f);
+                lockRt.anchoredPosition = new Vector2(0f, footY - 11f);
+                lockRt.sizeDelta = new Vector2(72f, 20f);
+                lockImg = lockRt.GetComponent<Image>();
+                lockImg.sprite = RimaUITheme.SmallPanelFrame;
+                lockImg.type = Image.Type.Sliced;
+                lockImg.color = new Color(0.03f, 0.02f, 0.05f, 0.46f);
+                lockImg.raycastTarget = false;
 
-            var chipRt = MakePanel("CostChip", root);
-            chipRt.anchorMin = new Vector2(0.5f, 0f); chipRt.anchorMax = new Vector2(0.5f, 0f);
-            chipRt.pivot = new Vector2(0.5f, 0.5f);
-            chipRt.anchoredPosition = new Vector2(0f, -26f);
-            chipRt.sizeDelta = new Vector2(188f, 38f);
-            var chipImg = chipRt.GetComponent<Image>();
-            chipImg.sprite = RimaUITheme.SmallPanelFrame;
-            chipImg.type = Image.Type.Sliced;
-            chipImg.color = new Color(0.03f, 0.02f, 0.05f, 0.90f);
-            chipImg.raycastTarget = false;
+                var lockLabel = MakeText("KİLİTLİ", lockRt, 8.5f, FontStyles.Bold, RimaUITheme.TextMuted);
+                lockLabel.alignment = TextAlignmentOptions.Center;
+                var lockLabelRt = lockLabel.transform as RectTransform;
+                lockLabelRt.anchorMin = Vector2.zero; lockLabelRt.anchorMax = Vector2.one;
+                lockLabelRt.offsetMin = lockLabelRt.offsetMax = Vector2.zero;
 
-            var costChip = MakeText(UnlockOrPathText(cls), chipRt, 8.5f, FontStyles.Bold, RimaUITheme.Cyan);
-            costChip.alignment = TextAlignmentOptions.Center;
-            costChip.enableWordWrapping = true;
-            var costRt = costChip.transform as RectTransform;
-            costRt.anchorMin = Vector2.zero; costRt.anchorMax = Vector2.one;
-            costRt.offsetMin = new Vector2(4f, 2f); costRt.offsetMax = new Vector2(-4f, -2f);
+                var chipRt = MakeRect("CostLine", root, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+                chipRt.pivot = new Vector2(0.5f, 0.5f);
+                chipRt.anchoredPosition = new Vector2(0f, footY - 52f);
+                chipRt.sizeDelta = new Vector2(boxSize.x - 12f, 18f);
+
+                costChip = MakeText(UnlockOrPathText(cls), chipRt, 7.2f, FontStyles.Bold, RimaUITheme.TextMuted);
+                costChip.alignment = TextAlignmentOptions.Center;
+                costChip.enableWordWrapping = false;
+                costChip.overflowMode = TextOverflowModes.Ellipsis;
+                var costRt = costChip.transform as RectTransform;
+                costRt.anchorMin = Vector2.zero; costRt.anchorMax = Vector2.one;
+                costRt.offsetMin = costRt.offsetMax = Vector2.zero;
+            }
 
             var hitRt = MakePanel("Hit", root);
-            hitRt.anchorMin = new Vector2(0.5f, 0f);
-            hitRt.anchorMax = new Vector2(0.5f, 0f);
+            hitRt.anchorMin = new Vector2(0.5f, 0.5f);
+            hitRt.anchorMax = new Vector2(0.5f, 0.5f);
             hitRt.pivot = new Vector2(0.5f, 0.5f);
-            hitRt.anchoredPosition = new Vector2(0f, VisibleCharacterHeight * 0.5f);
+            hitRt.anchoredPosition = new Vector2(0f, footY + VisibleCharacterHeight * 0.5f);
             hitRt.sizeDelta = HitSizeFor(fit);
             var hit = hitRt.GetComponent<Image>();
             hit.color = Color.clear;
@@ -569,7 +598,7 @@ namespace RIMA
                 selectionGlowDisk = selectionGlowDisk,
                 selectionRing = selectionRing,
                 selectionMotes = selectionMotes,
-                lockGlyph = lockImg,
+                lockChip = lockImg,
                 costChip = costChip,
                 canvasGroup = canvasGroup,
                 classType = cls,
@@ -595,11 +624,11 @@ namespace RIMA
             ApplyRoomEntryVisual(entry, false);
         }
 
-        private static RectTransform BuildSelectionVfx(RectTransform parent, Vector2 characterSize)
+        private static RectTransform BuildSelectionVfx(RectTransform parent, Vector2 characterSize, float footY)
         {
-            var root = MakeRect("SelectionUIGlowVFX", parent, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f));
+            var root = MakeRect("SelectionUIGlowVFX", parent, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
             root.pivot = new Vector2(0.5f, 0.5f);
-            root.anchoredPosition = Vector2.zero;
+            root.anchoredPosition = new Vector2(0f, footY);
             root.sizeDelta = new Vector2(characterSize.x * 0.82f, 80f);
 
             var glowDisk = MakePanel("PulseGlowDisk", root);
@@ -872,7 +901,7 @@ namespace RIMA
                         ? "SEÇ"
                         : canUnlock
                             ? $"KİLİDİ AÇ — {LockedButtonText(cls)}"
-                            : "YETERSİZ";
+                            : "YETERSİZ SHATTERED ECHO";
                     startButtonLabel.fontSize = unlocked ? 21f : 12f;
                     startButtonLabel.color = unlocked || canUnlock ? Color.white : RimaUITheme.TextMuted;
                 }
@@ -1140,7 +1169,7 @@ namespace RIMA
 
         private static string CardActionText(ClassType cls)
         {
-            if (IsUnlocked(cls)) return "Click to Start";
+            if (IsUnlocked(cls)) return "SEÇ";
             return $"{UnlockCost(cls)} SHATTERED ECHO veya {UnlockConditionText(cls)}";
         }
 
@@ -1265,10 +1294,10 @@ namespace RIMA
                 }
             }
 
-            if (entry.lockGlyph != null)
+            if (entry.lockChip != null)
             {
-                entry.lockGlyph.gameObject.SetActive(!unlocked);
-                entry.lockGlyph.color = WithAlpha(RimaUITheme.Cyan, selected ? 0.30f : 0.18f);
+                entry.lockChip.gameObject.SetActive(!unlocked);
+                entry.lockChip.color = new Color(0.03f, 0.02f, 0.05f, selected ? 0.56f : 0.42f);
             }
 
             if (entry.costChip != null)
