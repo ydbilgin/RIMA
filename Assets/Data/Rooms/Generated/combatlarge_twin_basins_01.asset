@@ -94,9 +94,105 @@ MonoBehaviour:
   - combat_large
   blockerTags: []
   props:
+  - propDefinitionGuid: 4193dd8caa840684fb876815e3780064
+    tilePosition: {x: 11, y: 21}
+    rotationSteps: 3
+    flipX: 1
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 4193dd8caa840684fb876815e3780064
+    tilePosition: {x: 12, y: 20}
+    rotationSteps: 0
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
+    tilePosition: {x: 12, y: 22}
+    rotationSteps: 3
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
   - propDefinitionGuid: f39d32fa19793394dab9cda4a588e1fe
-    tilePosition: {x: 25, y: 21}
+    tilePosition: {x: 13, y: 21}
+    rotationSteps: 3
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
+    tilePosition: {x: 14, y: 21}
+    rotationSteps: 3
+    flipX: 1
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
+    tilePosition: {x: 13, y: 22}
+    rotationSteps: 2
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
+    tilePosition: {x: 11, y: 22}
+    rotationSteps: 2
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: f39d32fa19793394dab9cda4a588e1fe
+    tilePosition: {x: 10, y: 20}
+    rotationSteps: 0
+    flipX: 1
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
+    tilePosition: {x: 9, y: 22}
+    rotationSteps: 2
+    flipX: 1
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
+    tilePosition: {x: 11, y: 18}
     rotationSteps: 1
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
+    tilePosition: {x: 8, y: 21}
+    rotationSteps: 0
+    flipX: 1
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 4193dd8caa840684fb876815e3780064
+    tilePosition: {x: 16, y: 21}
+    rotationSteps: 3
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 7403021896d131b44b906095dd65e95f
+    tilePosition: {x: 17, y: 22}
+    rotationSteps: 0
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: c8d6352c766cc994495a3e58bddbe73a
+    tilePosition: {x: 18, y: 21}
+    rotationSteps: 2
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
+    tilePosition: {x: 7, y: 22}
+    rotationSteps: 0
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
+    tilePosition: {x: 6, y: 21}
+    rotationSteps: 1
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: f39d32fa19793394dab9cda4a588e1fe
+    tilePosition: {x: 6, y: 22}
+    rotationSteps: 3
     flipX: 0
     placedByUser: auto
     variantIndex: -1
