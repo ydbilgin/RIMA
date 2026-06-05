@@ -39,6 +39,8 @@ namespace RIMA
         public float[] hitRadius = { 0.75f, 0.75f, 0.9f };
         public float[] knockbackForce = { 4f, 5f, 8f };
         public float[] knockbackDuration = { 0.10f, 0.12f, 0.18f };
+        public HitImpulse[] hitImpulses;
+        public KnockdownProfile knockdownProfile;
 
         [Header("Projectile / Strike (CastRhythm, ShotCadence, VeilStrike)")]
         public int projectileDamage = 18;
@@ -96,6 +98,26 @@ namespace RIMA
         {
             if (hitRadius == null || hitRadius.Length == 0) return 0f;
             return hitRadius[Mathf.Min(step, hitRadius.Length - 1)];
+        }
+
+        public HitImpulse GetImpulseForStep(int step, Vector2 direction)
+        {
+            bool hasImpulse = hitImpulses != null && hitImpulses.Length > 0;
+            if (hasImpulse)
+            {
+                var impulse = hitImpulses[Mathf.Min(step, hitImpulses.Length - 1)].WithDirection(direction);
+                if (impulse.knockdownProfile == null) impulse.knockdownProfile = knockdownProfile;
+                return impulse;
+            }
+
+            float force = knockbackForce != null && knockbackForce.Length > 0
+                ? knockbackForce[Mathf.Min(step, knockbackForce.Length - 1)]
+                : 0f;
+            float duration = knockbackDuration != null && knockbackDuration.Length > 0
+                ? knockbackDuration[Mathf.Min(step, knockbackDuration.Length - 1)]
+                : 0f;
+            bool heavyHit = step == comboLength - 1;
+            return new HitImpulse(direction, force, duration, heavyHit, knockdownProfile);
         }
 
         public bool Validate(out string error)

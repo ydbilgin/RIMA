@@ -8,6 +8,7 @@ namespace RIMA.Combat.Juice
         public static bool HitstopEnabled = true;
         public static bool VignetteEnabled = true;
         public static bool CameraPunchEnabled = true;
+        public static bool KnockdownEnabled = true;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetOnDomainReload()
@@ -16,6 +17,7 @@ namespace RIMA.Combat.Juice
             HitstopEnabled = true;
             VignetteEnabled = true;
             CameraPunchEnabled = true;
+            KnockdownEnabled = true;
         }
     }
 }

@@ -98,16 +98,9 @@ namespace RIMA
                 }
                 rage?.OnHitEnemy();
 
-                var kb = col.GetComponent<KnockbackReceiver>();
-                if (kb != null)
+                if (!hp.IsDead && col.TryGetComponent(out KnockbackReceiver kb))
                 {
-                    float kbForce = profile.knockbackForce != null && profile.knockbackForce.Length > 0
-                        ? profile.knockbackForce[Mathf.Min(step, profile.knockbackForce.Length - 1)]
-                        : 0f;
-                    float kbDur = profile.knockbackDuration != null && profile.knockbackDuration.Length > 0
-                        ? profile.knockbackDuration[Mathf.Min(step, profile.knockbackDuration.Length - 1)]
-                        : 0f;
-                    kb.ApplyKnockback(facing, kbForce, kbDur);
+                    kb.ApplyImpulse(profile.GetImpulseForStep(step, facing));
                 }
             }
         }

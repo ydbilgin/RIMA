@@ -129,7 +129,16 @@ namespace RIMA
                 HitStop.Instance?.FreezeLight();
                 DamagePopup.Show(col.transform.position, finalDmg);
 
-                // Ravager identity: apply Sundered mark stacks
+                var kb = col.GetComponent<KnockbackReceiver>();
+                if (!hp.IsDead && kb != null)
+                {
+                    var impulse = profile.GetImpulseForStep(step, facing);
+                    impulse.force *= 1.15f;
+                    kb.ApplyImpulse(impulse);
+                }
+
+                // Ravager identity: apply Sundered mark stacks after impulse routing so
+                // this hit only knocks down targets that were already Broken/Sundered.
                 int markStacks = furyEmpowered ? 3 : 1;
                 SkillRuntime.State(hp)?.Apply(
                     SkillStateTracker.Sundered, 6f, markStacks, 5);
@@ -140,18 +149,6 @@ namespace RIMA
                     CameraShake.Instance?.Shake(0.22f, 0.15f);
                 }
 
-                var kb = col.GetComponent<KnockbackReceiver>();
-                if (kb != null)
-                {
-                    float kbForce = profile.knockbackForce != null && profile.knockbackForce.Length > 0
-                        ? profile.knockbackForce[Mathf.Min(step, profile.knockbackForce.Length - 1)]
-                        : 0f;
-                    float kbDur = profile.knockbackDuration != null && profile.knockbackDuration.Length > 0
-                        ? profile.knockbackDuration[Mathf.Min(step, profile.knockbackDuration.Length - 1)]
-                        : 0f;
-                    // Ravager: heavier knockback than Warblade
-                    kb.ApplyKnockback(facing, kbForce * 1.15f, kbDur);
-                }
             }
         }
 

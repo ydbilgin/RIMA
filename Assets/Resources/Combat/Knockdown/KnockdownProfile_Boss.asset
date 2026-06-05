@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ecd38c556a473a4fa5803805f80a425, type: 3}
+  m_Name: KnockdownProfile_Boss
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockdownProfile
+  launchDuration: 0.22
+  arcHeight: 0.3
+  tiltAngle: 22
+  landingSquashY: 0.72
+  landingSquashX: 1.06
+  landingSquashDuration: 0.1
+  bounceCount: 1
+  bounceHeight: 0.06
+  bounceDuration: 0.12
+  downTime: 0.35
+  getUpDuration: 0.26
+  getUpIFrame: 0.3
+  shadowSize: {x: 1.2, y: 0.38}
+  shadowAlpha: 0.36

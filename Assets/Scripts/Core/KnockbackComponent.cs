@@ -7,6 +7,7 @@ namespace RIMA
     /// Health.cs'den çağrılır: GetComponent<KnockbackComponent>()?.ApplyKnockback(direction, force)
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(KnockbackReceiver))]
     public class KnockbackComponent : MonoBehaviour
     {
         [Header("Settings")]
@@ -14,6 +15,7 @@ namespace RIMA
         [SerializeField] private float recoveryTime = 0.2f; // Knockback sonrası kontrol geri gelme süresi
 
         private Rigidbody2D rb;
+        private KnockbackReceiver receiver;
         private float knockbackEndTime;
         private bool isKnockedBack;
 
@@ -22,6 +24,13 @@ namespace RIMA
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            EnsureReceiver();
+        }
+
+        private void Reset()
+        {
+            rb = GetComponent<Rigidbody2D>();
+            EnsureReceiver();
         }
 
         /// <summary>
@@ -37,8 +46,10 @@ namespace RIMA
             float effectiveForce = force * (1f - knockbackResistance);
             if (effectiveForce <= 0f) return;
 
-            // Knockback velocity uygula
-            rb.linearVelocity = direction.normalized * effectiveForce;
+            // Legacy boss path forwards into the unified receiver pipeline.
+            EnsureReceiver();
+            if (receiver != null)
+                receiver.ApplyImpulse(new HitImpulse(direction, effectiveForce, recoveryTime));
 
             // Knockback state
             isKnockedBack = true;
@@ -81,8 +92,16 @@ namespace RIMA
         {
             isKnockedBack = false;
             knockbackEndTime = 0f;
+            receiver?.CancelImpulse();
             if (rb != null)
                 rb.linearVelocity = Vector2.zero;
+        }
+
+        private void EnsureReceiver()
+        {
+            receiver = GetComponent<KnockbackReceiver>();
+            if (receiver == null)
+                receiver = gameObject.AddComponent<KnockbackReceiver>();
         }
     }
 }
