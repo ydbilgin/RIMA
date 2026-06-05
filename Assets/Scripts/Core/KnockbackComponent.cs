@@ -49,7 +49,11 @@ namespace RIMA
             // Legacy boss path forwards into the unified receiver pipeline.
             EnsureReceiver();
             if (receiver != null)
-                receiver.ApplyImpulse(new HitImpulse(direction, effectiveForce, recoveryTime));
+            {
+                var impulse = new HitImpulse(direction, effectiveForce, recoveryTime);
+                impulse.resistancePreApplied = true; // çifte resistance uygulamasını önle
+                receiver.ApplyImpulse(impulse);
+            }
 
             // Knockback state
             isKnockedBack = true;

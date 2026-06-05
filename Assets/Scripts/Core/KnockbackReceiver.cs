@@ -47,7 +47,7 @@ namespace RIMA
             if (health != null && health.IsDead) return;
             if (knockdownDriver != null && knockdownDriver.IsDownOrGettingUp) return;
 
-            float actualForce = impulse.force * (1f - knockbackResistance);
+            float actualForce = impulse.resistancePreApplied ? impulse.force : impulse.force * (1f - knockbackResistance);
             impulse.force = actualForce;
 
             if (activeKnockback != null) StopCoroutine(activeKnockback);

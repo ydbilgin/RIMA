@@ -11,6 +11,7 @@ namespace RIMA
         public float duration;
         public bool canKnockdown;
         public KnockdownProfile knockdownProfile;
+        public bool resistancePreApplied; // adapter (KnockbackComponent) zaten resistance uyguladıysa receiver tekrar uygulamaz
 
         public HitImpulse(Vector2 direction, float force, float duration, bool canKnockdown = false,
             KnockdownProfile knockdownProfile = null)
@@ -20,6 +21,7 @@ namespace RIMA
             this.duration = Mathf.Max(0f, duration);
             this.canKnockdown = canKnockdown;
             this.knockdownProfile = knockdownProfile;
+            this.resistancePreApplied = false;
         }
 
         public HitImpulse WithDirection(Vector2 newDirection)

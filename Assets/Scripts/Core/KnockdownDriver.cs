@@ -71,6 +71,12 @@ namespace RIMA
             IsDownOrGettingUp = false;
         }
 
+        private void OnDisable()
+        {
+            // Knockdown ortasında destroy/deactivate olursa immunity/AI/shadow leak'ini önle (axopus review MAJOR #1)
+            if (IsDownOrGettingUp) Cancel();
+        }
+
         private IEnumerator DoKnockdown(HitImpulse impulse, KnockdownProfile profile)
         {
             IsDownOrGettingUp = true;
