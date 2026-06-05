@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using RIMA.MapDesigner.Room.Data;
-using RIMA.MapDesigner.Room.Runtime;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace RIMA.EditorTools
@@ -14,7 +13,6 @@ namespace RIMA.EditorTools
     /// </summary>
     public sealed class RoomTemplateBrowserWindow : EditorWindow
     {
-        private const string ArenaScenePath = "Assets/Scenes/_Arena.unity";
         private const string RoomsRoot = "Assets/Data/Rooms";
 
         private Vector2 scroll;
@@ -79,13 +77,13 @@ namespace RIMA.EditorTools
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    if (GUILayout.Button(template.name, GUILayout.Height(22f)))
+                    if (GUILayout.Button(new GUIContent(template.name, "Odayı _Arena sahnesinde kur"), GUILayout.Height(22f)))
                     {
                         BuildInArena(template);
                     }
-                    if (GUILayout.Button("Göster", GUILayout.Width(52f)))
+                    if (GUILayout.Button(new GUIContent("Sahnede Kur ▶", "Odayı _Arena sahnesinde kur"), GUILayout.Width(96f), GUILayout.Height(22f)))
                     {
-                        EditorGUIUtility.PingObject(template);
+                        BuildInArena(template);
                     }
                 }
             }
@@ -94,51 +92,17 @@ namespace RIMA.EditorTools
 
         private static void BuildInArena(RoomTemplateSO template)
         {
-            if (Application.isPlaying)
+            System.Type utilityType = System.Type.GetType("RIMA.Editor.Map.RoomTemplateBuildUtility, RIMA.Editor");
+            MethodInfo method = utilityType != null
+                ? utilityType.GetMethod("BuildInArena", BindingFlags.Public | BindingFlags.Static)
+                : null;
+            if (method == null)
             {
-                EditorUtility.DisplayDialog("Room Browser", "Play mode açıkken kullanılamaz. Önce Play'i durdur (F6).", "Tamam");
+                EditorUtility.DisplayDialog("Room Browser", "RoomTemplateBuildUtility bulunamadı.", "Tamam");
                 return;
             }
 
-            // Make sure _Arena is the open scene.
-            var active = EditorSceneManager.GetActiveScene();
-            if (active.path != ArenaScenePath)
-            {
-                if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-                {
-                    return;
-                }
-                EditorSceneManager.OpenScene(ArenaScenePath, OpenSceneMode.Single);
-            }
-
-            var builder = Object.FindFirstObjectByType<IsoRoomBuilder>();
-            if (builder == null)
-            {
-                EditorUtility.DisplayDialog("Room Browser", "_Arena sahnesinde IsoRoomBuilder bulunamadı.", "Tamam");
-                return;
-            }
-
-            // Keep the tester in sync so a later Play uses the same template.
-            var tester = builder.GetComponent<IsoRoomBuilderTester>();
-            if (tester != null)
-            {
-                var so = new SerializedObject(tester);
-                var prop = so.FindProperty("template");
-                if (prop != null)
-                {
-                    prop.objectReferenceValue = template;
-                    so.ApplyModifiedPropertiesWithoutUndo();
-                }
-            }
-
-            builder.Build(template);
-            SceneView.lastActiveSceneView?.FrameSelected();
-            Selection.activeObject = builder.gameObject;
-            if (SceneView.lastActiveSceneView != null)
-            {
-                SceneView.lastActiveSceneView.Frame(new Bounds(builder.transform.position + new Vector3(6f, 3f, 0f), new Vector3(28f, 16f, 1f)), false);
-            }
-            Debug.Log($"[RoomBrowser] Built room '{template.name}' in _Arena.");
+            method.Invoke(null, new object[] { template, "Room Browser" });
         }
     }
 }

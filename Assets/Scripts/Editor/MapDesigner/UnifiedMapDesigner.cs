@@ -1,5 +1,10 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using RIMA.Editor.Map;
+using RIMA.MapDesigner.Props;
+using RIMA.MapDesigner.Room.Data;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,17 +27,24 @@ namespace RIMA.Editor.MapDesigner
     /// </summary>
     public class UnifiedMapDesigner : EditorWindow
     {
-        private enum Tab { Library, Floor, Cliff, Object, Portal, Light, Layers }
+        private enum Tab { Rooms, Library, Floor, Cliff, Object, Portal, Light, Layers }
+
+        private const string RoomsRoot = "Assets/Data/Rooms";
 
         private readonly RoomDataAuthoringController _controller = new RoomDataAuthoringController();
         private readonly UnifiedDesignerCore _core = new UnifiedDesignerCore();
         private readonly RoomDataComposer _composer = new RoomDataComposer();
 
-        private Tab _tab = Tab.Library;
+        private Tab _tab = Tab.Rooms;
+        private Vector2 _roomsScroll;
         private Vector2 _libScroll;
         private Vector2 _paletteScroll;
+        private string _roomSearch = string.Empty;
         private string _search = string.Empty;
         private bool _painting;
+        private int _autoPropsSeed = 12345;
+        private RoomTemplateSO _selectedTemplate;
+        private List<RoomTemplateSO> _roomTemplates = new List<RoomTemplateSO>();
 
         [MenuItem("RIMA/Map Designer", priority = 1)]
         public static void Open()
@@ -45,6 +57,7 @@ namespace RIMA.Editor.MapDesigner
         private void OnEnable()
         {
             _controller.RefreshLibrary();
+            RefreshRoomTemplates();
             _core.BeforeMutate = (room, label) => { if (room != null) Undo.RecordObject(room, label); };
             _core.Changed += OnCoreChanged;
             SceneView.duringSceneGui += OnSceneGui;
@@ -79,6 +92,7 @@ namespace RIMA.Editor.MapDesigner
 
             switch (_tab)
             {
+                case Tab.Rooms: DrawRooms(); break;
                 case Tab.Library: DrawLibrary(); break;
                 case Tab.Layers: DrawLayers(); break;
                 default: DrawCategory(TabToCategory(_tab)); break;
@@ -105,7 +119,10 @@ namespace RIMA.Editor.MapDesigner
                 GUILayout.FlexibleSpace();
                 _painting = GUILayout.Toggle(_painting, "Paint in SceneView", EditorStyles.toolbarButton, GUILayout.Width(140));
                 if (GUILayout.Button("Refresh", EditorStyles.toolbarButton, GUILayout.Width(70)))
+                {
                     _controller.RefreshLibrary();
+                    RefreshRoomTemplates();
+                }
             }
         }
 
@@ -127,6 +144,270 @@ namespace RIMA.Editor.MapDesigner
                     GUI.backgroundColor = prev;
                 }
             }
+        }
+
+        // -- Rooms tab (RoomTemplateSO front door) ---------------------------
+        private void RefreshRoomTemplates()
+        {
+            _roomTemplates = AssetDatabase.FindAssets("t:RoomTemplateSO", new[] { RoomsRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(AssetDatabase.LoadAssetAtPath<RoomTemplateSO>)
+                .Where(t => t != null)
+                .OrderBy(AssetDatabase.GetAssetPath)
+                .ToList();
+
+            if (_selectedTemplate == null && _roomTemplates.Count > 0)
+            {
+                _selectedTemplate = _roomTemplates[0];
+                _autoPropsSeed = RoomTemplateAutoPropsUtility.StableSeed(_selectedTemplate.name);
+            }
+        }
+
+        private void DrawRooms()
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                using (new EditorGUILayout.VerticalScope(GUILayout.Width(310f)))
+                {
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        _roomSearch = EditorGUILayout.TextField(_roomSearch, EditorStyles.toolbarSearchField);
+                        if (GUILayout.Button("Refresh", GUILayout.Width(70f)))
+                        {
+                            RefreshRoomTemplates();
+                        }
+                    }
+
+                    EditorGUILayout.LabelField($"RoomTemplateSO Library ({_roomTemplates.Count})", EditorStyles.boldLabel);
+                    _roomsScroll = EditorGUILayout.BeginScrollView(_roomsScroll);
+                    string currentFolder = null;
+                    for (int i = 0; i < _roomTemplates.Count; i++)
+                    {
+                        RoomTemplateSO template = _roomTemplates[i];
+                        if (template == null) continue;
+
+                        string path = AssetDatabase.GetAssetPath(template);
+                        if (!MatchesRoomSearch(template, path)) continue;
+
+                        string folder = Path.GetDirectoryName(path)?.Replace('\\', '/');
+                        if (folder != currentFolder)
+                        {
+                            currentFolder = folder;
+                            EditorGUILayout.Space(5f);
+                            EditorGUILayout.LabelField(string.IsNullOrEmpty(folder) ? "Rooms" : folder.Replace(RoomsRoot, "Rooms"), EditorStyles.boldLabel);
+                        }
+
+                        bool selected = _selectedTemplate == template;
+                        Color previous = GUI.backgroundColor;
+                        if (selected) GUI.backgroundColor = new Color(0.45f, 0.75f, 1f);
+                        if (GUILayout.Button(template.name, selected ? EditorStyles.miniButtonMid : EditorStyles.miniButton, GUILayout.Height(22f)))
+                        {
+                            _selectedTemplate = template;
+                            _autoPropsSeed = RoomTemplateAutoPropsUtility.StableSeed(template.name);
+                            GUI.FocusControl(null);
+                        }
+                        GUI.backgroundColor = previous;
+                    }
+                    EditorGUILayout.EndScrollView();
+                }
+
+                using (new EditorGUILayout.VerticalScope())
+                {
+                    DrawSelectedTemplateHeader();
+                    DrawSelectedTemplateActions();
+                    DrawTemplatePreview(_selectedTemplate);
+                }
+            }
+        }
+
+        private bool MatchesRoomSearch(RoomTemplateSO template, string path)
+        {
+            if (string.IsNullOrWhiteSpace(_roomSearch))
+            {
+                return true;
+            }
+
+            string needle = _roomSearch.Trim();
+            return template.name.IndexOf(needle, System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   (!string.IsNullOrEmpty(template.roomId) && template.roomId.IndexOf(needle, System.StringComparison.OrdinalIgnoreCase) >= 0) ||
+                   (!string.IsNullOrEmpty(path) && path.IndexOf(needle, System.StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+        private void DrawSelectedTemplateHeader()
+        {
+            if (_selectedTemplate == null)
+            {
+                EditorGUILayout.HelpBox("No RoomTemplateSO found under Assets/Data/Rooms.", MessageType.Warning);
+                return;
+            }
+
+            bool dirty = EditorUtility.IsDirty(_selectedTemplate);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField(_selectedTemplate.name, EditorStyles.boldLabel);
+                if (dirty)
+                {
+                    GUILayout.Label("* Unsaved Changes", EditorStyles.miniLabel, GUILayout.Width(130f));
+                }
+            }
+
+            EditorGUILayout.LabelField(AssetDatabase.GetAssetPath(_selectedTemplate), EditorStyles.miniLabel);
+        }
+
+        private void DrawSelectedTemplateActions()
+        {
+            using (new EditorGUI.DisabledScope(_selectedTemplate == null))
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (DrawColoredButton("Build in Arena", new Color(0.35f, 0.8f, 0.35f), GUILayout.Height(28f)))
+                    {
+                        RoomTemplateBuildUtility.BuildInArena(_selectedTemplate, "Map Designer");
+                    }
+
+                    if (DrawColoredButton("Auto Props", new Color(0.35f, 0.6f, 1f), GUILayout.Height(28f)))
+                    {
+                        AutoPopulateSelectedTemplate();
+                    }
+
+                    if (DrawColoredButton("Save Assets", new Color(1f, 0.6f, 0.22f), GUILayout.Height(28f)))
+                    {
+                        AssetDatabase.SaveAssets();
+                        AssetDatabase.Refresh();
+                        Debug.Log("[UnifiedMapDesigner] Saved RoomTemplateSO assets.");
+                        Repaint();
+                    }
+                }
+
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    _autoPropsSeed = EditorGUILayout.IntField("Seed", _autoPropsSeed);
+                    if (GUILayout.Button("Randomize", GUILayout.Width(90f)))
+                    {
+                        _autoPropsSeed = UnityEngine.Random.Range(1, int.MaxValue);
+                    }
+                }
+            }
+        }
+
+        private bool DrawColoredButton(string label, Color color, params GUILayoutOption[] options)
+        {
+            Color previous = GUI.backgroundColor;
+            GUI.backgroundColor = color;
+            bool clicked = GUILayout.Button(label, options);
+            GUI.backgroundColor = previous;
+            return clicked;
+        }
+
+        private void AutoPopulateSelectedTemplate()
+        {
+            if (_selectedTemplate == null)
+            {
+                return;
+            }
+
+            int before = _selectedTemplate.props != null ? _selectedTemplate.props.Count : 0;
+            if (!EditorUtility.DisplayDialog(
+                    "Auto Props",
+                    $"{before} prop(s) will be deleted and regenerated for '{_selectedTemplate.name}'.",
+                    "Regenerate",
+                    "Cancel"))
+            {
+                return;
+            }
+
+            IReadOnlyList<PropDefinitionSO> pool = RoomTemplateAutoPropsUtility.LoadPropPool();
+            if (pool == null || pool.Count == 0)
+            {
+                EditorUtility.DisplayDialog("Auto Props", "No prop pool found. Check Assets/Data/Props/PropRegistry.asset.", "OK");
+                return;
+            }
+
+            RoomTemplateAutoPropsUtility.Result result =
+                RoomTemplateAutoPropsUtility.Populate(_selectedTemplate, pool, _autoPropsSeed, true, "Auto Props RoomTemplate");
+            bool rebuilt = RoomTemplateBuildUtility.TryRebuildIfActiveArenaTemplate(_selectedTemplate);
+            Debug.Log($"[UnifiedMapDesigner] Auto Props '{_selectedTemplate.name}': {result.beforeCount}->{result.afterCount}, seed={result.seed}, rebuilt={rebuilt}.");
+            Repaint();
+        }
+
+        private void DrawTemplatePreview(RoomTemplateSO template)
+        {
+            EditorGUILayout.Space(4f);
+            EditorGUILayout.LabelField("2D Schematic Preview", EditorStyles.boldLabel);
+
+            Rect area = GUILayoutUtility.GetRect(260f, 360f, GUILayout.ExpandWidth(true));
+            EditorGUI.DrawRect(area, new Color(0.08f, 0.08f, 0.08f));
+            if (template == null || template.bounds.width <= 0 || template.bounds.height <= 0)
+            {
+                return;
+            }
+
+            const float padding = 10f;
+            Rect inner = new Rect(area.x + padding, area.y + padding, area.width - padding * 2f, area.height - padding * 2f);
+            float cell = Mathf.Floor(Mathf.Min(inner.width / template.bounds.width, inner.height / template.bounds.height));
+            if (cell < 1f)
+            {
+                return;
+            }
+
+            float gridWidth = cell * template.bounds.width;
+            float gridHeight = cell * template.bounds.height;
+            Rect gridRect = new Rect(
+                inner.x + (inner.width - gridWidth) * 0.5f,
+                inner.y + (inner.height - gridHeight) * 0.5f,
+                gridWidth,
+                gridHeight);
+
+            for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
+            {
+                for (int x = template.bounds.xMin; x < template.bounds.xMax; x++)
+                {
+                    Vector2Int tile = new Vector2Int(x, y);
+                    Rect cellRect = TilePreviewRect(template.bounds, gridRect, cell, tile);
+                    Color fill = template.IsWalkable(tile)
+                        ? new Color(0.16f, 0.18f, 0.18f)
+                        : Color.black;
+                    EditorGUI.DrawRect(cellRect, fill);
+                    EditorGUI.DrawRect(new Rect(cellRect.x, cellRect.y, cellRect.width, 1f), new Color(0.25f, 0.25f, 0.25f));
+                    EditorGUI.DrawRect(new Rect(cellRect.x, cellRect.y, 1f, cellRect.height), new Color(0.25f, 0.25f, 0.25f));
+                }
+            }
+
+            if (template.doorSockets != null)
+            {
+                for (int i = 0; i < template.doorSockets.Count; i++)
+                {
+                    DoorSocket door = template.doorSockets[i];
+                    if (door == null) continue;
+                    Rect doorRect = TilePreviewRect(template.bounds, gridRect, cell, door.position);
+                    EditorGUI.DrawRect(InflateToMinimum(doorRect, 4f), Color.cyan);
+                }
+            }
+
+            if (template.playerSpawn != null)
+            {
+                Rect spawnRect = TilePreviewRect(template.bounds, gridRect, cell, template.playerSpawn.position);
+                Rect dot = new Rect(spawnRect.center.x - 3f, spawnRect.center.y - 3f, 6f, 6f);
+                EditorGUI.DrawRect(dot, Color.green);
+            }
+        }
+
+        private static Rect TilePreviewRect(RectInt bounds, Rect gridRect, float cell, Vector2Int tile)
+        {
+            int lx = tile.x - bounds.xMin;
+            int ly = tile.y - bounds.yMin;
+            return new Rect(
+                gridRect.x + lx * cell,
+                gridRect.y + (bounds.height - 1 - ly) * cell,
+                cell,
+                cell);
+        }
+
+        private static Rect InflateToMinimum(Rect rect, float minSize)
+        {
+            float width = Mathf.Max(rect.width, minSize);
+            float height = Mathf.Max(rect.height, minSize);
+            return new Rect(rect.center.x - width * 0.5f, rect.center.y - height * 0.5f, width, height);
         }
 
         private static DesignerCategory TabToCategory(Tab t)

@@ -20,6 +20,7 @@ namespace RIMA.Editor.Map
     {
         private const string PropRegistryPath = "Assets/Data/Props/PropRegistry.asset";
         private const string ArenaScenePath = "Assets/Scenes/_Arena.unity";
+        private const string RoomsRoot = "Assets/Data/Rooms";
         private const float TargetDensity = 0.30f;
         private const int SeedTries = 8;
         private const int MaxPropsPerRoom = 45;
@@ -186,6 +187,111 @@ namespace RIMA.Editor.Map
             if (SceneManager.GetActiveScene().isDirty)
             {
                 Debug.Log("[RoomQCFix] _Arena is dirty from verification builds; intentionally not saving.");
+            }
+        }
+
+        [MenuItem("RIMA/Rooms/QC/Smoke Test All Templates")]
+        public static void SmokeTestAllTemplates()
+        {
+            PropRegistrySO registry = LoadRegistry();
+            if (registry == null) return;
+
+            if (Application.isPlaying)
+            {
+                Debug.LogError("[RoomSmokeTest] Cannot run while Play mode is active.");
+                return;
+            }
+
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                return;
+            }
+
+            EditorSceneManager.OpenScene(ArenaScenePath, OpenSceneMode.Single);
+            IsoRoomBuilder builder = Object.FindFirstObjectByType<IsoRoomBuilder>();
+            if (builder == null)
+            {
+                Debug.LogError("[RoomSmokeTest] IsoRoomBuilder not found in _Arena.");
+                return;
+            }
+
+            Grid grid = builder.GetComponentInParent<Grid>();
+            if (grid == null)
+            {
+                grid = Object.FindFirstObjectByType<Grid>();
+            }
+
+            if (grid == null)
+            {
+                Debug.LogError("[RoomSmokeTest] Grid not found in _Arena.");
+                return;
+            }
+
+            string[] guids = AssetDatabase.FindAssets("t:RoomTemplateSO", new[] { RoomsRoot });
+            List<RoomTemplateSO> rooms = new List<RoomTemplateSO>();
+            for (int i = 0; i < guids.Length; i++)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+                RoomTemplateSO room = AssetDatabase.LoadAssetAtPath<RoomTemplateSO>(path);
+                if (room != null)
+                {
+                    rooms.Add(room);
+                }
+            }
+            rooms.Sort((a, b) => string.Compare(AssetDatabase.GetAssetPath(a), AssetDatabase.GetAssetPath(b), System.StringComparison.OrdinalIgnoreCase));
+
+            int exceptions = 0;
+            int propValidationFailures = 0;
+            int totalProps = 0;
+            StringBuilder report = new StringBuilder();
+            report.AppendLine("[RoomSmokeTest] All RoomTemplateSO smoke test");
+            report.AppendLine($"templates={rooms.Count}");
+
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                RoomTemplateSO room = rooms[i];
+                string roomLabel = !string.IsNullOrEmpty(room.roomId) ? room.roomId : room.name;
+                try
+                {
+                    builder.Build(room);
+                    int floorCount = builder.LastFloorCells != null ? builder.LastFloorCells.Count : 0;
+                    int builtProps = CountBuiltProps(builder);
+                    int propOutside = CountBuiltPropsOutsideAuthoredFloor(builder, grid, room);
+                    int invalidTemplateProps = CountInvalidProps(room, registry);
+                    bool ok = propOutside == 0 && invalidTemplateProps == 0;
+                    if (!ok) propValidationFailures++;
+                    totalProps += builtProps;
+                    report.AppendLine($"{roomLabel}: floor={floorCount}, builtProps={builtProps}, propOutsideFloor={propOutside}, invalidTemplateProps={invalidTemplateProps}, ok={ok}");
+                }
+                catch (System.Exception ex)
+                {
+                    exceptions++;
+                    report.AppendLine($"{roomLabel}: exception={ex.GetType().Name}: {ex.Message}");
+                }
+            }
+
+            bool pass = exceptions == 0;
+            report.AppendLine($"exceptions={exceptions}, propValidationFailures={propValidationFailures}, totalBuiltProps={totalProps}");
+            report.AppendLine(pass ? "[RoomSmokeTest] PASS (build exceptions=0)" : "[RoomSmokeTest] FAIL");
+            WriteReport("STAGING/ROOM_SMOKE_ALL_TEMPLATES_laurethayday.txt", report.ToString());
+
+            if (pass)
+            {
+                Debug.Log(report.ToString());
+                if (propValidationFailures > 0)
+                {
+                    Debug.LogWarning($"[RoomSmokeTest] {propValidationFailures} template(s) have pre-existing prop walkable validation warnings. No assets were mutated.");
+                }
+                Debug.Log("[RoomSmokeTest] PASS");
+            }
+            else
+            {
+                Debug.LogError(report.ToString());
+            }
+
+            if (SceneManager.GetActiveScene().isDirty)
+            {
+                Debug.Log("[RoomSmokeTest] _Arena is dirty from smoke-test builds; intentionally not saving.");
             }
         }
 
