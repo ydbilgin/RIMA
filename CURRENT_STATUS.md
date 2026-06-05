@@ -22,11 +22,19 @@
 
 **Advisor ham çıktıları:** `CODEX_DONE_yasinderyabilgin.md` (file:line envanter — değerli) · `STAGING/_council_opus_charselect_v3.md` (görsel kritik + precedent tablosu) · ax çıktıları transcript'te (3.1=iso-chevron+diegetic-labels+Vestige; 3.5=lean-5-fix+Vestige; Opus+cx=tam-form, sentez tam-formu seçti). NLM sorgu = `STAGING/_nlm_charselect_currency.json` (canon: Shattered Echoes + unlock tablosu + "skill meta-unlock YOK").
 
-**⏭️ SONRAKİ SESSION — KULLANICI ONAYI İLE BAŞLA:**
-1. **KULLANICI: `STAGING/mockups/charselect_mockup_v2.html`'i tarayıcıda aç** → reaksiyon (beğen/iterasyon). ONAY gelirse →
-2. **cx Unity task:** CharSelect'i mockup'a benzet + cx'in bulduğu ihlal fix'leri (scale 1.12 `:996` + bob `:1075` + dönen VFX `:1086` + ScrollRect `:1159` + 4+6→5+5 anchor) + canon fiyat 80/150/200/250 + OR-path metni + "◈/Shattered Echo" tam-form label + sol panel 5 stat-bar verisi (RimaUITheme.ClassIdentity'ye) + sağ panel TAM-liste/karanlık-şart satırları.
-3. Playtest: echo award play-verify (ölüm → "+n SHATTERED ECHO" → CharSelect bakiye).
-GECE·3 backlog'u (Tier-1 hover/TooltipSystem + sol panel + ESC codex) HÂLÂ bekliyor — aşağıdaki blok.
+**🆕 SESSION DEVAMI (aynı gün) — UNITY UYGULANDI + v3.1 + MODÜLER-PROPS COUNCIL (+4 commit):**
+- Mockup iterasyonları (kullanıcı feedback'iyle): hover-tooltip+gerçek skill açıklamaları (`52435b98`) · uniform boyut+statik halka+siyah-yakın yaslı paneller (`57191bf7`) · **piksel-ölçümlü FIT** (alpha-scan: ayaklar canvas tabanından 30-34px yukarıdaymış→tam karo-oturma; `b91aa87b`).
+- Kullanıcı "tarayıcı yerine direkt Unity'e uygula" dedi → **CharSelect v3 Unity** (`0e8a03e2`, cx canlı play-verify): 5+5→serialized anchor + FIT ayak-pivot + görünür-char hitbox + ihlal fix'leri (scale/bob/VFX/ScrollRect) + tam skill listesi+TooltipSystem+stat-bar + canon fiyat + SHATTERED ECHO copy.
+- Kullanıcı editor-screenshot'la 3 sorun verdi → **v3.1 one-box refactor** (`c1468b27`, cx play-verify): `rosterAnchors[10]` TEK dizi (kutu başına her şey kökün içinde — Inspector'dan toplu taşınır) · LockGlyph bug fix (açıklarda 0; kilitlilerde "KİLİTLİ" chip) · panel-arkasına-girme bitti (band 0.225-0.745) · 3-sıra yerleşim (arka 4 / orta 2 / ön 4) · buton state metinleri fix.
+- **🔑 RONIN GİZEMİ:** kod değil PlayerPrefs'ti (eski testte 120'ye açılmış, bakiye 80'e düşmüştü) → sıfırlandı: Ronin kilitli, bakiye 200.
+- **🗺️ MODÜLER-PROPS COUNCIL (kullanıcı ref görseli; 3/3 OYBİRLİĞİ, karar=`STAGING/MODULAR_PROPS_DECISION_2026-06-05.md`):** PropGroupSO YOK→multi-cell tek prop+flipX[S] · overlay path tilemap aynı-grid[M] · çok-teras RED · damalı `(x+y)%2` zemin + **MEVCUT BridsonPoissonAutoPlacer+CompositionRoleMap'i 15 prop-fakiri odaya KOŞTUR** (en büyük ROI, ~yeni kod yok) · hepsi B-12'den ÖNCE ayrı task'ler.
+- **⚠️ ROUTING DÜZELTMESİ (kullanıcı):** her işi cx'e VERME — basit işler (HTML/doc/veri-tablo)→Sonnet/ax-3.5-Flash, mekanik Unity→Sonnet-MCP, SADECE gerçek kod→cx [[feedback-orchestrator-delegate-route-by-difficulty]] güçlendirildi.
+
+**⏭️ SONRAKİ:**
+1. **KULLANICI: Unity'de CharSelect feel-test** (görsel his + tıklama; yerleşim beğenmezsen Inspector→CharacterSelectScreen→`Roster Anchors[10]` toplu ayar).
+2. Modüler-props kuyruk (onaylı, sıralı): [S]flipX→cx · [S]2-3 küme prop author→Sonnet-MCP (asset gen gerekirse KULLANICIYLA) · [M]overlay tilemap→cx · [M]checker+auto-placer-koşturma→Sonnet → sonra B-12.
+3. Echo award play-verify (ölüm→"+n SHATTERED ECHO"→bakiye) — kullanıcı playtest'inde.
+4. GECE·3 backlog (Tier-1 hover draft-kartlarda + sol run-içi skill paneli + ESC codex) — aşağıdaki blok.
 
 ---
 
