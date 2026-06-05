@@ -269,6 +269,11 @@ namespace RIMA
             Resources.Load<Sprite>(SkillBarBackingPath) ?? Resources.Load<Sprite>(SkillBarBackingFallbackPath);
         public static bool SkillBarBackingIsSliced => Resources.Load<Sprite>(SkillBarBackingPath) != null;
 
+        private static Sprite _proceduralFootRing;
+
+        /// <summary>Procedural ellipse foot ring for character selection.</summary>
+        public static Sprite ProceduralFootRing => _proceduralFootRing ??= MakeEllipseRing(160, 100, 64f, 6.0f, 8.0f);
+
         // ── Passive draft-card icons (16-cell 4x4 sheet, runtime-sliced) ──
         // Active skills carry their own icon; passives/relics have none, so we
         // give each a stable on-brand icon from this generated pack by name hash.
@@ -420,5 +425,78 @@ namespace RIMA
             float cy = Mathf.Max(Mathf.Abs(py - h * 0.5f) - (h * 0.5f - r), 0f);
             return Mathf.Sqrt(cx * cx + cy * cy) - r;
         }
+
+        private static Sprite MakeEllipseRing(int w, int h, float ringRadius, float thickness, float glowWidth)
+        {
+            try
+            {
+                var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+                if (tex == null) return null;
+
+                tex.filterMode = FilterMode.Bilinear;
+                tex.wrapMode = TextureWrapMode.Clamp;
+
+                float cx = (w - 1) / 2f;
+                float cy = (h - 1) / 2f;
+                float aspect = 1f / 0.61f; // ~1.6393
+                float halfThick = thickness * 0.5f;
+
+                for (int x = 0; x < w; x++)
+                {
+                    for (int y = 0; y < h; y++)
+                    {
+                        float dx = x - cx;
+                        float dy = (y - cy) * aspect;
+                        float dist = Mathf.Sqrt(dx * dx + dy * dy);
+
+                        float alpha = 0f;
+                        if (dist >= ringRadius - halfThick && dist <= ringRadius + halfThick)
+                        {
+                            alpha = 1f;
+                        }
+                        else if (dist < ringRadius - halfThick)
+                        {
+                            // Inner anti-aliasing edge (over 1.5 pixels)
+                            float innerEdgeStart = ringRadius - halfThick - 1.5f;
+                            if (dist > innerEdgeStart)
+                            {
+                                alpha = Mathf.Clamp01((dist - innerEdgeStart) / 1.5f);
+                            }
+                        }
+                        else
+                        {
+                            // Outer glow falloff (over glowWidth pixels)
+                            float outerEdgeStart = ringRadius + halfThick;
+                            float outerEdgeEnd = outerEdgeStart + glowWidth;
+                            if (dist < outerEdgeEnd)
+                            {
+                                float t = Mathf.Clamp01((dist - outerEdgeStart) / glowWidth);
+                                alpha = (1f - t) * (1f - t); // quadratic falloff for soft glow
+                            }
+                        }
+
+                        if (alpha > 0f)
+                        {
+                            tex.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+                        }
+                        else
+                        {
+                            tex.SetPixel(x, y, Color.clear);
+                        }
+                    }
+                }
+
+                tex.Apply(false, true);
+
+                return Sprite.Create(tex, new Rect(0f, 0f, w, h),
+                    new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"[RimaUITheme] MakeEllipseRing failed (EditMode?): {ex.Message}");
+                return null;
+            }
+        }
     }
 }
+

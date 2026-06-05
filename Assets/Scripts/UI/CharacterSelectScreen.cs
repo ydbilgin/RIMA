@@ -28,7 +28,6 @@ namespace RIMA
         // Loaded once in BuildScreen; any may be null (sprite missing) -> wiring
         // silently skips that graphic and the prior flat-color visual remains.
         private const string PackBackdrop   = "UI/RIMA/Pack/bg_seal_keep";       // 1920x1080 full-screen backdrop
-        private const string PackPedestal   = "UI/RIMA/Pack/pedestal_seal";      // 512 circular seal platform
         private const string PackCardFrame  = "UI/RIMA/Pack/card_frame_9slice";  // 256x384 portrait card frame (border 28)
         private const string PackButton     = "UI/RIMA/Pack/button_9slice";      // 192x64 filled button bg (border 16)
         private const string PackPanelFrame = "UI/RIMA/Pack/panel_frame_9slice";
@@ -77,6 +76,7 @@ namespace RIMA
         };
 
         [SerializeField] private Vector2 hitPaddingScale = new(1.15f, 1.10f);
+        [SerializeField] private float footRingWidth = 160f;
 
         private const float RosterBandMinX = 0.225f;
         private const float RosterBandMaxX = 0.745f;
@@ -479,25 +479,16 @@ namespace RIMA
             glowRt.anchorMin = new Vector2(0.5f, 0.5f); glowRt.anchorMax = new Vector2(0.5f, 0.5f);
             glowRt.pivot = new Vector2(0.5f, 0.5f);
             glowRt.anchoredPosition = new Vector2(0f, footY);
-            glowRt.sizeDelta = new Vector2(250f, 92f);
+            glowRt.sizeDelta = new Vector2(footRingWidth, footRingWidth * 0.61f);
             var glow = glowRt.GetComponent<Image>();
-            glow.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
+            glow.sprite = RimaUITheme.ProceduralFootRing;
             glow.type = Image.Type.Simple;
             glow.preserveAspect = true;
             glow.raycastTarget = false;
 
-            var sealRt = MakePanel("PedestalSeal", root);
-            sealRt.anchorMin = new Vector2(0.5f, 0.5f); sealRt.anchorMax = new Vector2(0.5f, 0.5f);
-            sealRt.pivot = new Vector2(0.5f, 0.5f);
-            sealRt.anchoredPosition = new Vector2(0f, footY);
-            sealRt.sizeDelta = new Vector2(210f, 74f);
-            var seal = sealRt.GetComponent<Image>();
-            seal.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
-            seal.type = Image.Type.Simple;
-            seal.preserveAspect = true;
-            seal.raycastTarget = false;
+            Image seal = null;
 
-            var selectionVfxRoot = BuildSelectionVfx(root, placement.size, footY);
+            var selectionVfxRoot = BuildSelectionVfx(root, footY, footRingWidth);
             var selectionVfxImages = selectionVfxRoot.GetComponentsInChildren<Image>(true);
             var selectionGlowDisk = selectionVfxRoot.Find("SelectionGlowDisk").GetComponent<Image>();
             var selectionRing = selectionVfxRoot.Find("SelectionFootRing").GetComponent<Image>();
@@ -620,20 +611,21 @@ namespace RIMA
             ApplyRoomEntryVisual(entry, false);
         }
 
-        private static RectTransform BuildSelectionVfx(RectTransform parent, Vector2 characterSize, float footY)
+        private static RectTransform BuildSelectionVfx(RectTransform parent, float footY, float ringWidth)
         {
+            float ringHeight = ringWidth * 0.61f;
             var root = MakeRect("SelectionUIGlowVFX", parent, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
             root.pivot = new Vector2(0.5f, 0.5f);
             root.anchoredPosition = new Vector2(0f, footY);
-            root.sizeDelta = new Vector2(characterSize.x * 0.82f, 80f);
+            root.sizeDelta = new Vector2(ringWidth, ringHeight);
 
             var glowDisk = MakePanel("SelectionGlowDisk", root);
             glowDisk.anchorMin = new Vector2(0.5f, 0.5f); glowDisk.anchorMax = new Vector2(0.5f, 0.5f);
             glowDisk.pivot = new Vector2(0.5f, 0.5f);
             glowDisk.anchoredPosition = Vector2.zero;
-            glowDisk.sizeDelta = new Vector2(characterSize.x * 0.78f, 58f);
+            glowDisk.sizeDelta = new Vector2(ringWidth, ringHeight);
             var glowDiskImg = glowDisk.GetComponent<Image>();
-            glowDiskImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
+            glowDiskImg.sprite = null;
             glowDiskImg.type = Image.Type.Simple;
             glowDiskImg.preserveAspect = true;
             glowDiskImg.color = Color.clear;
@@ -643,9 +635,9 @@ namespace RIMA
             ring.anchorMin = new Vector2(0.5f, 0.5f); ring.anchorMax = new Vector2(0.5f, 0.5f);
             ring.pivot = new Vector2(0.5f, 0.5f);
             ring.anchoredPosition = Vector2.zero;
-            ring.sizeDelta = new Vector2(characterSize.x * 0.64f, 46f);
+            ring.sizeDelta = new Vector2(ringWidth, ringHeight);
             var ringImg = ring.GetComponent<Image>();
-            ringImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
+            ringImg.sprite = RimaUITheme.ProceduralFootRing;
             ringImg.type = Image.Type.Simple;
             ringImg.preserveAspect = true;
             ringImg.color = WithAlpha(RimaUITheme.CharSelectCyan, 0.0f);
