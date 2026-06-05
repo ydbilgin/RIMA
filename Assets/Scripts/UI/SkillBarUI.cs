@@ -23,6 +23,8 @@ namespace RIMA
         private const float SecondarySize = 44f;
         private const float SlotGap       = 8f;
         private const float ReadyFlashDuration = 0.18f;
+        private const float SynergyPulseDuration = 0.45f;
+        private const float SynergyPulseScale = 0.12f;
 
         // Bar slots → gameplay actions (CONTROL_SCHEME_SYNTHESIS_S6 §7): LMB, RMB, Q, E, R, F.
         private static readonly GameAction[] SlotActions =
@@ -39,6 +41,7 @@ namespace RIMA
         private SlotUI[] slots = new SlotUI[SlotCount];
         private bool[] wasOnCooldown = new bool[SlotCount];
         private float[] readyFlashTimers = new float[SlotCount];
+        private float[] synergyPulseTimers = new float[SlotCount];
         private Color cachedClassAccent = RimaUITheme.ClassAccent(ClassType.Warblade);
         private bool controllersResolved;
         private GameObject cachedPlayer;
@@ -235,10 +238,26 @@ namespace RIMA
             int active = GetActiveSlotCount();
             for (int i = 0; i < SlotCount; i++)
             {
+                if (synergyPulseTimers[i] > 0f)
+                    synergyPulseTimers[i] = Mathf.Max(0f, synergyPulseTimers[i] - Time.unscaledDeltaTime);
+
                 if (i < active)
                     UpdateSlot(i, GetActiveSlot(i));
                 else
                     UpdateSlotEmpty(i);
+            }
+        }
+
+        public void PulseSynergySlot(string skillName)
+        {
+            if (string.IsNullOrEmpty(skillName)) return;
+
+            int active = GetActiveSlotCount();
+            for (int i = 0; i < active && i < SlotCount; i++)
+            {
+                var skill = GetActiveSlot(i);
+                if (skill != null && string.Equals(skill.skillName, skillName, System.StringComparison.OrdinalIgnoreCase))
+                    synergyPulseTimers[i] = SynergyPulseDuration;
             }
         }
 
@@ -292,6 +311,8 @@ namespace RIMA
                 float alpha = Mathf.Lerp(0.5f, 0.95f, flashT);
                 ui.glowBorder.color = new Color(cachedClassAccent.r, cachedClassAccent.g, cachedClassAccent.b, alpha);
             }
+
+            ApplySynergyPulse(i, ui);
         }
 
         private void UpdateSlotEmpty(int i)
@@ -303,8 +324,29 @@ namespace RIMA
             ui.icon.color = new Color(0.3f, 0.3f, 0.4f, 0.3f);
             ui.cdOverlay.fillAmount = 0f;
             ui.glowBorder.color = Color.clear;
+            if (ui.root != null) ui.root.transform.localScale = Vector3.one;
+            synergyPulseTimers[i] = 0f;
             wasOnCooldown[i] = false;
             readyFlashTimers[i] = 0f;
+        }
+
+        private void ApplySynergyPulse(int i, SlotUI ui)
+        {
+            if (ui.root == null || ui.glowBorder == null) return;
+
+            float remaining = synergyPulseTimers[i];
+            if (remaining <= 0f)
+            {
+                ui.root.transform.localScale = Vector3.one;
+                return;
+            }
+
+            float t = 1f - Mathf.Clamp01(remaining / SynergyPulseDuration);
+            float wave = Mathf.Sin(t * Mathf.PI);
+            ui.root.transform.localScale = Vector3.one * (1f + SynergyPulseScale * wave);
+            Color current = ui.glowBorder.color;
+            float alpha = Mathf.Max(current.a, Mathf.Lerp(0.95f, 0.35f, t));
+            ui.glowBorder.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, alpha);
         }
 
         // ─── Controller resolution ──────────────────────────────────

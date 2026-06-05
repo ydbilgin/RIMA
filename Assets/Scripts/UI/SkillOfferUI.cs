@@ -29,6 +29,7 @@ namespace RIMA
         private TextMeshProUGUI titleLabel;
         private TextMeshProUGUI subtitleLabel;
         private Image screenFlash;
+        private SkillBarUI skillBar;
         private bool isConfirmingPick;
         private int hoverSerial;
 
@@ -64,6 +65,8 @@ namespace RIMA
 
             if (panel == null) BuildPanel();
             else panel.SetActive(true);
+            EnsureTooltipSystem();
+            skillBar = FindObjectOfType<SkillBarUI>();
 
             string title = roomNumber > 0 ? $"ODA {roomNumber}  —  ODUL SEC" : "ODUL SEC";
             if (titleLabel != null) titleLabel.text = title;
@@ -92,6 +95,8 @@ namespace RIMA
 
             if (panel == null) BuildPanel();
             else panel.SetActive(true);
+            EnsureTooltipSystem();
+            skillBar = FindObjectOfType<SkillBarUI>();
 
             if (titleLabel != null) titleLabel.text = "SLOT DOLU";
             if (subtitleLabel != null)
@@ -101,7 +106,7 @@ namespace RIMA
             for (int i = 0; i < currentActives.Count; i++)
             {
                 var sd = currentActives[i];
-                var card = BuildSkillCard(sd.skillName, sd.tier, sd.description, i, currentActives.Count, sd.icon);
+                var card = BuildSkillCard(sd.skillName, sd.tier, sd.description, i, currentActives.Count, sd.icon, null, sd);
                 var btn = card.GetComponentInChildren<Button>();
                 if (btn != null)
                 {
@@ -252,7 +257,8 @@ namespace RIMA
 
             var card = BuildSkillCard(name, offer.skill?.tier ?? SkillTier.Common, desc, index, total,
                 offer.type == RewardType.CrossClassEcho ? offer.crossClass?.icon : offer.skill?.icon,
-                tierColor);
+                tierColor,
+                offer.skill);
 
             // Select button
             var btn = card.GetComponentInChildren<Button>();
@@ -368,7 +374,7 @@ namespace RIMA
 
         // ─── Shared Card Builder ────────────────────────────────────
 
-        private GameObject BuildSkillCard(string skillName, SkillTier tier, string description, int index, int total, Sprite icon = null, Color? glowTintOverride = null)
+        private GameObject BuildSkillCard(string skillName, SkillTier tier, string description, int index, int total, Sprite icon = null, Color? glowTintOverride = null, SkillData tooltipSkill = null)
         {
             var cardGo = new GameObject($"Card_{index}", typeof(RectTransform));
             cardGo.transform.SetParent(cardContainer, false);
@@ -466,6 +472,7 @@ namespace RIMA
                 SelectFlash = selectFlashImg,
                 CanvasGroup = cardGroup,
                 GlowTint = glowTint,
+                TooltipSkill = tooltipSkill,
                 Phase = index,
                 OriginalSiblingIndex = cardGo.transform.GetSiblingIndex()
             };
@@ -589,6 +596,7 @@ namespace RIMA
             if (isConfirmingPick) return;
 
             isConfirmingPick = true;
+            TooltipSystem.Instance?.Hide();
             StopAllCoroutines();
 
             CardJuiceState chosen = null;
@@ -729,6 +737,16 @@ namespace RIMA
             state.PointerInsideCount += entered ? 1 : -1;
             if (state.PointerInsideCount < 0) state.PointerInsideCount = 0;
             RefreshHover(state);
+
+            if (entered)
+            {
+                ShowCardTooltip(state);
+                PulseOwnedChainSlots(state);
+            }
+            else if (state.PointerInsideCount == 0)
+            {
+                TooltipSystem.Instance?.Hide();
+            }
         }
 
         private void SetSelectionHover(CardJuiceState state, bool selected)
@@ -828,6 +846,7 @@ namespace RIMA
 
         private void ClearCards()
         {
+            TooltipSystem.Instance?.Hide();
             StopAllCoroutines();
             foreach (var c in cards)
                 if (c != null) Destroy(c);
@@ -837,6 +856,38 @@ namespace RIMA
             isConfirmingPick = false;
             hoverSerial = 0;
             SetScreenFlashAlpha(0f);
+        }
+
+        private void ShowCardTooltip(CardJuiceState state)
+        {
+            if (state?.TooltipSkill == null) return;
+            EnsureTooltipSystem();
+            TooltipSystem.Instance?.Show(TooltipSystem.FormatSkill(state.TooltipSkill));
+        }
+
+        private void PulseOwnedChainSlots(CardJuiceState state)
+        {
+            string skillName = state?.TooltipSkill?.skillName;
+            if (string.IsNullOrEmpty(skillName)) return;
+
+            var owned = DraftManager.Instance?.OwnedActiveSkillNames;
+            if (owned == null) return;
+
+            if (skillBar == null) skillBar = FindObjectOfType<SkillBarUI>();
+            if (skillBar == null) return;
+
+            for (int i = 0; i < owned.Count; i++)
+            {
+                string other = owned[i];
+                if (string.IsNullOrEmpty(other) || other == skillName) continue;
+                if (Chains(skillName, other)) skillBar.PulseSynergySlot(other);
+            }
+        }
+
+        private void EnsureTooltipSystem()
+        {
+            if (TooltipSystem.Instance != null) return;
+            gameObject.AddComponent<TooltipSystem>();
         }
 
         private Color TierColor(RewardOffer offer)
@@ -962,6 +1013,7 @@ namespace RIMA
             public Image SelectFlash;
             public CanvasGroup CanvasGroup;
             public Button Button;
+            public SkillData TooltipSkill;
             public Coroutine HoverTween;
             public Coroutine IdleGlow;
             public Color GlowTint;

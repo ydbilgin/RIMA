@@ -40,7 +40,7 @@ namespace RIMA
 
         private void BuildTooltip()
         {
-            canvas = FindObjectOfType<Canvas>();
+            canvas = GetComponentInParent<Canvas>() ?? FindObjectOfType<Canvas>();
             if (canvas == null) return;
 
             // Tooltip panel
@@ -50,14 +50,29 @@ namespace RIMA
             tooltipRect.sizeDelta = new Vector2(280f, 150f);
             tooltipRect.pivot = new Vector2(0f, 1f); // Top-left pivot
 
-            // Background
+            // Translucent ink-wash: readable, but not an opaque UI box.
             var bg = tooltipPanel.AddComponent<Image>();
-            bg.color = new Color(0.08f, 0.08f, 0.12f, 0.95f);
+            bg.color = new Color(0.01f, 0.018f, 0.026f, 0.62f);
+            bg.raycastTarget = false;
 
-            // Border
+            var washGo = new GameObject("InkWash", typeof(RectTransform));
+            washGo.transform.SetParent(tooltipPanel.transform, false);
+            var washRect = washGo.GetComponent<RectTransform>();
+            washRect.anchorMin = Vector2.zero;
+            washRect.anchorMax = Vector2.one;
+            washRect.offsetMin = washRect.offsetMax = Vector2.zero;
+            var wash = washGo.AddComponent<Image>();
+            wash.sprite = RimaUITheme.RarityGlow(SkillTier.Common);
+            wash.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.08f);
+            wash.raycastTarget = false;
+
+            // Cyan hairline, with top/bottom strokes carrying the frame.
             var outline = tooltipPanel.AddComponent<Outline>();
-            outline.effectColor = new Color(0.35f, 0.35f, 0.45f, 1f);
+            outline.effectColor = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.55f);
             outline.effectDistance = new Vector2(1f, -1f);
+
+            AddHairline("TopHairline", tooltipPanel.transform, true);
+            AddHairline("BottomHairline", tooltipPanel.transform, false);
 
             // Text
             var textGo = new GameObject("Text", typeof(RectTransform));
@@ -69,8 +84,8 @@ namespace RIMA
             textRect.offsetMax = new Vector2(-padding, -padding);
 
             tooltipText = textGo.AddComponent<TextMeshProUGUI>();
-            tooltipText.fontSize = 10;
-            tooltipText.color = new Color(0.85f, 0.87f, 0.95f);
+            tooltipText.fontSize = 11;
+            tooltipText.color = new Color(0.86f, 0.94f, 0.96f);
             tooltipText.alignment = TextAlignmentOptions.TopLeft;
             tooltipText.enableWordWrapping = true;
             tooltipText.raycastTarget = false;
@@ -108,7 +123,7 @@ namespace RIMA
 
         private IEnumerator ShowDelayed(string content, Vector2? screenPosition)
         {
-            yield return new WaitForSeconds(showDelay);
+            yield return new WaitForSecondsRealtime(showDelay);
 
             if (tooltipPanel == null || tooltipText == null) yield break;
 
@@ -160,6 +175,22 @@ namespace RIMA
                 localPos.y += tooltipRect.sizeDelta.y - offset.y * 2f;
 
             tooltipRect.anchoredPosition = localPos;
+        }
+
+        private static void AddHairline(string name, Transform parent, bool top)
+        {
+            var lineGo = new GameObject(name, typeof(RectTransform));
+            lineGo.transform.SetParent(parent, false);
+            var lineRt = lineGo.GetComponent<RectTransform>();
+            lineRt.anchorMin = top ? new Vector2(0f, 1f) : new Vector2(0f, 0f);
+            lineRt.anchorMax = top ? new Vector2(1f, 1f) : new Vector2(1f, 0f);
+            lineRt.pivot = top ? new Vector2(0.5f, 1f) : new Vector2(0.5f, 0f);
+            lineRt.offsetMin = new Vector2(8f, 0f);
+            lineRt.offsetMax = new Vector2(-8f, 0f);
+            lineRt.sizeDelta = new Vector2(lineRt.sizeDelta.x, 1f);
+            var line = lineGo.AddComponent<Image>();
+            line.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.62f);
+            line.raycastTarget = false;
         }
 
         private void Update()
