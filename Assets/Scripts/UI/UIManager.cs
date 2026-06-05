@@ -18,11 +18,13 @@ namespace RIMA
         private bool tabOpen;
         private bool settingsOpen;
         private bool skillOfferOpen;
+        private bool skillCodexOpen;
         private bool _menuPaused;
 
         // ── Cached references ────────────────────────────────────────────
         private CharacterSheetUI sheetUI;
         private SettingsMenuUI   settingsUI;
+        private SkillCodexUI     skillCodexUI;
 
         // ── Input ────────────────────────────────────────────────────────
         private InputAction tabAction;
@@ -31,7 +33,8 @@ namespace RIMA
         public bool IsTabOpen        => tabOpen;
         public bool IsSettingsOpen   => settingsOpen;
         public bool IsSkillOfferOpen => skillOfferOpen;
-        public bool IsAnyOverlayOpen => tabOpen || settingsOpen || skillOfferOpen;
+        public bool IsSkillCodexOpen => skillCodexOpen;
+        public bool IsAnyOverlayOpen => tabOpen || settingsOpen || skillOfferOpen || skillCodexOpen;
 
         // ─── Lifecycle ───────────────────────────────────────────────────
 
@@ -75,6 +78,7 @@ namespace RIMA
             tabOpen = false;
             settingsOpen = false;
             skillOfferOpen = false;
+            skillCodexOpen = false;
             _menuPaused = false;
             Time.timeScale = 1f;
         }
@@ -122,6 +126,9 @@ namespace RIMA
             // If settings open, close settings first
             if (settingsOpen) { CloseSettings(); return; }
 
+            // If codex open, close codex first
+            if (skillCodexOpen) { CloseSkillCodex(); return; }
+
             // Toggle TAB overlay
             if (tabOpen) CloseTab();
             else         OpenTab();
@@ -132,19 +139,22 @@ namespace RIMA
             // Skill offer blocks ESC
             if (skillOfferOpen) return;
 
+            // If settings open, close settings first
+            if (settingsOpen) { CloseSettings(); return; }
+
             // If TAB open, close TAB first
             if (tabOpen) { CloseTab(); return; }
 
-            // Toggle settings
-            if (settingsOpen) CloseSettings();
-            else              OpenSettings();
+            // Toggle skill codex
+            if (skillCodexOpen) CloseSkillCodex();
+            else                OpenSkillCodex();
         }
 
         // ─── Public API ─────────────────────────────────────────────────
 
         public void OpenTab()
         {
-            if (tabOpen || skillOfferOpen) return;
+            if (tabOpen || skillOfferOpen || skillCodexOpen) return;
             tabOpen = true;
             ResolveSheetUI();
             if (sheetUI != null) sheetUI.Show();
@@ -163,6 +173,7 @@ namespace RIMA
         {
             if (settingsOpen || skillOfferOpen) return;
             if (tabOpen) CloseTab();
+            if (skillCodexOpen) CloseSkillCodex();
             settingsOpen = true;
             ResolveSettingsUI();
             if (settingsUI != null) settingsUI.Open();
@@ -181,6 +192,7 @@ namespace RIMA
         {
             if (tabOpen) CloseTab();
             if (settingsOpen) CloseSettings();
+            if (skillCodexOpen) CloseSkillCodex();
             skillOfferOpen = true;
             ApplyTimeScale();
         }
@@ -189,6 +201,24 @@ namespace RIMA
         {
             if (!skillOfferOpen) return;
             skillOfferOpen = false;
+            ApplyTimeScale();
+        }
+
+        public void OpenSkillCodex()
+        {
+            if (skillCodexOpen || skillOfferOpen || settingsOpen) return;
+            if (tabOpen) CloseTab();
+            skillCodexOpen = true;
+            ResolveSkillCodexUI();
+            if (skillCodexUI != null) skillCodexUI.Open();
+            ApplyTimeScale();
+        }
+
+        public void CloseSkillCodex()
+        {
+            if (!skillCodexOpen) return;
+            skillCodexOpen = false;
+            if (skillCodexUI != null) skillCodexUI.Close();
             ApplyTimeScale();
         }
 
@@ -201,6 +231,7 @@ namespace RIMA
             tabOpen        = false;
             settingsOpen   = false;
             skillOfferOpen = false;
+            skillCodexOpen = false;
             _menuPaused    = false;
             Time.timeScale = 1f;
         }
@@ -224,7 +255,7 @@ namespace RIMA
 
         private void ApplyTimeScale()
         {
-            if (skillOfferOpen || settingsOpen)
+            if (skillOfferOpen || settingsOpen || skillCodexOpen)
                 Time.timeScale = 0f;
             else if (tabOpen)
                 Time.timeScale = 0.1f;
@@ -244,6 +275,12 @@ namespace RIMA
         {
             if (settingsUI == null)
                 settingsUI = FindAnyObjectByType<SettingsMenuUI>();
+        }
+
+        private void ResolveSkillCodexUI()
+        {
+            if (skillCodexUI == null)
+                skillCodexUI = SkillCodexUI.EnsureInstance();
         }
     }
 }
