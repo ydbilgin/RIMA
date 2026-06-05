@@ -78,38 +78,14 @@ MonoBehaviour:
   blockerTags: []
   props:
   - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
-    tilePosition: {x: 17, y: 15}
+    tilePosition: {x: 16, y: 16}
     rotationSteps: 1
-    flipX: 0
-    placedByUser: auto
-    variantIndex: -1
-  - propDefinitionGuid: 4193dd8caa840684fb876815e3780064
-    tilePosition: {x: 18, y: 16}
-    rotationSteps: 0
-    flipX: 0
-    placedByUser: auto
-    variantIndex: -1
-  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
-    tilePosition: {x: 16, y: 15}
-    rotationSteps: 0
-    flipX: 0
-    placedByUser: auto
-    variantIndex: -1
-  - propDefinitionGuid: c8d6352c766cc994495a3e58bddbe73a
-    tilePosition: {x: 19, y: 15}
-    rotationSteps: 2
     flipX: 0
     placedByUser: auto
     variantIndex: -1
   - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
     tilePosition: {x: 19, y: 16}
-    rotationSteps: 0
-    flipX: 1
-    placedByUser: auto
-    variantIndex: -1
-  - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
-    tilePosition: {x: 21, y: 15}
-    rotationSteps: 3
+    rotationSteps: 2
     flipX: 1
     placedByUser: auto
     variantIndex: -1

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RIMA.MapDesigner.Composition;
 using RIMA.MapDesigner.Room.Data;
+using UnityEditor;
 using UnityEngine;
 
 namespace RIMA.MapDesigner.Props.Auto
@@ -34,6 +35,9 @@ namespace RIMA.MapDesigner.Props.Auto
             RectInt bounds = template.bounds;
             if (bounds.width <= 0 || bounds.height <= 0) return result;
 
+            List<Vector2Int> walkableTiles = CollectWalkableTiles(template, bounds);
+            if (walkableTiles.Count == 0) return result;
+
             CompositionRoleMap effectiveRoleMap = roleMap ?? CompositionRoleMapGenerator.GenerateFromRoom(template);
             float minRadius = ResolveMinRadius(propPool);
             if (minRadius <= 0f) minRadius = 1f;
@@ -43,7 +47,7 @@ namespace RIMA.MapDesigner.Props.Auto
             List<int> active = new List<int>();
             List<PropPlacementData> simulated = new List<PropPlacementData>();
 
-            Vector2 firstPoint = PickFirstSeed(rng, bounds);
+            Vector2 firstPoint = PickFirstSeed(rng, walkableTiles);
             samples.Add(firstPoint);
             active.Add(0);
 
@@ -60,6 +64,7 @@ namespace RIMA.MapDesigner.Props.Auto
                     Vector2 candidate = RandomAnnulus(rng, origin, minRadius, minRadius * 2f);
                     Vector2Int tilePos = new Vector2Int(Mathf.FloorToInt(candidate.x), Mathf.FloorToInt(candidate.y));
                     if (!IsInsideBounds(bounds, tilePos)) continue;
+                    if (!template.IsWalkable(tilePos)) continue;
                     if (!TileDensityRoll(rng, effectiveRoleMap, tilePos, targetDensity)) continue;
                     if (HasSampleWithin(samples, candidate, minRadius)) continue;
 
@@ -67,6 +72,8 @@ namespace RIMA.MapDesigner.Props.Auto
                     if (prop == null) continue;
 
                     int rotation = rng.Next(0, 4);
+                    if (!FootprintFitsWalkable(template, prop, tilePos, rotation)) continue;
+
                     int variant = (prop.variantSprites != null && prop.variantSprites.Length > 0)
                         ? rng.Next(0, prop.variantSprites.Length)
                         : -1;
@@ -84,7 +91,7 @@ namespace RIMA.MapDesigner.Props.Auto
                     bool flipX = IsMirrorEligible(prop) && rng.Next(0, 2) == 0;
                     samples.Add(candidate);
                     active.Add(samples.Count - 1);
-                    simulated.Add(new PropPlacementData(prop.propId, tilePos)
+                    simulated.Add(new PropPlacementData(ResolvePropGuid(prop), tilePos)
                     {
                         rotationSteps = rotation,
                         flipX = flipX,
@@ -138,11 +145,28 @@ namespace RIMA.MapDesigner.Props.Auto
             return minRadius == float.MaxValue ? 1f : minRadius;
         }
 
-        private static Vector2 PickFirstSeed(System.Random rng, RectInt bounds)
+        private static List<Vector2Int> CollectWalkableTiles(RoomTemplateSO template, RectInt bounds)
         {
-            float fx = bounds.xMin + (float)rng.NextDouble() * bounds.width;
-            float fy = bounds.yMin + (float)rng.NextDouble() * bounds.height;
-            return new Vector2(fx, fy);
+            List<Vector2Int> tiles = new List<Vector2Int>();
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                for (int x = bounds.xMin; x < bounds.xMax; x++)
+                {
+                    Vector2Int tile = new Vector2Int(x, y);
+                    if (template.IsWalkable(tile))
+                    {
+                        tiles.Add(tile);
+                    }
+                }
+            }
+
+            return tiles;
+        }
+
+        private static Vector2 PickFirstSeed(System.Random rng, IReadOnlyList<Vector2Int> walkableTiles)
+        {
+            Vector2Int tile = walkableTiles[rng.Next(walkableTiles.Count)];
+            return new Vector2(tile.x + 0.5f, tile.y + 0.5f);
         }
 
         private static Vector2 RandomAnnulus(System.Random rng, Vector2 origin, float minR, float maxR)
@@ -156,6 +180,25 @@ namespace RIMA.MapDesigner.Props.Auto
         {
             return tile.x >= bounds.xMin && tile.x < bounds.xMax &&
                 tile.y >= bounds.yMin && tile.y < bounds.yMax;
+        }
+
+        private static bool FootprintFitsWalkable(RoomTemplateSO template, PropDefinitionSO prop, Vector2Int tilePos, int rotation)
+        {
+            Vector2Int size = PropFootprintValidator.GetRotatedFootprint(prop, rotation);
+            if (size.x <= 0 || size.y <= 0) return false;
+
+            for (int y = 0; y < size.y; y++)
+            {
+                for (int x = 0; x < size.x; x++)
+                {
+                    if (!template.IsWalkable(new Vector2Int(tilePos.x + x, tilePos.y + y)))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private static bool TileDensityRoll(System.Random rng, CompositionRoleMap roleMap, Vector2Int tile, float targetDensity)
@@ -198,6 +241,13 @@ namespace RIMA.MapDesigner.Props.Auto
         {
             if (prop == null) return false;
             return prop.footprintSize.x == prop.footprintSize.y;
+        }
+
+        private static string ResolvePropGuid(PropDefinitionSO prop)
+        {
+            string path = prop != null ? AssetDatabase.GetAssetPath(prop) : string.Empty;
+            string guid = string.IsNullOrEmpty(path) ? string.Empty : AssetDatabase.AssetPathToGUID(path);
+            return string.IsNullOrEmpty(guid) && prop != null ? prop.propId : guid;
         }
 
         private static bool ContainsRole(CompositionRole[] roles, CompositionRole role)
