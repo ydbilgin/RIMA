@@ -19,6 +19,12 @@
 
 **Bugün ayrıca DONE+commit'li (öğleden sonra):** prosedürel foot-ring (`680e9224`, Flash yazdı Opus play-QC) · CharacterSelect.unity authored-Root kalıcı inactive (`61256099`, Flash+Opus-QC; edit-mode'daki "eski ekran" hayaleti çözüldü) · TBH video-analizi + 3 konsept görseli + chamber pivotu (`5dd4afb4`, `146f3c02`) · roadmap+codeanim dökümanları (`e42b6910`). **Routing güncel:** hızlı işler → ax-3.5-Flash-High YAPAR, kontrol → Opus/Sonnet/cx (uygun olan); S-izole kod → Flash-dene→build+play-QC-gate→FAIL'de cx.
 
+**🛠️ TOOLING (akşam — sunum hazırlığı sırasında):**
+- ⚠️ **SUNUM-KRİTİK FİX (`ee14c16a`):** `_Arena` Build Settings'te YOKTU → chamber kapısı run başlatamıyordu; eklendi + canlı doğrulandı + diske flush. Sunum demo akışı: MainMenu aç→Play→BAŞLA→Chamber (WASD/E)→kapı→run.
+- **9 RIMA komutu GLOBALE taşındı** (`~/.claude/commands/`; parametrize, RIMA default'ları korunmuş; lint bilinçli proje-lokal kaldı). **`/bootstrap-project` global skill'i yazıldı** (yeni projede orkestra kurulumu + global-vs-lokal skill yerleşim kuralı gömülü).
+- **Kararlar (memory'de):** orchestrator = OPUS kalır (1M vs Sonnet 200k context; S61 superseded) + effort=medium default (kritik yakalamalar protokolden gelir, derin-düşünceden değil) + context disiplini (milestone'da /clear).
+- **🚧 IN-FLIGHT (YENİ SESSION İLK KONTROL — bg job otomatik bildirmez):** **`cx dispatch` GLOBALİZASYONU** cx'te (`STAGING/cx_task_globalize_dispatch_2026-06-05.md`, bg `bg8zllow9`): cx_dispatch.py→CodexAuthManager/dispatch/ + `cx dispatch` subcommand + CWD-bazlı path'ler + RIMA-dışı round-trip test + ax-global doğrulaması + commit/push. **KULLANICI KARARI: QC geçince RIMA DA GLOBALE GEÇER** (RIMA-lokal cx_dispatch.py emekli; PROJECT_RULES'taki dispatch komutu `cx dispatch ...` olarak güncellenir) + `/bootstrap-project`'in Codex sorusu "global cx dispatch (Recommended)" olur. Kontrol: `CODEX_DONE*.md` → QC (round-trip kanıtı!) → geçiş adımları.
+
 ---
 
 ## ⏯️ RESUME (2026-06-05 — CHARSELECT v3: 4-ADVISOR COUNCIL + SKILL-ECHO-UNLOCK KARARI + MOCKUP v2 — /clear sonrası İLK BURAYI OKU)
