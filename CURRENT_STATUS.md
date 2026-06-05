@@ -1,5 +1,27 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-06 GECE — SUNUM HAZIRLIĞI + RAPOR TASLAĞI + MAP DESIGNER ROOMS SEKMESİ: OTONOM GECE TAMAMI DONE — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı hocaya SUNUM hazırlıyor; playtest'te 2 bug verdi + "raporu yaz, council'le review et, Map Designer'ı güzelleştir, screenshot al, NLM-sync+status+memory güncelle" mandate'iyle yattı. Tamamı council-routed, yazar≠reviewer, crash YOK.
+
+**✅ OYUN FIX'LERİ (hepsi cx, play-verify kanıtlı, commit'li):**
+1. **CharSelect eski-ekran bug'ı** (`68f91c7a`): MainMenuController sadece sahne yüklüyordu, ChamberSelectBootstrap ölü MainMenuScreen'deydi → `CharacterSelectScreen.Awake` artık bootstrap'i kendisi ekliyor. Chamber menüden geliyor. + **RIMA/Room Browser** penceresi (tek tıkla oda kurma, sunum aracı).
+2. **Oda QC + fix turu** (`90c84995`): 26 oda görsel QC (15 OK/9 şüpheli/2 FAIL, rapor=`STAGING/ROOM_QC_REPORT_2026-06-05.md`) → off-island prop kök neden (placer walkable doğrulamıyordu) fix + 7 oda re-seed + twin_basins iç-cliff seam dolduruldu + Treasure_01 14→42 tile.
+3. **DungeonGraph singleton KRİTİK fix** (`d762cb8c`): Systems GO'daki 5 singleton duplicate'te `Destroy(gameObject)` ile TÜM Systems'i öldürüyordu (oda-clear kopuyordu) → `Destroy(this)`. PATH A (_IsoGame) + PATH B (Chamber→_Arena, SUNUM YOLU) uçtan uca yeşil. + sparse oda re-seed (twin_basins 17/lshape 9/cross 8 prop) + SeamCrawler "Enemy" tag.
+4. **Chamber Hades-tarzı [G]-interact** (`482864af`): heykele yaklaşınca ekran SWAP bug'ı (klasik canvas açılıyordu) → sadece dünya-içi "[G] Bürün — <SINIF>" prompt; kapı "[G] Rift'e Gir"; TAB fallback duruyor. Etkileşim tuşu artık G (E değil).
+5. **Map Designer "Rooms" sekmesi Faz-1** (`268848ce`, karar=`STAGING/MAPDESIGNER_DECISION_2026-06-06.md`): RIMA/Map Designer artık 8 sekme, Rooms DEFAULT — 26 template listesi+arama+2D şematik önizleme+Build in Arena(yeşil)/Auto Props seed+🎲(mavi,Undo'lu)/Save(turuncu)+dirty-yıldızı. `RoomTemplateBuildUtility`+`RoomTemplateAutoPropsUtility` ortak helper. Smoke test 26/26 0-exception (`RIMA/Rooms/QC/Smoke Test All Templates`). UnifiedDesignerTests 9/9. Faz-2 backlog DONE raporunda (SceneView boyama, socket handle, flood-fill validatör...).
+
+**📄 RAPOR TASLAĞI HAZIR (`STAGING/report/RAPOR_DRAFT_2026-06-06.md`, ~10.8k kelime ≈24s+ekler):** İçerik planı council'li (`STAGING/REPORT_CONTENT_DECISION_2026-06-06.md`; ana katkı çerçevesi="sistem inşa ettim", Unity tarihçesi YOK, anlatı odaklı). 8 bölüm Sonnet-agent'larca yazıldı → stitch → **3'lü council review** (cx olgusal: 5 FALSE iddia yakalandı — Echo formülü/unlock maliyeti/8-sekme/F2-pause/AudioManager · 3.1 jüri lensi: kaynakça+AI-test-paradoksu+şekil atıfları · 3.5 dil: 20 LLM-koku+tekrarlar) → **48 revizyon edit'i UYGULANDI**. Kalan kullanıcı işi: Giriş/Sonuç son rötuş + UML/akış şemaları çizimi + Bölüm-4'ü öne taşıma kararı (HTML not içinde) + docx'e dönüştürme (`ARCHIVE/AKADEMIK/create_ara_rapor.py` uyarlanacak). Plan revize=`STAGING/SENIOR_DESIGN_REPORT_PLAN.md` (karakter boyutu GÜNCEL: 120-128px sınıfa göre).
+**📸 SCREENSHOT SETİ:** `STAGING/report_screenshots/` 13 kare (menü/chamber/[G]prompt/oda/combat/draft/kapılar/M-overlay/boss/victory+echo/MapDesigner/RoomBrowser). Rapor şekil listesi eşleştirmeli.
+
+**🎓 SUNUM AKIŞI (kullanıcıya):** MainMenu aç→Game sekmesi+Maximize→Play→BAŞLA→Chamber WASD+[G]→kapı→run. Map demo: RIMA/Map Designer (Rooms sekmesi: tıkla-kur + Auto Props 🎲 = "wow") veya RIMA/Room Browser. F5/F6 kısayol. Sabah provası: `RIMA/Rooms/QC/Smoke Test All Templates` çalıştır (26/26 yeşil görmeli).
+
+**⚠️ DERSLER:** (a) Sonnet stitch-agent 32k output limitine takıldı → büyük dosya birleştirme=PowerShell concat + Edit-bazlı düzeltme agent'ı. (b) Rapor gibi LLM-yazımı metinlerde cx olgusal-audit ŞART (5 FALSE iddia vardı). (c) ScreenCapture.CaptureScreenshot overlay-UI dahil yakalar (MCP screenshot'un aksine).
+
+**⏭️ YENİ SESSION:** (1) Kullanıcı sunum provası (yukarıdaki akış). (2) Rapor: kullanıcı rötuşları → docx üretimi. (3) Map Designer Faz-2 (istenirse). (4) Oturum B 3 silah üretimi (kullanıcıyla) — önceki bloklardaki backlog geçerli. BLOCKED-açık: #17 Echo-Mote tanımı, #26 Card-Weight onayı.
+
+---
+
 ## ⏯️ RESUME (2026-06-05 GECE·2 — OTONOM 10-TASK KUYRUK: COUNCIL-ROUTED, 9 İŞ DONE+COMMIT, ax-OPUS-4.6 KANALI KANITLANDI — /clear sonrası İLK BURAYI OKU)
 
 **BAĞLAM:** Kullanıcı uzanmaya gitti, mandate: "council ile nasıl yapılacağını kararlaştır → doğru agent'lara ver → cross-review". Council = cx + ax-3.1-Pro + ax-3.5-Flash → Opus sentez; karar = `STAGING/QUEUE10_ROUTING_DECISION_2026-06-05.md` (lane'ler + yazar≠reviewer matrisi).
