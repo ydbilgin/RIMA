@@ -46,6 +46,9 @@ namespace RIMA
         [TextArea] public string passiveDescription; // tooltip'te gösterilir
         public StatusEffectType appliesEffect;       // bu skill hangi efekti uygular
 
+        [Header("Implementation Status")]
+        public bool isImplemented = true;
+
         /// <summary>
         /// Runtime'da SkillDatabase tarafından set edilir.
         /// Hangi SkillBase MonoBehaviour'ına karşılık geldiğini tutar.

@@ -255,6 +255,216 @@ namespace RIMA
                SkillTier.Epic, 13f, typeof(WirelineTrap));
 
             // ─────────────────────────────────────────────────────
+            // RONIN
+            // ─────────────────────────────────────────────────────
+            RN("Quickdraw",
+               "Instant dash-strike. Costs 20 Tension and refunds 10 on hit.",
+               SkillTier.Common, 2.2f, typeof(RoninQuickdraw));
+
+            RN("Iaido Stance",
+               "Root in place, gain 5 Tension per second, exit with empowered slash.",
+               SkillTier.Common, 5f, typeof(RoninIaidoStance));
+
+            RN("Sakura Veil",
+               "0.4s frame-perfect deflect. Successful counter refunds 30 Tension.",
+               SkillTier.Rare, 6f, typeof(RoninSakuraVeil));
+
+            RN("Final Draw",
+               "Spend all Tension for a slow-motion cone slash. Damage scales with spent Tension.",
+               SkillTier.Mythic, 12f, typeof(RoninFinalDraw));
+
+            RN("Moon Cut",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            RN("Still Water",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            RN("Petal Riposte",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            RN("Last Sheath",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            // ─────────────────────────────────────────────────────
+            // RAVAGER (Placeholders)
+            // ─────────────────────────────────────────────────────
+            RV("Rend Hook",
+               "Başlangıç aktif yetenek.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            RV("Bone Maw",
+               "Ritim kuran sınıf aracı.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            RV("Armor Split",
+               "Kontrol penceresi açar.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            RV("Red Wake",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            RV("Hook Slam",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            RV("Gore Path",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            RV("Fury Sink",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            RV("Last Roar",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            // ─────────────────────────────────────────────────────
+            // GUNSLINGER (Placeholders)
+            // ─────────────────────────────────────────────────────
+            GS("Deadeye",
+               "Başlangıç aktif yetenek.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            GS("Quick Reload",
+               "Ritim kuran sınıf aracı.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            GS("Ricochet",
+               "Kontrol penceresi açar.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            GS("Smoke Round",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            GS("Fan Hammer",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            GS("Silver Mark",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            GS("Pierce Shot",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            GS("Last Bullet",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            // ─────────────────────────────────────────────────────
+            // BRAWLER (Placeholders)
+            // ─────────────────────────────────────────────────────
+            BR("Jawbreaker",
+               "Başlangıç aktif yetenek.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            BR("Shoulder In",
+               "Ritim kuran sınıf aracı.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            BR("Ground Lock",
+               "Kontrol penceresi açar.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            BR("Counter Jab",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            BR("Iron Guard",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            BR("Ring Step",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            BR("Uppercut",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            BR("No Mercy",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            // ─────────────────────────────────────────────────────
+            // SUMMONER (Placeholders)
+            // ─────────────────────────────────────────────────────
+            SM("Wisp Call",
+               "Başlangıç aktif yetenek.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            SM("Bone Pact",
+               "Ritim kuran sınıf aracı.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            SM("Rift Totem",
+               "Kontrol penceresi açar.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            SM("Twin Shade",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            SM("Offering",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            SM("Grave Door",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            SM("Rift Swarm",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            SM("Last Familiar",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            // ─────────────────────────────────────────────────────
+            // HEXER (Placeholders)
+            // ─────────────────────────────────────────────────────
+            HX("Wither",
+               "Başlangıç aktif yetenek.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            HX("Hex Brand",
+               "Ritim kuran sınıf aracı.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            HX("Black Thread",
+               "Kontrol penceresi açar.",
+               SkillTier.Common, 5f, null, isImplemented: false);
+
+            HX("Mire Curse",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            HX("Glass Bone",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            HX("Dread Bloom",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Rare, 5f, null, isImplemented: false);
+
+            HX("Witch Knot",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            HX("Last Omen",
+               "Açılış: sınıf deed'i tamamla",
+               SkillTier.Epic, 5f, null, isImplemented: false);
+
+            // ─────────────────────────────────────────────────────
             // NEUTRAL PAsifleri (ClassType.None — herkese açık)
             // ─────────────────────────────────────────────────────
             Passive("Iron Body",
@@ -315,11 +525,29 @@ namespace RIMA
         private SkillData RG(string name, string desc, SkillTier tier, float cd, System.Type type)
             => Add(name, desc, tier, ClassType.Ranger, cd, type, false);
 
+        private SkillData RN(string name, string desc, SkillTier tier, float cd, System.Type type, bool isImplemented = true)
+            => Add(name, desc, tier, ClassType.Ronin, cd, type, false, isImplemented);
+
+        private SkillData RV(string name, string desc, SkillTier tier, float cd, System.Type type, bool isImplemented = true)
+            => Add(name, desc, tier, ClassType.Ravager, cd, type, false, isImplemented);
+
+        private SkillData GS(string name, string desc, SkillTier tier, float cd, System.Type type, bool isImplemented = true)
+            => Add(name, desc, tier, ClassType.Gunslinger, cd, type, false, isImplemented);
+
+        private SkillData BR(string name, string desc, SkillTier tier, float cd, System.Type type, bool isImplemented = true)
+            => Add(name, desc, tier, ClassType.Brawler, cd, type, false, isImplemented);
+
+        private SkillData SM(string name, string desc, SkillTier tier, float cd, System.Type type, bool isImplemented = true)
+            => Add(name, desc, tier, ClassType.Summoner, cd, type, false, isImplemented);
+
+        private SkillData HX(string name, string desc, SkillTier tier, float cd, System.Type type, bool isImplemented = true)
+            => Add(name, desc, tier, ClassType.Hexer, cd, type, false, isImplemented);
+
         private SkillData Passive(string name, string desc, SkillTier tier, System.Type type)
             => Add(name, desc, tier, ClassType.None, 0f, type, true);
 
         private SkillData Add(string name, string desc, SkillTier tier,
-                              ClassType cls, float cd, System.Type type, bool isPassive)
+                              ClassType cls, float cd, System.Type type, bool isPassive, bool isImplemented = true)
         {
             var d = ScriptableObject.CreateInstance<SkillData>();
             d.skillName   = name;
@@ -329,6 +557,7 @@ namespace RIMA
             d.cooldown    = cd;
             d.skillType   = type;
             d.isPassive   = isPassive;
+            d.isImplemented = isImplemented;
             if (d.icon == null && iconRegistry != null)
                 d.icon = iconRegistry.Get(d.skillName);
             db.Add(d);
@@ -354,6 +583,7 @@ namespace RIMA
             foreach (var s in db)
             {
                 if (IsRetiredOfferSkill(s.skillName)) continue;
+                if (!s.isImplemented) continue;
                 if (s.classType == ClassType.None ||
                     s.classType == primary ||
                     (secondary != ClassType.None && s.classType == secondary))

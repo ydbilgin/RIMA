@@ -327,6 +327,7 @@ namespace RIMA
             foreach (var s in allSkills)
             {
                 if (s == null) continue;
+                if (!s.isImplemented) continue;
                 if (s.classType == ClassType.None || s.classType == primary ||
                     (secondary != ClassType.None && s.classType == secondary))
                     list.Add(s);
