@@ -16,12 +16,10 @@ KOD+ASSET işi; .unity dosyası DİSKTE DÜZENLEME YASAK (her şey runtime boots
 
 # FAZLAR
 
-## P0 — Pedestal asset ($imagegen — kullanıcı onaylı üretim)
-`$imagegen` ile TEK sprite: iso düşük yuvarlak taş pedestal/platform diski, üstü düz (bir karakter durabilir),
-slate-gri taş + kenarında ÇOK hafif cyan rün şeridi, 64px-char ölçeğiyle uyumlu (~128×96 görünür), transparan
-arka plan (mevcut imagegen asset-pack pipeline'ınla: cell-split/chroma temizliği). Import: PPU64/Point/no-compress
-→ `Assets/Sprites/Environment/Props/echo_pedestal.png` → `PropDefinitionSO` `EchoPedestal`
-(`Assets/Data/Props/`, footprint 2×2, blocksMovement=true) + PropRegistry kaydı.
+## P0 — Pedestal asset ✅ HAZIR (orchestrator üretti — image_gen quota'na takılma, ÜRETME)
+Asset SAĞLANDI: `STAGING/imagegen/echo_pedestal.png` (128×100, transparan, chroma-temizlenmiş, QC PASS).
+Sadece: `Assets/Sprites/Environment/Props/echo_pedestal.png`'ye KOPYALA + import (PPU64/Point/no-compress)
+→ `PropDefinitionSO` `EchoPedestal` (`Assets/Data/Props/`, footprint 2×2, blocksMovement=true) + PropRegistry kaydı.
 
 ## P1 — Oda verisi: `Assets/Data/Rooms/Special/Chamber_CharSelect.asset` (RoomTemplateSO — GERÇEK asset)
 Editor-script/CreateInstance ile üret (RoomJsonImporter pattern'i serbest). İçerik (crescent referansına göre):
