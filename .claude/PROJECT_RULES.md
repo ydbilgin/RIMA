@@ -19,26 +19,26 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 
 | Durum | Kural |
 |---|---|
-| Kod yazma/düzenleme / dosya batch | → cx_dispatch.py (Codex, background) |
-| Batch doc update / frontmatter ekleme | → cx_dispatch.py (Codex, background) |
-| Git commit | → cx_dispatch.py içinde Codex yapar |
+| Kod yazma/düzenleme / dosya batch | → `cx dispatch` (Codex, background) |
+| Batch doc update / frontmatter ekleme | → `cx dispatch` (Codex, background) |
+| Git commit | → `cx dispatch` içinde Codex yapar |
 | Analiz / cross-ref / plan | → rima-sonnet dispatch |
 | Kısa QC / tek dosya okuma | → orchestrator direkt |
 
-**Dispatch formatı:** STAGING/'e task .md yaz → `python cx_dispatch.py --task-file ... --effort high` (run_in_background: true) → CODEX_DONE.md'den sonuç oku.
+**Dispatch formatı:** STAGING/'e task .md yaz → `cx dispatch --task-file ... --effort high` (run_in_background: true) → CODEX_DONE.md'den sonuç oku. (GLOBAL komut, 2026-06-05: CodexAuthManager `6dbe8d18`; RIMA-lokal cx_dispatch.py EMEKLİ.)
 
 ### Codex Görev Routing
-1. **Tüm Codex görevleri (impl, review, UnityMCP dahil):** `cx_dispatch.py` — sub-agent YOK.
-   ```bash
-   # Bash tool, run_in_background: true
-   python '/f/Antigravity Projeler/2d roguelite/RIMA/cx_dispatch.py' \
-     --task-file STAGING/task.md --effort high
+1. **Tüm Codex görevleri (impl, review, UnityMCP dahil):** `cx dispatch` — sub-agent YOK.
+   ```powershell
+   # PowerShell tool, run_in_background: true — CWD=proje kökü (task/done dosyaları CWD'ye yazılır)
+   cx dispatch --task-file "STAGING/task.md" --effort high
+   # L-task'lerde: --timeout 3600 (default 1200s yetmez)
    ```
-2. **Workflow:** CODEX_TASK.md'ye yaz (cx_dispatch.py yapar) → cx exec → CODEX_DONE.md oku.
-3. **Background zorunlu:** Her cx_dispatch.py çağrısı `run_in_background: true` ile. Orchestrator bloklanmaz, notify gelince okur.
+2. **Workflow:** CODEX_TASK.md'ye yaz (cx dispatch yapar) → cx exec → CODEX_DONE.md oku.
+3. **Background zorunlu:** Her `cx dispatch` çağrısı `run_in_background: true` ile. Orchestrator bloklanmaz, notify gelince okur.
 4. **UnityMCP:** Her profil config'de stdio MCP olarak tanımlı, otonom çalışır. **Unity açık olmalı.**
-5. **Model:** gpt-5.5. Profil otomatik seçilir (cx_dispatch.py — en eski LastRefresh).
-6. **rima-codex agent:** KALDIRILDI. cx_dispatch.py ile replace edildi.
+5. **Model:** gpt-5.5. Profil otomatik seçilir (`cx dispatch` — quota-aware, DISABLED atlar; yönetim: `cx enable/disable <profil>`).
+6. **rima-codex agent:** KALDIRILDI. `cx dispatch` ile replace edildi.
 
 ### Asset Üretim (S59 LOCKED — 2026-05-12)
 - **Pure 2D Top-Down chibi pixel art** mimarisi
