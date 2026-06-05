@@ -31,7 +31,7 @@
 - **⚠️ ROUTING DÜZELTMESİ (kullanıcı):** her işi cx'e VERME — basit işler (HTML/doc/veri-tablo)→Sonnet/ax-3.5-Flash, mekanik Unity→Sonnet-MCP, SADECE gerçek kod→cx [[feedback-orchestrator-delegate-route-by-difficulty]] güçlendirildi.
 
 **⏭️ SONRAKİ (KUYRUK — sıralı):**
-1. **🆕 CharSelect v3.2 RESTYLE [M] → cx — TASK HAZIR = `STAGING/cx_task_charselect_v32_restyle_2026-06-05.md`.** Kullanıcı şikayetleri (flash fazla · butonlar bayat · paneller okunmuyor · çok mavi) → ax-3.5-Flash web-araştırması (Hades/DD/HK/CoM/StS) → Opus kararları: flash SİL→dim-others %40+halka-0.2s-fade · 60-30-10 renk disiplini (cyan SADECE 4 yerde ≤%7, orange %3=unlock/currency/pozitif, gerisi nötr parşömen/demir-gri) · panel `#0D0D11`@%85 tek-katman (mavi gradient gider) · butonlar demir-plaka 9-slice (Pack reuse, asset gen YOK) primary-orange-hover/secondary-taş. Karakter boyut/pozisyon DOKUNULMAZ.
+1. ✅ **CharSelect v3.2 RESTYLE DONE (`5244aa92`, cx runtime-renk-ölçümlü play-verify):** flash silindi (dim-others 0.60 + halka 0.2s-fade-statik) · 60-30-10 (cyan TAM 4 yerde — tarama dökümlü) · panel #0D0D11@0.85 · demir-plaka butonlar (hover orange/cyan + scale). ax-3.5-Flash araştırması=`STAGING/_ax_research_charselect_ui_patterns.md` (Hades/DD/HK/CoM pattern'leri). ⚠️ Assembly-CSharp.csproj'da stale ref (`CliffPlacementRules.cs` yok — Unity console temiz, ilgisiz pre-existing).
 2. **KULLANICI: Unity'de CharSelect feel-test** (v3.2 sonrası; yerleşim → Inspector `Roster Anchors[10]`).
 3. Modüler-props kuyruk (onaylı): [S]flipX→cx · [S]küme prop→Sonnet-MCP (asset gen GATED) · [M]overlay tilemap→cx · [M]checker+auto-placer→Sonnet → sonra B-12.
 4. Echo award play-verify — kullanıcı playtest'inde.
