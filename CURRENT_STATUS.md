@@ -6,7 +6,7 @@
 
 **✅ DONE + COMMIT'Lİ (kuyruktaki 10 işin TAMAMI çözüldü, ~11 commit):**
 1. **T1 Knockdown paketi** (`2d519075`, cx; CODEANIM kararına göre HitImpulse+KnockdownProfile×3+KnockdownDriver+legacy adapter; PlayMode smoke yeşil) + **ax-Opus-4.6 mimari review PASS-WITH-NOTES** (`STAGING/_review_T1_knockdown_axopus.md`; 2 MAJOR yakaladı) + **review-fix'ler** (`aa9e76f7`: OnDisable cleanup=immunity-leak önleme + resistancePreApplied=çifte-resistance önleme; KnockbackTests 6/6).
-2. **T4 Hover tooltip + synergy pulse** (`69ebdd2a`, cx; TooltipSystem artık draft kartlarına bağlı, ink-wash stil, SkillBar pulse; play-probe kanıtlı).
+2. **T4 Hover tooltip + synergy pulse** (`69ebdd2a`, cx; TooltipSystem artık draft kartlarına bağlı, ink-wash stil, SkillBar pulse; play-probe kanıtlı) + **ax-Flash review PASS-WITH-NOTES → fix** (`9f302c42`: TooltipSystem OnDisable/OnDestroy cleanup).
 3. **T2 Ölüm-decal/ghost** (`709c0412`, **ax-OPUS-4.6 YAZDI** — pilot başarılı; bağımsız MobDeathDecal GO Ground/125, auto-attach; canlı kill-test doğrulandı).
 4. **T5 ESC SkillCodexUI MVP** (`74c1213d`, cx; UIManager pause-layer entegre, 10-sınıf seçici, placeholder=YAKINDA muted, ESC öncelik zinciri play-probe'lu).
 5. **T6 SkillDatabase 10 sınıf** (`f31469b4`, ax-Flash; Ronin 4 gerçek skill + 5 sınıf placeholder; `isImplemented` guard = draft'a sızmaz, codex görür).
