@@ -1,0 +1,11 @@
+[RoomQCFix] Verification report
+combat_large_diamond_01: floor=212, builtProps=4, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+combat_large_donut_01: floor=373, builtProps=6, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+chest_large_reliquary_diamond_01: floor=150, builtProps=5, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+combat_large_hourglass_01: floor=303, builtProps=5, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+combat_large_lshape_01: floor=351, builtProps=1, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+elite_large_trident_01: floor=396, builtProps=4, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+combat_large_cross_01: floor=281, builtProps=2, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+combatlarge_twin_basins_01: floor=599, builtProps=1, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+Treasure_01: floor=42, builtProps=4, propOutsideFloor=0, invalidTemplateProps=0, interiorCliffCandidates=0, ok=True
+[RoomQCFix] PASS
