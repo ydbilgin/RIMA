@@ -13,6 +13,7 @@ namespace RIMA.MapDesigner.Props.Auto
             public Vector2Int tilePos;
             public PropDefinitionSO prop;
             public int rotationSteps;
+            public bool flipX;
             public int variantIndex;
         }
 
@@ -80,11 +81,13 @@ namespace RIMA.MapDesigner.Props.Auto
                         out _);
                     if (validation != PropFootprintValidator.ValidationResult.Valid) continue;
 
+                    bool flipX = IsMirrorEligible(prop) && rng.Next(0, 2) == 0;
                     samples.Add(candidate);
                     active.Add(samples.Count - 1);
                     simulated.Add(new PropPlacementData(prop.propId, tilePos)
                     {
                         rotationSteps = rotation,
+                        flipX = flipX,
                         variantIndex = variant
                     });
                     result.Add(new PlacementCandidate
@@ -92,6 +95,7 @@ namespace RIMA.MapDesigner.Props.Auto
                         tilePos = tilePos,
                         prop = prop,
                         rotationSteps = rotation,
+                        flipX = flipX,
                         variantIndex = variant
                     });
 
@@ -188,6 +192,12 @@ namespace RIMA.MapDesigner.Props.Auto
             }
             if (eligible.Count == 0) return null;
             return eligible[rng.Next(eligible.Count)];
+        }
+
+        private static bool IsMirrorEligible(PropDefinitionSO prop)
+        {
+            if (prop == null) return false;
+            return prop.footprintSize.x == prop.footprintSize.y;
         }
 
         private static bool ContainsRole(CompositionRole[] roles, CompositionRole role)

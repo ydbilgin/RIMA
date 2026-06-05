@@ -9,6 +9,7 @@ namespace RIMA.MapDesigner.Props
         public string propDefinitionGuid;
         public Vector2Int tilePosition;
         public int rotationSteps = 0;
+        public bool flipX;
         public string placedByUser;
         public int variantIndex = -1;
 

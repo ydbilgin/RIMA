@@ -581,6 +581,7 @@ namespace RIMA.MapDesigner.Room.Runtime
 
                 SpriteRenderer spriteRenderer = propObject.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = sprite;
+                spriteRenderer.flipX = placement.flipX;
 
                 PropSorterRuntime sorter = propObject.AddComponent<PropSorterRuntime>();
                 sorter.PropDef = def;

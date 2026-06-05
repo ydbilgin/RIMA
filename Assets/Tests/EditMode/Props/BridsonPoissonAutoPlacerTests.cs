@@ -58,6 +58,39 @@ namespace RIMA.Tests.Props
         }
 
         [Test]
+        public void PropPlacementData_FlipX_SerializesRoundTrip()
+        {
+            PropPlacementData placement = new PropPlacementData("mirror", new Vector2Int(2, 3))
+            {
+                flipX = true
+            };
+
+            string json = JsonUtility.ToJson(placement);
+            PropPlacementData reloaded = JsonUtility.FromJson<PropPlacementData>(json);
+
+            Assert.IsTrue(reloaded.flipX);
+            Assert.AreEqual("mirror", reloaded.propDefinitionGuid);
+            Assert.AreEqual(new Vector2Int(2, 3), reloaded.tilePosition);
+        }
+
+        [Test]
+        public void Generate_DeterministicSeed_SameFlipXSequence()
+        {
+            BridsonPoissonAutoPlacer placer = new BridsonPoissonAutoPlacer();
+            RoomTemplateSO template = CreateTemplate(12, 10);
+            List<PropDefinitionSO> pool = new List<PropDefinitionSO> { CreateProp("mirror") };
+
+            List<BridsonPoissonAutoPlacer.PlacementCandidate> run1 = placer.Generate(template, null, pool, 123, 1f);
+            List<BridsonPoissonAutoPlacer.PlacementCandidate> run2 = placer.Generate(template, null, pool, 123, 1f);
+
+            Assert.AreEqual(run1.Count, run2.Count);
+            for (int i = 0; i < run1.Count; i++)
+            {
+                Assert.AreEqual(run1[i].flipX, run2[i].flipX);
+            }
+        }
+
+        [Test]
         public void Generate_RespectsMinDistance()
         {
             BridsonPoissonAutoPlacer placer = new BridsonPoissonAutoPlacer();
