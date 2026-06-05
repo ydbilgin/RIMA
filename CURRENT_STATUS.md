@@ -1,5 +1,18 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-05 GECE — TOOLING KAPANIŞI: cx GLOBAL + ax FLASH-FIX + COMMIT'LER — /clear sonrası İLK BURAYI OKU)
+
+**BU SESSION (tamamı tooling, hepsi commit+push'lu, oyun koduna dokunulmadı):**
+1. **✅ cx dispatch GLOBAL geçişi KAPANDI** (detay aşağıdaki bloğun TOOLING kısmında): CodexAuthManager `6dbe8d18` + RIMA-lokal cx_dispatch.py SİLİNDİ + PROJECT_RULES/`/bootstrap-project`/global `council.md` güncel. Artık SADECE `cx dispatch --task-file ... --effort ...` (proje kökünden; L-task `--timeout 3600`).
+2. **✅ `cx enable/disable` BUG FIX:** PS tek-eleman-unroll → isimler concat oluyordu (`laurethgameyekta`), disable sessizce etkisizdi → `.cx-settings.json` onarıldı + `codex_profile.ps1` fix. **Şu an DISABLED: laurethgame + yekta** (dispatch atlar; explicit `--profile` kullanabilir). "Status OK" kolonu ≠ seçilebilirlik (sadece API sağlığı).
+3. **✅ ax WINDOW-FLASH FIXED** (AntigravityAuthManager `56399bb`, push'lu): kök neden=pythonw+ConPTY yeni görünür pencere (3.1 Pro teşhis) → vbs hidden-console shim (3.5 Flash impl, Opus QC+2 canlı test, kullanıcı flash görmedi). ⚠️ **ax stdout artık iş bitince TEK SEFERDE gelir** — mid-run output dosyası boş = hang DEĞİL. Hesap=round-robin (`.ax_dispatch_state.json`), `--account`/`--no-swap` override.
+4. **✅ RIMA 3 commit (ax-3.5-Flash gruplandı, Opus QC + BOM temizliği filter-branch):** `82548df4` tooling-geçiş · `83062b24` STAGING artifact'leri (46 dosya) · `a303c13b` eski_anchors metadata silme. TMP font asset = glif-testi gürültüsü → restore edildi. Tree temiz (sadece `Assets/_Recovery/*` untracked, bilinçli).
+5. **🆕 DERS/TERCİH:** düşük-risk işte brief KISA (agent akıllı, hedef+pointer yeter); kısıt listesi SADECE geri-dönüşü-zor işlerde + agent'ın bilemeyeceği bağlam her zaman aktarılır [[feedback-brief-short-lowrisk-constraints-destructive]]. Flash commit mesajlarına BOM bulaştırabiliyor → commit sonrası kontrol.
+
+**⏭️ YENİ SESSION İLK İŞ = AŞAĞIDAKİ BLOĞUN "YENİ SESSION" LİSTESİ (değişmedi):** (1) **KULLANICI tam-döngü PLAYTEST** (MainMenu→Chamber WASD/E→kapı→run→boss→victory/ölüm) → his notları → fix listesi. (2) Oturum A kalanı: knockdown paketi [M] → ölüm-decal/ghost [S] → anchor-tool [S]. (3) Oturum B (kullanıcıyla): 3 silah üretimi. (4) Sodaman backlog (Tier-1 hover vb.) sırada bekliyor.
+
+---
+
 ## ⏯️ RESUME (2026-06-05 ÖĞLEDEN SONRA — PLAYABLE ROADMAP + ATTUNEMENT CHAMBER + CODE-ANIM KARARI — /clear sonrası İLK BURAYI OKU)
 
 **3 BÜYÜK KARAR (hepsi council'li, commit `e42b6910`):**
