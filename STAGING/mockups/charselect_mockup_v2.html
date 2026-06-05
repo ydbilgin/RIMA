@@ -481,6 +481,23 @@
   @media (max-aspect-ratio: 1/1){
     .stage{width:100vw;height:56.25vw}
   }
+  #skillTip{
+    position:fixed;
+    z-index:99;
+    max-width:280px;
+    padding:.55rem .7rem;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .12s ease;
+    color:#dce6ef;
+    font-size:13px;
+    line-height:1.38;
+    background:linear-gradient(180deg, rgba(6,12,17,.96), rgba(8,9,16,.94));
+    border:1px solid rgba(0,255,204,.38);
+    box-shadow:0 0 18px rgba(0,0,0,.65), inset 0 0 12px rgba(0,255,204,.05);
+  }
+  [data-desc]{cursor:help}
+  [data-desc]:hover{background:rgba(0,255,204,.06)}
 </style>
 </head>
 <body>
@@ -540,8 +557,8 @@ const classes = [
       s("Iron Charge","Bakis yonune firla, isabette Rage kazan.",false,"I"),
       s("Cleave","Cevresel donus darbesi, Rage ile guclenir.",false,"C"),
       s("Deep Wound","Yakin hedefe ani hasar ve kanama uygular.",false,"D"),
-      s("Sunder Mark","",false,"S"),
-      s("Crippling Blow","",false,"C"),
+      s("Sunder Mark","En yakın düşmanı işaretle: 8s boyunca zırh -%40. Death Blow aktifken -%60. Rage +5.",false,"S"),
+      s("Crippling Blow","Yakındaki düşmana ezici darbe: 3s yavaşlatır ve sersemletir. Death Blow ile zincirlenince %600 execute hasarı.",false,"C"),
       s("Earthsplitter","",true,"E","Açılış: Act 1'i Warblade ile bitir"),
       s("Blade Rush","",true,"B","Açılış: 3 odada hasar almadan ilerle"),
       s("Gravity Cleave","",true,"G","Açılış: 40 düşmanı Sundered halde yen"),
@@ -567,8 +584,8 @@ const classes = [
       s("Fireball","Hedef noktada patlama ve kisa yanma uygular.",false,"F"),
       s("Glacial Spike","Buz hatti yavaslatir ve Frost state kurar.",false,"G"),
       s("Living Bomb","Fitil patlayinca alana hasar verir.",false,"L"),
-      s("Chain Lightning","",false,"C"),
-      s("Blink","",false,"B"),
+      s("Chain Lightning","İlk düşmandan 5 hedefe atlar, Shocked uygular; Chill'li hedefte zincir 7 sekmeye çıkar. Mana 25.",false,"C"),
+      s("Blink","İmleç konumuna anında ışınlan — hasar almadan escape. Mana 20.",false,"B"),
       s("Arcane Blast","",true,"A","Açılış: 3 farklı elementi aynı odada kullan"),
       s("Frozen Orb","",true,"O","Açılış: 40 düşmanı Chill altında yen"),
       s("Prism Beam","",true,"P","Açılış: Act 1'i Elementalist ile bitir"),
@@ -746,12 +763,33 @@ function renderSkills(skills){
       </div>
     </div>`).join("");
   document.getElementById("skillList").innerHTML = rest.map(skill => `
-    <div class="mini-skill ${skill.locked ? "locked" : ""}">
+    <div class="mini-skill ${skill.locked ? "locked" : ""}"${skill.locked ? "" : ` data-desc="${(skill.desc || "Açıklama demo sonrası eklenecek.").replace(/"/g, "&quot;")}"`}>
       <span class="mini-icon">${skill.locked ? "?" : skill.icon}</span>
       <span class="mini-text">${skill.name}</span>
       ${skill.locked ? `<span class="mini-condition">${skill.condition}</span>` : ""}
     </div>`).join("");
 }
+
+// Hover tooltip: unlocked skill rows show their description; locked rows show ONLY the unlock
+// condition inline (user rule: no info for condition-gated skills), so they get no tooltip.
+const skillTip = document.createElement("div");
+skillTip.id = "skillTip";
+document.body.appendChild(skillTip);
+document.addEventListener("mouseover", e => {
+  const row = e.target.closest("[data-desc]");
+  if (!row) { skillTip.style.opacity = "0"; return; }
+  skillTip.textContent = row.dataset.desc;
+  skillTip.style.opacity = "1";
+});
+document.addEventListener("mousemove", e => {
+  if (skillTip.style.opacity !== "1") return;
+  const pad = 14, w = skillTip.offsetWidth, h = skillTip.offsetHeight;
+  let x = e.clientX - w - pad, y = e.clientY + pad; // open toward screen center (panel is on the right)
+  if (x < 8) x = e.clientX + pad;
+  if (y + h > window.innerHeight - 8) y = e.clientY - h - pad;
+  skillTip.style.left = x + "px";
+  skillTip.style.top = y + "px";
+});
 
 function renderButton(c){
   const btn = document.getElementById("mainButton");
