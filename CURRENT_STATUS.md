@@ -1,5 +1,51 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-05 — CHARSELECT v3: 4-ADVISOR COUNCIL + SKILL-ECHO-UNLOCK KARARI + MOCKUP v2 — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı CharSelect konsept görseli (ChatGPT image) + ChatGPT tasarım prompt'u verdi → council inceledi + skill-Echo-unlock kararı + görsel direktifler. **🆕 COUNCIL YAPISI DEĞİŞTİ (kullanıcı istedi): 4 advisor = cx ‖ ax-3.1-Pro ‖ ax-3.5-Flash ‖ OPUS-ADVISOR (ayrı rima-design agent, görseli GÖREBİLEN tek advisor) → Opus orchestrator sentez.** Bu pattern bundan sonra korunmalı.
+
+**✅ KARARLAR (= `STAGING/CHARSELECT_V3_DECISION_2026-06-05.md` — TAM OKU; kullanıcı onayları işli):**
+1. **K1 — Skill'ler Echo ile UNLOCK'LANMAZ (4/4 oybirliği).** NLM canon korundu (12 skill baştan açık, build=run-içi draft). Dead Cells pool-dilution = belgelenmiş anti-pattern. Görseldeki "400 ECHO mastery" REDDEDİLDİ.
+2. **K2 — Currency KESİN (kullanıcı onayladı): rename YOK, UI'da tam-form "◈ Shattered Echo"** (üst bar "◈ 80"); çıplak "Echo" gameplay mekaniklerine rezerve. "Vestige" = fallback-only.
+3. **Mastery panel KESİN (kullanıcı custom):** sağ panel sınıfın TÜM skill'lerini gösterir; açılma-şartlı olanlar KARANLIK + SADECE İSİM + şart metni ("Açılış: Act 1'i Warblade ile bitir"), açıklama gizli. Skill için PARA ASLA.
+4. **Default açık = 4 kalır** (demo); release'de canon (sadece Warblade).
+5. **Fiyatlar canon'a döner: 80/150/200/250 + OR achievement yolu UI'da** ("150 ◈ veya Act1×3"). Kodda 120/180/250 hard-coded (`CharacterSelectScreen.cs:938-947`) → değişecek.
+6. **Ekonomi gap:** run-sonu Shattered Echo kazanım kodu HİÇ YOK (cx kanıtladı) → eklenecek: ~20-40 ◈/run (Act1≈15/Act2≈25/Act3≈40+first-time bonus), tuning pass şart.
+
+**⚠️ cx MEVCUT UNITY KODUNDA DİREKTİF İHLALLERİ BULDU (mockup onayından sonra fix):** seçili scale 1.12× (`CharacterSelectScreen.cs:996-1002`) + dikey bob (`:1075-1085`) + dönen VFX (`:1086-1120`) + sağ panel ScrollRect (`:1159-1201`) + 4+6 dizilim (`:75-87`, 5+5 olacak). Kullanıcı SABİT direktifleri: tek-ekran no-scroll · dikey hareket YOK · ada altı temiz · tile-center snap · boyut sabit · kilitli=OPAK SİYAH · mağaza hissi YOK.
+
+**🚧 IN-FLIGHT:** cx HTML mockup v2 (`STAGING/cx_task_charselect_mockup_v2_2026-06-05.md` → `STAGING/mockups/charselect_mockup_v2.html`, bg job `b7c6otzaf`). Bitince: Opus QC → kullanıcı tarayıcıda açar → reaksiyon/iterasyon → ONAY → cx Unity'ye benzetir (ihlal fix'leri + canon fiyat + ◈ form + stat-bar verisi dahil).
+
+**Advisor ham çıktıları:** `CODEX_DONE_yasinderyabilgin.md` (file:line envanter — değerli) · `STAGING/_council_opus_charselect_v3.md` (görsel kritik + precedent tablosu) · ax çıktıları transcript'te (3.1=iso-chevron+diegetic-labels+Vestige; 3.5=lean-5-fix+Vestige; Opus+cx=tam-form, sentez tam-formu seçti). NLM sorgu = `STAGING/_nlm_charselect_currency.json` (canon: Shattered Echoes + unlock tablosu + "skill meta-unlock YOK").
+
+**SONRAKİ:** mockup QC+iterasyon → Unity task → run-sonu Echo award task → NLM-sync (decision doc). GECE·3 backlog'u (Tier-1 hover/TooltipSystem + sol panel + ESC codex) HÂLÂ bekliyor — aşağıdaki blok.
+
+---
+
+## ⏯️ RESUME (2026-06-04 GECE·3 — SODAMAN COUNCIL + SKILL-SELECTION HOVER/UX PLANI (ANALİZ/KARAR, KOD YOK) — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı Sodaman'ı (Steam bullet-heaven roguelite, app/2178990) incelettirdi + "skill seçerken **hover** gibi şeyleri nasıl ekleriz" + "council ile ne alınabilir bak" dedi. Sonra: "her şey bitince **handoff bırak, status+memory güncelle, yeni session'da devam ederiz**." → Bu session = SADECE analiz/karar; **KOD YOK**, sonraki session implement eder.
+
+**✅ YAPILAN — /council (cx yekta ‖ ax-3.1-Pro ‖ ax-3.5-Flash → Opus sentez):**
+- **Karar dökümanı = `STAGING/SODAMAN_LEARNINGS_DECISION_2026-06-04.md`** (TAM oku — TAKE/SKIP tablosu + 3-tier hover planı + sol panel + ESC codex + currency + öncelikli backlog). Advisor ham çıktıları: `STAGING/_council_{cx,q_31pro,q_35flash}_sodaman.md` + `CODEX_DONE_yekta.md` (cx'in file:line kanıtlı envanteri — ÇOK değerli).
+
+**🔑 EN KRİTİK BULGU (cx):** RIMA'nın hover/draft makinesi ~%80 HAZIR. `SkillOfferUI` zaten: sabit raycast hitbox + child `VisualRoot` hover-scale/lift (`:391-402`,`:752-825`), rarity-glow (`:403-418`), select-flash (`:445-456`), select-SFX, statik ChainChip synergy. **TEK BÜYÜK BOŞLUK: `TooltipSystem` (`TooltipSystem.cs:84-218`, name/tier/desc/CD tam yazılı) HİÇBİR yere bağlı DEĞİL (rg=0 caller).** = en yüksek değer/efor kazanımı.
+
+**SODAMAN'DAN:** AL = renk-kodlu skill-aileleri okunabilirliği (RIMA 10 class-accent'e eşle) + hover'da synergy-sinyali (mevcut ChainWindowTracker reuse) + 3-kartı "Rift Seal" diye re-skin. SKIP = sibernetik augment/body-parts (lore çatışır). DEFER = 40-kart deck-meta, 8-silah. Hub = CharacterSelect roster-room zaten var.
+
+**⏭️ SONRAKİ SESSION — ÖNCELİKLİ BACKLOG (decision doc §6):**
+1. **Tier-1 hover (S, 1 cx):** `TooltipSystem`'i draft kartlarına bağla (`CardJuiceHandler` insertion-point; opak kutu YOK → ink-wash + cyan hairline) + hover'da eşleşen equipped slot'u pulse (ChainWindowTracker + `DraftManager.OwnedActiveSkillNames`) + hover-SFX (klip gerek).
+2. **Sol skill paneli MVP (M):** yeni `SkillPanelToggleUI` (HUDController'a şişirme), sadece ikon+CD, `SkillBarUI` controller-resolve + `*_SkillController.GetAllSlots` reuse. **⚠️ AÇIK KARAR: toggle tuşu** — TAB zaten `CharacterSheetUI` build-overview'da DOLU → (A) mevcut TAB sheet'i bu diegetic sol panele yükselt [ÖNERİ] / (B) yeni GameAction+tuş (Alt-hold veya C).
+3. **ESC `SkillCodexUI` MVP (M):** tam-ekran, arka blur+desat, `UIManager` pause-layer (timeScale'i KENDİ yazma), `CharacterSelectScreen` skill-row + `SkillDatabase.GetAll()` reuse. **⚠️ BLOKER: SkillDatabase sadece Warblade/Elementalist/Shadowblade/Ranger kayıtlı** — diğer 6 sınıf yok → MVP = kayıtlı sınıflar, sonra #5 ile tam 10. Lock = sadece class-level (per-skill lock kodu yok).
+4. Tier-2 Rift-Arc tether çizgisi + Tier-3 kart re-skin (panel #2'den sonra).
+5. Kalan 6 sınıfı `SkillDatabase`'e kaydet (tam codex'i açar).
+
+**⚠️ KULLANICIYA AÇIK KARARLAR:** (1) sol-panel tuşu (A mevcut-TAB-yükselt vs B yeni-tuş); (2) currency adı — "Echo" estetik OK ama **isim ÇAKIŞMASI var:** meta-unlock-currency Echo (`CharacterSelectScreen:37-39`) ↔ gameplay "shadow Echo" mekaniği AYNI isim; run-parası ise Gold/Altın (`PlayerEconomy`). Global rename UNSAFE; gerekirse SADECE meta-currency rename (örn "Vestige") + NLM canon. → bunlar GATED, kod yok.
+
+**ROUTING:** implement → cx (yekta bu session güvenilir). council = cx ‖ ax-3.1 ‖ ax-3.5 → Opus. ax serileştirme korundu (3.1 sonra 3.5, settings.json model-swap+restore). Unity D3D11.
+
+---
+
 ## ⏯️ RESUME (2026-06-04 GECE·2 — UI REDESIGN DEVAMI + CHARSELECT v2 "ROSTER ROOM" + cx PARALEL/ROUTING — /clear sonrası İLK BURAYI OKU)
 
 **BAĞLAM:** Kullanıcı 3 ekranı (MainMenu/Settings/CharSelect) redesign + sonra CharSelect'i **diegetic "roster room"**a evirdi (Image #9 referansı: karakterler bir odada durur, tıklayınca seçilir). Council-driven (cx + ax-3.1-Pro + ax-3.5-Flash → Opus sentez). Her iş play-verified + **dual-QC** (council üyeleri sırayla onayladı). Hepsi commit'li.
@@ -505,3 +551,8 @@ Arşivlenen bloklar (başlık + tarih):
 - ## 🔒 Çözülen çelişkiler — canonical lock (2026-05-28, NLM tespit + kullanıcı onayı)
 - ## ✅ S113 KAPANIŞ özet
 - ## ⚙️ Sonraki büyük scope (kullanıcı onayı sonrası)
+
+---
+
+> 📎 [Gemini 3.5 Flash — 2026-06-05] Sodaman arastirma dokumanini (`SODAMAN_LEARNINGS_DECISION_2026-06-04.md`) `F:\laurethstudio` klasorune kopyaladim. Bu pointer'i da ben ekledim (Claude degil).
+

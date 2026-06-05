@@ -1,0 +1,301 @@
+{
+  "answer": "The canonical name for the permanent meta-currency is **Shattered Echoes** (or simply \"Echoes\") [1]. Between runs in the Hub, Echoes are strictly used for permanent meta-progression, which includes:\n*   **Unlocking new playable classes:** The primary currency sink, representing the recovery of your shattered identity fragments [1]. \n*   **Hub Upgrades:** You spend Echoes at NPCs like **The Cartographer (100 Echoes)** to permanently upgrade your map visibility so you can see one room further ahead, and **Vrel (50 Echoes)** to craft random augments [2], [1].\n\n**The \"Echo\" Naming Collision**\nThe word \"Echo\" is heavily overloaded across completely different mechanical systems in RIMA's design documents. Here is everything named Echo:\n*   **Currency:** **Shattered Echoes**, the permanent meta-currency [1].\n*   **Difficulty Mode:** **Echo Mode**, the easy/assist difficulty offering -25% enemy HP and -15% cooldowns [3].\n*   **Mechanics:** **Echo Imprints** (temporary passive skill choices offered in drafts) [4], the **Shadow Echo** (the Shadowblade's translucent indigo mimic) [5], and **Cross-Class Echoes** (the visual silhouette manifestation of a cross-class proc) [6].\n*   **Bosses:** **The Echo Twin** (the 2-phase Act 2 Boss) [7] and **Fracture Echoes** (late-game boss variants you must defeat for specific rewards) [8].\n*   **Mobs:** The **Chain Warden Echo** (an Act 1 mobility punisher) [9], the **Echo Hound** (an Act 2 grunt that leaves an afterimage) [10], and the **Echo Striker** (an Act 3 skirmisher that copies your last used skill) [11].\n\n**Canonical Skill Unlock Progression**\n**Skills are not unlocked with meta-currency between runs** [12]. RIMA has no permanent skill tree [12]. Instead, every class has a predefined pool of exactly 12 common skills available from the start. You build your kit and upgrade your skills (from Common to Legendary) entirely **in-run** via a *Slay the Spire*-style 3-choice draft after clearing rooms [13]. Since upgrades cost no resources and are drafted directly, your build resets completely upon death [14]. \n\n**Canonical Character Unlock Progression**\nCharacters are unlocked permanently using Shattered Echoes, but the game also provides an alternate path to unlock them via specific gameplay achievements [15]:\n*   **Warblade:** Unlocked by default [15].\n*   **Elementalist & Ranger:** 80 Echoes each [15].\n*   **Shadowblade:** 150 Echoes **OR** complete Act 1 three times [15].\n*   **Ravager:** 150 Echoes **OR** kill the Act 2 boss with the Warblade [15].\n*   **Ronin:** 150 Echoes **OR** kill the Act 2 boss with the Shadowblade [15].\n*   **Gunslinger:** 200 Echoes **OR** reach Act 2 with the Ranger [15].\n*   **Brawler:** 200 Echoes **OR** reach Act 2 with the Ravager [15].\n*   **Summoner:** 200 Echoes **OR** reach Act 2 in three consecutive runs [15].\n*   **Hexer:** 250 Echoes **AND** complete a run with the Elementalist [15].",
+  "conversation_id": "1fa77821-1000-4b15-8230-8e2602c0ed82",
+  "sources_used": [
+    "a1e375ae-74ea-48ed-aa91-74a3e74acbde",
+    "01de5ae4-a2bb-460a-9ea9-24ebb7742f30",
+    "9f2b02f1-d921-47a4-996e-a3f2be2810a4",
+    "96c5b5f5-b2e7-4544-903d-a53ae076d38f",
+    "2bedd29c-efe8-42e2-86db-57fcab36f83f",
+    "0263dc65-cc65-4297-8e36-2bc6f8e1b0c3",
+    "4039bb1b-9865-4559-aaef-26ebfb2537a7",
+    "c41be646-f5cb-4c02-819b-fc647985dba6",
+    "ca50a675-6ec7-48dc-94d9-b35ee7e97288",
+    "41aeac19-283c-4c14-a903-9b9964d2c390"
+  ],
+  "citations": {
+    "1": "a1e375ae-74ea-48ed-aa91-74a3e74acbde",
+    "2": "01de5ae4-a2bb-460a-9ea9-24ebb7742f30",
+    "3": "9f2b02f1-d921-47a4-996e-a3f2be2810a4",
+    "4": "a1e375ae-74ea-48ed-aa91-74a3e74acbde",
+    "5": "96c5b5f5-b2e7-4544-903d-a53ae076d38f",
+    "6": "2bedd29c-efe8-42e2-86db-57fcab36f83f",
+    "7": "0263dc65-cc65-4297-8e36-2bc6f8e1b0c3",
+    "8": "9f2b02f1-d921-47a4-996e-a3f2be2810a4",
+    "9": "4039bb1b-9865-4559-aaef-26ebfb2537a7",
+    "10": "c41be646-f5cb-4c02-819b-fc647985dba6",
+    "11": "4039bb1b-9865-4559-aaef-26ebfb2537a7",
+    "12": "ca50a675-6ec7-48dc-94d9-b35ee7e97288",
+    "13": "a1e375ae-74ea-48ed-aa91-74a3e74acbde",
+    "14": "41aeac19-283c-4c14-a903-9b9964d2c390",
+    "15": "9f2b02f1-d921-47a4-996e-a3f2be2810a4"
+  },
+  "references": [
+    {
+      "source_id": "a1e375ae-74ea-48ed-aa91-74a3e74acbde",
+      "citation_number": 1,
+      "cited_text": "Run'dan run'a taşınan ilerleme sistemi. Roguelite'ta her ölüm \"sıfırlama\" değil — bazı şeyler kalıcı olarak açılıyor. Shattered Echoes = meta para birimi. Run boyunca düşman öldürmekten ve oda tamamlamaktan toplanır, Hub'a dönünce kalıcı olarak birikiyor. Echoes ne için kullanılır: Yeni class'ların kilidi açma (bakınız §9) Hub NPC'lerinden kalıcı küçük güçlendirmeler Yırtık haritayı zenginleştiren upgrade'ler (Cartographer) Lore bağı: Echoes = Fracturing'de saçılan class \"yüzleri.\" Toplayınca bütünleşiyorsun. Her yeni class açılışı bir anı parçasını geri getiriyor."
+    },
+    {
+      "source_id": "01de5ae4-a2bb-460a-9ea9-24ebb7742f30",
+      "citation_number": 2,
+      "cited_text": "<cited_table> -------------------------------------------------------------------------------- META-PROGRESSİON (Temel) Echoes Harcama <cited_table>",
+      "cited_table": {
+        "num_columns": 2,
+        "rows": [
+          [
+            "Saldırı",
+            "Mekanik"
+          ],
+          [
+            "Fracture Beam",
+            "Yavaş dönen lazer çizgisi"
+          ],
+          [
+            "Void Shard",
+            "3 yönde projectile"
+          ],
+          [
+            "Sovereign Step",
+            "Boss teleport"
+          ],
+          [
+            "Gravity Pull",
+            "Oyuncuyu kenara çeker"
+          ]
+        ]
+      }
+    },
+    {
+      "source_id": "9f2b02f1-d921-47a4-996e-a3f2be2810a4",
+      "citation_number": 3,
+      "cited_text": "-------------------------------------------------------------------------------- ZORLUK MODLARI <cited_table> -------------------------------------------------------------------------------- ANİMASYON BÜTÇESİ <cited_table>",
+      "cited_table": {
+        "num_columns": 3,
+        "rows": [
+          [
+            "Mod",
+            "Açıklama",
+            "Unlock"
+          ],
+          [
+            "Echo",
+            "Düşman HP -%25, cooldown -%15",
+            "Başlangıçta"
+          ],
+          [
+            "Rift",
+            "Standart",
+            "Başlangıçta"
+          ],
+          [
+            "Fracture",
+            "Düşman HP +%50, Elite frekansı ×2",
+            "Act 3'e ulaş"
+          ],
+          [
+            "Void",
+            "Ölünce: hub'daki tüm meta-progress sıfırlanır",
+            "Tüm 10 class ile run bitir"
+          ]
+        ]
+      }
+    },
+    {
+      "source_id": "a1e375ae-74ea-48ed-aa91-74a3e74acbde",
+      "citation_number": 4,
+      "cited_text": "Offer garantisi: 3 seçenek içinde minimum 1 tanesi \"yeni skill VEYA tier upgrade\" olmalı. Echo Imprint Sunusu: Her 3 combat odada bir kez, normal Draft'a EK olarak sunulur. 3 kategori: Strike Form (LMB), Outlet Form (RMB), Surge Form (Dash/Resource). Run başına max 4 Imprint. Tag Sinerji Bonusu: Aktif 6 skill slotundan 2 tanesi aynı tag taşıyorsa otomatik pasif bonus aktive olur (draft sonrası hesaplanır). Tam tablo: TASARIM/ROOM_MECHANICS.md . Aktif Slot Sistemi Her class'ın 12 skill'i var ama bir run'da hepsini alamazsın — kasıtlı. Draft kararları anlamlı kalsın diye slot sistemi sınırlı:"
+    },
+    {
+      "source_id": "96c5b5f5-b2e7-4544-903d-a53ae076d38f",
+      "citation_number": 5,
+      "cited_text": "-------------------------------------------------------------------------------- status: REFERENCE faz: 1 tarih: 2026-05-06 ozet: \"Shadowblade Echo sistemi\" Shadowblade — Echo System Status: LOCKED 2026-05-06 What Is the Echo A translucent indigo Shadowblade copy that mirrors the player's basic attacks with a 0.4s delay at 50% damage. Enemies see it and split attention (~30% aggro weight) but cannot hit it. Maximum 1 Echo active at a time (skill tree node can push to 2 at 30% damage penalty). Echo Creation — Veil Thread Weave"
+    },
+    {
+      "source_id": "2bedd29c-efe8-42e2-86db-57fcab36f83f",
+      "citation_number": 6,
+      "cited_text": "🎯 BULK LİSTE (vertical, mob/boss-art HARİÇ): WAVE 1 depth-bundle: ChainWindowTracker+Sundered-state · Sundered visual tell (shard+cyan-crack+SFX) · execute-heal (M204) · draft chain-UI (M68) · OWNS/AVOIDS gate. WAVE 2 cross-class Echo: siyah silüet summon (ranged=uzaktan / melee=dash-strike-vanish + puf VFX), STAGING/CROSS_CLASS_DESIGN_SPEC.md (Sundered-Echo lore). WAVE 3: Gate reward/route preview + Map-Fragment forecast · Brink-reacts (cyan-leak/oda) · HUD bar-wire · floating-room edge-framing (env-imagegen burada). WAVE 4: boss-tragedy authored phase-break beats + hikâye revizyon . WAVE 5: Weapon Forms (Phase-2). CLOSE: B5 full F5 play-verify · commit + status/memory + NLM sync ."
+    },
+    {
+      "source_id": "0263dc65-cc65-4297-8e36-2bc6f8e1b0c3",
+      "citation_number": 7,
+      "cited_text": "Ölüm sahnesi (2.5s): Sovereign çöker. \"...sonunda boş.\" Zemin çatlar → secondary class seçimi açılır (Faz 2 unlock cue; Faz 1'de placeholder credits). Özet tablosu güncelleme: <cited_table> -------------------------------------------------------------------------------- ACT 2 BOSS — The Echo Twin (2 Faz) Tema: Oyuncunun dual-class dönüşümünün yansıması. İki varlık — ama tek beden. Lore: Fracturing'de iki kimliği aynı anda taşıyan biri. İkisi de çıkmak istiyor. Oyuncu dual-class'ını ustalıkla kullanarak bu ikiliği bozabilir.",
+      "cited_table": {
+        "num_columns": 4,
+        "rows": [
+          [
+            "Boss",
+            "Faz Sayısı",
+            "Geçiş HP",
+            "Süre Hedefi"
+          ],
+          [
+            "Act 1 — Penitent Sovereign",
+            "3",
+            "%66 / %33",
+            "3-4 dk"
+          ]
+        ]
+      }
+    },
+    {
+      "source_id": "9f2b02f1-d921-47a4-996e-a3f2be2810a4",
+      "citation_number": 8,
+      "cited_text": "Ne VAR (Faz 4'e ek): Act 3 tam (10-11 oda) Final Boss — The Architect (4 faz) Fracture Sovereign tam (3 faz) Fracture Echoes tüm bosslar (5 echo/boss × 4 boss = 20 echo toplam) 90 cross-class pasif + 90 cross-class ultimate (10×9 tam set) Grudge / Nemesis sistemi Zorluk modları (Echo / Rift / Fracture / Void) +3 mob: Rift Maw, Class Mimic, Remnant Host 2 ek Spirit: Void Seer, Fallen Champion Ancient Relic spirit (güçlü ama bedelli) Lokalizasyon altyapısı (TR/EN) Not: Tüm 10 class Faz 3-4'te zaten eklenmiş. Bu fazda yeni class YOK."
+    },
+    {
+      "source_id": "4039bb1b-9865-4559-aaef-26ebfb2537a7",
+      "citation_number": 9,
+      "cited_text": "-------------------------------------------------------------------------------- M05 — Chain Warden Echo Role: Charger / Mobility Punisher Fracture Trait: Eski hapishane muhafızının yankısı; zincirleri rift enerjisinden örülmüş. Silüet: 128×128, ağır zırh göğsü, omuzlardan 2 zincir uçuşan tendril. Auto-attack: Yok. Skill 1 — Triple Chain: 0.7s tell, 3 zincir 45° yelpazede (6m menzil). Hit = 1.5s slow %50. Skill 2 — Chain Pull: 1.0s tell, Warb 4m boss yönüne çekilir + 20 hasar. Dash-immune. Pull sonrası 1.2s window. Codex Adjustment: Chain Pull → dash-immune ama Iron Counter/parry ile kırılabilir. Warblade Counter: Triple Chain → dash side. Chain Pull → erken parry timing veya pull sonrası burst. Faz 2 Note: Pull dash-immune → Ranger/Gunslinger için gerçek tehdit. Synergy: Seam Crawler + Warden = en yüksek gerilim. ERKEN ODALARDA BERABER SPAWN YASAK."
+    },
+    {
+      "source_id": "c41be646-f5cb-4c02-819b-fc647985dba6",
+      "citation_number": 10,
+      "cited_text": "<cited_table> Yeni Elite (160px) <cited_table> Act 2 Mob Dağılımı <cited_table> --------------------------------------------------------------------------------",
+      "cited_table": {
+        "num_columns": 4,
+        "rows": [
+          [
+            "Mob",
+            "Act",
+            "Mekanik",
+            "Sprite"
+          ],
+          [
+            "Echo Hound",
+            "2, 3",
+            "Hızlı blink + echo afterimage (iki noktadan hasar), ses çeker",
+            "❌ Üretilecek"
+          ]
+        ]
+      }
+    },
+    {
+      "source_id": "4039bb1b-9865-4559-aaef-26ebfb2537a7",
+      "citation_number": 11,
+      "cited_text": "Act 3'ün Öğrettikleri: Her düşman bir soru sormak zorunda → oyuncu her odada aktif düşünmeli Pattern okuma → tepki verme değil, öngörme Susturulan skill → alternatif -------------------------------------------------------------------------------- NORMAL DÜŞMANLAR (Act 3) 1. Echo Striker Tür: Skirmisher / Emergent Combat Rolü: Mirror Combat — en son kullanılan skill'i taklit eder Lore: Savaş sesini emdi. Artık o sesin ta kendisi. Oyuncuya Sorduğu Soru: \"Kullandığın skill'den kaçabilir misin?\" Ana Davranış: Oyuncunun en son kullandığı skill'in basit bir versiyonunu kopyalar Kopyalanmış skill oyuncuya yönelir (hasar orijinalin %60'ı) Copy 4s gecikmeyle gelir — süre içinde öldürülürse copy iptal Zorladığı Build: AoE skill → kendi AoE'si kendine döner; mobility skill → echo dash Zayıf Yönü: 4s pencerede öldürülmeli — burst gerekli Boyut: 80px, oyuncunun mirroru gibi görünür ama bozuk"
+    },
+    {
+      "source_id": "ca50a675-6ec7-48dc-94d9-b35ee7e97288",
+      "citation_number": 12,
+      "cited_text": "-------------------------------------------------------------------------------- status: LOCKED faz: 1 tarih: 2026-05-03 ozet: \"Skill offer sistemi kararı\" SKILL OFFER SYSTEM DECISION Date: 2026-05-03 Status: LOCKED FOR PHASE 1 SYSTEM DESIGN Source: STAGING/SKILL_SYSTEM_ANALYSIS_PROMPT_NOTES.md + existing S43/R4 locks Decision RIMA should not use a visible skill tree screen for run progression. The production model is: Room reward offers 3 choices. Choices can be a new active skill, an upgrade for an owned active skill, a passive/echo, or a tag synergy. The core identity of each skill stays stable. Common/Rare upgrades mostly add modifiers. Epic upgrades can add a side mechanic. Legendary upgrades can rarely change behavior."
+    },
+    {
+      "source_id": "a1e375ae-74ea-48ed-aa91-74a3e74acbde",
+      "citation_number": 13,
+      "cited_text": "-------------------------------------------------------------------------------- 2. CORE LOOP Run Akışı Oyuncu Güç Eğrisi <cited_table> Skill Draft Sistemi Her combat odayı temizledikten sonra 3 seçenek sunulur: Yeni skill ekle — mevcut primary/secondary skill havuzundan Mevcut skilli tier atlatır — Common → Rare → Epic → Legendary Echo Imprint — LMB / RMB / Dash döngüsünü güçlendiren pasif",
+      "cited_table": {
+        "num_columns": 2,
+        "rows": [
+          [
+            "Aşama",
+            "Hissettirilen Şey"
+          ],
+          [
+            "Act 1 başlangıcı",
+            "\"Bu class ne yapıyor, anlıyorum.\""
+          ],
+          [
+            "Act 1 ortası",
+            "\"Build şekillenmeye başladı.\""
+          ],
+          [
+            "Act 1 boss sonrası",
+            "\"Tamam. Oyun şimdi başka bir şeye dönüştü.\""
+          ],
+          [
+            "Act 2 ortası",
+            "\"Ben artık build kuruyorum.\""
+          ],
+          [
+            "Geç Act 2",
+            "\"Bu skill kombinasyonu... beklemedim.\""
+          ],
+          [
+            "Act 3",
+            "\"Bu build insane.\""
+          ]
+        ]
+      }
+    },
+    {
+      "source_id": "41aeac19-283c-4c14-a903-9b9964d2c390",
+      "citation_number": 14,
+      "cited_text": "-------------------------------------------------------------------------------- 3. Upgrade Sistemi Karar: Her skill maksimum 3 upgrade slotu alir. Upgrade draft'tan gelir. Upgrade icin resource harcanmaz. 3 slot dolduktan sonra yeni upgrade otomatik uygulanmaz. 3 slot doluysa REPLACE prompt acilir. Oyuncu eski upgrade'i dusurup yenisini almayi secmelidir. Echo Imprint sisteminden ayridir. Echo Imprint ayrimi: <cited_table>",
+      "cited_table": {
+        "num_columns": 3,
+        "rows": [
+          [
+            "Sistem",
+            "Limit",
+            "Scope"
+          ],
+          [
+            "Skill upgrade",
+            "Skill basina 3 upgrade.",
+            "Tek skill davranisi ve statlari."
+          ],
+          [
+            "Echo Imprint",
+            "Run basina 4 imprint.",
+            "Ayrica tanimli run-level imprint sistemi."
+          ]
+        ]
+      }
+    },
+    {
+      "source_id": "9f2b02f1-d921-47a4-996e-a3f2be2810a4",
+      "citation_number": 15,
+      "cited_text": "Build Eksenleri: Patient DoT / Hex Overload / Soul Burst -------------------------------------------------------------------------------- CLASS UNLOCK SİSTEMİ <cited_table>",
+      "cited_table": {
+        "num_columns": 2,
+        "rows": [
+          [
+            "Class",
+            "Nasıl Açılır"
+          ],
+          [
+            "Warblade",
+            "Başlangıçta açık"
+          ],
+          [
+            "Elementalist",
+            "80 Echo"
+          ],
+          [
+            "Ranger",
+            "80 Echo"
+          ],
+          [
+            "Shadowblade",
+            "150 Echo VEYA Act 1'i 3 kez tamamla"
+          ],
+          [
+            "Ravager",
+            "150 Echo VEYA Warblade ile Act 2 boss öldür"
+          ],
+          [
+            "Ronin",
+            "150 Echo VEYA Shadowblade ile Act 2 boss öldür"
+          ],
+          [
+            "Gunslinger",
+            "200 Echo VEYA Ranger ile Act 2'ye ulaş"
+          ],
+          [
+            "Brawler",
+            "200 Echo VEYA Ravager ile Act 2'ye ulaş"
+          ],
+          [
+            "Summoner",
+            "200 Echo VEYA üst üste 3 run'da Act 2'ye ulaş"
+          ],
+          [
+            "Hexer",
+            "250 Echo + Elementalist ile run bitir"
+          ]
+        ]
+      }
+    }
+  ]
+}

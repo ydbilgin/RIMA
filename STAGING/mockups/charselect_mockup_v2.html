@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIMA — Karakter Seç v3 Mockup</title>
+<style>
+  :root{
+    --cyan:#00ffcc;
+    --cyan-soft:rgba(0,255,204,.34);
+    --cyan-faint:rgba(0,255,204,.12);
+    --orange:#e89020;
+    --orange-soft:rgba(232,144,32,.34);
+    --void:#13051e;
+    --void-deep:#05030a;
+    --stone:#718385;
+    --stone-dark:#1b2630;
+    --ink:#d8dfec;
+    --muted:#8a92a8;
+    --paper:rgba(10,14,20,.42);
+    --line:rgba(0,255,204,.38);
+    --warn:#d09550;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#05030a;color:var(--ink)}
+  body{display:grid;place-items:center;font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
+  button{font:inherit}
+  .stage{
+    position:relative;
+    width:min(100vw,160vh);
+    height:min(100vh,56.25vw);
+    aspect-ratio:16/9;
+    overflow:hidden;
+    background:
+      radial-gradient(58% 62% at 50% 44%, rgba(0,255,204,.18), transparent 42%),
+      radial-gradient(34% 42% at 14% 17%, var(--orange-soft), transparent 58%),
+      radial-gradient(34% 42% at 86% 17%, var(--orange-soft), transparent 58%),
+      radial-gradient(92% 72% at 50% 20%, #2a1040 0%, #12071f 48%, #05030a 100%);
+    border:1px solid rgba(0,255,204,.24);
+    box-shadow:0 0 55px #000;
+  }
+  .room-bg{
+    position:absolute;
+    inset:7.5% 20.8% 12.6% 20.8%;
+    background:url("../../Assets/Resources/UI/RIMA/CharacterSelect/room_bg.png") center 41%/cover no-repeat;
+    opacity:.72;
+    filter:saturate(.84) contrast(.98) brightness(.66);
+    mask-image:linear-gradient(to bottom, transparent 0%, #000 9%, #000 79%, transparent 99%);
+  }
+  .void-floor{
+    position:absolute;
+    left:0;right:0;bottom:0;height:28%;
+    background:linear-gradient(to bottom, transparent, #05030a 45%, #05030a);
+    pointer-events:none;
+  }
+  .light-wash{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(28% 38% at 50% 48%, rgba(0,255,204,.2), transparent 74%),
+      radial-gradient(14% 30% at 19% 24%, rgba(232,144,32,.26), transparent 70%),
+      radial-gradient(14% 30% at 81% 24%, rgba(232,144,32,.26), transparent 70%);
+    pointer-events:none;
+  }
+  .topbar{
+    position:absolute;left:0;right:0;top:0;height:8%;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 2.65%;
+    background:linear-gradient(to bottom, rgba(4,7,12,.72), rgba(4,7,12,.2));
+    border-bottom:1px solid rgba(0,255,204,.18);
+    z-index:20;
+  }
+  .brand{
+    color:#dcefff;
+    font-weight:800;
+    letter-spacing:.2em;
+    font-size:clamp(13px,1.7vw,28px);
+    text-shadow:0 0 14px rgba(0,255,204,.42);
+  }
+  .brand span{color:var(--cyan)}
+  .wallet{
+    color:var(--cyan);
+    font-weight:800;
+    letter-spacing:.09em;
+    font-size:clamp(12px,1.35vw,21px);
+    padding:.38em .7em;
+    border:1px solid rgba(0,255,204,.42);
+    background:rgba(4,9,14,.45);
+    box-shadow:inset 0 0 14px rgba(0,255,204,.08), 0 0 16px rgba(0,255,204,.13);
+  }
+  .side-panel{
+    position:absolute;
+    top:13.4%;
+    bottom:13.7%;
+    width:21.2%;
+    z-index:18;
+    padding:1.1% 1.15%;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.05), transparent 24%),
+      linear-gradient(180deg, rgba(5,11,16,.56), rgba(8,8,15,.36));
+    border:1px solid rgba(154,178,184,.34);
+    outline:1px solid rgba(0,255,204,.2);
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,.62),
+      inset 0 0 28px rgba(0,255,204,.05),
+      0 0 34px rgba(0,0,0,.56);
+    overflow:hidden;
+  }
+  .side-panel:before,.side-panel:after{
+    content:"";
+    position:absolute;
+    width:25px;height:25px;
+    border-color:var(--line);
+    pointer-events:none;
+  }
+  .side-panel:before{left:7px;top:7px;border-left:2px solid;border-top:2px solid}
+  .side-panel:after{right:7px;bottom:7px;border-right:2px solid;border-bottom:2px solid}
+  .left-panel{left:1.55%}
+  .right-panel{right:1.55%}
+  .panel-title{
+    margin:0 0 .68rem;
+    color:var(--cyan);
+    font-size:clamp(10px,.98vw,15px);
+    font-weight:800;
+    letter-spacing:.19em;
+    text-align:center;
+    text-shadow:0 0 12px rgba(0,255,204,.36);
+  }
+  .class-name{
+    color:var(--orange);
+    font-weight:900;
+    letter-spacing:.05em;
+    font-size:clamp(19px,2vw,31px);
+    margin:.2rem 0 .28rem;
+    text-transform:uppercase;
+  }
+  .tags{
+    display:flex;
+    gap:.32rem;
+    flex-wrap:wrap;
+    margin-bottom:.56rem;
+  }
+  .tag{
+    border:1px solid rgba(0,255,204,.28);
+    color:#aad7d3;
+    background:rgba(0,255,204,.06);
+    font-size:clamp(8px,.72vw,11px);
+    font-weight:700;
+    letter-spacing:.14em;
+    padding:.2rem .34rem;
+  }
+  .motto{
+    color:#e5b27c;
+    font-size:clamp(10px,.95vw,14px);
+    line-height:1.25;
+    margin:.35rem 0 .5rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .desc{
+    color:#c9d0df;
+    font-size:clamp(10px,.86vw,13px);
+    line-height:1.35;
+    min-height:2.65em;
+    margin:0 0 .58rem;
+  }
+  .resource{
+    border-top:1px solid rgba(154,178,184,.2);
+    border-bottom:1px solid rgba(154,178,184,.2);
+    padding:.5rem 0;
+    margin-bottom:.64rem;
+    color:#aeb8c8;
+    font-size:clamp(9px,.78vw,12px);
+    line-height:1.32;
+  }
+  .resource b{color:var(--cyan);letter-spacing:.1em}
+  .unlock-note{
+    color:#d1a674;
+    font-size:clamp(9px,.76vw,12px);
+    line-height:1.28;
+    margin:.45rem 0 .58rem;
+    min-height:2.45em;
+  }
+  .stat-list{display:grid;gap:.42rem;margin-top:.3rem}
+  .stat{
+    display:grid;
+    grid-template-columns:39% 1fr;
+    align-items:center;
+    gap:.58rem;
+  }
+  .stat-label{
+    color:#c9d1dc;
+    font-size:clamp(9px,.78vw,12px);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .bar{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;height:12px}
+  .seg{
+    border:1px solid rgba(0,255,204,.18);
+    background:rgba(0,0,0,.26);
+    box-shadow:inset 0 0 3px rgba(0,0,0,.7);
+  }
+  .seg.on{
+    background:linear-gradient(to bottom, #50fff0, #00bda4);
+    box-shadow:0 0 6px rgba(0,255,204,.35);
+  }
+  .roster{
+    position:absolute;
+    left:23.1%;
+    right:23.1%;
+    top:13.5%;
+    bottom:17%;
+    z-index:8;
+  }
+  .plane-shadow{
+    position:absolute;
+    left:7%;
+    right:7%;
+    bottom:0;
+    height:26%;
+    background:radial-gradient(closest-side, rgba(0,0,0,.58), transparent 73%);
+    pointer-events:none;
+  }
+  .tile{
+    position:absolute;
+    width:13.4%;
+    aspect-ratio:1/.55;
+    transform:translate(-50%,-50%) rotate(45deg) skew(-6deg,-6deg);
+    border:1px solid rgba(0,255,204,.18);
+    background:
+      linear-gradient(135deg, rgba(0,255,204,.16), transparent 36%, rgba(0,0,0,.18) 64%),
+      rgba(48,68,72,.58);
+    box-shadow:inset 0 0 14px rgba(0,0,0,.42), 0 8px 18px rgba(0,0,0,.42);
+    opacity:.88;
+  }
+  .tile:after{
+    content:"";
+    position:absolute;inset:18% 28%;
+    border-top:2px solid rgba(0,255,204,.28);
+    transform:rotate(-32deg);
+  }
+  .char{
+    position:absolute;
+    width:11.2%;
+    transform:translate(-50%,-100%);
+    text-align:center;
+    cursor:pointer;
+    border:0;
+    background:transparent;
+    padding:0;
+    color:inherit;
+    z-index:3;
+  }
+  .char:focus-visible{outline:2px solid var(--cyan);outline-offset:8px}
+  .char:hover .hover-ring{opacity:.48}
+  .sprite-wrap{
+    position:relative;
+    height:clamp(92px,10.7vw,158px);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+  }
+  .sprite{
+    width:178%;
+    height:178%;
+    max-width:none;
+    object-fit:contain;
+    object-position:center bottom;
+    image-rendering:pixelated;
+    filter:drop-shadow(0 8px 6px rgba(0,0,0,.72));
+  }
+  .char.locked .sprite{
+    filter:brightness(0) drop-shadow(0 0 1px rgba(0,255,204,.4));
+  }
+  .char.unlocked .sprite{
+    width:232%;
+    height:232%;
+  }
+  .feet-ring,.hover-ring{
+    position:absolute;
+    left:50%;
+    bottom:2%;
+    width:82%;
+    height:18%;
+    transform:translateX(-50%);
+    border-radius:50%;
+    pointer-events:none;
+    opacity:0;
+  }
+  .feet-ring{
+    border:2px solid var(--cyan);
+    box-shadow:0 0 16px rgba(0,255,204,.78), inset 0 0 10px rgba(0,255,204,.28);
+    animation:glowPulse 1.85s ease-in-out infinite;
+  }
+  .hover-ring{
+    border:1px solid rgba(0,255,204,.72);
+    box-shadow:0 0 9px rgba(0,255,204,.28);
+  }
+  .selected .feet-ring{opacity:1}
+  @keyframes glowPulse{0%,100%{box-shadow:0 0 12px rgba(0,255,204,.55), inset 0 0 8px rgba(0,255,204,.2)}50%{box-shadow:0 0 24px rgba(0,255,204,.88), inset 0 0 14px rgba(0,255,204,.34)}}
+  .label{
+    display:inline-grid;
+    gap:2px;
+    justify-items:center;
+    min-width:92%;
+    margin-top:2px;
+    padding:3px 5px 4px;
+    color:#e1e6ee;
+    font-size:clamp(8px,.75vw,12px);
+    font-weight:900;
+    letter-spacing:.08em;
+    background:linear-gradient(90deg, transparent, rgba(0,0,0,.6) 16%, rgba(0,0,0,.6) 84%, transparent);
+    text-shadow:0 1px 2px #000;
+  }
+  .selected .label{color:var(--cyan);text-shadow:0 0 9px rgba(0,255,204,.7)}
+  .lock-glyph{
+    display:none;
+    width:18px;height:18px;
+    align-items:center;justify-content:center;
+    margin:-1px auto 0;
+    color:var(--cyan);
+    font-size:12px;
+    border:1px solid rgba(0,255,204,.34);
+    border-radius:50%;
+    background:rgba(0,0,0,.58);
+    box-shadow:0 0 8px rgba(0,255,204,.2);
+  }
+  .locked .lock-glyph{display:flex}
+  .cost-line{
+    display:none;
+    color:#72f7e2;
+    font-size:clamp(7px,.55vw,9px);
+    font-weight:800;
+    letter-spacing:.03em;
+    white-space:normal;
+    max-width:122px;
+    line-height:1.05;
+  }
+  .locked .cost-line{display:block}
+  .skill-body{
+    display:grid;
+    grid-template-rows:auto auto 1fr;
+    min-height:100%;
+  }
+  .featured{display:grid;gap:.3rem}
+  .skill-card{
+    display:grid;
+    grid-template-columns:28px 1fr;
+    gap:.38rem;
+    align-items:center;
+    min-height:35px;
+    padding:.25rem .32rem;
+    border:1px solid rgba(0,255,204,.2);
+    background:rgba(0,255,204,.055);
+  }
+  .ico{
+    width:28px;height:28px;
+    display:grid;place-items:center;
+    color:var(--orange);
+    font-weight:900;
+    border:1px solid rgba(232,144,32,.38);
+    background:radial-gradient(circle at 50% 42%, rgba(232,144,32,.2), rgba(0,0,0,.38));
+    box-shadow:inset 0 0 8px rgba(0,0,0,.7);
+  }
+  .skill-name{
+    color:#ff9d55;
+    font-size:clamp(9px,.78vw,12px);
+    font-weight:900;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+  }
+  .skill-desc{
+    color:#b9c0cf;
+    font-size:clamp(7px,.58vw,9px);
+    line-height:1.18;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .skill-section{
+    margin:.36rem 0 .24rem;
+    color:#748196;
+    font-size:clamp(8px,.65vw,10px);
+    letter-spacing:.18em;
+    font-weight:900;
+    text-transform:uppercase;
+    border-top:1px solid rgba(154,178,184,.18);
+    padding-top:.42rem;
+  }
+  .compact-list{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:.16rem .22rem;
+    align-content:start;
+  }
+  .mini-skill{
+    min-height:17px;
+    display:flex;
+    align-items:center;
+    gap:.28rem;
+    padding:.1rem .16rem;
+    border:1px solid rgba(154,178,184,.16);
+    background:rgba(255,255,255,.025);
+    overflow:hidden;
+  }
+  .mini-icon{
+    width:15px;height:15px;
+    display:grid;place-items:center;
+    flex:0 0 auto;
+    color:var(--cyan);
+    font-size:9px;
+    border:1px solid rgba(0,255,204,.22);
+  }
+  .mini-text{
+    min-width:0;
+    color:#cbd4e3;
+    font-size:clamp(7px,.58vw,9px);
+    font-weight:800;
+    letter-spacing:.04em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-transform:uppercase;
+  }
+  .mini-skill.locked{
+    background:rgba(0,0,0,.28);
+    border-color:rgba(95,80,113,.2);
+  }
+  .mini-skill.locked .mini-icon{color:#565068;border-color:#40384d}
+  .mini-skill.locked .mini-text{color:#645d73}
+  .mini-condition{
+    color:#9a856f;
+    font-size:clamp(6px,.48vw,8px);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin-left:auto;
+    padding-left:.25rem;
+  }
+  .bottom{
+    position:absolute;
+    left:2.1%;right:2.1%;bottom:2.35%;
+    height:9.2%;
+    z-index:24;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .back-btn{
+    position:absolute;
+    left:0;
+    color:#a9b0c3;
+    background:rgba(7,9,14,.26);
+    border:1px solid rgba(154,178,184,.26);
+    padding:.47rem .82rem;
+    font-size:clamp(10px,.78vw,13px);
+    font-weight:800;
+    letter-spacing:.12em;
+  }
+  .main-btn{
+    min-width:clamp(210px,22vw,360px);
+    min-height:54%;
+    color:#061211;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.18), transparent 36%),
+      linear-gradient(90deg, #0ca58e, var(--cyan), #0ca58e);
+    border:1px solid rgba(0,255,204,.75);
+    box-shadow:0 0 28px rgba(0,255,204,.28), inset 0 0 0 1px rgba(255,255,255,.12);
+    font-size:clamp(13px,1.22vw,20px);
+    font-weight:950;
+    letter-spacing:.13em;
+    padding:.78rem 1.4rem;
+  }
+  .main-btn.insufficient{
+    color:#706a79;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent 40%), linear-gradient(90deg, #1e1d28, #34313f, #1e1d28);
+    border-color:rgba(154,178,184,.22);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+    cursor:not-allowed;
+  }
+  @media (max-aspect-ratio: 1/1){
+    .stage{width:100vw;height:56.25vw}
+  }
+</style>
+</head>
+<body>
+<main class="stage" aria-label="RIMA karakter seçimi v3 mockup">
+  <div class="room-bg" aria-hidden="true"></div>
+  <div class="void-floor" aria-hidden="true"></div>
+  <div class="light-wash" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">RIMA <span>— KARAKTER SEÇ</span></div>
+    <div class="wallet" title="Shattered Echo">◈ 80</div>
+  </header>
+
+  <section class="side-panel left-panel" aria-live="polite">
+    <h1 class="class-name" id="className"></h1>
+    <div class="tags" id="tags"></div>
+    <div class="motto" id="motto"></div>
+    <p class="desc" id="desc"></p>
+    <div class="resource" id="resource"></div>
+    <div class="unlock-note" id="unlockNote"></div>
+    <div class="stat-list" id="stats"></div>
+  </section>
+
+  <section class="roster" id="roster" aria-label="Karakterler">
+    <div class="plane-shadow" aria-hidden="true"></div>
+  </section>
+
+  <section class="side-panel right-panel">
+    <div class="skill-body">
+      <h2 class="panel-title">YETENEKLER</h2>
+      <div class="featured" id="featuredSkills"></div>
+      <div>
+        <div class="skill-section">TAM LİSTE</div>
+        <div class="compact-list" id="skillList"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bottom">
+    <button class="back-btn" type="button">GERİ</button>
+    <button class="main-btn" id="mainButton" type="button">SEÇ</button>
+  </footer>
+</main>
+
+<script>
+const SHATTERED_ECHOES = 80;
+const spriteBase = "../../Assets/Art/Characters";
+const classes = [
+  {
+    id:"warblade", name:"Warblade", tags:["Heavy","Melee","Rage"], locked:false,
+    sprite:`${spriteBase}/Warblade/Rotations/warblade_south.png`, pos:[22,73], row:"front",
+    motto:"Yaklas. Sabitle. Zirh kir. Infaz et.",
+    desc:"Agir iki el kilici ve parry ritmiyle on saflarda alan acar.",
+    resource:"Rage 0-100. Vurarak ve kontrol ederek dolar; bitirici anlari guclendirir.",
+    stats:[8,8,4,6,3],
+    skills:[
+      s("Iron Charge","Bakis yonune firla, isabette Rage kazan.",false,"I"),
+      s("Cleave","Cevresel donus darbesi, Rage ile guclenir.",false,"C"),
+      s("Deep Wound","Yakin hedefe ani hasar ve kanama uygular.",false,"D"),
+      s("Sunder Mark","",false,"S"),
+      s("Crippling Blow","",false,"C"),
+      s("Earthsplitter","",true,"E","Açılış: Act 1'i Warblade ile bitir"),
+      s("Blade Rush","",true,"B","Açılış: 3 odada hasar almadan ilerle"),
+      s("Gravity Cleave","",true,"G","Açılış: 40 düşmanı Sundered halde yen"),
+      s("Iron Counter","",true,"I","Açılış: 20 saldırıyı parry ile boz"),
+      s("Iron Crush","",true,"I","Açılış: Act 2 elitini Warblade ile yen"),
+      s("Ironclade Momentum","",true,"M","Açılış: 60 sn combo kaybetme"),
+      s("Blood Drinker","",false,"B"),
+      s("Wrath Protocol","",true,"W","Açılış: HP %50 altında oda temizle"),
+      s("Tempered Fury","",true,"T","Açılış: Rage'i 80+ tutarak boss yen"),
+      s("Berserker's Resolve","",false,"R"),
+      s("Battle Surge","",true,"B","Açılış: Act 2 bossunu Warblade ile yen"),
+      s("Death Blow","",true,"X","Açılış: 25 execute zinciri tamamla")
+    ]
+  },
+  {
+    id:"elementalist", name:"Elementalist", tags:["Arcane","AoE","Mana"], locked:false,
+    sprite:`${spriteBase}/Elementalist/Rotations/elementalist_south.png`, pos:[37,73], row:"front",
+    motto:"Elementleri ust uste bindir, alanin kurallarini degistir.",
+    desc:"Ateş, buz ve arkan zincirleriyle kalabaligi yoneten menzilli sinif.",
+    resource:"Mana 0-100. Buyuler harcar; element state'leri combo penceresi acar.",
+    stats:[7,3,5,9,7],
+    skills:[
+      s("Fireball","Hedef noktada patlama ve kisa yanma uygular.",false,"F"),
+      s("Glacial Spike","Buz hatti yavaslatir ve Frost state kurar.",false,"G"),
+      s("Living Bomb","Fitil patlayinca alana hasar verir.",false,"L"),
+      s("Chain Lightning","",false,"C"),
+      s("Blink","",false,"B"),
+      s("Arcane Blast","",true,"A","Açılış: 3 farklı elementi aynı odada kullan"),
+      s("Frozen Orb","",true,"O","Açılış: 40 düşmanı Chill altında yen"),
+      s("Prism Beam","",true,"P","Açılış: Act 1'i Elementalist ile bitir"),
+      s("Meteor","",true,"M","Açılış: Frozen hedefe boss hasarı ver"),
+      s("Frost Wall","",true,"W","Açılış: 25 projectile engelle"),
+      s("Solar Flare","",true,"S","Açılış: Light stack ile 50 düşman yen"),
+      s("Blizzard","",true,"B","Açılış: Act 2'ye Elementalist ile ulaş")
+    ]
+  },
+  {
+    id:"ranger", name:"Ranger", tags:["Range","Trap","Focus"], locked:false,
+    sprite:`${spriteBase}/Ranger/Rotations/ranger_south.png`, pos:[52,73], row:"front",
+    motto:"Isaretle, sabitle, cikis yolunu kapat.",
+    desc:"Ok, tuzak ve pozisyonla savasi uzaktan parcalayan avci.",
+    resource:"Focus. Kritik pencereler, trap ve mark zincirleriyle artar.",
+    stats:[6,4,8,8,4],
+    skills:[
+      s("Aimed Shot","Nisanli yuksek hasar; dolu Focus'ta kritik sansi.",false,"A"),
+      s("Pinning Shot","Root ve mark uygulayan rift oku.",false,"P"),
+      s("Marked Detonate","Marked hedefleri patlatir.",false,"M"),
+      s("Hunter's Step","",false,"H"), s("Bone Trap","",false,"B"), s("Disengage","",false,"D"),
+      s("Multi Shot","",true,"M","Açılış: 5 hedefi tek atışta vur"), s("Sweep Volley","",true,"S","Açılış: Act 1'i Ranger ile bitir"),
+      s("Predator's Mark","",true,"P","Açılış: 60 mark tetikle"), s("Final Strike","",true,"F","Açılış: Trapped boss execute et"),
+      s("Wireline Trap","",true,"W","Açılış: Act 2'ye Ranger ile ulaş")
+    ]
+  },
+  {
+    id:"shadowblade", name:"Shadowblade", tags:["Stealth","Burst","Scar"], locked:false,
+    sprite:`${spriteBase}/Shadowblade/Rotations/shadowblade_south.png`, pos:[67,73], row:"front",
+    motto:"Gorunmeden yaklas, iz birak, tek darbede kapat.",
+    desc:"Rift Scar ve ani konum degistirme ile yuksek riskli suikastci.",
+    resource:"Energy. Stealth cikislari ve scar collapse zincirleriyle deger kazanir.",
+    stats:[8,3,9,6,8],
+    skills:[
+      s("Backstab","Arkadan vurusta katli hasar.",false,"B"), s("Phase Step","Cizgide scar birakan phase dash.",false,"P"),
+      s("Backstab Mark","Mark ve scar kurar.",false,"M"), s("Death Mark","",false,"D"), s("Shadow Clone","",false,"C"),
+      s("Shadow Step","",true,"S","Açılış: Act 1'i Shadowblade ile bitir"), s("Fan of Knives","",true,"F","Açılış: 30 kanama uygula"),
+      s("Veil Burst","",true,"V","Açılış: 4 hedefe phase zinciri"), s("Severance","",true,"S","Açılış: 80 scar collapse et"),
+      s("Smoke Veil","",true,"V","Açılış: hasar almadan 3 oda"), s("Chain Cull","",true,"C","Açılış: Act 2 bossunu Shadowblade ile yen"),
+      s("Shadow Pin","",false,"P"), s("Night Aperture","",true,"N","Açılış: 6 scar'i aynı anda taşıt")
+    ]
+  },
+  {
+    id:"ronin", name:"Ronin", tags:["Blade","Timing","Resolve"], locked:true, cost:150, orPath:"Act 2 boss: Shadowblade",
+    sprite:`${spriteBase}/Ronin/Rotations/ronin_south.png`, pos:[82,73], row:"front",
+    motto:"Kini cekmeden once karar verilir.",
+    desc:"Iaido pencereleriyle bekler, tek vurusluk aciklari cezalandirir.",
+    resource:"Resolve. Bekleyis, parry ve hizli cekis anlarinda dolar.",
+    stats:[8,5,7,6,7],
+    skills:placeholderSkills("Quickdraw","Iaido Stance","Sakura Veil","Final Draw","Moon Cut","Still Water","Petal Riposte","Last Sheath")
+  },
+  {
+    id:"ravager", name:"Ravager", tags:["Brutal","Bleed","Armor"], locked:true, cost:150, orPath:"Act 2 boss: Warblade",
+    sprite:`${spriteBase}/Ravager/Rotations/ravager_south.png`, pos:[28,51], row:"back",
+    motto:"Kirilan her zirh yeni bir kapi acar.",
+    desc:"Yavas ama yikici; bleed ve armor break ile sahayi kasar.",
+    resource:"Fury. Hasar aldikca ve yakindan vurdukca yukselir.",
+    stats:[9,9,3,5,6],
+    skills:placeholderSkills("Rend Hook","Bone Maw","Armor Split","Red Wake","Hook Slam","Gore Path","Fury Sink","Last Roar")
+  },
+  {
+    id:"gunslinger", name:"Gunslinger", tags:["Range","Reload","Crit"], locked:true, cost:200, orPath:"Act 2 clear: Ranger",
+    sprite:`${spriteBase}/Gunslinger/Rotations/gunslinger_south.png`, pos:[43,51], row:"back",
+    motto:"Mermi sayisi azsa kararlar hizlanir.",
+    desc:"Reload ritmi ve kritik pencerelerle mesafeyi oldurucu kilar.",
+    resource:"Ammo. Sarjor yonetimi ve perfect reload ile guclenir.",
+    stats:[8,4,7,7,7],
+    skills:placeholderSkills("Deadeye","Quick Reload","Ricochet","Smoke Round","Fan Hammer","Silver Mark","Pierce Shot","Last Bullet")
+  },
+  {
+    id:"brawler", name:"Brawler", tags:["Close","Guard","Combo"], locked:true, cost:200, orPath:"Act 2 clear: Ravager",
+    sprite:`${spriteBase}/Brawler/Rotations/brawler_south.png`, pos:[58,51], row:"back",
+    motto:"Mesafe kapaninca kavga baslar.",
+    desc:"Kisa menzilde guard break, grappling ve combo baskisi kurar.",
+    resource:"Grit. Blok, yumruk ve yere serme ile dolar.",
+    stats:[7,8,6,5,5],
+    skills:placeholderSkills("Jawbreaker","Shoulder In","Ground Lock","Counter Jab","Iron Guard","Ring Step","Uppercut","No Mercy")
+  },
+  {
+    id:"summoner", name:"Summoner", tags:["Minion","Ritual","Control"], locked:true, cost:200, orPath:"Act 2: 3 consecutive runs",
+    sprite:`${spriteBase}/Summoner/Rotations/summoner_south.png`, pos:[73,51], row:"back",
+    motto:"Tek basina savasma; catlagi konustur.",
+    desc:"Kisa omurlu cagrilar ve rituel alanlariyla savasi bolgelere ayirir.",
+    resource:"Essence. Cagri suresi ve kurban zincirleriyle doner.",
+    stats:[5,4,4,9,8],
+    skills:placeholderSkills("Wisp Call","Bone Pact","Rift Totem","Twin Shade","Offering","Grave Door","Rift Swarm","Last Familiar")
+  },
+  {
+    id:"hexer", name:"Hexer", tags:["Curse","DoT","Debuff"], locked:true, cost:250, orPath:"Elementalist run complete",
+    sprite:`${spriteBase}/Hexer/Rotations/hexer_south.png`, pos:[88,51], row:"back",
+    motto:"Lanet once zihne, sonra kana isler.",
+    desc:"Curse stack, zayiflatma ve gecikmeli patlamalarla dusmani cozer.",
+    resource:"Hex. Curse yayildikca guclenir; patlatinca sifirlanir.",
+    stats:[6,3,5,10,9],
+    skills:placeholderSkills("Wither","Hex Brand","Black Thread","Mire Curse","Glass Bone","Dread Bloom","Witch Knot","Last Omen")
+  }
+];
+
+function s(name, desc, locked=false, icon="*", condition=""){ return {name, desc, locked, icon, condition}; }
+function placeholderSkills(...names){
+  return names.map((name, i) => s(name, i < 3 ? ["Başlangıç aktif yetenek.","Ritim kuran sınıf aracı.","Kontrol penceresi açar."][i] : "", i > 4, name[0], i > 4 ? "Açılış: sınıf deed'i tamamla" : ""));
+}
+
+let selectedId = "warblade";
+
+function init(){
+  const roster = document.getElementById("roster");
+  classes.forEach((c, index) => {
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.style.left = c.pos[0] + "%";
+    tile.style.top = (c.pos[1] + 5.2) + "%";
+    tile.style.zIndex = index + 1;
+    roster.appendChild(tile);
+
+    const btn = document.createElement("button");
+    btn.className = `char ${c.locked ? "locked" : "unlocked"}`;
+    btn.type = "button";
+    btn.dataset.id = c.id;
+    btn.style.left = c.pos[0] + "%";
+    btn.style.top = c.pos[1] + "%";
+    btn.style.zIndex = 20 + index;
+    btn.innerHTML = `
+      <div class="sprite-wrap">
+        <div class="feet-ring"></div>
+        <div class="hover-ring"></div>
+        <img class="sprite" src="${c.sprite}" alt="${c.name}">
+      </div>
+      <div class="label">
+        <span>${c.name.toUpperCase()}</span>
+        <span class="lock-glyph">⌾</span>
+        <span class="cost-line">${c.cost ? `${c.cost} ◈ · veya ${c.orPath}` : ""}</span>
+      </div>`;
+    btn.addEventListener("click", () => selectClass(c.id));
+    roster.appendChild(btn);
+  });
+  selectClass(selectedId);
+}
+
+function selectClass(id){
+  selectedId = id;
+  const c = classes.find(x => x.id === id);
+  document.querySelectorAll(".char").forEach(el => el.classList.toggle("selected", el.dataset.id === id));
+  document.getElementById("className").textContent = c.name;
+  document.getElementById("tags").innerHTML = c.tags.map(t => `<span class="tag">${t}</span>`).join("");
+  document.getElementById("motto").textContent = `"${c.motto}"`;
+  document.getElementById("desc").textContent = c.desc;
+  document.getElementById("resource").innerHTML = `<b>${c.tags[c.tags.length-1]}</b><br>${c.resource}`;
+  document.getElementById("unlockNote").textContent = c.locked
+    ? `${c.cost} Shattered Echo veya ${c.orPath}. Skill açılışları para ile değil deed ile gelir.`
+    : "Bu sinif demo icin acik. Skill havuzu run icindeki Rift-Seal draft'i ile sekillenir.";
+  renderStats(c.stats);
+  renderSkills(c.skills);
+  renderButton(c);
+}
+
+function renderStats(values){
+  const labels = ["Hasar","Dayanıklılık","Hız","Kontrol","Zorluk"];
+  document.getElementById("stats").innerHTML = labels.map((label, i) => `
+    <div class="stat">
+      <div class="stat-label">${label}</div>
+      <div class="bar">${Array.from({length:10}, (_, n) => `<span class="seg ${n < values[i] ? "on" : ""}"></span>`).join("")}</div>
+    </div>`).join("");
+}
+
+function renderSkills(skills){
+  const featured = skills.slice(0,3);
+  const rest = skills.slice(3);
+  document.getElementById("featuredSkills").innerHTML = featured.map(skill => `
+    <div class="skill-card">
+      <div class="ico">${skill.icon}</div>
+      <div>
+        <div class="skill-name">${skill.name}</div>
+        <div class="skill-desc">${skill.desc}</div>
+      </div>
+    </div>`).join("");
+  document.getElementById("skillList").innerHTML = rest.map(skill => `
+    <div class="mini-skill ${skill.locked ? "locked" : ""}">
+      <span class="mini-icon">${skill.locked ? "?" : skill.icon}</span>
+      <span class="mini-text">${skill.name}</span>
+      ${skill.locked ? `<span class="mini-condition">${skill.condition}</span>` : ""}
+    </div>`).join("");
+}
+
+function renderButton(c){
+  const btn = document.getElementById("mainButton");
+  btn.classList.remove("insufficient");
+  btn.disabled = false;
+  if (!c.locked) {
+    btn.textContent = "SEÇ";
+    return;
+  }
+  if (SHATTERED_ECHOES >= c.cost) {
+    btn.textContent = `KİLİDİ AÇ — ${c.cost} ◈ Shattered Echo`;
+    return;
+  }
+  btn.textContent = "YETERSİZ ◈";
+  btn.classList.add("insufficient");
+  btn.disabled = true;
+}
+
+init();
+</script>
+</body>
+</html>
