@@ -106,16 +106,16 @@ namespace RIMA
             {
                 highlightedClass = nearest.classType;
                 InvokeClassicSelect(nearest.classType);
-                SetClassicOverlayVisible(true);
+                SetClassicOverlayVisible(classicTabOpen);
                 promptLabel.gameObject.SetActive(true);
                 promptLabel.transform.position = nearest.labelAnchor + Vector3.up * 0.42f;
                 promptLabel.text = IsUnlocked(nearest.classType)
-                    ? "[E] Echo'ya Burun"
+                    ? $"[G] Bürün — {nearest.classType.ToString().ToUpperInvariant()}"
                     : CanUnlock(nearest.classType)
-                        ? $"[E] Kilidi Ac - {UnlockCost(nearest.classType)} SHATTERED ECHO"
+                        ? $"[G] Kilidi Aç — {UnlockCost(nearest.classType)} SHATTERED ECHO"
                         : UnlockOrPathText(nearest.classType);
 
-                if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.eKey))
+                if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
                 {
                     if (IsUnlocked(nearest.classType))
                     {
@@ -136,9 +136,9 @@ namespace RIMA
                 SetClassicOverlayVisible(classicTabOpen);
                 promptLabel.gameObject.SetActive(true);
                 promptLabel.transform.position = exitWorld + Vector3.up * 0.7f;
-                promptLabel.text = "[E] Rift'e Gir";
+                promptLabel.text = "[G] Rift'e Gir";
 
-                if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.eKey))
+                if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
                 {
                     StartRun();
                 }
