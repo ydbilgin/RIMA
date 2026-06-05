@@ -53,5 +53,12 @@ ilk fazda placeholder, gerçek sprite sonra PixelLab GATED).
   trigger'ları; fizik/Rigidbody YOK — overkill). Dummy combat = faux (HitFlash+damage-number+HP bar UI;
   gerçek combat stack'i menüye sokulmaz).
 - "5-5 yan sayfa" sorusu: GEREKMEZ — hepsi tek sahnede; roster büyürse mekân büyür (yürüme bunun çözümü).
-- Implementasyon = cx task `STAGING/cx_task_charselect_v4_chamber_2026-06-05.md` (P1 yürüme+bürünme+kapı,
-  P2 dummy).
+- ~~Implementasyon = canvas-mover task~~ → **SUPERSEDED (kullanıcı pivotu, aynı gün): "MAP YAPAR GİBİ
+  GİRİŞ EKRANI"** — backdrop-resim YERİNE chamber MEVCUT MODÜLER SİSTEMLE inşa edilir:
+  RoomTemplateSO "Chamber_CharSelect" + IsoRoomBuilder (floor451+cliff+overlay+props: RuinedKeepKit
+  arch_gate/pillar + brazier + rift-crack decal) + GERÇEK player prefab (gerçek yürüme + GERÇEK combat →
+  dummy faux değil gerçek vurulur). Eksik TEK asset = pedestal diski (cx $imagegen). Canvas-mover task'ı
+  durduruldu, partial edit'ler revert edildi. Crescent backdrop görseli (`attunement_chamber_bg_crescent.png`)
+  artık LAYOUT REFERANSI (asset değil). Yeni task = `cx_task_chamber_room_2026-06-05.md`.
+  Kazanç: seçim ekranı = gerçek oyun odası (tam tutarlılık) + Map Designer'da düzenlenebilir + modüler-props
+  işleri (flipX/overlay) doğrudan burada da kullanılır.
