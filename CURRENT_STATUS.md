@@ -1,6 +1,28 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-05 GECE — TOOLING KAPANIŞI: cx GLOBAL + ax FLASH-FIX + COMMIT'LER — /clear sonrası İLK BURAYI OKU)
+## ⏯️ RESUME (2026-06-05 GECE·2 — OTONOM 10-TASK KUYRUK: COUNCIL-ROUTED, 9 İŞ DONE+COMMIT, ax-OPUS-4.6 KANALI KANITLANDI — /clear sonrası İLK BURAYI OKU)
+
+**BAĞLAM:** Kullanıcı uzanmaya gitti, mandate: "council ile nasıl yapılacağını kararlaştır → doğru agent'lara ver → cross-review". Council = cx + ax-3.1-Pro + ax-3.5-Flash → Opus sentez; karar = `STAGING/QUEUE10_ROUTING_DECISION_2026-06-05.md` (lane'ler + yazar≠reviewer matrisi).
+
+**✅ DONE + COMMIT'Lİ (kuyruktaki 10 işin TAMAMI çözüldü, ~11 commit):**
+1. **T1 Knockdown paketi** (`2d519075`, cx; CODEANIM kararına göre HitImpulse+KnockdownProfile×3+KnockdownDriver+legacy adapter; PlayMode smoke yeşil) + **ax-Opus-4.6 mimari review PASS-WITH-NOTES** (`STAGING/_review_T1_knockdown_axopus.md`; 2 MAJOR yakaladı) + **review-fix'ler** (`aa9e76f7`: OnDisable cleanup=immunity-leak önleme + resistancePreApplied=çifte-resistance önleme; KnockbackTests 6/6).
+2. **T4 Hover tooltip + synergy pulse** (`69ebdd2a`, cx; TooltipSystem artık draft kartlarına bağlı, ink-wash stil, SkillBar pulse; play-probe kanıtlı).
+3. **T2 Ölüm-decal/ghost** (`709c0412`, **ax-OPUS-4.6 YAZDI** — pilot başarılı; bağımsız MobDeathDecal GO Ground/125, auto-attach; canlı kill-test doğrulandı).
+4. **T5 ESC SkillCodexUI MVP** (`74c1213d`, cx; UIManager pause-layer entegre, 10-sınıf seçici, placeholder=YAKINDA muted, ESC öncelik zinciri play-probe'lu).
+5. **T6 SkillDatabase 10 sınıf** (`f31469b4`, ax-Flash; Ronin 4 gerçek skill + 5 sınıf placeholder; `isImplemented` guard = draft'a sızmaz, codex görür).
+6. **T8 Checker zemin + 15 odaya prop** (`e6502fd9`, Sonnet-MCP yazdı, cx review FAIL→fix: density 0.30+cap 45+CleanCenter skip+Undo; 0-41 prop/oda; play-verify checker canlı). ⚠️ T5 verify'ı _Arena restore edince floorTileAlt silinmişti → yeniden atandı (lesson aşağıda).
+7. **T7 Skill-ikon import fix** (`7826cb10`, Point/PPU64/uncompressed ×19) · **T10 build-settings** (`1ce5f413`, _FazMVP_Demo_s99 çıktı) · **T3 anchor-tuning tool** (`1cefa37c`, ax-Flash; OrientationSync SceneView handle editörü — Oturum B önkoşulu) · **#14 Dynamic-Wave** = zaten kodluymuş (no-op QA PASS).
+
+**🤖 ax-OPUS-4.6 KANALI CANLI + KANITLI:** model `Claude Opus 4.6 (Thinking)`, settings.json swap pattern'i. Review kalitesi yüksek (file:line, 2 gerçek MAJOR), yazım+UnityMCP+play-test uçtan uca çalışıyor. Kullanıcı izni: limit bitene kadar kullan. [[project-ax-opus46-available]]
+**⚠️ DERSLER:** (a) DISABLED cx profili = KESİN YASAK, explicit --profile bile (kullanıcı uyardı; yekta T5'te yanlışlıkla kullanıldı) [[feedback-disabled-profile-hard-ban]]. (b) laurethayday 5h %100 BLOCKED olunca `cx dispatch` SESSİZCE failed (eski DONE'u basıp exit 0) — dispatch sonrası DONE dosyası timestamp kontrol et. (c) cx verify "sahneyi restore" ederken working-tree'deki BAŞKA agent'ın sahne değişikliğini silebilir — sahne değişikliği olan işi önce commit'le. (d) `agy models` non-TTY'de hang. (e) ⚠️ ax window-flash NÜKSETTİ (kullanıcı gördü, ~T4-review dispatch'i sırasında) — vbs shim'e rağmen; şüpheliler: şimsiz direkt `agy models` çağrısı VEYA Claude background-PowerShell'den wscript yolu. REPRO + fix gerek (AntigravityAuthManager).
+
+**⏸️ DEFER/BLOCKED (kullanıcıya):** #17 Echo-Mote-Heal TANIMSIZ (pickup-heal mi kart-VFX mi? council BLOCKED dedi) · #26 Card-Weight defer (T4 ile draft çakışması + düşük ROI) · dead-code sweep (ayrı audit) · T8 yoğunluk feel-tuning (0-prop boss odası OK mi?).
+
+**⏭️ YENİ SESSION İLK İŞ (değişmedi): KULLANICI TAM-DÖNGÜ PLAYTEST** — şimdi üstüne: knockdown hissi (ağır vuruş Broken/Sundered hedefte), hover tooltip, ESC codex, checker+prop'lu odalar, ölüm-decal. Sonra Oturum B (3 silah, kullanıcıyla; anchor-tool HAZIR).
+
+---
+
+## ⏯️ RESUME (2026-06-05 GECE — TOOLING KAPANIŞI: cx GLOBAL + ax FLASH-FIX + COMMIT'LER)
 
 **BU SESSION (tamamı tooling, hepsi commit+push'lu, oyun koduna dokunulmadı):**
 1. **✅ cx dispatch GLOBAL geçişi KAPANDI** (detay aşağıdaki bloğun TOOLING kısmında): CodexAuthManager `6dbe8d18` + RIMA-lokal cx_dispatch.py SİLİNDİ + PROJECT_RULES/`/bootstrap-project`/global `council.md` güncel. Artık SADECE `cx dispatch --task-file ... --effort ...` (proje kökünden; L-task `--timeout 3600`).
