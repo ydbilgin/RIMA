@@ -89,5 +89,53 @@ namespace RIMA.Tests.Room
             Assert.AreEqual(RIMA.RoomType.Boss, director.CurrentRoomType);
             Assert.AreEqual(0, director.CurrentChoices.Count);
         }
+
+        [Test]
+        public void Lifecycle_CombatClearRewardDoorAdvance_FollowsExpectedOrder()
+        {
+            RoomRunLifecycle lifecycle = new RoomRunLifecycle();
+
+            lifecycle.BeginCombat();
+            Assert.AreEqual(RoomRunLifecycleState.Combat, lifecycle.State);
+
+            Assert.IsTrue(lifecycle.MarkCleared());
+            Assert.AreEqual(RoomRunLifecycleState.Cleared, lifecycle.State);
+
+            Assert.IsTrue(lifecycle.MarkRewardTaken());
+            Assert.AreEqual(RoomRunLifecycleState.RewardTaken, lifecycle.State);
+
+            Assert.IsTrue(lifecycle.MarkDoorsOpened());
+            Assert.AreEqual(RoomRunLifecycleState.DoorOpen, lifecycle.State);
+
+            Assert.IsTrue(lifecycle.MarkAdvancing());
+            Assert.AreEqual(RoomRunLifecycleState.Advancing, lifecycle.State);
+        }
+
+        [Test]
+        public void Lifecycle_DoorCannotOpenBeforeRewardTaken()
+        {
+            RoomRunLifecycle lifecycle = new RoomRunLifecycle();
+
+            lifecycle.BeginCombat();
+            Assert.IsFalse(lifecycle.MarkDoorsOpened());
+            Assert.AreEqual(RoomRunLifecycleState.Combat, lifecycle.State);
+
+            Assert.IsTrue(lifecycle.MarkCleared());
+            Assert.IsFalse(lifecycle.MarkDoorsOpened());
+            Assert.AreEqual(RoomRunLifecycleState.Cleared, lifecycle.State);
+        }
+
+        [Test]
+        public void Lifecycle_VictoryCanTerminateAfterClear()
+        {
+            RoomRunLifecycle lifecycle = new RoomRunLifecycle();
+
+            lifecycle.BeginCombat();
+            Assert.IsTrue(lifecycle.MarkCleared());
+            lifecycle.MarkVictory();
+
+            Assert.AreEqual(RoomRunLifecycleState.Victory, lifecycle.State);
+            Assert.IsFalse(lifecycle.MarkRewardTaken());
+        }
     }
 }

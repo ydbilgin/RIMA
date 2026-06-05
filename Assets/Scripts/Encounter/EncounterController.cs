@@ -13,8 +13,8 @@ namespace RIMA.Encounter
         [SerializeField] private bool eliteRoom;
         [SerializeField] private bool startOnEnable;
 
-        public UnityEvent<int> OnWaveStarted;
-        public UnityEvent OnRoomCleared;
+        public UnityEvent<int> OnWaveStarted = new UnityEvent<int>();
+        public UnityEvent OnRoomCleared = new UnityEvent();
 
         private readonly ThreatBudget threatBudget = new ThreatBudget();
         private readonly List<GameObject> activeEnemies = new List<GameObject>();
@@ -23,6 +23,9 @@ namespace RIMA.Encounter
         private float spentBudget;
         private bool secondWaveSpawned;
         private bool encounterActive;
+        private float reconcileTimer;
+
+        public int ActiveEnemyCount => activeEnemies.Count;
 
         private void OnEnable()
         {
@@ -32,7 +35,22 @@ namespace RIMA.Encounter
 
         public void OnRoomEnter()
         {
-            activeWave = bank != null ? bank.PickWave(difficulty, seed) : null;
+            BeginEncounter(bank != null ? bank.PickWave(difficulty, seed) : null, spawnPoints, difficulty, seed, eliteRoom);
+        }
+
+        public void BeginEncounter(
+            EncounterWaveSO wave,
+            Transform[] points,
+            float encounterDifficulty,
+            int encounterSeed,
+            bool isEliteRoom)
+        {
+            activeWave = wave;
+            spawnPoints = points;
+            difficulty = encounterDifficulty;
+            seed = encounterSeed;
+            eliteRoom = isEliteRoom;
+
             if (activeWave == null)
             {
                 Debug.LogWarning("[EncounterController] No EncounterWaveSO available.");
@@ -46,6 +64,37 @@ namespace RIMA.Encounter
 
             if (activeEnemies.Count == 0)
                 SpawnSecondWaveOrClear();
+        }
+
+        private void Update()
+        {
+            if (!encounterActive || activeEnemies.Count == 0)
+            {
+                return;
+            }
+
+            reconcileTimer += Time.unscaledDeltaTime;
+            if (reconcileTimer < 0.5f)
+            {
+                return;
+            }
+
+            reconcileTimer = 0f;
+            for (int i = activeEnemies.Count - 1; i >= 0; i--)
+            {
+                GameObject enemy = activeEnemies[i];
+                Health health = enemy != null ? enemy.GetComponent<Health>() : null;
+                if (enemy == null || health == null || health.IsDead)
+                {
+                    activeEnemies.RemoveAt(i);
+                    threatBudget.Release(enemy);
+                }
+            }
+
+            if (activeEnemies.Count == 0)
+            {
+                OnAllEnemiesDead();
+            }
         }
 
         public void OnAllEnemiesDead()
@@ -85,6 +134,7 @@ namespace RIMA.Encounter
                 GameObject enemy = spawned[i];
                 if (enemy == null) continue;
 
+                enemy.tag = "Enemy";
                 activeEnemies.Add(enemy);
                 if (openingWave)
                     openingWaveEnemies.Add(enemy);
@@ -130,6 +180,7 @@ namespace RIMA.Encounter
             activeEnemies.Clear();
             openingWaveEnemies.Clear();
             spentBudget = 0f;
+            reconcileTimer = 0f;
         }
     }
 }

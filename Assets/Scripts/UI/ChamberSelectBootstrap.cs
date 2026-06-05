@@ -23,7 +23,8 @@ namespace RIMA
         private const string FloorTileResource = "ChamberSelect/Tiles/ChamberFloor";
         private const string CollisionTileResource = "ChamberSelect/Tiles/ChamberCollision";
         private const string OverlayTileResource = "ChamberSelect/Tiles/ChamberOverlayPath";
-        private const string GameSceneName = "_IsoGame";
+        private const string ArenaRunSceneName = "_Arena";
+        private const string FallbackGameSceneName = "_IsoGame";
         private const string ClassUnlockPrefsPrefix = "rima_class_unlocked_";
 
         private static readonly ClassType[] ChamberClasses =
@@ -563,9 +564,17 @@ namespace RIMA
             EnsureClassManager().SetPrimaryClass(currentClass);
             RunStats.Instance?.StartNewRun();
             MapFlowManager.Instance?.ResetRun();
-            Debug.Log($"[ChamberSelectBootstrap] P3 evidence: rift door confirmed; loading {GameSceneName} with class {currentClass}.");
-            SceneManager.LoadScene(GameSceneName);
+
+            string targetScene = CanLoadScene(ArenaRunSceneName) ? ArenaRunSceneName : FallbackGameSceneName;
+            Debug.Log($"[ChamberSelectBootstrap] P3 evidence: rift door confirmed; loading {targetScene} with class {currentClass}.");
+            SceneManager.LoadScene(targetScene);
             Destroy(gameObject);
+        }
+
+        private static bool CanLoadScene(string sceneName)
+        {
+            return SceneUtility.GetBuildIndexByScenePath($"Assets/Scenes/{sceneName}.unity") >= 0 ||
+                   SceneUtility.GetBuildIndexByScenePath(sceneName) >= 0;
         }
 
         private static bool IsUnlocked(ClassType cls)
