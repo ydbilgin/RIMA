@@ -16,6 +16,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private Transform cliffContainer;
         [SerializeField] private Transform markerContainer;
         [SerializeField] private TileBase floorTile;
+        [SerializeField] private TileBase floorTileAlt; // Optional: when set, checker pattern alternates (x+y)&1
         [SerializeField] private TileBase collisionTile;
         [SerializeField] private TileBase[] overlayTiles;
         [SerializeField] private Sprite cliffSouth;
@@ -281,9 +282,11 @@ namespace RIMA.MapDesigner.Room.Runtime
             // floor tile instead of reading as a void pit.
             AddPropFloorCells(template, floorCells);
 
+            bool hasChecker = floorTileAlt != null;
             foreach (Vector3Int cell in floorCells)
             {
-                groundTilemap.SetTile(cell, floorTile);
+                TileBase tile = (hasChecker && ((cell.x + cell.y) & 1) == 1) ? floorTileAlt : floorTile;
+                groundTilemap.SetTile(cell, tile);
             }
 
             return floorCells;

@@ -476,7 +476,9 @@ MonoBehaviour:
   cliffContainer: {fileID: 1967664194}
   markerContainer: {fileID: 437571397}
   floorTile: {fileID: 11400000, guid: 5f4cf3e6421f2e846839d1b37a5a93d1, type: 2}
+  floorTileAlt: {fileID: 11400000, guid: 4f967d8fd24ac2a41ba012bd06aaf935, type: 2}
   collisionTile: {fileID: 11400000, guid: 5f4cf3e6421f2e846839d1b37a5a93d1, type: 2}
+  overlayTiles: []
   cliffSouth: {fileID: 21300000, guid: c034e72eab57f8b4aabe1114583e49d1, type: 3}
   cliffSouthEast: {fileID: 21300000, guid: 59ed76ac64fba7e4aa6f466dd5b4761e, type: 3}
   cliffSouthWest: {fileID: 21300000, guid: 33c826ddad8cf8a45973a8ab10bc0206, type: 3}
@@ -3482,13 +3484,22 @@ MonoBehaviour:
   playerPrefab: {fileID: 6045311534637519706, guid: 51d1b129b77e6f04fbeca10699526625, type: 3}
   arenaCamera: {fileID: 702644023}
   encounterBank: {fileID: 11400000, guid: 862f5e6b00674fe4bd4c16c9afe249c4, type: 2}
+  encounterController: {fileID: 0}
+  defaultEnemyPrefab: {fileID: 0}
   encounterDifficulty: 10
   enemyContainer: {fileID: 0}
   cameraPadding: 1.25
+  rewardSprite: {fileID: 0}
+  rewardColliderRadius: 0.45
+  clearSlowMoScale: 0.3
+  clearSlowMoReturnDuration: 0.6
   fallbackTemplate: {fileID: 11400000, guid: 2904aa1235e85764993eec449324e92c, type: 2}
   runSeed: 12345
   buildOnStart: 1
   depthCount: 5
+  RoomCleared:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1169920645
 Transform:
   m_ObjectHideFlags: 0

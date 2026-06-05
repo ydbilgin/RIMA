@@ -53,5 +53,54 @@ MonoBehaviour:
   blockerTags:
   - chest_marker_7_7
   - chest_marker_12_7
-  props: []
+  props:
+  - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
+    tilePosition: {x: 8, y: 2}
+    rotationSteps: 0
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
+    tilePosition: {x: 9, y: 1}
+    rotationSteps: 2
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: c8d6352c766cc994495a3e58bddbe73a
+    tilePosition: {x: 6, y: 1}
+    rotationSteps: 1
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 4193dd8caa840684fb876815e3780064
+    tilePosition: {x: 5, y: 2}
+    rotationSteps: 1
+    flipX: 1
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 7403021896d131b44b906095dd65e95f
+    tilePosition: {x: 11, y: 1}
+    rotationSteps: 0
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 7403021896d131b44b906095dd65e95f
+    tilePosition: {x: 10, y: 2}
+    rotationSteps: 1
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 4193dd8caa840684fb876815e3780064
+    tilePosition: {x: 12, y: 2}
+    rotationSteps: 0
+    flipX: 0
+    placedByUser: auto
+    variantIndex: -1
+  - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
+    tilePosition: {x: 13, y: 1}
+    rotationSteps: 0
+    flipX: 1
+    placedByUser: auto
+    variantIndex: -1
   walkableGrid: 0000000000000000000000000000000000000000000000000000000000010100000000000000000000000000000000010101010101000000000000000000000000000101010101010101000000000000000000000001010101010101010101000000000000000000010101010101010101010101000000000000010101010101010101010101010101010000000101010101010101010101010101010101010100010101010101010101010101010101010101000000010101010101010101010101010101010000000000000101010101010101010101010000000000000000000101010101010101010100000000000000000000000101010101010101000000000000000000000000000101010101010000000000000000000000000000010101010101000000000000000000000000000000000001000000000000000000
+  overlayMask: 
