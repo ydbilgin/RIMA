@@ -14,11 +14,19 @@
 
 **⚠️ cx MEVCUT UNITY KODUNDA DİREKTİF İHLALLERİ BULDU (mockup onayından sonra fix):** seçili scale 1.12× (`CharacterSelectScreen.cs:996-1002`) + dikey bob (`:1075-1085`) + dönen VFX (`:1086-1120`) + sağ panel ScrollRect (`:1159-1201`) + 4+6 dizilim (`:75-87`, 5+5 olacak). Kullanıcı SABİT direktifleri: tek-ekran no-scroll · dikey hareket YOK · ada altı temiz · tile-center snap · boyut sabit · kilitli=OPAK SİYAH · mağaza hissi YOK.
 
-**🚧 IN-FLIGHT:** cx HTML mockup v2 (`STAGING/cx_task_charselect_mockup_v2_2026-06-05.md` → `STAGING/mockups/charselect_mockup_v2.html`, bg job `b7c6otzaf`). Bitince: Opus QC → kullanıcı tarayıcıda açar → reaksiyon/iterasyon → ONAY → cx Unity'ye benzetir (ihlal fix'leri + canon fiyat + ◈ form + stat-bar verisi dahil).
+**✅ SESSION TAMAMLANDI — 2 COMMIT:**
+- `4617a273` docs: council + karar dökümanı + **mockup v2 DONE + Opus QC PASS** (`STAGING/mockups/charselect_mockup_v2.html` — headless-Chrome screenshot ile doğrulandı: 5+5 karo-snap, opak siyah+rim, no-scroll, ◈ 80 üst bar, TAM skill listesi karanlık "Açılış:..." satırlı, state-buton; gerçek idle_south sprite'lar `Assets/Art/Characters/<C>/Rotations/`). NLM-sync DONE (decision doc).
+- `78e78bda` feat: **run-sonu Shattered Echo award** — `EchoWallet` static helper (bakiye CharacterSelectScreen'den taşındı, davranış aynı) + `ComputeRunAward` (rooms*3+kills/5, clamp 5-60) + Death/DemoComplete "+n Shattered Echo" satırı + çift-award guard (RunStats). **3/3 EditMode test YEŞİL (Unity Test Runner'da koştu)**, compile 0 error. ⚠️ play-verify PENDING (sonraki playtest'te ölüm ekranında "+n SHATTERED ECHO" görülmeli + CharSelect bakiyesi artmalı).
+
+**⚠️ YENİ DERS/BULGU:** "◈" (U+25C8) glifi **LiberationSans SDF static atlas'ta YOK** (tüm elmas glifleri ◆◇◊♦❖✦ de yok; execute_code ile doğrulandı) → Unity TMP'de kutu çıkar. Şimdilik kodda tam-form "Shattered Echo" yazısı. CharSelect Unity pass'inde istenirse: TMP dynamic-fallback font asset (Segoe UI Symbol) ile ◈ eklenebilir — karar o task'te.
 
 **Advisor ham çıktıları:** `CODEX_DONE_yasinderyabilgin.md` (file:line envanter — değerli) · `STAGING/_council_opus_charselect_v3.md` (görsel kritik + precedent tablosu) · ax çıktıları transcript'te (3.1=iso-chevron+diegetic-labels+Vestige; 3.5=lean-5-fix+Vestige; Opus+cx=tam-form, sentez tam-formu seçti). NLM sorgu = `STAGING/_nlm_charselect_currency.json` (canon: Shattered Echoes + unlock tablosu + "skill meta-unlock YOK").
 
-**SONRAKİ:** mockup QC+iterasyon → Unity task → run-sonu Echo award task → NLM-sync (decision doc). GECE·3 backlog'u (Tier-1 hover/TooltipSystem + sol panel + ESC codex) HÂLÂ bekliyor — aşağıdaki blok.
+**⏭️ SONRAKİ SESSION — KULLANICI ONAYI İLE BAŞLA:**
+1. **KULLANICI: `STAGING/mockups/charselect_mockup_v2.html`'i tarayıcıda aç** → reaksiyon (beğen/iterasyon). ONAY gelirse →
+2. **cx Unity task:** CharSelect'i mockup'a benzet + cx'in bulduğu ihlal fix'leri (scale 1.12 `:996` + bob `:1075` + dönen VFX `:1086` + ScrollRect `:1159` + 4+6→5+5 anchor) + canon fiyat 80/150/200/250 + OR-path metni + "◈/Shattered Echo" tam-form label + sol panel 5 stat-bar verisi (RimaUITheme.ClassIdentity'ye) + sağ panel TAM-liste/karanlık-şart satırları.
+3. Playtest: echo award play-verify (ölüm → "+n SHATTERED ECHO" → CharSelect bakiye).
+GECE·3 backlog'u (Tier-1 hover/TooltipSystem + sol panel + ESC codex) HÂLÂ bekliyor — aşağıdaki blok.
 
 ---
 
