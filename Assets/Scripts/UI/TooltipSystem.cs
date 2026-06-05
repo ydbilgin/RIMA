@@ -121,6 +121,19 @@ namespace RIMA
             isVisible = false;
         }
 
+        private void OnDisable()
+        {
+            // Panel Canvas'ın çocuğu — host kapatılırsa açık tooltip ekranda asılı kalmasın (T4 Flash review Note 2)
+            Hide();
+        }
+
+        private void OnDestroy()
+        {
+            // Panel Canvas altında yaşıyor; host destroy olunca orphan kalmasın (T4 Flash review Note 1)
+            if (tooltipPanel != null)
+                Destroy(tooltipPanel);
+        }
+
         private IEnumerator ShowDelayed(string content, Vector2? screenPosition)
         {
             yield return new WaitForSecondsRealtime(showDelay);
