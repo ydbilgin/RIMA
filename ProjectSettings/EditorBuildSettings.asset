@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/_IsoGame.unity
     guid: 170024b9cdc150349a6633ade977ccee
   - enabled: 1
-    path: Assets/Scenes/_Archive/_FazMVP_Demo_s99.unity
-    guid: ca75fd3b0a605b84fb9b05f064c9e8a2
-  - enabled: 1
     path: Assets/Scenes/Test/PlayableArena_Test01.unity
     guid: e7a9a5b06c574fb2beff599c4f5282f4
   - enabled: 1
