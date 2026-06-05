@@ -30,11 +30,12 @@
 - **🗺️ MODÜLER-PROPS COUNCIL (kullanıcı ref görseli; 3/3 OYBİRLİĞİ, karar=`STAGING/MODULAR_PROPS_DECISION_2026-06-05.md`):** PropGroupSO YOK→multi-cell tek prop+flipX[S] · overlay path tilemap aynı-grid[M] · çok-teras RED · damalı `(x+y)%2` zemin + **MEVCUT BridsonPoissonAutoPlacer+CompositionRoleMap'i 15 prop-fakiri odaya KOŞTUR** (en büyük ROI, ~yeni kod yok) · hepsi B-12'den ÖNCE ayrı task'ler.
 - **⚠️ ROUTING DÜZELTMESİ (kullanıcı):** her işi cx'e VERME — basit işler (HTML/doc/veri-tablo)→Sonnet/ax-3.5-Flash, mekanik Unity→Sonnet-MCP, SADECE gerçek kod→cx [[feedback-orchestrator-delegate-route-by-difficulty]] güçlendirildi.
 
-**⏭️ SONRAKİ:**
-1. **KULLANICI: Unity'de CharSelect feel-test** (görsel his + tıklama; yerleşim beğenmezsen Inspector→CharacterSelectScreen→`Roster Anchors[10]` toplu ayar).
-2. Modüler-props kuyruk (onaylı, sıralı): [S]flipX→cx · [S]2-3 küme prop author→Sonnet-MCP (asset gen gerekirse KULLANICIYLA) · [M]overlay tilemap→cx · [M]checker+auto-placer-koşturma→Sonnet → sonra B-12.
-3. Echo award play-verify (ölüm→"+n SHATTERED ECHO"→bakiye) — kullanıcı playtest'inde.
-4. GECE·3 backlog (Tier-1 hover draft-kartlarda + sol run-içi skill paneli + ESC codex) — aşağıdaki blok.
+**⏭️ SONRAKİ (KUYRUK — sıralı):**
+1. **🆕 CharSelect v3.2 RESTYLE [M] → cx — TASK HAZIR = `STAGING/cx_task_charselect_v32_restyle_2026-06-05.md`.** Kullanıcı şikayetleri (flash fazla · butonlar bayat · paneller okunmuyor · çok mavi) → ax-3.5-Flash web-araştırması (Hades/DD/HK/CoM/StS) → Opus kararları: flash SİL→dim-others %40+halka-0.2s-fade · 60-30-10 renk disiplini (cyan SADECE 4 yerde ≤%7, orange %3=unlock/currency/pozitif, gerisi nötr parşömen/demir-gri) · panel `#0D0D11`@%85 tek-katman (mavi gradient gider) · butonlar demir-plaka 9-slice (Pack reuse, asset gen YOK) primary-orange-hover/secondary-taş. Karakter boyut/pozisyon DOKUNULMAZ.
+2. **KULLANICI: Unity'de CharSelect feel-test** (v3.2 sonrası; yerleşim → Inspector `Roster Anchors[10]`).
+3. Modüler-props kuyruk (onaylı): [S]flipX→cx · [S]küme prop→Sonnet-MCP (asset gen GATED) · [M]overlay tilemap→cx · [M]checker+auto-placer→Sonnet → sonra B-12.
+4. Echo award play-verify — kullanıcı playtest'inde.
+5. GECE·3 backlog (Tier-1 hover draft-kartlarda + sol run-içi skill paneli + ESC codex) — aşağıdaki blok.
 
 ---
 
