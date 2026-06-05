@@ -262,14 +262,15 @@
     justify-content:center;
   }
   .sprite{
-    /* UNIFORM SIZE RULE: every visible character is the same 64px-design scale.
-       --cv = canvasHeight/120 (sources are 120/124/128px canvases with the same 64px
-       character inside) — scaling the box by --cv keeps the CHARACTER identical. */
-    width:calc(200% * var(--cv,1));
-    height:calc(200% * var(--cv,1));
+    /* UNIFORM SIZE + EXACT TILE SEAT — per-sprite PIXEL-MEASURED normalization.
+       Each source canvas was alpha-scanned: visible char height (60-62px) and feet gap
+       (30-34px of empty canvas below the feet) differ per file. JS sets:
+         --s        : scale so every visible character renders the SAME height
+         transform  : shifts the image down by its own feet-gap (and fixes x-center bias)
+       so feet land EXACTLY on the wrap bottom = the tile/ring line. */
+    width:calc(200% * var(--s,1));
+    height:auto;
     max-width:none;
-    object-fit:contain;
-    object-position:center bottom;
     image-rendering:pixelated;
     filter:drop-shadow(0 8px 6px rgba(0,0,0,.72));
   }
@@ -719,13 +720,35 @@ function init(){
         <span class="cost-line">${c.cost ? `${c.cost} ◈ · veya ${c.orPath}` : ""}</span>
       </div>`;
     btn.addEventListener("click", () => selectClass(c.id));
-    // Canvas normalization: sources are 120/124/128px canvases with the same 64px character —
-    // scale each img box by canvasHeight/120 so every character renders at the SAME size.
+    // PIXEL-MEASURED fit (alpha-scan of each south PNG, 2026-06-05):
+    // c=canvas px, v=visible char height px, g=feet gap below char px, x=horizontal center bias px.
+    const FIT = {
+      warblade:{c:120,v:61,g:30,x:-0.5}, elementalist:{c:120,v:60,g:30,x:-0.5},
+      ranger:{c:128,v:61,g:34,x:-3},     shadowblade:{c:124,v:61,g:32,x:-0.5},
+      ronin:{c:128,v:62,g:34,x:-0.5},    ravager:{c:124,v:60,g:32,x:-0.5},
+      gunslinger:{c:124,v:61,g:32,x:-0.5}, brawler:{c:120,v:60,g:30,x:-0.5},
+      summoner:{c:124,v:61,g:32,x:-2},   hexer:{c:124,v:61,g:32,x:-0.5}
+    };
+    const f = FIT[c.id];
     const img = btn.querySelector(".sprite");
-    const applyCv = () => { if (img.naturalHeight) img.style.setProperty("--cv", (img.naturalHeight / 120).toFixed(4)); };
-    img.addEventListener("load", applyCv);
-    if (img.complete) applyCv();
+    if (f) {
+      const scale = (f.c / f.v) / (120 / 61); // visible char height identical for all (Warblade baseline)
+      img.style.setProperty("--s", scale.toFixed(4));
+      img.style.transform = `translate(${(-f.x / f.c * 100).toFixed(2)}%, ${(f.g / f.c * 100).toFixed(2)}%)`;
+    }
+    btn._tile = tile; // remembered so the tile can be aligned to the FEET line after layout
     roster.appendChild(btn);
+  });
+
+  // Align each tile diamond to the character's FEET line (= sprite-wrap bottom; the name
+  // label hangs below the feet, so the button bottom is NOT the feet).
+  requestAnimationFrame(() => {
+    const rRect = roster.getBoundingClientRect();
+    document.querySelectorAll(".char").forEach(btn => {
+      if (!btn._tile) return;
+      const wrap = btn.querySelector(".sprite-wrap").getBoundingClientRect();
+      btn._tile.style.top = (((wrap.bottom - rRect.top) / rRect.height) * 100).toFixed(2) + "%";
+    });
   });
   selectClass(selectedId);
 }
