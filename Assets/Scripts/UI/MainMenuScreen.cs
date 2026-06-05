@@ -239,6 +239,7 @@ namespace RIMA
             var go = new GameObject("[CharacterSelectScreen]");
             DontDestroyOnLoad(go);
             go.AddComponent<CharacterSelectScreen>();
+            go.AddComponent<ChamberSelectBootstrap>();
         }
 
         private void OnQuit()
