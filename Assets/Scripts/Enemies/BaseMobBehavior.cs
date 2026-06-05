@@ -87,6 +87,10 @@ namespace RIMA
 
             GroundBlobShadow.Ensure(transform, new Vector2(0.9f, 0.30f), 0.28f);
 
+            // Ölüm squash/fade + decal residue — yoksa otomatik ekle
+            if (!TryGetComponent<MobDeathResidue>(out _))
+                gameObject.AddComponent<MobDeathResidue>();
+
             // Spawn anında renk sıfırla — önceki ölüm fade'i prefab'a yazılmışsa temizle
             if (SR != null) SR.color = Color.white;
 
