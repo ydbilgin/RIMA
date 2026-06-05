@@ -168,6 +168,13 @@ namespace RIMA
         private void Awake()
         {
             if (targetCanvas == null) targetCanvas = GetComponentInParent<Canvas>();
+            // Attunement Chamber (v4) is the primary selection flow. The authored scene only
+            // contains this classic screen, so attach the chamber bootstrap here; it hides the
+            // classic canvas and re-shows it as the TAB fallback overlay.
+            if (GetComponent<ChamberSelectBootstrap>() == null)
+            {
+                gameObject.AddComponent<ChamberSelectBootstrap>();
+            }
         }
 
         private void Start()
