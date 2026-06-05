@@ -1,0 +1,14 @@
+# RIMA — CharacterSelect v2 "Diegetic Roster Room" — DESIGN / UX lens (Gemini 3.1 Pro)
+
+READ first: F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\CHARSELECT_ROSTERROOM_BRIEF_2026-06-04.md
+(Full vision: one generated iso ruined-keep room background, our 10 class sprites standing in it, click-to-select with a cyan seal selection effect, NO left list, bottom detail bar, locked classes shown in-room with unlock conditions.)
+
+You are the DESIGN/UX advisor (feasibility + lean advisors answer separately). RIMA = dark pixel-art roguelite, cyan #00FFCC rift/seal energy, void-purple, "Vivid Vulnerability", iso 3/4 perspective. Give concrete, premium, implementable direction:
+
+1. **Room composition & character arrangement** — arrange 10 characters in ONE iso keep room so it reads clean and premium (the reference crams 13; we want orderly with 10). Propose exact arrangement: rows/arc/grid on floor tiles, spacing, character scale vs room, front-to-back draw order, where the "stage"/focal point is. Where do the 4 unlocked vs 6 locked stand (e.g., unlocked in front arc, locked further back/sides)? Numbers (approx normalized positions).
+2. **Click-to-select + selection effect** — how the selected character reads as chosen: cyan seal ring under feet + soft upward glow + slight scale, others dim to ~60%? Hover affordance (cursor-over glow). What does "SEÇ" confirm vs the click? Keyboard fallback (arrow nav)? Make it feel tactile and clear.
+3. **Locked-class UX — INDUSTRY PATTERNS (this is the key research):** survey how shipped games present locked characters + unlock conditions — Hades (mirror/keepsakes), Dead Cells, Slay the Spire (unlock cards/chars), Risk of Rain 2 (challenge logbook), Darkest Dungeon, Brotato/Vampire Survivors. Compare silhouette-in-place vs grayed sprite vs empty slot vs locked-with-condition-text. Recommend ONE cohesive RIMA approach using its Echo-cost unlocks (4 free, 6 cost Echo): how the locked char looks in the room, where the unlock condition/cost shows (on hover? on select? a tag under them?), and the unlock CTA. Teach the meta without clutter.
+4. **Bottom detail bar** — with the left list gone, design the bottom strip: selected class name + tagline + identity (motto/playstyle/resource) + 3-4 signature skill chips (icon+name) + SEÇ/GERİ. Layout proportions so it's readable, on-brand (ink-on-paper, framed-but-diegetic), not crowded.
+5. **Background generation prompt** — write the precise ax imagegen prompt for the EMPTY iso ruined-keep room backdrop: perspective, composition (central seal floor + braziers + banners + broken walls + void sky), palette hex, hard exclusions (no characters/text/UI), and leave clear floor anchor zones for placing character sprites. On-brand RIMA pixel art, not generic fantasy.
+
+Tight, concrete, numbers + hex. This drives a Unity procedural-UI build.
