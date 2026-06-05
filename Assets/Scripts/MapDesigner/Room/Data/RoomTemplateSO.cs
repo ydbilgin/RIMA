@@ -33,6 +33,10 @@ namespace RIMA.MapDesigner.Room.Data
         [Tooltip("Per-tile walkability map. Index = (y * bounds.width) + x. true = walkable, false = wall/blocked. Empty array = full bounds walkable (fallback).")]
         public bool[] walkableGrid;
 
+        [Header("Overlay Mask (Modular Props K2)")]
+        [Tooltip("Per-tile overlay map. Index = (y * bounds.width) + x. 0 = none, 1..N = overlay tile index. Empty array = no overlay.")]
+        public int[] overlayMask;
+
         public bool IsWalkable(Vector2Int tilePos)
         {
             if (walkableGrid == null || walkableGrid.Length == 0)
@@ -47,6 +51,21 @@ namespace RIMA.MapDesigner.Room.Data
 
             int idx = (ly * bounds.width) + lx;
             return idx >= 0 && idx < walkableGrid.Length && walkableGrid[idx];
+        }
+
+        public int GetOverlayTileIndex(Vector2Int tilePos)
+        {
+            if (overlayMask == null || overlayMask.Length == 0)
+            {
+                return 0;
+            }
+
+            int lx = tilePos.x - bounds.xMin;
+            int ly = tilePos.y - bounds.yMin;
+            if (lx < 0 || lx >= bounds.width || ly < 0 || ly >= bounds.height) return 0;
+
+            int idx = (ly * bounds.width) + lx;
+            return idx >= 0 && idx < overlayMask.Length ? overlayMask[idx] : 0;
         }
     }
 }

@@ -17,6 +17,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private Transform markerContainer;
         [SerializeField] private TileBase floorTile;
         [SerializeField] private TileBase collisionTile;
+        [SerializeField] private TileBase[] overlayTiles;
         [SerializeField] private Sprite cliffSouth;
         [SerializeField] private Sprite cliffSouthEast;
         [SerializeField] private Sprite cliffSouthWest;
@@ -41,6 +42,8 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private Vector2 runeLocalOffset = new Vector2(0f, 1.4f);
         [SerializeField] private Vector2 gateTuck = new Vector2(0f, -0.25f);
         [SerializeField] private float gateRowSpacing = 2.4f;
+
+        private const string OverlayTilemapName = "OverlayTilemap";
 
         private static readonly Vector3Int SouthWestNeighbor = new Vector3Int(-1, 0, 0);
         private static readonly Vector3Int SouthEastNeighbor = new Vector3Int(0, -1, 0);
@@ -90,12 +93,13 @@ namespace RIMA.MapDesigner.Room.Runtime
             HashSet<Vector3Int> floorCells = BuildFloor(template);
             LastFloorCells = new HashSet<Vector3Int>(floorCells);
 
+            int overlayCellCount = BuildOverlay(template);
             int cliffCellCount = BuildCliffs(floorCells);
             BuildBoundary(template, floorCells);
             BuildMarkers(template);
             int propCount = BuildProps(template);
 
-            Debug.Log($"[IsoRoomBuilder] Built {template.roomId}: {floorCells.Count} floor, {cliffCellCount} cliff, {propCount} props.");
+            Debug.Log($"[IsoRoomBuilder] Built {template.roomId}: {floorCells.Count} floor, {overlayCellCount} overlay, {cliffCellCount} cliff, {propCount} props.");
         }
 
         private bool ResolveRequiredReferences()
@@ -215,10 +219,29 @@ namespace RIMA.MapDesigner.Room.Runtime
         {
             groundTilemap.ClearAllTiles();
             collisionTilemap.ClearAllTiles();
+            DestroyOverlayTilemap();
             DestroyChildren(cliffContainer);
             DestroyChildren(markerContainer);
             DestroyChildren(propsContainer);
             DestroyChildren(gatesContainer);
+        }
+
+        private void DestroyOverlayTilemap()
+        {
+            Tilemap existingOverlay = FindNamedTilemap(OverlayTilemapName);
+            if (existingOverlay == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(existingOverlay.gameObject);
+            }
+            else
+            {
+                DestroyImmediate(existingOverlay.gameObject);
+            }
         }
 
         private void DestroyChildren(Transform container)
@@ -264,6 +287,69 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             return floorCells;
+        }
+
+        private int BuildOverlay(RoomTemplateSO template)
+        {
+            if (overlayTiles == null || overlayTiles.Length == 0 ||
+                template.overlayMask == null || template.overlayMask.Length == 0)
+            {
+                return 0;
+            }
+
+            RectInt bounds = template.bounds;
+            List<(Vector3Int cell, TileBase tile)> placements = new List<(Vector3Int cell, TileBase tile)>();
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                for (int x = bounds.xMin; x < bounds.xMax; x++)
+                {
+                    int overlayIndex = template.GetOverlayTileIndex(new Vector2Int(x, y));
+                    if (overlayIndex <= 0 || overlayIndex > overlayTiles.Length)
+                    {
+                        continue;
+                    }
+
+                    TileBase overlayTile = overlayTiles[overlayIndex - 1];
+                    if (overlayTile != null)
+                    {
+                        placements.Add((new Vector3Int(x, y, 0), overlayTile));
+                    }
+                }
+            }
+
+            if (placements.Count == 0)
+            {
+                return 0;
+            }
+
+            Tilemap overlayTilemap = CreateOverlayTilemap();
+            for (int i = 0; i < placements.Count; i++)
+            {
+                overlayTilemap.SetTile(placements[i].cell, placements[i].tile);
+            }
+
+            return placements.Count;
+        }
+
+        private Tilemap CreateOverlayTilemap()
+        {
+            GameObject overlayObject = new GameObject(OverlayTilemapName);
+            overlayObject.transform.SetParent(grid.transform, false);
+            Tilemap overlayTilemap = overlayObject.AddComponent<Tilemap>();
+            TilemapRenderer overlayRenderer = overlayObject.AddComponent<TilemapRenderer>();
+
+            TilemapRenderer groundRenderer = groundTilemap.GetComponent<TilemapRenderer>();
+            if (groundRenderer != null)
+            {
+                overlayRenderer.sortingLayerID = groundRenderer.sortingLayerID;
+                overlayRenderer.sortingOrder = groundRenderer.sortingOrder + 1;
+            }
+            else
+            {
+                overlayRenderer.sortingOrder = 1;
+            }
+
+            return overlayTilemap;
         }
 
         private void AddPropFloorCells(RoomTemplateSO template, HashSet<Vector3Int> floorCells)
