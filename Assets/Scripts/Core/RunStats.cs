@@ -19,6 +19,8 @@ namespace RIMA
         private float runTimeSeconds;
         private bool runStarted;
         private bool frozen;
+        private bool echoAwarded;
+        private int echoAward;
 
         public static RunStats Instance
         {
@@ -34,6 +36,10 @@ namespace RIMA
         public static int RoomReached => Instance.GetRoomReached();
         public static int RoomsCleared => Instance.roomsCleared;
         public static int RewardsCollected => Instance.rewardsCollected;
+        public int KillsForAward => kills;
+        public int RoomsClearedForAward => roomsCleared;
+        public bool HasEchoAward => echoAwarded;
+        public int EchoAward => echoAward;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Bootstrap()
@@ -106,6 +112,8 @@ namespace RIMA
             runTimeSeconds = 0f;
             runStarted = false;
             frozen = false;
+            echoAwarded = false;
+            echoAward = 0;
             UnhookPlayerHealth();
         }
 
@@ -149,6 +157,15 @@ namespace RIMA
         {
             if (!runStarted) StartRunIfNeeded();
             rewardsCollected++;
+        }
+
+        public bool TryMarkEchoAwarded(int amount)
+        {
+            if (echoAwarded) return false;
+
+            echoAwarded = true;
+            echoAward = Mathf.Max(0, amount);
+            return true;
         }
 
         private void OnKill(KillEvent e)

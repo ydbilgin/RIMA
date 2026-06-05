@@ -103,7 +103,9 @@ namespace RIMA
 
         private string BuildRunSummary()
         {
-            return $"Room reached: {RunStats.RoomReached}\nKills: {RunStats.Kills}\nTime: {FormatSeconds(RunStats.RunTimeSeconds)}";
+            int echoAward = EchoWallet.AwardRunIfNeeded(RunStats.Instance);
+            // "◈" glyph missing from LiberationSans SDF static atlas (renders as box) — full form per K2 decision.
+            return $"Room reached: {RunStats.RoomReached}\nKills: {RunStats.Kills}\nTime: {FormatSeconds(RunStats.RunTimeSeconds)}\n+{echoAward} Shattered Echo";
         }
 
         private void OpenWishlist()

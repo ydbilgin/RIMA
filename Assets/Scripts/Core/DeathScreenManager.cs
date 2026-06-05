@@ -159,7 +159,9 @@ namespace RIMA
 
         private string BuildRunStats()
         {
-            return $"ODA {RunStats.RoomReached} · KILLS {RunStats.Kills} · SÜRE {FormatSeconds(RunStats.RunTimeSeconds)}";
+            int echoAward = EchoWallet.AwardRunIfNeeded(RunStats.Instance);
+            // "◈" glyph missing from LiberationSans SDF static atlas (renders as box) — full form per K2 decision.
+            return $"ODA {RunStats.RoomReached} · KILLS {RunStats.Kills} · SÜRE {FormatSeconds(RunStats.RunTimeSeconds)} · +{echoAward} SHATTERED ECHO";
         }
 
         private void EnsurePanel()

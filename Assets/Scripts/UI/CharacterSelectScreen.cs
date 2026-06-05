@@ -34,8 +34,6 @@ namespace RIMA
         private const string PackPanelFrame = "UI/RIMA/Pack/panel_frame_9slice";
         private const string RoomBackdrop   = "UI/RIMA/CharacterSelect/room_bg";
         private const int RoomBackdropRetryFrames = 10;
-        private const int DemoStartingEcho = 200;
-        private const string EchoBalancePrefsKey = "rima_demo_echo_balance";
         private const string ClassUnlockPrefsPrefix = "rima_class_unlocked_";
         private const string HexerElementalistRunPrefsKey = "rima_hexer_elementalist_run";
         private static readonly Color LockedSilhouetteColor = new(0.039f, 0.020f, 0.063f, 1f);
@@ -131,7 +129,7 @@ namespace RIMA
 
         private void Start()
         {
-            EnsureDemoEchoBalance();
+            EchoWallet.EnsureInitialized();
             BuildScreen();
             // Default to the previously-selected class (if still unlocked) instead of force-overwriting to Warblade,
             // since SelectClass now writes PlayerClassManager.SelectedClass immediately.
@@ -946,20 +944,6 @@ namespace RIMA
             _ => 0,
         };
 
-        private static void EnsureDemoEchoBalance()
-        {
-            if (PlayerPrefs.HasKey(EchoBalancePrefsKey)) return;
-
-            PlayerPrefs.SetInt(EchoBalancePrefsKey, DemoStartingEcho);
-            PlayerPrefs.Save();
-        }
-
-        private static int GetEchoBalance()
-        {
-            EnsureDemoEchoBalance();
-            return PlayerPrefs.GetInt(EchoBalancePrefsKey, DemoStartingEcho);
-        }
-
         private static bool HasHexerPrerequisite() =>
             PlayerPrefs.GetInt(HexerElementalistRunPrefsKey, 0) == 1;
 
@@ -967,7 +951,7 @@ namespace RIMA
         {
             if (IsUnlocked(cls)) return false;
             if (cls == ClassType.Hexer && !HasHexerPrerequisite()) return false;
-            return GetEchoBalance() >= UnlockCost(cls);
+            return EchoWallet.Balance >= UnlockCost(cls);
         }
 
         private void TryUnlockSelectedClass()
@@ -975,7 +959,8 @@ namespace RIMA
             if (!CanUnlock(selectedClass)) return;
 
             int cost = UnlockCost(selectedClass);
-            PlayerPrefs.SetInt(EchoBalancePrefsKey, GetEchoBalance() - cost);
+            if (!EchoWallet.TrySpend(cost)) return;
+
             PlayerPrefs.SetInt(UnlockPrefKey(selectedClass), 1);
             PlayerPrefs.Save();
 
@@ -986,7 +971,7 @@ namespace RIMA
         private void RefreshEchoLabel()
         {
             if (echoBalanceLabel != null)
-                echoBalanceLabel.text = $"{GetEchoBalance()} ECHO";
+                echoBalanceLabel.text = $"{EchoWallet.Balance} ECHO";
         }
 
         private static void ApplyRoomEntryVisual(RoomEntry entry, bool selected)
