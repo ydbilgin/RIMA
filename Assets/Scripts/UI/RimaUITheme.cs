@@ -34,6 +34,20 @@ namespace RIMA
         public static readonly Color Gold         = new Color(0.95f, 0.74f, 0.24f, 1f);
         public static readonly Color DangerRed    = new Color(0.90f, 0.18f, 0.12f, 1f);
 
+        // Character Select v3.2 palette: 60-30-10, neutral-first.
+        public static readonly Color CharSelectVoidBlack    = new Color(0.059f, 0.051f, 0.082f, 1f);  // #0F0D15
+        public static readonly Color CharSelectPanelFill    = new Color(0.051f, 0.051f, 0.067f, 0.85f); // #0D0D11 @ 85%
+        public static readonly Color CharSelectIronGrey     = new Color(0.184f, 0.188f, 0.216f, 1f);  // #2F3037
+        public static readonly Color CharSelectTextBody     = new Color(0.690f, 0.702f, 0.737f, 1f);  // #B0B3BC
+        public static readonly Color CharSelectParchment    = new Color(0.918f, 0.918f, 0.918f, 1f);  // #EAEAEA
+        public static readonly Color CharSelectDivider      = new Color(0.286f, 0.231f, 0.369f, 1f);  // #493B5E
+        public static readonly Color CharSelectCyan         = new Color(0.000f, 1.000f, 0.800f, 1f);  // #00FFCC
+        public static readonly Color CharSelectOrange       = new Color(0.910f, 0.565f, 0.125f, 1f);  // #E89020
+        public static readonly Color CharSelectButtonFill   = new Color(0.082f, 0.086f, 0.110f, 1f);  // #15161C
+        public static readonly Color CharSelectStatFill     = new Color(0.784f, 0.804f, 0.847f, 1f);  // #C8CDD8
+        public static readonly Color CharSelectStatEmpty    = new Color(0.102f, 0.106f, 0.133f, 1f);  // #1A1B22
+        public static readonly Color CharSelectLockedText   = new Color(0.420f, 0.380f, 0.480f, 1f);
+
         // ── HP Bar States ─────────────────────────────────────────────────
         public static readonly Color HpHealthy    = new Color(0.29f, 0.62f, 0.75f, 1f); // #4A9EBF  >60%
         public static readonly Color HpWarning    = new Color(0.78f, 0.45f, 0.16f, 1f); // #C8742A  30-60%

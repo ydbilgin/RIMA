@@ -54,15 +54,18 @@ namespace RIMA
         private Image     identityPortraitImage;
         private CanvasGroup identityPanelGroup;
         private Coroutine identityFadeRoutine;
+        private RectTransform startButtonRoot;
+        private Image     startButtonBorder;
+        private Image     startButtonFill;
         private Button    startButton;
         private TMP_Text  startButtonLabel;
         private TMP_Text  echoBalanceLabel;
         private TMP_Text  skillEmptyLabel;
         private RectTransform skillContent;
         private RectTransform identityStatsRoot;
-
-        private Image showcaseFlashImage;
-        private float selectFlashTimer;
+        private ClassType selectionFadeClass;
+        private float selectionRingFadeTimer;
+        private const float SelectionRingFadeDuration = 0.20f;
 
         [Header("Roster Layout")]
         [Tooltip("Backdrop-normalized anchors by class order: 0 Warblade, 1 Elementalist, 2 Ranger, 3 Shadowblade, 4 Ronin, 5 Ravager, 6 Gunslinger, 7 Brawler, 8 Summoner, 9 Hexer.")]
@@ -263,7 +266,7 @@ namespace RIMA
         private void BuildRosterRoom(RectTransform parent)
         {
             roomEntries.Clear();
-            Image backdropImage = RimaUITheme.CreateFullScreenBackdrop(parent, RoomBackdrop, RimaUITheme.BackgroundDark);
+            Image backdropImage = RimaUITheme.CreateFullScreenBackdrop(parent, RoomBackdrop, RimaUITheme.CharSelectVoidBlack);
             NameRoomBackdropSprite(backdropImage);
             if (backdropImage != null && backdropImage.sprite == null)
                 StartCoroutine(RetryLoadRoomBackdrop(backdropImage));
@@ -273,13 +276,6 @@ namespace RIMA
 
             foreach (var placement in BuildRosterPlacements().OrderByDescending(p => p.anchor.y))
                 BuildRoomCharacter(rosterContainer, placement);
-
-            showcaseFlashImage = MakePanel("SelectionFlash", parent).GetComponent<Image>();
-            var flashRt = showcaseFlashImage.transform as RectTransform;
-            flashRt.anchorMin = Vector2.zero; flashRt.anchorMax = Vector2.one;
-            flashRt.offsetMin = flashRt.offsetMax = Vector2.zero;
-            showcaseFlashImage.color = Color.clear;
-            showcaseFlashImage.raycastTarget = false;
         }
 
         private IEnumerable<RoomPlacement> BuildRosterPlacements()
@@ -359,10 +355,10 @@ namespace RIMA
             var bg = bar.GetComponent<Image>();
             bg.sprite = RimaUITheme.SmallPanelFrame;
             bg.type = Image.Type.Sliced;
-            bg.color = new Color(0.016f, 0.035f, 0.051f, 0.78f);
+            bg.color = RimaUITheme.CharSelectPanelFill;
             bg.raycastTarget = false;
 
-            var title = MakeText("RIMA - KARAKTER SEÇ", bar, 22f, FontStyles.Bold, RimaUITheme.TextPrimary);
+            var title = MakeText("RIMA <color=#B0B3BC>- KARAKTER SEÇ</color>", bar, 22f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             title.alignment = TextAlignmentOptions.Left;
             title.characterSpacing = 18f;
             var titleRt = title.transform as RectTransform;
@@ -377,10 +373,10 @@ namespace RIMA
             var walletImg = wallet.GetComponent<Image>();
             walletImg.sprite = RimaUITheme.SmallPanelFrame;
             walletImg.type = Image.Type.Sliced;
-            walletImg.color = new Color(0.016f, 0.035f, 0.051f, 0.88f);
+            walletImg.color = RimaUITheme.CharSelectPanelFill;
             walletImg.raycastTarget = false;
 
-            echoBalanceLabel = MakeText("", wallet, 14f, FontStyles.Bold, RimaUITheme.Cyan);
+            echoBalanceLabel = MakeText("", wallet, 14f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
             echoBalanceLabel.alignment = TextAlignmentOptions.Center;
             var echoRt = echoBalanceLabel.transform as RectTransform;
             echoRt.anchorMin = Vector2.zero; echoRt.anchorMax = Vector2.one;
@@ -503,8 +499,8 @@ namespace RIMA
 
             var selectionVfxRoot = BuildSelectionVfx(root, placement.size, footY);
             var selectionVfxImages = selectionVfxRoot.GetComponentsInChildren<Image>(true);
-            var selectionGlowDisk = selectionVfxRoot.Find("PulseGlowDisk").GetComponent<Image>();
-            var selectionRing = selectionVfxRoot.Find("StaticCyanRing").GetComponent<Image>();
+            var selectionGlowDisk = selectionVfxRoot.Find("SelectionGlowDisk").GetComponent<Image>();
+            var selectionRing = selectionVfxRoot.Find("SelectionFootRing").GetComponent<Image>();
             var selectionMotes = selectionVfxImages
                 .Where(img => img != null && img.name.StartsWith("GlowMote", StringComparison.Ordinal))
                 .ToArray();
@@ -519,7 +515,7 @@ namespace RIMA
             sprite.preserveAspect = true;
             sprite.raycastTarget = false;
 
-            var nameLabel = MakeText(cls.ToString().ToUpperInvariant(), root, 11f, FontStyles.Bold, RimaUITheme.TextPrimary);
+            var nameLabel = MakeText(cls.ToString().ToUpperInvariant(), root, 11f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             nameLabel.alignment = TextAlignmentOptions.Center;
             nameLabel.enableWordWrapping = false;
             nameLabel.overflowMode = TextOverflowModes.Ellipsis;
@@ -541,10 +537,10 @@ namespace RIMA
                 lockImg = lockRt.GetComponent<Image>();
                 lockImg.sprite = RimaUITheme.SmallPanelFrame;
                 lockImg.type = Image.Type.Sliced;
-                lockImg.color = new Color(0.03f, 0.02f, 0.05f, 0.46f);
+                lockImg.color = WithAlpha(RimaUITheme.CharSelectButtonFill, 0.52f);
                 lockImg.raycastTarget = false;
 
-                var lockLabel = MakeText("KİLİTLİ", lockRt, 8.5f, FontStyles.Bold, RimaUITheme.TextMuted);
+                var lockLabel = MakeText("KİLİTLİ", lockRt, 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
                 lockLabel.alignment = TextAlignmentOptions.Center;
                 var lockLabelRt = lockLabel.transform as RectTransform;
                 lockLabelRt.anchorMin = Vector2.zero; lockLabelRt.anchorMax = Vector2.one;
@@ -555,7 +551,7 @@ namespace RIMA
                 chipRt.anchoredPosition = new Vector2(0f, footY - 52f);
                 chipRt.sizeDelta = new Vector2(boxSize.x - 12f, 18f);
 
-                costChip = MakeText(UnlockOrPathText(cls), chipRt, 7.2f, FontStyles.Bold, RimaUITheme.TextMuted);
+                costChip = MakeText(UnlockOrPathText(cls), chipRt, 7.2f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
                 costChip.alignment = TextAlignmentOptions.Center;
                 costChip.enableWordWrapping = false;
                 costChip.overflowMode = TextOverflowModes.Ellipsis;
@@ -612,7 +608,7 @@ namespace RIMA
                 if (entry.glow != null)
                 {
                     entry.glow.enabled = true;
-                    entry.glow.color = WithAlpha(RimaUITheme.ClassAccent(captured), 0.22f);
+                    entry.glow.color = WithAlpha(RimaUITheme.CharSelectCyan, 0.28f);
                 }
             });
             AddEventTrigger(hitRt.gameObject, EventTriggerType.PointerExit, _ =>
@@ -631,7 +627,7 @@ namespace RIMA
             root.anchoredPosition = new Vector2(0f, footY);
             root.sizeDelta = new Vector2(characterSize.x * 0.82f, 80f);
 
-            var glowDisk = MakePanel("PulseGlowDisk", root);
+            var glowDisk = MakePanel("SelectionGlowDisk", root);
             glowDisk.anchorMin = new Vector2(0.5f, 0.5f); glowDisk.anchorMax = new Vector2(0.5f, 0.5f);
             glowDisk.pivot = new Vector2(0.5f, 0.5f);
             glowDisk.anchoredPosition = Vector2.zero;
@@ -640,10 +636,10 @@ namespace RIMA
             glowDiskImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
             glowDiskImg.type = Image.Type.Simple;
             glowDiskImg.preserveAspect = true;
-            glowDiskImg.color = new Color(0f, 1f, 0.80f, 0.0f);
+            glowDiskImg.color = Color.clear;
             glowDiskImg.raycastTarget = false;
 
-            var ring = MakePanel("StaticCyanRing", root);
+            var ring = MakePanel("SelectionFootRing", root);
             ring.anchorMin = new Vector2(0.5f, 0.5f); ring.anchorMax = new Vector2(0.5f, 0.5f);
             ring.pivot = new Vector2(0.5f, 0.5f);
             ring.anchoredPosition = Vector2.zero;
@@ -652,7 +648,7 @@ namespace RIMA
             ringImg.sprite = Resources.Load<Sprite>(PackPedestal) ?? RimaUITheme.SmallPanelFrame;
             ringImg.type = Image.Type.Simple;
             ringImg.preserveAspect = true;
-            ringImg.color = new Color(0f, 1f, 0.80f, 0.0f);
+            ringImg.color = WithAlpha(RimaUITheme.CharSelectCyan, 0.0f);
             ringImg.raycastTarget = false;
 
             root.gameObject.SetActive(false);
@@ -672,7 +668,7 @@ namespace RIMA
             var portraitFrameImg = portraitFrame.GetComponent<Image>();
             portraitFrameImg.sprite = RimaUITheme.SmallPanelFrame;
             portraitFrameImg.type = Image.Type.Sliced;
-            portraitFrameImg.color = new Color(0.02f, 0.01f, 0.04f, 0.78f);
+            portraitFrameImg.color = RimaUITheme.CharSelectButtonFill;
             portraitFrameImg.raycastTarget = false;
 
             var portraitMask = MakePanel("IdentityPortraitMask", portraitFrame);
@@ -694,47 +690,47 @@ namespace RIMA
             identityAccentBar = bar.GetComponent<Image>();
             identityAccentBar.raycastTarget = false;
 
-            classNameLabel = MakeText("WARBLADE", parent, 25, FontStyles.Bold, Color.white);
+            classNameLabel = MakeText("WARBLADE", parent, 25, FontStyles.Bold, RimaUITheme.CharSelectCyan);
             classNameLabel.alignment = TextAlignmentOptions.Center;
             var cnRt = classNameLabel.transform as RectTransform;
             cnRt.anchorMin = new Vector2(0.05f, 0.72f); cnRt.anchorMax = new Vector2(0.95f, 0.80f);
             cnRt.offsetMin = cnRt.offsetMax = Vector2.zero;
 
-            tagline1Label = MakeText("HEAVY · MELEE · RAGE", parent, 11, FontStyles.Bold, RimaUITheme.TextMuted);
+            tagline1Label = MakeText("HEAVY · MELEE · RAGE", parent, 11, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
             tagline1Label.alignment = TextAlignmentOptions.Center;
             var t1Rt = tagline1Label.transform as RectTransform;
             t1Rt.anchorMin = new Vector2(0.05f, 0.65f); t1Rt.anchorMax = new Vector2(0.95f, 0.72f);
             t1Rt.offsetMin = t1Rt.offsetMax = Vector2.zero;
 
-            tagline2Label = MakeText("", parent, 11, FontStyles.Normal, RimaUITheme.TextMuted);
+            tagline2Label = MakeText("", parent, 11, FontStyles.Normal, RimaUITheme.CharSelectTextBody);
             tagline2Label.alignment = TextAlignmentOptions.Center;
             tagline2Label.enableWordWrapping = true;
             var t2Rt = tagline2Label.transform as RectTransform;
             t2Rt.anchorMin = new Vector2(0.08f, 0.55f); t2Rt.anchorMax = new Vector2(0.92f, 0.65f);
             t2Rt.offsetMin = t2Rt.offsetMax = Vector2.zero;
 
-            identityMottoLabel = MakeText("", parent, 13, FontStyles.Bold, RimaUITheme.Cyan);
+            identityMottoLabel = MakeText("", parent, 13, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             identityMottoLabel.alignment = TextAlignmentOptions.Left;
             identityMottoLabel.enableWordWrapping = true;
             var mottoRt = identityMottoLabel.transform as RectTransform;
             mottoRt.anchorMin = new Vector2(0.08f, 0.43f); mottoRt.anchorMax = new Vector2(0.92f, 0.54f);
             mottoRt.offsetMin = mottoRt.offsetMax = Vector2.zero;
 
-            identityPlaystyleLabel = MakeText("", parent, 10, FontStyles.Normal, RimaUITheme.TextMuted);
+            identityPlaystyleLabel = MakeText("", parent, 10, FontStyles.Normal, RimaUITheme.CharSelectTextBody);
             identityPlaystyleLabel.alignment = TextAlignmentOptions.TopLeft;
             identityPlaystyleLabel.enableWordWrapping = true;
             var playstyleRt = identityPlaystyleLabel.transform as RectTransform;
             playstyleRt.anchorMin = new Vector2(0.08f, 0.30f); playstyleRt.anchorMax = new Vector2(0.92f, 0.42f);
             playstyleRt.offsetMin = playstyleRt.offsetMax = Vector2.zero;
 
-            identityResourceLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.TextPrimary);
+            identityResourceLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             identityResourceLabel.alignment = TextAlignmentOptions.TopLeft;
             identityResourceLabel.enableWordWrapping = true;
             var resourceRt = identityResourceLabel.transform as RectTransform;
             resourceRt.anchorMin = new Vector2(0.08f, 0.22f); resourceRt.anchorMax = new Vector2(0.92f, 0.29f);
             resourceRt.offsetMin = resourceRt.offsetMax = Vector2.zero;
 
-            identityLockLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.TextMuted);
+            identityLockLabel = MakeText("", parent, 10, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
             identityLockLabel.alignment = TextAlignmentOptions.Left;
             identityLockLabel.enableWordWrapping = true;
             var lockRt = identityLockLabel.transform as RectTransform;
@@ -753,7 +749,7 @@ namespace RIMA
 
         private void BuildSkillPanel(RectTransform parent)
         {
-            var skillsHeader = MakeText("YETENEKLER", parent, 13, FontStyles.Bold, RimaUITheme.Cyan);
+            var skillsHeader = MakeText("YETENEKLER", parent, 13, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             skillsHeader.alignment = TextAlignmentOptions.Left;
             var shRt = skillsHeader.transform as RectTransform;
             shRt.anchorMin = new Vector2(0f, 0.93f); shRt.anchorMax = new Vector2(1f, 1f);
@@ -761,7 +757,7 @@ namespace RIMA
 
             skillContent = MakeSkillStripArea(parent, "SkillStripArea");
 
-            skillEmptyLabel = MakeText("Yetenekler yakinda", parent, 13, FontStyles.Normal, RimaUITheme.TextMuted);
+            skillEmptyLabel = MakeText("Yetenekler yakinda", parent, 13, FontStyles.Normal, RimaUITheme.CharSelectTextBody);
             skillEmptyLabel.alignment = TextAlignmentOptions.Center;
             var emptyRt = skillEmptyLabel.transform as RectTransform;
             emptyRt.anchorMin = new Vector2(0f, 0f); emptyRt.anchorMax = new Vector2(1f, 0.92f);
@@ -775,13 +771,13 @@ namespace RIMA
             var bg = parent.GetComponent<Image>();
             bg.sprite = RimaUITheme.SmallPanelFrame;
             bg.type = Image.Type.Sliced;
-            bg.color = new Color(0.05f, 0.03f, 0.07f, 0.86f);
+            bg.color = RimaUITheme.CharSelectPanelFill;
             bg.raycastTarget = false;
 
-            var topBorder = MakePanel("CyanTopBorder", parent);
+            var topBorder = MakePanel("MutedTopBorder", parent);
             SetStretch(topBorder, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -2f), Vector2.zero);
             var topBorderImg = topBorder.GetComponent<Image>();
-            topBorderImg.color = RimaUITheme.Cyan;
+            topBorderImg.color = RimaUITheme.CharSelectDivider;
             topBorderImg.raycastTarget = false;
 
         }
@@ -789,38 +785,50 @@ namespace RIMA
         private void BuildStartButton(RectTransform parent)
         {
             var btnRoot = MakePanel("StartButton", parent);
+            startButtonRoot = btnRoot;
             btnRoot.anchorMin = new Vector2(0.50f, 0.06f);
             btnRoot.anchorMax = new Vector2(0.50f, 0.06f);
             btnRoot.pivot = new Vector2(0.5f, 0.5f);
             btnRoot.anchoredPosition = Vector2.zero;
             btnRoot.sizeDelta = new Vector2(360f, 52f);
 
-            var bgImg = btnRoot.GetComponent<Image>();
-            // On-brand 9-slice button background (filled center). Falls back to the
-            // procedural ResourceFrame if the Pack sprite is missing.
-            var buttonSprite = Resources.Load<Sprite>(PackButton);
-            bgImg.sprite = buttonSprite != null ? buttonSprite : RimaUITheme.ResourceFrame;
-            bgImg.type = Image.Type.Sliced;
-            bgImg.color = RimaUITheme.ClassAccent(ClassType.Warblade);
-            bgImg.raycastTarget = true;
+            startButtonBorder = btnRoot.GetComponent<Image>();
+            startButtonBorder.sprite = Resources.Load<Sprite>(PackPanelFrame) ?? RimaUITheme.ResourceFrame;
+            startButtonBorder.type = Image.Type.Sliced;
+            startButtonBorder.color = RimaUITheme.CharSelectIronGrey;
+            startButtonBorder.raycastTarget = true;
 
-            startButtonLabel = MakeText("SEÇ", btnRoot, 21, FontStyles.Bold, Color.white);
+            var fillRt = MakePanel("StartButtonFill", btnRoot);
+            SetStretch(fillRt, Vector2.zero, Vector2.one, new Vector2(3f, 3f), new Vector2(-3f, -3f));
+            startButtonFill = fillRt.GetComponent<Image>();
+            startButtonFill.sprite = Resources.Load<Sprite>(PackButton) ?? RimaUITheme.ResourceFrame;
+            startButtonFill.type = Image.Type.Sliced;
+            startButtonFill.color = RimaUITheme.CharSelectButtonFill;
+            startButtonFill.raycastTarget = false;
+
+            startButtonLabel = MakeText("SEÇ", btnRoot, 21, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             startButtonLabel.alignment = TextAlignmentOptions.Center;
             startButtonLabel.enableWordWrapping = true;
             startButtonLabel.overflowMode = TextOverflowModes.Ellipsis;
+            startButtonLabel.characterSpacing = 12f;
             var lRt = startButtonLabel.transform as RectTransform;
             lRt.anchorMin = Vector2.zero; lRt.anchorMax = Vector2.one;
             lRt.offsetMin = lRt.offsetMax = Vector2.zero;
 
             startButton = btnRoot.gameObject.AddComponent<Button>();
-            startButton.targetGraphic = bgImg;
+            startButton.targetGraphic = startButtonBorder;
             startButton.onClick.AddListener(OnStartRun);
 
             var colors = startButton.colors;
-            colors.normalColor      = Color.white;
-            colors.highlightedColor = new Color(1.15f, 1.15f, 1.15f, 1f);
-            colors.pressedColor     = new Color(0.80f, 0.80f, 0.80f, 1f);
+            colors.normalColor = Color.white;
+            colors.highlightedColor = Color.white;
+            colors.pressedColor = Color.white;
+            colors.selectedColor = Color.white;
+            colors.disabledColor = Color.white;
             startButton.colors = colors;
+
+            AddPlateButtonFeedback(btnRoot, startButton, startButtonBorder,
+                RimaUITheme.CharSelectIronGrey, RimaUITheme.CharSelectOrange, 1.05f, 1.02f);
         }
 
         private void BuildBackButton(RectTransform parent)
@@ -832,21 +840,67 @@ namespace RIMA
             btnRoot.anchoredPosition = Vector2.zero;
             btnRoot.sizeDelta = new Vector2(180f, 44f);
 
-            var bgImg = btnRoot.GetComponent<Image>();
-            bgImg.sprite = Resources.Load<Sprite>(PackButton) ?? RimaUITheme.ResourceFrame;
-            bgImg.type = Image.Type.Sliced;
-            bgImg.color = new Color(0.10f, 0.11f, 0.15f, 0.82f);
-            bgImg.raycastTarget = true;
+            var borderImg = btnRoot.GetComponent<Image>();
+            borderImg.sprite = Resources.Load<Sprite>(PackPanelFrame) ?? RimaUITheme.ResourceFrame;
+            borderImg.type = Image.Type.Sliced;
+            borderImg.color = RimaUITheme.CharSelectIronGrey;
+            borderImg.raycastTarget = true;
 
-            var label = MakeText("GERİ", btnRoot, 16, FontStyles.Bold, RimaUITheme.TextPrimary);
+            var fillRt = MakePanel("BackButtonFill", btnRoot);
+            SetStretch(fillRt, Vector2.zero, Vector2.one, new Vector2(2f, 2f), new Vector2(-2f, -2f));
+            var fillImg = fillRt.GetComponent<Image>();
+            fillImg.sprite = Resources.Load<Sprite>(PackButton) ?? RimaUITheme.ResourceFrame;
+            fillImg.type = Image.Type.Sliced;
+            fillImg.color = RimaUITheme.CharSelectButtonFill;
+            fillImg.raycastTarget = false;
+
+            var label = MakeText("GERİ", btnRoot, 16, FontStyles.Bold, new Color(0.620f, 0.620f, 0.620f, 1f));
             label.alignment = TextAlignmentOptions.Center;
+            label.characterSpacing = 8f;
             var lRt = label.transform as RectTransform;
             lRt.anchorMin = Vector2.zero; lRt.anchorMax = Vector2.one;
             lRt.offsetMin = lRt.offsetMax = Vector2.zero;
 
             var button = btnRoot.gameObject.AddComponent<Button>();
-            button.targetGraphic = bgImg;
+            button.targetGraphic = borderImg;
             button.onClick.AddListener(OnBackClicked);
+
+            var colors = button.colors;
+            colors.normalColor = Color.white;
+            colors.highlightedColor = Color.white;
+            colors.pressedColor = Color.white;
+            colors.selectedColor = Color.white;
+            colors.disabledColor = Color.white;
+            button.colors = colors;
+
+            AddPlateButtonFeedback(btnRoot, button, borderImg,
+                RimaUITheme.CharSelectIronGrey, RimaUITheme.CharSelectCyan, 1.02f, 1.00f);
+        }
+
+        private static void AddPlateButtonFeedback(RectTransform root, Button button, Image border,
+            Color normalBorder, Color hoverBorder, float hoverScale, float pressedScale)
+        {
+            AddEventTrigger(root.gameObject, EventTriggerType.PointerEnter, _ =>
+            {
+                if (button != null && !button.interactable) return;
+                if (border != null) border.color = hoverBorder;
+                root.localScale = new Vector3(hoverScale, hoverScale, 1f);
+            });
+            AddEventTrigger(root.gameObject, EventTriggerType.PointerExit, _ =>
+            {
+                if (border != null) border.color = normalBorder;
+                root.localScale = Vector3.one;
+            });
+            AddEventTrigger(root.gameObject, EventTriggerType.PointerDown, _ =>
+            {
+                if (button != null && !button.interactable) return;
+                root.localScale = new Vector3(pressedScale, pressedScale, 1f);
+            });
+            AddEventTrigger(root.gameObject, EventTriggerType.PointerUp, _ =>
+            {
+                if (button != null && !button.interactable) return;
+                root.localScale = new Vector3(hoverScale, hoverScale, 1f);
+            });
         }
 
         // ─── Selection Logic ──────────────────────────────────────────────
@@ -854,8 +908,9 @@ namespace RIMA
         private void SelectClass(ClassType cls)
         {
             selectedClass = cls;
-            var accent = RimaUITheme.ClassAccent(cls);
             bool unlocked = IsUnlocked(cls);
+            selectionFadeClass = cls;
+            selectionRingFadeTimer = SelectionRingFadeDuration;
 
             if (unlocked)
                 PlayerClassManager.SelectedClass = cls;
@@ -863,12 +918,20 @@ namespace RIMA
             foreach (var kv in roomEntries)
                 ApplyRoomEntryVisual(kv.Value, kv.Key == cls);
 
-            if (accentBar != null) accentBar.color = accent;
+            if (roomEntries.TryGetValue(cls, out var fadeEntry))
+            {
+                if (fadeEntry.selectionGlowDisk != null)
+                    fadeEntry.selectionGlowDisk.color = Color.clear;
+                if (fadeEntry.selectionRing != null)
+                    fadeEntry.selectionRing.color = WithAlpha(RimaUITheme.CharSelectCyan, 0f);
+            }
+
+            if (accentBar != null) accentBar.color = RimaUITheme.CharSelectDivider;
 
             if (classNameLabel != null)
             {
                 classNameLabel.text  = cls.ToString().ToUpperInvariant();
-                classNameLabel.color = accent;
+                classNameLabel.color = RimaUITheme.CharSelectCyan;
             }
 
             if (identityPortraitImage != null)
@@ -886,15 +949,19 @@ namespace RIMA
             RefreshIdentityPanel(cls);
             ShowIdentityPopup();
             RefreshSkillList(cls);
-            selectFlashTimer = 0.28f;
 
-            // Start button color
             if (startButton != null)
             {
-                var img = startButton.GetComponent<Image>();
                 bool canUnlock = CanUnlock(cls);
-                if (img != null) img.color = unlocked ? accent : new Color(0.08f, 0.13f, 0.16f, 0.88f);
                 startButton.interactable = unlocked || canUnlock;
+                if (startButtonRoot != null) startButtonRoot.localScale = Vector3.one;
+                if (startButtonBorder != null) startButtonBorder.color = RimaUITheme.CharSelectIronGrey;
+                if (startButtonFill != null)
+                {
+                    var fill = RimaUITheme.CharSelectButtonFill;
+                    fill.a = unlocked || canUnlock ? 1f : 0.50f;
+                    startButtonFill.color = fill;
+                }
                 if (startButtonLabel != null)
                 {
                     startButtonLabel.text = unlocked
@@ -903,28 +970,31 @@ namespace RIMA
                             ? $"KİLİDİ AÇ — {LockedButtonText(cls)}"
                             : "YETERSİZ SHATTERED ECHO";
                     startButtonLabel.fontSize = unlocked ? 21f : 12f;
-                    startButtonLabel.color = unlocked || canUnlock ? Color.white : RimaUITheme.TextMuted;
+                    startButtonLabel.color = unlocked
+                        ? RimaUITheme.CharSelectParchment
+                        : canUnlock
+                            ? RimaUITheme.CharSelectOrange
+                            : WithAlpha(RimaUITheme.CharSelectTextBody, 0.65f);
                 }
             }
         }
 
         private void RefreshIdentityPanel(ClassType cls)
         {
-            var accent = RimaUITheme.ClassAccent(cls);
             var (motto, playstyle, resource) = RimaUITheme.ClassIdentity(cls);
 
-            if (identityAccentBar != null) identityAccentBar.color = accent;
+            if (identityAccentBar != null) identityAccentBar.color = RimaUITheme.CharSelectDivider;
             if (identityMottoLabel != null)
             {
                 identityMottoLabel.text = motto;
-                identityMottoLabel.color = accent;
+                identityMottoLabel.color = RimaUITheme.CharSelectParchment;
             }
             if (identityPlaystyleLabel != null) identityPlaystyleLabel.text = playstyle;
             if (identityResourceLabel != null) identityResourceLabel.text = resource;
             if (identityLockLabel != null)
             {
                 identityLockLabel.text = IsUnlocked(cls) ? "" : IdentityLockText(cls);
-                identityLockLabel.color = RimaUITheme.TextMuted;
+                identityLockLabel.color = RimaUITheme.CharSelectTextBody;
             }
             RefreshStatBars(cls);
         }
@@ -956,7 +1026,7 @@ namespace RIMA
             layoutElement.preferredHeight = 15f;
             layoutElement.minHeight = 15f;
 
-            var labelText = MakeText(label, row, 7.5f, FontStyles.Bold, RimaUITheme.TextMuted);
+            var labelText = MakeText(label, row, 7.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
             labelText.alignment = TextAlignmentOptions.Left;
             var labelRt = labelText.transform as RectTransform;
             labelRt.anchorMin = new Vector2(0f, 0f); labelRt.anchorMax = new Vector2(0.36f, 1f);
@@ -975,10 +1045,16 @@ namespace RIMA
             {
                 var seg = MakePanel("Seg_" + i, bar);
                 var img = seg.GetComponent<Image>();
-                img.color = i < clamped
-                    ? new Color(0f, 1f, 0.80f, 0.88f)
-                    : new Color(0f, 0f, 0f, 0.38f);
+                img.color = RimaUITheme.CharSelectIronGrey;
                 img.raycastTarget = false;
+
+                var fill = MakePanel("Fill", seg);
+                SetStretch(fill, Vector2.zero, Vector2.one, new Vector2(1f, 1f), new Vector2(-1f, -1f));
+                var fillImg = fill.GetComponent<Image>();
+                fillImg.color = i < clamped
+                    ? RimaUITheme.CharSelectStatFill
+                    : RimaUITheme.CharSelectStatEmpty;
+                fillImg.raycastTarget = false;
             }
         }
 
@@ -1029,7 +1105,7 @@ namespace RIMA
 
             if (skills.Count > featuredCount)
             {
-                var section = MakeText("TAM LİSTE", skillContent, 8.5f, FontStyles.Bold, RimaUITheme.TextMuted);
+                var section = MakeText("TAM LİSTE", skillContent, 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
                 section.alignment = TextAlignmentOptions.Left;
                 var sectionRt = section.transform as RectTransform;
                 sectionRt.sizeDelta = new Vector2(0f, 18f);
@@ -1056,7 +1132,7 @@ namespace RIMA
             rowImg.type = Image.Type.Sliced;
             rowImg.color = skill.locked
                 ? new Color(0f, 0f, 0f, 0.42f)
-                : new Color(0.016f, 0.035f, 0.051f, featured ? 0.76f : 0.54f);
+                : WithAlpha(RimaUITheme.CharSelectPanelFill, featured ? 0.76f : 0.54f);
             rowImg.raycastTarget = !skill.locked;
 
             var iconFrame = MakePanel("IconFrame", row);
@@ -1069,8 +1145,10 @@ namespace RIMA
             frameImg.sprite = RimaUITheme.SmallPanelFrame;
             frameImg.type = Image.Type.Sliced;
             frameImg.color = skill.locked
-                ? new Color(0.10f, 0.09f, 0.14f, 0.70f)
-                : WithAlpha(RimaUITheme.ClassAccent(cls), 0.28f);
+                ? WithAlpha(RimaUITheme.CharSelectLockedText, 0.70f)
+                : featured
+                    ? WithAlpha(RimaUITheme.CharSelectCyan, 0.26f)
+                    : WithAlpha(RimaUITheme.CharSelectIronGrey, 0.72f);
             frameImg.raycastTarget = false;
 
             if (skill.iconSprite != null && !skill.locked)
@@ -1086,7 +1164,7 @@ namespace RIMA
             else
             {
                 var iconLabel = MakeText(skill.locked ? "?" : skill.iconText, iconFrame, featured ? 12f : 8f, FontStyles.Bold,
-                    skill.locked ? RimaUITheme.TextMuted : RimaUITheme.Cyan);
+                    skill.locked ? RimaUITheme.CharSelectTextBody : RimaUITheme.CharSelectParchment);
                 iconLabel.alignment = TextAlignmentOptions.Center;
                 var iconLabelRt = iconLabel.transform as RectTransform;
                 iconLabelRt.anchorMin = Vector2.zero; iconLabelRt.anchorMax = Vector2.one;
@@ -1094,7 +1172,7 @@ namespace RIMA
             }
 
             var name = MakeText(skill.name?.ToUpperInvariant() ?? "UNKNOWN", row, featured ? 10f : 8f, FontStyles.Bold,
-                skill.locked ? new Color(0.42f, 0.38f, 0.48f, 1f) : RimaUITheme.ClassAccent(cls));
+                skill.locked ? RimaUITheme.CharSelectLockedText : RimaUITheme.CharSelectParchment);
             name.alignment = TextAlignmentOptions.TopLeft;
             name.enableWordWrapping = false;
             name.overflowMode = TextOverflowModes.Ellipsis;
@@ -1104,7 +1182,7 @@ namespace RIMA
                 nameRt.anchorMin = new Vector2(0f, 0.56f); nameRt.anchorMax = new Vector2(1f, 0.94f);
                 nameRt.offsetMin = new Vector2(48f, 0f); nameRt.offsetMax = new Vector2(-6f, 0f);
 
-                var desc = MakeText(OneLine(skill.description), row, 7.5f, FontStyles.Normal, new Color(1f, 1f, 1f, 0.75f));
+                var desc = MakeText(OneLine(skill.description), row, 7.5f, FontStyles.Normal, WithAlpha(RimaUITheme.CharSelectTextBody, 0.86f));
                 desc.alignment = TextAlignmentOptions.TopLeft;
                 desc.enableWordWrapping = false;
                 desc.overflowMode = TextOverflowModes.Ellipsis;
@@ -1119,7 +1197,7 @@ namespace RIMA
 
                 if (skill.locked)
                 {
-                    var condition = MakeText(skill.condition, row, 7f, FontStyles.Normal, new Color(0.61f, 0.49f, 0.36f, 1f));
+                    var condition = MakeText(skill.condition, row, 7f, FontStyles.Normal, RimaUITheme.CharSelectLockedText);
                     condition.alignment = TextAlignmentOptions.Right;
                     condition.enableWordWrapping = false;
                     condition.overflowMode = TextOverflowModes.Ellipsis;
@@ -1237,14 +1315,12 @@ namespace RIMA
         private void RefreshEchoLabel()
         {
             if (echoBalanceLabel != null)
-                echoBalanceLabel.text = $"{EchoWallet.Balance} SHATTERED ECHO";
+                echoBalanceLabel.text = $"<color=#E89020>{EchoWallet.Balance}</color> <color=#B0B3BC>SHATTERED ECHO</color>";
         }
 
         private static void ApplyRoomEntryVisual(RoomEntry entry, bool selected)
         {
             bool unlocked = IsUnlocked(entry.classType);
-            var accent = RimaUITheme.ClassAccent(entry.classType);
-            float alpha = selected ? 1f : (unlocked ? 0.75f : 0.88f);
             float scale = entry.baseScale;
 
             if (entry.root != null)
@@ -1254,13 +1330,13 @@ namespace RIMA
             }
 
             if (entry.canvasGroup != null)
-                entry.canvasGroup.alpha = alpha;
+                entry.canvasGroup.alpha = 1f;
 
             if (entry.sprite != null)
             {
                 float spriteAlpha = entry.sprite.color.a;
                 entry.sprite.color = unlocked
-                    ? Color.white
+                    ? (selected ? Color.white : new Color(0.60f, 0.60f, 0.60f, spriteAlpha))
                     : WithAlpha(LockedSilhouetteColor, spriteAlpha);
             }
 
@@ -1272,39 +1348,39 @@ namespace RIMA
 
             if (entry.glow != null)
             {
-                entry.glow.enabled = selected;
-                entry.glow.color = WithAlpha(accent, selected ? 0.32f : 0.0f);
+                entry.glow.enabled = false;
+                entry.glow.color = Color.clear;
             }
 
             if (entry.selectionVfxRoot != null)
                 entry.selectionVfxRoot.gameObject.SetActive(selected);
 
             if (entry.selectionGlowDisk != null)
-                entry.selectionGlowDisk.color = new Color(0f, 1f, 0.80f, selected ? 0.22f : 0.0f);
+                entry.selectionGlowDisk.color = Color.clear;
 
             if (entry.selectionRing != null)
-                entry.selectionRing.color = new Color(0f, 1f, 0.80f, selected ? 0.46f : 0.0f);
+                entry.selectionRing.color = WithAlpha(RimaUITheme.CharSelectCyan, selected ? 0.46f : 0.0f);
 
             if (entry.selectionMotes != null)
             {
                 foreach (var mote in entry.selectionMotes)
                 {
                     if (mote != null)
-                        mote.color = new Color(0f, 1f, 0.80f, 0.0f);
+                        mote.color = Color.clear;
                 }
             }
 
             if (entry.lockChip != null)
             {
                 entry.lockChip.gameObject.SetActive(!unlocked);
-                entry.lockChip.color = new Color(0.03f, 0.02f, 0.05f, selected ? 0.56f : 0.42f);
+                entry.lockChip.color = WithAlpha(RimaUITheme.CharSelectButtonFill, selected ? 0.70f : 0.52f);
             }
 
             if (entry.costChip != null)
             {
                 entry.costChip.transform.parent.gameObject.SetActive(!unlocked);
                 entry.costChip.text = UnlockOrPathText(entry.classType);
-                entry.costChip.color = selected ? RimaUITheme.Cyan : RimaUITheme.TextMuted;
+                entry.costChip.color = selected ? RimaUITheme.CharSelectOrange : RimaUITheme.CharSelectTextBody;
             }
 
             if (entry.hit != null)
@@ -1325,13 +1401,17 @@ namespace RIMA
 
         private void AnimateRoomSelection()
         {
+            if (selectionRingFadeTimer > 0f)
+                selectionRingFadeTimer = Mathf.Max(0f, selectionRingFadeTimer - Time.unscaledDeltaTime);
+
             if (roomEntries.TryGetValue(selectedClass, out var selected))
             {
+                float fade = selectedClass == selectionFadeClass
+                    ? 1f - Mathf.Clamp01(selectionRingFadeTimer / SelectionRingFadeDuration)
+                    : 1f;
+
                 if (selected.root != null)
                     selected.root.anchoredPosition = selected.basePosition;
-
-                if (selected.glow != null)
-                    selected.glow.color = new Color(0f, 1f, 0.80f, 0.30f);
 
                 if (selected.seal != null)
                     selected.seal.rectTransform.localScale = Vector3.one;
@@ -1339,13 +1419,13 @@ namespace RIMA
                 if (selected.selectionGlowDisk != null)
                 {
                     selected.selectionGlowDisk.rectTransform.localScale = Vector3.one;
-                    selected.selectionGlowDisk.color = new Color(0f, 1f, 0.80f, 0.24f);
+                    selected.selectionGlowDisk.color = Color.clear;
                 }
 
                 if (selected.selectionRing != null)
                 {
                     selected.selectionRing.rectTransform.localEulerAngles = Vector3.zero;
-                    selected.selectionRing.color = new Color(0f, 1f, 0.80f, 0.52f);
+                    selected.selectionRing.color = WithAlpha(RimaUITheme.CharSelectCyan, 0.46f * fade);
                 }
 
                 if (selected.selectionMotes != null)
@@ -1356,18 +1436,9 @@ namespace RIMA
                             continue;
 
                         mote.rectTransform.localScale = Vector3.one;
-                        mote.color = new Color(0f, 1f, 0.80f, 0.0f);
+                        mote.color = Color.clear;
                     }
                 }
-            }
-
-            if (selectFlashTimer > 0f)
-                selectFlashTimer = Mathf.Max(0f, selectFlashTimer - Time.unscaledDeltaTime);
-
-            if (showcaseFlashImage != null)
-            {
-                float a = selectFlashTimer > 0f ? selectFlashTimer / 0.28f : 0f;
-                showcaseFlashImage.color = new Color(0.78f, 1f, 0.96f, a * 0.32f);
             }
         }
 
@@ -1619,18 +1690,27 @@ namespace RIMA
             var img = rt.GetComponent<Image>();
             img.sprite = Resources.Load<Sprite>(PackPanelFrame) ?? RimaUITheme.SmallPanelFrame;
             img.type = Image.Type.Sliced;
-            img.color = new Color(0.016f, 0.035f, 0.051f, 0.95f);
+            img.color = RimaUITheme.CharSelectIronGrey;
             img.raycastTarget = false;
 
-            var edge = MakePanel("CyanEdge", rt);
-            SetStretch(edge, Vector2.zero, Vector2.one, new Vector2(-2f, -2f), new Vector2(2f, 2f));
-            var edgeImg = edge.GetComponent<Image>();
-            edgeImg.sprite = img.sprite;
-            edgeImg.type = Image.Type.Sliced;
-            edgeImg.color = new Color(0f, 1f, 0.80f, 0.38f);
-            edgeImg.raycastTarget = false;
+            var fill = MakePanel("PanelFill", rt);
+            SetStretch(fill, Vector2.zero, Vector2.one, new Vector2(1f, 1f), new Vector2(-1f, -1f));
+            var fillImg = fill.GetComponent<Image>();
+            fillImg.sprite = img.sprite;
+            fillImg.type = Image.Type.Sliced;
+            fillImg.color = RimaUITheme.CharSelectPanelFill;
+            fillImg.raycastTarget = false;
 
-            edge.SetAsFirstSibling();
+            var innerHighlight = MakePanel("InnerHighlight", rt);
+            SetStretch(innerHighlight, Vector2.zero, Vector2.one, new Vector2(2f, 2f), new Vector2(-2f, -2f));
+            var highlightImg = innerHighlight.GetComponent<Image>();
+            highlightImg.sprite = img.sprite;
+            highlightImg.type = Image.Type.Sliced;
+            highlightImg.color = WithAlpha(RimaUITheme.CharSelectParchment, 0.08f);
+            highlightImg.raycastTarget = false;
+
+            fill.SetAsFirstSibling();
+            innerHighlight.SetSiblingIndex(1);
             return rt;
         }
 
