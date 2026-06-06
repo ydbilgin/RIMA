@@ -123,10 +123,18 @@ namespace RIMA.Combat
         }
 
         /// <summary>Called by ExecutePromptDriver on DeathBlow fire — L-tier execute shake.</summary>
-        public void TriggerExecuteShake() => Shake(executeMagnitude, executeDuration);
+        public void TriggerExecuteShake()
+        {
+            if (!FeelToggleSettings.ShakeEnabled) return;
+            Shake(executeMagnitude, executeDuration);
+        }
 
         /// <summary>Called by knockdown land — M-tier knockdown shake.</summary>
-        public void TriggerKnockdownShake() => Shake(knockdownMagnitude, knockdownDuration);
+        public void TriggerKnockdownShake()
+        {
+            if (!FeelToggleSettings.ShakeEnabled) return;
+            Shake(knockdownMagnitude, knockdownDuration);
+        }
 
         public void Shake(float magnitude, float duration)
         {

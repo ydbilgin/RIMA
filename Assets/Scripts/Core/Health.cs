@@ -8,6 +8,10 @@ namespace RIMA
         [SerializeField] private int maxHP = 100;
         private int currentHP;
 
+        // Internal cooldown on HitImpact SFX to prevent spam from DoT / multi-hit ticks.
+        private const float HitImpactIcd = 0.08f;
+        private float _nextHitImpactTime;
+
         public int CurrentHP => currentHP;
         public int MaxHP => maxHP;
         public bool IsDead => currentHP <= 0;
@@ -48,7 +52,11 @@ namespace RIMA
             OnDamageTaken?.Invoke(amount);
             int effective = Mathf.Max(1, Mathf.RoundToInt(amount * incomingDamageMultiplier));
             currentHP = Mathf.Max(0, currentHP - effective);
-            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.HitImpact);
+            if (Time.time >= _nextHitImpactTime)
+            {
+                RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.HitImpact);
+                _nextHitImpactTime = Time.time + HitImpactIcd;
+            }
             OnHealthChanged?.Invoke(currentHP, maxHP);
             if (currentHP == 0)
             {

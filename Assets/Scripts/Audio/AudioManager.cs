@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace RIMA.Audio
 {
@@ -50,6 +51,10 @@ namespace RIMA.Audio
             go.AddComponent<AudioManager>();
         }
 
+        // Scene names that should have chamber ambient playing.
+        // Keep lowercase for case-insensitive compare.
+        private static readonly string[] ChamberSceneNames = { "chamber", "attunementchamber", "attunement_chamber" };
+
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -60,13 +65,65 @@ namespace RIMA.Audio
             GenerateClips();
             LoadResourceOverrides();
             TryPlayMusic();
-            TryPlayAmbient();
+            // Start ambient only if current scene is chamber; hook handles transitions.
+            if (IsChamberScene(SceneManager.GetActiveScene().name))
+                TryPlayAmbient();
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (IsChamberScene(scene.name))
+            {
+                // Entering chamber — start ambient if not already playing.
+                if (ambientSrc == null || !ambientSrc.isPlaying)
+                    TryPlayAmbient();
+            }
+            else
+            {
+                // Leaving chamber — stop ambient loop.
+                if (ambientSrc != null && ambientSrc.isPlaying)
+                {
+                    ambientSrc.Stop();
+                    ambientSrc.clip = null;
+                }
+            }
+        }
+
+        private static bool IsChamberScene(string sceneName)
+        {
+            if (string.IsNullOrEmpty(sceneName)) return false;
+            string lower = sceneName.ToLowerInvariant().Replace(" ", "").Replace("_", "");
+            foreach (var s in ChamberSceneNames)
+                if (lower.Contains(s.Replace("_", ""))) return true;
+            return false;
+        }
+
+        // When set to true, the next HitImpact and EnemyDeath calls are swallowed (execute-kill
+        // suppression). Cleared automatically after one suppression cycle.
+        private static bool _suppressHitDeathOnce;
+
+        /// <summary>
+        /// Suppress the next HitImpact and EnemyDeath SFX cues (one frame / one-shot).
+        /// Call before DealDamage when the blow is an execute to avoid acoustic clutter.
+        /// </summary>
+        public static void SuppressNextHitDeathSfx() => _suppressHitDeathOnce = true;
 
         /// <summary>Play a SFX one-shot. No-op if manager/clip missing (safe from anywhere).</summary>
         public static void Play(Sfx sfx, float volume = 1f)
         {
             if (Instance == null || Instance.src == null) return;
+            // Suppress HitImpact and EnemyDeath when an execute fires to avoid acoustic clutter.
+            if (_suppressHitDeathOnce && (sfx == Sfx.HitImpact || sfx == Sfx.EnemyDeath))
+            {
+                if (sfx == Sfx.EnemyDeath) _suppressHitDeathOnce = false; // clear after kill cue
+                return;
+            }
             // Hold the cue but stay silent while only the procedural placeholder exists.
             if (Instance.muteProceduralFallback && !Instance.realClips.Contains(sfx)) return;
             if (Instance.clips.TryGetValue(sfx, out var clip) && clip != null)

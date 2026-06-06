@@ -92,8 +92,21 @@ namespace RIMA.Combat
             TriggerPause(pauseDurationKill);
         }
 
-        /// <summary>Called by ExecutePromptDriver when DeathBlow fires — dedicated execute freeze tier.</summary>
-        public void TriggerExecutePause() => TriggerPause(pauseDurationExecute);
+        /// <summary>Called by ExecutePromptDriver when DeathBlow fires — dedicated execute freeze tier.
+        /// Overrides any in-progress hit pause so total freeze ≈ pauseDurationExecute (not stacked).</summary>
+        public void TriggerExecutePause()
+        {
+            if (!FeelToggleSettings.HitstopEnabled) return;
+            // Clear any running pause so the execute duration is not stacked on top of it.
+            if (pauseCoroutine != null)
+            {
+                StopCoroutine(pauseCoroutine);
+                pendingExtraSeconds = 0f;
+                Time.timeScale = previousTimeScale;
+                pauseCoroutine = null;
+            }
+            TriggerPause(pauseDurationExecute);
+        }
 
         public void TriggerPause(float duration)
         {

@@ -33,6 +33,9 @@ namespace RIMA
         private bool isConfirmingPick;
         private int hoverSerial;
 
+        // Debounce for DraftHover SFX — 0.1s cooldown prevents spam on quick mouse sweeps.
+        private float _nextDraftHoverSfxTime;
+
         // ── Layout constants ─────────────────────────────────────────
         private const float CardWidth  = 280f;
         private const float CardHeight = 400f;
@@ -740,7 +743,11 @@ namespace RIMA
 
             if (entered)
             {
-                RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.DraftHover, 0.55f);
+                if (Time.unscaledTime >= _nextDraftHoverSfxTime)
+                {
+                    RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.DraftHover, 0.55f);
+                    _nextDraftHoverSfxTime = Time.unscaledTime + 0.1f;
+                }
                 ShowCardTooltip(state);
                 PulseOwnedChainSlots(state);
             }

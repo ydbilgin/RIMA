@@ -6,8 +6,9 @@ namespace RIMA
 {
     public class InputBufferService : MonoBehaviour
     {
-        // T2 M1: dash buffer 80ms (spec). Attack buffer keeps a slightly larger window for leniency.
-        [SerializeField] private float bufferWindow = 0.08f;
+        // T2 M1: dash buffer 80ms (tight — intentional). Attack keeps full 180ms for chain leniency.
+        [SerializeField] private float dashBufferWindow = 0.08f;
+        [SerializeField] private float attackBufferWindow = 0.18f;
 
         private enum Pending { None, Dash, Attack }
 
@@ -25,13 +26,13 @@ namespace RIMA
         public void RequestDash()
         {
             pending = Pending.Dash;
-            bufferExpiry = Time.time + bufferWindow;
+            bufferExpiry = Time.time + dashBufferWindow;
         }
 
         public void RequestAttack()
         {
             pending = Pending.Attack;
-            bufferExpiry = Time.time + bufferWindow;
+            bufferExpiry = Time.time + attackBufferWindow;
         }
 
         private void Update()

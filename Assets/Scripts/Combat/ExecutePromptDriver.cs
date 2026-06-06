@@ -40,6 +40,9 @@ namespace RIMA
         private GameObject currentTarget;   // the enemy currently showing the prompt
         private bool wasShowingPrompt;
 
+        // Pre-allocated buffer for OverlapCircleNonAlloc — avoids per-frame GC.
+        private readonly Collider2D[] _overlapBuffer = new Collider2D[16];
+
         private void Awake()
         {
             if (enemyLayer.value == 0)
@@ -51,7 +54,10 @@ namespace RIMA
         private void CreatePromptLabel()
         {
             var go = new GameObject("ExecutePrompt_WorldLabel");
-            go.transform.SetParent(null, true);   // world-space, unparented so it follows target manually
+            // Parent to Player so it's destroyed with the player on scene unload,
+            // preventing MissingReferenceException if player survives via DontDestroyOnLoad.
+            // Position is overridden every frame in Update(), so parenting has no visual effect.
+            go.transform.SetParent(transform, false);
             promptLabel = go.AddComponent<TextMeshPro>();
             promptLabel.fontSize = promptFontSize;
             promptLabel.color = promptColor;
@@ -112,18 +118,17 @@ namespace RIMA
         private Health FindNearestExecutableTarget()
         {
             Vector2 pos = transform.position;
-            var hits = Physics2D.OverlapCircleAll(pos, detectRadius, enemyLayer);
+            int count = Physics2D.OverlapCircleNonAlloc(pos, detectRadius, _overlapBuffer, enemyLayer);
             float best = float.MaxValue;
             Health bestHp = null;
 
-            foreach (var h in hits)
+            for (int i = 0; i < count; i++)
             {
+                var h = _overlapBuffer[i];
                 if (h.gameObject == gameObject) continue;
-                var hp = h.GetComponent<Health>();
-                if (hp == null || hp.IsDead) continue;
+                if (!h.TryGetComponent(out Health hp) || hp.IsDead) continue;
+                if (!h.TryGetComponent(out SkillStateTracker state)) continue;
 
-                var state = h.GetComponent<SkillStateTracker>();
-                if (state == null) continue;
                 bool markedForExecution = state.Has(SkillStateTracker.Broken)
                                        || state.Has(SkillStateTracker.Sundered);
                 if (!markedForExecution) continue;

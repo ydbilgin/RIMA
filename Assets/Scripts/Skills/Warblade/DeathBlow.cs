@@ -51,6 +51,8 @@ namespace RIMA
             float mult = chained ? chainMultiplier : damageMultiplier;
 
             int damage = Mathf.RoundToInt(baseDamage * mult);
+            // Suppress HitImpact + EnemyDeath for this blow — ExecutePayoff covers the audio.
+            RIMA.Audio.AudioManager.SuppressNextHitDeathSfx();
             SkillRuntime.DealDamage(target, damage, this);
 
             // T2: fire execute juice (freeze + shake + SFX) via ExecutePromptDriver
