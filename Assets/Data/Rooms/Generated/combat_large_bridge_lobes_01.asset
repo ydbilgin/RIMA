@@ -22,19 +22,19 @@ MonoBehaviour:
     width: 30
     height: 18
   doorSockets:
-  - socketId: door_N_01
+  - socketId: door_NW_01
     position: {x: 10, y: 17}
     direction: 0
     widthInTiles: 2
     isExit: 1
-  - socketId: door_E_01
-    position: {x: 29, y: 9}
-    direction: 2
+  - socketId: door_N_01
+    position: {x: 15, y: 16}
+    direction: 0
     widthInTiles: 2
     isExit: 1
-  - socketId: door_W_01
-    position: {x: 0, y: 9}
-    direction: 3
+  - socketId: door_NE_01
+    position: {x: 20, y: 16}
+    direction: 0
     widthInTiles: 2
     isExit: 1
   playerSpawn:

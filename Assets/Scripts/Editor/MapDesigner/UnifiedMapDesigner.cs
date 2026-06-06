@@ -380,7 +380,12 @@ namespace RIMA.Editor.MapDesigner
                     DoorSocket door = template.doorSockets[i];
                     if (door == null) continue;
                     Rect doorRect = TilePreviewRect(template.bounds, gridRect, cell, door.position);
-                    EditorGUI.DrawRect(InflateToMinimum(doorRect, 4f), Color.cyan);
+                    int slotIndex = RoomTemplateSO.ExitSlotIndex(door);
+                    Color color = SlotPreviewColor(slotIndex);
+                    Rect marker = InflateToMinimum(doorRect, 7f);
+                    EditorGUI.DrawRect(marker, color);
+                    string label = slotIndex >= 0 ? RoomTemplateSO.ExitSlotLabel(slotIndex) : door.direction.ToString();
+                    DrawPreviewLabel(marker, label, Color.white);
                 }
             }
 
@@ -389,7 +394,13 @@ namespace RIMA.Editor.MapDesigner
                 Rect spawnRect = TilePreviewRect(template.bounds, gridRect, cell, template.playerSpawn.position);
                 Rect dot = new Rect(spawnRect.center.x - 3f, spawnRect.center.y - 3f, 6f, 6f);
                 EditorGUI.DrawRect(dot, Color.green);
+                DrawPreviewLabel(InflateToMinimum(spawnRect, 8f), "ENTRY", Color.green);
             }
+
+            EditorGUI.LabelField(
+                new Rect(gridRect.x, gridRect.yMax + 2f, gridRect.width, 16f),
+                "1:N  2:NW+NE  3:NW+N+NE",
+                EditorStyles.miniLabel);
         }
 
         private static Rect TilePreviewRect(RectInt bounds, Rect gridRect, float cell, Vector2Int tile)
@@ -408,6 +419,36 @@ namespace RIMA.Editor.MapDesigner
             float width = Mathf.Max(rect.width, minSize);
             float height = Mathf.Max(rect.height, minSize);
             return new Rect(rect.center.x - width * 0.5f, rect.center.y - height * 0.5f, width, height);
+        }
+
+        private static Color SlotPreviewColor(int slotIndex)
+        {
+            switch (slotIndex)
+            {
+                case 0:
+                    return new Color(0.25f, 0.65f, 1f);
+                case 1:
+                    return new Color(0.1f, 1f, 0.95f);
+                case 2:
+                    return new Color(0.85f, 0.55f, 1f);
+                default:
+                    return Color.cyan;
+            }
+        }
+
+        private static void DrawPreviewLabel(Rect anchor, string text, Color color)
+        {
+            Color previous = GUI.color;
+            GUI.color = color;
+            GUIStyle style = new GUIStyle(EditorStyles.boldLabel)
+            {
+                fontSize = 9,
+                alignment = TextAnchor.MiddleCenter,
+                clipping = TextClipping.Overflow
+            };
+            Rect labelRect = new Rect(anchor.center.x - 24f, anchor.y - 13f, 48f, 12f);
+            EditorGUI.LabelField(labelRect, text, style);
+            GUI.color = previous;
         }
 
         private static DesignerCategory TabToCategory(Tab t)

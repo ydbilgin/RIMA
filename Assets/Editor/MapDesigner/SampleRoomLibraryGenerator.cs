@@ -72,7 +72,298 @@ namespace RIMA.Editor.MapDesigner
             template.blockerTags = new List<string>();
             template.props = BuildProps(spec.Props, barrelGuid);
             template.walkableGrid = BuildWalkableGrid(spec, template.doorSockets);
+            ApplyGateSlots(template, barrelGuid);
             return template;
+        }
+
+        private static void ApplyGateSlots(RoomTemplateSO template, string barrelGuid)
+        {
+            if (template.roomId == "Treasure_01")
+            {
+                BuildTreasureVault(template, barrelGuid);
+                return;
+            }
+
+            Vector2Int[] slots = BuildNorthSlots(template);
+            var doors = new List<DoorSocket>();
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] == InvalidCell)
+                {
+                    continue;
+                }
+
+                EnsureSouthCorridor(template, slots[i]);
+                doors.Add(new DoorSocket
+                {
+                    socketId = RoomTemplateSO.ExitSlotId(i),
+                    position = slots[i],
+                    direction = DoorDirection.North,
+                    widthInTiles = 2,
+                    isExit = true
+                });
+            }
+
+            template.doorSockets = doors;
+            if (template.playerSpawn == null ||
+                !template.IsWalkable(template.playerSpawn.position) ||
+                IsTooCloseToAnyDoor(template.playerSpawn.position, doors))
+            {
+                if (!TryFindPlayerSpawn(template, doors, out Vector2Int spawnPosition))
+                {
+                    doors.RemoveAll(door => door == null || door.socketId != RoomTemplateSO.ExitSlotNorthId);
+                    TryFindPlayerSpawn(template, doors, out spawnPosition);
+                }
+
+                template.playerSpawn = new PlayerSpawnSocket
+                {
+                    socketId = "player_spawn_01",
+                    position = spawnPosition,
+                    facing = DoorDirection.North
+                };
+            }
+            else
+            {
+                template.playerSpawn.facing = DoorDirection.North;
+            }
+        }
+
+        private static readonly Vector2Int InvalidCell = new Vector2Int(int.MinValue, int.MinValue);
+
+        private static Vector2Int[] BuildNorthSlots(RoomTemplateSO template)
+        {
+            Vector2Int[] slots = { InvalidCell, InvalidCell, InvalidCell };
+            List<Vector2Int> candidates = CollectNorthDoorEdges(template, true);
+            if (candidates.Count == 0)
+            {
+                candidates = CollectNorthDoorEdges(template, false);
+            }
+
+            if (candidates.Count == 0)
+            {
+                return slots;
+            }
+
+            float centerX = template.bounds.xMin + (template.bounds.width - 1) * 0.5f;
+            Vector2Int center = PickNearest(candidates, centerX, null);
+            slots[1] = center;
+
+            Vector2Int left = InvalidCell;
+            Vector2Int right = InvalidCell;
+            float leftDistance = float.MaxValue;
+            float rightDistance = float.MaxValue;
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                Vector2Int candidate = candidates[i];
+                if (candidate == center || Vector2Int.Distance(candidate, center) < 3f)
+                {
+                    continue;
+                }
+
+                if (candidate.x < center.x)
+                {
+                    float distance = Mathf.Abs(candidate.x - (template.bounds.xMin + template.bounds.width / 3f));
+                    if (left == InvalidCell || distance < leftDistance)
+                    {
+                        left = candidate;
+                        leftDistance = distance;
+                    }
+                }
+                else if (candidate.x > center.x)
+                {
+                    float distance = Mathf.Abs(candidate.x - (template.bounds.xMin + template.bounds.width * 2f / 3f));
+                    if (right == InvalidCell || distance < rightDistance)
+                    {
+                        right = candidate;
+                        rightDistance = distance;
+                    }
+                }
+            }
+
+            slots[0] = left;
+            slots[2] = right;
+            return slots;
+        }
+
+        private static List<Vector2Int> CollectNorthDoorEdges(RoomTemplateSO template, bool requireSouthCorridor)
+        {
+            var candidates = new List<Vector2Int>();
+            for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
+            {
+                for (int x = template.bounds.xMin; x < template.bounds.xMax; x++)
+                {
+                    Vector2Int cell = new Vector2Int(x, y);
+                    if (!template.IsWalkable(cell) || template.IsWalkable(cell + Vector2Int.up))
+                    {
+                        continue;
+                    }
+
+                    if (requireSouthCorridor && !HasSouthCorridor(template, cell))
+                    {
+                        continue;
+                    }
+
+                    candidates.Add(cell);
+                }
+            }
+
+            candidates.Sort((a, b) => a.x != b.x ? a.x.CompareTo(b.x) : a.y.CompareTo(b.y));
+            return candidates;
+        }
+
+        private static Vector2Int PickNearest(List<Vector2Int> cells, float targetX, List<Vector2Int> excluded)
+        {
+            Vector2Int best = cells[0];
+            float bestDistance = float.MaxValue;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                Vector2Int candidate = cells[i];
+                if (excluded != null && excluded.Contains(candidate))
+                {
+                    continue;
+                }
+
+                float distance = Mathf.Abs(candidate.x - targetX);
+                if (distance < bestDistance)
+                {
+                    best = candidate;
+                    bestDistance = distance;
+                }
+            }
+
+            return best;
+        }
+
+        private static bool HasSouthCorridor(RoomTemplateSO template, Vector2Int slot)
+        {
+            return template.IsWalkable(slot + Vector2Int.down)
+                && template.IsWalkable(slot + Vector2Int.down * 2);
+        }
+
+        private static void EnsureSouthCorridor(RoomTemplateSO template, Vector2Int slot)
+        {
+            SetWalkable(template, slot + Vector2Int.down, true);
+            SetWalkable(template, slot + Vector2Int.down * 2, true);
+        }
+
+        private static void SetWalkable(RoomTemplateSO template, Vector2Int position, bool walkable)
+        {
+            if (!template.bounds.Contains(position))
+            {
+                return;
+            }
+
+            int lx = position.x - template.bounds.xMin;
+            int ly = position.y - template.bounds.yMin;
+            int index = ly * template.bounds.width + lx;
+            if (template.walkableGrid != null && index >= 0 && index < template.walkableGrid.Length)
+            {
+                template.walkableGrid[index] = walkable;
+            }
+        }
+
+        private static bool TryFindPlayerSpawn(RoomTemplateSO template, List<DoorSocket> doors, out Vector2Int best)
+        {
+            bool found = false;
+            best = default;
+            int bestY = int.MaxValue;
+            float centerX = template.bounds.xMin + (template.bounds.width - 1) * 0.5f;
+            float bestCenterDistance = float.MaxValue;
+
+            for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
+            {
+                for (int x = template.bounds.xMin; x < template.bounds.xMax; x++)
+                {
+                    Vector2Int candidate = new Vector2Int(x, y);
+                    if (!template.IsWalkable(candidate) || IsTooCloseToAnyDoor(candidate, doors))
+                    {
+                        continue;
+                    }
+
+                    float centerDistance = Mathf.Abs(candidate.x - centerX);
+                    if (!found || y < bestY || (y == bestY && centerDistance < bestCenterDistance))
+                    {
+                        found = true;
+                        best = candidate;
+                        bestY = y;
+                        bestCenterDistance = centerDistance;
+                    }
+                }
+            }
+
+            if (found)
+            {
+                return true;
+            }
+
+            for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
+            {
+                for (int x = template.bounds.xMin; x < template.bounds.xMax; x++)
+                {
+                    Vector2Int candidate = new Vector2Int(x, y);
+                    if (template.IsWalkable(candidate))
+                    {
+                        best = candidate;
+                        return false;
+                    }
+                }
+            }
+
+            best = new Vector2Int(template.bounds.xMin, template.bounds.yMin);
+            return false;
+        }
+
+        private static bool IsTooCloseToAnyDoor(Vector2Int candidate, List<DoorSocket> doors)
+        {
+            if (doors == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < doors.Count; i++)
+            {
+                if (doors[i] != null && Vector2Int.Distance(candidate, doors[i].position) < 4f)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void BuildTreasureVault(RoomTemplateSO template, string barrelGuid)
+        {
+            template.bounds = new RectInt(0, 0, 8, 8);
+            template.cameraBounds = CameraBounds.FromBounds(template.bounds);
+            template.doorSockets = new List<DoorSocket>
+            {
+                new DoorSocket { socketId = RoomTemplateSO.ExitSlotNorthWestId, position = new Vector2Int(1, 6), direction = DoorDirection.North, widthInTiles = 2, isExit = true },
+                new DoorSocket { socketId = RoomTemplateSO.ExitSlotNorthId, position = new Vector2Int(4, 7), direction = DoorDirection.North, widthInTiles = 2, isExit = true },
+            };
+            template.playerSpawn = new PlayerSpawnSocket { socketId = "player_spawn_01", position = new Vector2Int(3, 1), facing = DoorDirection.North };
+
+            bool[] grid = new bool[template.bounds.width * template.bounds.height];
+            for (int y = 0; y < template.bounds.height; y++)
+            {
+                for (int x = 0; x < template.bounds.width; x++)
+                {
+                    bool walkable =
+                        (y == 7 && x >= 3 && x <= 5) ||
+                        (y == 6 && x >= 1 && x <= 6) ||
+                        (y >= 2 && y <= 5 && x >= 1 && x <= 6) ||
+                        (y == 1 && x >= 2 && x <= 5);
+                    grid[y * template.bounds.width + x] = walkable;
+                }
+            }
+
+            template.walkableGrid = grid;
+            template.props = new List<PropPlacementData>
+            {
+                new PropPlacementData(barrelGuid, new Vector2Int(2, 5)),
+                new PropPlacementData(barrelGuid, new Vector2Int(5, 5)),
+                new PropPlacementData(barrelGuid, new Vector2Int(2, 2)),
+                new PropPlacementData(barrelGuid, new Vector2Int(5, 2)),
+            };
         }
 
         private static bool[] BuildWalkableGrid(RoomSpec spec, List<DoorSocket> doors)

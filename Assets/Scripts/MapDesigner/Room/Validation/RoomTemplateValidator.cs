@@ -83,20 +83,36 @@ namespace RIMA.MapDesigner.Room.Validation
 
         private static void ValidateDoors(RoomTemplateSO template, string id, List<RoomValidationIssue> issues)
         {
-            int exitCount = 0;
+            DoorSocket[] slots = template.ResolveExitSlots();
+            int validSlotCount = 0;
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] != null)
+                {
+                    validSlotCount++;
+                }
+            }
+
             if (template.doorSockets != null)
             {
                 for (int i = 0; i < template.doorSockets.Count; i++)
                 {
                     DoorSocket d = template.doorSockets[i];
                     if (d == null) continue;
-                    if (d.isExit) exitCount++;
 
                     if (d.isExit && d.direction == RIMA.DoorDirection.South)
                     {
                         issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
                             "ERR_SOUTH_EXIT_SOCKET",
                             $"DoorSocket[{i}] '{d.socketId}' is a South exit; south exits are forbidden.",
+                            id));
+                    }
+
+                    if (d.isExit && RoomTemplateSO.ExitSlotIndex(d) < 0)
+                    {
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                            "ERR_INVALID_EXIT_SLOT_ID",
+                            $"DoorSocket[{i}] '{d.socketId}' is not one of door_NW_01 / door_N_01 / door_NE_01.",
                             id));
                     }
 
@@ -107,14 +123,32 @@ namespace RIMA.MapDesigner.Room.Validation
                             $"DoorSocket[{i}] '{d.socketId}' at {d.position} is not a walkable {d.direction} edge cell.",
                             id));
                     }
+
+                    if (d.isExit && RoomTemplateSO.ExitSlotIndex(d) >= 0 && !HasSouthCorridor(template, d.position))
+                    {
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                            "ERR_EXIT_SLOT_NO_SOUTH_CORRIDOR",
+                            $"DoorSocket[{i}] '{d.socketId}' at {d.position} does not have 2 walkable cells to the south.",
+                            id));
+                    }
                 }
             }
 
-            if (exitCount == 0)
+            if (validSlotCount == 0)
             {
                 issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
-                    "ERR_NO_EXIT_SOCKET", "No DoorSocket with isExit=true.", id));
+                    "ERR_NO_EXIT_SLOT", "No valid authored exit slot.", id));
             }
+
+            if (slots[1] == null)
+            {
+                issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                    "ERR_MISSING_N_EXIT_SLOT", "Missing valid door_N_01 exit slot.", id));
+            }
+
+            ValidateSlotDistinctnessAndSeparation(slots, id, issues);
+            ValidateSlotSpawnDistance(template, slots, id, issues);
+            ValidateSlotWarnings(template, slots, id, issues);
         }
 
         private static void ValidateCameraBounds(RoomTemplateSO template, string id, List<RoomValidationIssue> issues)
@@ -234,6 +268,154 @@ namespace RIMA.MapDesigner.Room.Validation
 
             Vector2Int neighbor = socket.position + DirectionOffset(socket.direction);
             return !template.IsWalkable(neighbor);
+        }
+
+        private static bool HasSouthCorridor(RoomTemplateSO template, Vector2Int position)
+        {
+            return template.IsWalkable(position + Vector2Int.down)
+                && template.IsWalkable(position + Vector2Int.down * 2);
+        }
+
+        private static void ValidateSlotDistinctnessAndSeparation(DoorSocket[] slots, string id, List<RoomValidationIssue> issues)
+        {
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] == null)
+                {
+                    continue;
+                }
+
+                for (int j = i + 1; j < slots.Length; j++)
+                {
+                    if (slots[j] == null)
+                    {
+                        continue;
+                    }
+
+                    if (slots[i].position == slots[j].position)
+                    {
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                            "ERR_EXIT_SLOTS_NOT_DISTINCT",
+                            $"{RoomTemplateSO.ExitSlotLabel(i)} and {RoomTemplateSO.ExitSlotLabel(j)} share {slots[i].position}.",
+                            id));
+                    }
+
+                    if (Vector2Int.Distance(slots[i].position, slots[j].position) < 3f)
+                    {
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                            "ERR_EXIT_SLOTS_TOO_CLOSE",
+                            $"{RoomTemplateSO.ExitSlotLabel(i)} and {RoomTemplateSO.ExitSlotLabel(j)} are less than 3 tiles apart.",
+                            id));
+                    }
+                }
+            }
+        }
+
+        private static void ValidateSlotSpawnDistance(RoomTemplateSO template, DoorSocket[] slots, string id, List<RoomValidationIssue> issues)
+        {
+            if (template.playerSpawn == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                DoorSocket slot = slots[i];
+                if (slot == null)
+                {
+                    continue;
+                }
+
+                if (Vector2Int.Distance(template.playerSpawn.position, slot.position) < 4f)
+                {
+                    issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                        "ERR_PLAYER_TOO_CLOSE_TO_EXIT_SLOT",
+                        $"Player spawn is less than 4 tiles from {RoomTemplateSO.ExitSlotLabel(i)} at {slot.position}.",
+                        id));
+                }
+            }
+        }
+
+        private static void ValidateSlotWarnings(RoomTemplateSO template, DoorSocket[] slots, string id, List<RoomValidationIssue> issues)
+        {
+            if (slots[0] != null && slots[2] != null && Mathf.Abs(slots[0].position.y - slots[2].position.y) > 2)
+            {
+                issues.Add(new RoomValidationIssue(ValidationSeverity.Warning,
+                    "WARN_EXIT_SLOT_WINGS_MISALIGNED",
+                    $"NW/NE slot Y values differ by more than 2: {slots[0].position.y} vs {slots[2].position.y}.",
+                    id));
+            }
+
+            if (template.props != null)
+            {
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    DoorSocket slot = slots[i];
+                    if (slot == null)
+                    {
+                        continue;
+                    }
+
+                    for (int p = 0; p < template.props.Count; p++)
+                    {
+                        var prop = template.props[p];
+                        if (prop != null && Vector2Int.Distance(slot.position, prop.tilePosition) < 2f)
+                        {
+                            issues.Add(new RoomValidationIssue(ValidationSeverity.Warning,
+                                "WARN_EXIT_SLOT_NEAR_PROP",
+                                $"{RoomTemplateSO.ExitSlotLabel(i)} at {slot.position} is less than 2 tiles from prop at {prop.tilePosition}.",
+                                id));
+                        }
+                    }
+                }
+            }
+
+            if (template.playerSpawn == null || !template.IsWalkable(template.playerSpawn.position))
+            {
+                return;
+            }
+
+            HashSet<Vector2Int> reachable = FloodFill(template, template.playerSpawn.position);
+            for (int i = 0; i < slots.Length; i++)
+            {
+                DoorSocket slot = slots[i];
+                if (slot != null && !reachable.Contains(slot.position))
+                {
+                    issues.Add(new RoomValidationIssue(ValidationSeverity.Warning,
+                        "WARN_EXIT_SLOT_UNREACHABLE",
+                        $"{RoomTemplateSO.ExitSlotLabel(i)} at {slot.position} is not flood-fill reachable from playerSpawn.",
+                        id));
+                }
+            }
+        }
+
+        private static HashSet<Vector2Int> FloodFill(RoomTemplateSO template, Vector2Int start)
+        {
+            HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+            Queue<Vector2Int> open = new Queue<Vector2Int>();
+            visited.Add(start);
+            open.Enqueue(start);
+
+            while (open.Count > 0)
+            {
+                Vector2Int cell = open.Dequeue();
+                TryVisit(template, cell + Vector2Int.up, visited, open);
+                TryVisit(template, cell + Vector2Int.down, visited, open);
+                TryVisit(template, cell + Vector2Int.left, visited, open);
+                TryVisit(template, cell + Vector2Int.right, visited, open);
+            }
+
+            return visited;
+        }
+
+        private static void TryVisit(RoomTemplateSO template, Vector2Int cell, HashSet<Vector2Int> visited, Queue<Vector2Int> open)
+        {
+            if (!template.IsWalkable(cell) || !visited.Add(cell))
+            {
+                return;
+            }
+
+            open.Enqueue(cell);
         }
 
         private static Vector2Int DirectionOffset(RIMA.DoorDirection direction)

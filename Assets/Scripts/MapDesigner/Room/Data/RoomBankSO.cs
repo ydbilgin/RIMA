@@ -29,6 +29,35 @@ namespace RIMA.MapDesigner.Room.Data
             return list[index];
         }
 
+        public RoomTemplateSO Pick(RIMA.RoomType roomType, int seed, int requiredExitSlots)
+        {
+            List<RoomTemplateSO> list = GetList(roomType);
+            if (list == null || list.Count == 0)
+            {
+                return null;
+            }
+
+            int required = Mathf.Clamp(requiredExitSlots, 0, 3);
+            List<RoomTemplateSO> eligible = new List<RoomTemplateSO>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                RoomTemplateSO template = list[i];
+                if (template != null && template.ValidExitSlotCount >= required)
+                {
+                    eligible.Add(template);
+                }
+            }
+
+            if (eligible.Count == 0)
+            {
+                return null;
+            }
+
+            int hashed = unchecked(seed * 1103515245 + 12345);
+            int index = (hashed & 0x7FFFFFFF) % eligible.Count;
+            return eligible[index];
+        }
+
         public List<RoomTemplateSO> GetList(RIMA.RoomType roomType)
         {
             switch (roomType)

@@ -104,7 +104,7 @@ namespace RIMA.Tests.Props
             template.playerSpawn = new PlayerSpawnSocket { socketId = "player", position = new Vector2Int(1, 1), facing = RIMA.DoorDirection.North };
             template.doorSockets = new List<DoorSocket>
             {
-                new DoorSocket { socketId = "door", position = new Vector2Int(5, 9), direction = RIMA.DoorDirection.North, widthInTiles = 2, isExit = true }
+                new DoorSocket { socketId = RoomTemplateSO.ExitSlotNorthId, position = new Vector2Int(5, 9), direction = RIMA.DoorDirection.North, widthInTiles = 2, isExit = true }
             };
             template.enemySpawnSockets = new List<EnemySpawnSocket>();
             template.encounterTags = new List<string> { "props_test" };

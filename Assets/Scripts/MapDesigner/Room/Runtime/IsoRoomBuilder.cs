@@ -732,15 +732,27 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
             DestroyChildren(gatesContainer);
 
-            Vector3 rowAnchor;
-            bool hasNorthExitSocket = TryGetNorthExitAnchor(out rowAnchor);
-            if (!hasNorthExitSocket)
+            int count = doorTypes.Count;
+            List<DoorSocket> selectedSlots = new List<DoorSocket>();
+            if (lastTemplate != null && lastTemplate.TryResolveExitSlotsForDoorCount(count, selectedSlots))
             {
-                string templateName = lastTemplate != null && !string.IsNullOrEmpty(lastTemplate.roomId) ? lastTemplate.roomId : "unknown";
-                if (WarnedMissingNorthExitSocketTemplates.Add(templateName))
+                for (int i = 0; i < count; i++)
                 {
-                    Debug.LogWarning($"[IsoRoomBuilder] Template {templateName} has no North exit socket; using fallback exit door row.");
+                    DoorSocket slot = selectedSlots[i];
+                    Vector3 center = grid.GetCellCenterWorld(new Vector3Int(slot.position.x, slot.position.y, 0));
+                    Vector3 position = new Vector3(center.x + gateTuck.x, center.y + gateTuck.y, 0f);
+                    doors.Add(CreateExitDoorObject(i, doorTypes[i], position));
                 }
+
+                return doors;
+            }
+
+            string templateName = lastTemplate != null && !string.IsNullOrEmpty(lastTemplate.roomId) ? lastTemplate.roomId : "unknown";
+            string warningKey = $"{templateName}:{count}";
+            if (WarnedMissingNorthExitSocketTemplates.Add(warningKey))
+            {
+                int validSlots = lastTemplate != null ? lastTemplate.ValidExitSlotCount : 0;
+                Debug.LogWarning($"[IsoRoomBuilder] Template {templateName} has {validSlots} valid exit slots for {count} doors; using fallback exit door row.");
             }
 
             Vector3 min = new Vector3(float.MaxValue, float.MaxValue, 0f);
@@ -752,7 +764,7 @@ namespace RIMA.MapDesigner.Room.Runtime
                 max = Vector3.Max(max, world);
             }
 
-            float rowY = hasNorthExitSocket ? rowAnchor.y : Mathf.Lerp(min.y, max.y, 0.72f);
+            float rowY = Mathf.Lerp(min.y, max.y, 0.72f);
             float rowXMin = float.MaxValue;
             float rowXMax = float.MinValue;
             foreach (Vector3Int cell in LastFloorCells)
@@ -769,71 +781,49 @@ namespace RIMA.MapDesigner.Room.Runtime
                 rowXMin = min.x;
                 rowXMax = max.x;
             }
-            float centerX = hasNorthExitSocket ? rowAnchor.x : (rowXMin + rowXMax) * 0.5f;
+            float centerX = (rowXMin + rowXMax) * 0.5f;
             float usableWidth = Mathf.Max(0f, (rowXMax - rowXMin) - 1.8f);
-            int count = doorTypes.Count;
             float spacing = (count > 1 && (count - 1) * gateRowSpacing > usableWidth)
                 ? usableWidth / (count - 1)
                 : gateRowSpacing;
 
             for (int i = 0; i < count; i++)
             {
-                RoomType doorType = doorTypes[i];
-                GameObject gateObject = new GameObject($"ExitDoor_{i}_{doorType}");
-                gateObject.transform.SetParent(gatesContainer, false);
-
                 float x = centerX + (i - (count - 1) * 0.5f) * spacing;
                 Vector3 position = new Vector3(x + gateTuck.x, rowY + gateTuck.y, 0f);
-                gateObject.transform.position = position;
-
-                SpriteRenderer gateRenderer = gateObject.AddComponent<SpriteRenderer>();
-                gateRenderer.sprite = gateNorthSprite;
-                gateRenderer.sortingLayerName = cliffSortingLayer;
-                gateRenderer.sortingOrder = gateSortOrderBase + Mathf.RoundToInt(cliffSortYSpan - position.y);
-
-                Sprite runeSprite = (doorType == RoomType.Elite || doorType == RoomType.Boss)
-                    ? runeEliteSprite
-                    : runeCombatSprite;
-                if (runeSprite != null)
-                {
-                    GameObject runeObject = new GameObject("Rune");
-                    runeObject.transform.SetParent(gateObject.transform, false);
-                    runeObject.transform.localPosition = new Vector3(runeLocalOffset.x, runeLocalOffset.y, 0f);
-
-                    SpriteRenderer runeRenderer = runeObject.AddComponent<SpriteRenderer>();
-                    runeRenderer.sprite = runeSprite;
-                    runeRenderer.sortingLayerName = cliffSortingLayer;
-                    runeRenderer.sortingOrder = gateRenderer.sortingOrder + 1;
-                }
-
-                doors.Add(gateObject);
+                doors.Add(CreateExitDoorObject(i, doorTypes[i], position));
             }
 
             return doors;
         }
 
-        private bool TryGetNorthExitAnchor(out Vector3 rowAnchor)
+        private GameObject CreateExitDoorObject(int choiceIndex, RoomType doorType, Vector3 position)
         {
-            rowAnchor = default;
-            if (lastTemplate == null || lastTemplate.doorSockets == null)
+            GameObject gateObject = new GameObject($"ExitDoor_{choiceIndex}_{doorType}");
+            gateObject.transform.SetParent(gatesContainer, false);
+            gateObject.transform.position = position;
+
+            SpriteRenderer gateRenderer = gateObject.AddComponent<SpriteRenderer>();
+            gateRenderer.sprite = gateNorthSprite;
+            gateRenderer.sortingLayerName = cliffSortingLayer;
+            gateRenderer.sortingOrder = gateSortOrderBase + Mathf.RoundToInt(cliffSortYSpan - position.y);
+
+            Sprite runeSprite = (doorType == RoomType.Elite || doorType == RoomType.Boss)
+                ? runeEliteSprite
+                : runeCombatSprite;
+            if (runeSprite != null)
             {
-                return false;
+                GameObject runeObject = new GameObject("Rune");
+                runeObject.transform.SetParent(gateObject.transform, false);
+                runeObject.transform.localPosition = new Vector3(runeLocalOffset.x, runeLocalOffset.y, 0f);
+
+                SpriteRenderer runeRenderer = runeObject.AddComponent<SpriteRenderer>();
+                runeRenderer.sprite = runeSprite;
+                runeRenderer.sortingLayerName = cliffSortingLayer;
+                runeRenderer.sortingOrder = gateRenderer.sortingOrder + 1;
             }
 
-            for (int i = 0; i < lastTemplate.doorSockets.Count; i++)
-            {
-                DoorSocket socket = lastTemplate.doorSockets[i];
-                if (socket == null || !socket.isExit || socket.direction != DoorDirection.North)
-                {
-                    continue;
-                }
-
-                Vector3 center = grid.GetCellCenterWorld(new Vector3Int(socket.position.x, socket.position.y, 0));
-                rowAnchor = new Vector3(center.x, center.y, 0f);
-                return true;
-            }
-
-            return false;
+            return gateObject;
         }
     }
 }

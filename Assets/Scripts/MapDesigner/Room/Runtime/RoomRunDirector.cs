@@ -180,7 +180,8 @@ namespace RIMA.MapDesigner.Room.Runtime
             ClearActiveEnemies();
             lifecycle.BeginCombat();
 
-            RoomTemplateSO template = roomBank != null ? roomBank.Pick(CurrentRoomType, runSeed + CurrentNodeId) : null;
+            List<DungeonNode> choices = CurrentChoices;
+            RoomTemplateSO template = roomBank != null ? roomBank.Pick(CurrentRoomType, runSeed + CurrentNodeId, choices.Count) : null;
             if (template == null)
             {
                 template = fallbackTemplate;
@@ -203,7 +204,7 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             // Exit doors = this node's branch choices (door count + each door's destination type).
             List<RIMA.RoomType> doorTypes = new List<RIMA.RoomType>();
-            foreach (DungeonNode child in CurrentChoices)
+            foreach (DungeonNode child in choices)
             {
                 doorTypes.Add(child.roomType);
             }

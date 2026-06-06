@@ -13,7 +13,7 @@ namespace RIMA.Tests.Room
         private const string CharSelectPath = "Assets/Data/Rooms/Special/Chamber_CharSelect.asset";
 
         [Test]
-        public void RoomTemplatesExceptCharSelect_HaveWalkableNorthSpawnSockets()
+        public void RoomTemplatesExceptCharSelect_HaveAuthoredNorthExitSlots()
         {
             string[] guids = AssetDatabase.FindAssets("t:RoomTemplateSO", new[] { RoomsRoot });
             List<string> failures = new List<string>();
@@ -37,8 +37,8 @@ namespace RIMA.Tests.Room
                     failures.Add($"{path}: missing or non-walkable player spawn");
                 }
 
-                bool hasNorthExit = false;
-                bool hasSouthExit = false;
+                DoorSocket[] slots = room.ResolveExitSlots();
+                int validSlotCount = 0;
                 if (room.doorSockets != null)
                 {
                     for (int socketIndex = 0; socketIndex < room.doorSockets.Count; socketIndex++)
@@ -49,19 +49,55 @@ namespace RIMA.Tests.Room
                             continue;
                         }
 
-                        hasNorthExit |= socket.direction == DoorDirection.North;
-                        hasSouthExit |= socket.direction == DoorDirection.South;
+                        if (socket.direction == DoorDirection.South)
+                        {
+                            failures.Add($"{path}: has South exit at {socket.position}");
+                        }
                     }
                 }
 
-                if (!hasNorthExit)
+                for (int slotIndex = 0; slotIndex < slots.Length; slotIndex++)
                 {
-                    failures.Add($"{path}: missing North exit");
+                    if (slots[slotIndex] != null)
+                    {
+                        validSlotCount++;
+                    }
                 }
 
-                if (hasSouthExit)
+                if (validSlotCount == 0)
                 {
-                    failures.Add($"{path}: has South exit");
+                    failures.Add($"{path}: missing valid authored exit slots");
+                }
+
+                if (slots[1] == null)
+                {
+                    failures.Add($"{path}: missing valid N slot");
+                }
+
+                for (int a = 0; a < slots.Length; a++)
+                {
+                    if (slots[a] == null)
+                    {
+                        continue;
+                    }
+
+                    for (int b = a + 1; b < slots.Length; b++)
+                    {
+                        if (slots[b] == null)
+                        {
+                            continue;
+                        }
+
+                        if (slots[a].position == slots[b].position)
+                        {
+                            failures.Add($"{path}: {RoomTemplateSO.ExitSlotLabel(a)} and {RoomTemplateSO.ExitSlotLabel(b)} share {slots[a].position}");
+                        }
+
+                        if (UnityEngine.Vector2Int.Distance(slots[a].position, slots[b].position) < 3f)
+                        {
+                            failures.Add($"{path}: {RoomTemplateSO.ExitSlotLabel(a)} and {RoomTemplateSO.ExitSlotLabel(b)} are less than 3 tiles apart");
+                        }
+                    }
                 }
             }
 

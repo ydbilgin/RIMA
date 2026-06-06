@@ -14,16 +14,16 @@ namespace RIMA.Tests.Editor
 
         private static readonly Dictionary<string, ExpectedRoom> ExpectedRooms = new Dictionary<string, ExpectedRoom>
         {
-            { "Spawn_01", new ExpectedRoom(new RectInt(0, 0, 8, 6), 1) },
-            { "Corridor_Linear_01", new ExpectedRoom(new RectInt(0, 0, 12, 4), 2) },
-            { "Corridor_LShape_01", new ExpectedRoom(new RectInt(0, 0, 10, 8), 2) },
-            { "Combat_Small_01", new ExpectedRoom(new RectInt(0, 0, 8, 6), 2) },
-            { "Combat_Medium_01", new ExpectedRoom(new RectInt(0, 0, 12, 8), 3) },
-            { "Combat_Large_01", new ExpectedRoom(new RectInt(0, 0, 16, 10), 4) },
-            { "Elite_01", new ExpectedRoom(new RectInt(0, 0, 10, 8), 2) },
-            { "Treasure_01", new ExpectedRoom(new RectInt(0, 0, 6, 6), 1) },
-            { "Shrine_01", new ExpectedRoom(new RectInt(0, 0, 8, 8), 2) },
-            { "Boss_Intro_01", new ExpectedRoom(new RectInt(0, 0, 14, 10), 2) }
+            { "Spawn_01", new ExpectedRoom(new RectInt(0, 0, 8, 6)) },
+            { "Corridor_Linear_01", new ExpectedRoom(new RectInt(0, 0, 12, 4)) },
+            { "Corridor_LShape_01", new ExpectedRoom(new RectInt(0, 0, 10, 8)) },
+            { "Combat_Small_01", new ExpectedRoom(new RectInt(0, 0, 8, 6)) },
+            { "Combat_Medium_01", new ExpectedRoom(new RectInt(0, 0, 12, 8)) },
+            { "Combat_Large_01", new ExpectedRoom(new RectInt(0, 0, 16, 10)) },
+            { "Elite_01", new ExpectedRoom(new RectInt(0, 0, 10, 8)) },
+            { "Treasure_01", new ExpectedRoom(new RectInt(0, 0, 8, 8)) },
+            { "Shrine_01", new ExpectedRoom(new RectInt(0, 0, 8, 8)) },
+            { "Boss_Intro_01", new ExpectedRoom(new RectInt(0, 0, 14, 10)) }
         };
 
         [Test]
@@ -44,7 +44,9 @@ namespace RIMA.Tests.Editor
                 Assert.IsNotNull(room.walkableGrid, $"{expected.Key} should have a walkable grid.");
                 Assert.AreEqual(room.bounds.width * room.bounds.height, room.walkableGrid.Length, $"{expected.Key} walkable grid size should match bounds.");
                 Assert.IsNotNull(room.doorSockets, $"{expected.Key} should have door sockets.");
-                Assert.AreEqual(expected.Value.DoorCount, room.doorSockets.Count, $"{expected.Key} door count mismatch.");
+                Assert.GreaterOrEqual(room.ValidExitSlotCount, 1, $"{expected.Key} should have at least one valid authored slot.");
+                Assert.IsNotNull(room.ResolveExitSlots()[1], $"{expected.Key} should have a valid N slot.");
+                Assert.IsFalse(room.doorSockets.Exists(door => door != null && door.direction == DoorDirection.South), $"{expected.Key} should not have South exits.");
             }
         }
 
@@ -56,8 +58,15 @@ namespace RIMA.Tests.Editor
             RoomTemplateSO room = LoadRoom("Spawn_01");
             Assert.IsNotNull(room);
             Assert.IsNotNull(room.playerSpawn);
-            Assert.AreEqual(new Vector2Int(2, 3), room.playerSpawn.position);
-            Assert.AreEqual(DoorDirection.East, room.playerSpawn.facing);
+            Assert.IsTrue(room.IsWalkable(room.playerSpawn.position));
+            Assert.AreEqual(DoorDirection.North, room.playerSpawn.facing);
+            foreach (DoorSocket door in room.doorSockets)
+            {
+                if (door != null && door.isExit)
+                {
+                    Assert.GreaterOrEqual(Vector2Int.Distance(room.playerSpawn.position, door.position), 4f);
+                }
+            }
         }
 
         [Test]
@@ -86,12 +95,10 @@ namespace RIMA.Tests.Editor
         private readonly struct ExpectedRoom
         {
             public readonly RectInt Bounds;
-            public readonly int DoorCount;
 
-            public ExpectedRoom(RectInt bounds, int doorCount)
+            public ExpectedRoom(RectInt bounds)
             {
                 Bounds = bounds;
-                DoorCount = doorCount;
             }
         }
     }
