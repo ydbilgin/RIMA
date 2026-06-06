@@ -179,7 +179,12 @@ namespace RIMA
 
             if (CurrentState == MobState.Chase)
             {
-                Rb.linearVelocity = dir * (chaseSpeed * speedMult);
+                Vector2 desiredVel = dir * (chaseSpeed * speedMult);
+                // Walkability clamp: prevent mobs from crossing void/hole cells.
+                // Uses the shared helper (same logic as PlayerController) with O(1) grid lookup.
+                // Permissive when no WalkabilityMap in scene (legacy behavior preserved).
+                desiredVel = WalkabilityMap.ClampVelocityToWalkable(WalkabilityMap.Instance, transform.position, desiredVel, Time.fixedDeltaTime);
+                Rb.linearVelocity = desiredVel;
                 // Sprite flip artık EnemyAnimator tarafından yönetiliyor
             }
             else

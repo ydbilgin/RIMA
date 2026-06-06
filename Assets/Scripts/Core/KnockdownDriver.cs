@@ -184,13 +184,19 @@ namespace RIMA
             float elapsed = 0f;
             float duration = profile.LaunchDuration;
             Vector2 velocity = direction * Mathf.Max(0f, force);
+            WalkabilityMap walkMap = WalkabilityMap.Instance;
 
             while (elapsed < duration)
             {
                 float t = Mathf.Clamp01(elapsed / duration);
                 float height = Mathf.Sin(t * Mathf.PI) * profile.ArcHeight;
                 float decay = 1f - t;
-                if (rb != null) rb.linearVelocity = velocity * decay;
+                if (rb != null)
+                {
+                    // Walkability clamp: knockdown arc cannot push actor into void/holes.
+                    Vector2 frameVel = WalkabilityMap.ClampVelocityToWalkable(walkMap, transform.position, velocity * decay, Time.deltaTime);
+                    rb.linearVelocity = frameVel;
+                }
                 SetVisual(height, profile.tiltAngle * tiltSign * t, Vector3.one);
                 elapsed += Time.deltaTime;
                 yield return null;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RIMA.MapDesigner.Room.Data;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -6,8 +7,8 @@ namespace RIMA.Environment
 {
     /// <summary>
     /// Authority for "is this cell walkable / dashable?".
-    /// MVP rule: a cell is walkable iff the bound Floor Tilemap has a tile there.
-    /// Future: obstacleSources (IObstacle providers) refine walk/dash answers.
+    /// Primary source: RoomTemplateSO.walkableGrid (set by InitFromTemplate each room load).
+    /// Fallback: bound Floor Tilemap when no template grid is present.
     /// </summary>
     [ExecuteAlways]
     public sealed class WalkabilityMap : MonoBehaviour
@@ -26,6 +27,12 @@ namespace RIMA.Environment
 
         private static WalkabilityMap _instance;
         private bool _tileChangedSubscribed;
+
+        // Template-sourced walkability grid (takes priority over tilemap lookup).
+        // Populated by InitFromTemplate; cleared between rooms.
+        private bool[] _templateWalkableGrid;
+        private RectInt _templateBounds;
+        private bool _hasTemplateGrid;
 
         // Phase 1 reachability cache (flood-fill from Player). Invalidated on any tilemap edit.
         private HashSet<Vector3Int> _reachableCache;
@@ -183,8 +190,43 @@ namespace RIMA.Environment
             }
         }
 
+        /// <summary>
+        /// Populate walkability from a RoomTemplateSO. Call once per room load (e.g. from
+        /// RoomRunDirector.BuildCurrentRoom before spawning actors). The template grid takes
+        /// priority over the floor tilemap for all IsWalkable / IsWalkableWorld queries.
+        /// Pass null to clear the template grid and revert to tilemap-based lookup.
+        /// </summary>
+        public void InitFromTemplate(RoomTemplateSO template)
+        {
+            if (template == null || template.walkableGrid == null || template.walkableGrid.Length == 0)
+            {
+                _hasTemplateGrid = false;
+                _templateWalkableGrid = null;
+                _reachableCache = null;
+                return;
+            }
+
+            _templateWalkableGrid = template.walkableGrid;
+            _templateBounds = template.bounds;
+            _hasTemplateGrid = true;
+            _reachableCache = null;
+        }
+
+        private bool IsWalkableByTemplate(Vector3Int cell)
+        {
+            int lx = cell.x - _templateBounds.xMin;
+            int ly = cell.y - _templateBounds.yMin;
+            if (lx < 0 || lx >= _templateBounds.width || ly < 0 || ly >= _templateBounds.height)
+                return false;
+            int idx = (ly * _templateBounds.width) + lx;
+            return idx >= 0 && idx < _templateWalkableGrid.Length && _templateWalkableGrid[idx];
+        }
+
         public bool IsWalkable(Vector3Int cell)
         {
+            if (_hasTemplateGrid)
+                return IsWalkableByTemplate(cell);
+
             if (floorTilemap == null) return false;
             if (!floorTilemap.HasTile(cell)) return false;
 
@@ -194,9 +236,23 @@ namespace RIMA.Environment
 
         public bool IsWalkableWorld(Vector3 worldPos)
         {
+            if (_hasTemplateGrid)
+            {
+                // Use the floor tilemap for WorldToCell conversion when available, otherwise
+                // fall back to a raw integer truncation (works for integer-cell grids).
+                if (floorTilemap != null)
+                {
+                    Vector3Int cell = floorTilemap.WorldToCell(worldPos);
+                    return IsWalkable(cell);
+                }
+                // Approximate: floor(worldPos) → cell coordinate (assumes 1-unit cell alignment)
+                Vector3Int approxCell = new Vector3Int(Mathf.FloorToInt(worldPos.x), Mathf.FloorToInt(worldPos.y), 0);
+                return IsWalkable(approxCell);
+            }
+
             if (floorTilemap == null) return false;
-            Vector3Int cell = floorTilemap.WorldToCell(worldPos);
-            return IsWalkable(cell);
+            Vector3Int c = floorTilemap.WorldToCell(worldPos);
+            return IsWalkable(c);
         }
 
         public bool IsDashable(Vector3Int cell)
@@ -208,9 +264,65 @@ namespace RIMA.Environment
 
         public bool IsDashableWorld(Vector3 worldPos)
         {
+            if (_hasTemplateGrid)
+            {
+                if (floorTilemap != null)
+                {
+                    Vector3Int cell = floorTilemap.WorldToCell(worldPos);
+                    return IsDashable(cell);
+                }
+                Vector3Int approxCell = new Vector3Int(Mathf.FloorToInt(worldPos.x), Mathf.FloorToInt(worldPos.y), 0);
+                return IsDashable(approxCell);
+            }
             if (floorTilemap == null) return false;
-            Vector3Int cell = floorTilemap.WorldToCell(worldPos);
-            return IsDashable(cell);
+            Vector3Int c = floorTilemap.WorldToCell(worldPos);
+            return IsDashable(c);
+        }
+
+        /// <summary>
+        /// Shared axis-slide helper used by PlayerController and BaseMobBehavior.
+        /// Given a desired velocity, current world position, and fixedDeltaTime, returns the
+        /// clamped velocity that keeps the actor on walkable cells.
+        ///
+        /// Rules (no corner-cutting):
+        ///   1. Diagonal: target cell must be walkable. If not, try slide on X axis, then Y.
+        ///      Both axes must individually be walkable to slide (no diagonal corner-cut).
+        ///   2. Axis-aligned: if target unwalkable, zero.
+        ///
+        /// Returns Vector2.zero when all directions are blocked.
+        /// Permissive (returns desiredVelocity unchanged) when walkMap is null.
+        /// </summary>
+        public static Vector2 ClampVelocityToWalkable(WalkabilityMap walkMap, Vector3 currentPos, Vector2 desiredVelocity, float dt)
+        {
+            if (walkMap == null) return desiredVelocity;
+
+            const float deadzoneSqr = 0.0001f;
+            if (desiredVelocity.sqrMagnitude <= deadzoneSqr) return desiredVelocity;
+
+            Vector3 nextPos = currentPos + (Vector3)(desiredVelocity * dt);
+
+            if (walkMap.IsWalkableWorld(nextPos))
+                return desiredVelocity;
+
+            bool diagonal = Mathf.Abs(desiredVelocity.x) > 0.001f && Mathf.Abs(desiredVelocity.y) > 0.001f;
+
+            if (diagonal)
+            {
+                // Try X-only slide: target cell (x+dx, y) must be walkable.
+                Vector3 xOnlyPos = currentPos + new Vector3(desiredVelocity.x * dt, 0f, 0f);
+                bool xOk = walkMap.IsWalkableWorld(xOnlyPos);
+                // Try Y-only slide: target cell (x, y+dy) must be walkable.
+                Vector3 yOnlyPos = currentPos + new Vector3(0f, desiredVelocity.y * dt, 0f);
+                bool yOk = walkMap.IsWalkableWorld(yOnlyPos);
+
+                if (xOk) return new Vector2(desiredVelocity.x, 0f);
+                if (yOk) return new Vector2(0f, desiredVelocity.y);
+                return Vector2.zero;
+            }
+            else
+            {
+                return Vector2.zero;
+            }
         }
     }
 }

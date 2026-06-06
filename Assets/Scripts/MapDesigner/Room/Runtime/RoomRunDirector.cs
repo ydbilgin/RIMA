@@ -195,6 +195,15 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             CurrentTemplate = template;
             builder.Build(template);
+
+            // Seed WalkabilityMap from template data so mob/knockback clamps use the
+            // authoritative walkable grid rather than deriving it from rendered floor tiles.
+            RIMA.Environment.WalkabilityMap walkMap = RIMA.Environment.WalkabilityMap.Instance;
+            if (walkMap != null)
+            {
+                walkMap.InitFromTemplate(template);
+            }
+
             FitCameraToRoom();
 
             EnsurePlayerAtSpawn();

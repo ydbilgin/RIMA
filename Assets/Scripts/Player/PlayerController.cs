@@ -307,33 +307,21 @@ namespace RIMA
             float speedMult = statusEffects != null ? statusEffects.moveSpeedMultiplier : 1f;
             if (attack != null && attack.IsCommitted) speedMult *= commitmentMoveMult;
 
+            WalkabilityMap walkMap = WalkabilityMap.Instance;
+
             if (isDashing)
             {
-                rb.linearVelocity = dashDir * dashSpeed;
+                // Clamp dash velocity per-frame so knockback/dash can't push into void.
+                Vector2 dashVel = WalkabilityMap.ClampVelocityToWalkable(walkMap, transform.position, dashDir * dashSpeed, Time.fixedDeltaTime);
+                rb.linearVelocity = dashVel;
                 return;
             }
 
-            // Defensive walkable pre-check: if next-frame position lands on a void cell,
-            // zero velocity instead of moving. Acts as a fallback for VoidBlocker collider.
+            // Defensive walkable pre-check: shared ClampVelocityToWalkable helper handles
+            // diagonal corner-cut prevention (both slide axes must be walkable independently).
             // Permissive when no WalkabilityMap exists (legacy behavior preserved).
             Vector2 desiredVel = moveInput * moveSpeed * speedMult;
-            WalkabilityMap walkMap = WalkabilityMap.Instance;
-            if (walkMap != null && desiredVel.sqrMagnitude > MoveDeadzoneSqr)
-            {
-                Vector3 cur = transform.position;
-                float dt = Time.fixedDeltaTime;
-                if (!walkMap.IsWalkableWorld(cur + (Vector3)(desiredVel * dt)))
-                {
-                    // Edge-slide (top-down feel): instead of stopping DEAD at a void cell, keep the
-                    // velocity component that stays on the visible floor so the player glides along the
-                    // edge / narrow bridge instead of sticking. Boundary still = the visible floor tiles.
-                    bool xOk = walkMap.IsWalkableWorld(cur + new Vector3(desiredVel.x * dt, 0f, 0f));
-                    bool yOk = walkMap.IsWalkableWorld(cur + new Vector3(0f, desiredVel.y * dt, 0f));
-                    if (xOk)      desiredVel = new Vector2(desiredVel.x, 0f);
-                    else if (yOk) desiredVel = new Vector2(0f, desiredVel.y);
-                    else { rb.linearVelocity = Vector2.zero; return; }
-                }
-            }
+            desiredVel = WalkabilityMap.ClampVelocityToWalkable(walkMap, transform.position, desiredVel, Time.fixedDeltaTime);
 
             rb.linearVelocity = desiredVel;
         }

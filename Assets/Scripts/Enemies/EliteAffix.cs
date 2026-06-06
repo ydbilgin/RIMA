@@ -180,6 +180,8 @@ namespace RIMA
 
         // ─── Teleporter ──────────────────────────────────────────────
 
+        private bool _warnedTeleportFail;
+
         private void Teleport()
         {
             const int maxAttempts = 3;
@@ -200,20 +202,45 @@ namespace RIMA
                     StartCoroutine(TeleportFlash());
                 return;
             }
+
+            // All attempts failed — log once per mob so logs don't spam.
+            if (!_warnedTeleportFail)
+            {
+                Debug.LogWarning($"[EliteAffix] Teleporter on '{gameObject.name}' found no valid walkable destination after {maxAttempts} attempts; staying put.");
+                _warnedTeleportFail = true;
+            }
         }
 
         private bool IsTeleportDestinationValid(Vector3 worldPos, LayerMask wallMask)
         {
-            ResolveTeleportTilemaps();
-
-            if (floorTilemap != null)
+            // Primary check: authoritative walkability (RoomTemplateSO grid or floor tilemap).
+            RIMA.Environment.WalkabilityMap walkMap = RIMA.Environment.WalkabilityMap.Instance;
+            if (walkMap != null)
             {
-                Vector3Int cell = floorTilemap.WorldToCell(worldPos);
-                if (floorTilemap.GetTile(cell) == null)
+                if (!walkMap.IsWalkableWorld(worldPos))
                     return false;
 
-                if (wallTilemap != null && wallTilemap.GetTile(cell) != null)
-                    return false;
+                // Reachability gate: don't teleport to a disconnected island.
+                if (walkMap.floorTilemap != null)
+                {
+                    Vector3Int cell = walkMap.floorTilemap.WorldToCell(worldPos);
+                    if (!walkMap.IsReachableFromPlayer(cell))
+                        return false;
+                }
+            }
+            else
+            {
+                // Fallback: legacy tilemap lookup (no WalkabilityMap in scene).
+                ResolveTeleportTilemaps();
+                if (floorTilemap != null)
+                {
+                    Vector3Int cell = floorTilemap.WorldToCell(worldPos);
+                    if (floorTilemap.GetTile(cell) == null)
+                        return false;
+
+                    if (wallTilemap != null && wallTilemap.GetTile(cell) != null)
+                        return false;
+                }
             }
 
             return Physics2D.OverlapCircle(worldPos, teleportCollisionRadius, wallMask) == null;

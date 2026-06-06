@@ -27,16 +27,31 @@ namespace RIMA.MapDesigner.Props.Runtime
             if (!propDef.blocksWalkable) return null;
 
             BoxCollider2D existing = GetComponent<BoxCollider2D>();
-            if (existing != null) return existing;
+            if (existing != null)
+            {
+                EnsureDefaultLayer();
+                return existing;
+            }
 
             BoxCollider2D box = gameObject.AddComponent<BoxCollider2D>();
             ApplyFootprint(box);
+            // Assign explicit "Default" layer so prop colliders join the same physics group
+            // as the boundary tilemap, blocking both player and enemy bodies uniformly.
+            EnsureDefaultLayer();
             return box;
+        }
+
+        private void EnsureDefaultLayer()
+        {
+            int defaultLayer = LayerMask.NameToLayer("Default");
+            if (defaultLayer >= 0 && gameObject.layer != defaultLayer)
+                gameObject.layer = defaultLayer;
         }
 
         private void Awake()
         {
             EnsureCollider();
+            EnsureDefaultLayer();
         }
 
         private void OnValidate()

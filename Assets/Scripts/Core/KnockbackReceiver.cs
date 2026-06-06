@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using RIMA.Environment;
 
 namespace RIMA
 {
@@ -81,11 +82,16 @@ namespace RIMA
             if (duration <= 0f) yield break;
 
             float elapsed = 0f;
+            WalkabilityMap walkMap = WalkabilityMap.Instance;
             while (elapsed < duration)
             {
                 // Lineer decay: başta hızlı, sonda yavaşlar
                 float t = 1f - (elapsed / duration);
-                rb.linearVelocity = velocity * t;
+                Vector2 frameVel = velocity * t;
+                // Walkability clamp: stop (don't bounce) if knockback would push into void.
+                // Uses the shared O(1) helper; permissive when no WalkabilityMap in scene.
+                frameVel = WalkabilityMap.ClampVelocityToWalkable(walkMap, transform.position, frameVel, Time.deltaTime);
+                rb.linearVelocity = frameVel;
                 elapsed += Time.deltaTime;
                 yield return null;
             }
