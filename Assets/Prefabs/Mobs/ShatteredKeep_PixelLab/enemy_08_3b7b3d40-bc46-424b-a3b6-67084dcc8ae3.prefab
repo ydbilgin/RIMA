@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 944276572818426554}
   - component: {fileID: 3921369715294358842}
+  - component: {fileID: 6484260898112949512}
   m_Layer: 0
   m_Name: enemy_08_3b7b3d40-bc46-424b-a3b6-67084dcc8ae3
   m_TagString: Untagged
@@ -77,8 +78,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1293760285
+  m_SortingLayer: 1293760285
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 7a2f29c39a1fec840b992ed32375e17a, type: 3}
@@ -91,3 +92,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &6484260898112949512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058932754928553810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce282c7c6e1c25249911a1a693d5c431, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: RIMA::IsoSorter
+  baseOrder: 0
+  pivotOffsetY: 0

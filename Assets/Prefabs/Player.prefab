@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9081982419003365740}
   - component: {fileID: 1375603082478773792}
+  - component: {fileID: 7741234598012345678}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -109,8 +110,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1293760285
+  m_SortingLayer: 1293760285
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
@@ -123,6 +124,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7741234598012345678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3278452288192993413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce282c7c6e1c25249911a1a693d5c431, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: RIMA::IsoSorter
+  baseOrder: 0
+  pivotOffsetY: 0
 --- !u!1 &3590611930566067720
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,8 +396,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1293760285
+  m_SortingLayer: 1293760285
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
