@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RIMA;
+using RIMA.DebugTools;
 using RIMA.MapDesigner.Props;
 using RIMA.MapDesigner.Props.Runtime;
 using RIMA.MapDesigner.Room.Data;
@@ -199,6 +200,10 @@ namespace RIMA.MapDesigner.Room.Runtime
             if (markerContainer == null)
             {
                 markerContainer = CreateContainer("RoomMarkers");
+            }
+            if (Application.isPlaying)
+            {
+                ScreenshotMode.Register(markerContainer.gameObject, "IsoRoomBuilder markers");
             }
 
             if (propsContainer == null)

@@ -20,6 +20,7 @@ using UnityEngine.Tilemaps;
 using RIMA.Live;          // RuntimeAssetRegistry, RegistryEntry (same RIMA.Runtime assembly — Assets/Scripts/Live has no own asmdef)
 using RIMA.RoomPainter;
 using RIMA.Systems.Map;   // RoomLoader.OnRoomLoaded (live spine)
+using RIMA.DebugTools;
 
 namespace RIMA.DevTools
 {
@@ -123,6 +124,11 @@ namespace RIMA.DevTools
 
         // ── Lifecycle ──────────────────────────────────────────────────────────
 
+        private void Awake()
+        {
+            ScreenshotMode.Register(gameObject, nameof(InPlayMapPaintOverlay));
+        }
+
         private void OnEnable()
         {
             RoomLoader.OnRoomLoaded += HandleRoomLoaded;
@@ -136,6 +142,7 @@ namespace RIMA.DevTools
 
         private void OnDestroy()
         {
+            ScreenshotMode.Unregister(gameObject);
             RestoreTimeScale();
         }
 

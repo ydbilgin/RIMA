@@ -23,6 +23,16 @@ namespace RIMA.DebugTools
             panel.AddComponent<DemoDebugPanel>();
         }
 
+        private void Awake()
+        {
+            ScreenshotMode.Register(gameObject, nameof(DemoDebugPanel));
+        }
+
+        private void OnDestroy()
+        {
+            ScreenshotMode.Unregister(gameObject);
+        }
+
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;

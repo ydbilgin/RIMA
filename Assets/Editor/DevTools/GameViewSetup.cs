@@ -34,6 +34,11 @@ namespace RIMA.Editor.DevTools
             EnsureEvenResolution(forced: true);
         }
 
+        public static void RunSetupForcedForTools()
+        {
+            EnsureEvenResolution(forced: true);
+        }
+
         private static void EnsureEvenResolution(bool forced)
         {
             EditorPrefs.SetBool("GameView.maximizeOnPlay", true);

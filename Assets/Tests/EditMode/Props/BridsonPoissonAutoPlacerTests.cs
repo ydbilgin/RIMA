@@ -58,6 +58,19 @@ namespace RIMA.Tests.Props
         }
 
         [Test]
+        public void Generate_DeterministicSeed_SamePlacementSignature()
+        {
+            BridsonPoissonAutoPlacer placer = new BridsonPoissonAutoPlacer();
+            RoomTemplateSO template = CreateTemplate(16, 12);
+            List<PropDefinitionSO> pool = new List<PropDefinitionSO> { CreateProp("det-a"), CreateProp("det-b") };
+
+            List<BridsonPoissonAutoPlacer.PlacementCandidate> run1 = placer.Generate(template, null, pool, 20260607, 1f);
+            List<BridsonPoissonAutoPlacer.PlacementCandidate> run2 = placer.Generate(template, null, pool, 20260607, 1f);
+
+            Assert.AreEqual(Signature(run1), Signature(run2));
+        }
+
+        [Test]
         public void PropPlacementData_FlipX_SerializesRoundTrip()
         {
             PropPlacementData placement = new PropPlacementData("mirror", new Vector2Int(2, 3))
@@ -180,6 +193,23 @@ namespace RIMA.Tests.Props
             template.props = new List<PropPlacementData>();
             created.Add(template);
             return template;
+        }
+
+        private static string Signature(List<BridsonPoissonAutoPlacer.PlacementCandidate> placements)
+        {
+            System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            for (int i = 0; i < placements.Count; i++)
+            {
+                BridsonPoissonAutoPlacer.PlacementCandidate p = placements[i];
+                string propId = p.prop != null ? p.prop.propId : "<null>";
+                builder.Append(p.tilePos.x).Append(',').Append(p.tilePos.y).Append(':')
+                    .Append(propId).Append(':')
+                    .Append(p.rotationSteps).Append(':')
+                    .Append(p.flipX ? '1' : '0').Append(':')
+                    .Append(p.variantIndex).Append('|');
+            }
+
+            return builder.ToString();
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using RIMA.DebugTools;
 using RIMA.CameraSystem;
 using RIMA.Environment;
 using RIMA.MapDesigner.Props;
@@ -368,6 +369,7 @@ namespace RIMA
 
             TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, new Vector3(0f, 0.95f, 0f), 3.1f);
             hpLabel.text = "DUMMY HP 100/100";
+            ScreenshotMode.Register(hpLabel.gameObject, "TrainingDummy_HP");
             dummy.AddComponent<TrainingDummyTarget>().Initialize(health, hpLabel);
             Debug.Log("[ChamberSelectBootstrap] P4 evidence: real damageable training dummy spawned in lower-left pocket.");
         }
