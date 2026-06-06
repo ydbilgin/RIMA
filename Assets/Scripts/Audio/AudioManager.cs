@@ -3,7 +3,21 @@ using UnityEngine;
 
 namespace RIMA.Audio
 {
-    public enum Sfx { Hit, Shatter, Dash, Cast, DraftSelect, GateOpen, Death, BossIntro, Finisher }
+    public enum Sfx
+    {
+        // ── original cues ─────────────────────────────────────
+        Hit, Shatter, Dash, Cast, DraftSelect, GateOpen, Death, BossIntro, Finisher,
+        // ── T2 additions ──────────────────────────────────────
+        SwingLight,       // light M1 swing
+        SwingHeavy,       // heavy / finisher swing
+        HitImpact,        // meaty hit confirm (light+heavy)
+        EnemyDeath,       // enemy kill
+        ExecutePayoff,    // DeathBlow execute land
+        RoomClear,        // room cleared / portal opens
+        DraftHover,       // skill card hover
+        ChamberAmbient,   // looping chamber background
+        KnockdownThud,    // knockdown land impact
+    }
 
     /// <summary>
     /// Minimal self-contained SFX layer (W2 skeleton). Generates placeholder clips procedurally
@@ -23,6 +37,7 @@ namespace RIMA.Audio
 
         private AudioSource src;
         private AudioSource musicSrc;
+        private AudioSource ambientSrc;
         private readonly Dictionary<Sfx, AudioClip> clips = new Dictionary<Sfx, AudioClip>();
         private readonly HashSet<Sfx> realClips = new HashSet<Sfx>();
 
@@ -45,6 +60,7 @@ namespace RIMA.Audio
             GenerateClips();
             LoadResourceOverrides();
             TryPlayMusic();
+            TryPlayAmbient();
         }
 
         /// <summary>Play a SFX one-shot. No-op if manager/clip missing (safe from anywhere).</summary>
@@ -59,15 +75,25 @@ namespace RIMA.Audio
 
         private void GenerateClips()
         {
-            clips[Sfx.Hit]         = Noise(0.08f, 0.55f, 1400f, true);  // meaty thwack
-            clips[Sfx.Shatter]     = Noise(0.13f, 0.45f, 5000f, true);  // glass/armor clink
-            clips[Sfx.Dash]        = Sweep(0.16f, 220f, 640f, 0.45f);
-            clips[Sfx.Cast]        = Tone(0.20f, 540f, 0.45f, true);
-            clips[Sfx.DraftSelect] = Tone(0.12f, 900f, 0.40f, false);
-            clips[Sfx.GateOpen]    = Sweep(0.45f, 130f, 360f, 0.45f);
-            clips[Sfx.Death]       = Sweep(0.38f, 420f, 80f, 0.50f);
-            clips[Sfx.BossIntro]   = Tone(0.70f, 110f, 0.55f, true);
-            clips[Sfx.Finisher]    = Sweep(0.28f, 180f, 900f, 0.50f);
+            clips[Sfx.Hit]           = Noise(0.08f, 0.55f, 1400f, true);
+            clips[Sfx.Shatter]       = Noise(0.13f, 0.45f, 5000f, true);
+            clips[Sfx.Dash]          = Sweep(0.16f, 220f, 640f, 0.45f);
+            clips[Sfx.Cast]          = Tone(0.20f, 540f, 0.45f, true);
+            clips[Sfx.DraftSelect]   = Tone(0.12f, 900f, 0.40f, false);
+            clips[Sfx.GateOpen]      = Sweep(0.45f, 130f, 360f, 0.45f);
+            clips[Sfx.Death]         = Sweep(0.38f, 420f, 80f, 0.50f);
+            clips[Sfx.BossIntro]     = Tone(0.70f, 110f, 0.55f, true);
+            clips[Sfx.Finisher]      = Sweep(0.28f, 180f, 900f, 0.50f);
+            // T2 additions — procedural fallbacks (replaced by real clips if present in Resources/Audio)
+            clips[Sfx.SwingLight]    = Sweep(0.10f, 320f, 800f, 0.38f);
+            clips[Sfx.SwingHeavy]    = Sweep(0.14f, 200f, 600f, 0.55f);
+            clips[Sfx.HitImpact]     = Noise(0.10f, 0.60f, 1200f, true);
+            clips[Sfx.EnemyDeath]    = Sweep(0.30f, 380f, 70f, 0.48f);
+            clips[Sfx.ExecutePayoff] = Sweep(0.35f, 160f, 1100f, 0.60f);
+            clips[Sfx.RoomClear]     = Sweep(0.50f, 120f, 420f, 0.50f);
+            clips[Sfx.DraftHover]    = Tone(0.08f, 1100f, 0.28f, true);
+            clips[Sfx.ChamberAmbient]= Tone(3.00f, 80f, 0.18f, false);
+            clips[Sfx.KnockdownThud] = Noise(0.14f, 0.65f, 900f, true);
         }
 
         private void LoadResourceOverrides()
@@ -95,6 +121,38 @@ namespace RIMA.Audio
             musicSrc.spatialBlend = 0f;
             musicSrc.volume = 0.25f;
             musicSrc.Play();
+        }
+
+        private void TryPlayAmbient()
+        {
+            if (!realClips.Contains(Sfx.ChamberAmbient)) return;
+            if (!clips.TryGetValue(Sfx.ChamberAmbient, out var clip) || clip == null) return;
+
+            ambientSrc = gameObject.AddComponent<AudioSource>();
+            ambientSrc.clip = clip;
+            ambientSrc.loop = true;
+            ambientSrc.playOnAwake = false;
+            ambientSrc.spatialBlend = 0f;
+            ambientSrc.volume = 0.12f;
+            ambientSrc.Play();
+        }
+
+        /// <summary>Play a SFX as a looping ambient source. Returns the AudioSource so caller can stop it.
+        /// Obeys the same mute-fallback rule as <see cref="Play"/>.</summary>
+        public static AudioSource PlayLooped(Sfx sfx, float volume = 0.5f)
+        {
+            if (Instance == null || Instance.src == null) return null;
+            if (Instance.muteProceduralFallback && !Instance.realClips.Contains(sfx)) return null;
+            if (!Instance.clips.TryGetValue(sfx, out var clip) || clip == null) return null;
+
+            var loopSrc = Instance.gameObject.AddComponent<AudioSource>();
+            loopSrc.clip = clip;
+            loopSrc.loop = true;
+            loopSrc.playOnAwake = false;
+            loopSrc.spatialBlend = 0f;
+            loopSrc.volume = Mathf.Clamp01(volume);
+            loopSrc.Play();
+            return loopSrc;
         }
 
         // ── procedural synth helpers (mono, 44.1k) ──────────────────────

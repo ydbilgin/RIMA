@@ -82,8 +82,16 @@ namespace RIMA
                     isCrit = isFinisher,
                     hitDirection = facing
                 });
+                // T2: light vs heavy swing SFX (finisher = heavy tier)
                 if (isFinisher)
+                {
+                    AudioManager.Play(Sfx.SwingHeavy);
                     AudioManager.Play(Sfx.Finisher);
+                }
+                else
+                {
+                    AudioManager.Play(Sfx.SwingLight);
+                }
 
                 if (hp.IsDead)
                 {
@@ -94,7 +102,7 @@ namespace RIMA
                         victim = col.gameObject,
                         mobFamily = col.tag
                     });
-                    AudioManager.Play(Sfx.Shatter);
+                    AudioManager.Play(Sfx.EnemyDeath);
                 }
                 rage?.OnHitEnemy();
 

@@ -292,6 +292,7 @@ namespace RIMA
             AddIfMissing<PlayerController>(playerObject);
             AddIfMissing<RageSystem>(playerObject);
             AddIfMissing<PlayerAttack>(playerObject);
+            AddIfMissing<ExecutePromptDriver>(playerObject);
         }
 
         private static PlayerClassManager EnsureClassManager()

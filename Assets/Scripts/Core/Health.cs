@@ -48,11 +48,13 @@ namespace RIMA
             OnDamageTaken?.Invoke(amount);
             int effective = Mathf.Max(1, Mathf.RoundToInt(amount * incomingDamageMultiplier));
             currentHP = Mathf.Max(0, currentHP - effective);
-            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.Hit);
+            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.HitImpact);
             OnHealthChanged?.Invoke(currentHP, maxHP);
             if (currentHP == 0)
             {
-                RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.Death);
+                // Use EnemyDeath for non-player objects; Death for player (tag-based distinction)
+                bool isPlayer = gameObject.CompareTag("Player");
+                RIMA.Audio.AudioManager.Play(isPlayer ? RIMA.Audio.Sfx.Death : RIMA.Audio.Sfx.EnemyDeath);
                 OnDeath?.Invoke();
             }
         }

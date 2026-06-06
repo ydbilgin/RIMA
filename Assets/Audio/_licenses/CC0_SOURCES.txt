@@ -1,0 +1,21 @@
+Audio clips in Assets/Audio/SFX/ are sourced from the following CC0 (public domain) packs:
+
+Pack: Kenney Impact Sounds
+URL:  https://kenney.nl/assets/impact-sounds
+License: CC0 1.0 Universal (public domain)
+
+Pack: Kenney Interface Sounds
+URL:  https://kenney.nl/assets/interface-sounds
+License: CC0 1.0 Universal (public domain)
+
+Pack: Kenney RPG Audio
+URL:  https://kenney.nl/assets/rpg-audio
+License: CC0 1.0 Universal (public domain)
+
+NOTE: The files in this project were drawn from pre-downloaded Kenney packs already in
+Assets/Audio/SFX/. They have been renamed and copied to Assets/Resources/Audio/ to match
+AudioManager's Sfx enum names. All clips remain CC0.
+
+Attribution (voluntary, not required by CC0):
+  Kenney (kenney.nl) — audio art assets under CC0 1.0
+  https://creativecommons.org/publicdomain/zero/1.0/

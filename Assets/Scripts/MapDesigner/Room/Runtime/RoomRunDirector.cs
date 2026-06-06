@@ -726,6 +726,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             RoomCleared?.Invoke();
+            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.RoomClear);
             Debug.Log($"[RoomRunDirector] RoomCleared node={CurrentNodeId} type={CurrentRoomType}");
 
             if (clearSequence != null)

@@ -53,6 +53,9 @@ namespace RIMA
             int damage = Mathf.RoundToInt(baseDamage * mult);
             SkillRuntime.DealDamage(target, damage, this);
 
+            // T2: fire execute juice (freeze + shake + SFX) via ExecutePromptDriver
+            ExecutePromptDriver.OnExecuteFired();
+
             // Consume the gating state so a survivor can't be re-executed for free
             // (prevents an infinite execute loop). Sundered is the escalated state, prefer it.
             var state = SkillRuntime.State(target);

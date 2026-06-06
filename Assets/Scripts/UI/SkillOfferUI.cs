@@ -740,6 +740,7 @@ namespace RIMA
 
             if (entered)
             {
+                RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.DraftHover, 0.55f);
                 ShowCardTooltip(state);
                 PulseOwnedChainSlots(state);
             }

@@ -10,16 +10,21 @@ namespace RIMA.Combat
 
         public Vector3 CurrentOffset { get; private set; }
 
-        [SerializeField] private float hitMagnitude = 0.05f;
-        [SerializeField] private float hitDuration = 0.1f;
-        [SerializeField] private float critMagnitude = 0.12f;
+        // T2 shake tiers: S=small (light hit), M=medium (heavy/knockdown), L=large (execute/finisher)
+        [SerializeField] private float hitMagnitude = 0.04f;           // S — light hit
+        [SerializeField] private float hitDuration = 0.10f;
+        [SerializeField] private float critMagnitude = 0.10f;          // M — heavy/crit hit
         [SerializeField] private float critDuration = 0.18f;
-        [SerializeField] private float commitBeat3Magnitude = 0.15f;
-        [SerializeField] private float commitBeat3Duration = 0.2f;
-        [SerializeField] private float killMagnitude = 0.1f;
+        [SerializeField] private float commitBeat3Magnitude = 0.18f;   // L — finisher
+        [SerializeField] private float commitBeat3Duration = 0.22f;
+        [SerializeField] private float killMagnitude = 0.10f;          // M — kill
         [SerializeField] private float killDuration = 0.15f;
         [SerializeField] private float dashMagnitude = 0.04f;
         [SerializeField] private float dashDuration = 0.08f;
+        [SerializeField] private float knockdownMagnitude = 0.13f;     // M — knockdown land
+        [SerializeField] private float knockdownDuration = 0.22f;
+        [SerializeField] private float executeMagnitude = 0.18f;       // L — execute payoff
+        [SerializeField] private float executeDuration = 0.28f;
         [SerializeField] private float minIcdSeconds = 0.04f;
 
         private Coroutine shakeCoroutine;
@@ -116,6 +121,12 @@ namespace RIMA.Combat
 
             Shake(e.magnitude, e.duration);
         }
+
+        /// <summary>Called by ExecutePromptDriver on DeathBlow fire — L-tier execute shake.</summary>
+        public void TriggerExecuteShake() => Shake(executeMagnitude, executeDuration);
+
+        /// <summary>Called by knockdown land — M-tier knockdown shake.</summary>
+        public void TriggerKnockdownShake() => Shake(knockdownMagnitude, knockdownDuration);
 
         public void Shake(float magnitude, float duration)
         {

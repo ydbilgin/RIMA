@@ -150,6 +150,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7444985518921700907}
+    - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6466155867164398132}
   m_SourcePrefab: {fileID: 100100000, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
 --- !u!1 &6045311534637519706 stripped
 GameObject:
@@ -168,7 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3435327e25ff414b9305d0a94005419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.PlayerMovementController
-  moveSpeed: 4
 --- !u!114 &6149835107572577534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +241,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
   knockbackResistance: 0
+  isKnockdownable: 1
+  defaultKnockdownProfile: {fileID: 0}
 --- !u!114 &2501367934047808920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +259,7 @@ MonoBehaviour:
   dashSpeed: 18
   dashDuration: 0.15
   dashCooldown: 0.8
+  dashCliffGrace: 0.1
   commitmentMoveMult: 0.25
   combatFacingLockDuration: 0.18
 --- !u!114 &7444985518921700907
@@ -273,3 +278,22 @@ MonoBehaviour:
   slashArcVFX: {fileID: 0}
   outgoingDamageMultiplier: 1
   baseDamage: 0
+--- !u!114 &6466155867164398132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045311534637519706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25abab193bfac7e4c8edbee58bb1a7fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.ExecutePromptDriver
+  detectRadius: 2
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  promptFontSize: 4.2
+  promptColor: {r: 1, g: 0.92, b: 0.55, a: 1}
+  promptOffset: {x: 0, y: 0.85, z: 0}

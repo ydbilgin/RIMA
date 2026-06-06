@@ -6,7 +6,8 @@ namespace RIMA
 {
     public class InputBufferService : MonoBehaviour
     {
-        [SerializeField] private float bufferWindow = 0.18f;
+        // T2 M1: dash buffer 80ms (spec). Attack buffer keeps a slightly larger window for leniency.
+        [SerializeField] private float bufferWindow = 0.08f;
 
         private enum Pending { None, Dash, Attack }
 

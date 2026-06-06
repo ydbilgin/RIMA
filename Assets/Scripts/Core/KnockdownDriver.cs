@@ -101,6 +101,10 @@ namespace RIMA
                 StatusEffectType.Stunned,
                 profile.LaunchDuration + profile.DownTime + profile.GetUpDuration + profile.GetUpIFrame);
 
+            // T2: knockdown launch SFX + shake (land phase — M-tier)
+            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.KnockdownThud, 0.75f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.TriggerKnockdownShake();
+
             yield return MoveArc(profile, direction, impulse.force, tiltSign);
             yield return Squash(profile, tiltSign);
             yield return Bounce(profile, tiltSign);

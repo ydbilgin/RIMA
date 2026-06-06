@@ -8,12 +8,13 @@ namespace RIMA.Combat
     {
         public static HitPauseDriver Instance { get; private set; }
 
-        // Canon hitstop tiers (WORK_ORDER B3): hit 0.04 / crit 0.07 / kill 0.12 / finisher 0.18. Feel-tune = user F5.
-        [SerializeField] private float pauseDurationHit = 0.04f;
-        [SerializeField] private float pauseDurationCrit = 0.07f;
+        // T2 juice tiers: light=.03 / heavy(crit)=.06 / kill=.12 / finisher=.18 / execute=.10 / boss=.20
+        [SerializeField] private float pauseDurationHit = 0.03f;      // light hit
+        [SerializeField] private float pauseDurationCrit = 0.06f;     // heavy / crit hit
         [SerializeField] private float pauseDurationKill = 0.12f;
-        [SerializeField] private float pauseDurationFinisher = 0.18f; // Beat3 commit finisher — the heaviest player-driven pause.
-        [SerializeField] private float pauseDurationBossDeath = 0.20f; // TODO: route boss-death event here when one exists.
+        [SerializeField] private float pauseDurationFinisher = 0.18f; // Beat3 commit finisher
+        [SerializeField] private float pauseDurationBossDeath = 0.20f;
+        [SerializeField] private float pauseDurationExecute = 0.10f;  // DeathBlow execute freeze
         [SerializeField] private float pauseTimeScale = 0f;
         [SerializeField] private float minIcdSeconds = 0.05f;
 
@@ -90,6 +91,9 @@ namespace RIMA.Combat
 
             TriggerPause(pauseDurationKill);
         }
+
+        /// <summary>Called by ExecutePromptDriver when DeathBlow fires — dedicated execute freeze tier.</summary>
+        public void TriggerExecutePause() => TriggerPause(pauseDurationExecute);
 
         public void TriggerPause(float duration)
         {
