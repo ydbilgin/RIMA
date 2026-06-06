@@ -10,6 +10,7 @@
         "RIMA.RoomDesigner.Editor",
         "RIMA.Editor.TileImport",
         "RIMA.MapDesigner.Editor",
+        "RIMA.Editor",
         "Unity.2D.Tilemap.Extras",
         "GUID:2bafac87e7f4b9b418d9448d219b01ab",
         "RIMA.Tests.Contracts"

@@ -109,6 +109,18 @@ namespace RIMA.Editor.Rooms
                 return false;
             }
 
+            // v2: id field overrides roomId; size.w/h override width/height
+            if (!string.IsNullOrWhiteSpace(room.id) && string.IsNullOrWhiteSpace(room.roomId))
+                room.roomId = room.id;
+            if (room.version >= 2 && room.size != null)
+            {
+                if (room.size.w > 0) room.width = room.size.w;
+                if (room.size.h > 0) room.height = room.size.h;
+            }
+            // v2: if no grid but has walkable array, use walkable as grid (pure '#'/'.')
+            if ((room.grid == null || room.grid.Length == 0) && room.walkable != null && room.walkable.Length > 0)
+                room.grid = room.walkable;
+
             string roomId = string.IsNullOrWhiteSpace(room.roomId) ? string.Empty : room.roomId.Trim();
             if (string.IsNullOrEmpty(roomId))
             {
@@ -154,6 +166,9 @@ namespace RIMA.Editor.Rooms
                 data.encounterTags.Add("json_notes_present");
             }
 
+            // --- walkable grid (v1 marker parse OR v2 pure '#'/'.' parse) ---
+            bool isV2 = room.version >= 2;
+
             if (room.grid == null)
             {
                 report.Warning($"{room.roomId}: grid missing; generated all-void walkable grid and fallback player spawn.");
@@ -171,49 +186,68 @@ namespace RIMA.Editor.Rooms
                 {
                     char c = x < row.Length ? row[x] : ' ';
                     Vector2Int position = new Vector2Int(x, tileY);
-                    data.walkableGrid[(tileY * room.width) + x] = IsWalkable(c, room.roomId, position, report);
 
-                    if (c == 'P' && !playerFound)
+                    if (isV2)
                     {
-                        data.playerSpawn = position;
-                        playerFound = true;
+                        // v2: '#' = walkable, '.' = void; no embedded markers
+                        data.walkableGrid[(tileY * room.width) + x] = (c == '#');
                     }
-                    else if (c == 'P')
+                    else
                     {
-                        report.Warning($"{room.roomId}: multiple P markers found; using the first player spawn.");
-                    }
-                    else if (c == 'e')
-                    {
-                        data.enemySpawns.Add(new EnemySpawnSocket
+                        data.walkableGrid[(tileY * room.width) + x] = IsWalkable(c, room.roomId, position, report);
+
+                        if (c == 'P' && !playerFound)
                         {
-                            socketId = $"enemy_spawn_{data.enemySpawns.Count + 1:00}",
-                            position = position,
-                            tierHint = "standard",
-                            avoidRadius = 1.5f
-                        });
-                    }
-                    else if (c == 'B')
-                    {
-                        data.enemySpawns.Add(new EnemySpawnSocket
+                            data.playerSpawn = position;
+                            playerFound = true;
+                        }
+                        else if (c == 'P')
                         {
-                            socketId = $"boss_spawn_{data.enemySpawns.Count + 1:00}",
-                            position = position,
-                            tierHint = "boss",
-                            avoidRadius = 3f
-                        });
-                    }
-                    else if (c == 'C')
-                    {
-                        chestCount++;
-                        data.chestMarkerTags.Add($"chest_marker_{x}_{tileY}");
+                            report.Warning($"{room.roomId}: multiple P markers found; using the first player spawn.");
+                        }
+                        else if (c == 'e')
+                        {
+                            data.enemySpawns.Add(new EnemySpawnSocket
+                            {
+                                socketId = $"enemy_spawn_{data.enemySpawns.Count + 1:00}",
+                                position = position,
+                                tierHint = "standard",
+                                avoidRadius = 1.5f
+                            });
+                        }
+                        else if (c == 'B')
+                        {
+                            data.enemySpawns.Add(new EnemySpawnSocket
+                            {
+                                socketId = $"boss_spawn_{data.enemySpawns.Count + 1:00}",
+                                position = position,
+                                tierHint = "boss",
+                                avoidRadius = 3f
+                            });
+                        }
+                        else if (c == 'C')
+                        {
+                            chestCount++;
+                            data.chestMarkerTags.Add($"chest_marker_{x}_{tileY}");
+                        }
                     }
                 }
+            }
+
+            // --- spawn position ---
+            if (isV2 && room.spawn != null)
+            {
+                // v2 spawn: JSON coords (jsonY = h-1-gridY) → invert back
+                int spawnGridY = (room.height - 1) - room.spawn.y;
+                data.playerSpawn = new Vector2Int(room.spawn.x, spawnGridY);
+                playerFound = true;
             }
 
             if (!playerFound)
             {
                 data.playerSpawn = FindFallbackPlayerSpawn(data.walkableGrid, room.width, room.height);
-                report.Warning($"{room.roomId}: no P marker found; player spawn fell back to {data.playerSpawn}.");
+                if (!isV2)
+                    report.Warning($"{room.roomId}: no P marker found; player spawn fell back to {data.playerSpawn}.");
             }
 
             if (chestCount > 0)
@@ -221,8 +255,85 @@ namespace RIMA.Editor.Rooms
                 report.Warning($"{room.roomId}: {chestCount} C marker(s) preserved as tags only; RoomTemplateSO has no chest socket field.");
             }
 
-            data.doorSockets.AddRange(BuildDoorSockets(room, report));
+            // --- door sockets ---
+            if (isV2 && room.exitSlots != null)
+            {
+                data.doorSockets.AddRange(BuildExitSlotsV2(room, report));
+            }
+            else
+            {
+                data.doorSockets.AddRange(BuildDoorSockets(room, report));
+            }
+
+            // --- v2 enemy spawns ---
+            if (isV2 && room.enemySpawns != null)
+            {
+                for (int i = 0; i < room.enemySpawns.Length; i++)
+                {
+                    RoomEnemyJson e = room.enemySpawns[i];
+                    if (e == null) continue;
+                    int gridY = (room.height - 1) - e.y;
+                    data.enemySpawns.Add(new EnemySpawnSocket
+                    {
+                        socketId = $"enemy_spawn_{data.enemySpawns.Count + 1:00}",
+                        position = new Vector2Int(e.x, gridY),
+                        tierHint = string.IsNullOrEmpty(e.tier) ? "standard" : e.tier,
+                        avoidRadius = 1.5f
+                    });
+                }
+            }
+
+            // --- v2 props ---
+            if (isV2)
+            {
+                data.hasPropsArray = true; // always true for v2 even if array is empty
+                data.incomingProps = new List<RIMA.MapDesigner.Props.PropPlacementData>();
+                if (room.props != null)
+                {
+                    for (int i = 0; i < room.props.Length; i++)
+                    {
+                        RoomPropJson p = room.props[i];
+                        if (p == null || string.IsNullOrEmpty(p.id)) continue;
+                        int gridY = (room.height - 1) - p.y;
+                        data.incomingProps.Add(new RIMA.MapDesigner.Props.PropPlacementData
+                        {
+                            propDefinitionGuid = p.id,
+                            tilePosition = new Vector2Int(p.x, gridY),
+                            variantIndex = p.variant,
+                            flipX = p.flipX
+                        });
+                    }
+                }
+            }
+            // v1: hasPropsArray remains false → props preserved
+
             return data;
+        }
+
+        private static List<DoorSocket> BuildExitSlotsV2(RoomJson room, ImportReport report)
+        {
+            var sockets = new List<DoorSocket>();
+            ExitSlotsJson slots = room.exitSlots;
+            if (slots == null) return sockets;
+
+            void AddSlot(ExitSlotPosJson pos, string socketId, string slotName)
+            {
+                if (pos == null) return;
+                int gridY = (room.height - 1) - pos.y;
+                sockets.Add(new DoorSocket
+                {
+                    socketId = socketId,
+                    position = new Vector2Int(pos.x, gridY),
+                    direction = DoorDirection.North,
+                    widthInTiles = 2,
+                    isExit = true
+                });
+            }
+
+            AddSlot(slots.NW, RoomTemplateSO.ExitSlotNorthWestId, "NW");
+            AddSlot(slots.N,  RoomTemplateSO.ExitSlotNorthId,     "N");
+            AddSlot(slots.NE, RoomTemplateSO.ExitSlotNorthEastId, "NE");
+            return sockets;
         }
 
         private static string GetRow(RoomJson room, int inputY, ImportReport report)
@@ -397,7 +508,17 @@ namespace RIMA.Editor.Rooms
             template.encounterTags = data.encounterTags;
             template.difficultyTags = data.difficultyTags;
             template.blockerTags = data.chestMarkerTags;
-            template.props = new List<RIMA.MapDesigner.Props.PropPlacementData>();
+            // CRITICAL FIX (Flash finding): preserve existing props when incoming JSON has no props array.
+            // Only replace when data.hasPropsArray is true (incoming JSON explicitly supplies props).
+            if (data.hasPropsArray)
+            {
+                template.props = data.incomingProps ?? new List<RIMA.MapDesigner.Props.PropPlacementData>();
+            }
+            else if (template.props == null)
+            {
+                template.props = new List<RIMA.MapDesigner.Props.PropPlacementData>();
+            }
+            // else: keep existing template.props unchanged
             template.walkableGrid = data.walkableGrid;
         }
 
@@ -499,13 +620,71 @@ namespace RIMA.Editor.Rooms
         [Serializable]
         private class RoomJson
         {
+            // v1 fields
             public string roomId;
             public string roomType;
             public int width;
             public int height;
-            public string[] grid;
-            public DoorJson[] doors;
+            public string[] grid;       // v1: grid with P/e/B/C markers; v2: pure '#'/'.' walkable
+            public DoorJson[] doors;    // v1 doors array
             public string notes;
+
+            // v2 additional fields (JsonUtility ignores unknown keys; missing = default)
+            public int version;         // 0 = v1 (not set), 2 = v2
+            public string id;           // v2 roomId alias
+            public RoomSizeJson size;   // v2 size object {w, h}
+            public string[] walkable;   // v2 walkable rows (pure '#'/'.')
+            public RoomSpawnJson spawn; // v2 spawn {x, y}
+            public ExitSlotsJson exitSlots; // v2 named exit slots
+            public RoomPropJson[] props;    // v2 props array
+            public RoomEnemyJson[] enemySpawns; // v2 enemy spawns
+        }
+
+        [Serializable]
+        private class RoomSizeJson
+        {
+            public int w;
+            public int h;
+        }
+
+        [Serializable]
+        private class RoomSpawnJson
+        {
+            public int x;
+            public int y;
+        }
+
+        [Serializable]
+        private class ExitSlotsJson
+        {
+            public ExitSlotPosJson NW;
+            public ExitSlotPosJson N;
+            public ExitSlotPosJson NE;
+        }
+
+        [Serializable]
+        private class ExitSlotPosJson
+        {
+            public int x;
+            public int y;
+        }
+
+        [Serializable]
+        private class RoomPropJson
+        {
+            public string id;   // propDefinitionGuid or propName
+            public int x;
+            public int y;
+            public int variant = -1;
+            public bool flipX;
+        }
+
+        [Serializable]
+        private class RoomEnemyJson
+        {
+            public int x;
+            public int y;
+            public string tier;
         }
 
         [Serializable]
@@ -526,6 +705,9 @@ namespace RIMA.Editor.Rooms
             public readonly List<string> difficultyTags = new List<string>();
             public readonly List<string> chestMarkerTags = new List<string>();
             public Vector2Int playerSpawn;
+            // schema-v2 props support
+            public bool hasPropsArray;
+            public List<RIMA.MapDesigner.Props.PropPlacementData> incomingProps;
 
             public RoomBuildData(int width, int height, ImportReport report)
             {

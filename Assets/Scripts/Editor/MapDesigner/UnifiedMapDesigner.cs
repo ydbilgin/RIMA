@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using RIMA.RoomPainter;
 using RIMA.RoomPainter.Editor;
 using RIMA.Live;
+using RIMA.MapDesigner.Room.Validation;
 
 namespace RIMA.Editor.MapDesigner
 {
@@ -35,6 +36,9 @@ namespace RIMA.Editor.MapDesigner
         private readonly UnifiedDesignerCore _core = new UnifiedDesignerCore();
         private readonly RoomDataComposer _composer = new RoomDataComposer();
 
+        // ── Rooms tab edit toolbar ───────────────────────────────────────────
+        private enum SchematicEditMode { None, PaintWalkable, PaintVoid, SetEntry, SetNW, SetN, SetNE }
+
         private Tab _tab = Tab.Rooms;
         private Vector2 _roomsScroll;
         private Vector2 _libScroll;
@@ -45,6 +49,15 @@ namespace RIMA.Editor.MapDesigner
         private int _autoPropsSeed = 12345;
         private RoomTemplateSO _selectedTemplate;
         private List<RoomTemplateSO> _roomTemplates = new List<RoomTemplateSO>();
+
+        // debounce export
+        private SchematicEditMode _schematicMode = SchematicEditMode.None;
+        private bool _isDraggingSchematic;
+        private double _exportDueTime = -1.0;
+        private const double ExportDebounceSeconds = 1.0;
+        private readonly HashSet<RoomTemplateSO> _pendingExport = new HashSet<RoomTemplateSO>();
+        // inline validator messages after slot moves
+        private string _lastSlotValidationMsg = string.Empty;
 
         [MenuItem("RIMA/Map Designer", priority = 1)]
         public static void Open()
@@ -61,12 +74,44 @@ namespace RIMA.Editor.MapDesigner
             _core.BeforeMutate = (room, label) => { if (room != null) Undo.RecordObject(room, label); };
             _core.Changed += OnCoreChanged;
             SceneView.duringSceneGui += OnSceneGui;
+            EditorApplication.update += OnEditorUpdate;
         }
 
         private void OnDisable()
         {
             _core.Changed -= OnCoreChanged;
             SceneView.duringSceneGui -= OnSceneGui;
+            EditorApplication.update -= OnEditorUpdate;
+            FlushPendingExports(); // flush on window close
+        }
+
+        private void OnEditorUpdate()
+        {
+            if (_exportDueTime > 0 && EditorApplication.timeSinceStartup >= _exportDueTime)
+            {
+                _exportDueTime = -1.0;
+                FlushPendingExports();
+            }
+        }
+
+        private void ScheduleExport(RoomTemplateSO template)
+        {
+            if (template == null) return;
+            _pendingExport.Add(template);
+            _exportDueTime = EditorApplication.timeSinceStartup + ExportDebounceSeconds;
+        }
+
+        private void FlushPendingExports()
+        {
+            if (_pendingExport.Count == 0) return;
+            foreach (RoomTemplateSO t in _pendingExport)
+            {
+                if (t == null) continue;
+                bool written = RoomTemplateJsonExporter.Export(t);
+                if (written)
+                    Debug.Log($"[UnifiedMapDesigner] JSON exported: {t.name}");
+            }
+            _pendingExport.Clear();
         }
 
         private void OnCoreChanged()
@@ -78,6 +123,8 @@ namespace RIMA.Editor.MapDesigner
                 RoomDataAuthoringController.WriteLiveRoom(_core.ActiveRoom);
                 EditorSceneManager_MarkActiveDirty();
                 SceneView.RepaintAll();
+                // schedule JSON export for the selected Rooms-tab template (if any)
+                ScheduleExport(_selectedTemplate);
             }
 
             Repaint();
@@ -215,7 +262,8 @@ namespace RIMA.Editor.MapDesigner
                 {
                     DrawSelectedTemplateHeader();
                     DrawSelectedTemplateActions();
-                    DrawTemplatePreview(_selectedTemplate);
+                    DrawSchematicEditToolbar();
+                    DrawTemplatePreviewWithEditing(_selectedTemplate);
                 }
             }
         }
@@ -272,10 +320,24 @@ namespace RIMA.Editor.MapDesigner
 
                     if (DrawColoredButton("Save Assets", new Color(1f, 0.6f, 0.22f), GUILayout.Height(28f)))
                     {
+                        FlushPendingExports(); // flush before save
                         AssetDatabase.SaveAssets();
                         AssetDatabase.Refresh();
                         Debug.Log("[UnifiedMapDesigner] Saved RoomTemplateSO assets.");
                         Repaint();
+                    }
+                }
+
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (DrawColoredButton("Export JSON", new Color(0.6f, 0.9f, 0.6f), GUILayout.Height(22f)))
+                    {
+                        RoomTemplateJsonExporter.Export(_selectedTemplate);
+                        Debug.Log($"[UnifiedMapDesigner] Exported JSON for {_selectedTemplate.name}.");
+                    }
+                    if (DrawColoredButton("Export All JSON", new Color(0.5f, 0.8f, 0.5f), GUILayout.Height(22f)))
+                    {
+                        RoomTemplateJsonExporter.ExportAll();
                     }
                 }
 
@@ -330,12 +392,265 @@ namespace RIMA.Editor.MapDesigner
             Repaint();
         }
 
+        private void DrawSchematicEditToolbar()
+        {
+            EditorGUILayout.Space(2f);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                DrawModeButton("Paint Walkable", SchematicEditMode.PaintWalkable, new Color(0.25f, 0.75f, 0.25f));
+                DrawModeButton("Paint Void", SchematicEditMode.PaintVoid, new Color(0.6f, 0.25f, 0.25f));
+                DrawModeButton("Set Entry", SchematicEditMode.SetEntry, new Color(0.25f, 1f, 0.25f));
+                DrawModeButton("Set NW", SchematicEditMode.SetNW, new Color(0.25f, 0.65f, 1f));
+                DrawModeButton("Set N", SchematicEditMode.SetN, new Color(0.1f, 1f, 0.95f));
+                DrawModeButton("Set NE", SchematicEditMode.SetNE, new Color(0.85f, 0.55f, 1f));
+                if (GUILayout.Button("None", GUILayout.Width(50f)))
+                    _schematicMode = SchematicEditMode.None;
+            }
+
+            if (!string.IsNullOrEmpty(_lastSlotValidationMsg))
+            {
+                Color prev = GUI.color;
+                GUI.color = Color.red;
+                EditorGUILayout.LabelField(_lastSlotValidationMsg, EditorStyles.miniLabel);
+                GUI.color = prev;
+            }
+        }
+
+        private void DrawModeButton(string label, SchematicEditMode mode, Color activeColor)
+        {
+            bool active = _schematicMode == mode;
+            Color prev = GUI.backgroundColor;
+            if (active) GUI.backgroundColor = activeColor;
+            if (GUILayout.Button(label, EditorStyles.miniButton))
+                _schematicMode = active ? SchematicEditMode.None : mode;
+            GUI.backgroundColor = prev;
+        }
+
+        private void DrawTemplatePreviewWithEditing(RoomTemplateSO template)
+        {
+            // draw the schematic normally first
+            DrawTemplatePreview(template);
+
+            // then handle mouse input on the same area
+            if (template == null || _schematicMode == SchematicEditMode.None) return;
+
+            Event e = Event.current;
+            bool isDown = e.type == EventType.MouseDown;
+            bool isDrag = e.type == EventType.MouseDrag;
+            bool isUp   = e.type == EventType.MouseUp;
+
+            if (isUp)
+            {
+                _isDraggingSchematic = false;
+                return;
+            }
+
+            if (!isDown && !isDrag) return;
+
+            // Get the schematic grid rect by recomputing same geometry as DrawTemplatePreview
+            Rect area = GetLastSchematicArea(template);
+            if (!area.Contains(e.mousePosition)) return;
+
+            Vector2Int? cell = SchematicMouseToCell(template, area, e.mousePosition);
+            if (cell == null) return;
+
+            if (isDown) _isDraggingSchematic = true;
+            if (!isDown && !_isDraggingSchematic) return;
+
+            ApplySchematicEdit(template, cell.Value, e.button);
+            e.Use();
+            Repaint();
+        }
+
+        // We store the last schematic rect so mouse handling can use it
+        private Rect _lastSchematicGridRect;
+        private RoomTemplateSO _lastSchematicTemplate;
+
+        private Rect GetLastSchematicArea(RoomTemplateSO template)
+        {
+            // Reconstruct the grid rect from the same bounds/padding logic used in DrawTemplatePreview
+            if (_lastSchematicTemplate != template || _lastSchematicGridRect == Rect.zero)
+                return Rect.zero;
+            return _lastSchematicGridRect;
+        }
+
+        private Vector2Int? SchematicMouseToCell(RoomTemplateSO template, Rect gridRect, Vector2 mousePos)
+        {
+            if (template == null || gridRect == Rect.zero) return null;
+            int w = template.bounds.width;
+            int h = template.bounds.height;
+            const float padding = 10f;
+            Rect inner = new Rect(gridRect.x + padding, gridRect.y + padding, gridRect.width - padding * 2f, gridRect.height - padding * 2f);
+            float cell = Mathf.Floor(Mathf.Min(inner.width / w, inner.height / h));
+            if (cell < 1f) return null;
+            float gw = cell * w;
+            float gh = cell * h;
+            Rect grid = new Rect(
+                inner.x + (inner.width - gw) * 0.5f,
+                inner.y + (inner.height - gh) * 0.5f,
+                gw, gh);
+
+            if (!grid.Contains(mousePos)) return null;
+
+            float rx = mousePos.x - grid.x;
+            float ry = mousePos.y - grid.y;
+            int lx = (int)(rx / cell);
+            int ly = (int)(ry / cell);
+            // TilePreviewRect uses: gridRect.y + (height-1-ly)*cell  → ly=0 is top → gridY = (h-1-ly)
+            int gridY = (h - 1) - ly;
+            int gx = template.bounds.xMin + Mathf.Clamp(lx, 0, w - 1);
+            int gy = template.bounds.yMin + Mathf.Clamp(gridY, 0, h - 1);
+            return new Vector2Int(gx, gy);
+        }
+
+        private void ApplySchematicEdit(RoomTemplateSO template, Vector2Int cell, int mouseButton)
+        {
+            // RMB = erase paint / cancel
+            bool isErase = mouseButton == 1;
+
+            Undo.RecordObject(template, "Room Schematic Edit");
+
+            switch (_schematicMode)
+            {
+                case SchematicEditMode.PaintWalkable:
+                    SetWalkable(template, cell, !isErase);
+                    break;
+                case SchematicEditMode.PaintVoid:
+                    SetWalkable(template, cell, isErase); // paint void = set NOT walkable
+                    break;
+                case SchematicEditMode.SetEntry:
+                    if (!isErase) SetPlayerSpawn(template, cell);
+                    break;
+                case SchematicEditMode.SetNW:
+                    if (!isErase) SetExitSlot(template, cell, 0);
+                    break;
+                case SchematicEditMode.SetN:
+                    if (!isErase) SetExitSlot(template, cell, 1);
+                    break;
+                case SchematicEditMode.SetNE:
+                    if (!isErase) SetExitSlot(template, cell, 2);
+                    break;
+            }
+
+            EditorUtility.SetDirty(template);
+            ScheduleExport(template);
+        }
+
+        private static void SetWalkable(RoomTemplateSO template, Vector2Int cell, bool walkable)
+        {
+            int w = template.bounds.width;
+            int h = template.bounds.height;
+            int needed = w * h;
+            if (template.walkableGrid == null || template.walkableGrid.Length != needed)
+            {
+                // initialize from existing walkability (full-walkable if empty)
+                bool[] grid = new bool[needed];
+                for (int y = 0; y < h; y++)
+                    for (int x = 0; x < w; x++)
+                        grid[y * w + x] = template.IsWalkable(new Vector2Int(template.bounds.xMin + x, template.bounds.yMin + y));
+                template.walkableGrid = grid;
+            }
+            int lx = cell.x - template.bounds.xMin;
+            int ly = cell.y - template.bounds.yMin;
+            if (lx < 0 || lx >= w || ly < 0 || ly >= h) return;
+            template.walkableGrid[ly * w + lx] = walkable;
+        }
+
+        private static void SetPlayerSpawn(RoomTemplateSO template, Vector2Int cell)
+        {
+            if (template.playerSpawn == null)
+                template.playerSpawn = new PlayerSpawnSocket { socketId = "player_spawn_01" };
+            template.playerSpawn.position = cell;
+            template.playerSpawn.facing = RIMA.DoorDirection.South;
+        }
+
+        private void SetExitSlot(RoomTemplateSO template, Vector2Int cell, int slotIndex)
+        {
+            if (template.doorSockets == null)
+                template.doorSockets = new System.Collections.Generic.List<DoorSocket>();
+
+            string socketId = RoomTemplateSO.ExitSlotId(slotIndex);
+
+            // find existing slot with this socketId and update position, or add new
+            DoorSocket existing = null;
+            for (int i = 0; i < template.doorSockets.Count; i++)
+            {
+                if (template.doorSockets[i]?.socketId == socketId)
+                {
+                    existing = template.doorSockets[i];
+                    break;
+                }
+            }
+
+            if (existing != null)
+            {
+                existing.position = cell;
+                existing.direction = RIMA.DoorDirection.North;
+                existing.isExit = true;
+            }
+            else
+            {
+                template.doorSockets.Add(new DoorSocket
+                {
+                    socketId = socketId,
+                    position = cell,
+                    direction = RIMA.DoorDirection.North,
+                    isExit = true,
+                    widthInTiles = 2
+                });
+            }
+
+            // Validate and show MUST violations inline (non-blocking)
+            RunSlotValidation(template);
+        }
+
+        private void RunSlotValidation(RoomTemplateSO template)
+        {
+            List<RoomValidationIssue> issues = new List<RoomValidationIssue>();
+            DoorSocket[] slots = template.ResolveExitSlots();
+            // Check MUST rules that pertain to slots
+            if (slots[1] == null)
+                issues.Add(new RoomValidationIssue(ValidationSeverity.Error, "ERR_MISSING_N_EXIT_SLOT", "Missing N slot.", template.roomId));
+
+            for (int a = 0; a < slots.Length; a++)
+            {
+                if (slots[a] == null) continue;
+                for (int b = a + 1; b < slots.Length; b++)
+                {
+                    if (slots[b] == null) continue;
+                    if (Vector2Int.Distance(slots[a].position, slots[b].position) < 3f)
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error, "ERR_EXIT_SLOTS_TOO_CLOSE",
+                            $"{RoomTemplateSO.ExitSlotLabel(a)}+{RoomTemplateSO.ExitSlotLabel(b)} < 3 tiles apart.", template.roomId));
+                }
+            }
+
+            if (issues.Count > 0)
+            {
+                var msgs = new System.Text.StringBuilder();
+                for (int i = 0; i < issues.Count; i++)
+                {
+                    if (i > 0) msgs.Append(" | ");
+                    msgs.Append(issues[i].message);
+                }
+                _lastSlotValidationMsg = msgs.ToString();
+            }
+            else
+            {
+                _lastSlotValidationMsg = string.Empty;
+            }
+        }
+
         private void DrawTemplatePreview(RoomTemplateSO template)
         {
             EditorGUILayout.Space(4f);
-            EditorGUILayout.LabelField("2D Schematic Preview", EditorStyles.boldLabel);
+            string modeHint = _schematicMode == SchematicEditMode.None ? "" : $"  [{_schematicMode}]";
+            EditorGUILayout.LabelField("2D Schematic Preview" + modeHint, EditorStyles.boldLabel);
 
             Rect area = GUILayoutUtility.GetRect(260f, 360f, GUILayout.ExpandWidth(true));
+            // store area for mouse→cell inverse mapping
+            _lastSchematicTemplate = template;
+            _lastSchematicGridRect = area;
+
             EditorGUI.DrawRect(area, new Color(0.08f, 0.08f, 0.08f));
             if (template == null || template.bounds.width <= 0 || template.bounds.height <= 0)
             {

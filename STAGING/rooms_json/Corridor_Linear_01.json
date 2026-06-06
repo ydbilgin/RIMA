@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "id": "Corridor_Linear_01",
+  "roomType": "Corridor",
+  "size": {"w": 12, "h": 4},
+  "walkable": [
+    "............",
+    "############",
+    "############",
+    "..#..#..#..."
+  ],
+  "spawn": {"x": 9, "y": 2},
+  "exitSlots": {
+    "N": {"x": 5, "y": 1}
+  },
+  "props": [
+  ],
+  "enemySpawns": [
+    {"x": 5, "y": 1, "tier": "standard"}
+  ],
+  "notes": ""
+}

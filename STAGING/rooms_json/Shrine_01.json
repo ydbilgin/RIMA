@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "id": "Shrine_01",
+  "roomType": "Curse",
+  "size": {"w": 8, "h": 8},
+  "walkable": [
+    "........",
+    ".######.",
+    ".##..##.",
+    "##.##.##",
+    "##.##.##",
+    ".##..##.",
+    ".######.",
+    "........"
+  ],
+  "spawn": {"x": 3, "y": 6},
+  "exitSlots": {
+    "N": {"x": 1, "y": 1},
+    "NE": {"x": 6, "y": 1}
+  },
+  "props": [
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 3, "y": 2, "variant": -1, "flipX": false} /* Wooden Barrel */,
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 4, "y": 2, "variant": -1, "flipX": false} /* Wooden Barrel */,
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 2, "y": 3, "variant": -1, "flipX": false} /* Wooden Barrel */,
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 5, "y": 3, "variant": -1, "flipX": false} /* Wooden Barrel */,
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 2, "y": 4, "variant": -1, "flipX": false} /* Wooden Barrel */,
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 5, "y": 4, "variant": -1, "flipX": false} /* Wooden Barrel */,
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 3, "y": 5, "variant": -1, "flipX": false} /* Wooden Barrel */,
+    {"id": "b50be24c830a450ba0ccd36625e57c31", "x": 4, "y": 5, "variant": -1, "flipX": false} /* Wooden Barrel */
+  ],
+  "enemySpawns": [
+  ],
+  "notes": ""
+}
