@@ -67,6 +67,9 @@ namespace RIMA.MapDesigner.Room.Runtime
         public Transform PlayerSpawnMarker { get; private set; }
         public IReadOnlyList<Transform> EnemySpawnMarkers => enemySpawnMarkers;
 
+        private static readonly HashSet<string> WarnedMissingNorthExitSocketTemplates = new HashSet<string>();
+
+        private RoomTemplateSO lastTemplate;
         private readonly List<Transform> enemySpawnMarkers = new List<Transform>();
 
         public void Build(RoomTemplateSO template)
@@ -88,6 +91,7 @@ namespace RIMA.MapDesigner.Room.Runtime
                 return;
             }
 
+            lastTemplate = template;
             EnsureContainers();
             ClearPrevious();
 
@@ -625,6 +629,19 @@ namespace RIMA.MapDesigner.Room.Runtime
             return true;
         }
 
+        public bool TryGetCellCenterWorld(Vector2Int tilePosition, out Vector3 world)
+        {
+            world = default;
+            if (grid == null)
+            {
+                return false;
+            }
+
+            Vector3 center = grid.GetCellCenterWorld(new Vector3Int(tilePosition.x, tilePosition.y, 0));
+            world = new Vector3(center.x, center.y, 0f);
+            return true;
+        }
+
         // Spawns obstacle/decor props authored in template.props at iso cell centers.
         // Reuses the existing prop data (PropDefinitionSO/PropRegistrySO) and runtime
         // components (PropSorterRuntime for Y-sort, PropColliderAutoBuilder for blockers).
@@ -715,6 +732,17 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
             DestroyChildren(gatesContainer);
 
+            Vector3 rowAnchor;
+            bool hasNorthExitSocket = TryGetNorthExitAnchor(out rowAnchor);
+            if (!hasNorthExitSocket)
+            {
+                string templateName = lastTemplate != null && !string.IsNullOrEmpty(lastTemplate.roomId) ? lastTemplate.roomId : "unknown";
+                if (WarnedMissingNorthExitSocketTemplates.Add(templateName))
+                {
+                    Debug.LogWarning($"[IsoRoomBuilder] Template {templateName} has no North exit socket; using fallback exit door row.");
+                }
+            }
+
             Vector3 min = new Vector3(float.MaxValue, float.MaxValue, 0f);
             Vector3 max = new Vector3(float.MinValue, float.MinValue, 0f);
             foreach (Vector3Int cell in LastFloorCells)
@@ -724,7 +752,7 @@ namespace RIMA.MapDesigner.Room.Runtime
                 max = Vector3.Max(max, world);
             }
 
-            float rowY = Mathf.Lerp(min.y, max.y, 0.72f);
+            float rowY = hasNorthExitSocket ? rowAnchor.y : Mathf.Lerp(min.y, max.y, 0.72f);
             float rowXMin = float.MaxValue;
             float rowXMax = float.MinValue;
             foreach (Vector3Int cell in LastFloorCells)
@@ -741,7 +769,7 @@ namespace RIMA.MapDesigner.Room.Runtime
                 rowXMin = min.x;
                 rowXMax = max.x;
             }
-            float centerX = (rowXMin + rowXMax) * 0.5f;
+            float centerX = hasNorthExitSocket ? rowAnchor.x : (rowXMin + rowXMax) * 0.5f;
             float usableWidth = Mathf.Max(0f, (rowXMax - rowXMin) - 1.8f);
             int count = doorTypes.Count;
             float spacing = (count > 1 && (count - 1) * gateRowSpacing > usableWidth)
@@ -782,6 +810,30 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             return doors;
+        }
+
+        private bool TryGetNorthExitAnchor(out Vector3 rowAnchor)
+        {
+            rowAnchor = default;
+            if (lastTemplate == null || lastTemplate.doorSockets == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < lastTemplate.doorSockets.Count; i++)
+            {
+                DoorSocket socket = lastTemplate.doorSockets[i];
+                if (socket == null || !socket.isExit || socket.direction != DoorDirection.North)
+                {
+                    continue;
+                }
+
+                Vector3 center = grid.GetCellCenterWorld(new Vector3Int(socket.position.x, socket.position.y, 0));
+                rowAnchor = new Vector3(center.x, center.y, 0f);
+                return true;
+            }
+
+            return false;
         }
     }
 }

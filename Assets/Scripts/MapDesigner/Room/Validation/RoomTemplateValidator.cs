@@ -69,6 +69,15 @@ namespace RIMA.MapDesigner.Room.Validation
                     "ERR_PLAYER_OUT_OF_BOUNDS",
                     $"PlayerSpawnSocket position {template.playerSpawn.position} is outside room bounds {template.bounds}.",
                     id));
+                return;
+            }
+
+            if (!template.IsWalkable(template.playerSpawn.position))
+            {
+                issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                    "ERR_PLAYER_NOT_WALKABLE",
+                    $"PlayerSpawnSocket position {template.playerSpawn.position} is not walkable.",
+                    id));
             }
         }
 
@@ -77,9 +86,27 @@ namespace RIMA.MapDesigner.Room.Validation
             int exitCount = 0;
             if (template.doorSockets != null)
             {
-                foreach (var d in template.doorSockets)
+                for (int i = 0; i < template.doorSockets.Count; i++)
                 {
-                    if (d != null && d.isExit) exitCount++;
+                    DoorSocket d = template.doorSockets[i];
+                    if (d == null) continue;
+                    if (d.isExit) exitCount++;
+
+                    if (d.isExit && d.direction == RIMA.DoorDirection.South)
+                    {
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                            "ERR_SOUTH_EXIT_SOCKET",
+                            $"DoorSocket[{i}] '{d.socketId}' is a South exit; south exits are forbidden.",
+                            id));
+                    }
+
+                    if (!IsValidDoorEdge(template, d))
+                    {
+                        issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
+                            "ERR_DOOR_SOCKET_NOT_EDGE",
+                            $"DoorSocket[{i}] '{d.socketId}' at {d.position} is not a walkable {d.direction} edge cell.",
+                            id));
+                    }
                 }
             }
 
@@ -196,6 +223,34 @@ namespace RIMA.MapDesigner.Room.Validation
         private static bool RectsOverlap(RectInt a, RectInt b)
         {
             return !(a.xMax <= b.xMin || a.xMin >= b.xMax || a.yMax <= b.yMin || a.yMin >= b.yMax);
+        }
+
+        private static bool IsValidDoorEdge(RoomTemplateSO template, DoorSocket socket)
+        {
+            if (!RectContains(template.bounds, socket.position) || !template.IsWalkable(socket.position))
+            {
+                return false;
+            }
+
+            Vector2Int neighbor = socket.position + DirectionOffset(socket.direction);
+            return !template.IsWalkable(neighbor);
+        }
+
+        private static Vector2Int DirectionOffset(RIMA.DoorDirection direction)
+        {
+            switch (direction)
+            {
+                case RIMA.DoorDirection.North:
+                    return new Vector2Int(0, 1);
+                case RIMA.DoorDirection.South:
+                    return new Vector2Int(0, -1);
+                case RIMA.DoorDirection.East:
+                    return new Vector2Int(1, 0);
+                case RIMA.DoorDirection.West:
+                    return new Vector2Int(-1, 0);
+                default:
+                    return Vector2Int.zero;
+            }
         }
     }
 }

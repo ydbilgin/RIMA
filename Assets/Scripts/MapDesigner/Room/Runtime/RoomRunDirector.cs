@@ -110,6 +110,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         private bool warnedMissingPlayer;
         private bool warnedMissingEncounterBank;
         private bool warnedMissingArenaCamera;
+        private bool warnedSpawnFallback;
         private DungeonGraph graph;
         private readonly List<GameObject> activeEnemies = new List<GameObject>();
         private readonly List<GameObject> activeDoors = new List<GameObject>();
@@ -288,9 +289,9 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         private void EnsurePlayerAtSpawn()
         {
-            if (builder.PlayerSpawnMarker == null)
+            if (!TryResolvePlayerSpawnWorld(out Vector3 spawnWorld))
             {
-                Debug.LogWarning("[RoomRunDirector] Missing player spawn marker; player spawn skipped.");
+                Debug.LogWarning("[RoomRunDirector] Missing player spawn marker and no walkable fallback cell; player spawn skipped.");
                 return;
             }
 
@@ -311,7 +312,7 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             if (player == null && playerPrefab != null)
             {
-                GameObject instance = Instantiate(playerPrefab, builder.PlayerSpawnMarker.position, Quaternion.identity);
+                GameObject instance = Instantiate(playerPrefab, spawnWorld, Quaternion.identity);
                 instance.name = "Player";
                 player = instance.transform;
             }
@@ -326,9 +327,98 @@ namespace RIMA.MapDesigner.Room.Runtime
                 return;
             }
 
-            player.position = builder.PlayerSpawnMarker.position;
+            player.position = spawnWorld;
             EnsurePlayerRuntime(player.gameObject);
             EnsurePrimaryClass();
+        }
+
+        private bool TryResolvePlayerSpawnWorld(out Vector3 spawnWorld)
+        {
+            spawnWorld = default;
+            bool hasUsableSocket = CurrentTemplate != null
+                && CurrentTemplate.playerSpawn != null
+                && CurrentTemplate.IsWalkable(CurrentTemplate.playerSpawn.position)
+                && builder.PlayerSpawnMarker != null;
+
+            if (hasUsableSocket)
+            {
+                spawnWorld = builder.PlayerSpawnMarker.position;
+                return true;
+            }
+
+            if (!warnedSpawnFallback)
+            {
+                string reason = builder.PlayerSpawnMarker == null ? "missing spawn marker" : "spawn socket is not walkable";
+                string roomName = CurrentTemplate != null && !string.IsNullOrEmpty(CurrentTemplate.roomId) ? CurrentTemplate.roomId : "unknown";
+                Debug.LogWarning($"[RoomRunDirector] Using fallback player spawn for {roomName}: {reason}.");
+                warnedSpawnFallback = true;
+            }
+
+            if (CurrentTemplate == null || !TryFindBottomCenterWalkableCell(CurrentTemplate, out Vector2Int fallbackCell))
+            {
+                return false;
+            }
+
+            if (builder.TryGetCellCenterWorld(fallbackCell, out spawnWorld))
+            {
+                return true;
+            }
+
+            spawnWorld = new Vector3(fallbackCell.x, fallbackCell.y, 0f);
+            return true;
+        }
+
+        private static bool TryFindBottomCenterWalkableCell(RoomTemplateSO template, out Vector2Int cell)
+        {
+            cell = default;
+            bool foundAny = false;
+            int minX = int.MaxValue;
+            int maxX = int.MinValue;
+            for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
+            {
+                for (int x = template.bounds.xMin; x < template.bounds.xMax; x++)
+                {
+                    Vector2Int candidate = new Vector2Int(x, y);
+                    if (!template.IsWalkable(candidate))
+                    {
+                        continue;
+                    }
+
+                    foundAny = true;
+                    minX = Mathf.Min(minX, x);
+                    maxX = Mathf.Max(maxX, x);
+                }
+            }
+
+            if (!foundAny)
+            {
+                return false;
+            }
+
+            float centerX = (minX + maxX) * 0.5f;
+            int bestY = int.MaxValue;
+            float bestDistance = float.MaxValue;
+            for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
+            {
+                for (int x = template.bounds.xMin; x < template.bounds.xMax; x++)
+                {
+                    Vector2Int candidate = new Vector2Int(x, y);
+                    if (!template.IsWalkable(candidate))
+                    {
+                        continue;
+                    }
+
+                    float distance = Mathf.Abs(x - centerX);
+                    if (y < bestY || (y == bestY && distance < bestDistance))
+                    {
+                        cell = candidate;
+                        bestY = y;
+                        bestDistance = distance;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private static bool IsFunctionalPlayer(GameObject candidate)

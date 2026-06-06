@@ -23,24 +23,24 @@ MonoBehaviour:
     height: 18
   doorSockets:
   - socketId: door_N_01
-    position: {x: 13, y: 17}
+    position: {x: 12, y: 17}
     direction: 0
     widthInTiles: 2
     isExit: 1
-  - socketId: door_W_02
-    position: {x: 0, y: 8}
-    direction: 3
-    widthInTiles: 2
-    isExit: 1
-  - socketId: door_E_03
+  - socketId: door_E_01
     position: {x: 25, y: 8}
     direction: 2
     widthInTiles: 2
     isExit: 1
+  - socketId: door_W_01
+    position: {x: 0, y: 8}
+    direction: 3
+    widthInTiles: 2
+    isExit: 1
   playerSpawn:
     socketId: player_spawn_01
-    position: {x: 13, y: 16}
-    facing: 1
+    position: {x: 12, y: 0}
+    facing: 0
   enemySpawnSockets:
   - socketId: enemy_spawn_01
     position: {x: 13, y: 11}

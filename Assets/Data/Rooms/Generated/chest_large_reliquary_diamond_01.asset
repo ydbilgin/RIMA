@@ -27,15 +27,20 @@ MonoBehaviour:
     direction: 0
     widthInTiles: 2
     isExit: 1
-  - socketId: door_E_02
+  - socketId: door_E_01
     position: {x: 19, y: 7}
     direction: 2
     widthInTiles: 2
     isExit: 1
+  - socketId: door_W_01
+    position: {x: 1, y: 8}
+    direction: 3
+    widthInTiles: 2
+    isExit: 1
   playerSpawn:
     socketId: player_spawn_01
-    position: {x: 10, y: 14}
-    facing: 1
+    position: {x: 10, y: 1}
+    facing: 0
   enemySpawnSockets: []
   cameraBounds:
     tileRect:

@@ -27,20 +27,20 @@ MonoBehaviour:
     direction: 0
     widthInTiles: 2
     isExit: 1
-  - socketId: door_W_02
-    position: {x: 0, y: 9}
-    direction: 3
-    widthInTiles: 2
-    isExit: 1
-  - socketId: door_E_03
+  - socketId: door_E_01
     position: {x: 29, y: 9}
     direction: 2
     widthInTiles: 2
     isExit: 1
+  - socketId: door_W_01
+    position: {x: 0, y: 9}
+    direction: 3
+    widthInTiles: 2
+    isExit: 1
   playerSpawn:
     socketId: player_spawn_01
-    position: {x: 14, y: 20}
-    facing: 1
+    position: {x: 14, y: 1}
+    facing: 0
   enemySpawnSockets:
   - socketId: enemy_spawn_01
     position: {x: 8, y: 9}
