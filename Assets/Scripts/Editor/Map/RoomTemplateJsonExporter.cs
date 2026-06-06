@@ -59,14 +59,14 @@ namespace RIMA.Editor.Map
             int h = template.bounds.height;
 
             var sb = new StringBuilder();
-            sb.AppendLine("{");
-            sb.AppendLine($"  \"version\": {SchemaVersion},");
-            sb.AppendLine($"  \"id\": \"{EscapeJson(roomId)}\",");
-            sb.AppendLine($"  \"roomType\": \"{EscapeJson(template.roomType.ToString())}\",");
-            sb.AppendLine($"  \"size\": {{\"w\": {w}, \"h\": {h}}},");
+            sb.Append("{\n");
+            sb.Append($"  \"version\": {SchemaVersion},\n");
+            sb.Append($"  \"id\": \"{EscapeJson(roomId)}\",\n");
+            sb.Append($"  \"roomType\": \"{EscapeJson(template.roomType.ToString())}\",\n");
+            sb.Append($"  \"size\": {{\"w\": {w}, \"h\": {h}}},\n");
 
             // walkable rows: row 0 = north (highest gridY = h-1)
-            sb.AppendLine("  \"walkable\": [");
+            sb.Append("  \"walkable\": [\n");
             for (int jsonRow = 0; jsonRow < h; jsonRow++)
             {
                 int gridY = (h - 1) - jsonRow; // Y-flip
@@ -77,9 +77,9 @@ namespace RIMA.Editor.Map
                     rowSb.Append(template.IsWalkable(tile) ? '#' : '.');
                 }
                 bool last = (jsonRow == h - 1);
-                sb.AppendLine($"    \"{rowSb}\"{(last ? "" : ",")}");
+                sb.Append($"    \"{rowSb}\"{(last ? "" : ",")}\n");
             }
-            sb.AppendLine("  ],");
+            sb.Append("  ],\n");
 
             // spawn: Y-flip
             if (template.playerSpawn != null)
@@ -87,16 +87,16 @@ namespace RIMA.Editor.Map
                 int spawnLocalX = template.playerSpawn.position.x - template.bounds.xMin;
                 int spawnLocalY = template.playerSpawn.position.y - template.bounds.yMin;
                 int spawnJsonY = (h - 1) - spawnLocalY;
-                sb.AppendLine($"  \"spawn\": {{\"x\": {spawnLocalX}, \"y\": {spawnJsonY}}},");
+                sb.Append($"  \"spawn\": {{\"x\": {spawnLocalX}, \"y\": {spawnJsonY}}},\n");
             }
             else
             {
-                sb.AppendLine("  \"spawn\": null,");
+                sb.Append("  \"spawn\": null,\n");
             }
 
             // exitSlots: named NW/N/NE from door_NW_01/door_N_01/door_NE_01
             DoorSocket[] slots = template.ResolveExitSlots();
-            sb.AppendLine("  \"exitSlots\": {");
+            sb.Append("  \"exitSlots\": {\n");
             string[] slotNames = { "NW", "N", "NE" };
             List<string> slotLines = new List<string>();
             for (int i = 0; i < slots.Length; i++)
@@ -108,11 +108,12 @@ namespace RIMA.Editor.Map
                 int jy = (h - 1) - ly;
                 slotLines.Add($"    \"{slotNames[i]}\": {{\"x\": {lx}, \"y\": {jy}}}");
             }
-            sb.AppendLine(string.Join(",\n", slotLines));
-            sb.AppendLine("  },");
+            sb.Append(string.Join(",\n", slotLines));
+            sb.Append("\n");
+            sb.Append("  },\n");
 
             // props
-            sb.AppendLine("  \"props\": [");
+            sb.Append("  \"props\": [\n");
             if (template.props != null && template.props.Count > 0)
             {
                 List<string> propLines = new List<string>();
@@ -129,12 +130,13 @@ namespace RIMA.Editor.Map
                     propLines.Add(
                         $"    {{\"id\": \"{EscapeJson(p.propDefinitionGuid)}\", \"x\": {plx}, \"y\": {pjy}, \"variant\": {p.variantIndex}, \"flipX\": {(p.flipX ? "true" : "false")}}}{nameHint}");
                 }
-                sb.AppendLine(string.Join(",\n", propLines));
+                sb.Append(string.Join(",\n", propLines));
+                sb.Append("\n");
             }
-            sb.AppendLine("  ],");
+            sb.Append("  ],\n");
 
             // enemySpawns
-            sb.AppendLine("  \"enemySpawns\": [");
+            sb.Append("  \"enemySpawns\": [\n");
             if (template.enemySpawnSockets != null && template.enemySpawnSockets.Count > 0)
             {
                 List<string> enemyLines = new List<string>();
@@ -148,12 +150,12 @@ namespace RIMA.Editor.Map
                     string tier = string.IsNullOrEmpty(e.tierHint) ? "standard" : e.tierHint;
                     enemyLines.Add($"    {{\"x\": {elx}, \"y\": {ejy}, \"tier\": \"{EscapeJson(tier)}\"}}");
                 }
-                sb.AppendLine(string.Join(",\n", enemyLines));
+                sb.Append(string.Join(",\n", enemyLines));
+                sb.Append("\n");
             }
-            sb.AppendLine("  ],");
+            sb.Append("  ],\n");
 
-            sb.Append("  \"notes\": \"\"");
-            sb.AppendLine();
+            sb.Append("  \"notes\": \"\"\n");
             sb.Append("}");
 
             return sb.ToString();
@@ -170,10 +172,13 @@ namespace RIMA.Editor.Map
             string absPath = Path.GetFullPath(Path.Combine(JsonOutputFolder, safeName + ".json"));
             if (File.Exists(absPath))
             {
-                // Read raw bytes to strip any BOM before comparison
+                // Read raw bytes to strip any BOM before comparison.
+                // Normalize both sides to LF so git line-ending settings (autocrlf) can't
+                // cause spurious "changed" detections.
                 byte[] existingBytes = File.ReadAllBytes(absPath);
-                string existing = StripBom(existingBytes);
-                if (existing == json) return false;
+                string existing = StripBom(existingBytes).Replace("\r\n", "\n").Replace("\r", "\n");
+                string jsonNorm = json.Replace("\r\n", "\n").Replace("\r", "\n");
+                if (existing == jsonNorm) return false;
             }
             File.WriteAllBytes(absPath, Utf8NoBom.GetBytes(json));
             return true;

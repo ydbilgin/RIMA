@@ -53,6 +53,7 @@ namespace RIMA.Editor.MapDesigner
         // debounce export
         private SchematicEditMode _schematicMode = SchematicEditMode.None;
         private bool _isDraggingSchematic;
+        private int _dragUndoGroupIndex = -1; // undo group opened at drag-stroke start
         private double _exportDueTime = -1.0;
         private const double ExportDebounceSeconds = 1.0;
         private readonly HashSet<RoomTemplateSO> _pendingExport = new HashSet<RoomTemplateSO>();
@@ -441,6 +442,12 @@ namespace RIMA.Editor.MapDesigner
 
             if (isUp)
             {
+                // Collapse all undo entries registered during this drag stroke into one step.
+                if (_isDraggingSchematic && _dragUndoGroupIndex >= 0)
+                {
+                    Undo.CollapseUndoOperations(_dragUndoGroupIndex);
+                    _dragUndoGroupIndex = -1;
+                }
                 _isDraggingSchematic = false;
                 return;
             }
@@ -454,7 +461,14 @@ namespace RIMA.Editor.MapDesigner
             Vector2Int? cell = SchematicMouseToCell(template, area, e.mousePosition);
             if (cell == null) return;
 
-            if (isDown) _isDraggingSchematic = true;
+            if (isDown)
+            {
+                _isDraggingSchematic = true;
+                // Open a named group so the whole drag stroke collapses to one undo step on mouse-up.
+                Undo.IncrementCurrentGroup();
+                Undo.SetCurrentGroupName("Room Schematic Stroke");
+                _dragUndoGroupIndex = Undo.GetCurrentGroup();
+            }
             if (!isDown && !_isDraggingSchematic) return;
 
             ApplySchematicEdit(template, cell.Value, e.button);

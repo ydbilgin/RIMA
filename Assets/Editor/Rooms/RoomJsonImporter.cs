@@ -35,6 +35,25 @@ namespace RIMA.Editor.Rooms
             ImportFromPath(absolutePath);
         }
 
+        /// <summary>
+        /// Test-facing helper: parse a single-room v2 JSON object string and return whether
+        /// the "props" key is present in the JSON (i.e., whether BuildRoomData would set
+        /// hasPropsArray = true and overwrite existing props).
+        /// Expected input: the inner room JSON object, e.g. {"version":2,"id":"x",...}.
+        /// </summary>
+        public static bool TestOnly_V2JsonHasPropsKey(string singleRoomJson)
+        {
+            // Wrap as document array so ParseDocument can handle it
+            string wrapped = "{\"rooms\":[" + singleRoomJson + "]}";
+            ImportReport report = new ImportReport();
+            RoomJsonDocument doc = ParseDocument(wrapped, report);
+            if (doc == null || doc.rooms == null || doc.rooms.Length == 0) return false;
+            RoomJson room = doc.rooms[0];
+            if (room == null || room.version < 2) return false;
+            // Mirror the exact decision in BuildRoomData
+            return room.props != null;
+        }
+
         private static void ImportFromPath(string absolutePath)
         {
             ImportReport report = new ImportReport();
@@ -286,7 +305,9 @@ namespace RIMA.Editor.Rooms
             // --- v2 props ---
             if (isV2)
             {
-                data.hasPropsArray = true; // always true for v2 even if array is empty
+                // Only treat the array as authoritative when the "props" key is actually present.
+                // Missing key (room.props == null) → preserve existing template.props unchanged.
+                data.hasPropsArray = room.props != null;
                 data.incomingProps = new List<RIMA.MapDesigner.Props.PropPlacementData>();
                 if (room.props != null)
                 {
