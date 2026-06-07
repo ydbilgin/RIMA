@@ -126,6 +126,11 @@ namespace RIMA
 
         // ─── Init ─────────────────────────────────────────────────────────────
 
+        // ─── T6 Boss-A visual components ──────────────────────────────────────
+
+        private SpriteRenderer rimSR;   // outline/rim layer
+        private static readonly Vector3 BossScale = new Vector3(1.75f, 1.75f, 1f); // 1.5-2× spec, midpoint
+
         private void Awake()
         {
             rb     = GetComponent<Rigidbody2D>();
@@ -144,13 +149,55 @@ namespace RIMA
             var p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) player = p.transform;
 
+            // T6: 1.75× scale (Boss-A spec: 1.5-2× midpoint).
+            transform.localScale = BossScale;
+
+            // T6: Rim-light layer — koyu cyan outline üstünde sprite yayını.
+            rimSR = BuildRimLayer();
+
             healthBar = FindAnyObjectByType<BossHealthBar>();
-            healthBar?.Initialize("The Penitent Sovereign", bossMaxHP);
-            healthBar?.Show();
+            healthBar?.Initialize("THE PENITENT SOVEREIGN", bossMaxHP);
+            // HP bar Show() → BossIntroController sekansında yapılır.
 
             health.OnHealthChanged.AddListener((cur, max) => healthBar?.UpdateHP(cur));
 
-            StartCoroutine(BossLoop());
+            // T6: 1.5s boss intro sekansı; tamamlanınca BossLoop başlar.
+            BossIntroController.Begin(
+                "THE PENITENT SOVEREIGN",
+                transform,
+                healthBar,
+                () => StartCoroutine(BossLoop()));
+        }
+
+        /// <summary>Rim-light: sprites'in önüne koyu-cyan renkte küçük-ofset kopyası koyar.</summary>
+        private SpriteRenderer BuildRimLayer()
+        {
+            if (sr == null) return null;
+
+            var rimGO = new GameObject("BossRimLayer");
+            rimGO.transform.SetParent(sr.transform.parent, false);
+            rimGO.transform.localPosition  = sr.transform.localPosition;
+            rimGO.transform.localScale     = Vector3.one * 1.04f; // %4 büyük
+
+            var rim = rimGO.AddComponent<SpriteRenderer>();
+            rim.sprite       = sr.sprite;
+            rim.sortingLayerName = sr.sortingLayerName;
+            rim.sortingOrder = sr.sortingOrder - 1;
+            rim.color        = new Color(0.10f, 0.75f, 0.90f, 0.55f); // cyan rim
+            rim.material     = sr.material;
+
+            // Sprite değişimlerini izle (animasyon olursa).
+            StartCoroutine(SyncRimSprite(rim));
+            return rim;
+        }
+
+        private IEnumerator SyncRimSprite(SpriteRenderer rim)
+        {
+            while (rim != null && sr != null)
+            {
+                if (rim.sprite != sr.sprite) rim.sprite = sr.sprite;
+                yield return new WaitForSeconds(0.05f);
+            }
         }
 
         // ─── Core Loop ────────────────────────────────────────────────────────
@@ -286,6 +333,14 @@ namespace RIMA
         private IEnumerator Attack_ChainWhip()
         {
             rb.linearVelocity = Vector2.zero;
+
+            // T6: line telegraph (Art/Telegraphs/telegraph_line_beam.png → EnemyTelegraph LineRenderer).
+            if (player != null)
+            {
+                Vector2 telegraphDir = ((Vector2)player.position - (Vector2)transform.position).normalized;
+                EnemyTelegraph.SpawnLine(transform.position, telegraphDir, chainWhipLength, chainWhipWidth, telegraphDuration);
+            }
+
             yield return StartCoroutine(Telegraph(telegraphDuration));
             if (dead || player == null) yield break;
 
@@ -335,6 +390,10 @@ namespace RIMA
         private IEnumerator Attack_PenitentSurge()
         {
             rb.linearVelocity = Vector2.zero;
+
+            // T6: circle telegraph (EnemyTelegraph SpawnCircle).
+            EnemyTelegraph.SpawnCircle(transform.position, surgeRadius, telegraphDuration + 0.1f);
+
             yield return StartCoroutine(Telegraph(telegraphDuration + 0.1f));
             if (dead) yield break;
 
@@ -620,8 +679,14 @@ namespace RIMA
 
         private IEnumerator DeathSequence()
         {
+            // T6: Boss-kill slow-mo payoff — mevcut HitPauseDriver owner-guard'lı mekanizması (0.20s boss tier).
+            RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.20f);
+
             // Floor crack effect + screen shake
-            ScreenShake.Instance?.AddTrauma(1f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.55f, 0.45f);
+
+            // T6: Seal fragments dağılma (ritual circle pulse + 4 fragment sprite).
+            SpawnSealFragments();
 
             // Dramatic fade
             float elapsed = 0f;
@@ -633,6 +698,11 @@ namespace RIMA
                 float t = elapsed / fadeDuration;
                 if (sr != null)
                     sr.color = Color.Lerp(start, new Color(start.r, start.g, start.b, 0f), t);
+                if (rimSR != null)
+                {
+                    Color rc = rimSR.color;
+                    rimSR.color = new Color(rc.r, rc.g, rc.b, Mathf.Lerp(0.55f, 0f, t));
+                }
                 elapsed += Time.deltaTime;
                 yield return null;
             }
@@ -661,6 +731,65 @@ namespace RIMA
             RuntimeRoomManager.Instance?.NotifyBossDefeated();
 
             Destroy(gameObject, 0.5f);
+        }
+
+        // ─── Seal Fragments (T6 boss-kill payoff) ────────────────────────────
+
+        /// <summary>
+        /// Boss öldüğünde 4 fragment parçası dağılır.
+        /// Sprite olarak Art/Boss/boss_intro_seal_ring.png kullanılır; asset yoksa renk kutusu.
+        /// </summary>
+        private void SpawnSealFragments()
+        {
+            Sprite sealSpr = Resources.Load<Sprite>("Boss/boss_intro_seal_ring");
+            int count = 4;
+            for (int i = 0; i < count; i++)
+            {
+                float angle = i * (360f / count) + Random.Range(-20f, 20f);
+                Vector2 dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+                StartCoroutine(FragmentFly(sealSpr, (Vector2)transform.position, dir));
+            }
+        }
+
+        private static IEnumerator FragmentFly(Sprite spr, Vector2 origin, Vector2 dir)
+        {
+            var go = new GameObject("SealFragment");
+            go.transform.position = origin;
+
+            var fragSR = go.AddComponent<SpriteRenderer>();
+            fragSR.sprite = spr;
+            fragSR.sortingLayerName = "Entities";
+            fragSR.sortingOrder = 10;
+            go.transform.localScale = Vector3.one * 0.35f;
+
+            if (spr == null)
+            {
+                // Fragment yok → küçük cyan kare.
+                Texture2D tex = new Texture2D(8, 8);
+                Color c = new Color(0.28f, 0.88f, 1f);
+                for (int y = 0; y < 8; y++) for (int x = 0; x < 8; x++) tex.SetPixel(x, y, c);
+                tex.Apply(); tex.filterMode = FilterMode.Point;
+                fragSR.sprite = Sprite.Create(tex, new Rect(0,0,8,8), new Vector2(0.5f,0.5f), 16f);
+                go.transform.localScale = Vector3.one * 0.5f;
+            }
+
+            float speed = Random.Range(3f, 6f);
+            float lifetime = Random.Range(0.5f, 0.9f);
+            float elapsed = 0f;
+            Color startColor = fragSR.color;
+
+            while (elapsed < lifetime)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / lifetime;
+                go.transform.position += (Vector3)(dir * speed * Time.deltaTime);
+                speed = Mathf.Lerp(speed, 0f, Time.deltaTime * 4f);
+                startColor.a = Mathf.Lerp(1f, 0f, t);
+                fragSR.color = startColor;
+                yield return null;
+            }
+
+            Destroy(go);
         }
 
         // ─── Telegraph Helper ─────────────────────────────────────────────────

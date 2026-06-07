@@ -103,9 +103,24 @@ namespace RIMA
 
         private string BuildRunSummary()
         {
-            int echoAward = EchoWallet.AwardRunIfNeeded(RunStats.Instance);
-            // "◈" glyph missing from LiberationSans SDF static atlas (renders as box) — full form per K2 decision.
-            return $"Room reached: {RunStats.RoomReached}\nKills: {RunStats.Kills}\nTime: {FormatSeconds(RunStats.RunTimeSeconds)}\n+{echoAward} Shattered Echo";
+            RunStats stats = RunStats.Instance;
+            int echoAward = EchoWallet.AwardRunIfNeeded(stats);
+
+            int roomsCleared = stats != null ? stats.RoomsClearedForAward : 0;
+            int kills         = stats != null ? stats.KillsForAward : 0;
+            int roomLine      = roomsCleared * EchoWallet.RoomAwardEcho;
+            int killLine      = kills / EchoWallet.KillsPerAwardEcho;
+            int bonusLine     = Mathf.Max(0, echoAward - roomLine - killLine); // first-time / clamp
+
+            // Her satır ayrı ayrı gösterilir (T6 Echo döküm paneli).
+            return
+                $"ODA: {RunStats.RoomReached}    KILLS: {kills}    SÜRE: {FormatSeconds(RunStats.RunTimeSeconds)}\n" +
+                $"\n" +
+                $"Oda tamamlama  {roomsCleared} x 3 = +{roomLine}\n" +
+                $"Kill ödülü     {kills} / 5 = +{killLine}\n" +
+                (bonusLine > 0 ? $"İlk sefer bonusu = +{bonusLine}\n" : "") +
+                $"─────────────────────────────\n" +
+                $"TOPLAM: +{echoAward} Shattered Echo";
         }
 
         private void OpenWishlist()

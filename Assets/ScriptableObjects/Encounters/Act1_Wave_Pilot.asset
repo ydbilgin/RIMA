@@ -26,14 +26,6 @@ MonoBehaviour:
     maxSimultaneous: 4
     t2Capable: 1
     eliteOnly: 0
-  - enemyType: 2
-    prefab: {fileID: 3937228661296602118, guid: 508cfd9d5a4ba5747ace7d078de89777, type: 3}
-    count: 2
-    threatCost: 3
-    weight: 2
-    maxSimultaneous: 2
-    t2Capable: 0
-    eliteOnly: 0
   - enemyType: 3
     prefab: {fileID: 4281498823748507438, guid: 85cf92ee9e4d4f14db740a803c741ad2, type: 3}
     count: 1

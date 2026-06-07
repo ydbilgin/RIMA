@@ -159,9 +159,22 @@ namespace RIMA
 
         private string BuildRunStats()
         {
-            int echoAward = EchoWallet.AwardRunIfNeeded(RunStats.Instance);
-            // "◈" glyph missing from LiberationSans SDF static atlas (renders as box) — full form per K2 decision.
-            return $"ODA {RunStats.RoomReached} · KILLS {RunStats.Kills} · SÜRE {FormatSeconds(RunStats.RunTimeSeconds)} · +{echoAward} SHATTERED ECHO";
+            RunStats stats = RunStats.Instance;
+            int echoAward = EchoWallet.AwardRunIfNeeded(stats);
+
+            int roomsCleared = stats != null ? stats.RoomsClearedForAward : 0;
+            int kills         = stats != null ? stats.KillsForAward : 0;
+            int roomLine      = roomsCleared * EchoWallet.RoomAwardEcho;
+            int killLine      = kills / EchoWallet.KillsPerAwardEcho;
+            int bonusLine     = Mathf.Max(0, echoAward - roomLine - killLine);
+
+            // Echo döküm satırları ayrı ayrı (T6).
+            return
+                $"ODA {RunStats.RoomReached} · KILLS {kills} · SÜRE {FormatSeconds(RunStats.RunTimeSeconds)}\n" +
+                $"Oda tamamlama {roomsCleared} x 3 = +{roomLine}\n" +
+                $"Kill ödülü {kills} / 5 = +{killLine}\n" +
+                (bonusLine > 0 ? $"İlk sefer bonusu = +{bonusLine}\n" : "") +
+                $"TOPLAM: +{echoAward} SHATTERED ECHO";
         }
 
         private void EnsurePanel()
