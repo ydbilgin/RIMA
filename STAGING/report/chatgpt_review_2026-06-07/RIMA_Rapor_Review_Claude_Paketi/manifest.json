@@ -1,0 +1,18 @@
+{
+  "package": "RIMA Report Review Pack for Claude",
+  "created_for": "RAPOR_RIMA_2026-06-06 second review",
+  "files": [
+    "README.md",
+    "01_ACIMASIZ_REVIEW.md",
+    "02_ONCELIKLI_DUZELTME_LISTESI.md",
+    "03_CLAUDE_PATCH_PROMPT.md",
+    "04_FIGURE_FIX_CHECKLIST.md"
+  ],
+  "main_warnings": [
+    "Figure 1-5 visual quality/debug issues",
+    "Door/wall terminology conflicts with portal-only doctrine",
+    "Test inventory vs run result confusion",
+    "Placeholder figures must not remain",
+    "Encoding/Turkish character cleanup required"
+  ]
+}

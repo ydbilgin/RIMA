@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>RIMA Raporu — Şekil Seti v2 Kontak Sheet</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f4f6; padding: 24px; }
+  h1 { text-align: center; color: #222; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 32px; }
+  .figure-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 20px; margin-bottom: 32px; }
+  .figure-title { font-size: 1.2em; font-weight: bold; margin-bottom: 12px; color: #1a1a3a; }
+  .figure-card img { max-width: 100%; border: 1px solid #ddd; border-radius: 6px; display: block; }
+  .figure-source { margin-top: 10px; font-size: 0.85em; color: #555; background: #f0f0f8; padding: 6px 10px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>RIMA Bitirme Raporu — Şekil Seti v2</h1>
+<div class="subtitle">Üretim tarihi: 2026-06-07 · figures_v2/ klasörü · Kullanıcı onayı için kontak sheet</div>
+
+    <div class="figure-card">
+      <div class="figure-title">Şekil 1 — Attunement Chamber Genel Görünüm <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig01_chamber.png" alt="fig01_chamber.png" />
+      <div class="figure-source">Kaynak: UnityMCP sahnelenmiş runtime karesi (2026-06-07) — ChamberSelectBootstrap aktif, 10 sınıf pedestali görünür, debug marker YOK, EchoLabel metinleri gizlendi, kamera orthoSize=4.2 @ (2.87, 6.8)</div>
+    </div>
+
+    <div class="figure-card">
+      <div class="figure-title">Şekil 2 — [G] Bürünme Prompt'u <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig02_attune_prompt.png" alt="fig02_attune_prompt.png" />
+      <div class="figure-source">Kaynak: UnityMCP sahnelenmiş runtime karesi (2026-06-07) — Screen-space Canvas overlay sortingOrder=9999 ile "[G] Bürün — WARBLADE" siyan metin oluşturuldu (TMP world-space z-ordering sorununa geçici çözüm), Warblade pedestali yakın plan</div>
+    </div>
+
+    <div class="figure-card">
+      <div class="figure-title">Şekil 3 — Combat Anı <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig03_combat.png" alt="fig03_combat.png" />
+      <div class="figure-source">Kaynak: UnityMCP sahnelenmiş runtime karesi (2026-06-07) — _Arena sahnesi, aktif savaş; FractureImp düşman kırmızı hit-flash ile, SeamCrawler sprite eksik olduğu için gizlendi; TierHPBar/TierChip gizlendi, ScreenshotMode debug yüzeyleri kapatıldı; BrokenStateVisual devre dışı; fig03b_execute_prompt.png = bonus [RMB] İnfaz kare</div>
+    </div>
+
+    <div class="figure-card">
+      <div class="figure-title">Şekil 3b — [RMB] İnfaz Execute Prompt <span style="color:#2a9d2a;font-weight:bold">[ BONUS ]</span></div>
+      <img src="fig03b_execute_prompt.png" alt="fig03b_execute_prompt.png" />
+      <div class="figure-source">Kaynak: UnityMCP sahnelenmiş runtime karesi (2026-06-07) — ExecutePromptDriver aktif, Sundered düşman menzilinde, "[RMB] İnfaz" altın overlay görünür</div>
+    </div>
+
+    <div class="figure-card">
+      <div class="figure-title">Şekil 4 — 3 Kart Draft <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig04_draft.png" alt="fig04_draft.png" />
+      <div class="figure-source">Kaynak: UnityMCP sahnelenmiş runtime karesi (2026-06-07) — DraftManager.ShowDraft() çağrısı ile 3 kart üretildi (SUNDER MARK / BLOOD DRINKER / GRAVITY CLEAVE), tooltip overlay Canvas sortingOrder=10000 ile BLOOD DRINKER üst sağda</div>
+    </div>
+
+    <div class="figure-card">
+      <div class="figure-title">Şekil 5 — Çıkış Portalleri <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig05_portals.png" alt="fig05_portals.png" />
+      <div class="figure-source">Kaynak: UnityMCP sahnelenmiş runtime karesi (2026-06-07) — _Arena ExitDoor world-space kapı objeleri: siyan=Muharebe Odası (rune_combat), yeşil=Elit Karşılaşma (rune_elite); 2 çıkış seçeneği görsel olarak ayırt edilebilir</div>
+    </div>
+    
+    <div class="figure-card">
+      <div class="figure-title">Şekil 6 — Warblade Büyütülmüş Render <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig06_warblade.png" alt="fig06_warblade.png" />
+      <div class="figure-source">Kaynak: PIL üretim: Assets/Resources/Characters/Warblade/warblade_idle_south.png × 7 (NEAREST), açık gri zemin</div>
+    </div>
+    
+    <div class="figure-card">
+      <div class="figure-title">Şekil 8 — Oda Üretim Boru Hattı Diyagramı <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig08_pipeline.png" alt="fig08_pipeline.png" />
+      <div class="figure-source">Kaynak: PIL üretim: 7 aşama akış şeması, cyan=RoomTemplateSO canonical vurgu</div>
+    </div>
+    
+    <div class="figure-card">
+      <div class="figure-title">Şekil 13 — Test Koşu Özeti Kartı <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig13_test_summary.png" alt="fig13_test_summary.png" />
+      <div class="figure-source">Kaynak: PIL üretim (TERCIH-B): 410 PASS / 0 FAIL / 1 inconclusive — TestResults_EditMode.summary.txt doğrulandı</div>
+    </div>
+    
+    <div class="figure-card">
+      <div class="figure-title">Şekil 14 — QC Öncesi/Sonrası Kompozit <span style="color:#2a9d2a;font-weight:bold">[ DONE ]</span></div>
+      <img src="fig14_qc_before_after.png" alt="fig14_qc_before_after.png" />
+      <div class="figure-source">Kaynak: PIL üretim: ÖNCE=RoomQC/combat_large_diamond_01.png, SONRA=RoomQC_v2/combat_large_diamond_01.png — AYNI oda çifti, kırmızı elips=ada dışı prop sorunu</div>
+    </div>
+    
+</body>
+</html>
