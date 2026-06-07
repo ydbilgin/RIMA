@@ -146,7 +146,8 @@ namespace RIMA.MapDesigner.Room.Runtime
                 return RIMA.RoomType.Chest;
             }
 
-            return RIMA.RoomType.Event;
+            // Demo guard (F-008, STATICAUDIT_DECISION_2026-06-07): Event node demo kapsamı dışı — Combat/Elite/Reward/Boss only.
+            return RIMA.RoomType.Combat;
         }
 
         private static void ConnectRows(Random random, List<DungeonNode> current, List<DungeonNode> next)

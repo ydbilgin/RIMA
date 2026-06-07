@@ -28,7 +28,7 @@ MonoBehaviour:
     widthInTiles: 2
     isExit: 1
   - socketId: door_N_01
-    position: {x: 17, y: 26}
+    position: {x: 17, y: 27}
     direction: 0
     widthInTiles: 2
     isExit: 1

@@ -123,6 +123,38 @@ namespace RIMA.Tests.Room
             return visited.Count;
         }
 
+        [Test]
+        public void DemoGraphNeverGeneratesEventNodes()
+        {
+            // F-008 guard: Event node demo kapsamı dışı — only Combat/Elite/Chest/Boss are valid.
+            // Also asserts Boss node is still generated (boss invariant must not be broken).
+            int[] depthCounts = { 3, 5, 7, 8 };
+            int[] seeds = { 0, 1, 2, 7, 13, 17, 23, 42, 77, 99, 123, 200, 333, 500, 777, 1000, 1234, 4242, 9999, 31337 };
+
+            foreach (int depthCount in depthCounts)
+            {
+                foreach (int seed in seeds)
+                {
+                    RuntimeDungeonGraph graph = RuntimeDungeonGraph.Generate(seed, depthCount);
+                    string context = $"seed={seed}, depthCount={depthCount}";
+
+                    bool hasBoss = false;
+                    foreach (RuntimeDungeonNode node in graph.nodes)
+                    {
+                        Assert.AreNotEqual(RIMA.RoomType.Event, node.roomType,
+                            $"Event node found: {context} node id={node.id} depth={node.depth}");
+
+                        if (node.roomType == RIMA.RoomType.Boss)
+                        {
+                            hasBoss = true;
+                        }
+                    }
+
+                    Assert.IsTrue(hasBoss, $"No Boss node found: {context}");
+                }
+            }
+        }
+
         private static int HighestDepth(RuntimeDungeonGraph graph)
         {
             int highest = 0;
