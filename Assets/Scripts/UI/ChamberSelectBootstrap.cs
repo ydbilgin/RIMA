@@ -28,6 +28,10 @@ namespace RIMA
         private const string FallbackGameSceneName = "_IsoGame";
         private const string ClassUnlockPrefsPrefix = "rima_class_unlocked_";
 
+        [SerializeField, Min(1f)] private float chamberCameraFitMultiplier = 1.18f;
+        [SerializeField, Min(0f)] private float chamberCameraFitPadding = 0.7f;
+        [SerializeField, Min(1f)] private float chamberCameraMinimumOrthographicSize = 6.5f;
+
         private static readonly ClassType[] ChamberClasses =
         {
             ClassType.Warblade, ClassType.Elementalist, ClassType.Ranger, ClassType.Shadowblade,
@@ -60,6 +64,10 @@ namespace RIMA
         private bool classicTabOpen;
         private bool busyAttuning;
         private Vector3 exitWorld;
+        private CameraZoom disabledCameraZoom;
+        private RIMA.CameraSystem.CameraFollow chamberFollow;
+        private Vector3 previousFollowOffset;
+        private bool previousFollowCaptured;
 
         private void Start()
         {
@@ -77,6 +85,7 @@ namespace RIMA
             SetClassicOverlayVisible(false);
 
             BuildWorldRoom();
+            RemoveChamberEnemyLeakage();
             SpawnPlayer();
             SpawnEchoStations();
             SpawnTrainingDummy();
@@ -85,6 +94,20 @@ namespace RIMA
             RefreshEchoVisuals();
 
             Debug.Log("[ChamberSelectBootstrap] P2 chamber bootstrap complete: room built, player spawned, echo stations and dummy active.");
+        }
+
+        private void OnDestroy()
+        {
+            if (disabledCameraZoom != null)
+            {
+                disabledCameraZoom.enabled = true;
+                disabledCameraZoom = null;
+            }
+
+            if (chamberFollow != null && previousFollowCaptured)
+            {
+                chamberFollow.worldOffset = previousFollowOffset;
+            }
         }
 
         private void Update()
@@ -322,10 +345,14 @@ namespace RIMA
                 statue.transform.SetParent(root, false);
                 statue.transform.position = baseWorld + new Vector3(0.47f, 0.62f, 0f);
                 SpriteRenderer sr = statue.AddComponent<SpriteRenderer>();
-                sr.sprite = Resources.Load<Sprite>(RimaUITheme.AnchorPath(cls));
+                sr.sprite = LoadClassIdleSouthSprite(cls, out bool usedFallback);
                 sr.sortingLayerName = "Characters";
                 sr.sortingOrder = SortOrder(statue.transform.position);
                 statue.transform.localScale = new Vector3(0.66f, 0.66f, 1f);
+                if (usedFallback)
+                {
+                    Debug.LogWarning($"[ChamberSelectBootstrap] Missing idle_south sprite for {cls}; using generic dark echo silhouette instead of Warblade fallback.");
+                }
 
                 TMP_Text label = CreateWorldText($"EchoLabel_{cls}", root, baseWorld + new Vector3(0.48f, 0.08f, 0f), 2.7f);
                 label.text = IsUnlocked(cls) ? cls.ToString().ToUpperInvariant() : $"{cls.ToString().ToUpperInvariant()}\n{UnlockOrPathText(cls)}";
@@ -349,13 +376,20 @@ namespace RIMA
             Vector3 pos = grid.GetCellCenterWorld(new Vector3Int(4, 5, 0));
             GameObject dummy = new GameObject("TrainingDummy_RealDamageable");
             dummy.transform.position = pos;
-            dummy.tag = "Enemy";
+            dummy.tag = "Untagged";
+            int enemyLayer = LayerMask.NameToLayer("Enemy");
+            if (enemyLayer >= 0) dummy.layer = enemyLayer;
 
             SpriteRenderer sr = dummy.AddComponent<SpriteRenderer>();
-            sr.sprite = LoadAsset<Sprite>("Assets/Resources/Environment/StoneDungeon/Decor/RIMA_pillar_base.png", "Environment/StoneDungeon/Decor/RIMA_pillar_base");
+            sr.sprite = LoadClassIdleSouthSprite(ClassType.Brawler, out bool usedFallback);
+            if (usedFallback)
+            {
+                Debug.LogWarning("[ChamberSelectBootstrap] Missing Brawler idle_south for dummy; using generic dark echo silhouette.");
+            }
+            sr.color = new Color(0.45f, 0.96f, 1f, 0.58f);
             sr.sortingLayerName = "Characters";
             sr.sortingOrder = SortOrder(pos);
-            dummy.transform.localScale = new Vector3(0.85f, 0.85f, 1f);
+            dummy.transform.localScale = new Vector3(0.72f, 0.72f, 1f);
 
             Rigidbody2D body = dummy.AddComponent<Rigidbody2D>();
             body.bodyType = RigidbodyType2D.Kinematic;
@@ -368,7 +402,7 @@ namespace RIMA
             dummy.AddComponent<KnockbackReceiver>();
             dummy.AddComponent<RIMA.Combat.HitFlashDriver>();
 
-            TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, new Vector3(0f, 0.95f, 0f), 3.1f);
+            TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, pos + new Vector3(0f, 1.05f, 0f), 3.1f);
             hpLabel.text = "DUMMY HP 100/100";
             ScreenshotMode.Register(hpLabel.gameObject, "TrainingDummy_HP");
             dummy.AddComponent<TrainingDummyTarget>().Initialize(health, hpLabel);
@@ -409,17 +443,37 @@ namespace RIMA
             }
 
             chamberCamera.orthographic = true;
-            chamberCamera.orthographicSize = 5.2f;
-            chamberCamera.transform.position = player.position + new Vector3(0f, 0f, -10f);
+            Bounds chamberBounds = CalculateChamberBounds();
+            float aspect = chamberCamera.aspect > 0.01f ? chamberCamera.aspect : 16f / 9f;
+            float fittedSize = Mathf.Max(chamberBounds.extents.y, chamberBounds.extents.x / aspect);
+            float orthoSize = Mathf.Max(chamberCameraMinimumOrthographicSize, fittedSize * chamberCameraFitMultiplier + chamberCameraFitPadding);
+            chamberCamera.orthographicSize = orthoSize;
+
+            CameraZoom zoom = chamberCamera.GetComponent<CameraZoom>();
+            if (zoom != null && zoom.enabled)
+            {
+                zoom.enabled = false;
+                disabledCameraZoom = zoom;
+            }
+
             RIMA.CameraSystem.CameraFollow follow = chamberCamera.GetComponent<RIMA.CameraSystem.CameraFollow>()
                 ?? chamberCamera.gameObject.AddComponent<RIMA.CameraSystem.CameraFollow>();
+            if (!previousFollowCaptured)
+            {
+                previousFollowOffset = follow.worldOffset;
+                previousFollowCaptured = true;
+            }
+            chamberFollow = follow;
             follow.target = player;
-            follow.worldOffset = new Vector3(0f, 0f, -10f);
+            Vector3 followOffset = chamberBounds.center - player.position;
+            followOffset.z = -10f;
+            follow.worldOffset = followOffset;
+            chamberCamera.transform.position = player.position + followOffset;
 
             PixelPerfectCamera ppc = chamberCamera.GetComponent<PixelPerfectCamera>() ?? chamberCamera.gameObject.AddComponent<PixelPerfectCamera>();
             ppc.assetsPPU = 64;
-            ppc.refResolutionX = 640;
-            ppc.refResolutionY = 360;
+            ppc.refResolutionY = RoundToEven(Mathf.RoundToInt(orthoSize * 2f * ppc.assetsPPU));
+            ppc.refResolutionX = RoundToEven(Mathf.RoundToInt(ppc.refResolutionY * aspect));
             ppc.upscaleRT = false;
 
             if (FindFirstObjectByType<Light2D>() == null)
@@ -430,6 +484,48 @@ namespace RIMA
                 light.intensity = 0.92f;
                 light.color = new Color(0.78f, 0.86f, 1f, 1f);
             }
+        }
+
+        private Bounds CalculateChamberBounds()
+        {
+            bool initialized = false;
+            Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+
+            void Encapsulate(Vector3 point)
+            {
+                if (!initialized)
+                {
+                    bounds = new Bounds(point, Vector3.zero);
+                    initialized = true;
+                    return;
+                }
+
+                bounds.Encapsulate(point);
+            }
+
+            if (groundTilemap != null)
+            {
+                BoundsInt cellBounds = groundTilemap.cellBounds;
+                foreach (Vector3Int cell in cellBounds.allPositionsWithin)
+                {
+                    if (groundTilemap.HasTile(cell))
+                    {
+                        Encapsulate(grid.GetCellCenterWorld(cell));
+                    }
+                }
+            }
+
+            for (int i = 0; i < PedestalCells.Length; i++)
+            {
+                Vector2Int cell = PedestalCells[i];
+                Encapsulate(grid.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0)) + new Vector3(0.47f, 1.35f, 0f));
+            }
+
+            Encapsulate(exitWorld + new Vector3(0f, 1.3f, 0f));
+            Encapsulate(grid.GetCellCenterWorld(new Vector3Int(4, 5, 0)) + new Vector3(0f, 1.2f, 0f));
+            if (player != null) Encapsulate(player.position);
+
+            return initialized ? bounds : new Bounds(Vector3.zero, new Vector3(12f, 8f, 0f));
         }
 
         private EchoStation FindNearestStation()
@@ -642,6 +738,105 @@ namespace RIMA
         private static int SortOrder(Vector3 position)
         {
             return 80 + Mathf.RoundToInt(30f - position.y * 10f);
+        }
+
+        private int RemoveChamberEnemyLeakage()
+        {
+            HashSet<GameObject> removals = new HashSet<GameObject>();
+
+            foreach (GameObject go in FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                if (go == null || go.name.StartsWith("TrainingDummy_", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                if (IsChamberEnemyLeak(go))
+                {
+                    removals.Add(go);
+                }
+            }
+
+            foreach (GameObject go in removals)
+            {
+                if (go != null)
+                {
+                    Destroy(go);
+                }
+            }
+
+            if (removals.Count > 0)
+            {
+                Debug.Log($"[ChamberSelectBootstrap] Removed {removals.Count} pre-existing enemy/mob object(s) from chamber scene.");
+            }
+
+            return removals.Count;
+        }
+
+        private static bool IsChamberEnemyLeak(GameObject go)
+        {
+            if (go.CompareTag("Enemy")) return true;
+            if (go.GetComponent<EnemyAI>() != null) return true;
+            if (go.GetComponent<BaseMobBehavior>() != null) return true;
+            if (go.GetComponent<HollowMite>() != null) return true;
+            if (go.GetComponent<SeamCrawler_Trail>() != null) return true;
+            if (go.GetComponent<SeamCrawler_Homing>() != null) return true;
+
+            string name = go.name;
+            return name.StartsWith("Mob_", StringComparison.Ordinal) ||
+                   name.StartsWith("SeamCrawler", StringComparison.Ordinal) ||
+                   name.StartsWith("HollowMite", StringComparison.Ordinal);
+        }
+
+        private static Sprite LoadClassIdleSouthSprite(ClassType cls, out bool usedFallback)
+        {
+            string className = cls.ToString();
+            string lower = className.ToLowerInvariant();
+            string editorPath = $"Assets/Resources/Characters/{className}/{lower}_idle_south.png";
+            string resourcesPath = $"Characters/{className}/{lower}_idle_south";
+            Sprite sprite = LoadAsset<Sprite>(editorPath, resourcesPath);
+            usedFallback = sprite == null;
+            return sprite != null ? sprite : GenericEchoSilhouetteSprite();
+        }
+
+        private static Sprite genericEchoSilhouetteSprite;
+
+        private static Sprite GenericEchoSilhouetteSprite()
+        {
+            if (genericEchoSilhouetteSprite != null)
+            {
+                return genericEchoSilhouetteSprite;
+            }
+
+            const int width = 32;
+            const int height = 48;
+            Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            texture.filterMode = FilterMode.Point;
+            texture.wrapMode = TextureWrapMode.Clamp;
+
+            Color clear = Color.clear;
+            Color fill = Color.white;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    float nx = (x - width * 0.5f) / (width * 0.5f);
+                    float ny = y / (float)(height - 1);
+                    bool head = (nx * nx / 0.22f) + ((ny - 0.74f) * (ny - 0.74f) / 0.035f) <= 1f;
+                    bool torso = Mathf.Abs(nx) <= Mathf.Lerp(0.20f, 0.42f, Mathf.InverseLerp(0.66f, 0.25f, ny)) && ny > 0.22f && ny < 0.66f;
+                    bool baseShadow = (nx * nx / 0.55f) + ((ny - 0.14f) * (ny - 0.14f) / 0.018f) <= 1f;
+                    texture.SetPixel(x, y, head || torso || baseShadow ? fill : clear);
+                }
+            }
+
+            texture.Apply(false, true);
+            genericEchoSilhouetteSprite = Sprite.Create(texture, new Rect(0f, 0f, width, height), new Vector2(0.5f, 0.08f), 64f);
+            return genericEchoSilhouetteSprite;
+        }
+
+        private static int RoundToEven(int value)
+        {
+            return (value & 1) == 0 ? value : value + 1;
         }
 
         private static T AddIfMissing<T>(GameObject target) where T : Component
