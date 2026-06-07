@@ -3,6 +3,7 @@ using RIMA.Encounter;
 using RIMA.MapDesigner.Room.Data;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -128,6 +129,11 @@ namespace RIMA.MapDesigner.Room.Runtime
         public RoomTemplateSO CurrentTemplate { get; private set; }
         public RoomRunLifecycleState LifecycleState => lifecycle.State;
         public UnityEvent RoomCleared = new UnityEvent();
+
+        private void Awake()
+        {
+            RIMA.ChamberSelectBootstrap.CleanupLeakedCombatChamberObjects();
+        }
 
         private void Start()
         {
@@ -916,6 +922,7 @@ namespace RIMA.MapDesigner.Room.Runtime
 
                 trigger.Configure(this, i);
                 trigger.SetOpen(open);
+                RoomRunDoorLocatorPulse.SetDoorOpen(door, open);
             }
         }
 
@@ -1011,6 +1018,8 @@ namespace RIMA.MapDesigner.Room.Runtime
         private RoomRunDirector director;
         private int choiceIndex = -1;
         private bool isOpen;
+        private bool playerInRange;
+        private const Key InteractKey = Key.G;
 
         public void Configure(RoomRunDirector owner, int index)
         {
@@ -1027,6 +1036,27 @@ namespace RIMA.MapDesigner.Room.Runtime
                 trigger.isTrigger = true;
                 trigger.enabled = open;
             }
+
+            if (!open)
+            {
+                ClearPlayerRange();
+            }
+        }
+
+        private void Update()
+        {
+            if (!isOpen || !playerInRange || director == null || choiceIndex < 0)
+            {
+                return;
+            }
+
+            if (Keyboard.current == null || !Keyboard.current[InteractKey].wasPressedThisFrame)
+            {
+                return;
+            }
+
+            ClearPlayerRange();
+            director.TryEnterDoor(choiceIndex);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -1036,7 +1066,122 @@ namespace RIMA.MapDesigner.Room.Runtime
                 return;
             }
 
-            director.TryEnterDoor(choiceIndex);
+            playerInRange = true;
+            RIMA.HUDController.Instance?.SetInteractionPrompt(RIMA.Loc.T("chamber_select.prompt.enter_rift"));
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other == null || !other.CompareTag("Player"))
+            {
+                return;
+            }
+
+            ClearPlayerRange();
+        }
+
+        private void ClearPlayerRange()
+        {
+            if (!playerInRange)
+            {
+                return;
+            }
+
+            playerInRange = false;
+            RIMA.HUDController.Instance?.HideInteractionPrompt();
+        }
+    }
+
+    public sealed class RoomRunDoorLocatorPulse : MonoBehaviour
+    {
+        private const string LocatorName = "OpenDoorLocator";
+        private const int SegmentCount = 40;
+        private LineRenderer ring;
+        private Color baseColor = new Color(0f, 1f, 0.9f, 0.72f);
+
+        public static void SetDoorOpen(GameObject door, bool open)
+        {
+            if (door == null)
+            {
+                return;
+            }
+
+            RoomRunDoorLocatorPulse locator = door.GetComponentInChildren<RoomRunDoorLocatorPulse>(true);
+            if (locator == null && open)
+            {
+                GameObject go = new GameObject(LocatorName);
+                go.transform.SetParent(door.transform, false);
+                go.transform.localPosition = new Vector3(0f, -0.28f, 0f);
+                locator = go.AddComponent<RoomRunDoorLocatorPulse>();
+            }
+
+            if (locator != null)
+            {
+                locator.SetVisible(open);
+            }
+        }
+
+        private void Awake()
+        {
+            EnsureRing();
+        }
+
+        private void Update()
+        {
+            if (ring == null || !ring.enabled)
+            {
+                return;
+            }
+
+            float pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * 4.5f);
+            float alpha = Mathf.Lerp(0.30f, 0.82f, pulse);
+            Color color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            ring.startColor = color;
+            ring.endColor = color;
+            ring.startWidth = Mathf.Lerp(0.035f, 0.065f, pulse);
+            ring.endWidth = ring.startWidth;
+        }
+
+        private void SetVisible(bool visible)
+        {
+            EnsureRing();
+            if (ring != null)
+            {
+                ring.enabled = visible;
+            }
+
+            gameObject.SetActive(visible);
+        }
+
+        private void EnsureRing()
+        {
+            if (ring != null)
+            {
+                return;
+            }
+
+            ring = GetComponent<LineRenderer>();
+            if (ring == null)
+            {
+                ring = gameObject.AddComponent<LineRenderer>();
+            }
+
+            ring.useWorldSpace = false;
+            ring.loop = true;
+            ring.positionCount = SegmentCount;
+            ring.material = new Material(Shader.Find("Sprites/Default"));
+            ring.sortingLayerName = "Floor";
+            ring.sortingOrder = 80;
+            ring.startColor = baseColor;
+            ring.endColor = baseColor;
+
+            const float radiusX = 0.72f;
+            const float radiusY = 0.32f;
+            for (int i = 0; i < SegmentCount; i++)
+            {
+                float angle = (Mathf.PI * 2f * i) / SegmentCount;
+                ring.SetPosition(i, new Vector3(Mathf.Cos(angle) * radiusX, Mathf.Sin(angle) * radiusY, 0f));
+            }
         }
     }
 }

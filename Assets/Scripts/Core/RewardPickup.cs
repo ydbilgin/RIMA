@@ -10,6 +10,7 @@ namespace RIMA
     {
         [SerializeField] private Canvas promptCanvas;
         [SerializeField] private Text promptText;
+        [SerializeField] private float pickupVisualScale = 0.55f;
 
         private const Key InteractKey = Key.G;
         private bool collected;
@@ -24,6 +25,7 @@ namespace RIMA
 
             // T6.1 FIX: if no sprite assigned in Inspector, load the cyan rift-shard crystal.
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            transform.localScale = new Vector3(pickupVisualScale, pickupVisualScale, transform.localScale.z);
             if (sr != null && sr.sprite == null)
             {
                 Sprite riftShard = Resources.Load<Sprite>("Props/edge_filler_rift_shard");
@@ -31,8 +33,6 @@ namespace RIMA
                 {
                     sr.sprite = riftShard;
                     sr.color  = new Color(0.28f, 0.88f, 1f, 1f);  // cyan tint matching RIMA brand
-                    // 32px sprite @ PPU64 = 0.5 world unit — pickup için doğru boy (Opus QC: 2× devasa görünüyordu)
-                    transform.localScale = Vector3.one;
                 }
             }
 

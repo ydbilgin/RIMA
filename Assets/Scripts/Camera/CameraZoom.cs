@@ -20,7 +20,7 @@ namespace RIMA.CameraSystem
         private const float SettleDelay = 0.12f;
 
         [Header("Zoom range (zoom = refRes multiplier; larger = more world / further out)")]
-        [SerializeField] private float defaultZoom = 1.0f;
+        [SerializeField] private float defaultZoom = 1.25f;
         [SerializeField] private float minZoom = 0.7f;   // closest
         [SerializeField] private float maxZoom = 1.6f;   // furthest
 

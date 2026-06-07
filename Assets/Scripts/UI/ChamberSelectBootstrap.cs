@@ -24,6 +24,7 @@ namespace RIMA
         private const string FloorTileResource = "ChamberSelect/Tiles/ChamberFloor";
         private const string CollisionTileResource = "ChamberSelect/Tiles/ChamberCollision";
         private const string OverlayTileResource = "ChamberSelect/Tiles/ChamberOverlayPath";
+        private const string ChamberExitPortalResource = "Environment/Gate/gate_arch";
         private const string ArenaRunSceneName = "_Arena";
         private const string FallbackGameSceneName = "_IsoGame";
         private const string ClassUnlockPrefsPrefix = "rima_class_unlocked_";
@@ -101,7 +102,13 @@ namespace RIMA
 
         private void ApplyAtmospherePass()
         {
-            Transform builder = GameObject.Find("IsoRoomBuilder")?.transform;
+            Transform chamberRoot = GameObject.Find("AttunementChamber_Runtime")?.transform;
+            if (chamberRoot == null)
+            {
+                return;
+            }
+
+            Transform builder = chamberRoot.Find("IsoRoomBuilder");
             if (builder != null)
             {
                 Transform props = builder.Find("Props");
@@ -118,7 +125,7 @@ namespace RIMA
             }
 
             GameObject trailGo = new GameObject("CyanGuidanceTrail");
-            trailGo.transform.SetParent(GameObject.Find("AttunementChamber_Runtime").transform);
+            trailGo.transform.SetParent(chamberRoot);
             LineRenderer lr = trailGo.AddComponent<LineRenderer>();
             lr.positionCount = 4;
             Vector3 spawn = grid.GetCellCenterWorld(new Vector3Int(3, 3, 0));
@@ -134,9 +141,11 @@ namespace RIMA
             lr.sortingLayerName = "Floor";
             lr.sortingOrder = 1;
 
+            SpawnChamberExitPortal(chamberRoot);
+
             Vector3 doorPos = exitWorld + new Vector3(0f, 0.5f, 0f);
             GameObject doorLightGo = new GameObject("DoorLight");
-            doorLightGo.transform.SetParent(GameObject.Find("AttunementChamber_Runtime").transform);
+            doorLightGo.transform.SetParent(chamberRoot);
             doorLightGo.transform.position = doorPos;
             Light2D doorLight = doorLightGo.AddComponent<Light2D>();
             doorLight.lightType = Light2D.LightType.Point;
@@ -152,7 +161,7 @@ namespace RIMA
                 {
                     Vector3 pedPos = grid.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0)) + new Vector3(0.47f, 0.5f, 0f);
                     GameObject pedLightGo = new GameObject("PedestalLight");
-                    pedLightGo.transform.SetParent(GameObject.Find("AttunementChamber_Runtime").transform);
+                    pedLightGo.transform.SetParent(chamberRoot);
                     pedLightGo.transform.position = pedPos;
                     Light2D pedLight = pedLightGo.AddComponent<Light2D>();
                     pedLight.lightType = Light2D.LightType.Point;
@@ -162,6 +171,21 @@ namespace RIMA
                 }
                 lightCount++;
             }
+        }
+
+        private void SpawnChamberExitPortal(Transform chamberRoot)
+        {
+            GameObject portalGo = new GameObject("ChamberExitPortal");
+            portalGo.transform.SetParent(chamberRoot);
+            portalGo.transform.position = exitWorld + new Vector3(0f, 0.48f, 0f);
+            portalGo.transform.localScale = new Vector3(0.95f, 0.95f, 1f);
+
+            SpriteRenderer sr = portalGo.AddComponent<SpriteRenderer>();
+            sr.sprite = Resources.Load<Sprite>(ChamberExitPortalResource)
+                ?? LoadAsset<Sprite>("Assets/Resources/Environment/Gate/gate_arch.png", ChamberExitPortalResource);
+            sr.color = new Color(0f, 0f, 0f, 0.96f);
+            sr.sortingLayerName = "Characters";
+            sr.sortingOrder = SortOrder(portalGo.transform.position) - 4;
         }
 
         private void OnDestroy()
@@ -267,11 +291,7 @@ namespace RIMA
 
         private void BuildWorldRoom()
         {
-            GameObject old = GameObject.Find("AttunementChamber_Runtime");
-            if (old != null)
-            {
-                Destroy(old);
-            }
+            CleanupStaleChamberRuntimeObjects(true);
 
             GameObject root = new GameObject("AttunementChamber_Runtime");
             grid = root.AddComponent<Grid>();
@@ -326,6 +346,83 @@ namespace RIMA
 
             int floorCount = builder.LastFloorCells != null ? builder.LastFloorCells.Count : 0;
             Debug.Log($"[ChamberSelectBootstrap] P1/P2 evidence: room={roomTemplate.roomId}, floor={floorCount}, props={roomTemplate.props.Count}, pedestals={PedestalCells.Length}.");
+        }
+
+        public static void CleanupLeakedCombatChamberObjects()
+        {
+            CleanupStaleChamberRuntimeObjects(false);
+        }
+
+        private static void CleanupStaleChamberRuntimeObjects(bool includePlayerRoots)
+        {
+            string[] exactRootNames = includePlayerRoots
+                ? new[]
+                {
+                    "AttunementChamber_Runtime",
+                    "EchoStations",
+                    "TrainingDummy_RealDamageable",
+                    "TrainingDummy_HP",
+                    "ArrivalRing",
+                    "ChamberPrompt",
+                    "Player"
+                }
+                : new[]
+                {
+                    "AttunementChamber_Runtime",
+                    "EchoStations",
+                    "TrainingDummy_RealDamageable",
+                    "TrainingDummy_HP",
+                    "ArrivalRing",
+                    "ChamberPrompt",
+                    "ChamberExitPortal",
+                    "DoorLight"
+                };
+
+            GameObject[] objects = Resources.FindObjectsOfTypeAll<GameObject>();
+            for (int i = objects.Length - 1; i >= 0; i--)
+            {
+                GameObject go = objects[i];
+                if (go == null || !go.scene.IsValid() || go.transform.parent != null)
+                {
+                    continue;
+                }
+
+                if (MatchesChamberCleanupName(go.name, exactRootNames))
+                {
+                    DestroyRuntimeObject(go);
+                }
+            }
+        }
+
+        private static bool MatchesChamberCleanupName(string objectName, string[] exactRootNames)
+        {
+            for (int i = 0; i < exactRootNames.Length; i++)
+            {
+                if (objectName == exactRootNames[i])
+                {
+                    return true;
+                }
+            }
+
+            return objectName.StartsWith("EchoStatue_", StringComparison.Ordinal)
+                || objectName.StartsWith("EchoLabel_", StringComparison.Ordinal);
+        }
+
+        private static void DestroyRuntimeObject(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                DestroyImmediate(target);
+            }
         }
 
         private static Tilemap CreateTilemap(Transform parent, string name, string sortingLayer, int order, bool visible)

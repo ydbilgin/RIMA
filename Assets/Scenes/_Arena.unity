@@ -3496,7 +3496,7 @@ MonoBehaviour:
   defaultEnemyPrefab: {fileID: 0}
   encounterDifficulty: 10
   enemyContainer: {fileID: 0}
-  cameraPadding: 1.25
+  cameraPadding: 2
   rewardSprite: {fileID: 0}
   rewardColliderRadius: 0.45
   clearSlowMoScale: 0.3
