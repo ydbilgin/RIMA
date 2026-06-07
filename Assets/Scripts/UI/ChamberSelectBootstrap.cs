@@ -94,8 +94,74 @@ namespace RIMA
             CreatePromptLabel();
             ConfigureCameraAndLight();
             RefreshEchoVisuals();
+            ApplyAtmospherePass();
 
             Debug.Log("[ChamberSelectBootstrap] P2 chamber bootstrap complete: room built, player spawned, echo stations and dummy active.");
+        }
+
+        private void ApplyAtmospherePass()
+        {
+            Transform builder = GameObject.Find("IsoRoomBuilder")?.transform;
+            if (builder != null)
+            {
+                Transform props = builder.Find("Props");
+                if (props != null)
+                {
+                    foreach (Transform child in props)
+                    {
+                        if (child.name.Contains("EchoPedestal"))
+                        {
+                            child.localScale = new Vector3(0.7f, 0.7f, 1f);
+                        }
+                    }
+                }
+            }
+
+            GameObject trailGo = new GameObject("CyanGuidanceTrail");
+            trailGo.transform.SetParent(GameObject.Find("AttunementChamber_Runtime").transform);
+            LineRenderer lr = trailGo.AddComponent<LineRenderer>();
+            lr.positionCount = 4;
+            Vector3 spawn = grid.GetCellCenterWorld(new Vector3Int(3, 3, 0));
+            lr.SetPosition(0, spawn + new Vector3(0, -0.4f, 0));
+            lr.SetPosition(1, grid.GetCellCenterWorld(new Vector3Int(8, 6, 0)) + new Vector3(0, -0.4f, 0));
+            lr.SetPosition(2, grid.GetCellCenterWorld(new Vector3Int(14, 9, 0)) + new Vector3(0, -0.4f, 0));
+            lr.SetPosition(3, exitWorld + new Vector3(0, -0.4f, 0));
+            lr.startWidth = 0.04f;
+            lr.endWidth = 0.015f;
+            lr.material = new Material(Shader.Find("Sprites/Default"));
+            lr.startColor = new Color(0f, 1f, 1f, 0.45f);
+            lr.endColor = new Color(0f, 1f, 1f, 0.05f);
+            lr.sortingLayerName = "Floor";
+            lr.sortingOrder = 1;
+
+            Vector3 doorPos = exitWorld + new Vector3(0f, 0.5f, 0f);
+            GameObject doorLightGo = new GameObject("DoorLight");
+            doorLightGo.transform.SetParent(GameObject.Find("AttunementChamber_Runtime").transform);
+            doorLightGo.transform.position = doorPos;
+            Light2D doorLight = doorLightGo.AddComponent<Light2D>();
+            doorLight.lightType = Light2D.LightType.Point;
+            doorLight.intensity = 1.2f;
+            doorLight.pointLightOuterRadius = 4.5f;
+            doorLight.color = new Color(0.6f, 0.8f, 1f, 1f);
+
+            int lightCount = 0;
+            foreach (var cell in PedestalCells)
+            {
+                if (lightCount >= 6) break;
+                if (lightCount % 2 == 0 || lightCount == 5)
+                {
+                    Vector3 pedPos = grid.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0)) + new Vector3(0.47f, 0.5f, 0f);
+                    GameObject pedLightGo = new GameObject("PedestalLight");
+                    pedLightGo.transform.SetParent(GameObject.Find("AttunementChamber_Runtime").transform);
+                    pedLightGo.transform.position = pedPos;
+                    Light2D pedLight = pedLightGo.AddComponent<Light2D>();
+                    pedLight.lightType = Light2D.LightType.Point;
+                    pedLight.intensity = 0.6f;
+                    pedLight.pointLightOuterRadius = 3f;
+                    pedLight.color = new Color(0f, 1f, 1f, 1f);
+                }
+                lightCount++;
+            }
         }
 
         private void OnDestroy()
@@ -300,9 +366,34 @@ namespace RIMA
             instance.name = "Player";
             instance.transform.position = spawn;
             player = instance.transform;
+
+            GameObject ringGo = new GameObject("ArrivalRing");
+            ringGo.transform.position = spawn + new Vector3(0, -0.1f, 0);
+            SpriteRenderer ringSr = ringGo.AddComponent<SpriteRenderer>();
+            ringSr.sprite = Resources.Load<Sprite>("Props/arrival_ring_0") ?? Resources.Load<Sprite>("Props/arrival_ring");
+            ringSr.sortingLayerName = "Floor";
+            ringSr.sortingOrder = 10;
+            StartCoroutine(ArrivalRingRoutine(ringGo.transform, ringSr));
+
             EnsurePlayerRuntime(instance);
             EnsureClassManager().SetPrimaryClass(currentClass);
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: player spawned as {currentClass} at {spawn}.");
+        }
+
+        private IEnumerator ArrivalRingRoutine(Transform ring, SpriteRenderer sr)
+        {
+            if (sr.sprite == null) yield break;
+            float duration = 0.8f;
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                if (ring == null) yield break;
+                float k = t / duration;
+                ring.Rotate(0, 0, 180f * Time.deltaTime);
+                sr.color = new Color(0f, 1f, 1f, 1f - k);
+                ring.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.5f, k);
+                yield return null;
+            }
+            if (ring != null) Destroy(ring.gameObject);
         }
 
         private static void EnsurePlayerRuntime(GameObject playerObject)
@@ -585,19 +676,50 @@ namespace RIMA
             Vector3 startScale = player.localScale;
             SpriteRenderer[] renderers = player.GetComponentsInChildren<SpriteRenderer>();
 
-            for (float t = 0f; t < 0.4f; t += Time.deltaTime)
+            EchoStation station = stations.TryGetValue(cls, out var st) ? st : null;
+            Vector3 stationStartScale = station != null && station.statue != null ? station.statue.transform.localScale : Vector3.one;
+
+            GameObject burst = new GameObject("CyanBurst");
+            if (station != null) burst.transform.position = station.statue.transform.position + new Vector3(0f, 0.4f, 0f);
+            SpriteRenderer burstSr = burst.AddComponent<SpriteRenderer>();
+            burstSr.sprite = Resources.Load<Sprite>("Props/arrival_ring_0") ?? Resources.Load<Sprite>("Props/arrival_ring");
+            burstSr.sortingLayerName = "Characters";
+            burstSr.sortingOrder = 300;
+            burstSr.color = new Color(0f, 1f, 1f, 0f);
+
+            for (float t = 0f; t < 0.5f; t += Time.deltaTime)
             {
-                float k = Mathf.Clamp01(t / 0.4f);
-                player.localScale = Vector3.Lerp(startScale, startScale * 0.86f, Mathf.Sin(k * Mathf.PI));
+                float k = Mathf.Clamp01(t / 0.5f);
+                float sinK = Mathf.Sin(k * Mathf.PI);
+                player.localScale = Vector3.Lerp(startScale, startScale * 0.86f, sinK);
                 foreach (SpriteRenderer sr in renderers)
                 {
                     if (sr != null)
                     {
-                        sr.color = Color.Lerp(Color.white, new Color(0.55f, 1f, 1f, 1f), Mathf.Sin(k * Mathf.PI));
+                        sr.color = Color.Lerp(Color.white, new Color(0.55f, 1f, 1f, 1f), sinK);
                     }
+                }
+                
+                if (station != null && station.statue != null)
+                {
+                    station.statue.transform.localScale = Vector3.Lerp(stationStartScale, stationStartScale * 1.3f, sinK);
+                    station.statue.color = Color.Lerp(new Color(0.75f, 0.78f, 0.82f, 1f), new Color(0f, 1f, 1f, 1f), sinK);
+                }
+
+                if (burstSr != null)
+                {
+                    burstSr.transform.localScale = Vector3.one * Mathf.Lerp(0f, 3.5f, k);
+                    burstSr.color = new Color(0f, 1f, 1f, 1f - k);
                 }
 
                 yield return null;
+            }
+
+            if (burst != null) Destroy(burst);
+
+            if (station != null && station.statue != null)
+            {
+                station.statue.transform.localScale = stationStartScale;
             }
 
             currentClass = cls;
