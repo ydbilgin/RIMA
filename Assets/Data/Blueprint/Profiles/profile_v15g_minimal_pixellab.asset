@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7507145943983329504
+--- !u!114 &-4306948045912662653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18,7 +18,7 @@ MonoBehaviour:
   transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
   density: 0.14
   decalsPerRoomCap: 8
---- !u!114 &-948072383365091246
+--- !u!114 &-1786236260273807459
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,12 +54,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a3132e203afe7b64d8bc649397d8ef7d, type: 2}
   - {fileID: 11400000, guid: a26d15a666f02d64c9eb90208a65f6c6, type: 2}
   adjacencyRules:
-  - {fileID: -948072383365091246}
-  - {fileID: 6651661819685671364}
-  - {fileID: -7507145943983329504}
+  - {fileID: -1786236260273807459}
+  - {fileID: 1093038469304716590}
+  - {fileID: -4306948045912662653}
   wangRuleTileRef: {fileID: 0}
   gridSize: {x: 36, y: 22}
---- !u!114 &6651661819685671364
+--- !u!114 &1093038469304716590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
