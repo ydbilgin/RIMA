@@ -847,14 +847,9 @@ namespace RIMA.MapDesigner.Room.Runtime
         private bool HasAnyPortalSprite()
         {
             return gateNorthSprite != null
+                || gateWestSprite != null
                 || portalCombatFrontalSprite != null
-                || portalCombatAngledSprite != null
-                || portalEliteFrontalSprite != null
-                || portalEliteAngledSprite != null
-                || portalChestFrontalSprite != null
-                || portalChestAngledSprite != null
-                || portalBossFrontalSprite != null
-                || portalBossAngledSprite != null;
+                || portalCombatAngledSprite != null;
         }
 
         private Sprite ResolvePortalSprite(RoomType doorType, int slotIndex, out bool flipX)
@@ -862,22 +857,9 @@ namespace RIMA.MapDesigner.Room.Runtime
             bool angled = slotIndex != 1;
             flipX = slotIndex == 2;
 
-            switch (doorType)
-            {
-                case RoomType.Elite:
-                    return angled ? FirstNonNull(portalEliteAngledSprite, portalEliteFrontalSprite, gateWestSprite, gateNorthSprite)
-                        : FirstNonNull(portalEliteFrontalSprite, portalEliteAngledSprite, gateNorthSprite);
-                case RoomType.Chest:
-                    return angled ? FirstNonNull(portalChestAngledSprite, portalChestFrontalSprite, gateWestSprite, gateNorthSprite)
-                        : FirstNonNull(portalChestFrontalSprite, portalChestAngledSprite, gateNorthSprite);
-                case RoomType.Boss:
-                    return angled ? FirstNonNull(portalBossAngledSprite, portalBossFrontalSprite, gateWestSprite, gateNorthSprite)
-                        : FirstNonNull(portalBossFrontalSprite, portalBossAngledSprite, gateNorthSprite);
-                case RoomType.Combat:
-                default:
-                    return angled ? FirstNonNull(portalCombatAngledSprite, portalCombatFrontalSprite, gateWestSprite, gateNorthSprite)
-                        : FirstNonNull(portalCombatFrontalSprite, portalCombatAngledSprite, gateNorthSprite);
-            }
+            return angled
+                ? FirstNonNull(portalCombatAngledSprite, portalCombatFrontalSprite, gateWestSprite, gateNorthSprite)
+                : FirstNonNull(portalCombatFrontalSprite, portalCombatAngledSprite, gateNorthSprite);
         }
 
         private static Sprite FirstNonNull(params Sprite[] sprites)

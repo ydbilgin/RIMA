@@ -23,8 +23,8 @@ namespace RIMA.Editor
 
         private static readonly Vector2Int[] Pedestals =
         {
-            new(7, 6), new(9, 8), new(11, 9), new(13, 10), new(15, 10),
-            new(17, 9), new(16, 7), new(14, 6), new(12, 5), new(9, 5)
+            new(6, 6), new(8, 8), new(11, 10), new(14, 11), new(17, 10),
+            new(19, 8), new(17, 6), new(14, 5), new(11, 4), new(8, 4)
         };
 
         [MenuItem("RIMA/Character Select/Generate Attunement Chamber Assets")]
@@ -34,13 +34,10 @@ namespace RIMA.Editor
             CopyPedestal();
             PropDefinitionSO echoPedestal = EnsureEchoPedestal();
             PropDefinitionSO archGate = EnsureArchGate();
-            PropDefinitionSO brazier = LoadRequired<PropDefinitionSO>("Assets/Data/Props/Brazier.asset");
-            PropDefinitionSO pillar = LoadRequired<PropDefinitionSO>("Assets/Data/Props/Pillar.asset");
-            PropDefinitionSO riftCrack = LoadRequired<PropDefinitionSO>("Assets/Data/Props/FloorRiftCrack.asset");
 
             EnsureTileAssets();
-            UpdatePropRegistry(echoPedestal, archGate, brazier, pillar, riftCrack);
-            BuildRoom(echoPedestal, archGate, brazier, pillar, riftCrack);
+            UpdatePropRegistry(echoPedestal, archGate);
+            BuildRoom(echoPedestal, archGate);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -180,10 +177,7 @@ namespace RIMA.Editor
 
         private static void BuildRoom(
             PropDefinitionSO echoPedestal,
-            PropDefinitionSO archGate,
-            PropDefinitionSO brazier,
-            PropDefinitionSO pillar,
-            PropDefinitionSO riftCrack)
+            PropDefinitionSO archGate)
         {
             RoomTemplateSO room = AssetDatabase.LoadAssetAtPath<RoomTemplateSO>(RoomPath);
             if (room == null)
@@ -226,10 +220,7 @@ namespace RIMA.Editor
             room.overlayMask = BuildOverlay(bounds);
             room.props = BuildProps(
                 AssetDatabase.AssetPathToGUID(EchoPedestalPath),
-                AssetDatabase.AssetPathToGUID(ArchGatePath),
-                AssetDatabase.GetAssetPath(brazier),
-                AssetDatabase.GetAssetPath(pillar),
-                AssetDatabase.GetAssetPath(riftCrack));
+                AssetDatabase.AssetPathToGUID(ArchGatePath));
 
             EditorUtility.SetDirty(room);
         }
@@ -291,14 +282,8 @@ namespace RIMA.Editor
 
         private static List<PropPlacementData> BuildProps(
             string echoGuid,
-            string archGuid,
-            string brazierPath,
-            string pillarPath,
-            string riftCrackPath)
+            string archGuid)
         {
-            string brazierGuid = AssetDatabase.AssetPathToGUID(brazierPath);
-            string pillarGuid = AssetDatabase.AssetPathToGUID(pillarPath);
-            string riftGuid = AssetDatabase.AssetPathToGUID(riftCrackPath);
             var props = new List<PropPlacementData>();
 
             foreach (Vector2Int pedestal in Pedestals)
@@ -307,12 +292,6 @@ namespace RIMA.Editor
             }
 
             props.Add(new PropPlacementData(archGuid, new Vector2Int(20, 13)) { placedByUser = "chamber_generator" });
-            props.Add(new PropPlacementData(brazierGuid, new Vector2Int(18, 11)) { placedByUser = "chamber_generator" });
-            props.Add(new PropPlacementData(brazierGuid, new Vector2Int(21, 14)) { placedByUser = "chamber_generator" });
-            props.Add(new PropPlacementData(pillarGuid, new Vector2Int(6, 9)) { placedByUser = "chamber_generator" });
-            props.Add(new PropPlacementData(pillarGuid, new Vector2Int(16, 12)) { placedByUser = "chamber_generator" });
-            props.Add(new PropPlacementData(riftGuid, new Vector2Int(12, 8)) { placedByUser = "chamber_generator" });
-            props.Add(new PropPlacementData(riftGuid, new Vector2Int(14, 8)) { placedByUser = "chamber_generator", flipX = true });
             return props;
         }
 

@@ -47,61 +47,61 @@ MonoBehaviour:
   blockerTags: []
   props:
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 7, y: 6}
+    tilePosition: {x: 6, y: 6}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 9, y: 8}
+    tilePosition: {x: 8, y: 8}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 11, y: 9}
+    tilePosition: {x: 11, y: 10}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 13, y: 10}
+    tilePosition: {x: 14, y: 11}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 15, y: 10}
+    tilePosition: {x: 17, y: 10}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 17, y: 9}
+    tilePosition: {x: 19, y: 8}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 16, y: 7}
+    tilePosition: {x: 17, y: 6}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 14, y: 6}
+    tilePosition: {x: 14, y: 5}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 12, y: 5}
+    tilePosition: {x: 11, y: 4}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
     variantIndex: -1
   - propDefinitionGuid: 43ffd89fbc6a3834296a2599a355ee2e
-    tilePosition: {x: 9, y: 5}
+    tilePosition: {x: 8, y: 4}
     rotationSteps: 0
     flipX: 0
     placedByUser: chamber_generator
@@ -110,42 +110,6 @@ MonoBehaviour:
     tilePosition: {x: 20, y: 13}
     rotationSteps: 0
     flipX: 0
-    placedByUser: chamber_generator
-    variantIndex: -1
-  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
-    tilePosition: {x: 18, y: 11}
-    rotationSteps: 0
-    flipX: 0
-    placedByUser: chamber_generator
-    variantIndex: -1
-  - propDefinitionGuid: 31584569852247147a66f81a91b4fbe4
-    tilePosition: {x: 21, y: 14}
-    rotationSteps: 0
-    flipX: 0
-    placedByUser: chamber_generator
-    variantIndex: -1
-  - propDefinitionGuid: f39d32fa19793394dab9cda4a588e1fe
-    tilePosition: {x: 6, y: 9}
-    rotationSteps: 0
-    flipX: 0
-    placedByUser: chamber_generator
-    variantIndex: -1
-  - propDefinitionGuid: f39d32fa19793394dab9cda4a588e1fe
-    tilePosition: {x: 16, y: 12}
-    rotationSteps: 0
-    flipX: 0
-    placedByUser: chamber_generator
-    variantIndex: -1
-  - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
-    tilePosition: {x: 12, y: 8}
-    rotationSteps: 0
-    flipX: 0
-    placedByUser: chamber_generator
-    variantIndex: -1
-  - propDefinitionGuid: 08928e45111a42946957e4406bc4799d
-    tilePosition: {x: 14, y: 8}
-    rotationSteps: 0
-    flipX: 1
     placedByUser: chamber_generator
     variantIndex: -1
   walkableGrid: 01010101010101010100000000000000000000000000010101010101010101010100000000000000000000000101010101010101010101010100000000000000000001010101010101010101010101010100000000000000010101010101010101010101010101010000000000000101010101010101010101010101010101000000000001010101010101010101010101010101010100000000000101010101010101010101010101010101010000000000010101010101010101010101010101010101000000000001010101010101010101010101010101010000000000000001010101010101010101010101010101000000000000000101010101010101010101010101010100000000000000000101010101010101010101010101000000000000000000000101010101010101010101010000000000000000000000000001010101010101010100000000000000000000000000000000000101010101

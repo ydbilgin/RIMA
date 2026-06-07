@@ -33,10 +33,8 @@ namespace RIMA.Tests.Room
             IsoRoomBuilder builder = CreateRig();
             Sprite combatFrontal = CreateSprite("combat_frontal");
             Sprite combatAngled = CreateSprite("combat_angled");
-            Sprite eliteAngled = CreateSprite("elite_angled");
             SetPrivate(builder, "portalCombatFrontalSprite", combatFrontal);
             SetPrivate(builder, "portalCombatAngledSprite", combatAngled);
-            SetPrivate(builder, "portalEliteAngledSprite", eliteAngled);
             SetPrivate(builder, "runeCombatSprite", CreateSprite("rune_combat"));
             SetPrivate(builder, "runeEliteSprite", CreateSprite("rune_elite"));
 
@@ -52,7 +50,7 @@ namespace RIMA.Tests.Room
             Assert.AreEqual(3, doors.Count);
             AssertDoorVisual(doors[0], combatAngled, false);
             AssertDoorVisual(doors[1], combatFrontal, false);
-            AssertDoorVisual(doors[2], eliteAngled, true);
+            AssertDoorVisual(doors[2], combatAngled, true);
 
             SpriteRenderer runeRenderer = doors[2].transform.Find("Rune").GetComponent<SpriteRenderer>();
             Assert.IsFalse(runeRenderer.flipX);

@@ -1,0 +1,16 @@
+{
+  "package": "RIMA_UX_FLOW_FEEDBACK_2026-06-07",
+  "source_zip": "RIMA_EKRAN_AKISI_2026-06-07.zip",
+  "created_at": "2026-06-07T15:58:14.450077+00:00",
+  "main_verdict": "Flow works, presentation needs tighter room composition, portal readability, chamber/boss makeup, and language consistency.",
+  "files": [
+    "01_UX_FLOW_REVIEW.md",
+    "02_ROOM_SIZE_AND_COMPOSITION.md",
+    "03_MAKEUP_ASSET_PRODUCTION_LIST.md",
+    "04_LANGUAGE_AND_TERMS.md",
+    "05_DEMO_PRESENTATION_FLOW.md",
+    "06_CLAUDE_FEEDBACK_PROMPT.md",
+    "README.md",
+    "contact_sheet_reference.jpg"
+  ]
+}

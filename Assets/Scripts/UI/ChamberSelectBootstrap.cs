@@ -28,9 +28,9 @@ namespace RIMA
         private const string FallbackGameSceneName = "_IsoGame";
         private const string ClassUnlockPrefsPrefix = "rima_class_unlocked_";
 
-        [SerializeField, Min(1f)] private float chamberCameraFitMultiplier = 1.18f;
-        [SerializeField, Min(0f)] private float chamberCameraFitPadding = 0.7f;
-        [SerializeField, Min(1f)] private float chamberCameraMinimumOrthographicSize = 6.5f;
+        [SerializeField, Min(1f)] private float chamberCameraFitMultiplier = 1.04f;
+        [SerializeField, Min(0f)] private float chamberCameraFitPadding = 0.35f;
+        [SerializeField, Min(1f)] private float chamberCameraMinimumOrthographicSize = 5.8f;
 
         private static readonly ClassType[] ChamberClasses =
         {
@@ -41,8 +41,8 @@ namespace RIMA
 
         private static readonly Vector2Int[] PedestalCells =
         {
-            new(7, 6), new(9, 8), new(11, 9), new(13, 10), new(15, 10),
-            new(17, 9), new(16, 7), new(14, 6), new(12, 5), new(9, 5)
+            new(6, 6), new(8, 8), new(11, 10), new(14, 11), new(17, 10),
+            new(19, 8), new(17, 6), new(14, 5), new(11, 4), new(8, 4)
         };
 
         private readonly Dictionary<ClassType, EchoStation> stations = new();
@@ -65,6 +65,8 @@ namespace RIMA
         private bool busyAttuning;
         private Vector3 exitWorld;
         private CameraZoom disabledCameraZoom;
+        private Behaviour disabledLegacyPixelPerfectCamera;
+        private PixelPerfectCamera disabledUrpPixelPerfectCamera;
         private RIMA.CameraSystem.CameraFollow chamberFollow;
         private Vector3 previousFollowOffset;
         private bool previousFollowCaptured;
@@ -102,6 +104,18 @@ namespace RIMA
             {
                 disabledCameraZoom.enabled = true;
                 disabledCameraZoom = null;
+            }
+
+            if (disabledLegacyPixelPerfectCamera != null)
+            {
+                disabledLegacyPixelPerfectCamera.enabled = true;
+                disabledLegacyPixelPerfectCamera = null;
+            }
+
+            if (disabledUrpPixelPerfectCamera != null)
+            {
+                disabledUrpPixelPerfectCamera.enabled = true;
+                disabledUrpPixelPerfectCamera = null;
             }
 
             if (chamberFollow != null && previousFollowCaptured)
@@ -357,6 +371,7 @@ namespace RIMA
                 TMP_Text label = CreateWorldText($"EchoLabel_{cls}", root, baseWorld + new Vector3(0.48f, 0.08f, 0f), 2.7f);
                 label.text = IsUnlocked(cls) ? cls.ToString().ToUpperInvariant() : $"{cls.ToString().ToUpperInvariant()}\n{UnlockOrPathText(cls)}";
                 label.alignment = TextAlignmentOptions.Center;
+                label.gameObject.SetActive(false);
 
                 stations[cls] = new EchoStation
                 {
@@ -443,6 +458,20 @@ namespace RIMA
             }
 
             chamberCamera.orthographic = true;
+            Behaviour legacyPpc = FindLegacyPixelPerfectCamera(chamberCamera);
+            if (legacyPpc != null && legacyPpc.enabled)
+            {
+                legacyPpc.enabled = false;
+                disabledLegacyPixelPerfectCamera = legacyPpc;
+            }
+
+            PixelPerfectCamera urpPpc = chamberCamera.GetComponent<PixelPerfectCamera>();
+            if (urpPpc != null && urpPpc.enabled)
+            {
+                urpPpc.enabled = false;
+                disabledUrpPixelPerfectCamera = urpPpc;
+            }
+
             Bounds chamberBounds = CalculateChamberBounds();
             float aspect = chamberCamera.aspect > 0.01f ? chamberCamera.aspect : 16f / 9f;
             float fittedSize = Mathf.Max(chamberBounds.extents.y, chamberBounds.extents.x / aspect);
@@ -470,12 +499,6 @@ namespace RIMA
             follow.worldOffset = followOffset;
             chamberCamera.transform.position = player.position + followOffset;
 
-            PixelPerfectCamera ppc = chamberCamera.GetComponent<PixelPerfectCamera>() ?? chamberCamera.gameObject.AddComponent<PixelPerfectCamera>();
-            ppc.assetsPPU = 64;
-            ppc.refResolutionY = RoundToEven(Mathf.RoundToInt(orthoSize * 2f * ppc.assetsPPU));
-            ppc.refResolutionX = RoundToEven(Mathf.RoundToInt(ppc.refResolutionY * aspect));
-            ppc.upscaleRT = false;
-
             if (FindFirstObjectByType<Light2D>() == null)
             {
                 GameObject lightGo = new GameObject("Chamber_GlobalLight2D");
@@ -484,6 +507,26 @@ namespace RIMA
                 light.intensity = 0.92f;
                 light.color = new Color(0.78f, 0.86f, 1f, 1f);
             }
+        }
+
+        private static Behaviour FindLegacyPixelPerfectCamera(Camera camera)
+        {
+            if (camera == null)
+            {
+                return null;
+            }
+
+            Behaviour[] behaviours = camera.GetComponents<Behaviour>();
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                Behaviour behaviour = behaviours[i];
+                if (behaviour != null && behaviour.GetType().FullName == "UnityEngine.U2D.PixelPerfectCamera")
+                {
+                    return behaviour;
+                }
+            }
+
+            return null;
         }
 
         private Bounds CalculateChamberBounds()
@@ -501,18 +544,6 @@ namespace RIMA
                 }
 
                 bounds.Encapsulate(point);
-            }
-
-            if (groundTilemap != null)
-            {
-                BoundsInt cellBounds = groundTilemap.cellBounds;
-                foreach (Vector3Int cell in cellBounds.allPositionsWithin)
-                {
-                    if (groundTilemap.HasTile(cell))
-                    {
-                        Encapsulate(grid.GetCellCenterWorld(cell));
-                    }
-                }
             }
 
             for (int i = 0; i < PedestalCells.Length; i++)
@@ -610,6 +641,7 @@ namespace RIMA
                     station.label.color = highlighted
                         ? new Color(0.50f, 0.96f, 1f, 1f)
                         : new Color(0.82f, 0.86f, 0.90f, 1f);
+                    station.label.gameObject.SetActive(highlighted);
                 }
             }
         }

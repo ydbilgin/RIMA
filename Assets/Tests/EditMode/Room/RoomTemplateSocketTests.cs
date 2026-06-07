@@ -11,6 +11,11 @@ namespace RIMA.Tests.Room
     {
         private const string RoomsRoot = "Assets/Data/Rooms";
         private const string CharSelectPath = "Assets/Data/Rooms/Special/Chamber_CharSelect.asset";
+        private const string EchoPedestalPath = "Assets/Data/Props/EchoPedestal.asset";
+        private const string ArchGatePath = "Assets/Data/Props/ArchGate.asset";
+        private const string BrazierPath = "Assets/Data/Props/Brazier.asset";
+        private const string PillarPath = "Assets/Data/Props/Pillar.asset";
+        private const string FloorRiftCrackPath = "Assets/Data/Props/FloorRiftCrack.asset";
 
         [Test]
         public void RoomTemplatesExceptCharSelect_HaveAuthoredNorthExitSlots()
@@ -102,6 +107,55 @@ namespace RIMA.Tests.Room
             }
 
             Assert.IsEmpty(failures, string.Join("\n", failures));
+        }
+
+        [Test]
+        public void CharSelectRoom_HasOnlyPedestalsAndArchGateProps()
+        {
+            RoomTemplateSO room = AssetDatabase.LoadAssetAtPath<RoomTemplateSO>(CharSelectPath);
+            Assert.IsNotNull(room);
+            Assert.IsNotNull(room.props);
+
+            string echoGuid = AssetDatabase.AssetPathToGUID(EchoPedestalPath);
+            string archGuid = AssetDatabase.AssetPathToGUID(ArchGatePath);
+            HashSet<string> forbidden = new HashSet<string>
+            {
+                AssetDatabase.AssetPathToGUID(BrazierPath),
+                AssetDatabase.AssetPathToGUID(PillarPath),
+                AssetDatabase.AssetPathToGUID(FloorRiftCrackPath)
+            };
+            HashSet<UnityEngine.Vector2Int> expectedPedestals = new HashSet<UnityEngine.Vector2Int>
+            {
+                new UnityEngine.Vector2Int(6, 6), new UnityEngine.Vector2Int(8, 8),
+                new UnityEngine.Vector2Int(11, 10), new UnityEngine.Vector2Int(14, 11),
+                new UnityEngine.Vector2Int(17, 10), new UnityEngine.Vector2Int(19, 8),
+                new UnityEngine.Vector2Int(17, 6), new UnityEngine.Vector2Int(14, 5),
+                new UnityEngine.Vector2Int(11, 4), new UnityEngine.Vector2Int(8, 4)
+            };
+            HashSet<UnityEngine.Vector2Int> actualPedestals = new HashSet<UnityEngine.Vector2Int>();
+            int archCount = 0;
+
+            foreach (var prop in room.props)
+            {
+                Assert.IsFalse(forbidden.Contains(prop.propDefinitionGuid), $"Forbidden chamber prop remains: {prop.propDefinitionGuid} at {prop.tilePosition}");
+                if (prop.propDefinitionGuid == echoGuid)
+                {
+                    actualPedestals.Add(prop.tilePosition);
+                }
+                else if (prop.propDefinitionGuid == archGuid)
+                {
+                    archCount++;
+                    Assert.AreEqual(new UnityEngine.Vector2Int(20, 13), prop.tilePosition);
+                }
+                else
+                {
+                    Assert.Fail($"Unexpected chamber prop remains: {prop.propDefinitionGuid} at {prop.tilePosition}");
+                }
+            }
+
+            Assert.AreEqual(11, room.props.Count);
+            Assert.AreEqual(1, archCount);
+            CollectionAssert.AreEquivalent(expectedPedestals, actualPedestals);
         }
     }
 }
