@@ -42,9 +42,12 @@ namespace RIMA
 
         private static readonly Vector2Int[] PedestalCells =
         {
-            new(6, 6), new(8, 8), new(11, 10), new(14, 11), new(17, 10),
-            new(19, 8), new(17, 6), new(14, 5), new(11, 4), new(8, 4)
+            new(4, 5), new(5, 8), new(7, 11), new(9, 14), new(12, 16),
+            new(22, 5), new(21, 8), new(20, 11), new(19, 14), new(16, 16)
         };
+
+        private static readonly Vector2Int ExitCell = new(24, 17);
+        private static readonly Vector2Int DummyCell = new(8, 4);
 
         private readonly Dictionary<ClassType, EchoStation> stations = new();
 
@@ -130,8 +133,8 @@ namespace RIMA
             lr.positionCount = 4;
             Vector3 spawn = grid.GetCellCenterWorld(new Vector3Int(3, 3, 0));
             lr.SetPosition(0, spawn + new Vector3(0, -0.4f, 0));
-            lr.SetPosition(1, grid.GetCellCenterWorld(new Vector3Int(8, 6, 0)) + new Vector3(0, -0.4f, 0));
-            lr.SetPosition(2, grid.GetCellCenterWorld(new Vector3Int(14, 9, 0)) + new Vector3(0, -0.4f, 0));
+            lr.SetPosition(1, grid.GetCellCenterWorld(new Vector3Int(8, 7, 0)) + new Vector3(0, -0.4f, 0));
+            lr.SetPosition(2, grid.GetCellCenterWorld(new Vector3Int(15, 11, 0)) + new Vector3(0, -0.4f, 0));
             lr.SetPosition(3, exitWorld + new Vector3(0, -0.4f, 0));
             lr.startWidth = 0.04f;
             lr.endWidth = 0.015f;
@@ -342,7 +345,7 @@ namespace RIMA
             }
 
             builder.Build(roomTemplate);
-            exitWorld = grid.GetCellCenterWorld(new Vector3Int(20, 13, 0));
+            exitWorld = grid.GetCellCenterWorld(new Vector3Int(ExitCell.x, ExitCell.y, 0));
 
             int floorCount = builder.LastFloorCells != null ? builder.LastFloorCells.Count : 0;
             Debug.Log($"[ChamberSelectBootstrap] P1/P2 evidence: room={roomTemplate.roomId}, floor={floorCount}, props={roomTemplate.props.Count}, pedestals={PedestalCells.Length}.");
@@ -359,6 +362,7 @@ namespace RIMA
                 ? new[]
                 {
                     "AttunementChamber_Runtime",
+                    "IsoRoomBuilder",
                     "EchoStations",
                     "TrainingDummy_RealDamageable",
                     "TrainingDummy_HP",
@@ -474,6 +478,7 @@ namespace RIMA
 
             EnsurePlayerRuntime(instance);
             EnsureClassManager().SetPrimaryClass(currentClass);
+            ApplyChamberPlayerVisual(instance, currentClass);
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: player spawned as {currentClass} at {spawn}.");
         }
 
@@ -576,7 +581,7 @@ namespace RIMA
 
         private void SpawnTrainingDummy()
         {
-            Vector3 pos = grid.GetCellCenterWorld(new Vector3Int(4, 5, 0));
+            Vector3 pos = grid.GetCellCenterWorld(new Vector3Int(DummyCell.x, DummyCell.y, 0));
             GameObject dummy = new GameObject("TrainingDummy_RealDamageable");
             dummy.transform.position = pos;
             dummy.tag = "Untagged";
@@ -598,11 +603,11 @@ namespace RIMA
             body.bodyType = RigidbodyType2D.Kinematic;
             body.gravityScale = 0f;
             body.freezeRotation = true;
+            body.constraints = RigidbodyConstraints2D.FreezeAll;
             BoxCollider2D collider = dummy.AddComponent<BoxCollider2D>();
             collider.size = new Vector2(0.7f, 0.7f);
             Health health = dummy.AddComponent<Health>();
             health.SetMaxHP(100);
-            dummy.AddComponent<KnockbackReceiver>();
             dummy.AddComponent<RIMA.Combat.HitFlashDriver>();
 
             TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, pos + new Vector3(0f, 1.05f, 0f), 3.1f);
@@ -614,7 +619,7 @@ namespace RIMA
 
         private void CreatePromptLabel()
         {
-            promptLabel = CreateWorldText("ChamberPrompt", transform, Vector3.zero, 4.0f);
+            promptLabel = CreateWorldText("ChamberPrompt", transform, Vector3.zero, 1.8f);
             promptLabel.color = new Color(0.45f, 0.96f, 1f, 1f);
             promptLabel.fontStyle = FontStyles.Bold;
             promptLabel.gameObject.SetActive(false);
@@ -741,7 +746,7 @@ namespace RIMA
             }
 
             Encapsulate(exitWorld + new Vector3(0f, 1.3f, 0f));
-            Encapsulate(grid.GetCellCenterWorld(new Vector3Int(4, 5, 0)) + new Vector3(0f, 1.2f, 0f));
+            Encapsulate(grid.GetCellCenterWorld(new Vector3Int(DummyCell.x, DummyCell.y, 0)) + new Vector3(0f, 1.2f, 0f));
             if (player != null) Encapsulate(player.position);
 
             return initialized ? bounds : new Bounds(Vector3.zero, new Vector3(12f, 8f, 0f));
@@ -827,10 +832,49 @@ namespace RIMA
             {
                 if (sr != null) sr.color = Color.white;
             }
+            ApplyChamberPlayerVisual(player.gameObject, cls);
 
             RefreshEchoVisuals();
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: attuned to {cls}; PlayerClassManager.SelectedClass synchronized.");
             busyAttuning = false;
+        }
+
+        private static void ApplyChamberPlayerVisual(GameObject playerObject, ClassType cls)
+        {
+            if (playerObject == null || playerObject.GetComponentInChildren<Animator>() != null)
+            {
+                return;
+            }
+
+            Sprite sprite = LoadClassIdleSouthSprite(cls, out bool usedFallback);
+            SpriteRenderer[] renderers = playerObject.GetComponentsInChildren<SpriteRenderer>(true);
+            SpriteRenderer body = null;
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                SpriteRenderer candidate = renderers[i];
+                if (candidate != null && candidate.gameObject.name == "Body")
+                {
+                    body = candidate;
+                    break;
+                }
+            }
+
+            if (body == null && renderers.Length > 0)
+            {
+                body = renderers[0];
+            }
+
+            if (body == null || sprite == null)
+            {
+                return;
+            }
+
+            body.sprite = sprite;
+            body.color = Color.white;
+            if (usedFallback)
+            {
+                Debug.LogWarning($"[ChamberSelectBootstrap] Missing idle_south sprite for player {cls}; using generic dark echo silhouette.");
+            }
         }
 
         private void RefreshEchoVisuals()

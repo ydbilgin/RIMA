@@ -183,6 +183,29 @@ namespace RIMA.Tests
                 "Primary class changes must update player visuals, not only skill bindings.");
         }
 
+        [Test]
+        public void ChamberSelectBootstrap_ApplyChamberPlayerVisualUpdatesBodySpriteWithoutAnimator()
+        {
+            var expected = Resources.Load<Sprite>("Characters/Ranger/ranger_idle_south");
+            if (expected == null)
+                Assert.Inconclusive("Ranger idle_south sprite not in Resources; skip chamber sprite fallback check");
+
+            var player = new GameObject("Player");
+            player.transform.SetParent(root.transform);
+            var body = new GameObject("Body");
+            body.transform.SetParent(player.transform);
+            var renderer = body.AddComponent<SpriteRenderer>();
+
+            var method = typeof(ChamberSelectBootstrap).GetMethod("ApplyChamberPlayerVisual",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            Assert.IsNotNull(method, "Chamber player visual fallback method must exist.");
+
+            method.Invoke(null, new object[] { player, ClassType.Ranger });
+
+            Assert.AreSame(expected, renderer.sprite,
+                "Attunement chamber players without Animator must still visually become the selected class.");
+        }
+
         // ── Helpers ─────────────────────────────────────────────────────────
 
         private static int GetRuntimeListenerCount(Button btn)

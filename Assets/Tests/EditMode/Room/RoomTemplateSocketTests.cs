@@ -126,11 +126,11 @@ namespace RIMA.Tests.Room
             };
             HashSet<UnityEngine.Vector2Int> expectedPedestals = new HashSet<UnityEngine.Vector2Int>
             {
-                new UnityEngine.Vector2Int(6, 6), new UnityEngine.Vector2Int(8, 8),
-                new UnityEngine.Vector2Int(11, 10), new UnityEngine.Vector2Int(14, 11),
-                new UnityEngine.Vector2Int(17, 10), new UnityEngine.Vector2Int(19, 8),
-                new UnityEngine.Vector2Int(17, 6), new UnityEngine.Vector2Int(14, 5),
-                new UnityEngine.Vector2Int(11, 4), new UnityEngine.Vector2Int(8, 4)
+                new UnityEngine.Vector2Int(4, 5), new UnityEngine.Vector2Int(5, 8),
+                new UnityEngine.Vector2Int(7, 11), new UnityEngine.Vector2Int(9, 14),
+                new UnityEngine.Vector2Int(12, 16), new UnityEngine.Vector2Int(22, 5),
+                new UnityEngine.Vector2Int(21, 8), new UnityEngine.Vector2Int(20, 11),
+                new UnityEngine.Vector2Int(19, 14), new UnityEngine.Vector2Int(16, 16)
             };
             HashSet<UnityEngine.Vector2Int> actualPedestals = new HashSet<UnityEngine.Vector2Int>();
             int archCount = 0;
@@ -145,7 +145,7 @@ namespace RIMA.Tests.Room
                 else if (prop.propDefinitionGuid == archGuid)
                 {
                     archCount++;
-                    Assert.AreEqual(new UnityEngine.Vector2Int(20, 13), prop.tilePosition);
+                    Assert.AreEqual(new UnityEngine.Vector2Int(24, 17), prop.tilePosition);
                 }
                 else
                 {
@@ -156,6 +156,74 @@ namespace RIMA.Tests.Room
             Assert.AreEqual(11, room.props.Count);
             Assert.AreEqual(1, archCount);
             CollectionAssert.AreEquivalent(expectedPedestals, actualPedestals);
+        }
+
+        [Test]
+        public void CharSelectRoom_IsLargeTwoArcLayoutWithOpenCenter()
+        {
+            RoomTemplateSO room = AssetDatabase.LoadAssetAtPath<RoomTemplateSO>(CharSelectPath);
+            Assert.IsNotNull(room);
+            Assert.AreEqual(new UnityEngine.RectInt(0, 0, 28, 20), room.bounds);
+            Assert.AreEqual(new UnityEngine.RectInt(0, 0, 28, 20), room.cameraBounds.tileRect);
+            Assert.AreEqual(new UnityEngine.Vector2Int(3, 3), room.playerSpawn.position);
+            Assert.IsTrue(room.IsWalkable(new UnityEngine.Vector2Int(24, 17)), "Rift exit must sit on walkable floor.");
+
+            var blockedByPedestal = new HashSet<UnityEngine.Vector2Int>();
+            var pedestalRects = new List<UnityEngine.RectInt>();
+            string echoGuid = AssetDatabase.AssetPathToGUID(EchoPedestalPath);
+            foreach (var prop in room.props)
+            {
+                if (prop.propDefinitionGuid != echoGuid)
+                {
+                    continue;
+                }
+
+                pedestalRects.Add(new UnityEngine.RectInt(prop.tilePosition, new UnityEngine.Vector2Int(2, 2)));
+                for (int dx = 0; dx < 2; dx++)
+                {
+                    for (int dy = 0; dy < 2; dy++)
+                    {
+                        Assert.IsTrue(blockedByPedestal.Add(prop.tilePosition + new UnityEngine.Vector2Int(dx, dy)),
+                            $"Pedestal footprints overlap at {prop.tilePosition + new UnityEngine.Vector2Int(dx, dy)}");
+                    }
+                }
+            }
+
+            for (int i = 0; i < pedestalRects.Count; i++)
+            {
+                for (int j = i + 1; j < pedestalRects.Count; j++)
+                {
+                    if (RectGap(pedestalRects[i], pedestalRects[j]) < 1)
+                    {
+                        Assert.Fail($"Pedestal footprints are too close: {pedestalRects[i]} and {pedestalRects[j]}");
+                    }
+                }
+            }
+
+            var centerCorridor = new[]
+            {
+                new UnityEngine.Vector2Int(12, 8),
+                new UnityEngine.Vector2Int(13, 10),
+                new UnityEngine.Vector2Int(14, 12),
+                new UnityEngine.Vector2Int(13, 14),
+                new UnityEngine.Vector2Int(14, 16),
+                new UnityEngine.Vector2Int(18, 16),
+                new UnityEngine.Vector2Int(22, 17),
+                new UnityEngine.Vector2Int(24, 17)
+            };
+
+            foreach (var cell in centerCorridor)
+            {
+                Assert.IsTrue(room.IsWalkable(cell), $"Center corridor cell {cell} must be walkable.");
+                Assert.IsFalse(blockedByPedestal.Contains(cell), $"Center corridor cell {cell} is blocked by a pedestal footprint.");
+            }
+        }
+
+        private static int RectGap(UnityEngine.RectInt a, UnityEngine.RectInt b)
+        {
+            int xGap = System.Math.Max(0, System.Math.Max(a.xMin - b.xMax, b.xMin - a.xMax));
+            int yGap = System.Math.Max(0, System.Math.Max(a.yMin - b.yMax, b.yMin - a.yMax));
+            return System.Math.Max(xGap, yGap);
         }
     }
 }
