@@ -42,6 +42,36 @@ namespace RIMA
             GroundBlobShadow.Ensure(transform, new Vector2(0.58f, 0.20f), 0.24f);
 
             health.OnDeath.AddListener(OnDeath);
+
+            // T6.1 FIX: replace oversized purple placeholder box with a small readable diamond.
+            // Remove this block once real PixelLab sprite is assigned in the Inspector.
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null && sr.sprite == null)
+            {
+                sr.sprite = MakeSmallDiamond();
+                sr.color  = new Color(0.45f, 0.28f, 0.72f, 0.90f); // dim violet — swarm-tier colour
+                // 48px intended canvas; PPU=64 → ~0.75u, keep natural scale
+                transform.localScale = Vector3.one;
+            }
+        }
+
+        /// <summary>8×8 diamond sprite — compact placeholder so the mob doesn't render as a huge colour block.</summary>
+        private static Sprite MakeSmallDiamond()
+        {
+            const int S = 8;
+            var tex = new Texture2D(S, S, TextureFormat.RGBA32, false);
+            tex.filterMode = FilterMode.Point;
+            tex.wrapMode   = TextureWrapMode.Clamp;
+            int half = S / 2;
+            for (int y = 0; y < S; y++)
+                for (int x = 0; x < S; x++)
+                {
+                    // Diamond shape: |dx| + |dy| <= half
+                    bool inside = Mathf.Abs(x - half + 0.5f) + Mathf.Abs(y - half + 0.5f) <= half;
+                    tex.SetPixel(x, y, inside ? Color.white : Color.clear);
+                }
+            tex.Apply(false, true);
+            return Sprite.Create(tex, new Rect(0, 0, S, S), new Vector2(0.5f, 0.5f), S);
         }
 
         private void Start()

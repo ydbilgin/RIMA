@@ -54,17 +54,27 @@ namespace RIMA
             RectTransform root = CreateRect("VictoryRoot", transform);
             Stretch(root, new Vector2(0.12f, 0.08f), new Vector2(0.88f, 0.92f), Vector2.zero, Vector2.zero);
 
-            TextMeshProUGUI title = CreateText("Title", root, "DEMO COMPLETE", 42f, RimaUITheme.TextPrimary, TextAlignmentOptions.Center);
+            // T6.1 FIX: cyan clash → bone-white with heavy outline/shadow for legibility against the cyan VFX backdrop.
+            TextMeshProUGUI title = CreateText("Title", root, "DEMO COMPLETE", 42f, new Color(0.98f, 0.95f, 0.86f, 1f), TextAlignmentOptions.Center);
+            title.fontStyle = FontStyles.Bold;
+            title.outlineWidth = 0.25f;
+            title.outlineColor = new Color32(0, 0, 0, 210);
             Stretch(title.rectTransform, new Vector2(0f, 0.82f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero);
 
             TextMeshProUGUI line = CreateText("VictoryLine", root, "The full descent awaits.", 18f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
             Stretch(line.rectTransform, new Vector2(0f, 0.75f), new Vector2(1f, 0.84f), Vector2.zero, Vector2.zero);
 
-            RectTransform summary = CreatePanel("RunSummaryPanel", root, RimaUITheme.PanelTint, TarnishedGold);
-            Stretch(summary, new Vector2(0.18f, 0.45f), new Vector2(0.82f, 0.72f), Vector2.zero, Vector2.zero);
+            RectTransform summary = CreatePanel("RunSummaryPanel", root, new Color(0.04f, 0.05f, 0.08f, 0.82f), TarnishedGold);
+            Stretch(summary, new Vector2(0.12f, 0.38f), new Vector2(0.88f, 0.74f), Vector2.zero, Vector2.zero);
 
-            TextMeshProUGUI summaryText = CreateText("RunSummaryText", summary, BuildRunSummary(), 18f, RimaUITheme.TextPrimary, TextAlignmentOptions.MidlineLeft);
-            Stretch(summaryText.rectTransform, Vector2.zero, Vector2.one, new Vector2(24f, 16f), new Vector2(-24f, -16f));
+            // T6.1 FIX: bone-white text, larger font, auto-size so content fits, outline for contrast vs cyan backdrop.
+            TextMeshProUGUI summaryText = CreateText("RunSummaryText", summary, BuildRunSummary(), 20f, new Color(0.96f, 0.93f, 0.84f, 1f), TextAlignmentOptions.MidlineLeft);
+            summaryText.enableAutoSizing = true;
+            summaryText.fontSizeMin = 14f;
+            summaryText.fontSizeMax = 22f;
+            summaryText.outlineWidth = 0.15f;
+            summaryText.outlineColor = new Color32(10, 10, 15, 220);
+            Stretch(summaryText.rectTransform, Vector2.zero, Vector2.one, new Vector2(28f, 20f), new Vector2(-28f, -20f));
 
             RectTransform teaser = CreatePanel("NextClassTeaser", root, new Color(0.04f, 0.05f, 0.08f, 0.55f), new Color(0f, 1f, 0.8f, 0.32f));
             Stretch(teaser, new Vector2(0.18f, 0.35f), new Vector2(0.82f, 0.42f), Vector2.zero, Vector2.zero);

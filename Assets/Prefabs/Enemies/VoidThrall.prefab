@@ -331,7 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RIMA.PlaceholderSprite
   color: {r: 0.6, g: 0.1, b: 0.8, a: 1}
   pixelSize: 32
-  shape: 0
+  shape: 2
 --- !u!114 &7850277349428730644
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,6 +21,21 @@ namespace RIMA
         {
             Collider2D trigger = GetComponent<Collider2D>();
             if (trigger != null) trigger.isTrigger = true;
+
+            // T6.1 FIX: if no sprite assigned in Inspector, load the cyan rift-shard crystal.
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null && sr.sprite == null)
+            {
+                Sprite riftShard = Resources.Load<Sprite>("Props/edge_filler_rift_shard");
+                if (riftShard != null)
+                {
+                    sr.sprite = riftShard;
+                    sr.color  = new Color(0.28f, 0.88f, 1f, 1f);  // cyan tint matching RIMA brand
+                    // 32px sprite @ PPU64 = 0.5 world unit — pickup için doğru boy (Opus QC: 2× devasa görünüyordu)
+                    transform.localScale = Vector3.one;
+                }
+            }
+
             EnsurePromptVisuals();
         }
 

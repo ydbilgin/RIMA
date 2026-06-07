@@ -274,21 +274,26 @@ namespace RIMA
             Stretch(deathDivider.rectTransform, new Vector2(0.30f, 0.555f), new Vector2(0.70f, 0.555f), new Vector2(0f, -1f), new Vector2(0f, 1f));
 
             if (deathStats == null)
-                deathStats = CreateText("DeathStats", contentRoot, "", 16f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
-            deathStats.fontSize = 15f;
-            deathStats.color = RimaUITheme.TextMuted;
+                deathStats = CreateText("DeathStats", contentRoot, "", 16f, new Color(0.82f, 0.86f, 0.88f, 1f), TextAlignmentOptions.Center);
+            // T6.1 FIX: larger strip (4-5 line echo breakdown), auto-size, brighter colour.
+            deathStats.fontSize = 17f;
+            deathStats.enableAutoSizing = true;
+            deathStats.fontSizeMin = 11f;
+            deathStats.fontSizeMax = 17f;
+            deathStats.color = new Color(0.82f, 0.86f, 0.88f, 1f);
             deathStats.alignment = TextAlignmentOptions.Center;
-            Stretch(deathStats.rectTransform, new Vector2(0.06f, 0.45f), new Vector2(0.94f, 0.54f), Vector2.zero, Vector2.zero);
+            Stretch(deathStats.rectTransform, new Vector2(0.04f, 0.16f), new Vector2(0.96f, 0.55f), Vector2.zero, Vector2.zero);
 
             if (restartButton == null)
                 restartButton = CreateButton("RestartButton", contentRoot, "TEKRAR DENE [R]", 15f);
             StyleButton(restartButton, "TEKRAR DENE [R]", 15f);
-            Stretch((RectTransform)restartButton.transform, new Vector2(0.20f, 0.28f), new Vector2(0.49f, 0.38f), Vector2.zero, Vector2.zero);
+            // T6.1: buttons below the expanded stats strip.
+            Stretch((RectTransform)restartButton.transform, new Vector2(0.10f, 0.04f), new Vector2(0.48f, 0.14f), Vector2.zero, Vector2.zero);
 
             if (mainMenuButton == null)
                 mainMenuButton = CreateButton("MainMenuButton", contentRoot, "ANA MENÜ", 15f);
             StyleButton(mainMenuButton, "ANA MENÜ", 15f);
-            Stretch((RectTransform)mainMenuButton.transform, new Vector2(0.51f, 0.28f), new Vector2(0.80f, 0.38f), Vector2.zero, Vector2.zero);
+            Stretch((RectTransform)mainMenuButton.transform, new Vector2(0.52f, 0.04f), new Vector2(0.90f, 0.14f), Vector2.zero, Vector2.zero);
             mainMenuButton.onClick.AddListener(LoadMainMenu);
         }
 
