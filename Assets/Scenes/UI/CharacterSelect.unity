@@ -2300,7 +2300,7 @@ MonoBehaviour:
   selectedClassFlavor: {fileID: 1482537167}
   selectedClassFooter: {fileID: 1808276858}
   confirmButton: {fileID: 928744721}
-  gameSceneName: _IsoGame
+  gameSceneName: _Arena
   classButtonContainer: {fileID: 220064816}
   classButtonPrefab: {fileID: 1802442676}
   classes:
@@ -2439,7 +2439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29c9e136f6814493aaec0474b84a5ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.CharacterSelectScreen
-  gameSceneName: _IsoGame
+  gameSceneName: _Arena
   targetCanvas: {fileID: 0}
   rosterAnchors:
   - {x: 0.28, y: 0.69}

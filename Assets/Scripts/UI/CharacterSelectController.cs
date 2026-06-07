@@ -23,7 +23,7 @@ namespace RIMA.UI
         [SerializeField] private TMP_Text selectedClassFlavor;
         [SerializeField] private TMP_Text selectedClassFooter;
         [SerializeField] private Button confirmButton;
-        [SerializeField] private string gameSceneName = "_IsoGame";
+        [SerializeField] private string gameSceneName = "_Arena";
 
         [Header("Class Grid")]
         [SerializeField] private Transform classButtonContainer;

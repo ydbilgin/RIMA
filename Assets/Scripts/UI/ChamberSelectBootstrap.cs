@@ -26,7 +26,6 @@ namespace RIMA
         private const string OverlayTileResource = "ChamberSelect/Tiles/ChamberOverlayPath";
         private const string ChamberExitPortalResource = "Environment/Gate/gate_arch";
         private const string ArenaRunSceneName = "_Arena";
-        private const string FallbackGameSceneName = "_IsoGame";
         private const string ClassUnlockPrefsPrefix = "rima_class_unlocked_";
 
         [SerializeField, Min(1f)] private float chamberCameraFitMultiplier = 1.04f;
@@ -40,14 +39,14 @@ namespace RIMA
             ClassType.Summoner, ClassType.Hexer
         };
 
-        private static readonly Vector2Int[] PedestalCells =
+        private static readonly Vector2Int[] RosterCells =
         {
-            new(4, 5), new(5, 8), new(7, 11), new(9, 14), new(12, 16),
-            new(22, 5), new(21, 8), new(20, 11), new(19, 14), new(16, 16)
+            new(4, 15), new(6, 16), new(8, 17), new(10, 18), new(12, 18),
+            new(4, 5), new(5, 7), new(6, 9), new(7, 11), new(8, 13)
         };
 
         private static readonly Vector2Int ExitCell = new(24, 17);
-        private static readonly Vector2Int DummyCell = new(8, 4);
+        private static readonly Vector2Int DummyCell = new(14, 10);
 
         private readonly Dictionary<ClassType, EchoStation> stations = new();
 
@@ -66,8 +65,11 @@ namespace RIMA
         private ClassType currentClass = ClassType.Warblade;
         private ClassType highlightedClass = ClassType.None;
         private bool classicTabOpen;
+        private bool dummySelectOpen;
         private bool busyAttuning;
         private Vector3 exitWorld;
+        private Transform dummyTransform;
+        private SpriteRenderer dummyRenderer;
         private CameraZoom disabledCameraZoom;
         private Behaviour disabledLegacyPixelPerfectCamera;
         private PixelPerfectCamera disabledUrpPixelPerfectCamera;
@@ -111,22 +113,6 @@ namespace RIMA
                 return;
             }
 
-            Transform builder = chamberRoot.Find("IsoRoomBuilder");
-            if (builder != null)
-            {
-                Transform props = builder.Find("Props");
-                if (props != null)
-                {
-                    foreach (Transform child in props)
-                    {
-                        if (child.name.Contains("EchoPedestal"))
-                        {
-                            child.localScale = new Vector3(0.7f, 0.7f, 1f);
-                        }
-                    }
-                }
-            }
-
             GameObject trailGo = new GameObject("CyanGuidanceTrail");
             trailGo.transform.SetParent(chamberRoot);
             LineRenderer lr = trailGo.AddComponent<LineRenderer>();
@@ -157,7 +143,7 @@ namespace RIMA
             doorLight.color = new Color(0.6f, 0.8f, 1f, 1f);
 
             int lightCount = 0;
-            foreach (var cell in PedestalCells)
+            foreach (var cell in RosterCells)
             {
                 if (lightCount >= 6) break;
                 if (lightCount % 2 == 0 || lightCount == 5)
@@ -230,35 +216,42 @@ namespace RIMA
                 SetClassicOverlayVisible(classicTabOpen);
             }
 
-            EchoStation nearest = FindNearestStation();
             bool nearDoor = Vector2.Distance(player.position, exitWorld) <= 0.85f;
-
-            if (nearest != null)
+            bool nearDummy = dummyTransform != null && Vector2.Distance(player.position, dummyTransform.position) <= 1.1f;
+            if (dummySelectOpen && !nearDummy)
             {
-                highlightedClass = nearest.classType;
-                InvokeClassicSelect(nearest.classType);
-                SetClassicOverlayVisible(classicTabOpen);
+                dummySelectOpen = false;
+                classicTabOpen = false;
+                SetClassicOverlayVisible(false);
+            }
+
+            if (dummySelectOpen)
+            {
+                ClassType selected = PlayerClassManager.SelectedClass;
+                if (selected != ClassType.None && selected != currentClass && IsUnlocked(selected))
+                {
+                    ApplySelectedClassToPlayerAndDummy(selected);
+                }
+
+                SetClassicOverlayVisible(true);
+            }
+
+            if (nearDummy)
+            {
+                highlightedClass = currentClass;
+                SetClassicOverlayVisible(dummySelectOpen || classicTabOpen);
                 promptLabel.gameObject.SetActive(true);
-                promptLabel.transform.position = nearest.labelAnchor + Vector3.up * 0.42f;
-                promptLabel.text = IsUnlocked(nearest.classType)
-                    ? Loc.T("chamber_select.prompt.attune", nearest.classType.ToString().ToUpperInvariant())
-                    : CanUnlock(nearest.classType)
-                        ? Loc.T("chamber_select.prompt.unlock", UnlockCost(nearest.classType))
-                        : UnlockOrPathText(nearest.classType);
+                promptLabel.transform.position = dummyTransform.position + Vector3.up * 0.9f;
+                promptLabel.text = dummySelectOpen
+                    ? Loc.T("chamber_select.prompt.attune", currentClass.ToString().ToUpperInvariant())
+                    : "G: CHARACTER SELECT";
 
                 if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
                 {
-                    if (IsUnlocked(nearest.classType))
-                    {
-                        StartCoroutine(AttuneRoutine(nearest.classType));
-                    }
-                    else if (CanUnlock(nearest.classType))
-                    {
-                        Unlock(nearest.classType);
-                        InvokeClassicSelect(nearest.classType);
-                        RefreshEchoVisuals();
-                        Debug.Log($"[ChamberSelectBootstrap] P3 unlock: {nearest.classType} unlocked through EchoWallet.");
-                    }
+                    dummySelectOpen = !dummySelectOpen;
+                    classicTabOpen = dummySelectOpen;
+                    InvokeClassicSelect(currentClass);
+                    SetClassicOverlayVisible(dummySelectOpen);
                 }
             }
             else if (nearDoor)
@@ -348,7 +341,7 @@ namespace RIMA
             exitWorld = grid.GetCellCenterWorld(new Vector3Int(ExitCell.x, ExitCell.y, 0));
 
             int floorCount = builder.LastFloorCells != null ? builder.LastFloorCells.Count : 0;
-            Debug.Log($"[ChamberSelectBootstrap] P1/P2 evidence: room={roomTemplate.roomId}, floor={floorCount}, props={roomTemplate.props.Count}, pedestals={PedestalCells.Length}.");
+            Debug.Log($"[ChamberSelectBootstrap] P1/P2 evidence: room={roomTemplate.roomId}, floor={floorCount}, props={roomTemplate.props.Count}, roster={RosterCells.Length}, no pedestal discs.");
         }
 
         public static void CleanupLeakedCombatChamberObjects()
@@ -365,6 +358,7 @@ namespace RIMA
                     "IsoRoomBuilder",
                     "EchoStations",
                     "TrainingDummy_RealDamageable",
+                    "Dummy",
                     "TrainingDummy_HP",
                     "ArrivalRing",
                     "ChamberPrompt",
@@ -375,6 +369,7 @@ namespace RIMA
                     "AttunementChamber_Runtime",
                     "EchoStations",
                     "TrainingDummy_RealDamageable",
+                    "Dummy",
                     "TrainingDummy_HP",
                     "ArrivalRing",
                     "ChamberPrompt",
@@ -545,12 +540,12 @@ namespace RIMA
             for (int i = 0; i < ChamberClasses.Length; i++)
             {
                 ClassType cls = ChamberClasses[i];
-                Vector2Int cell = PedestalCells[i];
+                Vector2Int cell = RosterCells[i];
                 Vector3 baseWorld = grid.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0));
 
                 GameObject statue = new GameObject($"EchoStatue_{cls}");
                 statue.transform.SetParent(root, false);
-                statue.transform.position = baseWorld + new Vector3(0.47f, 0.62f, 0f);
+                statue.transform.position = baseWorld + new Vector3(0.47f, 0.48f, 0f);
                 SpriteRenderer sr = statue.AddComponent<SpriteRenderer>();
                 sr.sprite = LoadClassIdleSouthSprite(cls, out bool usedFallback);
                 sr.sortingLayerName = "Characters";
@@ -576,27 +571,29 @@ namespace RIMA
                 };
             }
 
-            Debug.Log("[ChamberSelectBootstrap] P3 evidence: 10 echo statues spawned above EchoPedestal props.");
+            Debug.Log("[ChamberSelectBootstrap] P3 evidence: 10 front-facing echo silhouettes spawned as display-only 5+5 along the two left edges.");
         }
 
         private void SpawnTrainingDummy()
         {
             Vector3 pos = grid.GetCellCenterWorld(new Vector3Int(DummyCell.x, DummyCell.y, 0));
-            GameObject dummy = new GameObject("TrainingDummy_RealDamageable");
+            GameObject dummy = new GameObject("Dummy");
             dummy.transform.position = pos;
             dummy.tag = "Untagged";
             int enemyLayer = LayerMask.NameToLayer("Enemy");
             if (enemyLayer >= 0) dummy.layer = enemyLayer;
+            dummyTransform = dummy.transform;
 
             SpriteRenderer sr = dummy.AddComponent<SpriteRenderer>();
-            sr.sprite = LoadClassIdleSouthSprite(ClassType.Brawler, out bool usedFallback);
+            sr.sprite = LoadClassIdleSouthSprite(currentClass, out bool usedFallback);
             if (usedFallback)
             {
-                Debug.LogWarning("[ChamberSelectBootstrap] Missing Brawler idle_south for dummy; using generic dark echo silhouette.");
+                Debug.LogWarning($"[ChamberSelectBootstrap] Missing {currentClass} idle_south for dummy; using generic dark echo silhouette.");
             }
-            sr.color = new Color(0.45f, 0.96f, 1f, 0.58f);
+            sr.color = Color.white;
             sr.sortingLayerName = "Characters";
             sr.sortingOrder = SortOrder(pos);
+            dummyRenderer = sr;
             dummy.transform.localScale = new Vector3(0.72f, 0.72f, 1f);
 
             Rigidbody2D body = dummy.AddComponent<Rigidbody2D>();
@@ -606,15 +603,16 @@ namespace RIMA
             body.constraints = RigidbodyConstraints2D.FreezeAll;
             BoxCollider2D collider = dummy.AddComponent<BoxCollider2D>();
             collider.size = new Vector2(0.7f, 0.7f);
+            collider.isTrigger = true;
             Health health = dummy.AddComponent<Health>();
-            health.SetMaxHP(100);
+            health.SetMaxHP(100000);
             dummy.AddComponent<RIMA.Combat.HitFlashDriver>();
 
             TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, pos + new Vector3(0f, 1.05f, 0f), 3.1f);
-            hpLabel.text = Loc.T("chamber_select.dummy_hp", 100, 100);
+            hpLabel.text = Loc.T("chamber_select.dummy_hp", health.CurrentHP, health.MaxHP);
             ScreenshotMode.Register(hpLabel.gameObject, "TrainingDummy_HP");
             dummy.AddComponent<TrainingDummyTarget>().Initialize(health, hpLabel);
-            Debug.Log("[ChamberSelectBootstrap] P4 evidence: real damageable training dummy spawned in lower-left pocket.");
+            Debug.Log("[ChamberSelectBootstrap] P4 evidence: solid immortal class-select Dummy spawned at chamber center.");
         }
 
         private void CreatePromptLabel()
@@ -739,9 +737,9 @@ namespace RIMA
                 bounds.Encapsulate(point);
             }
 
-            for (int i = 0; i < PedestalCells.Length; i++)
+            for (int i = 0; i < RosterCells.Length; i++)
             {
-                Vector2Int cell = PedestalCells[i];
+                Vector2Int cell = RosterCells[i];
                 Encapsulate(grid.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0)) + new Vector3(0.47f, 1.35f, 0f));
             }
 
@@ -752,37 +750,24 @@ namespace RIMA
             return initialized ? bounds : new Bounds(Vector3.zero, new Vector3(12f, 8f, 0f));
         }
 
-        private EchoStation FindNearestStation()
-        {
-            EchoStation nearest = null;
-            float nearestDist = 1.05f;
-            Vector2 p = player.position;
-
-            foreach (EchoStation station in stations.Values)
-            {
-                Vector2 stationWorld = station.labelAnchor;
-                float dist = Vector2.Distance(p, stationWorld);
-                if (dist < nearestDist)
-                {
-                    nearestDist = dist;
-                    nearest = station;
-                }
-            }
-
-            return nearest;
-        }
-
         private IEnumerator AttuneRoutine(ClassType cls)
         {
+            if (player == null)
+            {
+                yield break;
+            }
+
             busyAttuning = true;
             Vector3 startScale = player.localScale;
             SpriteRenderer[] renderers = player.GetComponentsInChildren<SpriteRenderer>();
 
             EchoStation station = stations.TryGetValue(cls, out var st) ? st : null;
-            Vector3 stationStartScale = station != null && station.statue != null ? station.statue.transform.localScale : Vector3.one;
+            SpriteRenderer stationRenderer = station != null ? station.statue : null;
+            Transform stationTransform = stationRenderer != null ? stationRenderer.transform : null;
+            Vector3 stationStartScale = stationTransform != null ? stationTransform.localScale : Vector3.one;
 
             GameObject burst = new GameObject("CyanBurst");
-            if (station != null) burst.transform.position = station.statue.transform.position + new Vector3(0f, 0.4f, 0f);
+            if (stationTransform != null) burst.transform.position = stationTransform.position + new Vector3(0f, 0.4f, 0f);
             SpriteRenderer burstSr = burst.AddComponent<SpriteRenderer>();
             burstSr.sprite = Resources.Load<Sprite>("Props/arrival_ring_0") ?? Resources.Load<Sprite>("Props/arrival_ring");
             burstSr.sortingLayerName = "Characters";
@@ -791,6 +776,13 @@ namespace RIMA
 
             for (float t = 0f; t < 0.5f; t += Time.deltaTime)
             {
+                if (player == null)
+                {
+                    if (burst != null) Destroy(burst);
+                    busyAttuning = false;
+                    yield break;
+                }
+
                 float k = Mathf.Clamp01(t / 0.5f);
                 float sinK = Mathf.Sin(k * Mathf.PI);
                 player.localScale = Vector3.Lerp(startScale, startScale * 0.86f, sinK);
@@ -802,10 +794,10 @@ namespace RIMA
                     }
                 }
                 
-                if (station != null && station.statue != null)
+                if (stationRenderer != null && stationTransform != null)
                 {
-                    station.statue.transform.localScale = Vector3.Lerp(stationStartScale, stationStartScale * 1.3f, sinK);
-                    station.statue.color = Color.Lerp(new Color(0.75f, 0.78f, 0.82f, 1f), new Color(0f, 1f, 1f, 1f), sinK);
+                    stationTransform.localScale = Vector3.Lerp(stationStartScale, stationStartScale * 1.3f, sinK);
+                    stationRenderer.color = Color.Lerp(new Color(0.75f, 0.78f, 0.82f, 1f), new Color(0f, 1f, 1f, 1f), sinK);
                 }
 
                 if (burstSr != null)
@@ -819,24 +811,75 @@ namespace RIMA
 
             if (burst != null) Destroy(burst);
 
-            if (station != null && station.statue != null)
+            if (stationTransform != null)
             {
-                station.statue.transform.localScale = stationStartScale;
+                stationTransform.localScale = stationStartScale;
             }
 
-            currentClass = cls;
-            PlayerClassManager.SelectedClass = cls;
-            EnsureClassManager().SetPrimaryClass(cls);
+            ApplySelectedClassToPlayerAndDummy(cls);
             player.localScale = startScale;
             foreach (SpriteRenderer sr in renderers)
             {
                 if (sr != null) sr.color = Color.white;
             }
-            ApplyChamberPlayerVisual(player.gameObject, cls);
-
             RefreshEchoVisuals();
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: attuned to {cls}; PlayerClassManager.SelectedClass synchronized.");
             busyAttuning = false;
+        }
+
+        public bool AcceptClassicSelectionFromPopup(ClassType cls)
+        {
+            if (!dummySelectOpen)
+            {
+                return false;
+            }
+
+            if (!IsUnlocked(cls))
+            {
+                TryUnlockFromPopup(cls);
+                return true;
+            }
+
+            ApplySelectedClassToPlayerAndDummy(cls);
+            dummySelectOpen = false;
+            classicTabOpen = false;
+            SetClassicOverlayVisible(false);
+            return true;
+        }
+
+        private void TryUnlockFromPopup(ClassType cls)
+        {
+            if (!CanUnlock(cls))
+            {
+                return;
+            }
+
+            Unlock(cls);
+            InvokeClassicSelect(cls);
+            RefreshEchoVisuals();
+            Debug.Log($"[ChamberSelectBootstrap] P3 unlock: {cls} unlocked through dummy character-select popup.");
+        }
+
+        private void ApplySelectedClassToPlayerAndDummy(ClassType cls)
+        {
+            currentClass = cls;
+            PlayerClassManager.SelectedClass = cls;
+            EnsureClassManager().SetPrimaryClass(cls);
+
+            if (player != null)
+            {
+                ApplyChamberPlayerVisual(player.gameObject, cls);
+            }
+
+            if (dummyRenderer != null)
+            {
+                dummyRenderer.sprite = LoadClassIdleSouthSprite(cls, out bool usedFallback);
+                dummyRenderer.color = Color.white;
+                if (usedFallback)
+                {
+                    Debug.LogWarning($"[ChamberSelectBootstrap] Missing idle_south sprite for dummy {cls}; using generic dark echo silhouette.");
+                }
+            }
         }
 
         private static void ApplyChamberPlayerVisual(GameObject playerObject, ClassType cls)
@@ -890,7 +933,7 @@ namespace RIMA
                     station.statue.color = !unlocked
                         ? new Color(0f, 0f, 0f, 0.92f)
                         : occupied
-                            ? new Color(0.28f, 0.72f, 0.78f, 0.42f)
+                            ? new Color(0.45f, 0.96f, 1f, 1f)
                             : highlighted
                                 ? new Color(0.86f, 1f, 1f, 1f)
                                 : new Color(0.75f, 0.78f, 0.82f, 1f);
@@ -959,16 +1002,10 @@ namespace RIMA
             RunStats.Instance?.StartNewRun();
             MapFlowManager.Instance?.ResetRun();
 
-            string targetScene = CanLoadScene(ArenaRunSceneName) ? ArenaRunSceneName : FallbackGameSceneName;
+            string targetScene = ArenaRunSceneName;
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: rift door confirmed; loading {targetScene} with class {currentClass}.");
             SceneManager.LoadScene(targetScene);
             Destroy(gameObject);
-        }
-
-        private static bool CanLoadScene(string sceneName)
-        {
-            return SceneUtility.GetBuildIndexByScenePath($"Assets/Scenes/{sceneName}.unity") >= 0 ||
-                   SceneUtility.GetBuildIndexByScenePath(sceneName) >= 0;
         }
 
         private static bool IsUnlocked(ClassType cls)
@@ -1041,7 +1078,7 @@ namespace RIMA
 
             foreach (GameObject go in FindObjectsByType<GameObject>(FindObjectsSortMode.None))
             {
-                if (go == null || go.name.StartsWith("TrainingDummy_", StringComparison.Ordinal))
+                if (go == null || go.name.StartsWith("TrainingDummy_", StringComparison.Ordinal) || go.name == "Dummy")
                 {
                     continue;
                 }

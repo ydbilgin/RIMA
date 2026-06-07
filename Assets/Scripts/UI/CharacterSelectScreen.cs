@@ -19,7 +19,7 @@ namespace RIMA
     public class CharacterSelectScreen : MonoBehaviour
     {
         [Header("Scene")]
-        [SerializeField] private string gameSceneName = "_IsoGame";
+        [SerializeField] private string gameSceneName = "_Arena";
 
         [Header("Optional Overrides")]
         [SerializeField] private Canvas targetCanvas;
@@ -1212,6 +1212,12 @@ namespace RIMA
 
         private void OnStartRun()
         {
+            ChamberSelectBootstrap chamber = GetComponent<ChamberSelectBootstrap>();
+            if (chamber != null && chamber.AcceptClassicSelectionFromPopup(selectedClass))
+            {
+                return;
+            }
+
             if (!IsUnlocked(selectedClass))
             {
                 TryUnlockSelectedClass();
@@ -1457,7 +1463,10 @@ namespace RIMA
             }
 
             var go = new GameObject("SkillDatabase_Auto");
-            DontDestroyOnLoad(go);
+            if (Application.isPlaying)
+            {
+                DontDestroyOnLoad(go);
+            }
             var db = go.AddComponent<SkillDatabase>();
             db.EnsureBuilt();
             return db;
