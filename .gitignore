@@ -65,8 +65,17 @@ Packages/*.bak
 # Local history backups
 CODEX_DONE_history_backup.md
 
-# Binary assets — versioned in PixelLab, not git
+# Binary assets — default-ignored; USED game assets are tracked (audit 2026-06-07)
+# Policy: Resources/** + Assets/Audio/** auto-tracked; other used assets force-added
+# via STAGING/ASSET_USAGE_AUDIT (GUID cross-reference). Archives/unused stay local.
 *.png
+!Assets/Resources/**/*.png
+!Assets/Audio/**/*.wav
+!Assets/Audio/**/*.ogg
+!Assets/Audio/**/*.mp3
+!Assets/Resources/**/*.wav
+!Assets/Resources/**/*.ogg
+!Assets/Resources/**/*.mp3
 # Screenshot .meta — PNGs above are ignored; don't track orphan dev-screenshot metas
 Assets/Screenshots/*.png.meta
 *.jpg
