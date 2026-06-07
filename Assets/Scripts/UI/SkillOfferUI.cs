@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -192,7 +193,7 @@ namespace RIMA
             trt.pivot = new Vector2(0.5f, 1f);
             trt.anchoredPosition = new Vector2(0f, -30f);
             trt.sizeDelta = new Vector2(600f, 44f);
-            titleLabel.fontSize = 34f;
+            titleLabel.fontSize = 21f;  // T4: %38 küçültüldü (34→21)
             titleLabel.fontStyle = FontStyles.Bold;
             titleLabel.color = RimaUITheme.Gold;
             titleLabel.alignment = TextAlignmentOptions.Center;
@@ -275,7 +276,7 @@ namespace RIMA
                 });
             }
 
-            // Tier chip
+            // Tier chip (top-left corner)
             var chipGo = new GameObject("TierChip", typeof(RectTransform));
             chipGo.transform.SetParent(GetCardVisualRoot(card), false);
             var chipRt = chipGo.GetComponent<RectTransform>();
@@ -299,6 +300,10 @@ namespace RIMA
             chipTxt.fontStyle = FontStyles.Bold;
             chipTxt.color = Color.white;
             chipTxt.alignment = TextAlignmentOptions.Center;
+
+            // T4 İş-1: Tag chip satırı — SkillData.tags'ten (max 3 tag) veya classType fallback
+            if (offer.skill != null)
+                BuildTagChips(card, offer.skill);
 
             // A5 chain-UI: if this offered skill interlocks (Sundered-Beat chain) with another
             // offered card OR an already-owned active, show a cyan "pairs with X" chip.
@@ -373,6 +378,85 @@ namespace RIMA
             chipTxt.alignment = TextAlignmentOptions.Center;
             chipTxt.enableWordWrapping = false;
             chipTxt.overflowMode = TextOverflowModes.Ellipsis;
+        }
+
+        // ─── T4 İş-1: Tag Chip Satırı ──────────────────────────────
+
+        /// <summary>Skill tag'lerini kart altında küçük chip'ler olarak gösterir (max 3).
+        /// SkillData.tags doluysa onları kullanır; boşsa classType'tan chip üretir.
+        /// Sınıf accent rengi + şeffaf arka plan. Name ile description arasında konumlanır.</summary>
+        private void BuildTagChips(GameObject card, SkillData skill)
+        {
+            // Tags boşsa classType chip'i göster (fallback: "tier/tip" = sınıf adı)
+            string[] labels;
+            if (skill.tags != null && skill.tags.Length > 0)
+            {
+                int cnt = Mathf.Min(skill.tags.Length, 3);
+                labels = new string[cnt];
+                for (int i = 0; i < cnt; i++) labels[i] = skill.tags[i].ToString().ToUpperInvariant();
+            }
+            else if (skill.classType != ClassType.None)
+            {
+                labels = new[] { skill.classType.ToString().ToUpperInvariant() };
+            }
+            else
+            {
+                return; // hiç gösterilecek şey yok
+            }
+
+            int count = labels.Length;
+            if (count == 0) return;
+
+            Color accentColor = RimaUITheme.ClassAccent(skill.classType);
+
+            // Chip row: anchored to top, Y=-212 (just below name label at Y=-178, h=30)
+            const float chipY      = -212f;
+            const float chipH      = 20f;
+            const float chipW      = 62f;
+            const float chipGapX   = 4f;
+            float totalW = count * chipW + (count - 1) * chipGapX;
+            float startX = -totalW / 2f + chipW / 2f;
+
+            var rowGo = new GameObject("TagRow", typeof(RectTransform));
+            rowGo.transform.SetParent(GetCardVisualRoot(card), false);
+            var rowRt = rowGo.GetComponent<RectTransform>();
+            rowRt.anchorMin = new Vector2(0.5f, 1f);
+            rowRt.anchorMax = new Vector2(0.5f, 1f);
+            rowRt.pivot = new Vector2(0.5f, 1f);
+            rowRt.anchoredPosition = new Vector2(0f, chipY);
+            rowRt.sizeDelta = new Vector2(totalW, chipH);
+
+            for (int i = 0; i < count; i++)
+            {
+                string label = labels[i];
+                float x = startX + i * (chipW + chipGapX);
+
+                var tGo = new GameObject($"Tag_{i}", typeof(RectTransform));
+                tGo.transform.SetParent(rowRt, false);
+                var tRt = tGo.GetComponent<RectTransform>();
+                tRt.anchorMin = new Vector2(0.5f, 0.5f);
+                tRt.anchorMax = new Vector2(0.5f, 0.5f);
+                tRt.pivot     = new Vector2(0.5f, 0.5f);
+                tRt.anchoredPosition = new Vector2(x, 0f);
+                tRt.sizeDelta = new Vector2(chipW, chipH);
+
+                var tImg = tGo.AddComponent<Image>();
+                tImg.color = new Color(accentColor.r, accentColor.g, accentColor.b, 0.22f);
+                tImg.raycastTarget = false;
+
+                var tTmp = MakeTMP($"TagTxt_{i}", tRt);
+                var tTmpRt = tTmp.GetComponent<RectTransform>();
+                tTmpRt.anchorMin = Vector2.zero;
+                tTmpRt.anchorMax = Vector2.one;
+                tTmpRt.offsetMin = tTmpRt.offsetMax = Vector2.zero;
+                tTmp.text = label;
+                tTmp.fontSize = 9f;
+                tTmp.fontStyle = FontStyles.Bold;
+                tTmp.color = new Color(accentColor.r, accentColor.g, accentColor.b, 0.9f);
+                tTmp.alignment = TextAlignmentOptions.Center;
+                tTmp.enableWordWrapping = false;
+                tTmp.overflowMode = TextOverflowModes.Ellipsis;
+            }
         }
 
         // ─── Shared Card Builder ────────────────────────────────────
@@ -508,33 +592,34 @@ namespace RIMA
             }
             iconImg.raycastTarget = false;
 
-            // Skill name
+            // Skill name — T4: font 22→24 (bir kademe büyük)
             var nameTmp = MakeTMP("Name", visualRoot);
             var nrt = nameTmp.GetComponent<RectTransform>();
             nrt.anchorMin = new Vector2(0f, 1f);
             nrt.anchorMax = new Vector2(1f, 1f);
             nrt.pivot = new Vector2(0.5f, 1f);
             nrt.anchoredPosition = new Vector2(0f, -178f);
-            nrt.sizeDelta = new Vector2(-24f, 30f);
+            nrt.sizeDelta = new Vector2(-24f, 32f);
             nameTmp.text = skillName?.ToUpperInvariant() ?? "???";
-            nameTmp.fontSize = 22f;
+            nameTmp.fontSize = 24f;  // T4: 22→24
             nameTmp.fontStyle = FontStyles.Bold;
             nameTmp.color = Color.white;
             nameTmp.alignment = TextAlignmentOptions.Center;
 
-            // Description
+            // Description — T4: font 14→16; Y=-236 (tag chip için yer açıldı); M2 sayı renklendirme
             var descTmp = MakeTMP("Desc", visualRoot);
             var drt = descTmp.GetComponent<RectTransform>();
             drt.anchorMin = new Vector2(0f, 1f);
             drt.anchorMax = new Vector2(1f, 1f);
             drt.pivot = new Vector2(0.5f, 1f);
-            drt.anchoredPosition = new Vector2(0f, -220f);
-            drt.sizeDelta = new Vector2(-32f, 72f);
-            descTmp.text = description ?? "";
-            descTmp.fontSize = 14f;
+            drt.anchoredPosition = new Vector2(0f, -236f);  // T4: -220→-236 (tag row alanı)
+            drt.sizeDelta = new Vector2(-32f, 64f);
+            descTmp.text = ColorizeNumbers(description ?? "");  // T4 M2: sayısal değerleri vurgula
+            descTmp.fontSize = 16f;  // T4: 14→16
             descTmp.color = new Color(0.7f, 0.75f, 0.8f, 0.9f);
             descTmp.alignment = TextAlignmentOptions.Center;
             descTmp.enableWordWrapping = true;
+            descTmp.richText = true;
 
             // Select button
             var btnGo = new GameObject("Btn", typeof(RectTransform));
@@ -851,6 +936,23 @@ namespace RIMA
         }
 
         // ─── Helpers ────────────────────────────────────────────────
+
+        // ─── T4 M2: Stat-diff renk yardımcısı ─────────────────────────────
+
+        /// <summary>M2 (R5): Açıklamadaki sayısal değerleri (hasar/CD/yüzde) cyan vurgu rengiyle
+        /// sarmalar. Karşılaştırma verisi olmadığından tüm sayılar "pozitif" (cyan) rengini alır.
+        /// TMP rich-text tag'leri kullanır — descTmp.richText = true şart.</summary>
+        private static readonly Regex _numberPattern = new Regex(
+            @"(\d+(?:\.\d+)?(?:\s*%)?)",
+            RegexOptions.Compiled);
+
+        private static string ColorizeNumbers(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+            // Cyan hex: #47E0FF (RimaUITheme.Cyan ≈ 0.28, 0.88, 1.0 → #47E1FF)
+            return _numberPattern.Replace(text, m =>
+                $"<color=#47E1FF>{m.Value}</color>");
+        }
 
         private void ClearCards()
         {

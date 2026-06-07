@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5853203891969942878
+--- !u!114 &-8120171979993920604
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18,7 +18,7 @@ MonoBehaviour:
   transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
   density: 0.16
   decalsPerRoomCap: 8
---- !u!114 &-2182963858780817960
+--- !u!114 &-5905577211400132962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -35,24 +35,6 @@ MonoBehaviour:
   zoneIdB: path
   transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
   density: 0.18
-  decalsPerRoomCap: 8
---- !u!114 &-467713047036911230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99c96e9e3b50f9740833ddfa062873bb, type: 3}
-  m_Name: rule_path_dirt_v15g
-  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintAdjacencyRuleSO
-  ruleId: rule_path_dirt_v15g
-  zoneIdA: path
-  zoneIdB: dirt
-  transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
-  density: 0.14
   decalsPerRoomCap: 8
 --- !u!114 &11400000
 MonoBehaviour:
@@ -72,8 +54,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a3132e203afe7b64d8bc649397d8ef7d, type: 2}
   - {fileID: 11400000, guid: a26d15a666f02d64c9eb90208a65f6c6, type: 2}
   adjacencyRules:
-  - {fileID: -2182963858780817960}
-  - {fileID: -5853203891969942878}
-  - {fileID: -467713047036911230}
+  - {fileID: -5905577211400132962}
+  - {fileID: -8120171979993920604}
+  - {fileID: 8260820419880222429}
   wangRuleTileRef: {fileID: 0}
   gridSize: {x: 36, y: 22}
+--- !u!114 &8260820419880222429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c96e9e3b50f9740833ddfa062873bb, type: 3}
+  m_Name: rule_path_dirt_v15g
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintAdjacencyRuleSO
+  ruleId: rule_path_dirt_v15g
+  zoneIdA: path
+  zoneIdB: dirt
+  transitionPool: {fileID: 11400000, guid: ae7d6b0ae5fe9b140997b810803d8da2, type: 2}
+  density: 0.14
+  decalsPerRoomCap: 8
