@@ -17,6 +17,7 @@ yapay zekâ geliştirme metodolojisi (yazar≠reviewer, council kararları, üç
    güncel, dürüst, baştan sona anlatımı (bitirme raporu taslağı; ~24 sayfa).
 2. **`CURRENT_STATUS.md`** — canlı proje durumu. EN ÜSTTEKİ blok en yenidir; aşağı indikçe tarih geriler.
 3. **`STAGING/MASTER_PLAN_FINAL_2026-06-06.md`** — aktif yol haritası (T1-T9).
+3.5. **`STAGING/audit/LIVE_FLOW_PROOF_2026-06-07.md`** — dosya:satır kanıtıyla canlı yol (_Arena → RoomRunDirector → IsoRoomBuilder). Hangi kodun aktif olduğunu anlamak için oku.
 4. **`TASARIM/GDD.md`** + **`TASARIM/CLASS_SILHOUETTE_BIBLE.md`** + **`TASARIM/RIMA_GAME_FEEL_AND_MECHANICS_BIBLE.md`**
    — çekirdek tasarım. Sınıf/silah hızlı özeti için: `STAGING/chatgpt_weapon_pack/01_CANON_WEAPONS.md`.
 5. **`STAGING/*_DECISION_*.md`** — council kararları. **Dosya adındaki tarih = geçerlilik sırası; EN YENİ kazanır.**
@@ -43,6 +44,10 @@ MEMORY/ dosyaları nokta-zamanlı gözlemlerdir; 2+ hafta eskiyse bayatlamış o
 "10 sınıf" = 10 sınıflık VERİ MODELİ; demo'da **4'ü uçtan uca oynanabilir** (Warblade/Elementalist/
 Shadowblade/Ranger). 111 skill tanımının 67'si implement, placeholder'lar draft havuzuna sızmaz
 (isImplemented filtresi). Test envanteri 549 tanım; son kayıtlı tam EditMode koşusu 410 PASS / 0 FAIL / 1 inconclusive.
+
+## LEGACY KOD (canlı yolda DEĞİL — yeni iş bağlanmaz)
+`RoomLoader` / `RoomSequenceData` / `Gate.cs` / `GateBehavior` / `DoorTrigger` / `RuntimeRoomManager` = eski oda/kapı sistemi, hiçbir canlı sahnede yok.
+Canlı yol kanıtı: `STAGING/audit/LIVE_FLOW_PROOF_2026-06-07.md` → _Arena → RoomRunDirector → IsoRoomBuilder.BuildExitDoors → RoomRunExitDoorTrigger → DungeonGraph child-choice.
 
 ## REPO'DA OLMAYANLAR
 Kullanılmayan/arşiv binary'ler (Kenney orijinalleri vb. — `STAGING/ASSET_USAGE_AUDIT_2026-06-07.md`),

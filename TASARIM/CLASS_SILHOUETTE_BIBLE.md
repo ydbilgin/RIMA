@@ -1,3 +1,5 @@
+> ℹ️ Tarihli tasarım dokümanı. Güncel kararlarla çelişirse en yeni `STAGING/*_DECISION_*.md` + `AI_READER_GUIDE.md` kazanır. (2026-06-07)
+
 ---
 status: LOCKED
 faz: 1

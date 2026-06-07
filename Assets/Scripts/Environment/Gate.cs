@@ -1,3 +1,5 @@
+// ⚠️ LEGACY (2026-06-07): Bu sınıf CANLI demo yolunda DEĞİL (kanıt: STAGING/audit/LIVE_FLOW_PROOF_2026-06-07.md).
+// Canlı yol: _Arena → RoomRunDirector → IsoRoomBuilder.BuildExitDoors. Yeni iş BURAYA BAĞLANMAZ.
 // Gate canonical spec: MEMORY/gate_socket_canonical_spec.md — 8 stil variant,
 // 1.5-2x karakter, lock state machine, 6-8 frame open anim.
 

@@ -1,3 +1,7 @@
+> ⚠️ **STALE / SUPERSEDED (2026-06-07).** Bu harita 2026-04-29 dönemini anlatır (RuntimeRoomManager + fiziksel N/S/E/W kapılar = REVOKED mimari).
+> Canlı akış için kazanan kaynaklar: `AI_READER_GUIDE.md` + `CURRENT_STATUS.md` + `STAGING/audit/LIVE_FLOW_PROOF_2026-06-07.md`.
+> Canlı yol: _Arena → RoomRunDirector → IsoRoomBuilder.BuildExitDoors (NW/N/NE Rift portal soketleri).
+
 # RIMA — System Architecture Quick Reference
 *Token Saving: Check here before reading source files. Only open source for editing.*
 *Last Updated: 2026-04-29*

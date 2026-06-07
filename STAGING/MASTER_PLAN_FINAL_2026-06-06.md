@@ -1,3 +1,5 @@
+> ℹ️ Görev DURUMU için CURRENT_STATUS.md kazanır; bu dosya sıra/kapsam referansıdır. (2026-06-07)
+
 # RIMA — NİHAİ DEĞERLENDİRME + UYGULAMA PLANI (2026-06-06)
 **Kaynak zinciri:** ChatGPT V2 planı → Council round-1 (`V2_PLAN_DECISION`) → Portal Pack → Council round-2 (`PORTAL_PACK_DECISION`) → ChatGPT konsolide soru seti → **bu doküman = Opus nihai kararı.**
 Kanıt tabanı: cx file:line envanterleri (`CODEX_DONE_laurethayday.md` ×2), ax-3.1 mimari, ax-3.5 lean, Opus-advisor tasarım ×2.

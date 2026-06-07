@@ -22,7 +22,7 @@ namespace RIMA
     /// Works with the existing tile-based RoomBuilder output.
     /// </summary>
     [DefaultExecutionOrder(-100)]
-    [System.Obsolete("Not the live spine - see WORK_ORDER_24_48H_S6. Live flow = Systems/Map/RoomLoader.cs.")]
+    [System.Obsolete("LEGACY - canli yol RoomRunDirector + IsoRoomBuilder (_Arena). Bkz STAGING/audit/LIVE_FLOW_PROOF_2026-06-07.md")]
     public class RuntimeRoomManager : MonoBehaviour
     {
         public static RuntimeRoomManager Instance { get; private set; }

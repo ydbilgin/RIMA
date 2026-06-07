@@ -1,0 +1,24 @@
+{
+  "package": "RIMA_DEEP_STATIC_AUDIT_2026-06-07",
+  "created_at": "2026-06-07T12:42:08.350833+00:00",
+  "audit_type": "deep static audit, not Unity runtime execution",
+  "top_blockers": [
+    "live room/gate path must be proven before T3 portal wiring",
+    "Gate.OpenAnimCoroutine likely violates root collider stability assumption",
+    "SYSTEM_MAP and old design docs can mislead agents",
+    "SkillDatabase canonical/isImplemented path needs verification",
+    "Weapon production canon needs override/clarification"
+  ],
+  "files": [
+    "README.md",
+    "00_AUDIT_SCOPE_AND_METHOD.md",
+    "01_EXECUTIVE_SUMMARY.md",
+    "02_FINDINGS_BY_SEVERITY.md",
+    "03_LIVE_FLOW_PROOF_SPEC.md",
+    "04_PATCH_PLAN_ORDERED.md",
+    "05_CLAUDE_DEEP_AUDIT_PROMPT.md",
+    "06_CODE_REVIEW_CHECKLIST.md",
+    "07_EVIDENCE_NOTES.md",
+    "08_CLEANUP_AND_RED_LIST.md"
+  ]
+}
