@@ -313,10 +313,36 @@ namespace RIMA
 
         // ─── Interaction Prompt (preserved API) ─────────────────────────
 
+        internal static string ComposeInteractionPrompt(string actionName)
+        {
+            string trimmed = actionName?.TrimStart();
+            if (!string.IsNullOrEmpty(trimmed) && IsBracketTokenStart(trimmed))
+            {
+                return actionName;
+            }
+
+            return $"[G] {actionName}";
+        }
+
+        private static bool IsBracketTokenStart(string text)
+        {
+            if (text[0] != '[') return false;
+
+            int close = text.IndexOf(']');
+            if (close <= 1) return false;
+
+            for (int i = 1; i < close; i++)
+            {
+                if (text[i] < 'A' || text[i] > 'Z') return false;
+            }
+
+            return true;
+        }
+
         public void SetInteractionPrompt(string actionName)
         {
             if (interactionPanel == null) return;
-            if (interactionText != null) interactionText.text = $"[G] {actionName}";
+            if (interactionText != null) interactionText.text = ComposeInteractionPrompt(actionName);
             interactionPanel.gameObject.SetActive(true);
         }
 
