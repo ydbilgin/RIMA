@@ -1,5 +1,16 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-08 — INTERACTION-PROMPT CONVENTION A + TEST OTOMASYONU — /clear sonrası İLK BURAYI OKU)
+
+**✅ DONE + COMMIT (`d45a3780`, cx yekta, 7/7 EditMode test YEŞİL, 0 compile, Opus diff-QC PASS — ⚠️ henüz PUSH'lanmadı):** ChatGPT design-pack'inin interaction-prompt bug'ı council'den geçti (cx+ax-3.1+ax-3.5→Opus). **Karar=A** (kullanıcı onaylı; `STAGING/INTERACTION_PROMPT_DECISION_2026-06-08.md`): anahtar loc string'de kalır, `HUDController.SetInteractionPrompt` token-aware oldu (`ComposeInteractionPrompt` pure helper — metin `[XYZ]` ile başlıyorsa prepend etmez). **Gerçek bug TEK:** `RewardPickup.cs:100`→`HUDController.cs:319` çift-prepend (`[G] [G] Ödülü Al`) düzeldi; diğer 5 prompt site zaten temizdi. **Testler (2 EditMode dosya, 7 assertion):** reflection-lint ters-invariant (SADECE onaylı 6 key token taşır, her birinde tam 1, TR=EN) + token-aware prepend + sprite-existence.
+**ChatGPT teşhisi büyük oranda STALE çıktı (cx kanıtlı):** pedestal-identity (idle_south **10/10 sınıf diskte VAR, sıfır fallback**) + HUD-off (chamber'da HUD yok, null-guard'lı) GERÇEK SORUN DEĞİL. Convention B (formatter refactor) + PlayMode testleri + identity/HUD regression testleri = over-engineering → REDDEDİLDİ (B = key-rebinding feature'ı gelince).
+**📥 ChatGPT design-pack:** `STAGING/_inbox/character_room_sketches_2026-06-08/` (01-06 sketch + 4 spec md). KAPSAM-DIŞI ayrı workstream (layout/design): oda walkable boyutları (combat 18×12-22×14, boss 26×16-30×18), pedestal %25-35 küçült, asset-dili birleştir (taş+cyan rift+kırık ritüel) — sketch'ler 03-06.
+**🆕 WORKFLOW:** ChatGPT-web özel GitHub repo'yu okuyabiliyor → büyük kararda dosya-adıyla paste-ready prompt ver, kullanıcı ChatGPT'ye atar, cevabı council'den geçir (stale olur!) [[feedback-chatgpt-web-github-review]]. Görsel review hâlâ zip (connector PNG göremez).
+**⚠️ ROUTING (kullanıcı 2026-06-08):** Claude limiti AZ → her iş dispatch (mekanik→ax-3.5-Flash-High, büyük→Codex), Opus çıktısı kısa. cx bu session KULLANILABİLİR (limits OK: laurethayday/yasinderyabilgin/yekta enabled).
+**⏭️ SONRAKİ:** d45a3780 push (ChatGPT'nin görmesi için) · istenirse oda-layout workstream (sketch 03-06) · GECE-2 kuyruğu hâlâ geçerli (aşağıda): T5 görsel QC, T8 dispatch, Sunum Rehberi, PixelLab BÜYÜK SEANS (gated).
+
+---
+
 ## ⏯️ RESUME (2026-06-07 GECE-2 — GÜN KAPANIŞI: ~32 commit, T1-T6+T-LOC kapalı, T4 son halka — /clear sonrası İLK BURAYI OKU)
 
 **SESSION SONU DURUMU (kullanıcı limiti doldu, kontrollü duruş):**
