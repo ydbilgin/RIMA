@@ -493,6 +493,14 @@ MonoBehaviour:
   gatesContainer: {fileID: 656218086}
   gateNorthSprite: {fileID: 21300000, guid: 50adff2905201df4497f4003a57b2de2, type: 3}
   gateWestSprite: {fileID: 21300000, guid: f84d5b0e194f16b409c93c21e87e71cf, type: 3}
+  portalCombatFrontalSprite: {fileID: 21300000, guid: bbf14de851e21b44d81e81db8853c1bc, type: 3}
+  portalCombatAngledSprite: {fileID: 21300000, guid: 44e162d91603f8541ad560ed70d12cc4, type: 3}
+  portalEliteFrontalSprite: {fileID: 21300000, guid: f2f7fac607d40634bba755f434ca3f08, type: 3}
+  portalEliteAngledSprite: {fileID: 21300000, guid: 7f1cfad091c312840abe057f01f9fe36, type: 3}
+  portalChestFrontalSprite: {fileID: 21300000, guid: e07a7ef84933d1d4e9a46479078aa847, type: 3}
+  portalChestAngledSprite: {fileID: 21300000, guid: 456e0c785ecdf134fa55b403314a1354, type: 3}
+  portalBossFrontalSprite: {fileID: 21300000, guid: 666dc61e7785a2b49af4697cc744ee66, type: 3}
+  portalBossAngledSprite: {fileID: 0}
   runeCombatSprite: {fileID: 21300000, guid: 8fe09fd0fb16e7a43801404e0d73f1d2, type: 3}
   runeEliteSprite: {fileID: 21300000, guid: ac420370780720e45b4af22cba7e45e6, type: 3}
   gateSortOrderBase: 40
@@ -610,7 +618,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1200000004
-  m_SortingLayer: 11
+  m_SortingLayer: 10
   m_SortingOrder: -380
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}

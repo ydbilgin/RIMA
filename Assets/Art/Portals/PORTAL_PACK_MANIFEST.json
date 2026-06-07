@@ -1,0 +1,194 @@
+{
+  "schema": "RIMA.portal_pack_manifest.v1",
+  "generated": "2026-06-07",
+  "import_settings": {
+    "filter": "Point",
+    "ppu": 64,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "pivot": "center"
+  },
+  "socket_mapping": {
+    "0": "NW angled-left",
+    "1": "N frontal",
+    "2": "NE angled-left runtime flipX"
+  },
+  "assets": [
+    {
+      "path": "Assets/Art/Portals/portal_arch_combat_frontal.png",
+      "type": "Combat",
+      "facing": "frontal",
+      "socket": "N",
+      "status": "imported",
+      "canvas": "96x128",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["keystone-rune", "rift-core"]
+    },
+    {
+      "path": "Assets/Art/Portals/portal_arch_combat_angled.png",
+      "type": "Combat",
+      "facing": "angled-left",
+      "socket": "NW,NE-runtime-flipX",
+      "status": "imported",
+      "canvas": "96x128",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["keystone-rune", "rift-core"]
+    },
+    {
+      "path": "Assets/Art/Portals/portal_arch_elite_frontal.png",
+      "type": "Elite",
+      "facing": "frontal",
+      "socket": "N",
+      "status": "imported",
+      "canvas": "96x128",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["keystone-rune", "rift-core"]
+    },
+    {
+      "path": "Assets/Art/Portals/portal_arch_elite_angled.png",
+      "type": "Elite",
+      "facing": "angled-left",
+      "socket": "NW,NE-runtime-flipX",
+      "status": "imported",
+      "canvas": "96x128",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["keystone-rune", "rift-core"]
+    },
+    {
+      "path": "Assets/Art/Portals/portal_arch_chest_frontal.png",
+      "type": "Chest",
+      "facing": "frontal",
+      "socket": "N",
+      "status": "imported",
+      "canvas": "96x128",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["keystone-rune", "rift-core"]
+    },
+    {
+      "path": "Assets/Art/Portals/portal_arch_chest_angled.png",
+      "type": "Chest",
+      "facing": "angled-left",
+      "socket": "NW,NE-runtime-flipX",
+      "status": "imported",
+      "canvas": "96x128",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["keystone-rune", "rift-core"]
+    },
+    {
+      "path": "Assets/Art/Portals/portal_arch_boss_frontal.png",
+      "type": "Boss",
+      "facing": "frontal",
+      "socket": "N",
+      "status": "imported",
+      "canvas": "128x176",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["great-seal", "rift-core"]
+    },
+    {
+      "path": "STAGING/imagegen/assets/portal_pack_batch2_2026-06-07/portal_arch_boss_angled.png",
+      "type": "Boss",
+      "facing": "angled-left",
+      "socket": "NW,NE",
+      "status": "parked-not-imported",
+      "canvas": "128x176",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["great-seal", "rift-core"]
+    },
+    {
+      "path": "STAGING/imagegen/assets/portal_pack_2026-06-07/portal_arch_elite.png",
+      "type": "Elite",
+      "facing": "frontal",
+      "socket": "N",
+      "status": "deprecated-not-imported",
+      "canvas": "96x128",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["keystone-rune", "rift-core"]
+    },
+    {
+      "path": "STAGING/imagegen/assets/portal_pack_2026-06-07/rune_reward.png",
+      "type": "ChestRune",
+      "facing": "badge",
+      "socket": "child-rune",
+      "status": "needs-regen-not-imported",
+      "canvas": "32x32",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["badge"]
+    },
+    {
+      "path": "STAGING/imagegen/assets/portal_pack_2026-06-07/rune_boss.png",
+      "type": "BossRune",
+      "facing": "badge",
+      "socket": "child-rune",
+      "status": "needs-regen-not-imported",
+      "canvas": "32x32",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["badge"]
+    },
+    {
+      "path": "Assets/Art/Telegraphs/telegraph_line_beam.png",
+      "type": "Telegraph",
+      "facing": "topdown-line",
+      "socket": "none",
+      "status": "imported-not-wired",
+      "canvas": "256x32",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["ground-decal"]
+    },
+    {
+      "path": "Assets/Art/Telegraphs/telegraph_circle_ring.png",
+      "type": "Telegraph",
+      "facing": "topdown-circle",
+      "socket": "none",
+      "status": "imported-not-wired",
+      "canvas": "256x256",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["ground-decal"]
+    },
+    {
+      "path": "Assets/Art/Telegraphs/telegraph_cone_fan.png",
+      "type": "Telegraph",
+      "facing": "topdown-cone",
+      "socket": "none",
+      "status": "imported-not-wired",
+      "canvas": "256x256",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["ground-decal"]
+    },
+    {
+      "path": "Assets/Art/Boss/decal_boss_ritual_circle.png",
+      "type": "Boss",
+      "facing": "ground-decal",
+      "socket": "none",
+      "status": "imported-not-wired",
+      "canvas": "192x96",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["ritual-circle"]
+    },
+    {
+      "path": "Assets/Art/Boss/boss_intro_seal_ring.png",
+      "type": "Boss",
+      "facing": "intro-ring",
+      "socket": "none",
+      "status": "imported-not-wired",
+      "canvas": "256x256",
+      "PPU": 64,
+      "pivot": "center",
+      "anchors": ["intro-ring"]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 [RoomSmokeTest] All RoomTemplateSO smoke test
 templates=26
-boss_shattered_oval_01: floor=694, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
+boss_shattered_oval_01: floor=694, builtProps=12, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 chest_large_donut_vault_01: floor=225, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 chest_large_reliquary_diamond_01: floor=150, builtProps=5, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 combatlarge_organic_blob_01: floor=632, builtProps=10, propOutsideFloor=4, invalidTemplateProps=4, ok=False
@@ -26,5 +26,5 @@ Shrine_01: floor=40, builtProps=8, propOutsideFloor=8, invalidTemplateProps=8, o
 Spawn_01: floor=26, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 Treasure_01: floor=37, builtProps=4, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 Chamber_CharSelect: floor=224, builtProps=17, propOutsideFloor=0, invalidTemplateProps=0, ok=True
-exceptions=0, propValidationFailures=9, totalBuiltProps=142
+exceptions=0, propValidationFailures=9, totalBuiltProps=154
 [RoomSmokeTest] PASS (build exceptions=0)

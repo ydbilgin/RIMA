@@ -38,6 +38,14 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private Transform gatesContainer;
         [SerializeField] private Sprite gateNorthSprite;
         [SerializeField] private Sprite gateWestSprite; // East reuses West with flipX
+        [SerializeField] private Sprite portalCombatFrontalSprite;
+        [SerializeField] private Sprite portalCombatAngledSprite;
+        [SerializeField] private Sprite portalEliteFrontalSprite;
+        [SerializeField] private Sprite portalEliteAngledSprite;
+        [SerializeField] private Sprite portalChestFrontalSprite;
+        [SerializeField] private Sprite portalChestAngledSprite;
+        [SerializeField] private Sprite portalBossFrontalSprite;
+        [SerializeField] private Sprite portalBossAngledSprite;
         [SerializeField] private Sprite runeCombatSprite;
         [SerializeField] private Sprite runeEliteSprite;
         [SerializeField] private int gateSortOrderBase = 40;
@@ -721,7 +729,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         public System.Collections.Generic.List<GameObject> BuildExitDoors(System.Collections.Generic.IReadOnlyList<RoomType> doorTypes)
         {
             var doors = new System.Collections.Generic.List<GameObject>();
-            if (doorTypes == null || doorTypes.Count == 0 || gateNorthSprite == null)
+            if (doorTypes == null || doorTypes.Count == 0 || !HasAnyPortalSprite())
             {
                 return doors;
             }
@@ -746,7 +754,8 @@ namespace RIMA.MapDesigner.Room.Runtime
                     DoorSocket slot = selectedSlots[i];
                     Vector3 center = grid.GetCellCenterWorld(new Vector3Int(slot.position.x, slot.position.y, 0));
                     Vector3 position = new Vector3(center.x + gateTuck.x, center.y + gateTuck.y, 0f);
-                    doors.Add(CreateExitDoorObject(i, doorTypes[i], position));
+                    int slotIndex = RoomTemplateSO.ExitSlotIndex(slot);
+                    doors.Add(CreateExitDoorObject(i, doorTypes[i], slotIndex, position));
                 }
 
                 return doors;
@@ -796,20 +805,24 @@ namespace RIMA.MapDesigner.Room.Runtime
             {
                 float x = centerX + (i - (count - 1) * 0.5f) * spacing;
                 Vector3 position = new Vector3(x + gateTuck.x, rowY + gateTuck.y, 0f);
-                doors.Add(CreateExitDoorObject(i, doorTypes[i], position));
+                doors.Add(CreateExitDoorObject(i, doorTypes[i], FallbackExitSlotIndex(i, count), position));
             }
 
             return doors;
         }
 
-        private GameObject CreateExitDoorObject(int choiceIndex, RoomType doorType, Vector3 position)
+        private GameObject CreateExitDoorObject(int choiceIndex, RoomType doorType, int slotIndex, Vector3 position)
         {
             GameObject gateObject = new GameObject($"ExitDoor_{choiceIndex}_{doorType}");
             gateObject.transform.SetParent(gatesContainer, false);
             gateObject.transform.position = position;
 
-            SpriteRenderer gateRenderer = gateObject.AddComponent<SpriteRenderer>();
-            gateRenderer.sprite = gateNorthSprite;
+            GameObject visualObject = new GameObject("Visual");
+            visualObject.transform.SetParent(gateObject.transform, false);
+
+            SpriteRenderer gateRenderer = visualObject.AddComponent<SpriteRenderer>();
+            gateRenderer.sprite = ResolvePortalSprite(doorType, slotIndex, out bool flipX);
+            gateRenderer.flipX = flipX;
             gateRenderer.sortingLayerName = cliffSortingLayer;
             gateRenderer.sortingOrder = gateSortOrderBase + Mathf.RoundToInt(cliffSortYSpan - position.y);
 
@@ -829,6 +842,70 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             return gateObject;
+        }
+
+        private bool HasAnyPortalSprite()
+        {
+            return gateNorthSprite != null
+                || portalCombatFrontalSprite != null
+                || portalCombatAngledSprite != null
+                || portalEliteFrontalSprite != null
+                || portalEliteAngledSprite != null
+                || portalChestFrontalSprite != null
+                || portalChestAngledSprite != null
+                || portalBossFrontalSprite != null
+                || portalBossAngledSprite != null;
+        }
+
+        private Sprite ResolvePortalSprite(RoomType doorType, int slotIndex, out bool flipX)
+        {
+            bool angled = slotIndex != 1;
+            flipX = slotIndex == 2;
+
+            switch (doorType)
+            {
+                case RoomType.Elite:
+                    return angled ? FirstNonNull(portalEliteAngledSprite, portalEliteFrontalSprite, gateWestSprite, gateNorthSprite)
+                        : FirstNonNull(portalEliteFrontalSprite, portalEliteAngledSprite, gateNorthSprite);
+                case RoomType.Chest:
+                    return angled ? FirstNonNull(portalChestAngledSprite, portalChestFrontalSprite, gateWestSprite, gateNorthSprite)
+                        : FirstNonNull(portalChestFrontalSprite, portalChestAngledSprite, gateNorthSprite);
+                case RoomType.Boss:
+                    return angled ? FirstNonNull(portalBossAngledSprite, portalBossFrontalSprite, gateWestSprite, gateNorthSprite)
+                        : FirstNonNull(portalBossFrontalSprite, portalBossAngledSprite, gateNorthSprite);
+                case RoomType.Combat:
+                default:
+                    return angled ? FirstNonNull(portalCombatAngledSprite, portalCombatFrontalSprite, gateWestSprite, gateNorthSprite)
+                        : FirstNonNull(portalCombatFrontalSprite, portalCombatAngledSprite, gateNorthSprite);
+            }
+        }
+
+        private static Sprite FirstNonNull(params Sprite[] sprites)
+        {
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                if (sprites[i] != null)
+                {
+                    return sprites[i];
+                }
+            }
+
+            return null;
+        }
+
+        private static int FallbackExitSlotIndex(int choiceIndex, int doorCount)
+        {
+            if (doorCount <= 1)
+            {
+                return 1;
+            }
+
+            if (doorCount == 2)
+            {
+                return choiceIndex == 0 ? 0 : 2;
+            }
+
+            return Mathf.Clamp(choiceIndex, 0, 2);
         }
     }
 }
