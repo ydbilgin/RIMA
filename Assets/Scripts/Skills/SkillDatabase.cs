@@ -601,10 +601,7 @@ namespace RIMA
                 "Arcane Blast" or
                 "Backstab" or
                 "Shadow Step" or
-                "Fan of Knives" or
-                "Aimed Shot" or
-                "Disengage" or
-                "Multi Shot";
+                "Fan of Knives";
         }
     }
 }

@@ -1572,14 +1572,13 @@ namespace RIMA
             },
             ClassType.Shadowblade => new[]
             {
-                OpenSkill("Backstab", "Arkadan vuruşta katlı hasar."),
+                OpenSkill("Scarbinding", "Düşman içinden phase geçişiyle kalıcı Rift Scar bırakır."),
                 OpenSkill("Phase Step", "Çizgide scar bırakan phase dash."),
                 OpenSkill("Backstab Mark", "Mark ve scar kurar."),
                 OpenSkill("Death Mark", "Gecikmeli patlama mark'ı koyar."),
                 OpenSkill("Shadow Clone", "Kısa süreli decoy phantom."),
                 OpenSkill("Shadow Pin", "Dagger projectile ile root ve scar."),
-                LockedSkill("Shadow Step", "Açılış: Act 1'i Shadowblade ile bitir"),
-                LockedSkill("Fan of Knives", "Açılış: 30 kanama uygula"),
+                LockedSkill("Mirror Cut", "Açılış: Act 1'i Shadowblade ile bitir"),
                 LockedSkill("Veil Burst", "Açılış: 4 hedefe phase zinciri"),
                 LockedSkill("Severance", "Açılış: 80 scar collapse et"),
                 LockedSkill("Smoke Veil", "Açılış: hasar almadan 3 oda"),

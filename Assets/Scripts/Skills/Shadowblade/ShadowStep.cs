@@ -23,7 +23,7 @@ namespace RIMA
         protected override void Awake()
         {
             base.Awake();
-            skillName = "Shadowstep";
+            skillName = "Shadow Step";
             cooldown = 7f;
             resourceCost = 25;
             ctrl = GetComponentInParent<Shadowblade_SkillController>();
