@@ -134,7 +134,7 @@ namespace RIMA
             panelImg.color = new Color(0.024f, 0.028f, 0.038f, 0.86f);
             panelImg.raycastTarget = false;
 
-            var title = MakeText("SKILL CODEX", panel, 26f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
+            var title = MakeText(Loc.T("codex.title"), panel, 26f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             title.alignment = TextAlignmentOptions.Left;
             var titleRt = title.rectTransform;
             titleRt.anchorMin = new Vector2(0f, 1f);
@@ -231,7 +231,7 @@ namespace RIMA
             scroll.vertical = true;
             scroll.movementType = ScrollRect.MovementType.Clamped;
 
-            emptyLabel = MakeText("BU SINIF ICIN KAYITLI SKILL YOK", viewport, 16f, FontStyles.Normal, RimaUITheme.CharSelectTextBody);
+            emptyLabel = MakeText(Loc.T("codex.empty"), viewport, 16f, FontStyles.Normal, RimaUITheme.CharSelectTextBody);
             emptyLabel.alignment = TextAlignmentOptions.Center;
             SetStretch(emptyLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
         }
@@ -377,7 +377,7 @@ namespace RIMA
 
         private void BuildPlaceholderRow(RectTransform row, SkillData skill)
         {
-            var name = MakeText($"{skill.skillName.ToUpperInvariant()} (YAKINDA)", row, 10.5f, FontStyles.Bold, RimaUITheme.CharSelectLockedText);
+            var name = MakeText(Loc.T("codex.coming_soon", skill.skillName.ToUpperInvariant()), row, 10.5f, FontStyles.Bold, RimaUITheme.CharSelectLockedText);
             name.alignment = TextAlignmentOptions.Left;
             name.enableWordWrapping = false;
             name.overflowMode = TextOverflowModes.Ellipsis;

@@ -71,9 +71,9 @@ namespace RIMA
             EnsureTooltipSystem();
             skillBar = FindObjectOfType<SkillBarUI>();
 
-            string title = roomNumber > 0 ? $"ODA {roomNumber}  —  ODUL SEC" : "ODUL SEC";
+            string title = roomNumber > 0 ? Loc.T("draft.title_room", roomNumber) : Loc.T("draft.title_generic");
             if (titleLabel != null) titleLabel.text = title;
-            if (subtitleLabel != null) subtitleLabel.text = "Birini sec — digerleri kaybolur";
+            if (subtitleLabel != null) subtitleLabel.text = Loc.T("draft.subtitle");
 
             // A5 chain-UI: snapshot the offered skillNames so each card can detect a chain with a sibling card.
             currentOfferNames.Clear();
@@ -101,9 +101,9 @@ namespace RIMA
             EnsureTooltipSystem();
             skillBar = FindObjectOfType<SkillBarUI>();
 
-            if (titleLabel != null) titleLabel.text = "SLOT DOLU";
+            if (titleLabel != null) titleLabel.text = Loc.T("draft.slot_full");
             if (subtitleLabel != null)
-                subtitleLabel.text = $"{incoming.skillName.ToUpperInvariant()} almak icin hangisini birakmak istiyorsun?";
+                subtitleLabel.text = Loc.T("draft.replace_prompt", incoming.skillName.ToUpperInvariant());
 
             // Build replace cards
             for (int i = 0; i < currentActives.Count; i++)
@@ -138,7 +138,7 @@ namespace RIMA
             str.anchorMin = Vector2.zero;
             str.anchorMax = Vector2.one;
             str.offsetMin = str.offsetMax = Vector2.zero;
-            skipTxt.text = "ATLA — alma";
+            skipTxt.text = Loc.T("draft.btn.skip");
             skipTxt.fontSize = 11f;
             skipTxt.fontStyle = FontStyles.Bold;
             skipTxt.color = new Color(0.48f, 0.48f, 0.55f);
@@ -231,15 +231,15 @@ namespace RIMA
 
             if (offer.type == RewardType.Gold)
             {
-                name = $"+{offer.goldAmount} ALTIN";
-                desc = "Hazinene ekle";
+                name = Loc.T("draft.gold_title", offer.goldAmount);
+                desc = Loc.T("draft.gold_desc");
                 tierTag = "GOLD";
                 tierColor = RimaUITheme.Gold;
             }
             else if (offer.type == RewardType.Heal)
             {
-                name = $"+%{offer.healPercent} CAN";
-                desc = "Aninda iyiles";
+                name = Loc.T("draft.heal_title", offer.healPercent);
+                desc = Loc.T("draft.heal_desc");
                 tierTag = "HEAL";
                 tierColor = new Color(0.28f, 0.78f, 0.45f);
             }
@@ -247,7 +247,7 @@ namespace RIMA
             {
                 // B5: distinct cyan ECHO treatment (cyan = echo / seal energy).
                 name = (offer.crossClass != null ? $"Echo of {offer.crossClass.sourceClass}" : "Echo").ToUpperInvariant();
-                desc = offer.crossClass?.description ?? "Cagir bir yankisi (C).";
+                desc = offer.crossClass?.description ?? Loc.T("draft.echo_desc");
                 tierTag = "ECHO";
                 tierColor = RimaUITheme.Cyan;
             }
@@ -366,7 +366,7 @@ namespace RIMA
             ctr.anchorMin = Vector2.zero;
             ctr.anchorMax = Vector2.one;
             ctr.offsetMin = ctr.offsetMax = Vector2.zero;
-            chipTxt.text = $"⟂ pairs with {partner.ToUpperInvariant()}";
+            chipTxt.text = Loc.T("draft.pairs_with", partner.ToUpperInvariant());
             chipTxt.fontSize = 10f;
             chipTxt.fontStyle = FontStyles.Bold;
             chipTxt.color = RimaUITheme.Cyan;
@@ -555,7 +555,7 @@ namespace RIMA
             btr.anchorMin = Vector2.zero;
             btr.anchorMax = Vector2.one;
             btr.offsetMin = btr.offsetMax = Vector2.zero;
-            btnTxt.text = "SEC";
+            btnTxt.text = Loc.T("draft.btn.select");
             btnTxt.fontSize = 15f;
             btnTxt.fontStyle = FontStyles.Bold;
             btnTxt.color = Color.white;

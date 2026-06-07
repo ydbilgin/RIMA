@@ -333,3 +333,14 @@ Tüm refler base64 PNG olarak hazırlanır. Her ref <=256px. Optimal 1-3 ref per
 5. style_images + size BIRLIKTE VERILEMEZ: style_images verilince size parametresi geçersiz — ref boyutu çıktı boyutunu belirler.
 6. Mob idle için walk animasyonu ayrı seansta: önce idle üret, walk = confirm sonra. Karıştırma.
 
+
+---
+## BÖLÜM 4 — BOSS (2026-06-07 akşam eklendi — kullanıcı kararı: boss görseli seansta üretilecek)
+Mevcut durum: PenitentSovereign'ın gerçek sprite'ı YOK (mor placeholder kutu). Boss-A kararı (1.5-2× scale + rim) mevcut görsel varsayıyordu — boş çıktı.
+- [ ] **The Penitent Sovereign** — tek yön (S/frontal), 1-2 state (idle + saldırı pozu)
+  - Canvas: **192×192** (COMBAT_ROSTER büyük-boy mantığı; Unity'de ~128-160 efektif — oyuncunun 2-2.5 katı silüet)
+  - Araç: create_character veya create_image_pro (karakter pipeline'ı — moblarla aynı)
+  - Kimlik (NLM canon): The Fracturing'in mimarı; kırık kraliyet figürü — çatlamış taç/mühür motifleri, koyu kütlevi gövde, cyan rift çatlakları gövdede (oyuncu-cyan'ından ayrışsın diye daha derin/mor-cyan ton), pişmanlık/yük duruşu ("Penitent" = öne eğik ağır omuzlar)
+  - Prompt taslağı: "large pixel art boss, The Penitent Sovereign, massive cracked stone-armored fallen king hunched in penitence, broken crown fused to head, deep violet-cyan rift cracks across body, dark gritty chibi-adjacent proportions, single south-facing pose, transparent background, no text"
+  - Style-ref: Warblade karakteri (oran dili) + portal kemeri (taş/cyan dili)
+  - Import sonrası: PenitentSovereign SpriteRenderer'a bağla; 1.75× scale KALDIRILIR (native boyut zaten büyük), rim-light kalır

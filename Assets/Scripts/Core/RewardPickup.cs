@@ -95,9 +95,9 @@ namespace RIMA
             }
 
             if (promptText != null)
-                promptText.text = "Topla: G";
+                promptText.text = Loc.T("reward.prompt.take");
 
-            HUDController.Instance?.SetInteractionPrompt("Topla: G");
+            HUDController.Instance?.SetInteractionPrompt(Loc.T("reward.prompt.take"));
         }
 
         private void ClearPlayerRange()
@@ -128,7 +128,7 @@ namespace RIMA
             GameObject textGO = new GameObject("PromptText");
             textGO.transform.SetParent(canvasGO.transform, false);
             promptText = textGO.AddComponent<Text>();
-            promptText.text = "Topla: G";
+            promptText.text = Loc.T("reward.prompt.take");
             promptText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             promptText.fontSize = 18;
             promptText.alignment = TextAnchor.MiddleCenter;

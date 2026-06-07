@@ -55,13 +55,13 @@ namespace RIMA
             Stretch(root, new Vector2(0.12f, 0.08f), new Vector2(0.88f, 0.92f), Vector2.zero, Vector2.zero);
 
             // T6.1 FIX: cyan clash → bone-white with heavy outline/shadow for legibility against the cyan VFX backdrop.
-            TextMeshProUGUI title = CreateText("Title", root, "DEMO COMPLETE", 42f, new Color(0.98f, 0.95f, 0.86f, 1f), TextAlignmentOptions.Center);
+            TextMeshProUGUI title = CreateText("Title", root, Loc.T("victory.title"), 42f, new Color(0.98f, 0.95f, 0.86f, 1f), TextAlignmentOptions.Center);
             title.fontStyle = FontStyles.Bold;
             title.outlineWidth = 0.25f;
             title.outlineColor = new Color32(0, 0, 0, 210);
             Stretch(title.rectTransform, new Vector2(0f, 0.82f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero);
 
-            TextMeshProUGUI line = CreateText("VictoryLine", root, "The full descent awaits.", 18f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
+            TextMeshProUGUI line = CreateText("VictoryLine", root, Loc.T("victory.subtitle"), 18f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
             Stretch(line.rectTransform, new Vector2(0f, 0.75f), new Vector2(1f, 0.84f), Vector2.zero, Vector2.zero);
 
             RectTransform summary = CreatePanel("RunSummaryPanel", root, new Color(0.04f, 0.05f, 0.08f, 0.82f), TarnishedGold);
@@ -89,24 +89,24 @@ namespace RIMA
                 silImg.raycastTarget = false;
                 Stretch(silImg.rectTransform, new Vector2(0.02f, 0.05f), new Vector2(0.16f, 0.95f), Vector2.zero, Vector2.zero);
 
-                TextMeshProUGUI teaserText = CreateText("NextClassTeaserText", teaser, "Next echo awaits — a new class joins the descent.", 14f, RimaUITheme.TextMuted, TextAlignmentOptions.Left);
+                TextMeshProUGUI teaserText = CreateText("NextClassTeaserText", teaser, Loc.T("victory.teaser"), 14f, RimaUITheme.TextMuted, TextAlignmentOptions.Left);
                 Stretch(teaserText.rectTransform, new Vector2(0.18f, 0f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero);
             }
             else
             {
-                TextMeshProUGUI teaserText = CreateText("NextClassTeaserText", teaser, "Next echo: a new class awaits the descent.", 14f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
+                TextMeshProUGUI teaserText = CreateText("NextClassTeaserText", teaser, Loc.T("victory.teaser"), 14f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
                 Stretch(teaserText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             }
 
-            Button wishlist = CreateButton("WishlistButton", root, "WISHLIST ON STEAM", BrandCyan, RimaUITheme.BackgroundDark, 24f);
+            Button wishlist = CreateButton("WishlistButton", root, Loc.T("victory.btn.wishlist"), BrandCyan, RimaUITheme.BackgroundDark, 24f);
             Stretch((RectTransform)wishlist.transform, new Vector2(0.24f, 0.22f), new Vector2(0.76f, 0.33f), Vector2.zero, Vector2.zero);
             wishlist.onClick.AddListener(OpenWishlist);
 
-            Button menu = CreateButton("MainMenuButton", root, "MAIN MENU", RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 16f);
+            Button menu = CreateButton("MainMenuButton", root, Loc.T("victory.btn.main_menu"), RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 16f);
             Stretch((RectTransform)menu.transform, new Vector2(0.24f, 0.10f), new Vector2(0.48f, 0.18f), Vector2.zero, Vector2.zero);
             menu.onClick.AddListener(LoadMainMenu);
 
-            Button again = CreateButton("PlayAgainButton", root, "PLAY AGAIN", RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 16f);
+            Button again = CreateButton("PlayAgainButton", root, Loc.T("victory.btn.play_again"), RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 16f);
             Stretch((RectTransform)again.transform, new Vector2(0.52f, 0.10f), new Vector2(0.76f, 0.18f), Vector2.zero, Vector2.zero);
             again.onClick.AddListener(Restart);
         }
@@ -124,13 +124,13 @@ namespace RIMA
 
             // Her satır ayrı ayrı gösterilir (T6 Echo döküm paneli).
             return
-                $"ODA: {RunStats.RoomReached}    KILLS: {kills}    SÜRE: {FormatSeconds(RunStats.RunTimeSeconds)}\n" +
+                Loc.T("victory.stats.summary", RunStats.RoomReached, kills, FormatSeconds(RunStats.RunTimeSeconds)) + "\n" +
                 $"\n" +
                 $"Oda tamamlama  {roomsCleared} x 3 = +{roomLine}\n" +
                 $"Kill ödülü     {kills} / 5 = +{killLine}\n" +
                 (bonusLine > 0 ? $"İlk sefer bonusu = +{bonusLine}\n" : "") +
                 $"─────────────────────────────\n" +
-                $"TOPLAM: +{echoAward} Shattered Echo";
+                Loc.T("death.stats.total_echo", echoAward);
         }
 
         private void OpenWishlist()

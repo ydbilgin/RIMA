@@ -148,9 +148,9 @@ namespace RIMA
                 promptLabel.gameObject.SetActive(true);
                 promptLabel.transform.position = nearest.labelAnchor + Vector3.up * 0.42f;
                 promptLabel.text = IsUnlocked(nearest.classType)
-                    ? $"[G] Bürün — {nearest.classType.ToString().ToUpperInvariant()}"
+                    ? Loc.T("chamber_select.prompt.attune", nearest.classType.ToString().ToUpperInvariant())
                     : CanUnlock(nearest.classType)
-                        ? $"[G] Kilidi Aç — {UnlockCost(nearest.classType)} SHATTERED ECHO"
+                        ? Loc.T("chamber_select.prompt.unlock", UnlockCost(nearest.classType))
                         : UnlockOrPathText(nearest.classType);
 
                 if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
@@ -174,7 +174,7 @@ namespace RIMA
                 SetClassicOverlayVisible(classicTabOpen);
                 promptLabel.gameObject.SetActive(true);
                 promptLabel.transform.position = exitWorld + Vector3.up * 0.7f;
-                promptLabel.text = "[G] Rift'e Gir";
+                promptLabel.text = Loc.T("chamber_select.prompt.enter_rift");
 
                 if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
                 {
@@ -418,7 +418,7 @@ namespace RIMA
             dummy.AddComponent<RIMA.Combat.HitFlashDriver>();
 
             TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, pos + new Vector3(0f, 1.05f, 0f), 3.1f);
-            hpLabel.text = "DUMMY HP 100/100";
+            hpLabel.text = Loc.T("chamber_select.dummy_hp", 100, 100);
             ScreenshotMode.Register(hpLabel.gameObject, "TrainingDummy_HP");
             dummy.AddComponent<TrainingDummyTarget>().Initialize(health, hpLabel);
             Debug.Log("[ChamberSelectBootstrap] P4 evidence: real damageable training dummy spawned in lower-left pocket.");
@@ -943,7 +943,7 @@ namespace RIMA
             {
                 if (label != null)
                 {
-                    label.text = $"DUMMY HP {current}/{max}";
+                    label.text = Loc.T("chamber_select.dummy_hp", current, max);
                 }
             }
         }

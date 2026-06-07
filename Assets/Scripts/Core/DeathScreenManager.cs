@@ -17,10 +17,10 @@ namespace RIMA
     public class DeathScreenManager : MonoBehaviour
     {
         private const string PackButtonPath = "UI/RIMA/Pack/button_9slice";
-        private static readonly string[] DeathLines =
+        private static string[] GetDeathLines() => new[]
         {
-            "The rift remembers. You won't.",
-            "Not an ending. Just a place where you stopped."
+            Loc.T("death.quote_1"),
+            Loc.T("death.quote_2"),
         };
 
         [Header("UI References (auto-found or auto-created if null)")]
@@ -105,7 +105,10 @@ namespace RIMA
                 deathPanel.SetActive(true);
 
                 if (deathTitle != null)
-                    deathTitle.text = DeathLines[Random.Range(0, DeathLines.Length)];
+                {
+                    var lines = GetDeathLines();
+                    deathTitle.text = lines[Random.Range(0, lines.Length)];
+                }
 
                 if (deathStats != null)
                     deathStats.text = BuildRunStats();
@@ -174,7 +177,7 @@ namespace RIMA
                 $"Oda tamamlama {roomsCleared} x 3 = +{roomLine}\n" +
                 $"Kill ödülü {kills} / 5 = +{killLine}\n" +
                 (bonusLine > 0 ? $"İlk sefer bonusu = +{bonusLine}\n" : "") +
-                $"TOPLAM: +{echoAward} SHATTERED ECHO";
+                Loc.T("death.stats.total_echo", echoAward);
         }
 
         private void EnsurePanel()
@@ -285,14 +288,14 @@ namespace RIMA
             Stretch(deathStats.rectTransform, new Vector2(0.04f, 0.16f), new Vector2(0.96f, 0.55f), Vector2.zero, Vector2.zero);
 
             if (restartButton == null)
-                restartButton = CreateButton("RestartButton", contentRoot, "TEKRAR DENE [R]", 15f);
-            StyleButton(restartButton, "TEKRAR DENE [R]", 15f);
+                restartButton = CreateButton("RestartButton", contentRoot, Loc.T("death.btn.retry"), 15f);
+            StyleButton(restartButton, Loc.T("death.btn.retry"), 15f);
             // T6.1: buttons below the expanded stats strip.
             Stretch((RectTransform)restartButton.transform, new Vector2(0.10f, 0.04f), new Vector2(0.48f, 0.14f), Vector2.zero, Vector2.zero);
 
             if (mainMenuButton == null)
-                mainMenuButton = CreateButton("MainMenuButton", contentRoot, "ANA MENÜ", 15f);
-            StyleButton(mainMenuButton, "ANA MENÜ", 15f);
+                mainMenuButton = CreateButton("MainMenuButton", contentRoot, Loc.T("death.btn.main_menu"), 15f);
+            StyleButton(mainMenuButton, Loc.T("death.btn.main_menu"), 15f);
             Stretch((RectTransform)mainMenuButton.transform, new Vector2(0.52f, 0.04f), new Vector2(0.90f, 0.14f), Vector2.zero, Vector2.zero);
             mainMenuButton.onClick.AddListener(LoadMainMenu);
         }

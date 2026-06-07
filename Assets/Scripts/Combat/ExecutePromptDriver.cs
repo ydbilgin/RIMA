@@ -65,7 +65,7 @@ namespace RIMA
             promptLabel.enableWordWrapping = false;
             promptLabel.sortingLayerID = SortingLayer.NameToID("UI");
             promptLabel.sortingOrder = 300;
-            promptLabel.text = "[RMB] İnfaz";
+            promptLabel.text = Loc.T("combat.prompt.execute");
             promptLabel.gameObject.SetActive(false);
         }
 
@@ -85,6 +85,7 @@ namespace RIMA
                 currentTarget = nearest.gameObject;
                 promptLabel.transform.position = nearest.transform.position + promptOffset;
                 promptLabel.gameObject.SetActive(true);
+                promptLabel.text = Loc.T("combat.prompt.execute");
                 wasShowingPrompt = true;
 
                 // Pulse alpha for visibility

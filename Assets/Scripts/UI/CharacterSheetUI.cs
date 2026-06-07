@@ -120,7 +120,7 @@ namespace RIMA
             khRt.pivot = new Vector2(0f, 1f);
             khRt.anchoredPosition = new Vector2(0f, -70f);
             khRt.sizeDelta = new Vector2(0f, 18f);
-            kitHeader.text = "ACTIVE KIT";
+            kitHeader.text = Loc.T("char_sheet.active_kit");
             kitHeader.fontSize = 10f;
             kitHeader.fontStyle = FontStyles.Bold;
             kitHeader.color = RimaUITheme.Gold;
@@ -150,7 +150,7 @@ namespace RIMA
             shRt.pivot = new Vector2(0f, 1f);
             shRt.anchoredPosition = new Vector2(0f, -230f);
             shRt.sizeDelta = new Vector2(0f, 18f);
-            synHeader.text = "SYNERGIES";
+            synHeader.text = Loc.T("char_sheet.synergies");
             synHeader.fontSize = 10f;
             synHeader.fontStyle = FontStyles.Bold;
             synHeader.color = RimaUITheme.Gold;
@@ -184,7 +184,7 @@ namespace RIMA
             rlRt.pivot = new Vector2(0.5f, 1f);
             rlRt.anchoredPosition = new Vector2(0f, -ExpandedMapSize - 8f);
             rlRt.sizeDelta = new Vector2(0f, 18f);
-            routeLabel.text = "DUNGEON ROUTE";
+            routeLabel.text = Loc.T("char_sheet.dungeon_route");
             routeLabel.fontSize = 10f;
             routeLabel.fontStyle = FontStyles.Bold;
             routeLabel.color = RimaUITheme.Gold;
@@ -207,7 +207,7 @@ namespace RIMA
             phRt.pivot = new Vector2(0f, 1f);
             phRt.anchoredPosition = Vector2.zero;
             phRt.sizeDelta = new Vector2(0f, 16f);
-            passHeader.text = "ACTIVE ECHOES";
+            passHeader.text = Loc.T("char_sheet.active_echoes");
             passHeader.fontSize = 10f;
             passHeader.fontStyle = FontStyles.Bold;
             passHeader.color = RimaUITheme.Gold;
@@ -225,7 +225,7 @@ namespace RIMA
             {
                 classNameLabel.text = primary != ClassType.None
                     ? primary.ToString().ToUpperInvariant()
-                    : "NO CLASS";
+                    : Loc.T("char_sheet.no_class");
                 classNameLabel.color = RimaUITheme.ClassAccent(primary);
             }
 

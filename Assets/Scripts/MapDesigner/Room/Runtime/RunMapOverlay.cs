@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using RIMA;
 
 namespace RIMA.MapDesigner.Room.Runtime
 {
@@ -48,8 +49,8 @@ namespace RIMA.MapDesigner.Room.Runtime
             EnsureStyles();
 
             DrawRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.03f, 0.02f, 0.06f, 0.88f));
-            GUI.Label(new Rect(0, 26, Screen.width, 44), "RUN PATH", titleStyle);
-            GUI.Label(new Rect(0, 72, Screen.width, 24), "M ile kapat   -   cyan = bulundugun oda", subtitleStyle);
+            GUI.Label(new Rect(0, 26, Screen.width, 44), Loc.T("map.title"), titleStyle);
+            GUI.Label(new Rect(0, 72, Screen.width, 24), Loc.T("map.subtitle"), subtitleStyle);
 
             const float nodeW = 172f;
             const float nodeH = 42f;

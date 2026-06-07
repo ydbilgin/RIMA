@@ -19,6 +19,18 @@ namespace RIMA.UI
         private void Start()
         {
             BuildRuntimeMenu();
+            Loc.OnLanguageChanged += RebuildMenu;
+        }
+
+        private void OnDestroy()
+        {
+            Loc.OnLanguageChanged -= RebuildMenu;
+        }
+
+        private void RebuildMenu()
+        {
+            if (runtimeRoot != null) Destroy(runtimeRoot.gameObject);
+            BuildRuntimeMenu();
         }
 
         public void OnStartClicked()
@@ -145,7 +157,7 @@ namespace RIMA.UI
             shadow.effectColor = new Color(0.18f, 0f, 0.32f, 0.62f);
             shadow.effectDistance = new Vector2(5f, -5f);
 
-            var subtitle = AddText(column, "Subtitle_RiftHunters", "THE RIFT HUNTERS", 15f, WithAlpha(RimaUITheme.TextMuted, 0.72f), TextAlignmentOptions.Left);
+            var subtitle = AddText(column, "Subtitle_RiftHunters", Loc.T("menu.subtitle"), 15f, WithAlpha(RimaUITheme.TextMuted, 0.72f), TextAlignmentOptions.Left);
             subtitle.fontStyle = FontStyles.Bold;
             subtitle.characterSpacing = 18f;
             var subRt = subtitle.rectTransform;
@@ -154,7 +166,7 @@ namespace RIMA.UI
             subRt.anchoredPosition = new Vector2(3f, -94f);
             subRt.sizeDelta = new Vector2(500f, 28f);
 
-            var whisper = AddText(column, "Whisper_YineGeldin", "Yine geldin.", 12f, WithAlpha(RimaUITheme.TextMuted, 0.58f), TextAlignmentOptions.Left);
+            var whisper = AddText(column, "Whisper_YineGeldin", Loc.T("menu.whisper"), 12f, WithAlpha(RimaUITheme.TextMuted, 0.58f), TextAlignmentOptions.Left);
             whisper.fontStyle = FontStyles.Italic;
             whisper.color = WarmOrange;
             var whisperRt = whisper.rectTransform;
@@ -164,9 +176,9 @@ namespace RIMA.UI
             whisperRt.sizeDelta = new Vector2(260f, 24f);
 
             AddCyanDivider(column, new Vector2(0f, -248f), 146f);
-            AddNakedButton(column, "Button_Basla", "BAŞLA", new Vector2(18f, -242f), OnStartClicked);
-            AddNakedButton(column, "Button_Ayarlar", "AYARLAR", new Vector2(18f, -292f), OnSettingsClicked);
-            AddNakedButton(column, "Button_Cikis", "ÇIKIŞ", new Vector2(18f, -342f), OnQuitClicked);
+            AddNakedButton(column, "Button_Basla", Loc.T("menu.btn.start"), new Vector2(18f, -242f), OnStartClicked);
+            AddNakedButton(column, "Button_Ayarlar", Loc.T("menu.btn.settings"), new Vector2(18f, -292f), OnSettingsClicked);
+            AddNakedButton(column, "Button_Cikis", Loc.T("menu.btn.quit"), new Vector2(18f, -342f), OnQuitClicked);
         }
 
         private void AddCyanDivider(RectTransform parent, Vector2 position, float height)

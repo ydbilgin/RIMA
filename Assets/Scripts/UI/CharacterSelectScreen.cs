@@ -365,7 +365,7 @@ namespace RIMA
             bg.color = RimaUITheme.CharSelectPanelFill;
             bg.raycastTarget = false;
 
-            var title = MakeText("RIMA <color=#B0B3BC>- KARAKTER SEÇ</color>", bar, 22f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
+            var title = MakeText(Loc.T("char_select.title"), bar, 22f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             title.alignment = TextAlignmentOptions.Left;
             title.characterSpacing = 18f;
             var titleRt = title.transform as RectTransform;
@@ -538,7 +538,7 @@ namespace RIMA
                 lockImg.color = WithAlpha(RimaUITheme.CharSelectButtonFill, 0.52f);
                 lockImg.raycastTarget = false;
 
-                var lockLabel = MakeText("KİLİTLİ", lockRt, 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
+                var lockLabel = MakeText(Loc.T("char_select.locked"), lockRt, 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
                 lockLabel.alignment = TextAlignmentOptions.Center;
                 var lockLabelRt = lockLabel.transform as RectTransform;
                 lockLabelRt.anchorMin = Vector2.zero; lockLabelRt.anchorMax = Vector2.one;
@@ -748,7 +748,7 @@ namespace RIMA
 
         private void BuildSkillPanel(RectTransform parent)
         {
-            var skillsHeader = MakeText("YETENEKLER", parent, 13, FontStyles.Bold, RimaUITheme.CharSelectParchment);
+            var skillsHeader = MakeText(Loc.T("char_select.skills"), parent, 13, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             skillsHeader.alignment = TextAlignmentOptions.Left;
             var shRt = skillsHeader.transform as RectTransform;
             shRt.anchorMin = new Vector2(0f, 0.93f); shRt.anchorMax = new Vector2(1f, 1f);
@@ -756,7 +756,7 @@ namespace RIMA
 
             skillContent = MakeSkillStripArea(parent, "SkillStripArea");
 
-            skillEmptyLabel = MakeText("Yetenekler yakinda", parent, 13, FontStyles.Normal, RimaUITheme.CharSelectTextBody);
+            skillEmptyLabel = MakeText(Loc.T("char_select.skills_soon"), parent, 13, FontStyles.Normal, RimaUITheme.CharSelectTextBody);
             skillEmptyLabel.alignment = TextAlignmentOptions.Center;
             var emptyRt = skillEmptyLabel.transform as RectTransform;
             emptyRt.anchorMin = new Vector2(0f, 0f); emptyRt.anchorMax = new Vector2(1f, 0.92f);
@@ -805,7 +805,7 @@ namespace RIMA
             startButtonFill.color = RimaUITheme.CharSelectButtonFill;
             startButtonFill.raycastTarget = false;
 
-            startButtonLabel = MakeText("SEÇ", btnRoot, 21, FontStyles.Bold, RimaUITheme.CharSelectParchment);
+            startButtonLabel = MakeText(Loc.T("char_select.btn.select"), btnRoot, 21, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             startButtonLabel.alignment = TextAlignmentOptions.Center;
             startButtonLabel.enableWordWrapping = true;
             startButtonLabel.overflowMode = TextOverflowModes.Ellipsis;
@@ -853,7 +853,7 @@ namespace RIMA
             fillImg.color = RimaUITheme.CharSelectButtonFill;
             fillImg.raycastTarget = false;
 
-            var label = MakeText("GERİ", btnRoot, 16, FontStyles.Bold, new Color(0.620f, 0.620f, 0.620f, 1f));
+            var label = MakeText(Loc.T("char_select.btn.back"), btnRoot, 16, FontStyles.Bold, new Color(0.620f, 0.620f, 0.620f, 1f));
             label.alignment = TextAlignmentOptions.Center;
             label.characterSpacing = 8f;
             var lRt = label.transform as RectTransform;
@@ -964,10 +964,10 @@ namespace RIMA
                 if (startButtonLabel != null)
                 {
                     startButtonLabel.text = unlocked
-                        ? "SEÇ"
+                        ? Loc.T("char_select.btn.select")
                         : canUnlock
-                            ? $"KİLİDİ AÇ — {LockedButtonText(cls)}"
-                            : "YETERSİZ SHATTERED ECHO";
+                            ? Loc.T("char_select.btn.unlock", LockedButtonText(cls))
+                            : Loc.T("char_select.not_enough_echo");
                     startButtonLabel.fontSize = unlocked ? 21f : 12f;
                     startButtonLabel.color = unlocked
                         ? RimaUITheme.CharSelectParchment
@@ -1010,11 +1010,11 @@ namespace RIMA
             }
 
             var stats = RimaUITheme.ClassStats(cls);
-            BuildStatRow(identityStatsRoot, "HASAR", stats.damage);
-            BuildStatRow(identityStatsRoot, "DAYANIK", stats.durability);
-            BuildStatRow(identityStatsRoot, "HIZ", stats.speed);
-            BuildStatRow(identityStatsRoot, "KONTROL", stats.control);
-            BuildStatRow(identityStatsRoot, "ZORLUK", stats.difficulty);
+            BuildStatRow(identityStatsRoot, Loc.T("char_select.stats.damage"), stats.damage);
+            BuildStatRow(identityStatsRoot, Loc.T("char_select.stats.durability"), stats.durability);
+            BuildStatRow(identityStatsRoot, Loc.T("char_select.stats.speed"), stats.speed);
+            BuildStatRow(identityStatsRoot, Loc.T("char_select.stats.control"), stats.control);
+            BuildStatRow(identityStatsRoot, Loc.T("char_select.stats.difficulty"), stats.difficulty);
         }
 
         private static void BuildStatRow(RectTransform parent, string label, int value)
@@ -1104,7 +1104,7 @@ namespace RIMA
 
             if (skills.Count > featuredCount)
             {
-                var section = MakeText("TAM LİSTE", skillContent, 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
+                var section = MakeText(Loc.T("char_select.full_list"), skillContent, 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
                 section.alignment = TextAlignmentOptions.Left;
                 var sectionRt = section.transform as RectTransform;
                 sectionRt.sizeDelta = new Vector2(0f, 18f);
@@ -1247,7 +1247,7 @@ namespace RIMA
         private static string CardActionText(ClassType cls)
         {
             if (IsUnlocked(cls)) return "SEÇ";
-            return $"{UnlockCost(cls)} SHATTERED ECHO veya {UnlockConditionText(cls)}";
+            return Loc.T("char_select.unlock_condition", UnlockCost(cls), UnlockConditionText(cls));
         }
 
         private static string LockedButtonText(ClassType cls)

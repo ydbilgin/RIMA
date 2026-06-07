@@ -35,6 +35,13 @@
 
 **🛑 ZİNCİR BİLİNÇLİ DURDU (T3 öncesi):** T3 portal wiring kullanıcının KONTAK-SHEET ONAYINA bağlı (beğeni süzgeci = kullanıcı kesinti noktası, protokol gereği). KALAN KUYRUK: T3 (batch-2 asset'leri + M3 sütunlar) → T6 boss-A → T4+M2 → T5 → T7/T8 (VOID_BACKGROUND_DEPTH_SPEC + batch-3 silüetler) → T9 rapor görselleri.
 
+**🌙 AKŞAM ZİNCİRİ (2026-06-07 gece — işçi havuzu dağıtık: Sonnet impl + ax-3.1-Pro analiz + ax-Flash imagegen + cx review-only):**
+- **✅ U1** (`3e0a106c`): portallar TEK gövde (cyan kemer ×3 cephe; tip=rün) + chamber dekompresyon (pillar/brazier/crack kaldırıldı, etiket=yaklaşınca, kamera 5.8)
+- **✅ Batch-3** (`d910edd9`): 24/24 asset — 3 ada silüeti + nebula (T8) + rim/decal/filler/parapet/plaket/varış-halkası. ⚠️ DERS: ax-Flash 2 turda da UYDURMA rapor verdi (timestamp kanıtlı) → kurtarma=Claude agent (gerçek defringe 3.5k px + 3 regen agy-pipeline) [[feedback-cx-review-only-routing]]
+- **✅ T6** (`86b8cfe3`) + **T6.1** (`efc02bd6`): BossIntroController (1.5s) + telegraph GERÇEK decal'lerle (Decals layer) + Victory/Death okunur Echo dökümü + SeamCrawler spawn-purge + placeholder kök neden (sarı/pembe=Penitent/HalfThrall kareleri→diamond) + ödül=cyan rift kristali (0.5u). cx mini-review in-flight.
+- **🔑 KARARLAR:** boss görseli=PixelLab seansında üretilecek ("mevcut boss"=mor kutuymuş!) — seans planı 5 kalem (4 mob+3 silah+boss, plan dosyasında prompt'lu) · **UI=ÇİFT DİLLİ** (TR+EN, ayardan seçimli; T-LANG→T-LOC büyüdü) — string tablosu HAZIR (`_process/2026-06/LOCALIZATION_STRING_TABLE_2026-06-07.md`, ax-3.1-Pro, 11.8KB)
+- **⏭️ KUYRUK:** cx-review fix'leri → T-LOC (Sonnet, tablo hazır) → T4 draft chips → T5 chamber atmosfer → T8 wiring (asset'ler hazır) → Sunum Çekim Rehberi → Tool Audit (Room Painter+araçlar). KULLANICI: PixelLab BÜYÜK SEANS · playtest · oda-zip'i ChatGPT'ye · silah-zip cevabı.
+
 **🎯 DEMO PLANI KİLİTLENDİ (2026-06-07 akşam, kullanıcı konsensüsü):** (1) **Moblar = PixelLab seansı SENİNLE** (echo-düşman reddedildi; 4-arketip gerçek mob üretimi — T7 buna bağlı); (2) otonom sıra **Opus kararı: T6→T4→T5→T8** (T6 önce: jürinin göreceği ölüm/zafer uçları + telegraph'lar import'lu hazır); (3) **P2'ler kapsamda KALIYOR** (T7+T8). BÜYÜK PixelLab SEANSI (kullanıcı "hazırım" deyince): moblar(4 arketip) → 3 silah(yay/hançer/disk) → küçükler(2 rün+monolith+portal rünleri). Seans promptları önceden hazırlanacak (rima-asset; NLM mob arketipleri + WEAPON_BATCH_PLAN reçetesi; ChatGPT silah cevabı gelirse merge, gelmezse bloklamaz). IN-FLIGHT: ekran-akışı kataloğu v2 (mob'suz/echo-dummy kurallı) → bitince T6 başlar (Unity sırası).
 
 **🆕 GÜNDÜZ SESSION (2026-06-07, kullanıcıyla):**

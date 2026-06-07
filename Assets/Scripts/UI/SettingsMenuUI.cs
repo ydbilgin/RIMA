@@ -201,6 +201,7 @@ namespace RIMA
         private void OnDestroy()
         {
             KeyBindManager.OnBindingsChanged -= RefreshBindLabels;
+            Loc.OnLanguageChanged -= RebuildUI;
         }
 
         // ─── Build ──────────────────────────────────────────────────
@@ -238,7 +239,7 @@ namespace RIMA
             titleRt.pivot = new Vector2(0.5f, 1f);
             titleRt.anchoredPosition = new Vector2(0f, -16f);
             titleRt.sizeDelta = new Vector2(0f, 30f);
-            title.text = "SETTINGS";
+            title.text = Loc.T("settings.title");
             title.fontSize = 20f;
             title.fontStyle = FontStyles.Bold;
             title.color = RimaUITheme.Gold;
@@ -247,13 +248,14 @@ namespace RIMA
             float y = -60f;
 
             // ── Gameplay Section ─────────────────────────────────────
-            y = AddSectionHeader(panel, "GAMEPLAY", y);
+            y = AddSectionHeader(panel, Loc.T("settings.gameplay"), y);
+            y = AddLanguageRow(panel, y);
             // Aim/Dash toggles drive PlayerController directly (Bug-2: the old aim toggle only wrote a dead pref key).
             bool hasGameplayPlayer = GameObject.FindGameObjectWithTag("Player") != null;
             if (hasGameplayPlayer)
             {
                 RectTransform aimRow;
-                y = AddBoolToggleRow(panel, "Aim Mode", "MOUSE", "FACING",
+                y = AddBoolToggleRow(panel, Loc.T("settings.aim_mode"), Loc.T("settings.mouse"), Loc.T("settings.facing"),
                     () => Player != null && Player.AttackAimMode == CombatAimMode.TowardsMouse,
                     on =>
                     {
@@ -264,7 +266,7 @@ namespace RIMA
                 RegisterGameplayOnlyRow(aimRow);
 
                 RectTransform dashRow;
-                y = AddBoolToggleRow(panel, "Dash Mode", "MOUSE", "FACING",
+                y = AddBoolToggleRow(panel, Loc.T("settings.dash_mode"), Loc.T("settings.mouse"), Loc.T("settings.facing"),
                     () => Player != null && Player.DashMode == DashMode.TowardsMouse,
                     on =>
                     {
@@ -277,40 +279,40 @@ namespace RIMA
 
             // ── Accessibility Section ────────────────────────────────
             y -= 12f;
-            y = AddSectionHeader(panel, "ACCESSIBILITY", y);
-            y = AddToggleRow(panel, "Screen Shake",     null, PrefScreenShake, 1, y);
-            y = AddToggleRow(panel, "Hit Stop",          null, PrefHitStop,     1, y);
-            y = AddToggleRow(panel, "Low HP Vignette",   null, PrefLowHpVig,    1, y);
-            y = AddToggleRow(panel, "Damage Numbers",    null, PrefDmgNumbers,  1, y);
-            y = AddToggleRow(panel, "Chromatic Aberration", null, PrefChromatic, 1, y);
+            y = AddSectionHeader(panel, Loc.T("settings.accessibility"), y);
+            y = AddToggleRow(panel, Loc.T("settings.screen_shake"),          null, PrefScreenShake, 1, y);
+            y = AddToggleRow(panel, Loc.T("settings.hit_stop"),               null, PrefHitStop,     1, y);
+            y = AddToggleRow(panel, Loc.T("settings.low_hp_vignette"),        null, PrefLowHpVig,    1, y);
+            y = AddToggleRow(panel, Loc.T("settings.damage_numbers"),         null, PrefDmgNumbers,  1, y);
+            y = AddToggleRow(panel, Loc.T("settings.chromatic_aberration"),   null, PrefChromatic,   1, y);
 
             // ── Audio Section ────────────────────────────────────────
             y -= 12f;
-            y = AddSectionHeader(panel, "AUDIO", y);
-            masterSlider = AddSliderRow(panel, "Master", PrefMaster, ref y);
-            musicSlider  = AddSliderRow(panel, "Music",  PrefMusic,  ref y);
-            sfxSlider    = AddSliderRow(panel, "SFX",    PrefSfx,    ref y);
+            y = AddSectionHeader(panel, Loc.T("settings.audio"), y);
+            masterSlider = AddSliderRow(panel, Loc.T("settings.master"), PrefMaster, ref y);
+            musicSlider  = AddSliderRow(panel, Loc.T("settings.music"),  PrefMusic,  ref y);
+            sfxSlider    = AddSliderRow(panel, Loc.T("settings.sfx"),    PrefSfx,    ref y);
 
             // ── Controls Section ─────────────────────────────────────
             y -= 12f;
-            y = AddSectionHeader(panel, "CONTROLS", y);
+            y = AddSectionHeader(panel, Loc.T("settings.controls"), y);
 
             // WASD — read-only display row (non-rebindable movement composite)
-            y = AddReadOnlyRow(panel, "Move", "WASD", y);
+            y = AddReadOnlyRow(panel, Loc.T("settings.move"), "WASD", y);
 
             // Rebindable actions in display order
-            y = AddBindRow(panel, "Dash",           GameAction.Dash,           y);
-            y = AddBindRow(panel, "Attack",         GameAction.Attack,         y);
-            y = AddBindRow(panel, "Alt Attack",     GameAction.ClassSecondary, y);
-            y = AddBindRow(panel, "Skill 1",        GameAction.Skill1,         y);
-            y = AddBindRow(panel, "Skill 2",        GameAction.Skill2,         y);
-            y = AddBindRow(panel, "Skill 3",        GameAction.Skill3,         y);
-            y = AddBindRow(panel, "Skill 4",        GameAction.Skill4,         y);
-            y = AddBindRow(panel, "Rift Break",     GameAction.RiftBreak,      y);
+            y = AddBindRow(panel, Loc.T("settings.dash"),        GameAction.Dash,           y);
+            y = AddBindRow(panel, Loc.T("settings.attack"),      GameAction.Attack,         y);
+            y = AddBindRow(panel, Loc.T("settings.alt_attack"),  GameAction.ClassSecondary, y);
+            y = AddBindRow(panel, Loc.T("settings.skill_1"),     GameAction.Skill1,         y);
+            y = AddBindRow(panel, Loc.T("settings.skill_2"),     GameAction.Skill2,         y);
+            y = AddBindRow(panel, Loc.T("settings.skill_3"),     GameAction.Skill3,         y);
+            y = AddBindRow(panel, Loc.T("settings.skill_4"),     GameAction.Skill4,         y);
+            y = AddBindRow(panel, Loc.T("settings.rift_break"),  GameAction.RiftBreak,      y);
 
             // Reset Controls button
             y -= 4f;
-            AddButton(panel, "RESET CONTROLS", new Vector2(0f, y), () =>
+            AddButton(panel, Loc.T("settings.btn.reset"), new Vector2(0f, y), () =>
             {
                 KeyBindManager.ResetToDefaults();
                 // Refresher will update all labels via OnBindingsChanged → refreshers list
@@ -323,12 +325,90 @@ namespace RIMA
 
             // ── Buttons ──────────────────────────────────────────────
             y -= 16f;
-            AddButton(panel, "RESUME", new Vector2(0f, y), OnResume);
+            AddButton(panel, Loc.T("settings.btn.resume"), new Vector2(0f, y), OnResume);
             y -= 40f;
-            AddButton(panel, "QUIT TO MENU", new Vector2(0f, y), OnQuitToMenu);
+            AddButton(panel, Loc.T("settings.btn.quit_to_menu"), new Vector2(0f, y), OnQuitToMenu);
+
+            Loc.OnLanguageChanged -= RebuildUI;
+            Loc.OnLanguageChanged += RebuildUI;
+        }
+
+        private void RebuildUI()
+        {
+            var root = GetComponent<RectTransform>();
+            if (root != null)
+            {
+                for (int i = root.childCount - 1; i >= 0; i--)
+                    Destroy(root.GetChild(i).gameObject);
+            }
+            refreshers.Clear();
+            _bindLabels.Clear();
+            masterSlider = null;
+            musicSlider  = null;
+            sfxSlider    = null;
+            BuildUI();
+            if (isOpen) { canvasGroup.alpha = 1f; canvasGroup.blocksRaycasts = true; canvasGroup.interactable = true; }
         }
 
         // ─── Section helpers ────────────────────────────────────────
+
+        private float AddLanguageRow(RectTransform parent, float y)
+        {
+            var row = MakeRect("Toggle_Language", parent);
+            row.anchorMin = new Vector2(0f, 1f);
+            row.anchorMax = new Vector2(1f, 1f);
+            row.pivot = new Vector2(0f, 1f);
+            row.anchoredPosition = new Vector2(30f, y);
+            row.sizeDelta = new Vector2(-60f, 22f);
+
+            var lbl = MakeTMP("Label", row);
+            var lr = lbl.GetComponent<RectTransform>();
+            lr.anchorMin = Vector2.zero;
+            lr.anchorMax = new Vector2(0.6f, 1f);
+            lr.offsetMin = lr.offsetMax = Vector2.zero;
+            lbl.fontSize = 10f;
+            lbl.color = new Color(0.8f, 0.85f, 0.9f, 0.9f);
+            lbl.alignment = TextAlignmentOptions.Left;
+
+            var btnGo = new GameObject("LangBtn", typeof(RectTransform));
+            btnGo.transform.SetParent(row, false);
+            var btnRt = btnGo.GetComponent<RectTransform>();
+            btnRt.anchorMin = new Vector2(0.65f, 0f);
+            btnRt.anchorMax = new Vector2(1f, 1f);
+            btnRt.offsetMin = btnRt.offsetMax = Vector2.zero;
+
+            var btnImg = btnGo.AddComponent<Image>();
+            var btnTxt = MakeTMP("BtnTxt", btnGo.GetComponent<RectTransform>());
+            var btRt = btnTxt.GetComponent<RectTransform>();
+            btRt.anchorMin = Vector2.zero;
+            btRt.anchorMax = Vector2.one;
+            btRt.offsetMin = btRt.offsetMax = Vector2.zero;
+            btnTxt.fontSize = 9f;
+            btnTxt.fontStyle = FontStyles.Bold;
+            btnTxt.color = Color.white;
+            btnTxt.alignment = TextAlignmentOptions.Center;
+
+            Color onColor  = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.3f);
+            Color offColor = new Color(0.2f, 0.2f, 0.25f, 0.5f);
+
+            void Paint()
+            {
+                bool isTR = Loc.CurrentLanguage == "tr";
+                lbl.text = Loc.T("settings.language");
+                btnTxt.text = isTR ? Loc.T("settings.lang.tr") : Loc.T("settings.lang.en");
+                btnImg.color = isTR ? onColor : offColor;
+            }
+            Paint();
+            refreshers.Add(Paint);
+
+            var btn = btnGo.AddComponent<Button>();
+            btn.onClick.AddListener(() =>
+            {
+                Loc.SetLanguage(Loc.CurrentLanguage == "tr" ? "en" : "tr");
+            });
+
+            return y - 26f;
+        }
 
         private float AddSectionHeader(RectTransform parent, string text, float y)
         {
@@ -385,7 +465,7 @@ namespace RIMA
             btRt.anchorMin = Vector2.zero;
             btRt.anchorMax = Vector2.one;
             btRt.offsetMin = btRt.offsetMax = Vector2.zero;
-            btnTxt.text = customText ?? (val == 1 ? "ON" : "OFF");
+            btnTxt.text = customText ?? (val == 1 ? Loc.T("settings.on") : Loc.T("settings.off"));
             btnTxt.fontSize = 9f;
             btnTxt.fontStyle = FontStyles.Bold;
             btnTxt.color = Color.white;
@@ -399,7 +479,7 @@ namespace RIMA
                 int cur = PlayerPrefs.GetInt(key, dv);
                 int next = cur == 1 ? 0 : 1;
                 PlayerPrefs.SetInt(key, next);
-                btnTxt.text = customText ?? (next == 1 ? "ON" : "OFF");
+                btnTxt.text = customText ?? (next == 1 ? Loc.T("settings.on") : Loc.T("settings.off"));
                 btnImg.color = next == 1
                     ? new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.3f)
                     : new Color(0.2f, 0.2f, 0.25f, 0.5f);
