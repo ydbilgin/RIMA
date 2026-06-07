@@ -60,6 +60,23 @@ namespace RIMA.Editor.MapDesigner
         // inline validator messages after slot moves
         private string _lastSlotValidationMsg = string.Empty;
 
+        // ── Full validation cache (B1 / B2) ──────────────────────────────────
+        private List<RoomValidationIssue> _validationIssues = new List<RoomValidationIssue>();
+        private RoomTemplateSO _validatedTemplate; // which template the cache belongs to
+        // Per-room badge cache: true = has Error issue
+        private Dictionary<RoomTemplateSO, bool> _roomHasError = new Dictionary<RoomTemplateSO, bool>();
+
+        // Mode display hints (A4)
+        private static readonly Dictionary<SchematicEditMode, string> ModeHints = new Dictionary<SchematicEditMode, string>
+        {
+            { SchematicEditMode.PaintWalkable, "Tıkla+sürükle = walkable yap" },
+            { SchematicEditMode.PaintVoid,     "Tıkla+sürükle = void yap" },
+            { SchematicEditMode.SetEntry,      "Giriş hücresine tıkla" },
+            { SchematicEditMode.SetNW,         "Kuzey-batı kapı hücresine tıkla" },
+            { SchematicEditMode.SetN,          "Kuzey kapı hücresine tıkla" },
+            { SchematicEditMode.SetNE,         "Kuzey-doğu kapı hücresine tıkla" },
+        };
+
         [MenuItem("RIMA/Map Designer", priority = 1)]
         public static void Open()
         {
@@ -194,6 +211,33 @@ namespace RIMA.Editor.MapDesigner
             }
         }
 
+        // ── B4: Keyboard shortcuts for Rooms tab ─────────────────────────────
+        private void HandleRoomsKeyboard()
+        {
+            if (EditorGUIUtility.editingTextField) return;
+            Event e = Event.current;
+            if (e.type != EventType.KeyDown) return;
+
+            SchematicEditMode next = _schematicMode;
+            switch (e.keyCode)
+            {
+                case KeyCode.W: next = SchematicEditMode.PaintWalkable; break;
+                case KeyCode.V: next = SchematicEditMode.PaintVoid;     break;
+                case KeyCode.E: next = SchematicEditMode.SetEntry;      break;
+                case KeyCode.Alpha1: next = SchematicEditMode.SetNW;    break;
+                case KeyCode.Alpha2: next = SchematicEditMode.SetN;     break;
+                case KeyCode.Alpha3: next = SchematicEditMode.SetNE;    break;
+                case KeyCode.Escape: next = SchematicEditMode.None;     break;
+                default: return;
+            }
+            if (next != _schematicMode)
+            {
+                _schematicMode = next;
+                e.Use();
+                Repaint();
+            }
+        }
+
         // -- Rooms tab (RoomTemplateSO front door) ---------------------------
         private void RefreshRoomTemplates()
         {
@@ -208,11 +252,13 @@ namespace RIMA.Editor.MapDesigner
             {
                 _selectedTemplate = _roomTemplates[0];
                 _autoPropsSeed = RoomTemplateAutoPropsUtility.StableSeed(_selectedTemplate.name);
+                RunFullValidation(_selectedTemplate);
             }
         }
 
         private void DrawRooms()
         {
+            HandleRoomsKeyboard();
             using (new EditorGUILayout.HorizontalScope())
             {
                 using (new EditorGUILayout.VerticalScope(GUILayout.Width(310f)))
@@ -222,6 +268,7 @@ namespace RIMA.Editor.MapDesigner
                         _roomSearch = EditorGUILayout.TextField(_roomSearch, EditorStyles.toolbarSearchField);
                         if (GUILayout.Button("Refresh", GUILayout.Width(70f)))
                         {
+                            _roomHasError.Clear(); // B2: invalidate badge cache
                             RefreshRoomTemplates();
                         }
                     }
@@ -248,10 +295,11 @@ namespace RIMA.Editor.MapDesigner
                         bool selected = _selectedTemplate == template;
                         Color previous = GUI.backgroundColor;
                         if (selected) GUI.backgroundColor = new Color(0.45f, 0.75f, 1f);
-                        if (GUILayout.Button(template.name, selected ? EditorStyles.miniButtonMid : EditorStyles.miniButton, GUILayout.Height(22f)))
+                        if (DrawRoomListButton(template, selected))
                         {
                             _selectedTemplate = template;
                             _autoPropsSeed = RoomTemplateAutoPropsUtility.StableSeed(template.name);
+                            RunFullValidation(template);
                             GUI.FocusControl(null);
                         }
                         GUI.backgroundColor = previous;
@@ -265,6 +313,7 @@ namespace RIMA.Editor.MapDesigner
                     DrawSelectedTemplateActions();
                     DrawSchematicEditToolbar();
                     DrawTemplatePreviewWithEditing(_selectedTemplate);
+                    DrawValidationPanel();
                 }
             }
         }
@@ -314,11 +363,6 @@ namespace RIMA.Editor.MapDesigner
                         RoomTemplateBuildUtility.BuildInArena(_selectedTemplate, "Map Designer");
                     }
 
-                    if (DrawColoredButton("Auto Props", new Color(0.35f, 0.6f, 1f), GUILayout.Height(28f)))
-                    {
-                        AutoPopulateSelectedTemplate();
-                    }
-
                     if (DrawColoredButton("Save Assets", new Color(1f, 0.6f, 0.22f), GUILayout.Height(28f)))
                     {
                         FlushPendingExports(); // flush before save
@@ -327,6 +371,17 @@ namespace RIMA.Editor.MapDesigner
                         Debug.Log("[UnifiedMapDesigner] Saved RoomTemplateSO assets.");
                         Repaint();
                     }
+                }
+
+                // A6 — seed + Auto Props on same row (seed is Auto Props' parameter)
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField("Seed", GUILayout.Width(34f));
+                    _autoPropsSeed = EditorGUILayout.IntField(_autoPropsSeed, GUILayout.Width(80f));
+                    if (GUILayout.Button("Rnd", GUILayout.Width(36f)))
+                        _autoPropsSeed = UnityEngine.Random.Range(1, int.MaxValue);
+                    if (DrawColoredButton("Auto Props", new Color(0.35f, 0.6f, 1f), GUILayout.Height(18f)))
+                        AutoPopulateSelectedTemplate();
                 }
 
                 using (new EditorGUILayout.HorizontalScope())
@@ -339,15 +394,6 @@ namespace RIMA.Editor.MapDesigner
                     if (DrawColoredButton("Export All JSON", new Color(0.5f, 0.8f, 0.5f), GUILayout.Height(22f)))
                     {
                         RoomTemplateJsonExporter.ExportAll();
-                    }
-                }
-
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    _autoPropsSeed = EditorGUILayout.IntField("Seed", _autoPropsSeed);
-                    if (GUILayout.Button("Randomize", GUILayout.Width(90f)))
-                    {
-                        _autoPropsSeed = UnityEngine.Random.Range(1, int.MaxValue);
                     }
                 }
             }
@@ -398,33 +444,68 @@ namespace RIMA.Editor.MapDesigner
             EditorGUILayout.Space(2f);
             using (new EditorGUILayout.HorizontalScope())
             {
-                DrawModeButton("Paint Walkable", SchematicEditMode.PaintWalkable, new Color(0.25f, 0.75f, 0.25f));
-                DrawModeButton("Paint Void", SchematicEditMode.PaintVoid, new Color(0.6f, 0.25f, 0.25f));
-                DrawModeButton("Set Entry", SchematicEditMode.SetEntry, new Color(0.25f, 1f, 0.25f));
-                DrawModeButton("Set NW", SchematicEditMode.SetNW, new Color(0.25f, 0.65f, 1f));
-                DrawModeButton("Set N", SchematicEditMode.SetN, new Color(0.1f, 1f, 0.95f));
-                DrawModeButton("Set NE", SchematicEditMode.SetNE, new Color(0.85f, 0.55f, 1f));
-                if (GUILayout.Button("None", GUILayout.Width(50f)))
+                DrawModeButton("Paint Walkable", SchematicEditMode.PaintWalkable, new Color(0.25f, 0.75f, 0.25f), "W");
+                DrawModeButton("Paint Void",     SchematicEditMode.PaintVoid,     new Color(0.6f,  0.25f, 0.25f), "V");
+                DrawModeButton("Set Entry",      SchematicEditMode.SetEntry,      new Color(0.25f, 1f,   0.25f),  "E");
+                DrawModeButton("Set NW",         SchematicEditMode.SetNW,         new Color(0.25f, 0.65f, 1f),    "1");
+                DrawModeButton("Set N",          SchematicEditMode.SetN,          new Color(0.1f,  1f,   0.95f),  "2");
+                DrawModeButton("Set NE",         SchematicEditMode.SetNE,         new Color(0.85f, 0.55f, 1f),    "3");
+                if (GUILayout.Button("None [Esc]", GUILayout.Width(70f)))
                     _schematicMode = SchematicEditMode.None;
             }
 
+            // A4 — active mode banner
+            if (_schematicMode != SchematicEditMode.None)
+            {
+                Color modeColor = ModeButtonColor(_schematicMode);
+                string hint = ModeHints.TryGetValue(_schematicMode, out string h) ? h : "";
+                Rect bannerRect = EditorGUILayout.GetControlRect(false, 18f);
+                EditorGUI.DrawRect(bannerRect, new Color(modeColor.r * 0.35f, modeColor.g * 0.35f, modeColor.b * 0.35f, 1f));
+                Color prev = GUI.color;
+                GUI.color = modeColor;
+                GUI.Label(bannerRect, $"  MOD: {_schematicMode}  —  {hint}  ·  Esc = çık", EditorStyles.miniLabel);
+                GUI.color = prev;
+
+                // Esc to exit mode
+                Event e = Event.current;
+                if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape && !EditorGUIUtility.editingTextField)
+                {
+                    _schematicMode = SchematicEditMode.None;
+                    e.Use();
+                    Repaint();
+                }
+            }
+
+            // A2 — slot validation HelpBox
             if (!string.IsNullOrEmpty(_lastSlotValidationMsg))
             {
-                Color prev = GUI.color;
-                GUI.color = Color.red;
-                EditorGUILayout.LabelField(_lastSlotValidationMsg, EditorStyles.miniLabel);
-                GUI.color = prev;
+                EditorGUILayout.HelpBox(_lastSlotValidationMsg, MessageType.Error);
             }
         }
 
-        private void DrawModeButton(string label, SchematicEditMode mode, Color activeColor)
+        private void DrawModeButton(string label, SchematicEditMode mode, Color activeColor, string shortcutKey = "")
         {
             bool active = _schematicMode == mode;
             Color prev = GUI.backgroundColor;
             if (active) GUI.backgroundColor = activeColor;
-            if (GUILayout.Button(label, EditorStyles.miniButton))
+            string tooltip = string.IsNullOrEmpty(shortcutKey) ? label : $"{label} [{shortcutKey}]";
+            if (GUILayout.Button(new GUIContent(label, tooltip), EditorStyles.miniButton))
                 _schematicMode = active ? SchematicEditMode.None : mode;
             GUI.backgroundColor = prev;
+        }
+
+        private static Color ModeButtonColor(SchematicEditMode mode)
+        {
+            switch (mode)
+            {
+                case SchematicEditMode.PaintWalkable: return new Color(0.25f, 0.75f, 0.25f);
+                case SchematicEditMode.PaintVoid:     return new Color(0.6f,  0.25f, 0.25f);
+                case SchematicEditMode.SetEntry:      return new Color(0.25f, 1f,    0.25f);
+                case SchematicEditMode.SetNW:         return new Color(0.25f, 0.65f, 1f);
+                case SchematicEditMode.SetN:          return new Color(0.1f,  1f,    0.95f);
+                case SchematicEditMode.SetNE:         return new Color(0.85f, 0.55f, 1f);
+                default:                              return Color.white;
+            }
         }
 
         private void DrawTemplatePreviewWithEditing(RoomTemplateSO template)
@@ -488,21 +569,14 @@ namespace RIMA.Editor.MapDesigner
             return _lastSchematicGridRect;
         }
 
-        private Vector2Int? SchematicMouseToCell(RoomTemplateSO template, Rect gridRect, Vector2 mousePos)
+        private Vector2Int? SchematicMouseToCell(RoomTemplateSO template, Rect areaRect, Vector2 mousePos)
         {
-            if (template == null || gridRect == Rect.zero) return null;
+            if (template == null || areaRect == Rect.zero) return null;
             int w = template.bounds.width;
             int h = template.bounds.height;
-            const float padding = 10f;
-            Rect inner = new Rect(gridRect.x + padding, gridRect.y + padding, gridRect.width - padding * 2f, gridRect.height - padding * 2f);
-            float cell = Mathf.Floor(Mathf.Min(inner.width / w, inner.height / h));
+            float cell = ComputeCellSize(areaRect, w, h);
             if (cell < 1f) return null;
-            float gw = cell * w;
-            float gh = cell * h;
-            Rect grid = new Rect(
-                inner.x + (inner.width - gw) * 0.5f,
-                inner.y + (inner.height - gh) * 0.5f,
-                gw, gh);
+            Rect grid = ComputeGridRect(areaRect, w, h, cell);
 
             if (!grid.Contains(mousePos)) return null;
 
@@ -548,6 +622,10 @@ namespace RIMA.Editor.MapDesigner
 
             EditorUtility.SetDirty(template);
             ScheduleExport(template);
+            // B1: invalidate validation cache on every schematic edit
+            if (_validatedTemplate == template) _validatedTemplate = null;
+            _roomHasError.Remove(template);
+            RunFullValidation(template);
         }
 
         private static void SetWalkable(RoomTemplateSO template, Vector2Int cell, bool walkable)
@@ -618,6 +696,123 @@ namespace RIMA.Editor.MapDesigner
             RunSlotValidation(template);
         }
 
+        // ── B1: Full validation (replaces/extends slot-only check) ───────────
+        private void RunFullValidation(RoomTemplateSO template)
+        {
+            if (template == null)
+            {
+                _validationIssues.Clear();
+                _validatedTemplate = null;
+                _lastSlotValidationMsg = string.Empty;
+                return;
+            }
+
+            _validationIssues = RoomTemplateValidator.Validate(template);
+            _validatedTemplate = template;
+
+            // Also refresh badge cache for this room
+            bool hasErr = false;
+            for (int i = 0; i < _validationIssues.Count; i++)
+                if (_validationIssues[i].severity == ValidationSeverity.Error) { hasErr = true; break; }
+            _roomHasError[template] = hasErr;
+
+            // Keep legacy slot-msg in sync (used by HelpBox in toolbar)
+            var slotIssues = new System.Text.StringBuilder();
+            for (int i = 0; i < _validationIssues.Count; i++)
+            {
+                var issue = _validationIssues[i];
+                if (issue.severity == ValidationSeverity.Error &&
+                    (issue.code == "ERR_MISSING_N_EXIT_SLOT" || issue.code == "ERR_EXIT_SLOTS_TOO_CLOSE"))
+                {
+                    if (slotIssues.Length > 0) slotIssues.Append(" | ");
+                    slotIssues.Append(issue.message);
+                }
+            }
+            _lastSlotValidationMsg = slotIssues.ToString();
+        }
+
+        private void DrawValidationPanel()
+        {
+            if (_validatedTemplate != _selectedTemplate)
+                RunFullValidation(_selectedTemplate);
+
+            EditorGUILayout.Space(4f);
+            if (_validationIssues == null || _validationIssues.Count == 0)
+            {
+                EditorGUILayout.HelpBox("✓ Validasyon temiz", MessageType.None);
+                return;
+            }
+
+            bool anyReal = false;
+            for (int i = 0; i < _validationIssues.Count; i++)
+                if (_validationIssues[i].severity != ValidationSeverity.Info) { anyReal = true; break; }
+
+            if (!anyReal)
+            {
+                EditorGUILayout.HelpBox("✓ Validasyon temiz", MessageType.None);
+            }
+
+            foreach (var issue in _validationIssues)
+            {
+                MessageType mt = issue.severity == ValidationSeverity.Error   ? MessageType.Error
+                               : issue.severity == ValidationSeverity.Warning ? MessageType.Warning
+                               : MessageType.None;
+                if (issue.severity == ValidationSeverity.Info) continue; // skip info in panel to save space
+                EditorGUILayout.HelpBox(issue.message, mt);
+            }
+        }
+
+        // B2: room list button with door-dot badges and error indicator
+        private bool DrawRoomListButton(RoomTemplateSO template, bool selected)
+        {
+            // ensure badge cache populated
+            if (!_roomHasError.ContainsKey(template))
+            {
+                // lightweight: run full validation once per room (will be cached afterward)
+                var issues = RoomTemplateValidator.Validate(template);
+                bool err = false;
+                for (int i = 0; i < issues.Count; i++)
+                    if (issues[i].severity == ValidationSeverity.Error) { err = true; break; }
+                _roomHasError[template] = err;
+            }
+
+            bool hasError = _roomHasError.TryGetValue(template, out bool e) && e;
+            DoorSocket[] slots = template.doorSockets != null ? template.ResolveExitSlots() : new DoorSocket[3];
+
+            Color prevBg = GUI.backgroundColor;
+            if (selected) GUI.backgroundColor = new Color(0.45f, 0.75f, 1f);
+
+            bool clicked = false;
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.miniButton, GUILayout.Height(22f)))
+            {
+                clicked = GUILayout.Button(template.name, EditorStyles.miniLabel, GUILayout.ExpandWidth(true), GUILayout.Height(18f));
+
+                // 3 door dots: NW=0, N=1, NE=2
+                for (int si = 0; si < 3; si++)
+                {
+                    Color dotColor = slots[si] != null ? SlotPreviewColor(si) : new Color(0.25f, 0.25f, 0.25f);
+                    Rect r = GUILayoutUtility.GetRect(8f, 8f, GUILayout.Width(8f), GUILayout.Height(8f));
+                    r.y += 5f;
+                    EditorGUI.DrawRect(r, dotColor);
+                }
+
+                if (hasError)
+                {
+                    Color prevC = GUI.color;
+                    GUI.color = Color.red;
+                    GUILayout.Label("!", EditorStyles.boldLabel, GUILayout.Width(12f));
+                    GUI.color = prevC;
+                }
+                else
+                {
+                    GUILayout.Space(12f);
+                }
+            }
+
+            GUI.backgroundColor = prevBg;
+            return clicked;
+        }
+
         private void RunSlotValidation(RoomTemplateSO template)
         {
             List<RoomValidationIssue> issues = new List<RoomValidationIssue>();
@@ -654,38 +849,46 @@ namespace RIMA.Editor.MapDesigner
             }
         }
 
+        // ── A3: shared cell-size calculation so DrawTemplatePreview and mouse code always agree ──
+        private static float ComputeCellSize(Rect area, int gridW, int gridH)
+        {
+            const float padding = 10f;
+            Rect inner = new Rect(area.x + padding, area.y + padding, area.width - padding * 2f, area.height - padding * 2f);
+            float raw = Mathf.Min(inner.width / gridW, inner.height / gridH);
+            return Mathf.Clamp(Mathf.Floor(raw), 8f, 28f);
+        }
+
+        private static Rect ComputeGridRect(Rect area, int gridW, int gridH, float cell)
+        {
+            const float padding = 10f;
+            Rect inner = new Rect(area.x + padding, area.y + padding, area.width - padding * 2f, area.height - padding * 2f);
+            float gw = cell * gridW;
+            float gh = cell * gridH;
+            return new Rect(
+                inner.x + (inner.width  - gw) * 0.5f,
+                inner.y + (inner.height - gh) * 0.5f,
+                gw, gh);
+        }
+
         private void DrawTemplatePreview(RoomTemplateSO template)
         {
             EditorGUILayout.Space(4f);
-            string modeHint = _schematicMode == SchematicEditMode.None ? "" : $"  [{_schematicMode}]";
-            EditorGUILayout.LabelField("2D Schematic Preview" + modeHint, EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("2D Schematic Preview", EditorStyles.boldLabel);
 
-            Rect area = GUILayoutUtility.GetRect(260f, 360f, GUILayout.ExpandWidth(true));
+            // A3: Expand to fill available space
+            float availH = Mathf.Max(180f, position.height - 360f); // generous remainder
+            Rect area = GUILayoutUtility.GetRect(260f, availH, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             // store area for mouse→cell inverse mapping
             _lastSchematicTemplate = template;
             _lastSchematicGridRect = area;
 
             EditorGUI.DrawRect(area, new Color(0.08f, 0.08f, 0.08f));
             if (template == null || template.bounds.width <= 0 || template.bounds.height <= 0)
-            {
                 return;
-            }
 
-            const float padding = 10f;
-            Rect inner = new Rect(area.x + padding, area.y + padding, area.width - padding * 2f, area.height - padding * 2f);
-            float cell = Mathf.Floor(Mathf.Min(inner.width / template.bounds.width, inner.height / template.bounds.height));
-            if (cell < 1f)
-            {
-                return;
-            }
-
-            float gridWidth = cell * template.bounds.width;
-            float gridHeight = cell * template.bounds.height;
-            Rect gridRect = new Rect(
-                inner.x + (inner.width - gridWidth) * 0.5f,
-                inner.y + (inner.height - gridHeight) * 0.5f,
-                gridWidth,
-                gridHeight);
+            float cell = ComputeCellSize(area, template.bounds.width, template.bounds.height);
+            if (cell < 1f) return;
+            Rect gridRect = ComputeGridRect(area, template.bounds.width, template.bounds.height, cell);
 
             for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
             {
@@ -726,10 +929,42 @@ namespace RIMA.Editor.MapDesigner
                 DrawPreviewLabel(InflateToMinimum(spawnRect, 8f), "ENTRY", Color.green);
             }
 
-            EditorGUI.LabelField(
-                new Rect(gridRect.x, gridRect.yMax + 2f, gridRect.width, 16f),
-                "1:N  2:NW+NE  3:NW+N+NE",
-                EditorStyles.miniLabel);
+            // A5 — color-chip legend
+            DrawSchematicLegend(gridRect);
+        }
+
+        private static void DrawSchematicLegend(Rect gridRect)
+        {
+            float legendY = gridRect.yMax + 4f;
+            float x = gridRect.x;
+            float chipSize = 10f;
+            float gap = 3f;
+            float labelW = 52f;
+
+            var entries = new (Color color, string label)[]
+            {
+                (new Color(0.25f, 1f, 0.25f),    "Entry"),
+                (new Color(0.25f, 0.65f, 1f),    "NW"),
+                (new Color(0.1f,  1f,   0.95f),  "N"),
+                (new Color(0.85f, 0.55f, 1f),    "NE"),
+                (new Color(0.16f, 0.18f, 0.18f), "Walkable"),
+                (Color.black,                    "Void"),
+            };
+
+            GUIStyle mini = EditorStyles.miniLabel;
+            foreach (var (color, lbl) in entries)
+            {
+                EditorGUI.DrawRect(new Rect(x, legendY + 1f, chipSize, chipSize), color);
+                x += chipSize + gap;
+                GUI.Label(new Rect(x, legendY, labelW, 14f), lbl, mini);
+                x += labelW + 2f;
+            }
+
+            // door-count rule note
+            Color prevC = GUI.color;
+            GUI.color = new Color(0.6f, 0.6f, 0.6f);
+            GUI.Label(new Rect(x, legendY, 200f, 14f), "(1 kapı→N · 2→NW+NE · 3→hepsi)", mini);
+            GUI.color = prevC;
         }
 
         private static Rect TilePreviewRect(RectInt bounds, Rect gridRect, float cell, Vector2Int tile)
@@ -1119,11 +1354,45 @@ namespace RIMA.Editor.MapDesigner
             GUILayout.FlexibleSpace();
             using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
             {
-                string brush = string.IsNullOrEmpty(_core.SelectedAssetId) ? "<none>" : _core.SelectedAssetId;
-                EditorGUILayout.LabelField(
-                    $"Category: {DesignerCategoryMap.Label(_core.Category)}   Brush: {brush} size:{_core.BrushSize}   " +
-                    $"{(_painting ? "PAINTING (LMB place / RMB erase / Alt=erase)" : "paint off")}",
-                    EditorStyles.miniLabel);
+                if (_tab == Tab.Rooms)
+                {
+                    // B3 — show selected room stats
+                    if (_selectedTemplate == null)
+                    {
+                        EditorGUILayout.LabelField("oda seç", EditorStyles.miniLabel);
+                    }
+                    else
+                    {
+                        int walkableCount = 0;
+                        if (_selectedTemplate.bounds.width > 0 && _selectedTemplate.bounds.height > 0)
+                        {
+                            for (int y = _selectedTemplate.bounds.yMin; y < _selectedTemplate.bounds.yMax; y++)
+                                for (int x = _selectedTemplate.bounds.xMin; x < _selectedTemplate.bounds.xMax; x++)
+                                    if (_selectedTemplate.IsWalkable(new Vector2Int(x, y))) walkableCount++;
+                        }
+                        int propCount = _selectedTemplate.props != null ? _selectedTemplate.props.Count : 0;
+                        DoorSocket[] slotsBar = _selectedTemplate.doorSockets != null
+                            ? _selectedTemplate.ResolveExitSlots()
+                            : new DoorSocket[3];
+                        var doorLabels = new System.Text.StringBuilder();
+                        string[] slotNames = { "NW", "N", "NE" };
+                        for (int si = 0; si < 3; si++)
+                            if (slotsBar[si] != null) { if (doorLabels.Length > 0) doorLabels.Append("+"); doorLabels.Append(slotNames[si]); }
+                        string doorsStr = doorLabels.Length > 0 ? doorLabels.ToString() : "kapı yok";
+                        EditorGUILayout.LabelField(
+                            $"{_selectedTemplate.name}  ·  {_selectedTemplate.bounds.width}x{_selectedTemplate.bounds.height}  ·  " +
+                            $"walkable {walkableCount}  ·  prop {propCount}  ·  kapılar: {doorsStr}",
+                            EditorStyles.miniLabel);
+                    }
+                }
+                else
+                {
+                    string brush = string.IsNullOrEmpty(_core.SelectedAssetId) ? "<none>" : _core.SelectedAssetId;
+                    EditorGUILayout.LabelField(
+                        $"Category: {DesignerCategoryMap.Label(_core.Category)}   Brush: {brush} size:{_core.BrushSize}   " +
+                        $"{(_painting ? "PAINTING (LMB place / RMB erase / Alt=erase)" : "paint off")}",
+                        EditorStyles.miniLabel);
+                }
             }
         }
 
