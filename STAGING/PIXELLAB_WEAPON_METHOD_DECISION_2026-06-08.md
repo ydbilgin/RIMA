@@ -1,6 +1,23 @@
 # PixelLab Weapon Method Decision - 2026-06-08
 
-Status: ANALYSIS ONLY. No generation, no code.
+## ✅ FINAL DECISION (LOCKED — 3-source consensus: cx + ax-3.1-Pro + ChatGPT, 2026-06-08)
+
+**Method = B-weighted HYBRID.**
+- **Production = PixelLab Object generation** (`create_1_direction_object` / object endpoint): single isolated transparent object, one angle (runtime mount/orientation solves the 8 directions).
+- **Create Image Pro = IDEATION ONLY** (silhouette/style/mood exploration, square focus-object pre-tries). NEVER the final production source — its exact non-square + transparent + target-size behavior is UNVERIFIED.
+- **Sizing rule:** target-size native FIRST. If the object endpoint can't emit an exact non-square canvas → generate in a square/near-square canvas and **transparent CROP** to the target bbox. **CROP allowed (grid-safe); SCALE/downscale FORBIDDEN (breaks the pixel grid).** No big-canvas→downscale, ever.
+- **Unity import:** PPU64 + Point + alpha transparency + **custom grip pivot set in Unity** (PixelLab returns NO pivot metadata).
+- **Prompt:** single weapon object — "no character, no hands, no environment, transparent background, horizontal-right, handle left / tip right" + class-specific negatives (no Elementalist staff/wand · no Gunslinger western/revolver · no Shadowblade glow/aura · no Hexer whip · Brawler = no weapon). Never "weapon held by a character" (model spawns hands/body).
+- **Batch by ASPECT FAMILY (≤8/batch, don't mix wildly different aspects):** B1 small linear (Shadowblade dagger + Gunslinger pistol) · B2 focus/square (Elementalist disc + Summoner lantern + Hexer grimoire) · B3 medium/large (Ranger bow + Ravager axe + Ronin katana; Warblade greatsword only if replacing placeholder).
+- **Per-weapon (PROVISIONAL — confirm at VERIFY-LIVE):** Rune Disc 48×48 center-pivot (yönsüz, no blade rotation) · Ranger Bow ~64×40-48 bbox, left grip ~(0.32,0.50), leftHandPrimary · Shadowblade Dagger 32-40×24, grip ~(0.20,0.50), single sprite + offhand flipX.
+
+**🔒 GATE — VERIFY LIVE before ANY production (first step of the gated PixelLab session, 1 cheap test):** Does the object endpoint support exact non-square canvas? transparent alpha guaranteed? candidate/review count? `style_images` + size together? sub-32px height (greatsword 64×16)? If non-square unsupported → use square+crop path. Do NOT write these as locked until tested against the live API/UI.
+
+Sources: this doc (cx, grounded) · `_process/2026-06/_research_axpro_pixellab_method_2026-06-08.md` (ax-3.1-Pro) · ChatGPT web review (B-hybrid + target-bbox/crop nuance + aspect-family batches).
+
+---
+
+Status: ANALYSIS ONLY. No generation, no code. (cx's original recommendation below; superseded by the FINAL DECISION above where they differ.)
 
 ## Recommendation
 
