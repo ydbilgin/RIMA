@@ -79,6 +79,21 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 - Session sonunda büyük cleanup → `/nlm-sync push`
 - STAGING/_archive/ ve memory/_archive/ standart klasörler — eski iterasyonlar oraya, asla silinmez (konservatif)
 
+### Süreç Artifact Konvansiyonu (2026-06-07 LOCK — birikme önlemi)
+**STAGING üst-seviyesi = SADECE LIVE dokümanlar:** `*_DECISION_*` · `*_PLAN/MASTER/SPEC/LOCK/AUDIT/BIBLE*` · aktif TASK'ler.
+
+| Dosya türü | NEREYE yazılır |
+|---|---|
+| Council soruları/ham çıktıları (`_council_*`) | `STAGING/_process/<YYYY-MM>/` |
+| Dispatch task dosyaları (cx/ax görevleri) | `STAGING/_process/<YYYY-MM>/` |
+| `_done_* / _review_* / _research_* / _nlm_*` kayıtları | `STAGING/_process/<YYYY-MM>/` |
+| TASK_* — iş TAMAMLANINCA | `STAGING/_process/<YYYY-MM>/` taşınır |
+| Kararlar/spec'ler (kalıcı) | STAGING üst-seviye (LIVE) |
+
+- `_process/` git-TRACKED'tir (izlenebilirlik korunur) ama `_` prefix'i sayesinde **nlm-sync taramaz** → NLM kirlenmez.
+- Kaçak birikirse: `powershell STAGING/tools/archive_staging_process.ps1` (whitelist-desenli, idempotent, SİLMEZ sadece taşır).
+- `/phase-close` checklist'ine dahildir. Tarihsel toplu arşiv = `STAGING/_archive/process_2026-06/` (2026-06-07 temizliği).
+
 ## Role: Orchestra Conductor (PRIMARY)
 Claude dispatches work; does NOT do mechanical bulk itself.
 
