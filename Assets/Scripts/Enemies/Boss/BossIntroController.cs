@@ -31,12 +31,18 @@ namespace RIMA
 
         // ─── State ────────────────────────────────────────────────────────────
         private bool complete;
+        private bool aborted;
+
+        // MAJOR-2 fix: track canvas created by EnsureCanvas so it can be cleaned up.
+        private Canvas createdCanvas;
 
         // ─── Public Factory ───────────────────────────────────────────────────
 
         /// <summary>
         /// Boss sahnede oluştuğunda bu metot çağrılır.
         /// Sekans tamamlandığında <paramref name="onComplete"/> çağrılır.
+        /// MAJOR-1 fix: controller GO boss'un child'ı olur → boss Destroy edildiğinde ikisi de ölür.
+        /// Ayrıca boss Health.OnDeath'e abone olup erken abort.
         /// </summary>
         public static BossIntroController Begin(
             string bossName,
@@ -45,9 +51,33 @@ namespace RIMA
             System.Action onComplete)
         {
             var go = new GameObject("BossIntroController");
+
+            // MAJOR-1: parent under boss so Destroy(boss) kills this GO too.
+            if (bossTransform != null)
+                go.transform.SetParent(bossTransform, false);
+
             var ctrl = go.AddComponent<BossIntroController>();
+
+            // MAJOR-1: subscribe to boss OnDeath for early abort.
+            if (bossTransform != null)
+            {
+                var bossHealth = bossTransform.GetComponent<Health>();
+                if (bossHealth != null)
+                    bossHealth.OnDeath.AddListener(ctrl.AbortIntro);
+            }
+
             ctrl.StartCoroutine(ctrl.RunIntro(bossName, bossTransform, healthBar, onComplete));
             return ctrl;
+        }
+
+        // MAJOR-1: called by boss Health.OnDeath listener to abort mid-intro.
+        private void AbortIntro()
+        {
+            if (aborted || complete) return;
+            aborted = true;
+            StopAllCoroutines();
+            CleanupCanvas();
+            Destroy(gameObject);
         }
 
         // ─── Intro Sequence ───────────────────────────────────────────────────
@@ -104,6 +134,7 @@ namespace RIMA
             complete = true;
             Destroy(dimOverlay.gameObject);
             Destroy(titleText.gameObject);
+            CleanupCanvas();
             Destroy(gameObject);
 
             onComplete?.Invoke();
@@ -197,12 +228,13 @@ namespace RIMA
             if (sr != null) { c.a = to; sr.color = c; }
         }
 
-        private static Canvas EnsureCanvas()
+        // MAJOR-2: non-static so we can track the canvas we created.
+        private Canvas EnsureCanvas()
         {
             Canvas[] all = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
             foreach (var c in all)
                 if (c.renderMode == RenderMode.ScreenSpaceOverlay && c.sortingOrder >= 150)
-                    return c;
+                    return c;   // reused existing canvas — we do NOT own it, do not destroy it.
 
             var go = new GameObject("BossIntroCanvas");
             var canvas = go.AddComponent<Canvas>();
@@ -210,7 +242,18 @@ namespace RIMA
             canvas.sortingOrder = 180;
             go.AddComponent<CanvasScaler>();
             go.AddComponent<GraphicRaycaster>();
+            createdCanvas = canvas;   // MAJOR-2: remember for cleanup.
             return canvas;
+        }
+
+        // MAJOR-2: destroy the canvas we created (not one we merely reused).
+        private void CleanupCanvas()
+        {
+            if (createdCanvas != null)
+            {
+                Destroy(createdCanvas.gameObject);
+                createdCanvas = null;
+            }
         }
 
         private static TextMeshProUGUI CreateTitleText(Transform parent, string bosName)

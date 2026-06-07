@@ -747,49 +747,64 @@ namespace RIMA
             {
                 float angle = i * (360f / count) + Random.Range(-20f, 20f);
                 Vector2 dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-                StartCoroutine(FragmentFly(sealSpr, (Vector2)transform.position, dir));
+                // MAJOR-3 fix: each fragment hosts its own coroutine via SealFragmentDriver,
+                // so it is independent of this (host) MonoBehaviour's lifetime.
+                SealFragmentDriver.Spawn(sealSpr, (Vector2)transform.position, dir);
             }
         }
 
-        private static IEnumerator FragmentFly(Sprite spr, Vector2 origin, Vector2 dir)
+        // ─── SealFragmentDriver — inner helper class ──────────────────────────
+        // MAJOR-3: Runs FragmentFly on its OWN GO so Destroy(boss, 0.5f) cannot
+        // kill the coroutine before the fragment's lifetime (up to 0.9s) completes.
+
+        private class SealFragmentDriver : MonoBehaviour
         {
-            var go = new GameObject("SealFragment");
-            go.transform.position = origin;
-
-            var fragSR = go.AddComponent<SpriteRenderer>();
-            fragSR.sprite = spr;
-            fragSR.sortingLayerName = "Entities";
-            fragSR.sortingOrder = 10;
-            go.transform.localScale = Vector3.one * 0.35f;
-
-            if (spr == null)
+            public static void Spawn(Sprite spr, Vector2 origin, Vector2 dir)
             {
-                // Fragment yok → küçük cyan kare.
-                Texture2D tex = new Texture2D(8, 8);
-                Color c = new Color(0.28f, 0.88f, 1f);
-                for (int y = 0; y < 8; y++) for (int x = 0; x < 8; x++) tex.SetPixel(x, y, c);
-                tex.Apply(); tex.filterMode = FilterMode.Point;
-                fragSR.sprite = Sprite.Create(tex, new Rect(0,0,8,8), new Vector2(0.5f,0.5f), 16f);
-                go.transform.localScale = Vector3.one * 0.5f;
+                var go = new GameObject("SealFragment");
+                go.transform.position = origin;
+
+                var fragSR = go.AddComponent<SpriteRenderer>();
+                fragSR.sprite = spr;
+                fragSR.sortingLayerName = "Entities";
+                fragSR.sortingOrder = 10;
+                go.transform.localScale = Vector3.one * 0.35f;
+
+                if (spr == null)
+                {
+                    // Fragment sprite yok → küçük cyan kare.
+                    Texture2D tex = new Texture2D(8, 8);
+                    Color c = new Color(0.28f, 0.88f, 1f);
+                    for (int y = 0; y < 8; y++) for (int x = 0; x < 8; x++) tex.SetPixel(x, y, c);
+                    tex.Apply(); tex.filterMode = FilterMode.Point;
+                    fragSR.sprite = Sprite.Create(tex, new Rect(0, 0, 8, 8), new Vector2(0.5f, 0.5f), 16f);
+                    go.transform.localScale = Vector3.one * 0.5f;
+                }
+
+                var driver = go.AddComponent<SealFragmentDriver>();
+                driver.StartCoroutine(driver.Fly(fragSR, dir));
             }
 
-            float speed = Random.Range(3f, 6f);
-            float lifetime = Random.Range(0.5f, 0.9f);
-            float elapsed = 0f;
-            Color startColor = fragSR.color;
-
-            while (elapsed < lifetime)
+            private IEnumerator Fly(SpriteRenderer fragSR, Vector2 dir)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / lifetime;
-                go.transform.position += (Vector3)(dir * speed * Time.deltaTime);
-                speed = Mathf.Lerp(speed, 0f, Time.deltaTime * 4f);
-                startColor.a = Mathf.Lerp(1f, 0f, t);
-                fragSR.color = startColor;
-                yield return null;
-            }
+                float speed = Random.Range(3f, 6f);
+                float lifetime = Random.Range(0.5f, 0.9f);
+                float elapsed = 0f;
+                Color startColor = fragSR.color;
 
-            Destroy(go);
+                while (elapsed < lifetime)
+                {
+                    elapsed += Time.deltaTime;
+                    float t = elapsed / lifetime;
+                    transform.position += (Vector3)(dir * speed * Time.deltaTime);
+                    speed = Mathf.Lerp(speed, 0f, Time.deltaTime * 4f);
+                    startColor.a = Mathf.Lerp(1f, 0f, t);
+                    fragSR.color = startColor;
+                    yield return null;
+                }
+
+                Destroy(gameObject);
+            }
         }
 
         // ─── Telegraph Helper ─────────────────────────────────────────────────

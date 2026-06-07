@@ -35,6 +35,7 @@ namespace RIMA
 
         private LineRenderer  line;
         private SpriteRenderer decalSR;
+        private Vector3 decalInitialScale;   // MINOR-4: cache non-uniform scale set by SpawnDecal
         private float elapsed;
         private bool  running;
         private static Material sharedDefaultMaterial;
@@ -59,9 +60,11 @@ namespace RIMA
             if (decalSR != null)
             {
                 Color dc = decalSR.color; dc.a = alpha; decalSR.color = dc;
-                // Grow slightly as the telegraph charges (0.9→1.0 scale over duration)
+                // Grow slightly as the telegraph charges (0.9→1.0 scale over duration).
+                // MINOR-4 fix: multiply initial non-uniform scale (length×width) rather than
+                // overwriting with a uniform Vector3.one * scale, which flattened line/cone decals.
                 float scale = Mathf.Lerp(0.88f, 1.0f, t);
-                decalSR.transform.localScale = Vector3.one * scale;
+                decalSR.transform.localScale = decalInitialScale * scale;
             }
 
             // Keep fallback line very subtle
@@ -207,6 +210,7 @@ namespace RIMA
             go.transform.position = new Vector3(worldPos.x, worldPos.y, 0f);
             go.transform.rotation = Quaternion.Euler(0f, 0f, zRotation);
             go.transform.localScale = new Vector3(scaleX, scaleY, 1f);
+            decalInitialScale = go.transform.localScale;   // MINOR-4: cache for per-frame multiply
 
             decalSR = go.AddComponent<SpriteRenderer>();
             decalSR.sprite           = spr;
