@@ -19,12 +19,12 @@ Boss_Intro_01: floor=100, builtProps=0, propOutsideFloor=0, invalidTemplateProps
 Combat_Large_01: floor=120, builtProps=1, propOutsideFloor=1, invalidTemplateProps=1, ok=False
 Combat_Medium_01: floor=60, builtProps=6, propOutsideFloor=6, invalidTemplateProps=6, ok=False
 Combat_Small_01: floor=28, builtProps=1, propOutsideFloor=1, invalidTemplateProps=1, ok=False
-Corridor_Linear_01: floor=24, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
+Corridor_Linear_01: floor=27, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 Corridor_LShape_01: floor=42, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 Elite_01: floor=52, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 Shrine_01: floor=40, builtProps=8, propOutsideFloor=8, invalidTemplateProps=8, ok=False
 Spawn_01: floor=26, builtProps=0, propOutsideFloor=0, invalidTemplateProps=0, ok=True
-Treasure_01: floor=42, builtProps=4, propOutsideFloor=0, invalidTemplateProps=0, ok=True
+Treasure_01: floor=37, builtProps=4, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 Chamber_CharSelect: floor=224, builtProps=17, propOutsideFloor=0, invalidTemplateProps=0, ok=True
 exceptions=0, propValidationFailures=9, totalBuiltProps=142
 [RoomSmokeTest] PASS (build exceptions=0)
