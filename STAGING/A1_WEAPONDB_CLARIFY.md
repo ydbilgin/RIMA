@@ -53,19 +53,20 @@ Three Warblade prefabs exist:
 
 ---
 
-## 4. OrientationSync / WeaponSorter — Dead Code Status
+## 4. OrientationSync / WeaponSorter — Runtime Status
 
-**Both are dead — zero references in any scene or prefab.**
+**Updated 2026-06-08 audit status:** `OrientationSync` is NO LONGER dead in the canonical runtime player. `Assets/Prefabs/Player.prefab` has `OrientationSync`, and `HandAnchorAttach` calls it after spawning the canonical weapon. `WeaponSorter` remains old-prefab-only unless separately revalidated.
 
 | Script | Path | CS references | Prefab/scene references |
 |--------|------|--------------|------------------------|
-| `OrientationSync` | `Assets/Scripts/Combat/OrientationSync.cs` | Self only | `Assets/Prefabs/Combat/Weapons/Warblade.prefab` only |
+| `OrientationSync` | `Assets/Scripts/Combat/OrientationSync.cs` | Called by `HandAnchorAttach` in canonical runtime | `Assets/Prefabs/Player.prefab` + old `Assets/Prefabs/Combat/Weapons/Warblade.prefab` |
 | `WeaponSorter` | `Assets/Scripts/Combat\WeaponSorter.cs` | Self only | `Assets/Prefabs/Combat/Weapons/Warblade.prefab` only |
 
-The only reference to these scripts is the old `Assets/Prefabs/Combat/Weapons/Warblade.prefab` — which is itself an orphan (not referenced by Player.prefab or any scene). That prefab also has the `handOffsets` array inlined, suggesting it predates the `WeaponDatabaseSO`/`HandAnchorAttach` system.
+The old `Assets/Prefabs/Combat/Weapons/Warblade.prefab` is still an orphan (not referenced by Player.prefab or any scene). That prefab also has the `handOffsets` array inlined, suggesting it predates the `WeaponDatabaseSO`/`HandAnchorAttach` system.
 
 **Recommendation for BLOK A:**
-- `OrientationSync.cs`, `WeaponSorter.cs`, and `Assets/Prefabs/Combat/Weapons/Warblade.prefab` are all orphan/dead. They COULD be deleted (no runtime break). However, `OrientationSync` is the future A2 MOUNT BRIDGE candidate — its `Sync(FacingDir8 dir)` API is exactly what A2 needs. **Wire rather than delete.**
+- Do NOT delete `OrientationSync.cs`; it is live in the canonical runtime player.
+- `WeaponSorter.cs` and `Assets/Prefabs/Combat/Weapons/Warblade.prefab` can be treated as old-prefab cleanup candidates after revalidation.
 - `WeaponSorter` duplicates sorting logic — can be deleted once A2 is wired.
 
 ---

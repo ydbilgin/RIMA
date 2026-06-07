@@ -4,7 +4,7 @@ Durum: SADECE PLAN — üretime BASMA, kullanıcı onayı gerekli
 
 ---
 
-## ONEMLI CAKISMA NOTU (okumadan basma)
+## ONEMLI CAKISMA NOTU — RESOLVED 2026-06-08 (okumadan basma)
 
 T2_MOB_PROTOTYPE_SPEC.md (LOCKED, Karar #82+84) ile COMBAT_ROSTER.md boyut bilgileri FARKLI.
 Hangisi gecer?
@@ -14,9 +14,9 @@ Hangisi gecer?
 | T2_MOB_PROTOTYPE_SPEC | 64px | 64px | 64px (sub-imp 32px) |
 | COMBAT_ROSTER (S43 onaylı) | 112px | 128px | 48px |
 
-KARAR GEREKTIRIYOR: Seans basında kullanıcıya sor hangi boyut geçerli. Öneri: COMBAT_ROSTER S43 onaylı = daha yeni. Aşağıdaki plan COMBAT_ROSTER boyutlarını kullanır ama kullanıcı 64px derse trivially güncellenebilir.
+RESOLVED per `STAGING/WEAPON_PIPELINE_AUDIT_2026-06-08.md`: COMBAT_ROSTER S43 wins. Demo 4 archetypes + sizes are Shard Walker 112 / Void Thrall 128 / Chain Warden 128 / Relic Caster 80. Penitent Bruiser + Fracture Imp = post-demo. User may override at session start.
 
-4. MOB ARKETIP BELIRSIZLIGI: T2 spec 3 mob içeriyor (Walker, Bruiser, Imp). COMBAT_ROSTER demo öncelik seti şu: Walker + Void Thrall + Chain Warden + Relic Caster. "4 arketip" = bu 4'mü yoksa T2 spec 3 + 4.? Aşağıdaki plan COMBAT_ROSTER demo setini (Walker, Void Thrall, Chain Warden, Relic Caster) 4 arketip olarak kullanır — T2 spec'in Bruiser ve Fracture Imp'ini de sonraya not olarak ekler. Kullanıcı onaylasın.
+4. MOB ARKETIP DURUMU: "4 arketip" = COMBAT_ROSTER demo seti (Walker, Void Thrall, Chain Warden, Relic Caster). T2 spec'in Penitent Bruiser ve Fracture Imp'i sonraya not olarak kalır.
 
 ---
 
@@ -258,10 +258,9 @@ Kullanıcı karar versin. Seçenek A önerilir (seans süresini kısaltır).
 
 ## SEANS AKIS SIRASI (kopyala-yapıştır hazır)
 
-Seans başlangıcında kullanıcıya sor:
-1. Mob boyutu: 64px mi (T2 spec) yoksa COMBAT_ROSTER boyutları mı (Walker=112, Bruiser=128, Imp=48)?
-2. 4. arketip: COMBAT_ROSTER demo seti mi (Walker/Thrall/Warden/Caster) yoksa başka?
-3. HalfThrall: programatik mi yoksa PixelLab?
+Seans başlangıcı notu: COMBAT_ROSTER S43 varsayılanı aktif (Shard Walker 112 / Void Thrall 128 / Chain Warden 128 / Relic Caster 80); kullanıcı isterse burada override edebilir.
+Kullanıcıya sor:
+1. HalfThrall: programatik mi yoksa PixelLab?
 
 Onaydan sonra sıra:
 ```

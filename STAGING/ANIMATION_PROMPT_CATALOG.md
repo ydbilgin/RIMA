@@ -1,5 +1,7 @@
 # RIMA — Animation Prompt Catalog (Warblade Demo Faz 1 + 9 Class Faz 4 master)
 
+> **DEMO ACTIVE:** none — new char/mob animation = 0 per CODEANIM_DECISION_2026-06-05. **POST-DEMO:** SPLIT body animation reference only. **DO NOT GENERATE BEFORE TIMING FREEZE.**
+
 **Tarih:** 2026-05-27 gece
 **Author:** rima-design (Opus 4.7) — triple-AI synthesis (NLM canonical + agy benchmark + asset envanteri)
 **Status:** PLAN — kullanıcı PixelLab Web UI "Add Animation" ekranında uygulayacak. Gen yok bu task'te.

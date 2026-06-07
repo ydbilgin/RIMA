@@ -1,5 +1,7 @@
 # WEAPON BATCH PLAN — RIMA (S114 S4 LOCK, 2026-05-29)
 
+> ⚠️ **SUPERSEDED / CANON-CORRECTION (2026-06-08):** Canonical sources are `STAGING/chatgpt_weapon_pack/01_CANON_WEAPONS.md` (weapon canon) + `STAGING/PIXELLAB_SESSION_PLAN_2026-06-07.md` (immediate session). Use this file only after applying the inline corrections below.
+
 **Karar:** Silah başına 1 sprite, 8 yön KOD ile (OrientationSync rotation+flipY+sort). 8dir-bake YOK. PPU 64. Karakter = 64px (120px canvas'a bakma).
 
 **⚠️ ÜRETİM = CLAUDE, MCP `create_1_direction_object` ile (KULLANICI YETKİ VERDİ S114 S4 — `feedback_pixellab_mcp_halt_strict` ban'ı BU GÖREV için kalktı). Sadece 3 batch.**
@@ -18,22 +20,22 @@
 | Ravager | Greataxe | Büyük | ❌ üret |
 | Ronin | Katana | Orta | ✅ `a032d9b5` |
 | Ranger | Compound bow | Orta | ✅ `ebc33ebf` |
-| Hexer | Curse staff / Grimoire / Scepter | Orta | ✅ staff `4bde2642` |
-| Elementalist | Staff / Orb | Orta | ❌ üret |
+| Hexer | Grimoire / Totem / Scepter (curse-staff FORBIDDEN) | Orta | ❌ canon focus üret; old staff asset forbidden |
+| Elementalist | Floating golden rune disc (staff/wand FORBIDDEN) | Orta | ❌ üret |
 | Summoner | Tome / Orb | Orta | ❌ üret |
 | Shadowblade | Reverse-grip dagger | Küçük | ✅ `9312ea86` |
-| Gunslinger | Flintlock pistol | Küçük | ✅ `894bba4a` |
-| Brawler | Gauntlet / fist | Küçük | ❌ üret |
+| Gunslinger | Rift-tech pistol (western/flintlock FORBIDDEN) | Küçük | ❌ canon pistol üret |
+| Brawler | NO weapon (body cosmetic only; gauntlet/fist-as-weapon FORBIDDEN) | Küçük | ❌ weapon üretme |
 
 ## BATCH 1 — Küçük silahlar (32-40px canvas → 64-item tier)
-- **Sınıflar:** Shadowblade (dagger), Gunslinger (pistol), Brawler (gauntlet).
-- **İçerik (varyantlarla):** dagger ×8, pistol ×8, gauntlet ×8, küçük wand/throwing ×varyant — 64 slot'a kadar.
+- **Sınıflar:** Shadowblade (dagger), Gunslinger (rift-tech pistol), Brawler (NO weapon; body cosmetic only).
+- **İçerik (varyantlarla):** dagger ×8, rift-tech pistol ×8, Brawler weapon YOK; küçük throwing varyantları — 64 slot'a kadar. Gauntlet/fist-as-weapon FORBIDDEN.
 - **style_images:** Shadowblade + Gunslinger + Brawler karakterleri.
 - ~20-40 gen.
 
 ## BATCH 2 — Orta 1H silahlar (64px canvas → 16-item tier)
-- **Sınıflar:** Ronin (katana), Hexer (curse staff/scepter), Elementalist (staff/orb), Summoner (tome/orb), Ranger (bow), generic sword.
-- **İçerik:** katana ×2-3, staff ×3, scepter ×2, orb ×2, tome ×2, bow ×2, sword ×2 ≈ 16.
+- **Sınıflar:** Ronin (katana), Hexer (grimoire/totem/scepter), Summoner (tome/orb), Elementalist (floating golden rune disc), Ranger (bow), generic sword.
+- **İçerik:** katana ×2-3, grimoire/totem/scepter ×4, golden rune disc ×2, tome/orb ×2, bow ×2, sword ×2 ≈ 16.
 - **style_images:** Ronin + Hexer + Elementalist + Ranger karakterleri.
 - ~20-40 gen.
 
@@ -44,7 +46,7 @@
 - ~20-40 gen.
 
 ## Üretim notları
-- Mevcut 64px weapon'lar uygun → SADECE eksikler (Ravager greataxe, Elementalist staff, Summoner tome, Brawler gauntlet) + swap varyantları üretilir.
+- Mevcut 64px weapon'lar uygun → SADECE eksikler (Ravager greataxe, Summoner tome/orb, Elementalist golden rune disc) + swap varyantları üretilir. Brawler weapon YOK; body cosmetic only.
 - Sapan/off-color tek silah → o sınıfın karakteriyle TEK BAŞINA yeniden üret (tightest match).
 - Demo (Warblade) = cyan greatsword `31ee0f73` zaten yeterli, batch beklemez.
 - **Claude üretir** (MCP, yetki verildi). Her batch: style-ref base64 hazırla → create_1_direction_object(description, item_descriptions[], style_images[]) → review → get_object → select_object_frames. Sonra Unity'ye import (PPU 64) + WeaponDatabase entry. 3 batch ile SINIRLI.

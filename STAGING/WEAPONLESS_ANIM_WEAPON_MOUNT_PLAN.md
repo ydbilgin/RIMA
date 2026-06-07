@@ -3,7 +3,7 @@
 **Author:** Sonnet orchestrator (triple-AI sentez: codebase verify + industry research + design synthesis)  
 **Status:** PLAN — asset gen yok. Kullanıcı action listesi Bölüm 4'te.
 
-> ⚠️ **SUPERSEDED (weapon PPU + sıra):** Weapon PPU bu plandaki 100 değil — **canonical PPU = 64** (body ile uyumlu, HandAnchor offset). Ayrıca üretim sırası **VFX-first / graybox-combat-first** olarak TERS çevrildi. Her ikisi de `STAGING/WEAPON_ANIM_VFX_PRODUCTION_LOCK.md` (2026-05-28, triple-AI lock, kullanıcı onayı) ile kilitli. Bu plan anim prompt blokları + HandAnchor mount detayı için hâlâ geçerli; PPU/sıra için LOCK doc'una bak.  
+> ⚠️ **SUPERSEDED / REFERENCE-ONLY (weapon PPU + sıra):** Weapon PPU bu plandaki 100 değil — **canonical PPU = 64** (body ile uyumlu, HandAnchor offset). Ayrıca üretim sırası **VFX-first / graybox-combat-first** olarak TERS çevrildi. Her ikisi de `STAGING/WEAPON_ANIM_VFX_PRODUCTION_LOCK.md` (2026-05-28, triple-AI lock, kullanıcı onayı) ile kilitli. Bu plan yalnızca anim prompt blokları + HandAnchor mount geçmişi için referanstır; PPU/sıra için LOCK doc'una bak.
 **Sources:** Codebase verify (OrientationSync.cs, HandAnchorAttach.cs, WeaponSorter.cs, SpriteHandData.cs, FacingDir8.cs, WeaponDatabaseSO.cs), warblade sprite görsel inceleme, ANIMATION_PROMPT_CATALOG.md canonical
 
 ---

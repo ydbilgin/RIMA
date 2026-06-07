@@ -21,6 +21,8 @@ Bu kararlar codebase'den dogrulandi, ezbere/plan iddiasina guvenilmedi:
 | "WeaponDatabaseSO tek dogru entry" | 2 asset var: `Assets/Resources/WeaponDatabase.asset` (HandAnchorAttach bunu okur, prefab = sade Transform+SR) + `Assets/ScriptableObjects/Weapons/WeaponDatabaseSO.asset`. OrientationSync/WeaponSorter farkli prefab'ta (`Prefabs/Combat/Weapons/Warblade.prefab`), aktif degil. | Hangi prefab'in aktif oldugunu netlestir; component'leri aktif prefab'a tasi. |
 | "VFX altyapisi yok, sifirdan" | VAR: `CombatEventBus.cs` (OnHit/OnKill), `VFXRouter.cs`, juice driver'lar (ScreenShakeDriver/HitPauseDriver/DamageNumberDriver), `SlashArcVFX.cs`, `HitImpact.cs`, `DeathVFX.cs`. Prefab: HitSpark/DeathBurst/SlashArcVFX. AMA hicbiri sahneye wire EDILMEMIS. | VFX = wire-up isi, sifirdan kod degil. Buyuk avantaj. |
 
+> ⚠️ **STALE STATUS NOTE (2026-06-08 audit):** The "OrientationSync dead/unwired" claim above is stale. `OrientationSync` is live-wired in canonical `Assets/Prefabs/Player.prefab`; `HandAnchorAttach` wires the spawned weapon through `SetWeaponTransform()` and calls `Sync()` per `STAGING/WEAPON_PIPELINE_AUDIT_2026-06-08.md`. PPU 64 and production-order locks in this document remain canonical.
+
 ---
 
 ## 1. LOCKED KARARLAR (5 madde)
@@ -36,6 +38,8 @@ agy Q2 kritik bulgu: 70-80 derece top-down'da TEK weapon sprite'i 360 dondurmek 
 
 ### L4 — Weapon-mount bridge = HandAnchorAttach icinde 4-diagonal (Codex (c) secenegi)
 OrientationSync/WeaponSorter dead code + PlayerAnimator 4-dir diagonal kullandigi icin, en az-LOC + en az-regresyon yolu: HandAnchorAttach Level1'e LateUpdate ekle, PlayerController.FacingDirection oku, NE/NW/SW/SE'ye snap et, weapon localRotation (SE -45/NE 45/NW 135/SW -135) + sortingOrder (NE/NW behind, SE/SW front) dogrudan set. PlayerAnimator'a DOKUNMA. OrientationSync/WeaponSorter'i yeniden wire ETME (deger tablolari referans olarak kullanilir). **Tahmini 35-55 LOC.** Weapon PPU = **64** (body ile ayni, scale telafisi yok).
+
+> ⚠️ **STALE (2026-06-08 audit):** The 4-diagonal bridge prescription above is historical. `OrientationSync` is now wired on `Player.prefab` and called by `HandAnchorAttach`; do not use this paragraph as current implementation status. Keep the PPU 64/order lock.
 
 ### L5 — Faz 1 = Level1 Static mount; Level2 SpriteHandData ERTELENDI
 twoHanded + orientBetweenHands Level1'de etkisiz (sadece metadata). Faz 1 iki-el gorunumu: weapon pivot = grip, anchorOffset = iki el gorsel ortasi, rotation L4 bridge'den. Level2 per-frame hand data = Faz 2+ (her frame icin SO pahali, demo'ya degmez).
@@ -160,7 +164,7 @@ Kriter: 4 yonde weapon dogru aci+sort (idle/walk); attack'ta weapon kapanip slas
 Efor: 0.5-1 gun.
 
 ### BLOK F — FAZ 4 OUTLINE (demo onayi SONRASI, detay yok)
-- 9 class weapon (Codex 10-class canvas/PPU64 tablosu: katana 96x192, dagger 64x96, staff/orb, bow 128x192, greataxe 128x192, whip 128x192, gauntlet/pistol/tome). Her biri WeaponDatabase entry + prefab.
+- 9 class weapon (canon-corrected PPU64 outline: katana 96x192, dagger 64x96, Ranger bow 128x192, Ravager greataxe 128x192, Gunslinger rift-tech pistol, Hexer grimoire/totem/scepter, Summoner tome/orb, Elementalist floating rune disc, Brawler NO weapon). Old staff/orb-for-Elementalist, Hexer whip, western/flintlock Gunslinger, and Brawler gauntlet-as-weapon terms are FORBIDDEN. Her biri WeaponDatabase entry + prefab where applicable.
 - Cross-class anim rollout (Elementalist -> Ranger -> Shadowblade -> Ronin -> Gunslinger -> Ravager -> Hexer -> Brawler -> Summoner).
 - Boss/elite death = PixelLab flipbook (L2 form kriteri).
 - 5-dir expansion (S->E->N->SE->NE; W/SW/NW = 4-dir diagonal facing turetir, native gen DEGIL).
