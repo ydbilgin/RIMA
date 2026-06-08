@@ -28,8 +28,8 @@ namespace RIMA
         private const string ChamberExitPortalResource = "Environment/Gate/gate_arch";
         private const string ChamberExitPortalEditorPath = "Assets/Sprites/Environment/Portal/portal_rift.png";
         private const string ArenaRunSceneName = "_Arena";
-        private const float ClassInteractRadius = 3.5f;
-        private const float ClassConfirmRadius = 3.7f;
+        private const float ClassInteractRadius = 2.0f;
+        private const float ClassConfirmRadius = 2.2f;
         private const float DoorInteractRadius = 3.5f;
         private const float DummyInteractRadius = 3.5f;
         private const int StandRowCount = 5;
@@ -313,7 +313,7 @@ namespace RIMA
             {
                 highlightedClass = ClassType.None;
                 SetClassicOverlayVisible(dummySelectOpen || classicTabOpen);
-                ShowPrompt(Vector3.zero, "[G] KUKLA — Sınıf Seç");
+                ShowPrompt(Vector3.zero, "[G] Dummy — Sınıf Seç");
 
                 if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
                 {
@@ -579,7 +579,9 @@ namespace RIMA
             }
 
             // Two straight columns, evenly spaced, deterministic.
-            // Unlocked classes (Warblade, Elementalist) placed in front rows (lowest Y = nearest spawn).
+            // FIX 3a: EQUAL SPACING — compute ideal Y positions first, then snap X only.
+            // By locking each row's Y to the exact Lerp value, all rows have equal vertical gaps.
+            // We only snap X (left/right columns), never Y, so the column stays visually uniform.
             HashSet<Vector2Int> reserved = new HashSet<Vector2Int> { chamberSpawnCell, ExitCell };
             List<EchoStationLayout> leftLayouts = new List<EchoStationLayout>(StandRowCount);
             List<EchoStationLayout> rightLayouts = new List<EchoStationLayout>(StandRowCount);
@@ -587,9 +589,13 @@ namespace RIMA
             {
                 float k = StandRowCount <= 1 ? 0f : row / (float)(StandRowCount - 1);
                 int y = Mathf.RoundToInt(Mathf.Lerp(firstRowY, lastRowY, k));
-                Vector2Int left = PickNearestWalkableCell(new Vector2Int(axisX - columnOffset, y), reserved, 7);
+
+                // Snap X within the same row only — try ideal X first, then ±1 on X at same Y.
+                Vector2Int leftIdeal = new Vector2Int(axisX - columnOffset, y);
+                Vector2Int left = PickNearestWalkableSameRowY(leftIdeal, reserved, 5);
                 reserved.Add(left);
-                Vector2Int right = PickNearestWalkableCell(new Vector2Int(axisX + columnOffset, y), reserved, 7);
+                Vector2Int rightIdeal = new Vector2Int(axisX + columnOffset, y);
+                Vector2Int right = PickNearestWalkableSameRowY(rightIdeal, reserved, 5);
                 reserved.Add(right);
 
                 leftLayouts.Add(new EchoStationLayout(left));
@@ -707,6 +713,39 @@ namespace RIMA
             }
 
             return target;
+        }
+
+        /// <summary>
+        /// FIX 3a: Snaps X within the same Y row for equal vertical spacing.
+        /// Tries ideal cell first, then scans ±searchRadius on X only at the same Y.
+        /// Falls back to PickNearestWalkableCell if no same-row cell found.
+        /// </summary>
+        private Vector2Int PickNearestWalkableSameRowY(Vector2Int target, HashSet<Vector2Int> reserved, int searchRadius)
+        {
+            // Try ideal cell first
+            if (IsWalkableCell(target) && !reserved.Contains(target))
+            {
+                return target;
+            }
+
+            // Scan X at same Y
+            for (int r = 1; r <= searchRadius; r++)
+            {
+                Vector2Int candidateLeft = new Vector2Int(target.x - r, target.y);
+                if (IsWalkableCell(candidateLeft) && !reserved.Contains(candidateLeft))
+                {
+                    return candidateLeft;
+                }
+
+                Vector2Int candidateRight = new Vector2Int(target.x + r, target.y);
+                if (IsWalkableCell(candidateRight) && !reserved.Contains(candidateRight))
+                {
+                    return candidateRight;
+                }
+            }
+
+            // Fallback: allow Y drift
+            return PickNearestWalkableCell(target, reserved, searchRadius);
         }
 
         /// <summary>
@@ -1102,14 +1141,21 @@ namespace RIMA
 
             // FIX E: scale label/bar offsets with dummy size so they sit above the bigger sprite.
             float dummyLabelHeight = 0.95f + (chamberDummyScale - 0.72f) * 0.4f;
+            // FIX 2: Name label says "Dummy"; show/hide on hover (default hidden).
             TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, dummy.transform.position + new Vector3(0f, dummyLabelHeight + 0.20f, 0f), 2.6f);
-            hpLabel.text = "KUKLA";
+            hpLabel.text = "Dummy";
+            hpLabel.gameObject.SetActive(false);   // hidden until hover
             ScreenshotMode.Register(hpLabel.gameObject, "TrainingDummy_HP");
-            // FIX STEP4: numeric HP counter ("1000 / 1000") between the title and the bar.
-            TMP_Text hpNumberLabel = CreateWorldText("TrainingDummy_HPNumber", dummy.transform,
-                dummy.transform.position + new Vector3(0f, dummyLabelHeight - 0.32f, 0f), 2.0f);
+            // FIX 2b: HP bar first (no separate number label above it).
+            DummyHpBar hpBar = CreateDummyHpBar(dummy.transform, dummy.transform.position + new Vector3(0f, dummyLabelHeight - 0.30f, 0f));
+            hpBar.RootGo.SetActive(false);   // hidden until hover
+            // FIX 2b: HP number INSIDE the bar (centered on the red fill area).
+            TMP_Text hpNumberLabel = CreateWorldText("TrainingDummy_HPNumber", hpBar.RootGo.transform,
+                hpBar.RootGo.transform.position, 1.8f);
             hpNumberLabel.text = $"{health.CurrentHP} / {health.MaxHP}";
-            DummyHpBar hpBar = CreateDummyHpBar(dummy.transform, dummy.transform.position + new Vector3(0f, dummyLabelHeight - 0.60f, 0f));
+            // FIX 2c: Hover component shows/hides name + bar when mouse is over dummy collider.
+            DummyHoverVisibility hoverVis = dummy.AddComponent<DummyHoverVisibility>();
+            hoverVis.Initialize(hpLabel.gameObject, hpBar.RootGo);
             dummy.AddComponent<TrainingDummyTarget>().Initialize(health, hpLabel, hpBar, hpNumberLabel);
             Debug.Log($"[ChamberSelectBootstrap] P4 evidence: immortal trigger-only training dummy spawned at chamber cell {chamberDummyCell}.");
         }
@@ -1123,7 +1169,7 @@ namespace RIMA
             CreateBarSprite("Back", bar.transform, Vector3.zero, new Vector3(1.15f, 0.13f, 1f), new Color(0.06f, 0.08f, 0.10f, 0.92f), 298);
             SpriteRenderer fill = CreateBarSprite("Fill", bar.transform, new Vector3(-0.55f, 0f, 0f), new Vector3(1.08f, 0.07f, 1f), new Color(0.7f, 0.05f, 0.08f, 0.98f), 299);
             fill.transform.localScale = new Vector3(1.08f, 0.07f, 1f);
-            return new DummyHpBar(fill, 1.08f);
+            return new DummyHpBar(bar, fill, 1.08f);
         }
 
         private static SpriteRenderer CreateBarSprite(string name, Transform parent, Vector3 localPosition, Vector3 scale, Color color, int sortingOrder)
@@ -1150,11 +1196,11 @@ namespace RIMA
             GameObject borderGo = new GameObject("ChamberPromptBorder", typeof(RectTransform));
             borderGo.transform.SetParent(canvasRoot, false);
             RectTransform borderRt = borderGo.GetComponent<RectTransform>();
-            borderRt.anchorMin = new Vector2(0.5f, 0.13f);
-            borderRt.anchorMax = new Vector2(0.5f, 0.13f);
+            borderRt.anchorMin = new Vector2(0.5f, 0.06f);
+            borderRt.anchorMax = new Vector2(0.5f, 0.06f);
             borderRt.pivot = new Vector2(0.5f, 0.5f);
             borderRt.anchoredPosition = Vector2.zero;
-            borderRt.sizeDelta = new Vector2(568f, 68f);   // 4px larger than panel on each side
+            borderRt.sizeDelta = new Vector2(692f, 68f);   // 4px larger than panel on each side
             Image borderImg = borderGo.AddComponent<Image>();
             borderImg.color = new Color(0.2f, 0.85f, 1f, 0.9f);
             borderImg.raycastTarget = false;
@@ -1162,11 +1208,11 @@ namespace RIMA
             GameObject promptGo = new GameObject("ChamberPromptPanel", typeof(RectTransform));
             promptGo.transform.SetParent(canvasRoot, false);
             RectTransform promptRt = promptGo.GetComponent<RectTransform>();
-            promptRt.anchorMin = new Vector2(0.5f, 0.13f);
-            promptRt.anchorMax = new Vector2(0.5f, 0.13f);
+            promptRt.anchorMin = new Vector2(0.5f, 0.06f);
+            promptRt.anchorMax = new Vector2(0.5f, 0.06f);
             promptRt.pivot = new Vector2(0.5f, 0.5f);
             promptRt.anchoredPosition = Vector2.zero;
-            promptRt.sizeDelta = new Vector2(560f, 60f);
+            promptRt.sizeDelta = new Vector2(684f, 60f);
 
             Image background = promptGo.AddComponent<Image>();
             background.color = new Color(0.06f, 0.09f, 0.12f, 0.92f);
@@ -1262,44 +1308,56 @@ namespace RIMA
 
         private void BuildChamberEchoDisplay(RectTransform root)
         {
-            GameObject groupGo = new GameObject("ChamberEchoDisplay", typeof(RectTransform));
-            groupGo.transform.SetParent(root, false);
-            RectTransform groupRt = groupGo.GetComponent<RectTransform>();
-            groupRt.anchorMin = new Vector2(0f, 1f);
-            groupRt.anchorMax = new Vector2(0f, 1f);
-            groupRt.pivot = new Vector2(0f, 1f);
-            groupRt.anchoredPosition = new Vector2(12f, -12f);
-            groupRt.sizeDelta = new Vector2(140f, 20f);
+            // FIX 4: Proper top-left HUD. Dark background panel for readability.
+            GameObject bgGo = new GameObject("ChamberEchoDisplayBg", typeof(RectTransform));
+            bgGo.transform.SetParent(root, false);
+            RectTransform bgRt = bgGo.GetComponent<RectTransform>();
+            bgRt.anchorMin = new Vector2(0f, 1f);
+            bgRt.anchorMax = new Vector2(0f, 1f);
+            bgRt.pivot = new Vector2(0f, 1f);
+            bgRt.anchoredPosition = new Vector2(8f, -8f);
+            bgRt.sizeDelta = new Vector2(160f, 32f);
+            Image bgImg = bgGo.AddComponent<Image>();
+            bgImg.color = new Color(0.04f, 0.07f, 0.10f, 0.82f);
+            bgImg.raycastTarget = false;
 
+            GameObject groupGo = new GameObject("ChamberEchoDisplay", typeof(RectTransform));
+            groupGo.transform.SetParent(bgGo.transform, false);
+            RectTransform groupRt = groupGo.GetComponent<RectTransform>();
+            groupRt.anchorMin = Vector2.zero;
+            groupRt.anchorMax = Vector2.one;
+            groupRt.offsetMin = new Vector2(6f, 4f);
+            groupRt.offsetMax = new Vector2(-6f, -4f);
+
+            // Cyan diamond icon
             GameObject iconGo = new GameObject("EchoIcon", typeof(RectTransform));
             iconGo.transform.SetParent(groupGo.transform, false);
             RectTransform iconRt = iconGo.GetComponent<RectTransform>();
             iconRt.anchorMin = new Vector2(0f, 0.5f);
             iconRt.anchorMax = new Vector2(0f, 0.5f);
             iconRt.pivot = new Vector2(0.5f, 0.5f);
-            iconRt.anchoredPosition = new Vector2(7f, -8f);
-            iconRt.sizeDelta = new Vector2(8f, 8f);
+            iconRt.anchoredPosition = new Vector2(8f, 0f);
+            iconRt.sizeDelta = new Vector2(12f, 12f);
             iconRt.localEulerAngles = new Vector3(0f, 0f, 45f);
-
             Image icon = iconGo.AddComponent<Image>();
-            icon.color = new Color(0.28f, 0.96f, 1f, 0.9f);
+            icon.color = new Color(0.28f, 0.96f, 1f, 0.95f);
             icon.raycastTarget = false;
 
+            // Balance label to the right of icon
             GameObject labelGo = new GameObject("EchoBalance", typeof(RectTransform));
             labelGo.transform.SetParent(groupGo.transform, false);
             RectTransform labelRt = labelGo.GetComponent<RectTransform>();
-            labelRt.anchorMin = new Vector2(0f, 1f);
-            labelRt.anchorMax = new Vector2(0f, 1f);
-            labelRt.pivot = new Vector2(0f, 1f);
-            labelRt.anchoredPosition = new Vector2(18f, 0f);
-            labelRt.sizeDelta = new Vector2(118f, 20f);
+            labelRt.anchorMin = Vector2.zero;
+            labelRt.anchorMax = Vector2.one;
+            labelRt.offsetMin = new Vector2(20f, 0f);
+            labelRt.offsetMax = Vector2.zero;
 
             chamberEchoBalanceLabel = labelGo.AddComponent<TextMeshProUGUI>();
             chamberEchoBalanceLabel.text = "0";
-            chamberEchoBalanceLabel.fontSize = 12f;
+            chamberEchoBalanceLabel.fontSize = 16f;
             chamberEchoBalanceLabel.fontStyle = FontStyles.Bold;
-            chamberEchoBalanceLabel.color = new Color(0.82f, 0.96f, 1f, 0.92f);
-            chamberEchoBalanceLabel.alignment = TextAlignmentOptions.Left;
+            chamberEchoBalanceLabel.color = new Color(0.82f, 0.96f, 1f, 0.95f);
+            chamberEchoBalanceLabel.alignment = TextAlignmentOptions.MidlineLeft;
             chamberEchoBalanceLabel.raycastTarget = false;
             RefreshChamberEchoHud();
         }
@@ -1733,12 +1791,13 @@ namespace RIMA
 
                 if (station.pedestal != null)
                 {
-                    // FIX 4: Pedestal glows cyan for unlocked, dark for locked.
+                    // FIX 3c: Pedestal oval glows ONLY when highlighted (player adjacent) or occupied.
+                    // Default (unlocked, not highlighted, not occupied) = very dim; locked = almost off.
                     station.pedestal.color = highlighted || occupied
-                        ? new Color(0.28f, 0.92f, 1f, 0.95f)
+                        ? new Color(0.28f, 0.92f, 1f, 0.95f)   // bright cyan when near or current class
                         : unlocked
-                            ? new Color(0.16f, 0.55f, 0.62f, 0.88f)   // visible cyan glow (brighter than before)
-                            : new Color(0.10f, 0.11f, 0.13f, 0.55f);  // almost black for locked
+                            ? new Color(0.10f, 0.22f, 0.26f, 0.30f)   // very dim — almost invisible at rest
+                            : new Color(0.10f, 0.11f, 0.13f, 0.20f);  // nearly off for locked
                     station.pedestal.transform.localScale = highlighted
                         ? new Vector3(1.46f, 0.50f, 1f)
                         : new Vector3(1.28f, 0.42f, 1f);
@@ -1746,8 +1805,8 @@ namespace RIMA
 
                 if (station.pedestalLight != null)
                 {
-                    // FIX 4: Locked stations have near-zero light to read as inactive.
-                    station.pedestalLight.intensity = !unlocked ? 0.12f : highlighted ? 1.40f : occupied ? 1.00f : 0.80f;
+                    // FIX 3c: Light is OFF by default; only the highlighted station glows.
+                    station.pedestalLight.intensity = !unlocked ? 0.04f : highlighted ? 1.40f : occupied ? 0.30f : 0.04f;
                     station.pedestalLight.pointLightOuterRadius = highlighted ? 3.8f : 3.0f;
                     station.pedestalLight.color = !unlocked
                         ? new Color(0.25f, 0.28f, 0.32f, 1f)   // cold dark for locked
@@ -2074,9 +2133,11 @@ namespace RIMA
         {
             private readonly SpriteRenderer fill;
             private readonly float width;
+            public readonly GameObject RootGo;
 
-            public DummyHpBar(SpriteRenderer fill, float width)
+            public DummyHpBar(GameObject rootGo, SpriteRenderer fill, float width)
             {
+                RootGo = rootGo;
                 this.fill = fill;
                 this.width = width;
             }
@@ -2091,6 +2152,57 @@ namespace RIMA
                 float clamped = Mathf.Clamp01(pct);
                 fill.transform.localScale = new Vector3(width * clamped, fill.transform.localScale.y, 1f);
                 fill.transform.localPosition = new Vector3(-width * 0.5f + width * clamped * 0.5f, 0f, 0f);
+            }
+        }
+
+        /// <summary>
+        /// FIX 2c: Shows the dummy's name label + HP bar only while the mouse cursor is over the dummy.
+        /// Uses a per-frame screen-space raycast so it works with trigger colliders.
+        /// </summary>
+        private sealed class DummyHoverVisibility : MonoBehaviour
+        {
+            private GameObject nameGo;
+            private GameObject barGo;
+            private bool isHovered;
+            private Collider2D col;
+
+            public void Initialize(GameObject nameLabelGo, GameObject hpBarGo)
+            {
+                nameGo = nameLabelGo;
+                barGo = hpBarGo;
+                col = GetComponent<Collider2D>();
+                SetVisible(false);
+            }
+
+            private void Update()
+            {
+                if (col == null)
+                {
+                    return;
+                }
+
+                Camera cam = Camera.main;
+                if (cam == null)
+                {
+                    return;
+                }
+
+                Vector2 mouseWorld = cam.ScreenToWorldPoint(UnityEngine.InputSystem.Mouse.current != null
+                    ? (Vector2)UnityEngine.InputSystem.Mouse.current.position.ReadValue()
+                    : (Vector2)Input.mousePosition);
+
+                bool nowHovered = col.OverlapPoint(mouseWorld);
+                if (nowHovered != isHovered)
+                {
+                    isHovered = nowHovered;
+                    SetVisible(isHovered);
+                }
+            }
+
+            private void SetVisible(bool visible)
+            {
+                if (nameGo != null) nameGo.SetActive(visible);
+                if (barGo != null) barGo.SetActive(visible);
             }
         }
 
@@ -2137,7 +2249,7 @@ namespace RIMA
             {
                 if (label != null)
                 {
-                    label.text = "KUKLA";
+                    label.text = "Dummy";
                 }
 
                 // FIX STEP4: update numeric HP display
