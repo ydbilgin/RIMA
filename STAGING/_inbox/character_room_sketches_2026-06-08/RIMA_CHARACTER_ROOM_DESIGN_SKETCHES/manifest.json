@@ -1,0 +1,13 @@
+{
+  "created": "2026-06-07T18:30:49.985430+00:00",
+  "files": [
+    "01_character_select_ideal.png",
+    "02_current_screen_diagnosis.png",
+    "03_chamber_layout.png",
+    "04_combat_room_layout.png",
+    "05_portal_choice_layout.png",
+    "06_boss_room_layout.png",
+    "README.md",
+    "CLAUDE_PROMPT.md"
+  ]
+}
