@@ -743,6 +743,13 @@ namespace RIMA.MapDesigner.Room.Runtime
             clearSequence = StartCoroutine(RoomClearSequence());
         }
 
+        // How many real-time seconds to wait for the player to pick up the reward before
+        // auto-collecting it so the run never deadlocks. Set to 0 to disable (not recommended).
+        private const float RewardAutoCollectTimeoutSec = 12f;
+
+        // How many real-time seconds to wait for a draft UI to close before forcing it away.
+        private const float DraftAutoCloseTimeoutSec = 90f;
+
         private System.Collections.IEnumerator RoomClearSequence()
         {
             try
@@ -767,20 +774,46 @@ namespace RIMA.MapDesigner.Room.Runtime
                     yield break;
                 }
 
+                // ROOT FIX (Bug 1): wait for player to collect the reward, but enforce a hard
+                // timeout so a missed/skipped reward can never deadlock the run progression.
+                float rewardTimer = 0f;
                 while (activeReward != null && !activeReward.WasCollected)
                 {
+                    rewardTimer += Time.unscaledDeltaTime;
+                    if (RewardAutoCollectTimeoutSec > 0f && rewardTimer >= RewardAutoCollectTimeoutSec)
+                    {
+                        Debug.LogWarning($"[RoomRunDirector] Reward not collected after {RewardAutoCollectTimeoutSec}s — auto-collecting to unblock run (node={CurrentNodeId}).");
+                        // Destroy the uncollected reward so the coroutine exits the loop cleanly.
+                        DestroyActiveReward();
+                        break;
+                    }
                     yield return null;
                 }
 
+                // ROOT FIX (Bug 2): MarkRewardTaken() can only fail if lifecycle isn't in
+                // Cleared state — that shouldn't happen here, but if it does (e.g. AdvanceTo
+                // was called concurrently), log it and bail safely rather than silently stalling.
                 if (!lifecycle.MarkRewardTaken())
                 {
+                    Debug.LogWarning($"[RoomRunDirector] MarkRewardTaken failed at node={CurrentNodeId} state={lifecycle.State} — skipping to door-open fallback.");
+                    ForceOpenExitDoorsFromAnyClearedState();
                     clearSequence = null;
                     yield break;
                 }
 
+                // ROOT FIX (Bug 3): draft wait now also has a hard timeout so a never-closing
+                // draft UI can't permanently stall the exit doors.
                 DraftManager draft = DraftManager.Instance;
+                float draftTimer = 0f;
                 while (draft != null && draft.IsDraftActive)
                 {
+                    draftTimer += Time.unscaledDeltaTime;
+                    if (draftTimer >= DraftAutoCloseTimeoutSec)
+                    {
+                        Debug.LogWarning($"[RoomRunDirector] Draft still active after {DraftAutoCloseTimeoutSec}s — force-closing to unblock run (node={CurrentNodeId}).");
+                        draft.HideDraft();
+                        break;
+                    }
                     yield return null;
                 }
 
@@ -892,12 +925,50 @@ namespace RIMA.MapDesigner.Room.Runtime
         {
             if (!lifecycle.MarkDoorsOpened())
             {
+                // ROOT FIX (Bug 2 guard): MarkDoorsOpened only fails if state != RewardTaken.
+                // Log the state so we can diagnose future regressions; then use the force-path
+                // to avoid silently leaving the player stuck with no exit.
+                Debug.LogWarning($"[RoomRunDirector] OpenExitDoors: MarkDoorsOpened failed at state={lifecycle.State} node={CurrentNodeId}. Attempting force-open.");
+                ForceOpenExitDoorsFromAnyClearedState();
                 return;
             }
 
             EnsureAtLeastOneExitDoor();
             ConfigureExitDoors(true);
-            Debug.Log($"[RoomRunDirector] Exit doors opened count={activeDoors.Count}");
+            Debug.Log($"[RoomRunDirector] Exit doors opened count={activeDoors.Count} node={CurrentNodeId}");
+        }
+
+        /// <summary>
+        /// Force-advances the lifecycle to DoorOpen (from any post-Combat state) and opens
+        /// the exit doors. Used as a fallback whenever the normal state-machine path could not
+        /// reach MarkDoorsOpened — guarantees the player always gets a working exit after a clear.
+        /// </summary>
+        private void ForceOpenExitDoorsFromAnyClearedState()
+        {
+            // Walk the lifecycle forward to RewardTaken if needed, then to DoorOpen.
+            // Each Mark* method is a no-op if the state is already past it, so this is safe
+            // to call from Cleared, RewardTaken, or even DoorOpen.
+            if (lifecycle.State == RoomRunLifecycleState.Cleared)
+            {
+                lifecycle.MarkRewardTaken();
+            }
+
+            if (lifecycle.State == RoomRunLifecycleState.RewardTaken)
+            {
+                lifecycle.MarkDoorsOpened();
+            }
+
+            if (lifecycle.State != RoomRunLifecycleState.DoorOpen)
+            {
+                // Still failed — lifecycle is in an unexpected state (e.g. Advancing or Victory).
+                // Do not open doors; just log and bail to avoid double-advancing the run.
+                Debug.LogWarning($"[RoomRunDirector] ForceOpenExitDoorsFromAnyClearedState: cannot open doors from state={lifecycle.State} node={CurrentNodeId}. Run may be completing or already advanced.");
+                return;
+            }
+
+            EnsureAtLeastOneExitDoor();
+            ConfigureExitDoors(true);
+            Debug.LogWarning($"[RoomRunDirector] Force-opened exit doors count={activeDoors.Count} node={CurrentNodeId}");
         }
 
         private void EnsureAtLeastOneExitDoor()
