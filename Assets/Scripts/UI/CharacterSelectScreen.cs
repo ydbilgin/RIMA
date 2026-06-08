@@ -1241,14 +1241,9 @@ namespace RIMA
             Destroy(gameObject);
         }
 
-        private static bool IsUnlocked(ClassType cls) =>
-            cls == ClassType.Warblade ||
-            cls == ClassType.Elementalist ||
-            cls == ClassType.Ranger ||
-            cls == ClassType.Shadowblade ||
-            PlayerPrefs.GetInt(UnlockPrefKey(cls), 0) == 1;
+        private static bool IsUnlocked(ClassType cls) => ClassUnlockPolicy.IsUnlocked(cls);
 
-        private static string UnlockPrefKey(ClassType cls) => ClassUnlockPrefsPrefix + cls;
+        private static string UnlockPrefKey(ClassType cls) => ClassUnlockPolicy.UnlockPrefKey(cls);
 
         private static string CardActionText(ClassType cls)
         {
@@ -1266,16 +1261,7 @@ namespace RIMA
             return $"{UnlockCost(cls)} SHATTERED ECHO · veya {UnlockConditionText(cls)}";
         }
 
-        private static int UnlockCost(ClassType cls) => cls switch
-        {
-            ClassType.Ronin => 150,
-            ClassType.Ravager => 150,
-            ClassType.Gunslinger => 200,
-            ClassType.Brawler => 200,
-            ClassType.Summoner => 200,
-            ClassType.Hexer => 250,
-            _ => 0,
-        };
+        private static int UnlockCost(ClassType cls) => ClassUnlockPolicy.UnlockCost(cls);
 
         private static string UnlockConditionText(ClassType cls) => cls switch
         {
@@ -1299,19 +1285,14 @@ namespace RIMA
 
         private static bool CanUnlock(ClassType cls)
         {
-            if (IsUnlocked(cls)) return false;
-            return EchoWallet.Balance >= UnlockCost(cls);
+            return ClassUnlockPolicy.CanUnlockWithEcho(cls);
         }
 
         private void TryUnlockSelectedClass()
         {
             if (!CanUnlock(selectedClass)) return;
 
-            int cost = UnlockCost(selectedClass);
-            if (!EchoWallet.TrySpend(cost)) return;
-
-            PlayerPrefs.SetInt(UnlockPrefKey(selectedClass), 1);
-            PlayerPrefs.Save();
+            if (!ClassUnlockPolicy.TryUnlockWithEcho(selectedClass)) return;
 
             RefreshEchoLabel();
             SelectClass(selectedClass);

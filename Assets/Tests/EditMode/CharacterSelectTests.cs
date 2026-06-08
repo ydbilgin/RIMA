@@ -177,7 +177,9 @@ namespace RIMA.Tests
             if (expected == null)
                 Assert.Inconclusive("Ranger controller not in Resources; skip runtime visual swap check");
 
+            PlayerPrefs.SetInt(ClassUnlockPolicy.UnlockPrefKey(ClassType.Ranger), 1);
             manager.SetPrimaryClass(ClassType.Ranger);
+            PlayerPrefs.DeleteKey(ClassUnlockPolicy.UnlockPrefKey(ClassType.Ranger));
 
             Assert.AreSame(expected, anim.runtimeAnimatorController,
                 "Primary class changes must update player visuals, not only skill bindings.");

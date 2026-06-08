@@ -31,6 +31,9 @@ namespace RIMA
         private Image resourceFillImage;
         private CanvasGroup resourceGroup;
 
+        private TextMeshProUGUI echoBalanceLabel;
+        private int lastEchoBalance = int.MinValue;
+
         private Image lowHpVignette;
 
         private TextMeshProUGUI roomNameLabel;
@@ -86,6 +89,9 @@ namespace RIMA
             if (buildRuntimeTemplate)
                 BuildHUD();
 
+            EchoWallet.EnsureInitialized();
+            UpdateEchoDisplay();
+
             var player = GameObject.FindGameObjectWithTag("Player");
             if (player == null) return;
 
@@ -112,6 +118,11 @@ namespace RIMA
 
             if (PlayerClassManager.Instance != null)
                 PlayerClassManager.Instance.OnPrimaryClassSet += OnClassChanged;
+        }
+
+        private void Update()
+        {
+            UpdateEchoDisplay();
         }
 
         private void OnDestroy()
@@ -274,6 +285,23 @@ namespace RIMA
             if (resPulseCoroutine != null) { StopCoroutine(resPulseCoroutine); resPulseCoroutine = null; }
         }
 
+        private void UpdateEchoDisplay()
+        {
+            if (echoBalanceLabel == null)
+            {
+                return;
+            }
+
+            int balance = EchoWallet.Balance;
+            if (balance == lastEchoBalance)
+            {
+                return;
+            }
+
+            lastEchoBalance = balance;
+            echoBalanceLabel.text = balance.ToString();
+        }
+
         // ─── Room Name (transient) ──────────────────────────────────────
 
         /// <summary>Show room name top-left, fade in 0.4s → hold 3s → fade out 1.2s.</summary>
@@ -389,6 +417,7 @@ namespace RIMA
             BuildLowHpVignette(root); // first → bottom layer (over gameplay, behind the bars)
             BuildHpBar(root);
             BuildResourceBar(root);
+            BuildEchoDisplay(root);
             BuildRoomNameLabel(root);
             BuildInteractionPrompt(root);
             if (showMiniMap)
@@ -528,6 +557,49 @@ namespace RIMA
             ApplyPackFill(resourceFillImage);
         }
 
+        private void BuildEchoDisplay(RectTransform root)
+        {
+            var groupGo = new GameObject("EchoDisplay", typeof(RectTransform));
+            groupGo.transform.SetParent(root, false);
+            var groupRt = groupGo.GetComponent<RectTransform>();
+            groupRt.anchorMin = new Vector2(0f, 1f);
+            groupRt.anchorMax = new Vector2(0f, 1f);
+            groupRt.pivot = new Vector2(0f, 1f);
+            groupRt.anchoredPosition = new Vector2(HudMargin, -HudMargin - HpBarHeight - ResBarHeight - 10f);
+            groupRt.sizeDelta = new Vector2(78f, 14f);
+
+            var iconGo = new GameObject("EchoIcon", typeof(RectTransform));
+            iconGo.transform.SetParent(groupGo.transform, false);
+            var iconRt = iconGo.GetComponent<RectTransform>();
+            iconRt.anchorMin = new Vector2(0f, 0.5f);
+            iconRt.anchorMax = new Vector2(0f, 0.5f);
+            iconRt.pivot = new Vector2(0.5f, 0.5f);
+            iconRt.anchoredPosition = new Vector2(5f, -6f);
+            iconRt.sizeDelta = new Vector2(7f, 7f);
+            iconRt.localEulerAngles = new Vector3(0f, 0f, 45f);
+
+            var icon = iconGo.AddComponent<Image>();
+            icon.color = new Color(0.28f, 0.96f, 1f, 0.9f);
+            icon.raycastTarget = false;
+
+            var labelGo = new GameObject("EchoBalance", typeof(RectTransform));
+            labelGo.transform.SetParent(groupGo.transform, false);
+            var labelRt = labelGo.GetComponent<RectTransform>();
+            labelRt.anchorMin = new Vector2(0f, 1f);
+            labelRt.anchorMax = new Vector2(0f, 1f);
+            labelRt.pivot = new Vector2(0f, 1f);
+            labelRt.anchoredPosition = new Vector2(14f, 0f);
+            labelRt.sizeDelta = new Vector2(62f, 14f);
+
+            echoBalanceLabel = labelGo.AddComponent<TextMeshProUGUI>();
+            echoBalanceLabel.text = "0";
+            echoBalanceLabel.fontSize = 10f;
+            echoBalanceLabel.fontStyle = FontStyles.Bold;
+            echoBalanceLabel.color = new Color(0.82f, 0.96f, 1f, 0.92f);
+            echoBalanceLabel.alignment = TextAlignmentOptions.Left;
+            echoBalanceLabel.raycastTarget = false;
+        }
+
         private static PlayerResourceBase ResolveResource(GameObject player, ClassType cls)
         {
             return cls switch
@@ -549,7 +621,7 @@ namespace RIMA
             rt.anchorMin = new Vector2(0f, 1f);
             rt.anchorMax = new Vector2(0f, 1f);
             rt.pivot = new Vector2(0f, 1f);
-            rt.anchoredPosition = new Vector2(HudMargin, -HudMargin - HpBarHeight - ResBarHeight - 12f);
+            rt.anchoredPosition = new Vector2(HudMargin, -HudMargin - HpBarHeight - ResBarHeight - 28f);
             rt.sizeDelta = new Vector2(200f, 18f);
 
             roomNameLabel = go.AddComponent<TextMeshProUGUI>();

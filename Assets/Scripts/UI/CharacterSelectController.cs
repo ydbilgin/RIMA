@@ -153,11 +153,7 @@ namespace RIMA.UI
             return IsUnlocked(cls);
         }
 
-        private static bool IsUnlocked(ClassType cls) =>
-            cls == ClassType.Warblade ||
-            cls == ClassType.Elementalist ||
-            cls == ClassType.Ranger ||
-            cls == ClassType.Shadowblade;
+        private static bool IsUnlocked(ClassType cls) => ClassUnlockPolicy.IsUnlocked(cls);
 
         private ClassData[] GetDefaultClasses() => new ClassData[]
         {

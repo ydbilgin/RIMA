@@ -51,15 +51,18 @@ namespace RIMA.Encounter
             seed = encounterSeed;
             eliteRoom = isEliteRoom;
 
+            ClearRuntimeState();
+            secondWaveSpawned = false;
+
             if (activeWave == null)
             {
-                Debug.LogWarning("[EncounterController] No EncounterWaveSO available.");
+                encounterActive = false;
+                Debug.LogWarning("[EncounterController] No EncounterWaveSO available; treating room as cleared.");
+                OnRoomCleared?.Invoke();
                 return;
             }
 
-            ClearRuntimeState();
             encounterActive = true;
-            secondWaveSpawned = false;
             SpawnBudget(activeWave.threatBudget * activeWave.openingBudgetFraction, true, 0);
 
             if (activeEnemies.Count == 0)

@@ -3501,7 +3501,7 @@ MonoBehaviour:
   rewardColliderRadius: 0.45
   clearSlowMoScale: 0.3
   clearSlowMoReturnDuration: 0.6
-  fallbackTemplate: {fileID: 11400000, guid: 2904aa1235e85764993eec449324e92c, type: 2}
+  fallbackTemplate: {fileID: 11400000, guid: 5ad60cbe32ed8664d88745ad4532cda4, type: 2}
   runSeed: 12345
   buildOnStart: 1
   depthCount: 5

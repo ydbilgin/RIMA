@@ -20,13 +20,20 @@ namespace RIMA.Walls.V2
             sockets = spec != null && spec.sockets != null ? new List<RoomSocket>(spec.sockets) : new List<RoomSocket>();
         }
 
-        private void OnDrawGizmos()
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
         {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
             DrawCells();
             DrawRects(waterRects, Color.cyan);
             DrawRects(islandRects, new Color(1f, 0.55f, 0.15f, 1f));
             DrawSockets();
         }
+#endif
 
         private void DrawCells()
         {

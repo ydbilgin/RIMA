@@ -745,44 +745,52 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         private System.Collections.IEnumerator RoomClearSequence()
         {
-            yield return ClearSlowMoBlip();
-
-            if (IsRunComplete)
+            try
             {
-                lifecycle.MarkVictory();
-                DemoCompleteOverlay.Show();
-                clearSequence = null;
-                yield break;
-            }
+                yield return ClearSlowMoBlip();
 
-            activeReward = SpawnRewardPickup();
-            if (activeReward == null)
-            {
-                lifecycle.MarkRewardTaken();
+                if (IsRunComplete)
+                {
+                    RestoreGameplayTimeScale();
+                    lifecycle.MarkVictory();
+                    DemoCompleteOverlay.Show();
+                    clearSequence = null;
+                    yield break;
+                }
+
+                activeReward = SpawnRewardPickup();
+                if (activeReward == null)
+                {
+                    lifecycle.MarkRewardTaken();
+                    OpenExitDoors();
+                    clearSequence = null;
+                    yield break;
+                }
+
+                while (activeReward != null && !activeReward.WasCollected)
+                {
+                    yield return null;
+                }
+
+                if (!lifecycle.MarkRewardTaken())
+                {
+                    clearSequence = null;
+                    yield break;
+                }
+
+                DraftManager draft = DraftManager.Instance;
+                while (draft != null && draft.IsDraftActive)
+                {
+                    yield return null;
+                }
+
                 OpenExitDoors();
                 clearSequence = null;
-                yield break;
             }
-
-            while (activeReward != null && !activeReward.WasCollected)
+            finally
             {
-                yield return null;
+                RestoreGameplayTimeScale();
             }
-
-            if (!lifecycle.MarkRewardTaken())
-            {
-                clearSequence = null;
-                yield break;
-            }
-
-            DraftManager draft = DraftManager.Instance;
-            while (draft != null && draft.IsDraftActive)
-            {
-                yield return null;
-            }
-
-            OpenExitDoors();
-            clearSequence = null;
         }
 
         private System.Collections.IEnumerator ClearSlowMoBlip()
@@ -887,8 +895,52 @@ namespace RIMA.MapDesigner.Room.Runtime
                 return;
             }
 
+            EnsureAtLeastOneExitDoor();
             ConfigureExitDoors(true);
             Debug.Log($"[RoomRunDirector] Exit doors opened count={activeDoors.Count}");
+        }
+
+        private void EnsureAtLeastOneExitDoor()
+        {
+            if (IsRunComplete)
+            {
+                return;
+            }
+
+            for (int i = activeDoors.Count - 1; i >= 0; i--)
+            {
+                if (activeDoors[i] == null)
+                {
+                    activeDoors.RemoveAt(i);
+                }
+            }
+
+            if (activeDoors.Count > 0)
+            {
+                return;
+            }
+
+            List<RIMA.RoomType> doorTypes = new List<RIMA.RoomType>();
+            List<DungeonNode> choices = CurrentChoices;
+            for (int i = 0; i < choices.Count; i++)
+            {
+                doorTypes.Add(choices[i].roomType);
+            }
+
+            if (builder != null && doorTypes.Count > 0)
+            {
+                activeDoors.AddRange(builder.BuildExitDoors(doorTypes));
+            }
+
+            if (activeDoors.Count > 0)
+            {
+                return;
+            }
+
+            GameObject fallbackDoor = new GameObject("ExitDoor_Fallback_0");
+            fallbackDoor.transform.position = ResolveRoomCenter() + Vector3.up;
+            activeDoors.Add(fallbackDoor);
+            Debug.LogWarning($"[RoomRunDirector] Created fallback exit door for node={CurrentNodeId} type={CurrentRoomType}.");
         }
 
         private void ConfigureExitDoors(bool open)
@@ -947,6 +999,16 @@ namespace RIMA.MapDesigner.Room.Runtime
             {
                 StopCoroutine(slowMoSequence);
                 slowMoSequence = null;
+            }
+
+            RestoreGameplayTimeScale();
+        }
+
+        private static void RestoreGameplayTimeScale()
+        {
+            if (Mathf.Abs(Time.timeScale - 1f) > 0.001f)
+            {
+                Time.timeScale = 1f;
             }
         }
 

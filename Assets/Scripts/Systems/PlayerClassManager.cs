@@ -40,6 +40,12 @@ namespace RIMA
         public void SetPrimaryClass(ClassType type)
         {
             if (type == ClassType.None) return;
+            if (!ClassUnlockPolicy.IsUnlocked(type))
+            {
+                Debug.LogWarning($"[PlayerClassManager] Locked primary class rejected: {type}");
+                return;
+            }
+
             SelectedClass = type;
             PrimaryClass = type;
             ApplyPrimaryClassToPlayer(type);
