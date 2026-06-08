@@ -10,11 +10,17 @@
 - **Gate hitbox** (`787d7b3d`): 1.2×1.0 → 0.8×0.7.
 - **Demo plan + ChatGPT review:** `STAGING/DEMO_MASTER_PLAN_2026-06-09.md` + ChatGPT repo-grounded review (`_inbox/chatgpt_plan_review_2026-06-09/`, bizim Explore'la örtüştü → onaylandı; faz sırası iyileştirildi).
 
-**🔄 IN-FLIGHT (a917d81):** Forced demo sequence (`DungeonGraph.BuildDemoSequence`, lineer Combat·Combat·Merchant·Combat·Boss, `forceDemoSequence` flag — RoomRunDirector'da kodlandı) + fixed arena camera (`useFixedDemoCamera`+`fixedOrthographicSize=5.0`, FitCameraToRoom bypass) + merchant/boss placeholder oda + sequence testleri + 5-oda doğrulama.
+**✅ Faz 1 DONE + PUSHED (`0f4f94bc`):** Forced demo sequence (`DungeonGraph.BuildDemoSequence`, lineer Combat·Combat·Merchant·Combat·Boss, `forceDemoSequence` flag) + fixed arena camera (`useFixedDemoCamera`+`fixedOrthographicSize=5.0`, FitCameraToRoom bypass, `ApplyFixedDemoCamera`) + merchant placeholder=Combat_Large_01 (gerçek shop SONRA) + boss=Boss_Intro_01 + 10 yeni sequence testi. 0 compile, 576 test (guarded suite'ler yeşil). **5-oda walkthrough screenshot = kullanıcı playtest (REVIEW EDİLECEK).**
 
 **⏭️ SONRAKİ (faz sırası — [[project-demo-phase-order]]):** (2) **Camera SINGLE-AUTHORITY** — `CameraZoom.cs` demo'da DISABLE (her Update ortho+refResolution değiştiriyor=2.otorite) + chamber ortho 4.2→**5.0** (chamber=arena geçişte yakınlık değişmesin) → (3) 2-class lock doğrula → (4) PauseMenu (ESC) → (5) Placeholder boss+victory (uçtan-uca test) → (6) Shop (merchantRooms BOŞ → 16×12 template + 3 stand) → (7) Real boss telegraph → (8) full tests → (9) polish.
 
 **📋 REVIEW EDİLECEK (kullanıcı playtest gerek):** chamber (prompt yeri+okunurluk · Dummy mouse-hover isim+HP · proximity pedestal · HUD floor/cliff üstünde mi) · softlock-fixli run (5 oda 0 stuck) · kamera tutarlılığı (chunk-1+2 sonrası chamber→arena geçiş). **Her iş bitince buraya "review edilecek" notu eklenir.**
+
+**🆕 YENİ SESSION İLK İŞLER (/clear sonrası — kullanıcı bu noktada /clear attı):**
+1. **✅ Faz 1 COMMIT'Lİ (`0f4f94bc`)** — working tree temiz. Kullanıcı **5-oda playtest** yapsın: Play→_Arena, console'da `DEMO MODE: ...Combat→Combat→Merchant→Combat→Boss` + her odada `Fixed demo camera orthographicSize=5` log'u + 5 oda 0-stuck + chamber→arena zoom hissi. Sorun varsa not.
+2. **Kullanıcı ChatGPT TARAMA yapıştıracak** (kod tarama/bug-scan — bu /clear'dan ÖNCE çalıştırıldı, yeni session'da gelecek) → council'den geçir (cx olgusal + ax → Opus), stale/legacy ele, gerçek bug listesi çıkar. ⏸️ Faz 2'den ÖNCE bunu işle (tarama yeni bug gösterebilir).
+3. Sonra **Faz 2 (Camera SINGLE-AUTHORITY)** dispatch: `CameraZoom.cs` demo'da DISABLE (her Update ortho+refResolution=2.otorite, defaultZoom 1.25) + chamber ortho 4.2→**5.0** (chamber=arena, geçişte yakınlık değişmesin). Acceptance: chamber→arena yakınlık sabit, 5 oda aynı ölçek, büyük oda zoom-out yapmaz (follow), 0 error.
+4. Sırayla Faz 3-9 ([[project-demo-phase-order]] / aşağıdaki SONRAKİ). Routing: kod=Sonnet/Opus/ax-Opus-4.6.
 
 ---
 
