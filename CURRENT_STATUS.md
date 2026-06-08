@@ -1,5 +1,23 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-09 — CHAMBER FULL-POLISH + SOFTLOCK KÖK-FIX + DEMO MASTER PLAN + FAZ SIRASI — 7 commit PUSHED `3a364565`→`787d7b3d` — /clear sonrası İLK BURAYI OKU)
+
+**⚠️ DURUM:** Bu session 7 commit origin/master'a PUSHED. Faz sırası = `[[project-demo-phase-order]]` memory + `STAGING/DEMO_MASTER_PLAN_2026-06-09.md`. Codex kotası az → kod artık Sonnet/Opus/ax-Opus-4.6.
+
+**✅ DONE + PUSHED:**
+- **Chamber FULL-POLISH** (`3a364565`/`98b838aa`/`cf2fc276`): kamera-follow + okunur ışık + grounding + **Hades tek sabit alt-prompt (ScreenSpaceOverlay → floor/cliff ÜSTÜNDE)** + uçan figür-isimleri kaldırıldı + **proximity-only pedestal** (sadece en-yakın yanar) + eşit aralık + doğru en-yakın highlight + **ClassUnlockPolicy** (başlangıç açık=Warblade+Elementalist, PlayerClassManager kilitliyi reddeder) + **BasicAttackProfile spawn-fix** (kuklaya vurulabiliyor + SlashArc) + **Dummy** (isim "Dummy", HP sayısı bar-içinde, isim+HP mouse-hover'da) + **Echo HUD** + PlayFromStartScene + room-completion garanti.
+- **Combat SOFTLOCK KÖK-FIX** (`7489e2de`): kök-neden = `RoomClearSequence` ödül-toplama beklemesi TIMEOUT'suz → toplanmazsa sonsuz bekler → kapı açılmaz → her oda stuck. Fix: ödül 12s + draft 90s timeout + `OpenExitDoors` sessiz-return yerine `ForceOpenExitDoorsFromAnyClearedState` (lifecycle ileri yürüt + ≥1 çalışan çıkış). **76/76 test (5 yeni regression) + 3-oda play doğrulandı, 0 stuck.**
+- **Gate hitbox** (`787d7b3d`): 1.2×1.0 → 0.8×0.7.
+- **Demo plan + ChatGPT review:** `STAGING/DEMO_MASTER_PLAN_2026-06-09.md` + ChatGPT repo-grounded review (`_inbox/chatgpt_plan_review_2026-06-09/`, bizim Explore'la örtüştü → onaylandı; faz sırası iyileştirildi).
+
+**🔄 IN-FLIGHT (a917d81):** Forced demo sequence (`DungeonGraph.BuildDemoSequence`, lineer Combat·Combat·Merchant·Combat·Boss, `forceDemoSequence` flag — RoomRunDirector'da kodlandı) + fixed arena camera (`useFixedDemoCamera`+`fixedOrthographicSize=5.0`, FitCameraToRoom bypass) + merchant/boss placeholder oda + sequence testleri + 5-oda doğrulama.
+
+**⏭️ SONRAKİ (faz sırası — [[project-demo-phase-order]]):** (2) **Camera SINGLE-AUTHORITY** — `CameraZoom.cs` demo'da DISABLE (her Update ortho+refResolution değiştiriyor=2.otorite) + chamber ortho 4.2→**5.0** (chamber=arena geçişte yakınlık değişmesin) → (3) 2-class lock doğrula → (4) PauseMenu (ESC) → (5) Placeholder boss+victory (uçtan-uca test) → (6) Shop (merchantRooms BOŞ → 16×12 template + 3 stand) → (7) Real boss telegraph → (8) full tests → (9) polish.
+
+**📋 REVIEW EDİLECEK (kullanıcı playtest gerek):** chamber (prompt yeri+okunurluk · Dummy mouse-hover isim+HP · proximity pedestal · HUD floor/cliff üstünde mi) · softlock-fixli run (5 oda 0 stuck) · kamera tutarlılığı (chunk-1+2 sonrası chamber→arena geçiş). **Her iş bitince buraya "review edilecek" notu eklenir.**
+
+---
+
 ## ⏯️ RESUME (2026-06-08 GECE/2 — GODOT-ARAŞTIRMA + CHATGPT DEMO-PLAN + CHAMBER REWORK 3/4/5 + ROOM-FIX'LER — ⚠️ HİÇBİRİ COMMIT EDİLMEDİ, BÜYÜK UNCOMMITTED YIĞIN — /clear sonrası İLK BURAYI OKU)
 
 **⚠️ COMMIT DURUMU: BU SESSION SIFIR COMMIT.** Her şey working tree'de. Kullanıcı "chamber iyi oldu" deyince mantıklı gruplarla commit edilecek. Untracked/pre-existing (RoomPainter asset, _Recovery sahnesi) BANA AİT DEĞİL — dokunma.
