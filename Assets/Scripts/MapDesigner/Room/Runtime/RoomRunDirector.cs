@@ -94,6 +94,19 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private float encounterDifficulty = 10f;
         [SerializeField] private Transform enemyContainer;
         [SerializeField] private float cameraPadding = 1.25f;
+
+        // ── Demo mode ─────────────────────────────────────────────────────────────
+        // When true, BeginRun uses DungeonGraph.BuildDemoSequence() instead of
+        // the random generator — producing an exact 5-node linear run:
+        //   Combat → Combat → Merchant → Combat → Boss
+        // Set to false (or uncheck in Inspector) to restore the random path.
+        [SerializeField] private bool forceDemoSequence = true;
+
+        // When true, every room uses a fixed orthographicSize instead of
+        // FitCameraToRoom so the zoom is identical in every room. The follow
+        // camera continues to track the player for large rooms.
+        [SerializeField] private bool useFixedDemoCamera = true;
+        [SerializeField] private float fixedOrthographicSize = 5.0f;
         [SerializeField] private Sprite rewardSprite;
         [SerializeField] private float rewardColliderRadius = 0.45f;
         [SerializeField] private float clearSlowMoScale = 0.3f;
@@ -154,7 +167,18 @@ namespace RIMA.MapDesigner.Room.Runtime
             StopClearSequences();
             DestroyActiveReward();
             ClearActiveEnemies();
-            graph = DungeonGraph.Generate(runSeed, depthCount);
+
+            if (forceDemoSequence)
+            {
+                // DEMO MODE: deterministic linear sequence — ignores seed and depthCount.
+                graph = DungeonGraph.BuildDemoSequence();
+                Debug.Log("[RoomRunDirector] DEMO MODE: using fixed linear sequence Combat→Combat→Merchant→Combat→Boss");
+            }
+            else
+            {
+                graph = DungeonGraph.Generate(runSeed, depthCount);
+            }
+
             CurrentNodeId = graph.startId;
             BuildCurrentRoom();
         }
@@ -210,7 +234,16 @@ namespace RIMA.MapDesigner.Room.Runtime
                 walkMap.InitFromTemplate(template);
             }
 
-            FitCameraToRoom();
+            if (useFixedDemoCamera)
+            {
+                // DEMO MODE: constant orthographic size so every room has the same zoom.
+                // The follow camera continues to track the player for large rooms.
+                ApplyFixedDemoCamera();
+            }
+            else
+            {
+                FitCameraToRoom();
+            }
 
             EnsurePlayerAtSpawn();
             EnsureDeathScreenManager();
@@ -228,6 +261,28 @@ namespace RIMA.MapDesigner.Room.Runtime
             ConfigureExitDoors(false);
 
             StartRoomEncounter();
+        }
+
+        private void ApplyFixedDemoCamera()
+        {
+            Camera targetCamera = arenaCamera != null ? arenaCamera : Camera.main;
+            if (targetCamera == null)
+            {
+                if (!warnedMissingArenaCamera)
+                {
+                    Debug.LogWarning("[RoomRunDirector] Missing arenaCamera and Camera.main; fixed demo camera skipped.");
+                    warnedMissingArenaCamera = true;
+                }
+                return;
+            }
+
+            float size = Mathf.Max(1f, fixedOrthographicSize);
+            targetCamera.orthographic = true;
+            targetCamera.orthographicSize = size;
+            // NOTE: do NOT reposition the camera — let the follow-camera system track the player.
+            float aspect = targetCamera.aspect > 0f ? targetCamera.aspect : 16f / 9f;
+            ConfigurePixelPerfectCamera(targetCamera, size, aspect);
+            Debug.Log($"[RoomRunDirector] Fixed demo camera orthographicSize={size} node={CurrentNodeId} type={CurrentRoomType}");
         }
 
         private void FitCameraToRoom()

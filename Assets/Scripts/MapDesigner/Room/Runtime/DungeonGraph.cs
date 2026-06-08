@@ -65,6 +65,53 @@ namespace RIMA.MapDesigner.Room.Runtime
             return result;
         }
 
+        // ── Demo sequence ─────────────────────────────────────────────────────────
+        // DEMO-ONLY: fixed linear sequence so every playthrough visits the same
+        // room types in the same order. NOT used by the regular random generator.
+        // Sequence: Combat → Combat → Merchant → Combat → Boss (5 nodes, linear).
+        public static readonly RIMA.RoomType[] DemoSequence =
+        {
+            RIMA.RoomType.Combat,
+            RIMA.RoomType.Combat,
+            RIMA.RoomType.Merchant,
+            RIMA.RoomType.Combat,
+            RIMA.RoomType.Boss,
+        };
+
+        /// <summary>
+        /// Builds a deterministic linear graph matching DemoSequence exactly.
+        /// Each node has exactly ONE child, except the final Boss node (0 children).
+        /// Seed is ignored — the sequence is always identical.
+        /// </summary>
+        public static DungeonGraph BuildDemoSequence()
+        {
+            var graph = new DungeonGraph
+            {
+                startId = 0,
+                maxDepth = DemoSequence.Length - 1,
+            };
+
+            for (int i = 0; i < DemoSequence.Length; i++)
+            {
+                var node = new DungeonNode
+                {
+                    id = i,
+                    depth = i,
+                    roomType = DemoSequence[i],
+                };
+                graph.nodes.Add(node);
+            }
+
+            // Wire up: each non-terminal node points to the next one.
+            for (int i = 0; i < DemoSequence.Length - 1; i++)
+            {
+                graph.nodes[i].childIds.Add(i + 1);
+            }
+            // Boss node (last) has no children — terminal.
+
+            return graph;
+        }
+
         public static DungeonGraph Generate(int seed, int depthCount)
         {
             if (depthCount < 2)
