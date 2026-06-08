@@ -1284,19 +1284,13 @@ namespace RIMA
             }
 
             // FIX RENDERING: Parent to scene root (NOT to this transform/CharacterSelectCanvas whose
-            // CanvasGroup.alpha=0 hides all children). Use ScreenSpaceCamera so the prompt renders
-            // as part of the camera output and is captured by ScreenCapture.CaptureScreenshot.
+            // CanvasGroup.alpha=0 hid all children). ScreenSpaceOverlay so the HUD + prompt ALWAYS
+            // draw ON TOP of every world sprite (floor, cliff, figures) — overlay has no per-sprite
+            // sorting conflict (ScreenSpaceCamera let tall cliff sprites occlude the HUD).
             GameObject canvasGo = new GameObject("ChamberOverlayCanvas", typeof(RectTransform));
-            // Detach from CharacterSelectCanvas hierarchy — place at scene root
             canvasGo.transform.SetParent(null, false);
             chamberOverlayCanvas = canvasGo.AddComponent<Canvas>();
-            // ScreenSpaceCamera: wire the chamber camera so the canvas renders through it.
-            // chamberCamera is set just before CreatePromptLabel() is called in BootstrapRoutine,
-            // but in case it's still null, fall back to Camera.main.
-            Camera cam = chamberCamera != null ? chamberCamera : Camera.main;
-            chamberOverlayCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-            chamberOverlayCanvas.worldCamera = cam;
-            chamberOverlayCanvas.planeDistance = 1f;
+            chamberOverlayCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
             chamberOverlayCanvas.sortingOrder = 500;
             CanvasScaler scaler = canvasGo.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
