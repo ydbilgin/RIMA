@@ -1,0 +1,9 @@
+Decision,Recommendation,Risk
+Flow length,"5 rooms: Combat, Combat, Shop, Combat, Boss",Shorter feels incomplete; longer increases bug risk
+Combat size,22x15,6+ mobs may clutter
+Boss size,28x18,Telegraphs need clear center
+Shop size,16x12,Do not overbuild inventory economy
+Camera,Fixed ortho 5.0 + follow,Per-room fit destroys consistency
+Shop offers,"Heal 20, Damage +12% 35, Cooldown -10% 35",Economy bloat
+Boss,Scaled mob + 3 telegraphs + HP + Victory,Scale-only boss feels unfair
+Phase order,Softlock → forced sequence → placeholder boss → shop → real boss,Shop before end-to-end flow delays full demo test

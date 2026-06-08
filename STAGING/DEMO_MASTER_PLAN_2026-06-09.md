@@ -104,10 +104,20 @@ MainMenu
 
 ---
 
-## 6) ChatGPT'ye SORULACAKLAR (açık kararlar)
-1. Akış: `combat·combat·shop·combat·boss` 5-oda yeterli mi, yoksa daha kısa/uzun mu?
-2. Oda boyutları (22×15 combat / 28×18 boss / 16×12 shop) demo-mob sayısıyla uyumlu mu?
-3. Sabit kamera ortho ~5.0 doğru aralık mı (hero-feel vs mob-görüş dengesi)?
-4. Shop kapsamı: kaç stand, ne satsın (upgrade vs heal vs item)? Echo ekonomisi (oda başı kazanç vs fiyatlar) dengesi?
-5. Boss: mevcut-mob-büyütme (Seçenek A) demo için yeterli mi?
-6. Sıra: Faz B (iskelet) → C (shop) → D (boss) doğru öncelik mi, yoksa boss'u öne mi almalı?
+## 6) ChatGPT REVIEW — DOĞRULANDI + BENİMSENEN DEĞİŞİKLİKLER (2026-06-09)
+ChatGPT repo'yu okudu, review = `STAGING/_inbox/chatgpt_plan_review_2026-06-09/`. Bulguları bizim Explore'la örtüşüyor (canlı yol, FitCameraToRoom, EncounterController iyi). **Çoğu plan ONAYLANDI** (5-oda akış, 22×15/16×12/28×18, sabit ortho 5.0, 2-sınıf kilit, lean shop). BENİMSENEN FARKLAR/EKLER:
+
+1. **🔑 FAZ SIRASI DEĞİŞTİ (ChatGPT haklı):** Placeholder boss/victory **shop'TAN ÖNCE** gelmeli — yoksa demo'nun SONU olmadan tam uçtan-uca test edemezsin. Yeni uygulama sırası:
+   `1.✅ Softlock fix → 2. Forced demo sequence → 3. Fixed camera → 4. 2-sınıf kilit → 5. PauseMenu → 6. PLACEHOLDER boss + victory/death → 7. Shop (3 stand) → 8. Gerçek boss telegraph saldırıları → 9. Full playthrough testleri → 10. Görsel polish`
+2. **Forced demo sequence = AYRI kod yolu** (generator'a bırakma): `[SerializeField] bool forceDemoSequence=true` + `DemoSequence = {Combat, Combat, Merchant, Combat, Boss}` → demo modunda DungeonGraph.Generate yerine DOĞRUDAN lineer graph (her node tek child). DungeonGraph şu an random/branching (`DungeonGraph.cs:85` Merchant'ı random fork'ta üretiyor) → demo'ya bırakılamaz.
+3. **⚠️ CONTENT GAP:** `DemoRoomBank.merchantRooms` BOŞ (alan var `RoomBankSO.cs:16`, template yok) → **shop oda template'i üretilmeli** (16×12, dövüşsüz, 2-3 stand yeri).
+4. **Mob sayısı CAP (22×15 için):** 6+ mob = collider sıkışması/görsel karmaşa. Per-oda: Combat1 = 2-3 kolay · Combat2 = 3-4 (1 ranged) · Combat3 = 4-5 (shop sonrası gücü hissettir).
+5. **Kamera:** `[SerializeField] bool useFixedDemoCamera=true; float fixedOrthographicSize=5.0f` (4.7 yakın/dar · 5.0 default · 5.3 güvenli/küçük-hiss).
+6. **SHOP SPEC (lean):** 3 stand — Heal 20 Echo (+%30 maxHP) · Damage 35 Echo (+%12 dmg, run-boyu) · Cooldown 35 Echo (-%10 CD). Ekonomi: combat clear = 20 Echo; shop'a girerken ~40 Echo → bir güçlü upgrade VEYA heal VEYA sakla. Inventory/relic/meta'ya BAĞLAMA.
+7. **BOSS SPEC:** scale 1.5-2× tek başına yetmez. ŞART: HP bar + telegraph + victory trigger. 3 saldırı — Slam Circle (0.8s telegraph, yakın AoE) · Line Charge (çizgi telegraph, 0.9s charge, kısa stun) · Rift Burst (3 küçük AoE sırayla). Gerçek faz şart değil; HP<%50 → CD %15 hızlanır. Ölünce: input lock → Victory panel → Main Menu → timeScale restore.
+8. **TEST PLAN:** EditMode (demo sequence tam 5 node · sıra Combat/Combat/Merchant/Combat/Boss · her node 1 child · boss child'sız · merchant ref var · template'ler non-null · her template ≥1 spawn+1 exit). PlayMode smoke (BeginRun demo → clear→reward→door→advance 5 oda + boss death→Victory). Manual (Warblade run · Elementalist run · boss death · her odada pause). FAIL: console error · NullRef · softlock · stuck door · timeScale-0 kaçak · floor-dışı.
+
+## 7) ZATEN YAPILAN (bu session, pushed)
+- ✅ Softlock kök-fix (reward/draft timeout + garantili exit) — 76/76 test, 3-oda doğrulama (`7489e2de`)
+- ✅ Gate hitbox 1.2×1.0 → 0.8×0.7 (`HEAD`)
+- ✅ Chamber tam cila (Hades prompt, proximity pedestal, lock policy, attack-profile, Dummy, HUD overlay)

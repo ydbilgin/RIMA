@@ -1034,7 +1034,10 @@ namespace RIMA.MapDesigner.Room.Runtime
                 if (collider == null)
                 {
                     collider = door.AddComponent<BoxCollider2D>();
-                    collider.size = new Vector2(1.2f, 1.0f);
+                    // Gate trigger zone: modest footprint (was 1.2x1.0 = ~3x player, felt oversized).
+                    // 0.8x0.7 still comfortably larger than the player (0.46x0.34) so walking into the
+                    // open door reliably advances, without an oversized "near the door" auto-trigger.
+                    collider.size = new Vector2(0.8f, 0.7f);
                 }
 
                 RoomRunExitDoorTrigger trigger = door.GetComponent<RoomRunExitDoorTrigger>();
