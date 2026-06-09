@@ -146,7 +146,9 @@ namespace RIMA
             {
                 MapFlowManager.Instance?.ResetRun();
                 RunStats.Instance?.StartNewRun();
-                SceneManager.LoadScene("_IsoGame");
+                // Live demo flow uses _Arena (RoomRunDirector + IsoRoomBuilder).
+                // _IsoGame is legacy; load _Arena so the restart re-enters the correct scene.
+                SceneManager.LoadScene("_Arena");
             }
         }
 

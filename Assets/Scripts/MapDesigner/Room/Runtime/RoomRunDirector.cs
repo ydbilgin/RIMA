@@ -116,10 +116,15 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private bool buildOnStart = true;
         [SerializeField] private int depthCount = 5;
 
+        [Header("Boss Spawn (demo path)")]
+        [Tooltip("Prefab spawned at the Boss node. Must have PenitentSovereign + Health components. Falls back to Resources/Prefabs/Enemies/Boss/PenitentSovereign.")]
+        [SerializeField] private GameObject bossPrefab;
+
         private const string DefaultPlayerPrefabPath = "Prefabs/Warblade";
         private const string DefaultEncounterBankPath = "Encounters/Act1_EncounterBank_Pilot";
         private const string DefaultRewardSpritePath = "UI/RIMA/RIMA_UI_Node_Chest";
         private const string DefaultEnemyPrefabEditorPath = "Assets/Prefabs/Enemies/FractureImp.prefab";
+        private const string DefaultBossPrefabEditorPath = "Assets/Prefabs/Enemies/Boss/PenitentSovereign.prefab";
 
         private bool warnedMissingPlayer;
         private bool warnedMissingEncounterBank;
@@ -563,6 +568,16 @@ namespace RIMA.MapDesigner.Room.Runtime
                 return;
             }
 
+            // ── DEMO BOSS PATH ────────────────────────────────────────────────────
+            // When the current node is a Boss node, bypass the EncounterController wave
+            // system and spawn PenitentSovereign directly. Health.OnDeath hooks back to
+            // HandleEncounterCleared so the victory/clear sequence fires normally.
+            if (CurrentRoomType == RIMA.RoomType.Boss)
+            {
+                SpawnBossDirectly(markerList[0]);
+                return;
+            }
+
             Transform[] spawnPoints = new Transform[markerList.Count];
             for (int i = 0; i < markerList.Count; i++)
             {
@@ -583,6 +598,68 @@ namespace RIMA.MapDesigner.Room.Runtime
             encounterController.OnRoomCleared.AddListener(HandleEncounterCleared);
             encounterController.BeginEncounter(wave, spawnPoints, DifficultyForCurrentRoom(), runSeed + CurrentNodeId, eliteRoom);
             ReparentEnemyContainerChildren();
+        }
+
+        /// <summary>
+        /// Demo-path boss spawn: instantiates PenitentSovereign at the first enemy socket
+        /// and wires Health.OnDeath → HandleEncounterCleared so the run's clear/victory
+        /// sequence fires when the boss dies — without touching legacy RuntimeRoomManager.
+        /// </summary>
+        private void SpawnBossDirectly(Transform spawnMarker)
+        {
+            GameObject prefab = ResolveBossPrefab();
+            if (prefab == null)
+            {
+                Debug.LogWarning("[RoomRunDirector] Boss prefab not found; treating Boss room as cleared.");
+                HandleEncounterCleared();
+                return;
+            }
+
+            Vector3 spawnPos = spawnMarker != null ? spawnMarker.position : transform.position;
+            EnsureEnemyContainer();
+            GameObject bossInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
+            bossInstance.name = "PenitentSovereign_Boss";
+            bossInstance.tag = "Enemy";
+            if (enemyContainer != null)
+                bossInstance.transform.SetParent(enemyContainer, true);
+            activeEnemies.Add(bossInstance);
+
+            // Hook Health.OnDeath → HandleEncounterCleared (single-fire: boss is the only enemy).
+            Health bossHealth = bossInstance.GetComponent<Health>();
+            if (bossHealth != null)
+            {
+                bossHealth.OnDeath.AddListener(HandleEncounterCleared);
+            }
+            else
+            {
+                Debug.LogWarning("[RoomRunDirector] PenitentSovereign prefab has no Health component — boss death will not trigger room clear.");
+            }
+
+            // Also ensure BossHealthBar exists in scene (PenitentSovereign.Start() uses FindAnyObjectByType).
+            EnsureBossHealthBar();
+
+            Debug.Log($"[RoomRunDirector] Boss spawned: {bossInstance.name} at {spawnPos} (node={CurrentNodeId})");
+        }
+
+        private GameObject ResolveBossPrefab()
+        {
+            if (bossPrefab != null)
+                return bossPrefab;
+
+#if UNITY_EDITOR
+            bossPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(DefaultBossPrefabEditorPath);
+#endif
+            if (bossPrefab == null)
+                bossPrefab = Resources.Load<GameObject>("Prefabs/Enemies/Boss/PenitentSovereign");
+
+            return bossPrefab;
+        }
+
+        private static void EnsureBossHealthBar()
+        {
+            if (UnityEngine.Object.FindAnyObjectByType<BossHealthBar>() != null)
+                return;
+            new GameObject("BossHealthBar_Auto").AddComponent<BossHealthBar>();
         }
 
         private void EnsureEnemyContainer()
