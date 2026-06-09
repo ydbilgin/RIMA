@@ -70,6 +70,10 @@ namespace RIMA.Shop
                 stand.Initialize(offers[i]);
                 stands.Add(stand);
 
+                // Placeholder polish: gentle bob + slow rotation so stands read as intentional.
+                // Remove once real art/animation is in place.
+                var floater = standGO.AddComponent<RIMA.PlaceholderFloat>();
+
                 Debug.Log($"[ShopRoomController] Spawned stand [{i}] '{offers[i].displayName}' at {worldPos}");
             }
         }
@@ -78,12 +82,13 @@ namespace RIMA.Shop
         {
             // Create a simple 8x8 coloured pixel as a stand indicator.
             // Replace with real sprites when assets are ready.
+            // Colors drawn from RIMA UI palette so they read as "intentional system" not broken.
             Color color = id switch
             {
-                ShopOfferId.Heal         => new Color(0.2f, 0.9f, 0.4f, 1f),   // green
-                ShopOfferId.DamageBoost  => new Color(1.0f, 0.4f, 0.2f, 1f),   // orange
-                ShopOfferId.MaxHPBoost   => new Color(0.3f, 0.6f, 1.0f, 1f),   // blue
-                _                        => Color.white,
+                ShopOfferId.Heal         => new Color(0.0f, 1.0f, 0.8f, 1f),   // #00FFCC teal — RIMA CharSelectCyan
+                ShopOfferId.DamageBoost  => new Color(0.95f, 0.74f, 0.24f, 1f), // Gold — RIMA RimaUITheme.Gold
+                ShopOfferId.MaxHPBoost   => new Color(0.28f, 0.88f, 1.0f, 1f),  // #47E0FF cyan — RIMA RimaUITheme.Cyan
+                _                        => new Color(0.28f, 0.88f, 1.0f, 1f),
             };
 
             Texture2D tex = new Texture2D(8, 8, TextureFormat.RGBA32, false);

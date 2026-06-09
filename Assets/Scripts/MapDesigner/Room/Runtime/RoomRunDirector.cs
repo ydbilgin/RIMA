@@ -1118,7 +1118,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         /// the exit doors. Used as a fallback whenever the normal state-machine path could not
         /// reach MarkDoorsOpened — guarantees the player always gets a working exit after a clear.
         /// </summary>
-        private void ForceOpenExitDoorsFromAnyClearedState()
+        public void ForceOpenExitDoorsFromAnyClearedState()
         {
             // Walk the lifecycle forward to RewardTaken if needed, then to DoorOpen.
             // Each Mark* method is a no-op if the state is already past it, so this is safe

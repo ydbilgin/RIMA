@@ -31,6 +31,7 @@ namespace RIMA
         // ── Input ────────────────────────────────────────────────────────
         private InputAction tabAction;
         private InputAction escAction;
+        private InputAction panicAction;
 
         public bool IsTabOpen        => tabOpen;
         public bool IsSettingsOpen   => settingsOpen;
@@ -97,22 +98,29 @@ namespace RIMA
 
             escAction = new InputAction("Escape", InputActionType.Button);
             escAction.AddBinding("<Keyboard>/escape");
+
+            panicAction = new InputAction("Panic", InputActionType.Button);
+            panicAction.AddBinding("<Keyboard>/f12");
         }
 
         private void OnEnable()
         {
             tabAction.Enable();
             escAction.Enable();
+            panicAction.Enable();
             tabAction.performed += OnTab;
             escAction.performed += OnEsc;
+            panicAction.performed += OnPanic;
         }
 
         private void OnDisable()
         {
             tabAction.performed -= OnTab;
             escAction.performed -= OnEsc;
+            panicAction.performed -= OnPanic;
             tabAction.Disable();
             escAction.Disable();
+            panicAction.Disable();
         }
 
         private void OnDestroy()
@@ -167,6 +175,43 @@ namespace RIMA
 
             // 6. Nothing open → open pause
             OpenPause();
+        }
+
+        /// <summary>
+        /// F12 — Demo panic button. Clears all UI overlays, restores timeScale, re-enables
+        /// PlayerController, and opens exit doors (via RoomRunDirector) so a softlock/UI-jam
+        /// can be rescued in front of the jury. No visible UI change.
+        /// </summary>
+        private void OnPanic(InputAction.CallbackContext ctx)
+        {
+            // 1. Force timeScale to 1.
+            Time.timeScale = 1f;
+
+            // 2. Close all open overlays by resetting state flags and hiding panels.
+            if (skillOfferOpen) CloseSkillOffer();
+            if (skillCodexOpen) CloseSkillCodex();
+            if (settingsOpen)   CloseSettings();
+            if (tabOpen)        CloseTab();
+            if (pauseOpen)      ClosePause();
+            _menuPaused = false;
+
+            // Ensure timeScale is 1 even if overlay-close methods set it otherwise.
+            Time.timeScale = 1f;
+
+            // 3. Re-enable PlayerController so movement works if it was locked.
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                var pc = player.GetComponent<RIMA.PlayerController>();
+                if (pc != null && !pc.enabled) pc.enabled = true;
+            }
+
+            // 4. Open exit doors via RoomRunDirector (softlock recovery).
+            var director = UnityEngine.Object.FindAnyObjectByType<RIMA.MapDesigner.Room.Runtime.RoomRunDirector>();
+            if (director != null)
+                director.ForceOpenExitDoorsFromAnyClearedState();
+
+            Debug.Log("[PANIC] recovered");
         }
 
         // ─── Public API ─────────────────────────────────────────────────
