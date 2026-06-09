@@ -933,6 +933,25 @@ namespace RIMA.MapDesigner.Room.Runtime
 
                 if (IsRunComplete)
                 {
+                    // Dual-class gate: boss room + secondary not yet chosen → open class selection,
+                    // wait for the player to pick, then wait for the unlock draft to finish.
+                    if (CurrentRoomType == RIMA.RoomType.Boss
+                        && PlayerClassManager.Instance != null
+                        && PlayerClassManager.Instance.SecondaryClass == ClassType.None)
+                    {
+                        PlayerClassManager.Instance.TriggerClassSelection();
+
+                        // WaitUntil works at timeScale=0 (uses real-time under the hood for the check).
+                        yield return new WaitUntil(() =>
+                            PlayerClassManager.Instance == null ||
+                            PlayerClassManager.Instance.SecondaryClass != ClassType.None);
+
+                        // Wait for the unlock draft (opened by DraftManager on OnSecondaryClassSelected)
+                        // to close before showing the victory screen.
+                        yield return new WaitWhile(() =>
+                            DraftManager.Instance != null && DraftManager.Instance.IsDraftActive);
+                    }
+
                     RestoreGameplayTimeScale();
                     lifecycle.MarkVictory();
                     DemoCompleteOverlay.Show();
