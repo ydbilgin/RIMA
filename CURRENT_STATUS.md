@@ -12,9 +12,16 @@
 
 **🟡 NLM TUTARSIZLIK:** Shop **Echo** harcıyor AMA Echo = KALICI META-currency → run-shop **Gold** olmalı. Jüri-etkisi düşük, en invaziv değişiklik → **KULLANICIYLA KARAR** (otonom yapılMADI). Gerisi kanon-tutarlı (Warblade+Elementalist · PenitentSovereign · chamber possession · lineer 5-oda).
 
-**⚙️ KATMAN 1 — OTONOM (kullanıcı dinlenirken, Sonnet):** A1 build-gap fix · A2 düşman controller wire · A3 boss anim araştır · A4 panic-button F12 · A5 placeholder bilinçli cila (kod-only) · A6 juice (camera-shake) · A7 gerçek test. **🟢 IN-FLIGHT: Sonnet "asset hardening" ajanı (A1+A2+A3) çalışıyor.**
+**⚙️ KATMAN 1 — OTONOM ✅ TAMAMLANDI + PUSHED (`339ab934`+`d3eefbad`+`96357fb2`):**
+- ✅ A1 boss build-gap — `_Arena` RoomRunDirector.bossPrefab serialize (build'de boss spawn olur, klimaks-kaybolma riski kapandı)
+- ✅ A2 düşman anim wire — FractureImp + Penitent controller bağlandı (demo SADECE bu 2 mob'u spawn ediyor: `Act1_Wave_Pilot.asset`; mevcut clip'ler, PixelLab gerekmedi)
+- ⏸️ A3 boss anim → USER-PRESENT (boss script `sr.color` sürüyor → Animator Write-Defaults çakışması; reçete: prefab-stage Animator+EnemyAnimator + Penitent.controller + TÜM state Write Defaults=OFF + play-verify)
+- ✅ A4 panic-button F12 (`UIManager.cs`) — timeScale=1 + overlay-kapat + input-restore + `ForceOpenExitDoorsFromAnyClearedState`
+- ⚠️ A5 placeholder — shop stand'lar palet+bob/dönme (`PlaceholderFloat.cs`) ✅; Elementalist disc DEFERRED (runtime object yok, PixelLab-gated)
+- ⏸️ A6 juice → USER-PRESENT — juice sistemi TAM (ScreenShake/CameraPunch/HitFlash/CameraFollow) ama **`_Arena`'da YOK** (sadece test sahnesinde); eklemek fixed-demo-camera ile çakışabilir → feel-tuning'de ekle+verify
+- ✅ A7 test: 594 EditMode, **18 pre-existing fail** (17 değil), 0 yeni fail
 
-**🎮 KATMAN 2 — USER-PRESENT (kullanıcı dönünce):** B1 PixelLab Warblade walk+attack · B2 Echo→Gold kararı · B3 gerçek 5-senaryo playtest (build) · B4 final build+FREEZE+prova. **Panic-button (F12) = jüri-önü softlock kurtarıcı.**
+**🎮 KATMAN 2 — USER-PRESENT (kullanıcı dönünce, SIRAYLA):** B1 PixelLab Warblade walk+attack (+ boss Animator A3 + diğer mob wire) · B2 Echo→Gold kararı (NLM canon) · A6 juice→_Arena + camera-authority kontrol · B3 5-senaryo build-playtest · B4 final build+FREEZE+prova. **NOT:** demo sadece 2 mob tipi spawn ediyor — çeşitlilik istenirse `Act1_Wave_Pilot` genişlet (mob'lar artık animasyonlu). `Warblade.controller` Animations-path'inde YOK (runtime Resources'tan çalışıyor).
 
 **CUT (yapma):** 10-sınıf anim · tam 8-yön full-state · _IsoGame söküm · yeni boss faz · derin balance.
 
