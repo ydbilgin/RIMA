@@ -1,5 +1,25 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-09 — 24H "EN İYİ DEMO" PLANI + ROUTING LOCK + OTONOM STABİLİTE BLOĞU AKTİF — /clear sonrası İLK BURAYI OKU)
+
+**🎯 ROUTING LOCK:** Production (Unity MCP/C#/prefab/asset/bug) = **Sonnet** (Claude limit sıfırlandı, bol Sonnet). Opus = sadece derin tasarım/strateji/review. Unity MCP aktif; Blender/Godot BAĞLI DEĞİL (sormadan motor değiştirme YOK). cx = opsiyonel advisor. [[feedback-sonnet-default-opus-deep-routing]].
+
+**📋 PLAN = `STAGING/DEMO_24H_PLAN_DECISION_2026-06-09.md`** (council cx+ax-3.1+ax-3.5 + NLM canon-check + Explore ground-truth → Opus sentez). Demo akışı KOD-TAMAM (`405581cb`); 24h işi = STABİLİZE + AKILLI CİLA.
+
+**🔎 GROUND-TRUTH (file:line doğrulandı):** demo-flow/shop/2-class/boss-telegraph/pause/victory HEPSİ GERÇEK. RİSK: **🔴 boss build-gap** (boss prefab Resources'ta değil → standalone build'de boss SESSİZCE atlanır = klimaks kaybolur, #1 risk, `RoomRunDirector.cs:621-625,687-698`). Test "594/17" KANITSIZ (kök XML 2026-05-18=411) → yeniden ölç.
+
+**🎬 ANİMASYON GERÇEĞİ:** Player = idle-only (üretim gerek, user-present). **Düşman = controller'lar DİSKTE VAR ama prefab'a BAĞLI DEĞİL** (`m_Controller:{fileID:0}`, sadece HalfThrall) → WIRE et = otonom kazanım, PixelLab gerekmez. Boss = placeholder, Penitent.controller var (araştır).
+
+**🟡 NLM TUTARSIZLIK:** Shop **Echo** harcıyor AMA Echo = KALICI META-currency → run-shop **Gold** olmalı. Jüri-etkisi düşük, en invaziv değişiklik → **KULLANICIYLA KARAR** (otonom yapılMADI). Gerisi kanon-tutarlı (Warblade+Elementalist · PenitentSovereign · chamber possession · lineer 5-oda).
+
+**⚙️ KATMAN 1 — OTONOM (kullanıcı dinlenirken, Sonnet):** A1 build-gap fix · A2 düşman controller wire · A3 boss anim araştır · A4 panic-button F12 · A5 placeholder bilinçli cila (kod-only) · A6 juice (camera-shake) · A7 gerçek test. **🟢 IN-FLIGHT: Sonnet "asset hardening" ajanı (A1+A2+A3) çalışıyor.**
+
+**🎮 KATMAN 2 — USER-PRESENT (kullanıcı dönünce):** B1 PixelLab Warblade walk+attack · B2 Echo→Gold kararı · B3 gerçek 5-senaryo playtest (build) · B4 final build+FREEZE+prova. **Panic-button (F12) = jüri-önü softlock kurtarıcı.**
+
+**CUT (yapma):** 10-sınıf anim · tam 8-yön full-state · _IsoGame söküm · yeni boss faz · derin balance.
+
+---
+
 ## ⏯️ RESUME (2026-06-09 GECE — OTONOM DEMO KOŞUSU: CHATGPT-RAPOR DOĞRULAMA + OVERLAP COUNCIL + FAZ 0-8 — 8 commit (BU AN LOCAL, PUSH SONRASI işaretlenecek) — /clear sonrası İLK BURAYI OKU)
 
 **⚠️ DURUM:** Kullanıcı "bütün işleri sırayla yap, otonom devam et" dedi + gitti. Demo fazları 0-8 uçtan-uca yapıldı. Her değişiklik Unity compile 0-error + Mutual-QC'li. Kod=Sonnet sub-agent'ları + Opus orchestrator (cx review-only kaldı).
