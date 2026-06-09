@@ -96,8 +96,9 @@ namespace RIMA
 
         private void OnDisable()
         {
-            if (PlayerClassManager.Instance != null)
-                PlayerClassManager.Instance.OnClassSelectionRequested -= HandleClassSelectionRequested;
+            if (_subscribedManager != null)
+                _subscribedManager.OnClassSelectionRequested -= HandleClassSelectionRequested;
+            _subscribedManager = null;
         }
 
         private void Start()
@@ -106,23 +107,28 @@ namespace RIMA
             SubscribeToManager();
         }
 
-        /// <summary>Called each frame only while the overlay is open, to catch late-arriving Instance.</summary>
+        /// <summary>Re-checks every frame: PlayerClassManager is a SCENE object (no DDOL), so a
+        /// death-restart or Play-Again reload destroys it and spawns a fresh instance. This overlay
+        /// IS DDOL — a one-shot subscribed flag would keep pointing at the dead manager and the
+        /// selection would never open on the second run (softlock at boss). Track the instance.</summary>
         private void Update()
         {
             if (!_isOpen)
-                SubscribeToManager(); // idempotent — only subscribes once
+                SubscribeToManager(); // re-subscribes whenever the manager instance changes
         }
 
-        // ── Subscription helper (safe against null Instance) ─────────────
+        // ── Subscription helper (safe against null/replaced Instance) ────
 
-        private bool _subscribed;
+        private PlayerClassManager _subscribedManager;
 
         private void SubscribeToManager()
         {
-            if (_subscribed) return;
-            if (PlayerClassManager.Instance == null) return;
-            PlayerClassManager.Instance.OnClassSelectionRequested += HandleClassSelectionRequested;
-            _subscribed = true;
+            var mgr = PlayerClassManager.Instance;
+            if (mgr == null || ReferenceEquals(mgr, _subscribedManager)) return;
+            if (_subscribedManager != null)
+                _subscribedManager.OnClassSelectionRequested -= HandleClassSelectionRequested;
+            mgr.OnClassSelectionRequested += HandleClassSelectionRequested;
+            _subscribedManager = mgr;
         }
 
         // ── Handler ──────────────────────────────────────────────────────

@@ -36,27 +36,31 @@ namespace RIMA
 
         private void OnDisable()
         {
-            if (PlayerClassManager.Instance != null)
-                PlayerClassManager.Instance.OnSecondaryClassSelected -= HandleSecondaryClassSelected;
-            _subscribed = false;
+            if (_subscribedManager != null)
+                _subscribedManager.OnSecondaryClassSelected -= HandleSecondaryClassSelected;
+            _subscribedManager = null;
         }
 
         private void Start() => SubscribeToManager();
 
-        private bool _subscribed;
+        // PlayerClassManager is a SCENE object — it is destroyed and recreated on every
+        // restart, while this banner is DDOL. Track the subscribed instance and re-subscribe
+        // whenever it changes (a one-shot flag would go stale after the first scene reload).
+        private PlayerClassManager _subscribedManager;
 
-        // Try to subscribe each frame until the manager arrives (late bootstrap scenarios).
         private void Update()
         {
-            if (!_subscribed) SubscribeToManager();
+            SubscribeToManager();
         }
 
         private void SubscribeToManager()
         {
-            if (_subscribed) return;
-            if (PlayerClassManager.Instance == null) return;
-            PlayerClassManager.Instance.OnSecondaryClassSelected += HandleSecondaryClassSelected;
-            _subscribed = true;
+            var mgr = PlayerClassManager.Instance;
+            if (mgr == null || ReferenceEquals(mgr, _subscribedManager)) return;
+            if (_subscribedManager != null)
+                _subscribedManager.OnSecondaryClassSelected -= HandleSecondaryClassSelected;
+            mgr.OnSecondaryClassSelected += HandleSecondaryClassSelected;
+            _subscribedManager = mgr;
         }
 
         private void HandleSecondaryClassSelected(ClassType type)
