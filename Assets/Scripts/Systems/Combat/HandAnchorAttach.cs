@@ -93,6 +93,13 @@ namespace RIMA
                     weaponRenderer = _weaponInstance.GetComponentInChildren<SpriteRenderer>();
             }
 
+            // Promote weapon renderer to the same sorting layer as the body so it
+            // never renders behind floor/cliff (which use lower layers like Floor/Ground).
+            if (weaponRenderer != null && bodyRenderer != null)
+            {
+                weaponRenderer.sortingLayerID = bodyRenderer.sortingLayerID;
+            }
+
             // Force initial sync.
             _lastDir = (FacingDir8)(-1);
         }
@@ -125,8 +132,16 @@ namespace RIMA
                 {
                     _lastDir = dir;
                     orientationSync.Sync(dir);
-                    UpdateWeaponSortOrder(dir);
                 }
+            }
+
+            // --- Sort order: update every LateUpdate so the weapon tracks IsoSorter's per-frame
+            // Y-sort of bodyRenderer. Firing only on direction-change left the order stale during
+            // movement while bodyRenderer.sortingOrder changed continuously.
+            if (attachMode == AttachMode.Level1Static && _playerController != null)
+            {
+                FacingDir8 dir = VectorToDir8(_playerController.FacingDirection);
+                UpdateWeaponSortOrder(dir);
             }
 
             // --- Level2SpriteHandData (unchanged) ---

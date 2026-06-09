@@ -146,6 +146,7 @@ namespace RIMA
 
             ApplyBasicAttackProfile(player, type);
             ApplyPrimaryClassVisual(player, type);
+            ApplyWeaponVisual(player, type);
         }
 
         public void SwitchClass(ClassType type) => SetPrimaryClass(type);
@@ -165,6 +166,27 @@ namespace RIMA
             anim.runtimeAnimatorController = ctrl;
             anim.Rebind();
             anim.Update(0f);
+        }
+
+        /// <summary>
+        /// Demo weapon-visual gate. HandAnchorAttach on the player prefab hardcodes the Warblade
+        /// sword, so non-Warblade classes (e.g. Elementalist) would otherwise show a WRONG sword.
+        /// Only Warblade has real weapon art in the demo; suppress the mount for the rest until
+        /// per-class weapon art exists (Elementalist rune disc = user-gated PixelLab).
+        /// HandAnchorAttach is visual-only (attack hitboxes live in PlayerAttack), so disabling it
+        /// affects nothing but the weapon sprite.
+        /// </summary>
+        private static void ApplyWeaponVisual(GameObject player, ClassType type)
+        {
+            var mount = player.GetComponentInChildren<HandAnchorAttach>(true);
+            if (mount == null) return;
+
+            bool showWeapon = type == ClassType.Warblade;
+            // Disabling before the mount's Start() prevents the weapon from spawning at all;
+            // if it already spawned (Start ran first), also hide the spawned instance.
+            mount.enabled = showWeapon;
+            if (mount.WeaponInstance != null)
+                mount.WeaponInstance.SetActive(showWeapon);
         }
 
         private void AddCrossClassPassive(GameObject player, ClassType type)
