@@ -52,8 +52,8 @@ namespace RIMA.Combat
         public void SetWeaponTransform(Transform weapon)
         {
             weaponTransform = weapon;
-            if (weaponRenderer == null && weapon != null)
-                weaponRenderer = weapon.GetComponentInChildren<SpriteRenderer>();
+            // Always refresh — on weapon swap the old renderer reference is stale (destroyed instance).
+            weaponRenderer = weapon != null ? weapon.GetComponentInChildren<SpriteRenderer>() : null;
         }
 
         public void Sync(FacingDir8 dir)

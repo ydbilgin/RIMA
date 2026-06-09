@@ -184,6 +184,21 @@ namespace RIMA
             _weaponInstance = Instantiate(entry.weaponPrefab, handAnchor);
             _weaponInstance.transform.localPosition = entry.anchorOffset;
             _weaponInstance.transform.localRotation = Quaternion.identity;
+
+            // Re-acquire the renderer and re-apply the body's sorting layer on EVERY attach.
+            // AttachWeapon can run after Start() (class/form change); a fresh instance otherwise
+            // keeps the weapon prefab's default sorting layer (Default = below Floor/Walls) and
+            // renders under the map. Per-frame order is handled by UpdateWeaponSortOrder.
+            weaponRenderer = _weaponInstance.GetComponentInChildren<SpriteRenderer>();
+            if (orientationSync != null)
+                orientationSync.SetWeaponTransform(_weaponInstance.transform);
+            if (weaponRenderer != null)
+            {
+                if (bodyRenderer != null)
+                    weaponRenderer.sortingLayerID = bodyRenderer.sortingLayerID;
+                else
+                    weaponRenderer.sortingLayerName = "Entities"; // fallback: never sit below Floor
+            }
         }
 
         // ─── A2 helpers ──────────────────────────────────────────────────────
