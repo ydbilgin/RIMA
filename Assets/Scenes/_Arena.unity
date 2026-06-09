@@ -3497,6 +3497,9 @@ MonoBehaviour:
   encounterDifficulty: 10
   enemyContainer: {fileID: 0}
   cameraPadding: 2
+  forceDemoSequence: 1
+  useFixedDemoCamera: 1
+  fixedOrthographicSize: 5
   rewardSprite: {fileID: 0}
   rewardColliderRadius: 0.45
   clearSlowMoScale: 0.3
@@ -3505,6 +3508,7 @@ MonoBehaviour:
   runSeed: 12345
   buildOnStart: 1
   depthCount: 5
+  bossPrefab: {fileID: 2119183627493839208, guid: ce8a23631ec35be4f9e41184e0884efb, type: 3}
   RoomCleared:
     m_PersistentCalls:
       m_Calls: []

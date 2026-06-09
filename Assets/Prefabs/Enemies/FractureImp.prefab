@@ -194,7 +194,7 @@ Animator:
   m_GameObject: {fileID: 7373608451472963539}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 23fcf855e190c4f45a2de7cdbdd20041, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -362,3 +362,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
   knockbackResistance: 0
+  isKnockdownable: 1
+  defaultKnockdownProfile: {fileID: 0}
