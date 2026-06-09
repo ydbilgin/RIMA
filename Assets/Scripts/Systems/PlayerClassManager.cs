@@ -64,6 +64,11 @@ namespace RIMA
         public void SelectSecondaryClass(ClassType type)
         {
             if (SecondaryClass != ClassType.None || type == ClassType.None) return;
+            if (type == PrimaryClass)
+            {
+                Debug.LogWarning($"[PlayerClassManager] SelectSecondaryClass rejected: type={type} matches PrimaryClass.");
+                return;
+            }
 
             SecondaryClass = type;
 

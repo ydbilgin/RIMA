@@ -178,7 +178,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             {
                 // DEMO MODE: deterministic linear sequence — ignores seed and depthCount.
                 graph = DungeonGraph.BuildDemoSequence();
-                Debug.Log("[RoomRunDirector] DEMO MODE: using fixed linear sequence Combat→Combat→Merchant→Combat→Boss");
+                Debug.Log("[RoomRunDirector] DEMO MODE: using fixed linear sequence Combat→Combat→Merchant→Combat→Boss→Combat(post-boss)");
             }
             else
             {
@@ -931,27 +931,31 @@ namespace RIMA.MapDesigner.Room.Runtime
             {
                 yield return ClearSlowMoBlip();
 
+                // ── Dual-class gate (Boss room clear) ─────────────────────────────────
+                // Fires when the Boss room is cleared. Boss is no longer the terminal node:
+                // after the player picks a secondary class and the unlock draft closes, we
+                // fall through to the normal reward/door flow so the exit door opens to the
+                // post-boss Combat room where the combined kit is actually PLAYED.
+                if (CurrentRoomType == RIMA.RoomType.Boss
+                    && PlayerClassManager.Instance != null
+                    && PlayerClassManager.Instance.SecondaryClass == ClassType.None)
+                {
+                    PlayerClassManager.Instance.TriggerClassSelection();
+
+                    // WaitUntil works at timeScale=0 (uses real-time under the hood for the check).
+                    yield return new WaitUntil(() =>
+                        PlayerClassManager.Instance == null ||
+                        PlayerClassManager.Instance.SecondaryClass != ClassType.None);
+
+                    // Wait for the unlock draft (opened by DraftManager on OnSecondaryClassSelected)
+                    // to close before opening the exit door.
+                    yield return new WaitWhile(() =>
+                        DraftManager.Instance != null && DraftManager.Instance.IsDraftActive);
+                }
+
+                // ── Run-complete check (post-boss Combat terminal node) ────────────────
                 if (IsRunComplete)
                 {
-                    // Dual-class gate: boss room + secondary not yet chosen → open class selection,
-                    // wait for the player to pick, then wait for the unlock draft to finish.
-                    if (CurrentRoomType == RIMA.RoomType.Boss
-                        && PlayerClassManager.Instance != null
-                        && PlayerClassManager.Instance.SecondaryClass == ClassType.None)
-                    {
-                        PlayerClassManager.Instance.TriggerClassSelection();
-
-                        // WaitUntil works at timeScale=0 (uses real-time under the hood for the check).
-                        yield return new WaitUntil(() =>
-                            PlayerClassManager.Instance == null ||
-                            PlayerClassManager.Instance.SecondaryClass != ClassType.None);
-
-                        // Wait for the unlock draft (opened by DraftManager on OnSecondaryClassSelected)
-                        // to close before showing the victory screen.
-                        yield return new WaitWhile(() =>
-                            DraftManager.Instance != null && DraftManager.Instance.IsDraftActive);
-                    }
-
                     RestoreGameplayTimeScale();
                     lifecycle.MarkVictory();
                     DemoCompleteOverlay.Show();

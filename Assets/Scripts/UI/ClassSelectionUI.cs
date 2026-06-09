@@ -24,7 +24,10 @@ namespace RIMA
         private bool   _isOpen;
 
         // ── Class data for the two demo choices ──────────────────────────
-        private static readonly (ClassType type, string accentHex, string descLine1, string descLine2)[] DemoChoices =
+        // The pool is filtered at Show() time: the player's PRIMARY class is excluded
+        // (picking it again would double-stack the same class — PlayerClassManager also
+        // guards this). If the primary occupies a pool slot, Warblade is substituted.
+        private static readonly (ClassType type, string accentHex, string descLine1, string descLine2)[] ChoicePool =
         {
             (
                 ClassType.Elementalist,
@@ -39,6 +42,26 @@ namespace RIMA
                 "Dokundur ya da nişan al. Tuzaklar ölüm bölgesini kurar."
             ),
         };
+
+        private static readonly (ClassType type, string accentHex, string descLine1, string descLine2) WarbladeFallbackCard =
+        (
+            ClassType.Warblade,
+            "#F2610F",
+            "YAKIN · AĞIR · MOMENTUM",
+            "Büyük kılıç. Ağır vuruş. Momentum zinciri kur."
+        );
+
+        private static (ClassType type, string accentHex, string descLine1, string descLine2)[] BuildChoices()
+        {
+            ClassType primary = PlayerClassManager.Instance != null
+                ? PlayerClassManager.Instance.PrimaryClass
+                : ClassType.None;
+
+            var result = new (ClassType type, string accentHex, string descLine1, string descLine2)[ChoicePool.Length];
+            for (int i = 0; i < ChoicePool.Length; i++)
+                result[i] = ChoicePool[i].type == primary ? WarbladeFallbackCard : ChoicePool[i];
+            return result;
+        }
 
         // ── Bootstrap ────────────────────────────────────────────────────
 
@@ -170,9 +193,10 @@ namespace RIMA
             float cardMid   = (cardLeft + cardRight) / 2f;
             float gap       = 0.015f;
 
-            BuildClassCard(panel, DemoChoices[0],
+            var choices = BuildChoices();
+            BuildClassCard(panel, choices[0],
                 new Vector2(cardLeft, 0.08f), new Vector2(cardMid - gap, 0.68f));
-            BuildClassCard(panel, DemoChoices[1],
+            BuildClassCard(panel, choices[1],
                 new Vector2(cardMid + gap, 0.08f), new Vector2(cardRight, 0.68f));
         }
 

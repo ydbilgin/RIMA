@@ -72,8 +72,28 @@ namespace RIMA.Tests.Room
         }
 
         [Test]
-        public void IsRunComplete_TrueAtBoss()
+        public void IsRunComplete_FalseAtBoss()
         {
+            // Boss is no longer terminal — it has a child (post-boss Combat).
+            LogAssert.Expect(LogType.Error, MissingBuilderError);
+            director.BeginRun();
+
+            int guard = 0;
+            while (director.CurrentRoomType != RIMA.RoomType.Boss && guard++ < 20)
+            {
+                LogAssert.Expect(LogType.Error, MissingBuilderError);
+                director.AdvanceTo(0);
+            }
+
+            Assert.AreEqual(RIMA.RoomType.Boss, director.CurrentRoomType, "Should be on Boss node.");
+            Assert.IsFalse(director.IsRunComplete, "Boss node must NOT be terminal (has post-boss child).");
+            Assert.AreEqual(1, director.CurrentChoices.Count, "Boss node must have exactly 1 choice.");
+        }
+
+        [Test]
+        public void IsRunComplete_TrueAtPostBoss()
+        {
+            // Post-boss Combat (node 5) is the real terminal.
             LogAssert.Expect(LogType.Error, MissingBuilderError);
             director.BeginRun();
 
@@ -84,9 +104,9 @@ namespace RIMA.Tests.Room
                 director.AdvanceTo(0);
             }
 
-            Assert.IsTrue(director.IsRunComplete);
+            Assert.IsTrue(director.IsRunComplete, "Post-boss Combat must be terminal.");
             Assert.IsNotNull(director.CurrentNode);
-            Assert.AreEqual(RIMA.RoomType.Boss, director.CurrentRoomType);
+            Assert.AreEqual(RIMA.RoomType.Combat, director.CurrentRoomType, "Terminal node must be post-boss Combat.");
             Assert.AreEqual(0, director.CurrentChoices.Count);
         }
 
@@ -136,6 +156,24 @@ namespace RIMA.Tests.Room
 
             Assert.AreEqual(RoomRunLifecycleState.Victory, lifecycle.State);
             Assert.IsFalse(lifecycle.MarkRewardTaken());
+        }
+
+        [Test]
+        public void SelectSecondaryClass_RejectsPrimaryClass()
+        {
+            // Primary-class reject guard in PlayerClassManager. A fresh manager defaults to
+            // PrimaryClass = Warblade, so no SetPrimaryClass call (and no Player lookup) is needed.
+            var go = new GameObject("PCM_Test");
+            var manager = go.AddComponent<PlayerClassManager>();
+
+            Assert.AreEqual(ClassType.Warblade, manager.PrimaryClass, "Fresh manager must default to Warblade primary.");
+
+            manager.SelectSecondaryClass(ClassType.Warblade); // must be rejected (matches primary)
+
+            Assert.AreEqual(ClassType.None, manager.SecondaryClass,
+                "SelectSecondaryClass must reject ClassType equal to PrimaryClass.");
+
+            Object.DestroyImmediate(go);
         }
     }
 }

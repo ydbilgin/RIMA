@@ -68,7 +68,8 @@ namespace RIMA.MapDesigner.Room.Runtime
         // ── Demo sequence ─────────────────────────────────────────────────────────
         // DEMO-ONLY: fixed linear sequence so every playthrough visits the same
         // room types in the same order. NOT used by the regular random generator.
-        // Sequence: Combat → Combat → Merchant → Combat → Boss (5 nodes, linear).
+        // Sequence: Combat → Combat → Merchant → Combat → Boss → Combat (6 nodes, linear).
+        // The final Combat node (post-boss dual-class arena) is terminal; Boss is NOT.
         public static readonly RIMA.RoomType[] DemoSequence =
         {
             RIMA.RoomType.Combat,
@@ -76,11 +77,12 @@ namespace RIMA.MapDesigner.Room.Runtime
             RIMA.RoomType.Merchant,
             RIMA.RoomType.Combat,
             RIMA.RoomType.Boss,
+            RIMA.RoomType.Combat,   // post-boss dual-class arena
         };
 
         /// <summary>
         /// Builds a deterministic linear graph matching DemoSequence exactly.
-        /// Each node has exactly ONE child, except the final Boss node (0 children).
+        /// Each node has exactly ONE child, except the final post-boss Combat node (0 children).
         /// Seed is ignored — the sequence is always identical.
         /// </summary>
         public static DungeonGraph BuildDemoSequence()
@@ -107,7 +109,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             {
                 graph.nodes[i].childIds.Add(i + 1);
             }
-            // Boss node (last) has no children — terminal.
+            // Post-boss Combat node (last) has no children — terminal.
 
             return graph;
         }

@@ -7,8 +7,8 @@ using RuntimeDungeonNode = RIMA.MapDesigner.Room.Runtime.DungeonNode;
 namespace RIMA.Tests.Room
 {
     /// <summary>
-    /// Validates the fixed demo sequence graph (Task 1) and that the DemoRoomBank
-    /// can resolve a non-null template for every node type in the sequence (Task 2).
+    /// Validates the fixed demo sequence graph (6 nodes, linear — post-boss Combat terminal)
+    /// and that the DemoRoomBank can resolve a non-null template for every node type.
     /// </summary>
     public class DemoSequenceTests
     {
@@ -17,10 +17,10 @@ namespace RIMA.Tests.Room
         // ── Graph structure ───────────────────────────────────────────────────────
 
         [Test]
-        public void DemoSequence_ProducesExactlyFiveNodes()
+        public void DemoSequence_ProducesExactlySixNodes()
         {
             RuntimeDungeonGraph graph = RuntimeDungeonGraph.BuildDemoSequence();
-            Assert.AreEqual(5, graph.nodes.Count, "Demo sequence must have exactly 5 nodes.");
+            Assert.AreEqual(6, graph.nodes.Count, "Demo sequence must have exactly 6 nodes.");
         }
 
         [Test]
@@ -33,6 +33,7 @@ namespace RIMA.Tests.Room
             Assert.AreEqual(RIMA.RoomType.Merchant, graph.nodes[2].roomType, "Node 2 must be Merchant.");
             Assert.AreEqual(RIMA.RoomType.Combat,   graph.nodes[3].roomType, "Node 3 must be Combat.");
             Assert.AreEqual(RIMA.RoomType.Boss,     graph.nodes[4].roomType, "Node 4 must be Boss.");
+            Assert.AreEqual(RIMA.RoomType.Combat,   graph.nodes[5].roomType, "Node 5 must be Combat (post-boss).");
         }
 
         [Test]
@@ -40,7 +41,7 @@ namespace RIMA.Tests.Room
         {
             RuntimeDungeonGraph graph = RuntimeDungeonGraph.BuildDemoSequence();
 
-            // Nodes 0–3 must each have exactly one child.
+            // Nodes 0–4 must each have exactly one child (Boss included — it leads to post-boss).
             for (int i = 0; i < graph.nodes.Count - 1; i++)
             {
                 Assert.AreEqual(1, graph.nodes[i].childIds.Count,
@@ -51,13 +52,24 @@ namespace RIMA.Tests.Room
         }
 
         [Test]
-        public void DemoSequence_BossNode_HasZeroChildren()
+        public void DemoSequence_PostBossNode_HasZeroChildren()
         {
             RuntimeDungeonGraph graph = RuntimeDungeonGraph.BuildDemoSequence();
-            RuntimeDungeonNode boss = graph.nodes[graph.nodes.Count - 1];
+            RuntimeDungeonNode postBoss = graph.nodes[graph.nodes.Count - 1];
 
-            Assert.AreEqual(RIMA.RoomType.Boss, boss.roomType, "Last node must be Boss.");
-            Assert.AreEqual(0, boss.childIds.Count, "Boss node must have 0 children (terminal).");
+            Assert.AreEqual(RIMA.RoomType.Combat, postBoss.roomType, "Last node must be post-boss Combat.");
+            Assert.AreEqual(0, postBoss.childIds.Count, "Post-boss Combat node must have 0 children (terminal).");
+        }
+
+        [Test]
+        public void DemoSequence_BossNode_HasOneChild()
+        {
+            RuntimeDungeonGraph graph = RuntimeDungeonGraph.BuildDemoSequence();
+            RuntimeDungeonNode boss = graph.nodes[4];
+
+            Assert.AreEqual(RIMA.RoomType.Boss, boss.roomType, "Node 4 must be Boss.");
+            Assert.AreEqual(1, boss.childIds.Count, "Boss node must have 1 child (post-boss Combat).");
+            Assert.AreEqual(5, boss.childIds[0], "Boss node child must be node 5.");
         }
 
         [Test]
@@ -72,7 +84,7 @@ namespace RIMA.Tests.Room
         {
             RuntimeDungeonGraph graph = RuntimeDungeonGraph.BuildDemoSequence();
 
-            // Walk from start to end and confirm we visit all 5 nodes in order.
+            // Walk from start to end and confirm we visit all 6 nodes in order.
             int current = graph.startId;
             int steps = 0;
             while (true)
@@ -86,7 +98,7 @@ namespace RIMA.Tests.Room
                 current = node.childIds[0];
             }
 
-            Assert.AreEqual(5, steps, "Traversal must visit exactly 5 nodes.");
+            Assert.AreEqual(6, steps, "Traversal must visit exactly 6 nodes.");
         }
 
         // ── Bank resolution ───────────────────────────────────────────────────────
@@ -107,10 +119,9 @@ namespace RIMA.Tests.Room
             RoomBankSO bank = AssetDatabase.LoadAssetAtPath<RoomBankSO>(DemoRoomBankPath);
             Assert.IsNotNull(bank, $"Missing bank at {DemoRoomBankPath}.");
 
-            // PLACEHOLDER: merchantRooms reuses Combat_Large_01 until the real shop room is built.
             RoomTemplateSO template = bank.Pick(RIMA.RoomType.Merchant, seed: 0);
             Assert.IsNotNull(template,
-                "DemoRoomBank must resolve a non-null template for Merchant (placeholder = Combat_Large_01).");
+                "DemoRoomBank must resolve a non-null template for Merchant.");
         }
 
         [Test]
