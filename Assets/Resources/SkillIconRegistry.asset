@@ -51,3 +51,109 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: bf4b4efea30c3a746b62a985dfac7b2a, type: 3}
   - key: whirlwindslash
     sprite: {fileID: 21300000, guid: ef65b02819ec6a349bbc2d1c6c39725d, type: 3}
+  - key: ironcrush
+    sprite: {fileID: 21300000, guid: 0fe6fdc9fada4b344a95fc3f030367f7, type: 3}
+  - key: bladerush
+    sprite: {fileID: 21300000, guid: a4165b61a179b324cbe12d42e1563ee7, type: 3}
+  - key: deepwound
+    sprite: {fileID: 21300000, guid: 706bc7353084a33418f5bce1bbe0ad3d, type: 3}
+  - key: ironcounter
+    sprite: {fileID: 21300000, guid: 7c9479b3ea4b58746958b853d8705206, type: 3}
+  - key: battlesurge
+    sprite: {fileID: 21300000, guid: 1d112d097a51e1c4d8581129ed5e75cd, type: 3}
+  - key: cripplingblow
+    sprite: {fileID: 21300000, guid: bdab674a267ebe84886691655a2db428, type: 3}
+  - key: sundermark
+    sprite: {fileID: 21300000, guid: 030919de371c6d142aaf35acac65cfeb, type: 3}
+  - key: ironcladmomentum
+    sprite: {fileID: 21300000, guid: a1aee761ea806ab46b36e6825b12559e, type: 3}
+  - key: earthsplitter
+    sprite: {fileID: 21300000, guid: b071a795bf2a8f243854232d03a8d05a, type: 3}
+  - key: cleave
+    sprite: {fileID: 21300000, guid: 0ecae1ee9f1cf764d84657621e74f342, type: 3}
+  - key: arcaneblast
+    sprite: {fileID: 21300000, guid: e94fc0b8bf9ca7447a0e36debfef906f, type: 3}
+  - key: combustion
+    sprite: {fileID: 21300000, guid: e27722075b6b9bc4eb4fd474a284564c, type: 3}
+  - key: prismbeam
+    sprite: {fileID: 21300000, guid: 454db72c60cb789438a3c3d33582255b, type: 3}
+  - key: frostwall
+    sprite: {fileID: 21300000, guid: ea815821984ab35408fa0bcadaac55fe, type: 3}
+  - key: solarflare
+    sprite: {fileID: 21300000, guid: d94a7692dd8227840b0eb378eb9b9f50, type: 3}
+  - key: frozenorb
+    sprite: {fileID: 21300000, guid: 44a44a672c0f60749b9e8e3b27282108, type: 3}
+  - key: arcanesurge
+    sprite: {fileID: 21300000, guid: b5e52c321d01e3b4d91b81691f52f770, type: 3}
+  - key: blizzard
+    sprite: {fileID: 21300000, guid: 171f9b8a3e8f0e24f8cf5ccd238acb93, type: 3}
+  - key: chainlightning
+    sprite: {fileID: 21300000, guid: ec1991a00e45916468eefa7a0f595cb4, type: 3}
+  - key: livingbomb
+    sprite: {fileID: 21300000, guid: acd2eef96c7975e49a8a1109a13d0720, type: 3}
+  - key: mirrorimage
+    sprite: {fileID: 21300000, guid: 619774a77b985c54fbbb9d4c38f86af6, type: 3}
+  - key: barbednetshot
+    sprite: {fileID: 21300000, guid: b783eb62cc0c1a74995868682112aa8b, type: 3}
+  - key: multishot
+    sprite: {fileID: 21300000, guid: 9841c65fcaf5f464bac6fe211a1a27ac, type: 3}
+  - key: disengage
+    sprite: {fileID: 21300000, guid: ffbaf8cb036d1a24eb9af73c5ce08c77, type: 3}
+  - key: blackarrow
+    sprite: {fileID: 21300000, guid: 9388253be840ab041a86ea890b9faeb4, type: 3}
+  - key: volley
+    sprite: {fileID: 21300000, guid: 69ac8713cb513704bbd9943e7e8232e6, type: 3}
+  - key: rapidfire
+    sprite: {fileID: 21300000, guid: 2a23d9eaf1dbbc94e9b9a031767c5ba0, type: 3}
+  - key: tetheringarrow
+    sprite: {fileID: 21300000, guid: 1e0d3a19ee65dee4bb72dd72952d3f85, type: 3}
+  - key: pinningshot
+    sprite: {fileID: 21300000, guid: c1f726c7e59922341bf20d5e52f950e2, type: 3}
+  - key: markeddetonate
+    sprite: {fileID: 21300000, guid: a5d1193edb3c3b6469769bc9bc8314c0, type: 3}
+  - key: huntersstep
+    sprite: {fileID: 21300000, guid: b27d263396f32e0469a1b72337540fe4, type: 3}
+  - key: bonetrap
+    sprite: {fileID: 21300000, guid: f943905327c2346448510c89a8e1bc65, type: 3}
+  - key: sweepvolley
+    sprite: {fileID: 21300000, guid: 97d5d24355aa4024087a8d7e9abeec62, type: 3}
+  - key: predatorsmark
+    sprite: {fileID: 21300000, guid: 374e87a0e9a4dca4790aedf4ba3fcd81, type: 3}
+  - key: finalstrike
+    sprite: {fileID: 21300000, guid: 8727094ca98d3144e9170ba0fbdc5540, type: 3}
+  - key: wirelinetrap
+    sprite: {fileID: 21300000, guid: 4009d7d5fb1c0dd43909117fcd9c4b94, type: 3}
+  - key: explosivetrap
+    sprite: {fileID: 21300000, guid: 9564886a62dc80a4c819177be7f84a32, type: 3}
+  - key: flare
+    sprite: {fileID: 21300000, guid: 7a9241d1e038d784f94ec6359b5fc877, type: 3}
+  - key: pointblank
+    sprite: {fileID: 21300000, guid: 42ddcb9d77775a2418f56653a95ef878, type: 3}
+  - key: kidneyshot
+    sprite: {fileID: 21300000, guid: 8b8db508db1a161438874fe6c5c5aadb, type: 3}
+  - key: preparation
+    sprite: {fileID: 21300000, guid: 5f6589cd520ee4748b45750862cdb119, type: 3}
+  - key: evasion
+    sprite: {fileID: 21300000, guid: 36467f70ec11b774ea67cbcebfb4ffc2, type: 3}
+  - key: phasestep
+    sprite: {fileID: 21300000, guid: 4a0139989bd2e904da7a12f8026c1319, type: 3}
+  - key: deathmark
+    sprite: {fileID: 21300000, guid: f319eed71acd69146a4efda7a79df236, type: 3}
+  - key: veilburst
+    sprite: {fileID: 21300000, guid: e13f448e70845f645adb812a3deac674, type: 3}
+  - key: severance
+    sprite: {fileID: 21300000, guid: f66d481d2c2ecd3458fe295ed231a772, type: 3}
+  - key: smokeveil
+    sprite: {fileID: 21300000, guid: b7c804a72868b544ea69a763ca9739d2, type: 3}
+  - key: chaincull
+    sprite: {fileID: 21300000, guid: 9f6d1ee2783292c4d97e48ce5d2143c8, type: 3}
+  - key: shadowpin
+    sprite: {fileID: 21300000, guid: aa3065d589120594cb0d82c4c99e12aa, type: 3}
+  - key: nightaperture
+    sprite: {fileID: 21300000, guid: 777433ea14ecbae499739b2ebccd953d, type: 3}
+  - key: backstabmark
+    sprite: {fileID: 21300000, guid: d13470a4aea0b7a40a231795c533c1c8, type: 3}
+  - key: shadowclone
+    sprite: {fileID: 21300000, guid: 440c18875935a5a4cb185439800e0244, type: 3}
+  - key: ambush
+    sprite: {fileID: 21300000, guid: ee4fe5d6c92176c4fa6f45b09e917429, type: 3}

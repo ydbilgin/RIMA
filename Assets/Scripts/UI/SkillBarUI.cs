@@ -281,7 +281,7 @@ namespace RIMA
             else
             {
                 ui.icon.sprite = null;
-                ui.icon.color = new Color(0.35f, 0.25f, 0.55f, 0.85f);
+                ui.icon.color = new Color(0.18f, 0.20f, 0.24f, 0.85f);
             }
 
             // Cooldown
