@@ -9,6 +9,7 @@ namespace RIMA.Tests.Contracts
             ("SettingsMenuUI", "Close"),
             ("ForgeUI",        "Hide"),
             ("ChestUI",        "Hide"),
+            ("PauseMenuUI",    "Close"),
         };
 
         // MainMenuScreen AutoInit guard field (static bool prevents double-init on domain reload)

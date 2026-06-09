@@ -19,12 +19,14 @@ namespace RIMA
         private bool settingsOpen;
         private bool skillOfferOpen;
         private bool skillCodexOpen;
+        private bool pauseOpen;
         private bool _menuPaused;
 
         // ── Cached references ────────────────────────────────────────────
         private CharacterSheetUI sheetUI;
         private SettingsMenuUI   settingsUI;
         private SkillCodexUI     skillCodexUI;
+        private PauseMenuUI      pauseUI;
 
         // ── Input ────────────────────────────────────────────────────────
         private InputAction tabAction;
@@ -34,7 +36,8 @@ namespace RIMA
         public bool IsSettingsOpen   => settingsOpen;
         public bool IsSkillOfferOpen => skillOfferOpen;
         public bool IsSkillCodexOpen => skillCodexOpen;
-        public bool IsAnyOverlayOpen => tabOpen || settingsOpen || skillOfferOpen || skillCodexOpen;
+        public bool IsPauseOpen      => pauseOpen;
+        public bool IsAnyOverlayOpen => tabOpen || settingsOpen || skillOfferOpen || skillCodexOpen || pauseOpen;
 
         // ─── Lifecycle ───────────────────────────────────────────────────
 
@@ -79,6 +82,7 @@ namespace RIMA
             settingsOpen = false;
             skillOfferOpen = false;
             skillCodexOpen = false;
+            pauseOpen = false;
             _menuPaused = false;
             Time.timeScale = 1f;
         }
@@ -136,18 +140,33 @@ namespace RIMA
 
         private void OnEsc(InputAction.CallbackContext ctx)
         {
-            // Skill offer blocks ESC
+            // 1. Skill offer blocks ESC entirely — no pause mid-draft
             if (skillOfferOpen) return;
 
-            // If settings open, close settings first
-            if (settingsOpen) { CloseSettings(); return; }
+            // 2. Settings open → close settings; pause panel re-appears if pause is still open
+            if (settingsOpen)
+            {
+                CloseSettings();
+                if (pauseOpen && pauseUI != null) pauseUI.Open();
+                return;
+            }
 
-            // If TAB open, close TAB first
+            // 3. Skill codex open → close codex; pause panel re-appears if pause is still open
+            if (skillCodexOpen)
+            {
+                CloseSkillCodex();
+                if (pauseOpen && pauseUI != null) pauseUI.Open();
+                return;
+            }
+
+            // 4. TAB overlay open → close TAB
             if (tabOpen) { CloseTab(); return; }
 
-            // Toggle skill codex
-            if (skillCodexOpen) CloseSkillCodex();
-            else                OpenSkillCodex();
+            // 5. Pause open → close/resume
+            if (pauseOpen) { ClosePause(); return; }
+
+            // 6. Nothing open → open pause
+            OpenPause();
         }
 
         // ─── Public API ─────────────────────────────────────────────────
@@ -174,6 +193,8 @@ namespace RIMA
             if (settingsOpen || skillOfferOpen) return;
             if (tabOpen) CloseTab();
             if (skillCodexOpen) CloseSkillCodex();
+            // Hide pause panel visually (keep pauseOpen=true so ESC returns to it)
+            if (pauseOpen && pauseUI != null) pauseUI.Close();
             settingsOpen = true;
             ResolveSettingsUI();
             if (settingsUI != null) settingsUI.Open();
@@ -208,6 +229,8 @@ namespace RIMA
         {
             if (skillCodexOpen || skillOfferOpen || settingsOpen) return;
             if (tabOpen) CloseTab();
+            // Hide pause panel visually (keep pauseOpen=true so ESC returns to it)
+            if (pauseOpen && pauseUI != null) pauseUI.Close();
             skillCodexOpen = true;
             ResolveSkillCodexUI();
             if (skillCodexUI != null) skillCodexUI.Open();
@@ -222,6 +245,31 @@ namespace RIMA
             ApplyTimeScale();
         }
 
+        public void OpenPause()
+        {
+            // Pause is blocked while a skill offer (draft) is active
+            if (skillOfferOpen) return;
+            if (pauseOpen) return;
+            pauseOpen = true;
+            ResolvePauseUI();
+            if (pauseUI != null) pauseUI.Open();
+            ApplyTimeScale();
+        }
+
+        public void ClosePause()
+        {
+            if (!pauseOpen) return;
+            pauseOpen = false;
+            if (pauseUI != null) pauseUI.Close();
+            ApplyTimeScale();
+        }
+
+        public void TogglePause()
+        {
+            if (pauseOpen) ClosePause();
+            else           OpenPause();
+        }
+
         /// <summary>
         /// Resets all overlay flags and restores timeScale to 1.
         /// Call before loading a new scene from a non-pause context (e.g. CharacterSelect -> game).
@@ -232,6 +280,7 @@ namespace RIMA
             settingsOpen   = false;
             skillOfferOpen = false;
             skillCodexOpen = false;
+            pauseOpen      = false;
             _menuPaused    = false;
             Time.timeScale = 1f;
         }
@@ -255,7 +304,7 @@ namespace RIMA
 
         private void ApplyTimeScale()
         {
-            if (skillOfferOpen || settingsOpen || skillCodexOpen)
+            if (skillOfferOpen || settingsOpen || skillCodexOpen || pauseOpen)
                 Time.timeScale = 0f;
             else if (tabOpen)
                 Time.timeScale = 0.1f;
@@ -281,6 +330,12 @@ namespace RIMA
         {
             if (skillCodexUI == null)
                 skillCodexUI = SkillCodexUI.EnsureInstance();
+        }
+
+        private void ResolvePauseUI()
+        {
+            if (pauseUI == null)
+                pauseUI = PauseMenuUI.EnsureInstance();
         }
     }
 }
