@@ -38,7 +38,9 @@ namespace RIMA
         [SerializeField, Min(0f)] private float chamberCameraFitPadding = 0.35f;
         [SerializeField, Min(1f)] private float chamberCameraMinimumOrthographicSize = 5.8f;
         [SerializeField, Range(0.45f, 0.72f)] private float chamberPlayerScreenY = 0.60f;
-        [SerializeField, Range(2.8f, 7f)] private float chamberCameraOrthoSize = 4.2f;
+        // DEMO camera consistency: must match RoomRunDirector.fixedOrthographicSize (5.0) so the
+        // chamber -> _Arena transition has no zoom pop. (OVERLAP/DEMO Faz 1.)
+        [SerializeField, Range(2.8f, 7f)] private float chamberCameraOrthoSize = 5.0f;
         [SerializeField, Min(0f)] private float chamberGlobalLightIntensity = 1.10f;
         [SerializeField, Min(0f)] private float chamberFillLightIntensity = 0.35f;
         // FIX E: dummy scale and cell override (x=0,y=0 means use auto placement)
