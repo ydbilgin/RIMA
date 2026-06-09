@@ -406,7 +406,7 @@ namespace RIMA
             }
 
             // Shake camera
-            ScreenShake.Instance?.AddTrauma(0.5f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.40f, 0.40f);
 
             Debug.DrawRay(transform.position, Vector2.up * surgeRadius, Color.yellow, 0.5f);
         }
@@ -509,7 +509,7 @@ namespace RIMA
                 h.GetComponent<KnockbackComponent>()?.ApplyKnockbackFrom(worldPos, 9f);
             }
 
-            ScreenShake.Instance?.AddTrauma(0.35f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.25f, 0.30f);
         }
 
         /// Sovereign's Wrath — tüm alan hasar, merkez güvenli bölge
@@ -530,7 +530,7 @@ namespace RIMA
                 h.GetComponent<Health>()?.TakeDamage(sovereignWrathDmg);
             }
 
-            ScreenShake.Instance?.AddTrauma(0.8f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.50f, 0.42f);
         }
 
         /// Fracture Charge — arena boyunca hızlı dash + hasar çizgisi
@@ -575,7 +575,7 @@ namespace RIMA
             }
 
             rb.linearVelocity = Vector2.zero;
-            ScreenShake.Instance?.AddTrauma(0.4f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.35f, 0.35f);
         }
 
         // ─── Phase Transition ─────────────────────────────────────────────────
@@ -601,7 +601,7 @@ namespace RIMA
             // Transition moment: purple burst
             if (sr != null) sr.color = phase2Color;
             RoomMonologController.Say(BeatChainsBreak);   // authored 50% chains-break beat (null-guards itself)
-            ScreenShake.Instance?.AddTrauma(0.7f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.45f, 0.40f);
             RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.1f); // chains-snap freeze (design §1, 50% beat)
 
             // Second half: settle into Phase 2 color
@@ -643,7 +643,7 @@ namespace RIMA
             baseColor = Color.Lerp(baseColor, new Color(0f, 1f, 0.8f, 1f), 0.4f);
             if (sr != null) sr.color = Color.white;
             RoomMonologController.Say(BeatUnleashed);     // authored 33% Unleashed beat (null-guards itself)
-            ScreenShake.Instance?.AddTrauma(0.9f);
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.55f, 0.45f);
             RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.1f);
 
             // Second half: settle into the new cyan-veined rest color

@@ -177,5 +177,19 @@ namespace RIMA.Combat
         {
             CurrentOffset = Vector3.zero;
         }
+
+        /// <summary>
+        /// Runtime bootstrap: if no ScreenShakeDriver exists in the loaded scene
+        /// (e.g. _Arena which has no juice prefab wired), create one on a hidden
+        /// GameObject so boss shake calls are never silently null.
+        /// </summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void EnsureInstance()
+        {
+            if (Instance != null) return;
+            var go = new GameObject("[ScreenShakeDriver-Auto]");
+            DontDestroyOnLoad(go);
+            go.AddComponent<ScreenShakeDriver>();
+        }
     }
 }
