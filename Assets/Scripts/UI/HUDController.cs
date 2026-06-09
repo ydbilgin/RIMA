@@ -65,6 +65,10 @@ namespace RIMA
         private Coroutine resPulseCoroutine;
         private bool isResPulsing;
 
+        // ── Control hint (first-room, fade-out once) ─────────────────────
+        private TextMeshProUGUI _controlHintLabel;
+        private bool _controlHintShown;
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -118,6 +122,8 @@ namespace RIMA
 
             if (PlayerClassManager.Instance != null)
                 PlayerClassManager.Instance.OnPrimaryClassSet += OnClassChanged;
+
+            ShowControlHintOnce();
         }
 
         private void Update()
@@ -420,6 +426,7 @@ namespace RIMA
             BuildEchoDisplay(root);
             BuildRoomNameLabel(root);
             BuildInteractionPrompt(root);
+            BuildControlHint(root);
             if (showMiniMap)
             {
                 BuildMiniMap(root);
@@ -714,6 +721,63 @@ namespace RIMA
             lowHpVignette.type = Image.Type.Simple;
             lowHpVignette.color = new Color(0.7f, 0.05f, 0.08f, 0f); // dark red; alpha driven by HP in OnHPChanged
             lowHpVignette.raycastTarget = false;
+        }
+
+        // ─── Control Hint (first-room tutorial line) ─────────────────────
+
+        private void BuildControlHint(RectTransform root)
+        {
+            var go = new GameObject("ControlHint", typeof(RectTransform));
+            go.transform.SetParent(root, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = new Vector2(0.5f, 0f);
+            rt.anchorMax = new Vector2(0.5f, 0f);
+            rt.pivot     = new Vector2(0.5f, 0f);
+            rt.anchoredPosition = new Vector2(0f, 18f);
+            rt.sizeDelta = new Vector2(560f, 18f);
+
+            _controlHintLabel = go.AddComponent<TextMeshProUGUI>();
+            _controlHintLabel.text = "WASD Hareket  ·  SPACE Dash  ·  Q/E/R/F Beceri  ·  G Etkileşim  ·  ESC Menü";
+            _controlHintLabel.fontSize = 13f;
+            _controlHintLabel.color = RimaUITheme.TextMuted;
+            _controlHintLabel.alignment = TextAlignmentOptions.Center;
+            _controlHintLabel.raycastTarget = false;
+            _controlHintLabel.outlineWidth = 0.18f;
+            _controlHintLabel.outlineColor = new Color32(0, 0, 0, 180);
+            _controlHintLabel.alpha = 0f; // hidden until ShowControlHintOnce fires
+        }
+
+        private void ShowControlHintOnce()
+        {
+            if (_controlHintShown || _controlHintLabel == null) return;
+            _controlHintShown = true;
+            StartCoroutine(ControlHintRoutine());
+        }
+
+        private IEnumerator ControlHintRoutine()
+        {
+            // Fade in (0.5s)
+            float t = 0f;
+            while (t < 0.5f)
+            {
+                t += Time.deltaTime;
+                _controlHintLabel.alpha = Mathf.Clamp01(t / 0.5f) * 0.75f;
+                yield return null;
+            }
+            _controlHintLabel.alpha = 0.75f;
+
+            // Hold 8s
+            yield return new WaitForSeconds(8f);
+
+            // Fade out (1.5s)
+            t = 0f;
+            while (t < 1.5f)
+            {
+                t += Time.deltaTime;
+                _controlHintLabel.alpha = Mathf.Clamp01(1f - t / 1.5f) * 0.75f;
+                yield return null;
+            }
+            _controlHintLabel.alpha = 0f;
         }
     }
 }

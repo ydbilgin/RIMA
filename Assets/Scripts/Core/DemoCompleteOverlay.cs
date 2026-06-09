@@ -12,6 +12,8 @@ namespace RIMA
     {
         // TODO(user, D4): replace app/0 with the real Steam App ID once the store page exists (GATED).
         private const string DefaultSteamWishlistUrl = "https://store.steampowered.com/app/0/";
+        // Hidden until a real store page exists — app/0 placeholder would open a dead page in the jury demo.
+        private const bool ShowWishlistButton = false;
         private static readonly Color BrandCyan = new Color(0f, 1f, 0.8f, 1f);
         private static readonly Color TarnishedGold = new Color(0.95f, 0.74f, 0.24f, 1f);
 
@@ -98,16 +100,20 @@ namespace RIMA
                 Stretch(teaserText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             }
 
-            Button wishlist = CreateButton("WishlistButton", root, Loc.T("victory.btn.wishlist"), BrandCyan, RimaUITheme.BackgroundDark, 24f);
-            Stretch((RectTransform)wishlist.transform, new Vector2(0.24f, 0.22f), new Vector2(0.76f, 0.33f), Vector2.zero, Vector2.zero);
-            wishlist.onClick.AddListener(OpenWishlist);
+            if (ShowWishlistButton)
+            {
+                Button wishlist = CreateButton("WishlistButton", root, Loc.T("victory.btn.wishlist"), BrandCyan, RimaUITheme.BackgroundDark, 24f);
+                Stretch((RectTransform)wishlist.transform, new Vector2(0.24f, 0.22f), new Vector2(0.76f, 0.33f), Vector2.zero, Vector2.zero);
+                wishlist.onClick.AddListener(OpenWishlist);
+            }
 
+            // Wishlist hidden: the two bottom buttons grow into the vacated space.
             Button menu = CreateButton("MainMenuButton", root, Loc.T("victory.btn.main_menu"), RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 16f);
-            Stretch((RectTransform)menu.transform, new Vector2(0.24f, 0.10f), new Vector2(0.48f, 0.18f), Vector2.zero, Vector2.zero);
+            Stretch((RectTransform)menu.transform, new Vector2(0.24f, 0.10f), new Vector2(0.48f, 0.22f), Vector2.zero, Vector2.zero);
             menu.onClick.AddListener(LoadMainMenu);
 
             Button again = CreateButton("PlayAgainButton", root, Loc.T("victory.btn.play_again"), RimaUITheme.PanelBorder, RimaUITheme.TextPrimary, 16f);
-            Stretch((RectTransform)again.transform, new Vector2(0.52f, 0.10f), new Vector2(0.76f, 0.18f), Vector2.zero, Vector2.zero);
+            Stretch((RectTransform)again.transform, new Vector2(0.52f, 0.10f), new Vector2(0.76f, 0.22f), Vector2.zero, Vector2.zero);
             again.onClick.AddListener(Restart);
         }
 
