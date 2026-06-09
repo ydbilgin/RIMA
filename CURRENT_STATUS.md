@@ -1,5 +1,21 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-10 — PIXELLAB ASSET KOŞUSU + DUAL-CLASS + TILESET ARAŞTIRMA — /clear sonrası ÖNCE `STAGING/SESSION_RESUME_2026-06-10.md` OKU)
+
+**📄 TAM DETAY = `STAGING/SESSION_RESUME_2026-06-10.md`** (state planı + ikon index→skill mapping + tüm object ID'ler). Bu blok özet.
+
+**✅ DONE:** Warblade kılıç sorting FIX (prefab→Entities + AttachWeapon re-apply) · **Dual-class boss akışı** (YENİ `ClassSelectionUI.cs` + RoomRunDirector guard, compile-temiz, **PLAYTEST BEKLİYOR**) · Elementalist disk import (mount kodu yok) · **64 skill ikonu üretildi** (tag `rima_skill_icons_v1`, raw=`STAGING/skill_icons_raw/`, contact=`icon_batch_contact_2026-06-09.png`) · PixelLab API docs `STAGING/PIXELLAB_API_DOCS_2026-06-10.txt` (NLM-synced).
+
+**⏳ IN-FLIGHT:** Fireball 8-dir object `6ca9bb15-a56b-497e-b67b-30721751fdd5` (processing) → next: get_object + animate_object + Unity.
+
+**📋 PENDING (sırayla):** (1) **İkon wiring** 64 PNG→Unity→SkillIconRegistry (mapping resume-doc'ta, GÖRSEL-doğrula) · (2) Fireball bitir · (3) **Karakter animasyon** (state planı resume-doc'ta: Warblade walk+attack, Elementalist walk+cast; V3 + states/interpolate; VERIFY-FIRST walk) · (4) dual-class playtest · (5) HP barları · (6) karakter-seç temizliği.
+
+**🔑 KARARLAR:** İkon=**32px obje-batch** (64 varyant tek çağrı) · Fireball=**8 yön** create_8_direction_object high-top-down (kullanıcı haklı: 3/4'te tek-rotate yanlış) · Sprite Fusion paralı GEREKMEZ (autotile RIMA'da var: Wang resolver'lar + Unity RuleTile) · **RIMA top-down'a ÇEKİLMEZ** (deadline) · LaurethStudio'ya tileset pipeline kaydedildi. Tüm PixelLab kararı = memory `reference-pixellab-ui-icon-anim`.
+
+**İŞ BÖLÜMÜ (LOCK):** PixelLab gen = kullanıcı üretir / Claude prompt+MCP-indir+Unity-wire; ama ikon/fireball gibi obje-batch'i kullanıcı "sen üret" derse Claude MCP'den üretir. [[feedback-user-draws-weapons-claude-mounts]]
+
+---
+
 ## ⏯️ RESUME (2026-06-09 — 24H "EN İYİ DEMO" PLANI + ROUTING LOCK + OTONOM STABİLİTE BLOĞU AKTİF — /clear sonrası İLK BURAYI OKU)
 
 **🎯 ROUTING LOCK:** Production (Unity MCP/C#/prefab/asset/bug) = **Sonnet** (Claude limit sıfırlandı, bol Sonnet). Opus = sadece derin tasarım/strateji/review. Unity MCP aktif; Blender/Godot BAĞLI DEĞİL (sormadan motor değiştirme YOK). cx = opsiyonel advisor. [[feedback-sonnet-default-opus-deep-routing]].
