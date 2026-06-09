@@ -1,5 +1,35 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-09 GECE — OTONOM DEMO KOŞUSU: CHATGPT-RAPOR DOĞRULAMA + OVERLAP COUNCIL + FAZ 0-8 — 8 commit (BU AN LOCAL, PUSH SONRASI işaretlenecek) — /clear sonrası İLK BURAYI OKU)
+
+**⚠️ DURUM:** Kullanıcı "bütün işleri sırayla yap, otonom devam et" dedi + gitti. Demo fazları 0-8 uçtan-uca yapıldı. Her değişiklik Unity compile 0-error + Mutual-QC'li. Kod=Sonnet sub-agent'ları + Opus orchestrator (cx review-only kaldı).
+
+**🔎 CHATGPT REPO-TARAMA RAPORU DOĞRULANDI (gerçek kodla, ~%60 BAYAT):** Boss zaten tam yapılı, demo-flow (forced linear sequence) zaten kodlu, softlock zaten fix'li (7489e2de), MainMenuController=canlı/MainMenuScreen=legacy (eski memory TERSti — DÜZELTİLDİ). Gerçek net-new = sadece PauseMenu + Shop. Detay 5 Explore ajanı + Sonnet overlap taraması.
+
+**🏛️ OVERLAP CLEANUP — 4-advisor council** (cx+ax-3.1+ax-3.5+ChatGPT→Opus), karar=`STAGING/OVERLAP_CLEANUP_DECISION_2026-06-09.md`: [Obsolete] markörle, rename+fiziksel-sil+RewardPickup-decouple+_IsoGame söküm = DEMO-SONRASI faz. Grep, Sonnet'in "direkt sil" önerisini çürüttü (legacy cluster+test+canlı RewardPickup bağımlı).
+
+**✅ COMMIT'LER (bu koşu, sırayla):**
+- `4becf50d` Faz 0 — legacy [Obsolete] markörleri (DungeonGraph/MainMenuScreen/DoorTrigger/GateBehavior)
+- `18527a98` Faz 1 — chamber camera ortho 4.2→5.0 (chamber↔arena pop'u biter; CameraZoom canlı sahnede yok=non-issue)
+- `b48c763` Faz 3 — **PauseMenu + ESC rewire** (ESC→Pause, Resume/Settings/Codex/MainMenu/Quit, timeScale güvenliği; UIManagerPauseTests 10/10)
+- `673ef5f4` Faz 4 — **boss demo'da spawn** (SpawnBossDirectly; PenitentSovereign zaten tam) + death-screen `_IsoGame`→`_Arena` fix; boss death→DemoComplete (IsRunComplete dalı)
+- `be9f536f`+`6a64287b` Faz 5 — **Shop** (ShopOfferData/ShopStand/ShopRoomController + Shop_01 template + Merchant branch; 3 teklif Heal/Damage/+MaxHP; cooldown hook YOK→+MaxHP ikame; ShopOfferTests 8/8)
+- `d5ea57b9` Faz 7 — Shop_01 Library→Special taşı (SampleRoomLibraryGenerator regresyonu düzeltildi)
+- `0a97c72a` Faz 8 — Warblade kılıç sorting (Default layer→Entities + her-frame sort) + Elementalist yanlış-kılıç suppression
+
+**✅ KOD-DEĞİŞİKLİĞİ GEREKMEYEN FAZLAR (doğrulandı):** Faz 2 (2-class kilit — ClassUnlockPolicy=Warblade+Elementalist + PlayerClassManager kilitliyi reddediyor, ZATEN doğru) · Faz 6 (boss telegraph — her atak Telegraph()+SpawnLine/SpawnCircle SONRA TakeDamage, ZATEN wire'lı).
+
+**🧪 TEST:** EditMode 594 test, **17 fail HEPSİ PRE-EXISTING** (Brush sprite-path, V15g/V15h pixellab/Wang, MCPSceneLoad reflection, PerfAntiPattern, PlayerAnimator, PrefabHealth, SubRoomSequence) — bu koşunun 8 commit'inden **0 yeni fail**. +18 yeni test (Pause 10 + Shop 8) yeşil.
+
+**🎮 KULLANICI PLAYTEST GEREK (bloklamaz, koddan doğrulanamaz):** chamber→arena zoom hissi (5.0) · ESC→PauseMenu + Resume/MainMenu timeScale · 5-oda demo run (Combat·Combat·**Shop**·Combat·**Boss**→Victory, 0 stuck) · Shop'ta 3 stand G-satın-alma + Echo · boss telegraph okunurluk · Warblade kılıç floor arkasına düşmüyor · Elementalist'te kılıç YOK.
+
+**🔒 GATED / DEMO-SONRASI (otonom yapılMADI — bilinçli):**
+- **PixelLab art (user-gated kural):** Elementalist floating rune disc · shop stand gerçek art (şu an placeholder renkli kareler). Kod-yolu hazır, asset bekliyor.
+- **Boss prefab build-gap:** PenitentSovereign.prefab Resources'ta değil → standalone BUILD'de boss editör-dışı spawn olmaz (editör demo'da AssetDatabase ile çalışır). Fix: _Arena'da RoomRunDirector.bossPrefab serialized ata VEYA prefab'ı Resources'a taşı.
+- **DEFERRED legacy _IsoGame decommission** (council kararı): DungeonGraph rename + cluster+test+sahne fiziksel sil + RewardPickup→RoomRunDirector decouple + CharacterSelectScreen.OnStartRun bypass kapat. `STAGING/OVERLAP_CLEANUP_DECISION_2026-06-09.md`.
+
+---
+
 ## ⏯️ RESUME (2026-06-09 — CHAMBER FULL-POLISH + SOFTLOCK KÖK-FIX + DEMO MASTER PLAN + FAZ SIRASI — 7 commit PUSHED `3a364565`→`787d7b3d` — /clear sonrası İLK BURAYI OKU)
 
 **⚠️ DURUM:** Bu session 7 commit origin/master'a PUSHED. Faz sırası = `[[project-demo-phase-order]]` memory + `STAGING/DEMO_MASTER_PLAN_2026-06-09.md`. Codex kotası az → kod artık Sonnet/Opus/ax-Opus-4.6.
