@@ -32,6 +32,11 @@ namespace RIMA
     ///
     /// Player picks ONE path at each fork. Map reveals room types 1 node ahead.
     /// </summary>
+    // ⚠️ LEGACY _IsoGame map subsystem. NAME COLLISION with the live pure class
+    // RIMA.MapDesigner.Room.Runtime.DungeonGraph (used by RoomRunDirector, has BuildDemoSequence).
+    // Live demo flow does NOT use this MonoBehaviour. Post-demo: rename → LegacyIsoDungeonGraph + delete
+    // with the rest of the legacy cluster (OVERLAP_CLEANUP_DECISION_2026-06-09.md, HEDEF 1).
+    [System.Obsolete("LEGACY _IsoGame dungeon graph — live is RIMA.MapDesigner.Room.Runtime.DungeonGraph. Post-demo removal.", false)]
     public class DungeonGraph : MonoBehaviour
     {
         public static DungeonGraph Instance { get; private set; }

@@ -24,6 +24,7 @@ namespace RIMA
     ///   (Faz B) diğerleri     ← gate_chest, gate_elite, gate_merchant, gate_forge, gate_event, gate_curse
     /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
+    [System.Obsolete("LEGACY _IsoGame gate visuals — live exit is RoomRunDirector.RoomRunExitDoorTrigger. Post-demo removal.", false)]
     public class GateBehavior : MonoBehaviour
     {
         [Header("Direction")]

@@ -19,6 +19,7 @@ namespace RIMA
     ///   - This script (set direction in Inspector)
     /// </summary>
     [RequireComponent(typeof(BoxCollider2D))]
+    [System.Obsolete("LEGACY _IsoGame door system — live exit is RoomRunDirector.RoomRunExitDoorTrigger. Post-demo removal.", false)]
     public class DoorTrigger : MonoBehaviour
     {
         [SerializeField] private DoorDirection direction;

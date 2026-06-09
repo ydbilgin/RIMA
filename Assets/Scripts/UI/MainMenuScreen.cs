@@ -10,6 +10,11 @@ namespace RIMA
     /// Main menu — Ashen Glyph spec.
     /// Dark background, "RIMA" logo with quiet cyan whisper, 2 buttons: NEW RUN, QUIT.
     /// </summary>
+    // ⚠️ LEGACY: NOT the live menu. Scene-backed RIMA.UI.MainMenuController is the live authority
+    // (Assets/Scenes/UI/MainMenu.unity). Self-creation is guarded (AutoInit scene-name allowlist).
+    // OnPlayClicked spawns a procedural CharacterSelectScreen = latent chamber-bypass; scheduled for
+    // post-demo removal (OVERLAP_CLEANUP_DECISION_2026-06-09.md, HEDEF 2).
+    [System.Obsolete("LEGACY menu — use scene-backed RIMA.UI.MainMenuController. Post-demo removal.", false)]
     public class MainMenuScreen : MonoBehaviour
     {
         private const string PackButtonPath = "UI/RIMA/Pack/button_9slice";
