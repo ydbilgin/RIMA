@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using RIMA.Encounter;
 using RIMA.MapDesigner.Room.Data;
+using RIMA.Shop;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -554,6 +555,16 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         private void StartRoomEncounter()
         {
+            // ── DEMO MERCHANT PATH ───────────────────────────────────────────────
+            // Check Merchant FIRST — before the enemy-socket guard — because merchant
+            // templates intentionally have zero enemy sockets. If we let the guard run
+            // first it would call HandleEncounterCleared() and skip the shop entirely.
+            if (CurrentRoomType == RIMA.RoomType.Merchant)
+            {
+                HandleMerchantRoom();
+                return;
+            }
+
             if (CurrentTemplate == null || CurrentTemplate.enemySpawnSockets == null || CurrentTemplate.enemySpawnSockets.Count == 0)
             {
                 HandleEncounterCleared();
@@ -639,6 +650,38 @@ namespace RIMA.MapDesigner.Room.Runtime
             EnsureBossHealthBar();
 
             Debug.Log($"[RoomRunDirector] Boss spawned: {bossInstance.name} at {spawnPos} (node={CurrentNodeId})");
+        }
+
+        /// <summary>
+        /// Merchant room: spawn 3 shop stands at the room centre, open exit doors immediately.
+        /// No EncounterController wave is started. Lifecycle is force-advanced to DoorOpen so
+        /// the player is never locked in — buying is optional.
+        /// </summary>
+        private void HandleMerchantRoom()
+        {
+            // Spawn ShopRoomController (self-contained; owns stands + cleanup on Destroy).
+            Vector3 center = ResolveRoomCenter();
+            GameObject shopGO = new GameObject("ShopRoomController");
+            ShopRoomController shopController = shopGO.AddComponent<ShopRoomController>();
+            shopController.Setup(center);
+
+            // Advance lifecycle from Combat → DoorOpen so exit doors open immediately.
+            // lifecycle is already in Combat (set in BuildCurrentRoom before StartRoomEncounter).
+            lifecycle.MarkCleared();
+            lifecycle.MarkRewardTaken();
+            // MarkDoorsOpened requires RewardTaken state — we are there now.
+            if (!lifecycle.MarkDoorsOpened())
+            {
+                Debug.LogWarning($"[RoomRunDirector] Merchant: MarkDoorsOpened failed at state={lifecycle.State}; using force-open.");
+                ForceOpenExitDoorsFromAnyClearedState();
+            }
+            else
+            {
+                EnsureAtLeastOneExitDoor();
+                ConfigureExitDoors(true);
+            }
+
+            Debug.Log($"[RoomRunDirector] Merchant room set up: 3 stands at {center}, exit doors open. node={CurrentNodeId}");
         }
 
         private GameObject ResolveBossPrefab()

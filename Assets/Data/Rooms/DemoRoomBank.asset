@@ -20,5 +20,5 @@ MonoBehaviour:
   bossRooms:
   - {fileID: 11400000, guid: aef8614a7e828f145ad7245c535b0859, type: 2}
   merchantRooms:
-  - {fileID: 11400000, guid: 2904aa1235e85764993eec449324e92c, type: 2}
+  - {fileID: 11400000, guid: 641ab5d8f26e6024495b89b16a9a60b1, type: 2}
   eventRooms: []
