@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace RIMA
@@ -16,6 +17,11 @@ namespace RIMA
         [SerializeField] private float slowDuration = 2.5f;
 
         private Elementalist_SkillController ctrl;
+
+        // PixelLab spike cluster visual
+        private static Sprite s_SpikeSprite;
+        private const int   SpikeCount = 3;
+        private const float SpikeFadeDuration = 0.5f;
 
         protected override void Awake()
         {
@@ -60,6 +66,57 @@ namespace RIMA
 
             ctrl?.RegisterElementCast(ElementalistElement.Frost, 2);
             ctrl?.ConsumeFireState(1);
+
+            SpawnSpikeVisuals(origin, dir);
+        }
+
+        /// <summary>
+        /// Spawns SpikeCount cluster sprites evenly distributed along the spike line, fades out in 0.5s.
+        /// </summary>
+        private void SpawnSpikeVisuals(Vector2 origin, Vector2 dir)
+        {
+            if (s_SpikeSprite == null)
+                s_SpikeSprite = Resources.Load<Sprite>("VFX/Skills/glacial_spike_cluster");
+
+            for (int i = 0; i < SpikeCount; i++)
+            {
+                float t = (i + 0.5f) / SpikeCount; // 0.17, 0.5, 0.83 — evenly spaced
+                Vector3 pos = (Vector3)(origin + dir * (lineLength * t));
+
+                var go = new GameObject("GlacialSpike_Visual");
+                go.transform.position = pos;
+                go.transform.localScale = new Vector3(0.55f, 0.55f, 1f);
+
+                var sr = go.AddComponent<SpriteRenderer>();
+                sr.sortingLayerName = "VFX";
+                sr.sortingOrder = 15;
+                if (s_SpikeSprite != null)
+                {
+                    sr.sprite = s_SpikeSprite;
+                    sr.color  = new Color(0.7f, 0.92f, 1f, 1f);
+                }
+                else
+                {
+                    sr.sprite = ElementalistRuntimeVisuals.GetCircleSprite();
+                    sr.color  = new Color(0.55f, 0.88f, 1f, 0.9f);
+                }
+
+                StartCoroutine(FadeAndDestroy(go, sr, SpikeFadeDuration));
+            }
+        }
+
+        private static IEnumerator FadeAndDestroy(GameObject go, SpriteRenderer sr, float duration)
+        {
+            float elapsed = 0f;
+            Color startColor = sr.color;
+            while (elapsed < duration && go != null)
+            {
+                elapsed += Time.deltaTime;
+                float a = Mathf.Lerp(startColor.a, 0f, elapsed / duration);
+                sr.color = new Color(startColor.r, startColor.g, startColor.b, a);
+                yield return null;
+            }
+            if (go != null) Destroy(go);
         }
     }
 }

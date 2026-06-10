@@ -1,4 +1,5 @@
 using UnityEngine;
+using RIMA.Combat;
 
 namespace RIMA
 {
@@ -21,6 +22,16 @@ namespace RIMA
             playerHealth = GetComponentInParent<Health>();
         }
 
+        private void OnEnable()
+        {
+            CombatEventBus.OnKill += HandleKillEvent;
+        }
+
+        private void OnDisable()
+        {
+            CombatEventBus.OnKill -= HandleKillEvent;
+        }
+
         protected override void OnLevelUp(int level)
         {
             healPerKill = level switch
@@ -33,11 +44,18 @@ namespace RIMA
             Debug.Log($"[BloodDrinker] Kill → +{healPerKill} HP");
         }
 
+        private void HandleKillEvent(KillEvent e)
+        {
+            OnKill();
+        }
+
         public void OnKill()
         {
-            if (playerHealth != null && healPerKill > 0)
+            if (CurrentLevel == 0 || healPerKill <= 0) return;
+            if (playerHealth != null)
             {
                 playerHealth.Heal(healPerKill);
+                Debug.Log($"[BloodDrinker] Healed +{healPerKill} HP");
             }
         }
     }

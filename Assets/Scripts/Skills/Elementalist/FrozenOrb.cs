@@ -68,12 +68,34 @@ namespace RIMA
         private Rigidbody2D rb;
         private bool exploded;
 
+        // Sprite loaded lazily — Resources/VFX/Skills/frozen_orb_main
+        private static Sprite s_OrbSprite;
+        private const float RotateSpeed = 90f; // degrees per second
+
         public void Init(Vector2 velocity, float lifetime)
         {
             rb = GetComponent<Rigidbody2D>();
             rb.gravityScale = 0f;
             rb.linearVelocity = velocity;
             Destroy(gameObject, lifetime);
+
+            // Apply PixelLab sprite if available
+            var sr = GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                if (s_OrbSprite == null)
+                    s_OrbSprite = Resources.Load<Sprite>("VFX/Skills/frozen_orb_main");
+                if (s_OrbSprite != null)
+                {
+                    sr.sprite = s_OrbSprite;
+                    sr.color  = Color.white;
+                }
+            }
+        }
+
+        private void Update()
+        {
+            transform.Rotate(0f, 0f, RotateSpeed * Time.deltaTime);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
