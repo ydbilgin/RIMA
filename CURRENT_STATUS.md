@@ -1,6 +1,18 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-10 GECE — OTONOM DEMO KOŞUSU TAMAMLANDI: 10 commit + CANLI ZİNCİR DOĞRULANDI — /clear sonrası İLK BURAYI OKU)
+## ⏯️ RESUME (2026-06-10 SABAH — UNITY RESTART + UNLOCK-DRAFT ÇİFT-FIX CANLI DOĞRULANDI `1709c2d8` PUSHED — /clear sonrası İLK BURAYI OKU)
+
+**✅ BU KOŞUDA (otonom, kanıtlı):**
+- **Unity restart YAPILDI** (D1 kapandı-kapandı): 4.19GB bozuk log → `Editor-prev.log` rotate, console temiz, "Access version" assert SPAM BİTTİ (play boyunca 0). Restart yolculuğu: force-kill → "Recovering Scene Backups" modal (UIA ile No) → fix agent'ın `using System;` CS0104'ü (alias'la düzeltildi) → Safe Mode dialog (UIA ile Ignore).
+- **`1709c2d8` UNLOCK-DRAFT ÇİFT KÖK-NEDEN FIX + CANLI 5/5 KANIT:** (1) race — `IsDraftPending` property + RoomRunDirector `(IsDraftPending||IsDraftActive)` bekleme + 90s timeout; (2) NRE — OnSecondaryClassSelected lambda'sı auto-created `DraftManager_Auto`'da null `offerGenerator`'a erişiyordu → lambda başında `EnsureDependencies()`. İlk canlı turda NRE yakalandı (asıl gece bulgusunun gerçek nedeni buydu), fix sonrası ikinci tur: boss→seçim→`IsDraftPending=true`→draft 3 kart AÇIK+kapı kapalı→skill seç→DoorOpen→node5, softlock yok. Screenshot 10-19 `STAGING/screenshots_demo_2026-06-10/`.
+- **TAM SUITE ×2: 584/599, 15 fail HEPSİ pre-existing** (Brush 2 · V15g/V15h 3 · MCPSceneLoad 4 · PerfAntiPattern 2 · PrefabHealth 2 · SubRoomSequence 2), 0 yeni; restart PlayerAnimator faillerini yeşillendirdi. (Eski "~8 fail" tahmini iyimserdi; 15 = gerçek taban.)
+- ⚠️ Dokunulmadı: `Assets/Data/Blueprint/*` binary asset diff'leri + `Assets/RoomPainter/AssetMetadata/*` untracked dosyalar (önceki session yan-ürünü, provenance belirsiz → commit edilmedi).
+
+**⏭️ KALAN SIRA (aşağıdaki GECE bloğundaki 3-6):** KULLANICI PixelLab üretimi (P1 Warblade RUN önce) · G1 gerçek-el playtest · Shop Echo→Gold kararı · G2 build smoke → G3 freeze.
+
+---
+
+## ⏯️ ESKİ RESUME (2026-06-10 GECE — OTONOM DEMO KOŞUSU TAMAMLANDI: 10 commit + CANLI ZİNCİR DOĞRULANDI)
 
 **🔒 PLAN = `STAGING/DEMO_FINAL_PLAN_2026-06-10.md`** · Rapor notları = `STAGING/REPORT_NOTES_2026-06-10.md` · Üretim sayfası = `STAGING/PIXELLAB_PRODUCTION_SHEET_2026-06-10.md` · Screenshot kanıtları = `STAGING/screenshots_demo_2026-06-10/` (01-09).
 
