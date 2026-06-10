@@ -63,7 +63,7 @@ namespace RIMA.Editor.Map
 
     public static class RoomTemplateAutoPropsUtility
     {
-        private const string PropRegistryPath = "Assets/Data/Props/PropRegistry.asset";
+        private const string PropRegistryPath = "Assets/Resources/Props/PropRegistry.asset";
 
         // Density fills edges/clusters and keeps the center clean.
         private const float TargetDensity = 0.30f;

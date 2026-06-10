@@ -20,13 +20,16 @@ namespace RIMA
 {
     public sealed class ChamberSelectBootstrap : MonoBehaviour
     {
-        private const string RoomAssetPath = "Assets/Data/Rooms/Special/Chamber_CharSelect.asset";
-        private const string RegistryAssetPath = "Assets/Data/Props/PropRegistry.asset";
+        private const string RoomAssetPath = "Assets/Resources/ChamberSelect/Chamber_CharSelect.asset";
+        private const string RoomResourcePath = "ChamberSelect/Chamber_CharSelect";
+        private const string RegistryAssetPath = "Assets/Resources/Props/PropRegistry.asset";
+        private const string RegistryResourcePath = "Props/PropRegistry";
         private const string FloorTileResource = "ChamberSelect/Tiles/ChamberFloor";
         private const string CollisionTileResource = "ChamberSelect/Tiles/ChamberCollision";
         private const string OverlayTileResource = "ChamberSelect/Tiles/ChamberOverlayPath";
         private const string ChamberExitPortalResource = "Environment/Gate/gate_arch";
-        private const string ChamberExitPortalEditorPath = "Assets/Sprites/Environment/Portal/portal_rift.png";
+        private const string ChamberExitPortalEditorPath = "Assets/Resources/Environment/Portal/portal_rift.png";
+        private const string ChamberExitPortalResourcePath = "Environment/Portal/portal_rift";
         private const string ArenaRunSceneName = "_Arena";
         private const float ClassInteractRadius = 2.0f;
         private const float ClassConfirmRadius = 2.2f;
@@ -159,7 +162,7 @@ namespace RIMA
             portalGo.transform.localScale = new Vector3(0.78f, 0.78f, 1f);
 
             SpriteRenderer sr = portalGo.AddComponent<SpriteRenderer>();
-            sr.sprite = LoadAsset<Sprite>(ChamberExitPortalEditorPath, null)
+            sr.sprite = LoadAsset<Sprite>(ChamberExitPortalEditorPath, ChamberExitPortalResourcePath)
                 ?? Resources.Load<Sprite>(ChamberExitPortalResource)
                 ?? LoadAsset<Sprite>("Assets/Resources/Environment/Gate/gate_arch.png", ChamberExitPortalResource);
             sr.color = Color.white;
@@ -487,8 +490,8 @@ namespace RIMA
             Transform propsContainer = CreateContainer(builder.transform, "Props");
             Transform gatesContainer = CreateContainer(builder.transform, "Gates");
 
-            roomTemplate = LoadAsset<RoomTemplateSO>(RoomAssetPath, null);
-            PropRegistrySO registry = LoadAsset<PropRegistrySO>(RegistryAssetPath, null);
+            roomTemplate = LoadAsset<RoomTemplateSO>(RoomAssetPath, RoomResourcePath);
+            PropRegistrySO registry = LoadAsset<PropRegistrySO>(RegistryAssetPath, RegistryResourcePath);
             TileBase floorTile = Resources.Load<TileBase>(FloorTileResource);
             TileBase collisionTile = Resources.Load<TileBase>(CollisionTileResource);
             TileBase overlayTile = Resources.Load<TileBase>(OverlayTileResource);
@@ -504,9 +507,9 @@ namespace RIMA
             SetField(builder, "collisionTile", collisionTile);
             SetField(builder, "overlayTiles", new[] { overlayTile });
             SetField(builder, "propRegistry", registry);
-            SetField(builder, "cliffSouth", LoadAsset<Sprite>("Assets/Sprites/Environment/CliffKit_RefB_pixelified/cliff_S.png", null));
-            SetField(builder, "cliffSouthEast", LoadAsset<Sprite>("Assets/Sprites/Environment/CliffKit_RefB_pixelified/cliff_SE.png", null));
-            SetField(builder, "cliffSouthWest", LoadAsset<Sprite>("Assets/Sprites/Environment/CliffKit_RefB_pixelified/cliff_SW.png", null));
+            SetField(builder, "cliffSouth", LoadAsset<Sprite>("Assets/Resources/Environment/Cliff/cliff_S.png", "Environment/Cliff/cliff_S"));
+            SetField(builder, "cliffSouthEast", LoadAsset<Sprite>("Assets/Resources/Environment/Cliff/cliff_SE.png", "Environment/Cliff/cliff_SE"));
+            SetField(builder, "cliffSouthWest", LoadAsset<Sprite>("Assets/Resources/Environment/Cliff/cliff_SW.png", "Environment/Cliff/cliff_SW"));
             SetField(builder, "gateNorthSprite", LoadAsset<Sprite>("Assets/Resources/Environment/Gate/gate_arch.png", "Environment/Gate/gate_arch"));
 
             if (roomTemplate == null || floorTile == null || collisionTile == null || registry == null)

@@ -11,7 +11,7 @@ namespace RIMA.Editor.Map
     public static class RoomSocketQCTool
     {
         private const string RoomsRoot = "Assets/Data/Rooms";
-        private const string CharSelectPath = "Assets/Data/Rooms/Special/Chamber_CharSelect.asset";
+        private const string CharSelectPath = "Assets/Resources/ChamberSelect/Chamber_CharSelect.asset";
         private const int DoorWidth = 2;
         private const float MinimumSpawnDoorDistance = 4f;
 

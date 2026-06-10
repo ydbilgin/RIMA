@@ -10,7 +10,7 @@ namespace RIMA.Tests.Room
     public sealed class RoomTemplateSocketTests
     {
         private const string RoomsRoot = "Assets/Data/Rooms";
-        private const string CharSelectPath = "Assets/Data/Rooms/Special/Chamber_CharSelect.asset";
+        private const string CharSelectPath = "Assets/Resources/ChamberSelect/Chamber_CharSelect.asset";
         private const string ArchGatePath = "Assets/Data/Props/ArchGate.asset";
         private const string BrazierPath = "Assets/Data/Props/Brazier.asset";
         private const string PillarPath = "Assets/Data/Props/Pillar.asset";

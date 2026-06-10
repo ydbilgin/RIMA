@@ -14,8 +14,8 @@ namespace RIMA.Editor
         private const string PedestalSpritePath = "Assets/Sprites/Environment/Props/echo_pedestal.png";
         private const string EchoPedestalPath = "Assets/Data/Props/EchoPedestal.asset";
         private const string ArchGatePath = "Assets/Data/Props/ArchGate.asset";
-        private const string RegistryPath = "Assets/Data/Props/PropRegistry.asset";
-        private const string RoomPath = "Assets/Data/Rooms/Special/Chamber_CharSelect.asset";
+        private const string RegistryPath = "Assets/Resources/Props/PropRegistry.asset";
+        private const string RoomPath = "Assets/Resources/ChamberSelect/Chamber_CharSelect.asset";
 
         private const string FloorTilePath = "Assets/Resources/ChamberSelect/Tiles/ChamberFloor.asset";
         private const string CollisionTilePath = "Assets/Resources/ChamberSelect/Tiles/ChamberCollision.asset";
@@ -47,9 +47,9 @@ namespace RIMA.Editor
         private static void EnsureFolders()
         {
             EnsureFolder("Assets/Sprites/Environment", "Props");
-            EnsureFolder("Assets/Data/Rooms", "Special");
             EnsureFolder("Assets/Resources", "ChamberSelect");
             EnsureFolder("Assets/Resources/ChamberSelect", "Tiles");
+            EnsureFolder("Assets/Resources", "Props");
         }
 
         private static void EnsureFolder(string parent, string child)

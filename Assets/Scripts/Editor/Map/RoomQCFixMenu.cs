@@ -18,7 +18,7 @@ namespace RIMA.Editor.Map
 {
     public static class RoomQCFixMenu
     {
-        private const string PropRegistryPath = "Assets/Data/Props/PropRegistry.asset";
+        private const string PropRegistryPath = "Assets/Resources/Props/PropRegistry.asset";
         private const string ArenaScenePath = "Assets/Scenes/_Arena.unity";
         private const string RoomsRoot = "Assets/Data/Rooms";
         private const float TargetDensity = 0.30f;
