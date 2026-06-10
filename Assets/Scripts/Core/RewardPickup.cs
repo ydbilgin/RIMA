@@ -10,13 +10,20 @@ namespace RIMA
     {
         [SerializeField] private Canvas promptCanvas;
         [SerializeField] private Text promptText;
-        [SerializeField] private float pickupVisualScale = 0.55f;
+        [SerializeField] private float pickupVisualScale = 1.1f;
 
         private const Key InteractKey = Key.G;
         private bool collected;
         private bool playerInRange;
 
         public bool WasCollected => collected;
+
+        /// <summary>
+        /// BUG-2 fix: the final resting world-scale of the pickup sprite.
+        /// RoomRunDirector.RewardSpawnPop uses this so the pop animation ends at the
+        /// correct size (instead of always ending at Vector3.one).
+        /// </summary>
+        public float VisualScale => pickupVisualScale;
 
         private void Awake()
         {
@@ -65,6 +72,18 @@ namespace RIMA
         {
             if (other == null || !other.CompareTag("Player")) return;
             ClearPlayerRange();
+        }
+
+        /// <summary>
+        /// BUG-1 fix: auto-grant the reward after timeout — same as Collect() but
+        /// does NOT require the player to be in range. Called by RoomRunDirector when
+        /// RewardAutoCollectTimeoutSec elapses so the reward is never silently discarded.
+        /// </summary>
+        public void ForceCollect()
+        {
+            if (collected) return;
+            Debug.Log("[Reward] ForceCollect — auto-granting skill draft after timeout");
+            Collect();
         }
 
         private void Collect()

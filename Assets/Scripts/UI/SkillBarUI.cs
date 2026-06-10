@@ -296,6 +296,13 @@ namespace RIMA
 
         // ─── Update ─────────────────────────────────────────────────
 
+        // BUG-4 FIX: visual bar layout is LMB | RMB | Q | E | R | F.
+        // Slots 0-1 (LMB/RMB) are Attack/ClassSecondary actions — they carry no skill component.
+        // Slots 2-5 (Q/E/R/F) map to skill-controller slots 0-3 (index offset = 2).
+        // Without the offset, skills assigned to Q (controller slot 0) were shown under the LMB
+        // label, making the bar appear to mismatch the actual keybindings.
+        private const int SkillBarOffset = 2; // first skill-controller slot lives at visual index 2
+
         private void Update()
         {
             int active = GetActiveSlotCount();
@@ -304,8 +311,11 @@ namespace RIMA
                 if (synergyPulseTimers[i] > 0f)
                     synergyPulseTimers[i] = Mathf.Max(0f, synergyPulseTimers[i] - Time.unscaledDeltaTime);
 
-                if (i < active)
-                    UpdateSlot(i, GetActiveSlot(i));
+                // Slots 0-1 (LMB/RMB) are attack slots with no skill; always render empty.
+                // Slots 2-5 (Q/E/R/F) map to controller skill slots 0-3.
+                int ctrlIndex = i - SkillBarOffset;
+                if (ctrlIndex >= 0 && ctrlIndex < active)
+                    UpdateSlot(i, GetActiveSlot(ctrlIndex));
                 else
                     UpdateSlotEmpty(i);
             }
@@ -316,9 +326,11 @@ namespace RIMA
             if (string.IsNullOrEmpty(skillName)) return;
 
             int active = GetActiveSlotCount();
-            for (int i = 0; i < active && i < SlotCount; i++)
+            for (int i = SkillBarOffset; i < SlotCount; i++)
             {
-                var skill = GetActiveSlot(i);
+                int ctrlIndex = i - SkillBarOffset;
+                if (ctrlIndex >= active) break;
+                var skill = GetActiveSlot(ctrlIndex);
                 if (skill != null && string.Equals(skill.skillName, skillName, System.StringComparison.OrdinalIgnoreCase))
                     synergyPulseTimers[i] = SynergyPulseDuration;
             }
@@ -519,34 +531,42 @@ namespace RIMA
         // ─── Drag-drop slot swap ────────────────────────────────────
 
         /// <summary>
-        /// Swap the skills in two slot indices and rebuild controller bindings so the
-        /// keybinds follow the visual order. Called by SlotDragHandler on successful drop.
+        /// Swap the skills in two visual slot indices (SkillBarOffset-adjusted) and rebuild
+        /// controller bindings so the keybinds follow the visual order.
+        /// Called by SlotDragHandler on successful drop. Visual indices below SkillBarOffset
+        /// (LMB/RMB attack slots) cannot be swapped into skill slots.
         /// </summary>
         public void SwapSlots(int fromIndex, int toIndex)
         {
             if (fromIndex == toIndex) return;
             if (fromIndex < 0 || fromIndex >= SlotCount || toIndex < 0 || toIndex >= SlotCount) return;
 
+            // Convert visual indices to controller indices (subtract SkillBarOffset).
+            // Ignore swaps that touch the LMB/RMB attack slots (visual index < SkillBarOffset).
+            int fromCtrl = fromIndex - SkillBarOffset;
+            int toCtrl   = toIndex   - SkillBarOffset;
+            if (fromCtrl < 0 || toCtrl < 0) return;
+
             // Swap in the active controller(s)
             if (UseElementalist())
             {
-                elemCtrl.SwapSlots(fromIndex, toIndex);
+                elemCtrl.SwapSlots(fromCtrl, toCtrl);
             }
             else if (UseRanger())
             {
-                rangerCtrl.SwapSlots(fromIndex, toIndex);
+                rangerCtrl.SwapSlots(fromCtrl, toCtrl);
             }
             else if (UseShadowblade())
             {
-                shadowCtrl.SwapSlots(fromIndex, toIndex);
+                shadowCtrl.SwapSlots(fromCtrl, toCtrl);
             }
             else if (UseRonin())
             {
-                roninCtrl.SwapSlots(fromIndex, toIndex);
+                roninCtrl.SwapSlots(fromCtrl, toCtrl);
             }
             else if (warbladeCtrl != null)
             {
-                warbladeCtrl.SwapSlots(fromIndex, toIndex);
+                warbladeCtrl.SwapSlots(fromCtrl, toCtrl);
             }
 
             Debug.Log($"[SkillBarUI] Swapped slots {fromIndex}↔{toIndex}");

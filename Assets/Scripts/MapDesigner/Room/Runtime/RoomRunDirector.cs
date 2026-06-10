@@ -156,6 +156,12 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         private void Start()
         {
+            // BUG-5 FIX: EnsureHUD unconditionally in Start so the HUD is always bootstrapped
+            // on the main entry path (MainMenu→Chamber→_Arena). BuildCurrentRoom also calls it,
+            // but calling here first guarantees it exists before any other Awake/Start code runs.
+            if (Application.isPlaying)
+                EnsureHUD();
+
             if (buildOnStart)
             {
                 BeginRun();
@@ -1161,9 +1167,9 @@ namespace RIMA.MapDesigner.Room.Runtime
             clearSequence = StartCoroutine(RoomClearSequence());
         }
 
-        // How many real-time seconds to wait for the player to pick up the reward before
-        // auto-collecting it so the run never deadlocks. Set to 0 to disable (not recommended).
-        private const float RewardAutoCollectTimeoutSec = 12f;
+        // BUG-1 FIX: was 12s — too short; player gets 90s to walk to the reward before it
+        // auto-grants (ForceCollect). Run never deadlocks AND reward is never silently discarded.
+        private const float RewardAutoCollectTimeoutSec = 90f;
 
         // How many real-time seconds to wait for a draft UI to close before forcing it away.
         private const float DraftAutoCloseTimeoutSec = 90f;
@@ -1243,21 +1249,31 @@ namespace RIMA.MapDesigner.Room.Runtime
                 StartCoroutine(RewardSpawnPop(activeReward));
 
 
-                // ROOT FIX (Bug 1): wait for player to collect the reward, but enforce a hard
-                // timeout so a missed/skipped reward can never deadlock the run progression.
+                // BUG-1 FIX: wait for player to collect the reward, but enforce a hard
+                // timeout. On timeout: GRANT the reward (ForceCollect) instead of silently
+                // discarding it — the player always gets their skill pick even if they missed
+                // the visual pickup. Doors open only after the draft resolves.
                 float rewardTimer = 0f;
                 while (activeReward != null && !activeReward.WasCollected)
                 {
                     rewardTimer += Time.unscaledDeltaTime;
                     if (RewardAutoCollectTimeoutSec > 0f && rewardTimer >= RewardAutoCollectTimeoutSec)
                     {
-                        Debug.LogWarning($"[RoomRunDirector] Reward not collected after {RewardAutoCollectTimeoutSec}s — auto-collecting to unblock run (node={CurrentNodeId}).");
-                        // Destroy the uncollected reward so the coroutine exits the loop cleanly.
-                        DestroyActiveReward();
+                        Debug.LogWarning($"[RoomRunDirector] Reward not collected after {RewardAutoCollectTimeoutSec}s — auto-granting to player (node={CurrentNodeId}).");
+                        // ForceCollect triggers the draft and marks WasCollected; the while-loop
+                        // then exits naturally on the next frame. Do NOT destroy the reward here —
+                        // ForceCollect/Collect does so after the draft closes.
+                        if (activeReward != null)
+                            activeReward.ForceCollect();
                         break;
                     }
                     yield return null;
                 }
+
+                // Wait for WasCollected (ForceCollect sets it synchronously) so the draft has
+                // been initiated. The existing draft-wait below handles the rest.
+                while (activeReward != null && !activeReward.WasCollected)
+                    yield return null;
 
                 // ROOT FIX (Bug 2): MarkRewardTaken() can only fail if lifecycle isn't in
                 // Cleared state — that shouldn't happen here, but if it does (e.g. AdvanceTo
@@ -1395,21 +1411,23 @@ namespace RIMA.MapDesigner.Room.Runtime
             // Light screen shake (null-safe: ScreenShakeDriver may not be present in all scenes).
             RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.08f, 0.2f);
 
-            // Scale-pop: 0 → 1.15 → 1.0 over 0.25 s.
+            // BUG-2 FIX: end at reward.VisualScale (1.1) instead of always 1.0.
+            // Scale-pop: 0 → 1.15×base → 1.0×base over 0.25 s.
+            float baseScale = reward != null ? reward.VisualScale : 1f;
             const float popTime = 0.25f;
             float t = 0f;
             while (t < popTime && reward != null)
             {
                 t += Time.unscaledDeltaTime;
                 float progress = t / popTime;
-                // Ease-out overshoot curve: grows past 1.15 then settles at 1.0.
+                // Ease-out overshoot curve: grows past 1.15×base then settles at base.
                 float scale = progress < 0.7f
-                    ? Mathf.Lerp(0f, 1.15f, progress / 0.7f)
-                    : Mathf.Lerp(1.15f, 1.0f, (progress - 0.7f) / 0.3f);
+                    ? Mathf.Lerp(0f, 1.15f * baseScale, progress / 0.7f)
+                    : Mathf.Lerp(1.15f * baseScale, baseScale, (progress - 0.7f) / 0.3f);
                 if (tf != null) tf.localScale = Vector3.one * scale;
                 yield return null;
             }
-            if (tf != null) tf.localScale = Vector3.one;
+            if (tf != null) tf.localScale = Vector3.one * baseScale;
         }
 
         /// <summary>
