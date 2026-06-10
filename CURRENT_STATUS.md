@@ -1,5 +1,30 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-11 — DEMO-FİNALİZASYON + RAPOR + MOB/MATERYAL FİX + KANONİK-YOL TEMİZLİĞİ — /clear sonrası İLK BURAYI OKU)
+
+**8 commit, hepsi master'a push'lu:** `7af8f5f4` HUD/skillbar+drag-drop+ödül-görünür · `a869bdfe` açılış-draft+oda-etiketi+Hades-ödül-anı · `6c381a30` ödül-timeout+büyüt+slot-offset+HUD-bootstrap · `6dcc19fa` 12 legacy mob wire+hollow_hulk boss · `2182fc41` rapor Şekil 6/15/16+§4.5 · `3cda94af` tek-kanonik-yol 8-P0-çakışma-temizliği · `597feb05` 2-sınıf-kısıt+lit-mob-unlit-fix · `3898599d` skill-bar prosedürel-temizlik
+
+**DEMO DURUMU (editörden oynanabilir):** 2 sınıf (Warblade/Elementalist), skill-bar açılış-draft'tan doluyor, moblar görünür (lit→unlit fix, 5 prefab), Hades ödül anı, oda kimlik etiketi, mob kadrosu+hollow_hulk boss wire'lı. Giriş: `RIMA → Play From Main Menu`.
+
+**KANONİK TEK YOL:** MainMenuController → CharacterSelect → _Arena → RoomRunDirector → IsoRoomBuilder → EncounterController → RewardPickup → DraftManager → AdvanceToChoice → Boss → Victory. Obsolete (demo-dışı): RuntimeRoomManager, _IsoGame*, MainMenuScreen, Core/MapFragment, GateBehavior, CameraShake.
+
+**KARARLAR:**
+- Mob-siyah kökü = `Sprite-Lit-Default` materyali → 5 prefab unlit'e dönüştürüldü. 3.1 Pro teşhisi TERSİNE söylemişti (orchestrator grep ile düzeltti — doğrulama şart).
+- Skill-bar boş kökü = ClassKits sadece WB+EL → demo 2 sınıfa kısıtlandı.
+- ChatGPT "boss→direkt victory" önerisi REDDEDİLDİ (post-boss dual-class arenası bilinçli P0).
+- Build-safety: fallback düşman/boss editor-only. Demo editörden = sorun yok.
+- **RIMA = PixelLab-only** (SpriteCook = gelecek top-down projeler için not, $6/800kr).
+
+**RAPOR:** `STAGING/report/RAPOR_DRAFT_2026-06-06.md` — council 30-bulgu pass + A5 dürüstleştirildi + §4.5 görsel-envanter + agentic-AI §5 + figürler `STAGING/report/figures_v2/`. BEKLEYEN: council-review + encoding-tarama + chamber-screenshot (kullanıcı) + docx-regen.
+
+**SONRAKİ ADIMLAR:** (1) kullanıcı tam playtest · (2) mob-çeşitliliği (12 mobdan 3 spawn → encounter-bank genişlet) · (3) background parallax (_Arena 5 katman, ClearPrevious durduruldu) · (4) rapor-son-düzlük · (5) 3 regresyon testi (mob-sprite/materyal+class-kit-coverage+softlock PlayMode).
+
+**DERSLER:** cx Bash'te yok (exit 127) → PowerShell · ax serialize tek seferde · ax-Opus=laurethayday (yasinderyabilgin BLOCKED) · ChatGPT paste-ready prompt · 3.1 Pro doğrulama şart.
+
+Detay: `MEMORY/project_resume_2026-06-11.md`
+
+---
+
 ## ⏯️ RESUME (2026-06-10 SABAH — UNITY RESTART + UNLOCK-DRAFT ÇİFT-FIX CANLI DOĞRULANDI `1709c2d8` PUSHED — /clear sonrası İLK BURAYI OKU)
 
 **✅ BU KOŞUDA (otonom, kanıtlı):**
