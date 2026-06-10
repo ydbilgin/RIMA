@@ -50,11 +50,12 @@ namespace RIMA
         [SerializeField] private Vector2Int chamberDummyCellOverride = new Vector2Int(0, 0);
         [SerializeField, Range(0.8f, 2.5f)] private float chamberDummyScale = 1.70f;
 
+        // DEMO LOCK (2026-06-10): only Warblade + Elementalist have ClassKits + controller-routing.
+        // Kit-less classes (Ranger, Shadowblade, Ronin, etc.) produce an empty skill bar and are
+        // excluded until their kits land. Expand when per-class kits are ready.
         private static readonly ClassType[] ChamberClasses =
         {
-            ClassType.Warblade, ClassType.Elementalist, ClassType.Ranger, ClassType.Shadowblade,
-            ClassType.Ronin, ClassType.Ravager, ClassType.Gunslinger, ClassType.Brawler,
-            ClassType.Summoner, ClassType.Hexer
+            ClassType.Warblade, ClassType.Elementalist,
         };
 
         private static readonly Vector2Int ExitCell = new(14, 18);

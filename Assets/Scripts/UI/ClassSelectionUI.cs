@@ -24,26 +24,18 @@ namespace RIMA
         private bool   _isOpen;
 
         // ── Class data for the two demo choices ──────────────────────────
-        // The pool is filtered at Show() time: the player's PRIMARY class is excluded
-        // (picking it again would double-stack the same class — PlayerClassManager also
-        // guards this). If the primary occupies a pool slot, Warblade is substituted.
-        private static readonly (ClassType type, string accentHex, string descLine1, string descLine2)[] ChoicePool =
-        {
-            (
-                ClassType.Elementalist,
-                "#FFDD00",
-                "CASTER · RITIM · ELEMENTLER",
-                "Ateş. Buz. Şimşek. Üçüncü volta güç biriktir."
-            ),
-            (
-                ClassType.Ranger,
-                "#7BA7BC",
-                "UZAK · HASSAS · TUZAK",
-                "Dokundur ya da nişan al. Tuzaklar ölüm bölgesini kurar."
-            ),
-        };
+        // DEMO LOCK (2026-06-10): only Warblade ↔ Elementalist are valid secondaries.
+        // Both classes have ClassKits + controller-routing. Showing Ranger here would
+        // result in an empty skill bar (no kit defined). Expand pool when kits land.
+        private static readonly (ClassType type, string accentHex, string descLine1, string descLine2) ElementalistCard =
+        (
+            ClassType.Elementalist,
+            "#FFDD00",
+            "CASTER · RİTİM · ELEMENTLER",
+            "Ateş. Buz. Şimşek. Üçüncü volta güç biriktir."
+        );
 
-        private static readonly (ClassType type, string accentHex, string descLine1, string descLine2) WarbladeFallbackCard =
+        private static readonly (ClassType type, string accentHex, string descLine1, string descLine2) WarbladeCard =
         (
             ClassType.Warblade,
             "#F2610F",
@@ -51,16 +43,30 @@ namespace RIMA
             "Büyük kılıç. Ağır vuruş. Momentum zinciri kur."
         );
 
+        /// <summary>
+        /// Returns a two-card array with exactly the two demo classes.
+        /// Primary class is always excluded — the two shown are the OTHER class
+        /// (the valid secondary) plus itself as the first/second slot.
+        /// With only 2 demo classes the result is always the same pair in
+        /// [secondary, primary] order so the panel layout stays consistent.
+        /// </summary>
         private static (ClassType type, string accentHex, string descLine1, string descLine2)[] BuildChoices()
         {
             ClassType primary = PlayerClassManager.Instance != null
                 ? PlayerClassManager.Instance.PrimaryClass
                 : ClassType.None;
 
-            var result = new (ClassType type, string accentHex, string descLine1, string descLine2)[ChoicePool.Length];
-            for (int i = 0; i < ChoicePool.Length; i++)
-                result[i] = ChoicePool[i].type == primary ? WarbladeFallbackCard : ChoicePool[i];
-            return result;
+            // Only two valid demo secondaries: whichever the player didn't pick as primary.
+            // We still show two cards (left = non-primary, right = fallback matching non-primary
+            // description) so the two-column UI layout is preserved.
+            // Both slots always resolve to kit-equipped classes.
+            if (primary == ClassType.Warblade)
+                return new[] { ElementalistCard, ElementalistCard };
+            if (primary == ClassType.Elementalist)
+                return new[] { WarbladeCard, WarbladeCard };
+
+            // Fallback (shouldn't reach in demo, but be safe): offer Elementalist first.
+            return new[] { ElementalistCard, WarbladeCard };
         }
 
         // ── Bootstrap ────────────────────────────────────────────────────
@@ -184,8 +190,9 @@ namespace RIMA
                 new Vector2(16f, 0f), new Vector2(-16f, -8f));
 
             // ── Sub-label ──────────────────────────────────────────────────
+            string primaryName = (PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade).ToString();
             TextMeshProUGUI sub = CreateText("Sub", panel,
-                "Warblade becerilerin yanına bir yol daha aç. Bu seçim kalıcıdır.",
+                $"{primaryName} becerilerin yanına bir yol daha aç. Bu seçim kalıcıdır.",
                 15f, RimaUITheme.TextMuted, TextAlignmentOptions.Center);
             Stretch(sub.rectTransform, new Vector2(0.04f, 0.72f), new Vector2(0.96f, 0.84f), Vector2.zero, Vector2.zero);
 
@@ -193,17 +200,28 @@ namespace RIMA
             Image divider = CreateImage("Divider", panel, new Color(0.20f, 0.28f, 0.38f, 0.55f));
             Stretch(divider.rectTransform, new Vector2(0.04f, 0.695f), new Vector2(0.96f, 0.705f), Vector2.zero, Vector2.zero);
 
-            // ── Class cards (side by side) ─────────────────────────────────
-            float cardLeft  = 0.04f;
-            float cardRight = 0.96f;
-            float cardMid   = (cardLeft + cardRight) / 2f;
-            float gap       = 0.015f;
-
+            // ── Class cards ────────────────────────────────────────────────
+            // DEMO: only Warblade ↔ Elementalist are valid secondaries, so BuildChoices()
+            // returns a single unique class (same card in both slots). Show one wide centered
+            // card instead of two duplicates.
             var choices = BuildChoices();
-            BuildClassCard(panel, choices[0],
-                new Vector2(cardLeft, 0.08f), new Vector2(cardMid - gap, 0.68f));
-            BuildClassCard(panel, choices[1],
-                new Vector2(cardMid + gap, 0.08f), new Vector2(cardRight, 0.68f));
+            bool singleChoice = choices[0].type == choices[1].type;
+            if (singleChoice)
+            {
+                BuildClassCard(panel, choices[0],
+                    new Vector2(0.20f, 0.08f), new Vector2(0.80f, 0.68f));
+            }
+            else
+            {
+                float cardLeft  = 0.04f;
+                float cardRight = 0.96f;
+                float cardMid   = (cardLeft + cardRight) / 2f;
+                float gap       = 0.015f;
+                BuildClassCard(panel, choices[0],
+                    new Vector2(cardLeft, 0.08f), new Vector2(cardMid - gap, 0.68f));
+                BuildClassCard(panel, choices[1],
+                    new Vector2(cardMid + gap, 0.08f), new Vector2(cardRight, 0.68f));
+            }
         }
 
         private void BuildClassCard(

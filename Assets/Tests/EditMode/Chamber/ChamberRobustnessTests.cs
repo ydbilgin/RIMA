@@ -2,7 +2,7 @@
 // T1: Chamber player spawn path yields PlayerAttack.enabled + non-null basicAttackProfile.
 // T2: Lock enforcement — locked class cannot become SelectedClass via PlayerClassManager.
 // T3: Dummy takes damage — Health.TakeDamage fires OnDamageTaken.
-// T4: Layout determinism — 10 unique station cells, unlocked classes occupy first 2 slots.
+// T4: Layout determinism — demo classes (Warblade+Elementalist) are unique and in early positions.
 
 using System.Collections.Generic;
 using System.Reflection;
@@ -229,7 +229,9 @@ namespace RIMA.Tests.Chamber
 
             ClassType[] classes = (ClassType[])field.GetValue(null);
             Assert.IsNotNull(classes, "T4: ChamberClasses array is null.");
-            Assert.AreEqual(10, classes.Length, "T4: Expected exactly 10 chamber classes.");
+            // DEMO LOCK (2026-06-10): only Warblade + Elementalist have kits + controller-routing.
+            // Array is 2 until remaining classes get their kits.
+            Assert.AreEqual(2, classes.Length, "T4: Expected exactly 2 demo chamber classes (Warblade+Elementalist).");
 
             // Unlocked starters must be present.
             Assert.Contains(ClassType.Warblade, classes,
