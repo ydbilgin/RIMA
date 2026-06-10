@@ -10,7 +10,11 @@
 
 - **✅ G2 BUILD SMOKE PASS (otonom, erken çekildi):** windows64 dev build 38.8s/219.8MB başarılı (`Builds/demo_smoke_2026-06-10/`) → exe canlı boot → MainMenu render (görsel kanıt lokal `20_build_smoke_screen.png`, tam-masaüstü içerdiği için commit edilmedi) → Player.log 0 exception. Build raporundaki 15 "error" = açık RoomTemplateBrowserWindow editör-paneli OnGUI gürültüsü, player kodu DEĞİL. Not: dev build ilk açılışta Windows firewall izni soruyor (player-connection listener) — jüri demosunda RELEASE build kullan ya da izni önceden ver.
 
-**⏭️ KALAN SIRA (hepsi KULLANICI-GATED):** PixelLab üretimi (P1 Warblade RUN önce, sayfa=`PIXELLAB_PRODUCTION_SHEET_2026-06-10.md`) · G1 gerçek-el playtest (artık unlock-draft DAHİL doğrulanabilir) · Shop Echo→Gold kararı · G3 freeze (teslim −24h).
+- **✅ KULLANICI-BULGUSU CHAMBER BUILD-GAP FIX (`17d209e2`):** standalone'da "BLOCKED: missing generated chamber assets" → 6 asset (Chamber_CharSelect, PropRegistry, 3 cliff, portal_rift) GUID korunarak Resources'a taşındı + LoadAsset fallback'leri dolduruldu + üretici menü yolları güncellendi. Runtime AssetDatabase audit'i: kalan kullanımlar build-güvenli; 6-oda zinciri roomBank-serialized.
+- **✅ ODA HAVUZU = TAMAMI MAP DESIGNER (`699ae782`):** DemoRoomBank combatRooms 1-geçerli+1-kopuk → **9 Generated oda**; elite kopuk Elite_01 → crescent+trident. Eskiden 4 combat node'u hep aynı teardrop'tu. CANLI 5/5 kanıt (screenshot 21-27): cross→twin_basins→Shop_01→teardrop→boss_oval→hourglass, hep doğru tek-N kapı, 0 fallback-warning, dual-class regresyonsuz. + Map Designer console-spam fix (boş-path guard ×2 pencere). KAPI SİSTEMİ teyit: çocuk=kapı sayısı; 1→N, 2→NW+NE, 3→NW+N+NE; Pick soket-filtreli.
+- **🔑 YENİ ROUTING (memory'de):** Fable=tespit/karar SADECE (22 Haziran'a kadar); execute→agent'lar. **BUILD ŞİMDİLİK YOK** — kullanıcı kararı: önce oyun editörde tamamlanır, build sonra. Son build `Builds/demo_smoke_2026-06-10/` chamber-fix'li ama oda-havuzu-ÖNCESI (bayat).
+
+**⏭️ KALAN SIRA (hepsi KULLANICI-GATED):** PixelLab üretimi (P1 Warblade RUN önce, sayfa=`PIXELLAB_PRODUCTION_SHEET_2026-06-10.md`) · G1 gerçek-el playtest (artık unlock-draft + yeni odalar DAHİL) · Shop Echo→Gold kararı · G3 freeze (teslim −24h). Minor not: node geçişinde önceki odanın ExitDoor objesi sahnede kalıyor (doğrulama ajanı gözlemi, akışı bozmuyor — cila listesine).
 
 ---
 
