@@ -151,24 +151,12 @@ namespace RIMA
             RebuildBindings();
         }
 
+        // F5 (2026-06-10, design lock): runs start with an EMPTY loadout — see
+        // Warblade_SkillController.EnsureDefaultLoadout for the full rationale.
         private void EnsureDefaultLoadout()
         {
             if (slots == null || slots.Length != 4)
                 slots = new SkillBase[4];
-
-            AssignDefaultSlot<Fireball>(0);
-            AssignDefaultSlot<GlacialSpike>(1);
-            AssignDefaultSlot<ChainLightning>(2);
-            AssignDefaultSlot<Blink>(3);
-        }
-
-        private void AssignDefaultSlot<T>(int index) where T : SkillBase
-        {
-            if (index < 0 || index >= slots.Length || slots[index] is T) return;
-
-            T skill = GetComponent<T>();
-            if (skill == null) skill = gameObject.AddComponent<T>();
-            slots[index] = skill;
         }
 
         public void RebuildBindings()

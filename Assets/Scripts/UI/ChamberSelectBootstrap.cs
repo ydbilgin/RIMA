@@ -1777,7 +1777,12 @@ namespace RIMA
 
         private static void ApplyChamberPlayerVisual(GameObject playerObject, ClassType cls)
         {
-            if (playerObject == null || playerObject.GetComponentInChildren<Animator>() != null)
+            // BUG-1 (2026-06-10): do NOT early-return when an Animator exists. The demo animator
+            // skeleton (Warblade/Elementalist controllers) only has EMPTY placeholder clips that
+            // drive no sprite curves, so the manual sprite assignment below is still required —
+            // otherwise selecting Elementalist leaves the Warblade prefab sprite on screen.
+            // Controller swap per class is handled by PlayerClassManager.SetPrimaryClass.
+            if (playerObject == null)
             {
                 return;
             }

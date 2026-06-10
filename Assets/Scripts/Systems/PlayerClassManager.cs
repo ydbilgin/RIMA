@@ -159,18 +159,49 @@ namespace RIMA
         private static void ApplyPrimaryClassVisual(GameObject player, ClassType type)
         {
             var anim = player.GetComponentInChildren<Animator>();
-            if (anim == null) return;
-
-            var ctrl = Resources.Load<RuntimeAnimatorController>($"Characters/{type}/{type}");
-            if (ctrl == null)
+            if (anim != null)
             {
-                Debug.LogWarning($"[PlayerClassManager] Animator controller not found for {type}");
+                var ctrl = Resources.Load<RuntimeAnimatorController>($"Characters/{type}/{type}");
+                if (ctrl != null)
+                {
+                    anim.runtimeAnimatorController = ctrl;
+                    anim.Rebind();
+                    anim.Update(0f);
+                }
+                else
+                {
+                    Debug.LogWarning($"[PlayerClassManager] Animator controller not found for {type}");
+                }
+            }
+
+            // Sprite fallback (BUG-1 2026-06-10): the demo animator clips are EMPTY placeholders —
+            // they drive no sprite curves, so after a controller swap the SpriteRenderer keeps
+            // whatever class sprite the prefab shipped with (Warblade). Set the selected class's
+            // idle sprite explicitly so the visual always matches the class, animator or not.
+            ApplyClassIdleSprite(player, type);
+        }
+
+        private static void ApplyClassIdleSprite(GameObject player, ClassType type)
+        {
+            string lower = type.ToString().ToLowerInvariant();
+            Sprite idle = Resources.Load<Sprite>($"Characters/{type}/{lower}_idle_south");
+            if (idle == null)
+            {
+                Debug.LogWarning($"[PlayerClassManager] idle_south sprite not found for {type}; class visual unchanged.");
                 return;
             }
 
-            anim.runtimeAnimatorController = ctrl;
-            anim.Rebind();
-            anim.Update(0f);
+            SpriteRenderer body = null;
+            foreach (SpriteRenderer candidate in player.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                if (candidate != null && candidate.gameObject.name == "Body") { body = candidate; break; }
+                if (body == null) body = candidate;
+            }
+
+            if (body == null) return;
+            body.sprite = idle;
+            body.color = Color.white;
+            Debug.Log($"[PlayerClassManager] Class visual applied: {type} sprite '{idle.name}' on '{body.gameObject.name}'.");
         }
 
         /// <summary>

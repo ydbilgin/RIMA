@@ -65,23 +65,13 @@ namespace RIMA
             RebuildBindings();
         }
 
+        // F5 (2026-06-10, design lock): runs start with an EMPTY loadout. The opening class-kit
+        // draft (RoomRunDirector.OpeningKitDraftSequence → DraftManager.ShowOpeningKitDraft)
+        // fills slot 0 (Q); room-clear drafts fill E/R/F. No hardcoded default skills.
         private void EnsureDefaultLoadout()
         {
             if (slots == null || slots.Length != 6)
                 slots = new SkillBase[6];
-
-            AssignDefaultSlot<IronCharge>(0);
-            AssignDefaultSlot<GravityCleave>(1);
-            AssignDefaultSlot<SunderMark>(2);
-            AssignDefaultSlot<Earthsplitter>(3);
-        }
-
-        private void AssignDefaultSlot<T>(int index) where T : SkillBase
-        {
-            if (index < 0 || index >= slots.Length || slots[index] is T) return;
-            T skill = GetComponent<T>();
-            if (skill == null) skill = gameObject.AddComponent<T>();
-            slots[index] = skill;
         }
 
         public void RebuildBindings()
