@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 namespace RIMA
 {
     /// <summary>
     /// "Rift Runeları" — 6 hexagonal skill slots (LMB, RMB, Q, E, R, F — binding-driven labels).
-    /// Ashen Glyph spec: hex mask bg, no border on bg, no drag-drop.
+    /// Ashen Glyph spec: hex mask bg, no border on bg.
     /// States: Ready (normal), Cooldown (30% opacity + clockwise pie), Empty ("—"), Active (1px cyan glow).
+    /// Drag-drop reordering: hold LMB on a slot and drag to another to swap skills and keybinds.
     /// </summary>
     public class SkillBarUI : MonoBehaviour
     {
@@ -45,6 +47,12 @@ namespace RIMA
         private Color cachedClassAccent = RimaUITheme.ClassAccent(ClassType.Warblade);
         private bool controllersResolved;
         private GameObject cachedPlayer;
+
+        // ── Drag-drop state (shared across all SlotDragHandlers) ────
+        /// <summary>The SkillBarUI currently hosting an active drag. Null when idle.</summary>
+        internal static SkillBarUI ActiveDragBar;
+        /// <summary>Slot index of the drag source. -1 when idle.</summary>
+        internal static int ActiveDragIndex = -1;
 
         private struct SlotUI
         {
@@ -129,6 +137,15 @@ namespace RIMA
 
         private void BuildSlots()
         {
+            // Drag-drop requires an EventSystem in the scene. Create one if absent.
+            if (FindObjectOfType<EventSystem>() == null)
+            {
+                var esGo = new GameObject("EventSystem");
+                esGo.AddComponent<EventSystem>();
+                esGo.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+                Debug.Log("[SkillBarUI] EventSystem auto-created for drag-drop support.");
+            }
+
             var container = GetComponent<RectTransform>();
 
             // Calculate total width: 2 primary + 4 secondary + gaps (6 slots)
@@ -228,6 +245,11 @@ namespace RIMA
                     keyLabel = keyTxt,
                     size = size
                 };
+
+                // Drag-drop: each slot root needs a Graphic for raycasting and a handler.
+                // The bg Image already provides the raycast hit area; ensure raycastTarget = true.
+                bgImg.raycastTarget = true;
+                AttachDragHandler(slotGo, i);
             }
         }
 
@@ -272,7 +294,13 @@ namespace RIMA
                 return;
             }
 
-            // Icon
+            // Icon — BUG-4 (2026-06-10): SkillBase.icon is never serialized on runtime-attached
+            // skill components, so the bar showed dark squares while 72 icons sat unused in the
+            // registry. Resolve from SkillIconRegistry by skillName (fallback: type name) once
+            // and cache the result on the component.
+            if (skill.icon == null)
+                skill.icon = ResolveIconFromRegistry(skill);
+
             if (skill.icon != null)
             {
                 ui.icon.sprite = skill.icon;
@@ -347,6 +375,29 @@ namespace RIMA
             Color current = ui.glowBorder.color;
             float alpha = Mathf.Max(current.a, Mathf.Lerp(0.95f, 0.35f, t));
             ui.glowBorder.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, alpha);
+        }
+
+        // ─── Icon registry (BUG-4) ──────────────────────────────────
+
+        private static SkillIconRegistry iconRegistry;
+        private static bool iconRegistryLoadAttempted;
+
+        private static Sprite ResolveIconFromRegistry(SkillBase skill)
+        {
+            if (!iconRegistryLoadAttempted)
+            {
+                iconRegistryLoadAttempted = true;
+                iconRegistry = Resources.Load<SkillIconRegistry>("SkillIconRegistry");
+                if (iconRegistry == null)
+                    Debug.LogWarning("[SkillBarUI] SkillIconRegistry not found in Resources; bar icons stay empty.");
+            }
+
+            if (iconRegistry == null || skill == null) return null;
+
+            Sprite sprite = iconRegistry.Get(skill.skillName);
+            if (sprite == null)
+                sprite = iconRegistry.Get(skill.GetType().Name);
+            return sprite;
         }
 
         // ─── Controller resolution ──────────────────────────────────
@@ -424,6 +475,50 @@ namespace RIMA
             return warbladeCtrl != null ? warbladeCtrl.GetSlot(index) : null;
         }
 
+        // ─── Drag-drop slot swap ────────────────────────────────────
+
+        /// <summary>
+        /// Swap the skills in two slot indices and rebuild controller bindings so the
+        /// keybinds follow the visual order. Called by SlotDragHandler on successful drop.
+        /// </summary>
+        public void SwapSlots(int fromIndex, int toIndex)
+        {
+            if (fromIndex == toIndex) return;
+            if (fromIndex < 0 || fromIndex >= SlotCount || toIndex < 0 || toIndex >= SlotCount) return;
+
+            // Swap in the active controller(s)
+            if (UseElementalist())
+            {
+                elemCtrl.SwapSlots(fromIndex, toIndex);
+            }
+            else if (UseRanger())
+            {
+                rangerCtrl.SwapSlots(fromIndex, toIndex);
+            }
+            else if (UseShadowblade())
+            {
+                shadowCtrl.SwapSlots(fromIndex, toIndex);
+            }
+            else if (UseRonin())
+            {
+                roninCtrl.SwapSlots(fromIndex, toIndex);
+            }
+            else if (warbladeCtrl != null)
+            {
+                warbladeCtrl.SwapSlots(fromIndex, toIndex);
+            }
+
+            Debug.Log($"[SkillBarUI] Swapped slots {fromIndex}↔{toIndex}");
+        }
+
+        /// <summary>Attaches a SlotDragHandler to a slot root and returns it.</summary>
+        private SlotDragHandler AttachDragHandler(GameObject slotRoot, int index)
+        {
+            var h = slotRoot.AddComponent<SlotDragHandler>();
+            h.Init(this, index);
+            return h;
+        }
+
         // ─── Util ───────────────────────────────────────────────────
 
         private static GameObject MakeChild(Transform parent, string name, float w, float h)
@@ -435,6 +530,172 @@ namespace RIMA
             rt.sizeDelta = new Vector2(w, h);
             rt.anchoredPosition = Vector2.zero;
             return go;
+        }
+    }
+
+    /// <summary>
+    /// Per-slot drag-drop handler. Attached to each slot root by SkillBarUI.BuildSlots.
+    /// Ghost follows the pointer; on drop onto another slot the two skills swap.
+    /// </summary>
+    internal sealed class SlotDragHandler : MonoBehaviour,
+        IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+    {
+        private SkillBarUI bar;
+        private int slotIndex;
+
+        // Ghost — a copy of the icon that follows the pointer during drag.
+        private GameObject ghost;
+        private Canvas rootCanvas;
+        private CanvasGroup ghostCG;
+
+        // While dragging, dim this slot's own icon.
+        private Image ownIconImage;
+
+        // Highlight overlay shown on hovered target slot.
+        private static SlotDragHandler hoveredTarget;
+        private Image highlightOverlay;
+        private static readonly Color HighlightColor = new Color(0.28f, 0.88f, 1f, 0.35f);
+
+        public void Init(SkillBarUI owner, int index)
+        {
+            bar = owner;
+            slotIndex = index;
+        }
+
+        private void Awake()
+        {
+            // Build a small highlight overlay child (hidden by default).
+            var overlayGo = new GameObject("DragHighlight", typeof(RectTransform));
+            overlayGo.transform.SetParent(transform, false);
+            var rt = overlayGo.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
+            highlightOverlay = overlayGo.AddComponent<Image>();
+            highlightOverlay.color = Color.clear;
+            highlightOverlay.raycastTarget = false;
+        }
+
+        // ── IPointerEnterHandler / IPointerExitHandler ──────────────
+
+        public void OnPointerEnter(PointerEventData _)
+        {
+            if (hoveredTarget != null && hoveredTarget != this)
+                hoveredTarget.SetHighlight(false);
+            hoveredTarget = this;
+            // Only highlight if a drag is in progress (from a sibling slot on the same bar).
+            if (SkillBarUI.ActiveDragBar == bar && SkillBarUI.ActiveDragIndex != slotIndex)
+                SetHighlight(true);
+        }
+
+        public void OnPointerExit(PointerEventData _)
+        {
+            SetHighlight(false);
+            if (hoveredTarget == this) hoveredTarget = null;
+        }
+
+        private void SetHighlight(bool on)
+        {
+            if (highlightOverlay != null)
+                highlightOverlay.color = on ? HighlightColor : Color.clear;
+        }
+
+        // ── IBeginDragHandler ───────────────────────────────────────
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left) return;
+
+            SkillBarUI.ActiveDragBar = bar;
+            SkillBarUI.ActiveDragIndex = slotIndex;
+
+            rootCanvas = GetComponentInParent<Canvas>();
+
+            // Dim this slot's icon.
+            ownIconImage = GetComponentsInChildren<Image>(true).Length > 1
+                ? GetComponentsInChildren<Image>(true)[1]  // bg=0, icon=1
+                : null;
+            if (ownIconImage != null)
+            {
+                var c = ownIconImage.color;
+                ownIconImage.color = new Color(c.r, c.g, c.b, 0.3f);
+            }
+
+            // Build ghost.
+            ghost = new GameObject("DragGhost", typeof(RectTransform));
+            ghost.transform.SetParent(rootCanvas != null ? rootCanvas.transform : transform.parent, false);
+            var ghostRT = ghost.GetComponent<RectTransform>();
+            ghostRT.sizeDelta = GetComponent<RectTransform>().sizeDelta;
+            ghostRT.pivot = new Vector2(0.5f, 0.5f);
+
+            ghostCG = ghost.AddComponent<CanvasGroup>();
+            ghostCG.alpha = 0.7f;
+            ghostCG.blocksRaycasts = false; // let events pass through to drop targets
+
+            var ghostImg = ghost.AddComponent<Image>();
+            // Copy the icon sprite from the slot.
+            Image iconSrc = GetComponentsInChildren<Image>(true).Length > 1
+                ? GetComponentsInChildren<Image>(true)[1] : null;
+            if (iconSrc != null)
+            {
+                ghostImg.sprite = iconSrc.sprite;
+                ghostImg.color  = new Color(iconSrc.color.r, iconSrc.color.g, iconSrc.color.b, 0.85f);
+            }
+            else
+            {
+                ghostImg.color = new Color(0.28f, 0.88f, 1f, 0.5f);
+            }
+
+            UpdateGhostPosition(eventData);
+        }
+
+        // ── IDragHandler ────────────────────────────────────────────
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left) return;
+            UpdateGhostPosition(eventData);
+        }
+
+        private void UpdateGhostPosition(PointerEventData eventData)
+        {
+            if (ghost == null || rootCanvas == null) return;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rootCanvas.transform as RectTransform,
+                eventData.position,
+                rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : eventData.enterEventCamera,
+                out Vector2 localPos);
+            (ghost.transform as RectTransform).anchoredPosition = localPos;
+        }
+
+        // ── IEndDragHandler ─────────────────────────────────────────
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            // Restore own icon alpha.
+            if (ownIconImage != null)
+            {
+                var c = ownIconImage.color;
+                ownIconImage.color = new Color(c.r, c.g, c.b, 1f);
+                ownIconImage = null;
+            }
+
+            if (ghost != null) { Destroy(ghost); ghost = null; }
+            if (hoveredTarget != null) { hoveredTarget.SetHighlight(false); hoveredTarget = null; }
+            SkillBarUI.ActiveDragBar = null;
+            SkillBarUI.ActiveDragIndex = -1;
+        }
+
+        // ── IDropHandler ────────────────────────────────────────────
+
+        public void OnDrop(PointerEventData eventData)
+        {
+            if (SkillBarUI.ActiveDragBar != bar) return;
+            int from = SkillBarUI.ActiveDragIndex;
+            if (from < 0 || from == slotIndex) return;
+
+            bar.SwapSlots(from, slotIndex);
+            SetHighlight(false);
         }
     }
 }

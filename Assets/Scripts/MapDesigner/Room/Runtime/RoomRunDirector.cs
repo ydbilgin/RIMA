@@ -186,11 +186,80 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             CurrentNodeId = graph.startId;
+            openingDraftShown = false;
             BuildCurrentRoom();
+
+            // F5 (2026-06-10): the run starts with an EMPTY loadout — open a 3-card draft from
+            // the primary class KIT as soon as the first room is built so the player picks their
+            // opening skill (slot 0 / Q). Play-mode only: EditMode tests call BeginRun directly.
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(OpeningKitDraftSequence());
+            }
+        }
+
+        private bool openingDraftShown;
+
+        /// <summary>
+        /// F5 run-start draft: waits for any pending/active draft to close (reuses the unlock-draft
+        /// wait pattern from RoomClearSequence), then opens the class-kit draft. Timeout mirrors
+        /// DraftAutoCloseTimeoutSec so an unattended draft can never softlock the run — on timeout
+        /// the draft closes and the player starts skill-less (first room-clear draft fills Q).
+        /// </summary>
+        private System.Collections.IEnumerator OpeningKitDraftSequence()
+        {
+            if (openingDraftShown)
+            {
+                yield break;
+            }
+
+            openingDraftShown = true;
+            EnsureDraftManager();
+            yield return null; // let DraftManager_Auto run Awake/Start before we use it
+
+            DraftManager draft = DraftManager.Instance;
+            if (draft == null)
+            {
+                Debug.LogWarning("[RoomRunDirector] Opening kit draft skipped: no DraftManager.");
+                yield break;
+            }
+
+            float waitTimer = 0f;
+            while (draft.IsDraftPending || draft.IsDraftActive)
+            {
+                waitTimer += Time.unscaledDeltaTime;
+                if (waitTimer >= DraftAutoCloseTimeoutSec)
+                {
+                    Debug.LogWarning($"[RoomRunDirector] Opening kit draft: prior draft not closed after {DraftAutoCloseTimeoutSec}s — force-closing.");
+                    draft.HideDraft();
+                    break;
+                }
+                yield return null;
+            }
+
+            draft.ShowOpeningKitDraft();
+
+            float openTimer = 0f;
+            while (draft.IsDraftActive)
+            {
+                openTimer += Time.unscaledDeltaTime;
+                if (openTimer >= DraftAutoCloseTimeoutSec)
+                {
+                    Debug.LogWarning($"[RoomRunDirector] Opening kit draft not resolved after {DraftAutoCloseTimeoutSec}s — force-closing to unblock run.");
+                    draft.HideDraft();
+                    break;
+                }
+                yield return null;
+            }
         }
 
         public void BuildCurrentRoom()
         {
+            // Ensure HUD (HP bar, skill bar, interaction prompt) exists in the scene.
+            // Called here so it runs once per room-build regardless of player-spawn result.
+            if (Application.isPlaying)
+                EnsureHUD();
+
             if (builder == null)
             {
                 Debug.LogError("[RoomRunDirector] Missing IsoRoomBuilder reference.");
@@ -260,6 +329,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             EnsurePlayerAtSpawn();
+            ConfigureFollowCamera();
             EnsureDeathScreenManager();
 
             Debug.Log($"[RoomRunDirector] Built node id={node.id} depth={node.depth} type={node.roomType} choices={CurrentChoices.Count} template={template.roomId}");
@@ -297,6 +367,49 @@ namespace RIMA.MapDesigner.Room.Runtime
             float aspect = targetCamera.aspect > 0f ? targetCamera.aspect : 16f / 9f;
             ConfigurePixelPerfectCamera(targetCamera, size, aspect);
             Debug.Log($"[RoomRunDirector] Fixed demo camera orthographicSize={size} node={CurrentNodeId} type={CurrentRoomType}");
+        }
+
+        /// <summary>
+        /// BUG-2 (2026-06-10): generated rooms (24x18, boss 36x28) no longer fit in the fixed
+        /// 5.0-ortho view, and _Arena's Main Camera has no follow component — the camera never
+        /// moved. Attach the live CameraFollow (RIMA.CameraSystem) at runtime, target the player,
+        /// clamp to the built room's floor bounds and snap so room transitions don't pan across
+        /// the map. Zoom stays fixed at 5.0 (ApplyFixedDemoCamera); chamber scene is untouched.
+        /// </summary>
+        private void ConfigureFollowCamera()
+        {
+            if (!useFixedDemoCamera)
+            {
+                return;
+            }
+
+            Camera targetCamera = arenaCamera != null ? arenaCamera : Camera.main;
+            if (targetCamera == null)
+            {
+                return;
+            }
+
+            RIMA.CameraSystem.CameraFollow follow = targetCamera.GetComponent<RIMA.CameraSystem.CameraFollow>();
+            if (follow == null)
+            {
+                follow = targetCamera.gameObject.AddComponent<RIMA.CameraSystem.CameraFollow>();
+            }
+
+            if (player != null)
+            {
+                follow.target = player;
+            }
+
+            if (builder != null && builder.TryGetLastFloorWorldBounds(out Bounds floorBounds))
+            {
+                follow.SetBounds(floorBounds);
+            }
+            else
+            {
+                follow.ClearBounds();
+            }
+
+            follow.SnapToTarget();
         }
 
         private void FitCameraToRoom()
@@ -1178,10 +1291,27 @@ namespace RIMA.MapDesigner.Room.Runtime
             EnsureDraftManager();
 
             GameObject rewardObject = new GameObject("RewardPickup");
-            rewardObject.transform.position = ResolveRoomCenter();
+            rewardObject.transform.position = ResolveRewardSpawnPosition();
 
             SpriteRenderer spriteRenderer = rewardObject.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = rewardSprite != null ? rewardSprite : CreateFallbackRewardSprite();
+
+            // BUG-4 (2026-06-10): rewardSprite is null in _Arena (fileID=0). The old fallback
+            // created a 1×1 pixel at PPU=16 (world size ≈0.034) — invisible on screen. Load the
+            // chest icon from Resources first; only fall back to the programmatic sprite if that
+            // also fails. Leave sprite = null when all sources fail so RewardPickup.Awake() can
+            // load the rift shard as its own fallback.
+            if (rewardSprite != null)
+            {
+                spriteRenderer.sprite = rewardSprite;
+            }
+            else
+            {
+                Sprite loaded = Resources.Load<Sprite>(DefaultRewardSpritePath);
+                if (loaded != null)
+                    spriteRenderer.sprite = loaded;
+                // else leave null — RewardPickup.Awake() will load the rift-shard fallback
+            }
+
             spriteRenderer.color = Color.white;
             spriteRenderer.sortingLayerName = "Entities";
             spriteRenderer.sortingOrder = 0;
@@ -1193,6 +1323,32 @@ namespace RIMA.MapDesigner.Room.Runtime
             RewardPickup pickup = rewardObject.AddComponent<RewardPickup>();
             Debug.Log($"[RoomRunDirector] RewardPickup spawned at {rewardObject.transform.position}");
             return pickup;
+        }
+
+        /// <summary>
+        /// BUG-3 (2026-06-10): the raw floor-bounds centre can be a non-walkable cell (donut hole,
+        /// cliff void) — the reward then sits where the player can't reach it and the 12 s timeout
+        /// silently auto-collects it ("reward never dropped"). Prefer the nearest walkable cell
+        /// (with 3x3 clearance) to the room centre; fall back to the old centre with a warning.
+        /// </summary>
+        private Vector3 ResolveRewardSpawnPosition()
+        {
+            if (CurrentTemplate != null && builder != null)
+            {
+                Vector2Int centerCell = new Vector2Int(
+                    Mathf.RoundToInt(CurrentTemplate.bounds.center.x),
+                    Mathf.RoundToInt(CurrentTemplate.bounds.center.y));
+
+                if (TryFindNearestClearanceCell(CurrentTemplate, centerCell, out Vector2Int cell)
+                    && builder.TryGetCellCenterWorld(cell, out Vector3 world))
+                {
+                    return world;
+                }
+
+                Debug.LogWarning($"[RoomRunDirector] Reward spawn: no walkable cell with clearance near centre of '{CurrentTemplate.roomId}' — using raw room centre fallback (node={CurrentNodeId}).");
+            }
+
+            return ResolveRoomCenter();
         }
 
         private Vector3 ResolveRoomCenter()
@@ -1234,6 +1390,77 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             new GameObject("DeathScreenManager_Auto").AddComponent<DeathScreenManager>();
+        }
+
+        /// <summary>
+        /// Ensures HUDController (HP bar, resource bar, interaction prompt) and SkillBarUI
+        /// exist in the scene. Both are built programmatically via their own BuildHUD / BuildSlots
+        /// methods, so we only need to create the Canvas host and attach the components.
+        /// Called once per BeginRun after the player is placed.
+        /// </summary>
+        private static void EnsureHUD()
+        {
+            // EventSystem required for UI input (drag-drop, button clicks).
+            if (FindObjectOfType<UnityEngine.EventSystems.EventSystem>() == null)
+            {
+                var esGo = new GameObject("EventSystem");
+                esGo.AddComponent<UnityEngine.EventSystems.EventSystem>();
+                esGo.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+                Debug.Log("[RoomRunDirector] EventSystem auto-created.");
+            }
+
+            // HUDController ─ top-level ScreenSpaceOverlay Canvas
+            if (HUDController.Instance == null && FindObjectOfType<HUDController>() == null)
+            {
+                var canvasGo = new GameObject("HUD_Canvas");
+                var canvas = canvasGo.AddComponent<UnityEngine.Canvas>();
+                canvas.renderMode = UnityEngine.RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = 10;
+                canvasGo.AddComponent<UnityEngine.UI.CanvasScaler>();
+                canvasGo.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+
+                // HUDController sits directly on the Canvas root so its RectTransform is the root
+                canvasGo.AddComponent<HUDController>();
+                Debug.Log("[RoomRunDirector] HUD_Canvas + HUDController auto-created.");
+            }
+
+            // SkillBarUI — needs its own Canvas (or child) with a RectTransform. Place it on a
+            // dedicated child so anchoring is independent of the HUD bars.
+            if (FindObjectOfType<SkillBarUI>() == null)
+            {
+                HUDController hud = HUDController.Instance ?? FindObjectOfType<HUDController>();
+                UnityEngine.Canvas parentCanvas = hud != null
+                    ? hud.GetComponent<UnityEngine.Canvas>() ?? hud.GetComponentInParent<UnityEngine.Canvas>()
+                    : null;
+
+                if (parentCanvas == null)
+                {
+                    // Fallback: find any ScreenSpaceOverlay canvas
+                    foreach (var cv in FindObjectsOfType<UnityEngine.Canvas>())
+                    {
+                        if (cv.renderMode == UnityEngine.RenderMode.ScreenSpaceOverlay) { parentCanvas = cv; break; }
+                    }
+                }
+
+                if (parentCanvas != null)
+                {
+                    var barGo = new GameObject("SkillBar", typeof(UnityEngine.RectTransform));
+                    barGo.transform.SetParent(parentCanvas.transform, false);
+                    var rt = barGo.GetComponent<UnityEngine.RectTransform>();
+                    // Bottom-center anchor
+                    rt.anchorMin = new UnityEngine.Vector2(0.5f, 0f);
+                    rt.anchorMax = new UnityEngine.Vector2(0.5f, 0f);
+                    rt.pivot     = new UnityEngine.Vector2(0.5f, 0f);
+                    rt.anchoredPosition = new UnityEngine.Vector2(0f, 16f);
+                    rt.sizeDelta = new UnityEngine.Vector2(400f, 72f);
+                    barGo.AddComponent<SkillBarUI>();
+                    Debug.Log("[RoomRunDirector] SkillBar + SkillBarUI auto-created.");
+                }
+                else
+                {
+                    Debug.LogWarning("[RoomRunDirector] EnsureHUD: no ScreenSpaceOverlay canvas found for SkillBarUI.");
+                }
+            }
         }
 
         private void OpenExitDoors()
