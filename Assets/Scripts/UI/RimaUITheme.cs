@@ -257,6 +257,42 @@ namespace RIMA
             64, 64, 10, new Color(0.06f, 0.07f, 0.10f, 0.92f),
             new Color(0.18f, 0.24f, 0.32f, 0.65f), 2);
 
+        // ── Procedural Skill Bar sprites (slot + bar backing, no PNG asset needed) ──
+
+        private static Sprite _proceduralSlotBg;
+        private static Sprite _proceduralSlotRim;
+        private static Sprite _proceduralBarBacking;
+
+        /// <summary>
+        /// Slot background layer: #07090F @ 88%, rounded radius 10.
+        /// Used as the filled bg of each skill slot (replaces stone-frame PNG).
+        /// </summary>
+        public static Sprite ProceduralSlotBg => _proceduralSlotBg ??= MakeRoundedRect(
+            64, 64, 10,
+            new Color(0.028f, 0.035f, 0.059f, 0.88f),   // #07090F @88%
+            new Color(0.104f, 0.141f, 0.314f, 0.50f),   // #1A2450 @50% — subtle cold rim
+            2);
+
+        /// <summary>
+        /// Slot rim / border layer: 1.5 px clear fill, border-only sprite used for the colored rim.
+        /// Ready=class-accent @65%, Cooldown=#2A3850 @50%, Empty=#1C2535 @35%.
+        /// </summary>
+        public static Sprite ProceduralSlotRim => _proceduralSlotRim ??= MakeRoundedRectRimOnly(
+            64, 64, 10, 2);
+
+        /// <summary>
+        /// Bar backing panel: #040609 @ 12%, 1 px border #1A2540 @ 30%, radius 8.
+        /// Replaces bar_frame_9slice PNG for the horizontal backing behind all slots.
+        /// </summary>
+        public static Sprite ProceduralBarBacking => _proceduralBarBacking ??= MakeRoundedRect(
+            128, 80, 8,
+            new Color(0.016f, 0.024f, 0.035f, 0.14f),  // #040609 @14% (slightly more visible)
+            new Color(0.102f, 0.145f, 0.251f, 0.30f),  // #1A2540 @30%
+            1);
+
+        /// <summary>Loads rarity_glow_common.png from Resources (used as glow sprite tinted to class accent).</summary>
+        public static Sprite RarityGlowCommon => Resources.Load<Sprite>("UI/RIMA/rarity_glow_common");
+
         /// <summary>Full-screen menu background — still loads the PNG if present.</summary>
         public static Sprite MenuDungeonBackground => RimaGeneratedSpriteCache.Load(MenuDungeonBackgroundPath);
 
@@ -401,7 +437,7 @@ namespace RIMA
                     }
                 }
 
-                tex.Apply(false, true); // makeNoLongerReadable for memory
+                tex.Apply(true, false); // keep readable so Sprite stays valid
 
                 int brd = radius; // 9-slice border
                 return Sprite.Create(tex, new Rect(0, 0, w, h),
@@ -414,6 +450,55 @@ namespace RIMA
                 // EditMode test context may not have graphics pipeline ready.
                 // Image components tolerate null sprite (renders solid color).
                 Debug.LogWarning($"[RimaUITheme] MakeRoundedRect failed (EditMode?): {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Creates a rounded rect sprite that is transparent in the fill area —
+        /// only the border ring (borderWidth pixels) is opaque white.
+        /// Tint this sprite at runtime to get the colored rim without affecting the slot bg.
+        /// </summary>
+        private static Sprite MakeRoundedRectRimOnly(int w, int h, int radius, int borderWidth)
+        {
+            try
+            {
+                var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+                tex.filterMode = FilterMode.Bilinear;
+                tex.wrapMode   = TextureWrapMode.Clamp;
+
+                for (int x = 0; x < w; x++)
+                for (int y = 0; y < h; y++)
+                {
+                    float dist = RoundedRectSDF(x, y, w, h, radius);
+                    Color c;
+                    if (dist > 0.5f)
+                    {
+                        c = Color.clear;
+                    }
+                    else if (dist > -borderWidth)
+                    {
+                        // border band — anti-alias outer edge
+                        float aa = dist > -0.5f ? Mathf.Clamp01(0.5f - dist) : 1f;
+                        c = new Color(1f, 1f, 1f, aa);
+                    }
+                    else
+                    {
+                        c = Color.clear; // interior is transparent
+                    }
+                    tex.SetPixel(x, y, c);
+                }
+
+                tex.Apply(true, false); // keep readable
+                int brd = radius;
+                return Sprite.Create(tex, new Rect(0, 0, w, h),
+                    new Vector2(0.5f, 0.5f), 100f, 0,
+                    SpriteMeshType.FullRect,
+                    new Vector4(brd, brd, brd, brd));
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"[RimaUITheme] MakeRoundedRectRimOnly failed: {ex.Message}");
                 return null;
             }
         }
@@ -486,7 +571,7 @@ namespace RIMA
                     }
                 }
 
-                tex.Apply(false, true);
+                tex.Apply(true, false); // keep readable
 
                 return Sprite.Create(tex, new Rect(0f, 0f, w, h),
                     new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);

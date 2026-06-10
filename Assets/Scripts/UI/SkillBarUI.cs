@@ -60,10 +60,12 @@ namespace RIMA
         {
             public GameObject root;
             public Image bg;
+            public Image rim;         // procedural rim border (tinted to state color)
             public Image icon;
             public Image cdOverlay;
             public Image glowBorder;
             public TextMeshProUGUI keyLabel;
+            public TextMeshProUGUI cdTimer;   // optional numeric countdown (5s+ cooldowns)
             public float size;
         }
 
@@ -156,11 +158,21 @@ namespace RIMA
             float totalW = 2 * PrimarySize + 4 * SecondarySize + 5 * SlotGap;
             float x = -totalW / 2f;
 
+            // Backing panel: procedural rounded-rect (#040609 @12%, 1px border #1A2540 @30%, r=8).
+            // No PNG asset — fully procedural; always looks clean at any scale.
             var backingGo = MakeChild(container, "HUDBacking", totalW + 32f, PrimarySize + 28f);
             var backingImg = backingGo.AddComponent<Image>();
-            backingImg.sprite = RimaUITheme.SkillBarBacking;
-            backingImg.type = RimaUITheme.SkillBarBackingIsSliced ? Image.Type.Sliced : Image.Type.Simple;
-            backingImg.color = backingImg.sprite != null ? new Color(1f, 1f, 1f, 0.12f) : new Color(0.03f, 0.04f, 0.08f, 0.14f);
+            var backingSprite = RimaUITheme.ProceduralBarBacking;
+            if (backingSprite != null)
+            {
+                backingImg.sprite = backingSprite;
+                backingImg.type   = Image.Type.Sliced;
+                backingImg.color  = Color.white;
+            }
+            else
+            {
+                backingImg.color = new Color(0.016f, 0.024f, 0.035f, 0.14f);
+            }
             backingImg.raycastTarget = false;
             backingGo.transform.SetAsFirstSibling();
 
@@ -175,79 +187,121 @@ namespace RIMA
                 rt.anchoredPosition = new Vector2(x + size / 2f, 0f);
                 x += size + SlotGap;
 
-                // Hex background (#0D0D12 at 55% opacity, no border)
-                var bgImg = slotGo.AddComponent<Image>();
-                bgImg.color = RimaUITheme.SlotHexBg;
-                bgImg.raycastTarget = false;
-                var bgShadow = slotGo.AddComponent<Shadow>();
-                bgShadow.effectColor = new Color(0f, 0f, 0f, 0.46f);
-                bgShadow.effectDistance = new Vector2(2f, -3f);
-                bgShadow.useGraphicAlpha = true;
-
-                var frameGo = MakeChild(slotGo.transform, "Frame", size, size);
-                var frameImg = frameGo.AddComponent<Image>();
-                frameImg.sprite = RimaUITheme.SkillSlotFrameAsset;
-                frameImg.type = Image.Type.Simple;
-                frameImg.color = frameImg.sprite != null ? Color.white : new Color(0.28f, 0.82f, 1f, 0.35f);
-                frameImg.raycastTarget = false;
-
-                // Icon (centered, slightly smaller)
-                float iconSize = size * 0.72f;
-                var iconGo = MakeChild(slotGo.transform, "Icon", iconSize, iconSize);
-                var iconImg = iconGo.AddComponent<Image>();
-                iconImg.color = new Color(0.3f, 0.3f, 0.4f, 0.5f); // empty
-                iconImg.raycastTarget = false;
-
-                // CD overlay (radial fill, clockwise)
-                var cdGo = MakeChild(slotGo.transform, "CD", size * 0.82f, size * 0.82f);
-                var cdImg = cdGo.AddComponent<Image>();
-                cdImg.color = new Color(0.02f, 0.025f, 0.07f, 0.88f);
-                cdImg.type = Image.Type.Filled;
-                cdImg.fillMethod = Image.FillMethod.Radial360;
-                cdImg.fillOrigin = (int)Image.Origin360.Top;
-                cdImg.fillClockwise = true;
-                cdImg.fillAmount = 0f;
-                cdImg.raycastTarget = false;
-
-                // Glow border (class accent, only when ready)
-                var glowGo = MakeChild(slotGo.transform, "Glow", size + 2f, size + 2f);
+                // ── Layer 0: Glow (behind everything, class-accent tinted rarity_glow_common) ──
+                var glowGo = MakeChild(slotGo.transform, "Glow", size + 4f, size + 4f);
                 var glowImg = glowGo.AddComponent<Image>();
-                glowImg.sprite = RimaUITheme.SkillSlotFrameAsset;
-                glowImg.type = Image.Type.Simple;
-                glowImg.color = Color.clear;
+                glowImg.sprite = RimaUITheme.RarityGlowCommon;
+                glowImg.type   = Image.Type.Simple;
+                glowImg.color  = Color.clear;
                 glowImg.raycastTarget = false;
                 glowGo.transform.SetAsFirstSibling();
 
-                // Key label (lower-right corner)
-                var keyGo = MakeChild(slotGo.transform, "Key", size * 0.54f, size * 0.32f);
+                // ── Layer 1: BG — procedural rounded-rect (#07090F @88%, r=10) ──
+                var bgImg = slotGo.AddComponent<Image>();
+                var slotBgSprite = RimaUITheme.ProceduralSlotBg;
+                if (slotBgSprite != null)
+                {
+                    bgImg.sprite = slotBgSprite;
+                    bgImg.type   = Image.Type.Simple;  // sprite scales to fit; no stretch artifacts
+                    bgImg.preserveAspect = false;
+                    bgImg.color  = Color.white;
+                }
+                else
+                {
+                    bgImg.color = new Color(0.028f, 0.035f, 0.059f, 0.88f);
+                }
+                bgImg.raycastTarget = false;
+
+                // Drop shadow on the slot
+                var bgShadow = slotGo.AddComponent<Shadow>();
+                bgShadow.effectColor    = new Color(0f, 0f, 0f, 0.46f);
+                bgShadow.effectDistance = new Vector2(2f, -3f);
+                bgShadow.useGraphicAlpha = true;
+
+                // ── Layer 2: Rim — thin procedural border ring (tinted per state) ──
+                var rimGo  = MakeChild(slotGo.transform, "Rim", size, size);
+                var rimImg = rimGo.AddComponent<Image>();
+                var rimSprite = RimaUITheme.ProceduralSlotRim;
+                if (rimSprite != null)
+                {
+                    rimImg.sprite = rimSprite;
+                    rimImg.type   = Image.Type.Simple;  // transparent-fill border ring, scales fine
+                    rimImg.preserveAspect = false;
+                    rimImg.color  = new Color(0.110f, 0.157f, 0.208f, 0.35f); // empty state: #1C2535 @35%
+                }
+                else
+                {
+                    rimImg.color = new Color(0.110f, 0.157f, 0.208f, 0.35f);
+                }
+                rimImg.raycastTarget = false;
+
+                // ── Layer 3: Icon (~71% of slot size) ──
+                float iconSize = size * 0.71f;
+                var iconGo  = MakeChild(slotGo.transform, "Icon", iconSize, iconSize);
+                var iconImg = iconGo.AddComponent<Image>();
+                iconImg.color = new Color(0.3f, 0.3f, 0.4f, 0.5f); // empty placeholder tint
+                iconImg.raycastTarget = false;
+
+                // ── Layer 4: CD overlay (radial clock-wipe, #030510 @86%) ──
+                var cdGo  = MakeChild(slotGo.transform, "CD", size * 0.82f, size * 0.82f);
+                var cdImg = cdGo.AddComponent<Image>();
+                cdImg.color       = new Color(0.012f, 0.020f, 0.063f, 0.86f);
+                cdImg.type        = Image.Type.Filled;
+                cdImg.fillMethod  = Image.FillMethod.Radial360;
+                cdImg.fillOrigin  = (int)Image.Origin360.Top;
+                cdImg.fillClockwise = true;
+                cdImg.fillAmount  = 0f;
+                cdImg.raycastTarget = false;
+
+                // ── Layer 5: CD numeric timer (font 10, cyan, top-center, hidden when not needed) ──
+                var cdTimerGo  = MakeChild(slotGo.transform, "CDTimer", size * 0.80f, size * 0.40f);
+                var cdTimerTxt = cdTimerGo.AddComponent<TextMeshProUGUI>();
+                cdTimerTxt.text      = "";
+                cdTimerTxt.fontSize  = 10f;
+                cdTimerTxt.fontStyle = FontStyles.Bold;
+                cdTimerTxt.color     = new Color(0.28f, 0.89f, 1f, 0.90f); // cyan
+                cdTimerTxt.alignment = TextAlignmentOptions.Center;
+                cdTimerTxt.outlineColor = new Color(0.016f, 0.024f, 0.051f, 0.90f);
+                cdTimerTxt.outlineWidth = 0.28f;
+                cdTimerTxt.raycastTarget = false;
+                var cdTimerRt  = cdTimerGo.GetComponent<RectTransform>();
+                cdTimerRt.anchorMin = new Vector2(0f, 1f);
+                cdTimerRt.anchorMax = new Vector2(1f, 1f);
+                cdTimerRt.pivot     = new Vector2(0.5f, 1f);
+                cdTimerRt.anchoredPosition = new Vector2(0f, -2f);
+
+                // ── Layer 6: Keybind label (lower-right, bold, outlined) ──
+                var keyGo  = MakeChild(slotGo.transform, "Key", size * 0.54f, size * 0.32f);
                 var keyTxt = keyGo.AddComponent<TextMeshProUGUI>();
-                keyTxt.text = SlotLabel(i);
-                keyTxt.fontSize = i < 2 ? 13f : 10f;
-                keyTxt.fontStyle = FontStyles.Bold;
-                keyTxt.color = new Color(0.86f, 0.92f, 0.96f, 0.92f);
-                keyTxt.alignment = TextAlignmentOptions.BottomRight;
-                keyTxt.outlineColor = new Color(0f, 0f, 0f, 0.82f);
-                keyTxt.outlineWidth = 0.18f;
+                keyTxt.text       = SlotLabel(i);
+                keyTxt.fontSize   = i < 2 ? 13f : 10f;
+                keyTxt.fontStyle  = FontStyles.Bold;
+                keyTxt.color      = new Color(0.86f, 0.92f, 0.96f, 0.92f);
+                keyTxt.alignment  = TextAlignmentOptions.BottomRight;
+                keyTxt.outlineColor = new Color(0.016f, 0.024f, 0.051f, 0.90f); // #04060D
+                keyTxt.outlineWidth = 0.28f;                                      // spec: 0.28f
                 keyTxt.raycastTarget = false;
                 var keyShadow = keyGo.AddComponent<Shadow>();
-                keyShadow.effectColor = new Color(0f, 0f, 0f, 0.72f);
+                keyShadow.effectColor    = new Color(0f, 0f, 0f, 0.72f);
                 keyShadow.effectDistance = new Vector2(1f, -1f);
                 keyShadow.useGraphicAlpha = true;
                 var keyRt = keyGo.GetComponent<RectTransform>();
                 keyRt.anchorMin = new Vector2(1f, 0f);
                 keyRt.anchorMax = new Vector2(1f, 0f);
-                keyRt.pivot = new Vector2(1f, 0f);
+                keyRt.pivot     = new Vector2(1f, 0f);
                 keyRt.anchoredPosition = new Vector2(-1f, 1f);
 
                 slots[i] = new SlotUI
                 {
-                    root = slotGo,
-                    bg = bgImg,
-                    icon = iconImg,
-                    cdOverlay = cdImg,
+                    root       = slotGo,
+                    bg         = bgImg,
+                    rim        = rimImg,
+                    icon       = iconImg,
+                    cdOverlay  = cdImg,
+                    cdTimer    = cdTimerTxt,
                     glowBorder = glowImg,
-                    keyLabel = keyTxt,
-                    size = size
+                    keyLabel   = keyTxt,
+                    size       = size
                 };
 
                 // Drag-drop: each slot root needs a Graphic for raycasting and a handler.
@@ -376,9 +430,21 @@ namespace RIMA
                 wasOnCooldown[i] = true;
                 readyFlashTimers[i] = 0f;
 
-                // On cooldown: dim icon
+                // On cooldown: dim icon to 30%, hide glow, show cold rim
                 ui.icon.color = new Color(ui.icon.color.r, ui.icon.color.g, ui.icon.color.b, 0.30f);
-                ui.glowBorder.color = new Color(cachedClassAccent.r, cachedClassAccent.g, cachedClassAccent.b, 0.18f);
+                ui.glowBorder.color = Color.clear;                                         // spec: glow hidden on CD
+                if (ui.rim != null) ui.rim.color = new Color(0.165f, 0.220f, 0.314f, 0.50f); // #2A3850 @50%
+
+                // CD numeric timer: show when cooldown >= 5 s total (approximate via pct)
+                // We show remaining seconds as an integer.  We need skill.CooldownRemaining if available.
+                if (ui.cdTimer != null)
+                {
+                    float remaining = skill.RemainingCooldown;
+                    if (remaining >= 5f)
+                        ui.cdTimer.text = Mathf.CeilToInt(remaining).ToString();
+                    else
+                        ui.cdTimer.text = "";
+                }
             }
             else
             {
@@ -388,9 +454,25 @@ namespace RIMA
                     wasOnCooldown[i] = false;
                 }
 
+                if (ui.cdTimer != null) ui.cdTimer.text = "";
+
                 float flashT = readyFlashTimers[i] / ReadyFlashDuration;
-                float alpha = Mathf.Lerp(0.5f, 0.95f, flashT);
+                // Ready: glow @50% base, flash up to @95% on first ready frame (0.18s)
+                float alpha = Mathf.Lerp(0.50f, 0.95f, flashT);
                 ui.glowBorder.color = new Color(cachedClassAccent.r, cachedClassAccent.g, cachedClassAccent.b, alpha);
+
+                // Ready rim: class-accent @65%
+                if (ui.rim != null) ui.rim.color = new Color(cachedClassAccent.r, cachedClassAccent.g, cachedClassAccent.b, 0.65f);
+
+                // Ready-flash: brief white flash on the rim itself
+                if (flashT > 0.01f && ui.rim != null)
+                {
+                    Color flashRim = Color.Lerp(
+                        new Color(cachedClassAccent.r, cachedClassAccent.g, cachedClassAccent.b, 0.65f),
+                        new Color(1f, 1f, 1f, 0.90f),
+                        flashT);
+                    ui.rim.color = flashRim;
+                }
             }
 
             ApplySynergyPulse(i, ui);
@@ -405,6 +487,8 @@ namespace RIMA
             ui.icon.color = new Color(0.3f, 0.3f, 0.4f, 0.3f);
             ui.cdOverlay.fillAmount = 0f;
             ui.glowBorder.color = Color.clear;
+            if (ui.rim != null) ui.rim.color = new Color(0.110f, 0.157f, 0.208f, 0.35f); // #1C2535 @35%
+            if (ui.cdTimer != null) ui.cdTimer.text = "";
             if (ui.root != null) ui.root.transform.localScale = Vector3.one;
             synergyPulseTimers[i] = 0f;
             wasOnCooldown[i] = false;
