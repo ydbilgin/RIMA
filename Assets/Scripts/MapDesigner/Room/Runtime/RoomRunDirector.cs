@@ -230,6 +230,14 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             CurrentTemplate = template;
+
+            // F1 (2026-06-10 playtest): combat arenas are floor + cliff ONLY. Template prop
+            // clusters (ritual circle / brazier / obelisk) boxed the player in at the spawn
+            // between prop colliders and the south cliff. Shop/Boss/Chamber prop flows are
+            // separate systems; only Combat and its Elite variant disable template props.
+            builder.spawnProps = CurrentRoomType != RIMA.RoomType.Combat
+                && CurrentRoomType != RIMA.RoomType.Elite;
+
             builder.Build(template);
 
             // Seed WalkabilityMap from template data so mob/knockback clamps use the
@@ -419,6 +427,18 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             if (hasUsableSocket)
             {
+                // F2: prefer a 3x3 walkable clearance around the spawn. Generated sockets sit
+                // on the bottom edge row (south cliff); when the socket itself has no clearance
+                // nudge to the nearest cleared interior cell so the player can always move.
+                Vector2Int socketCell = CurrentTemplate.playerSpawn.position;
+                if (!HasWalkableClearance(CurrentTemplate, socketCell)
+                    && TryFindNearestClearanceCell(CurrentTemplate, socketCell, out Vector2Int clearedCell)
+                    && builder.TryGetCellCenterWorld(clearedCell, out Vector3 clearedWorld))
+                {
+                    spawnWorld = clearedWorld;
+                    return true;
+                }
+
                 spawnWorld = builder.PlayerSpawnMarker.position;
                 return true;
             }
@@ -445,7 +465,10 @@ namespace RIMA.MapDesigner.Room.Runtime
             return true;
         }
 
-        private static bool TryFindBottomCenterWalkableCell(RoomTemplateSO template, out Vector2Int cell)
+        // F2: fallback spawn = bottom-center INTERIOR cell. Cells with a full 3x3 walkable
+        // clearance are preferred (so the spawn never hugs the south cliff edge or a wall);
+        // the old "lowest Y, closest to horizontal center" pick survives only as last resort.
+        public static bool TryFindBottomCenterWalkableCell(RoomTemplateSO template, out Vector2Int cell)
         {
             cell = default;
             bool foundAny = false;
@@ -473,6 +496,18 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             float centerX = (minX + maxX) * 0.5f;
+            if (TryFindBottomCenterCell(template, centerX, true, out cell))
+            {
+                return true;
+            }
+
+            return TryFindBottomCenterCell(template, centerX, false, out cell);
+        }
+
+        private static bool TryFindBottomCenterCell(RoomTemplateSO template, float centerX, bool requireClearance, out Vector2Int cell)
+        {
+            cell = default;
+            bool found = false;
             int bestY = int.MaxValue;
             float bestDistance = float.MaxValue;
             for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
@@ -485,17 +520,81 @@ namespace RIMA.MapDesigner.Room.Runtime
                         continue;
                     }
 
+                    if (requireClearance && !HasWalkableClearance(template, candidate))
+                    {
+                        continue;
+                    }
+
                     float distance = Mathf.Abs(x - centerX);
                     if (y < bestY || (y == bestY && distance < bestDistance))
                     {
                         cell = candidate;
                         bestY = y;
                         bestDistance = distance;
+                        found = true;
+                    }
+                }
+            }
+
+            return found;
+        }
+
+        // F2: 3x3 walkable clearance — the cell itself plus all 8 neighbors must be walkable.
+        public static bool HasWalkableClearance(RoomTemplateSO template, Vector2Int cell)
+        {
+            if (template == null)
+            {
+                return false;
+            }
+
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    if (!template.IsWalkable(new Vector2Int(cell.x + dx, cell.y + dy)))
+                    {
+                        return false;
                     }
                 }
             }
 
             return true;
+        }
+
+        // F2: nearest (squared euclidean) walkable cell with full 3x3 clearance to origin.
+        public static bool TryFindNearestClearanceCell(RoomTemplateSO template, Vector2Int origin, out Vector2Int cell)
+        {
+            cell = default;
+            if (template == null)
+            {
+                return false;
+            }
+
+            bool found = false;
+            int bestSqr = int.MaxValue;
+            for (int y = template.bounds.yMin; y < template.bounds.yMax; y++)
+            {
+                for (int x = template.bounds.xMin; x < template.bounds.xMax; x++)
+                {
+                    Vector2Int candidate = new Vector2Int(x, y);
+                    if (!template.IsWalkable(candidate) || !HasWalkableClearance(template, candidate))
+                    {
+                        continue;
+                    }
+
+                    int dx = x - origin.x;
+                    int dy = y - origin.y;
+                    int sqr = dx * dx + dy * dy;
+                    if (sqr < bestSqr)
+                    {
+                        bestSqr = sqr;
+                        cell = candidate;
+                        found = true;
+                    }
+                }
+            }
+
+            return found;
         }
 
         private static bool IsFunctionalPlayer(GameObject candidate)

@@ -33,6 +33,8 @@ namespace RIMA.MapDesigner.Room.Runtime
         [Header("Props (obstacles + decor)")]
         [SerializeField] private PropRegistrySO propRegistry;
         [SerializeField] private Transform propsContainer;
+        [Tooltip("When false, template props are skipped entirely: no prop objects AND no prop-footprint floor support cells (floor + cliff only). RoomRunDirector turns this off for Combat/Elite rooms — prop clusters at the spawn were soft-locking the player against the south cliff.")]
+        public bool spawnProps = true;
 
         [Header("Door Gates")]
         [SerializeField] private Transform gatesContainer;
@@ -111,7 +113,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             int cliffCellCount = BuildCliffs(floorCells);
             BuildBoundary(template, floorCells);
             BuildMarkers(template);
-            int propCount = BuildProps(template);
+            int propCount = spawnProps ? BuildProps(template) : 0;
 
             Debug.Log($"[IsoRoomBuilder] Built {template.roomId}: {floorCells.Count} floor, {overlayCellCount} overlay, {cliffCellCount} cliff, {propCount} props.");
         }
@@ -297,7 +299,13 @@ namespace RIMA.MapDesigner.Room.Runtime
             // A blocking prop turns its cell non-walkable, but the prop still sits ON solid
             // ground. Union prop footprints into the floor mask so those interior cells get a
             // floor tile instead of reading as a void pit.
-            AddPropFloorCells(template, floorCells);
+            // When spawnProps is off these support cells must NOT be added either — otherwise
+            // a walkable-looking floor tile would sit on a template-non-walkable cell
+            // (invisible wall vs the WalkabilityMap clamp).
+            if (spawnProps)
+            {
+                AddPropFloorCells(template, floorCells);
+            }
 
             bool hasChecker = floorTileAlt != null;
             foreach (Vector3Int cell in floorCells)
