@@ -1,5 +1,32 @@
 # CURRENT_STATUS
 
+## ⏯️ RESUME (2026-06-10 GECE — OTONOM DEMO KOŞUSU TAMAMLANDI: 10 commit + CANLI ZİNCİR DOĞRULANDI — /clear sonrası İLK BURAYI OKU)
+
+**🔒 PLAN = `STAGING/DEMO_FINAL_PLAN_2026-06-10.md`** · Rapor notları = `STAGING/REPORT_NOTES_2026-06-10.md` · Üretim sayfası = `STAGING/PIXELLAB_PRODUCTION_SHEET_2026-06-10.md` · Screenshot kanıtları = `STAGING/screenshots_demo_2026-06-10/` (01-09).
+
+**✅ BU KOŞUDA BİTTİ (10 commit, hepsi test-doğrulamalı, push'lu):**
+- `a120db55` **A1 P0 POST-BOSS DUAL-CLASS ARENA** — boss terminal değil; 6-node sequence; seçim→draft→kapı→post-boss'ta birleşik kit→victory + SecondaryUnlockBanner + primary-filtre (UI+manager çift katman)
+- `0b71…` **A8 İKİNCİ-RUN SOFTLOCK FIX** — DDOL listener'lar (ClassSelectionUI/Banner) sahne-reload'da yeniden-abone olur (`_subscribedManager` referans takibi); restart'ta secondary doğal sıfırlanıyor (manager sahne objesi, kod gerekmedi)
+- `cabf2c37` A2 boss shake (6 ölü çağrı→ScreenShakeDriver + bootstrap) · `1d97809e` A7 kontrol-ipucu (SPACE dash, Q/E/R/F skill!) + wishlist gizli · `aeab3134` A4 HalfThrall wave'de · `dfd80bb0` **A6 ikon registry 19→72** + mor-fallback fix · `ffa4f0b5` **R1 boss arenası 14×10→boss_shattered_oval_01 36×28** (~1.7 ekran) · `d85ac867` **W2 animator iskeleti** (Warblade.controller test-yolunda + Elementalist 4-diyagonal kontrat, BOŞ placeholder klipler, WD=OFF; PlayerAnimatorDirectionTests 13/13 — pre-existing fail 18→16)
+- A3 ÇÖZÜLDÜ-KOD-YOK (Controller sahnede zaten disabled, audit bayattı) · A5 müzik KULLANICI İPTAL ETTİ · D1 KAPANDI (aşağıda)
+
+**🎮 CANLI PLAY-MODE DOĞRULAMASI YAPILDI (MCP ile, screenshot'lı):** MainMenu boot ✓ chamber ✓ kılıç elde+sorting doğru (delta 0.28/0.06, weapon -350 > body -351) ✓ AFK-ölüm→ölüm ekranı GERÇEK ✓ shop kuruldu ✓ **boss yeni oval arenada 800HP spawn** ✓ **boss öldür→dual-class overlay CANLI AÇILDI→Elementalist buton-yoluyla seçildi→secondary=Elementalist→post-boss odaya geçildi (node5, 2 düşman, IsRunComplete=true)** ✓✓✓ — A1 zinciri uçtan uca gerçek oyunda çalışıyor.
+**⚠️ Tek tur bulgusu:** seçim sonrası **unlock draft otomatik AÇILMADI** (`IsDraftActive=False`) — akışı bloklamıyor (kapı açılıyor) ama beklenti draft'tı → YENİ SESSION İLK İŞ İNCELE (DraftManager OnSecondaryClassSelected aboneliği var mı?).
+
+**🔬 D1 KAPANDI:** Assert spam = Unity native lock bozulması, 2026-06-09'da Editor.log satır 178.181'de başlamış (öncesi sadece lisans-timeout gürültüsü, PROJE KODU DEĞİL), o noktadan beri her tick basıyor (4.03GB log). **FIX = UNITY EDITOR RESTART** (yapılMADI — kullanıcı kapatıp açsın; log rotate olur + assert'in kırdığı 8 test yeşillenir → beklenen pre-existing fail 16→~8).
+
+**⏭️ YENİ SESSION SIRASI:**
+1. **Unity restart** (kullanıcıdan iste/teyit et) → console temiz mi bak → tam suite koş (beklenti: ~586+/594, fail ~8)
+2. **Unlock-draft incelemesi** (yukarıdaki tur bulgusu — DraftManager secondary-selected hattı)
+3. **KULLANICI PixelLab üretimi:** `PIXELLAB_PRODUCTION_SHEET_2026-06-10.md` → önce **P1 Warblade RUN** (VERIFY-FIRST) → ben indir+klip doldur (iskelet hazır: `Assets/Animations/Characters/<Class>/Clips/*.anim` boş placeholder'lar) → P2-P4 → **B1 boss karakteri** → ben W3 boss-prefab Animator bağlarım
+4. **G1 GERÇEK-EL PLAYTEST** (kullanıcı): chamber→6 oda→boss→seçim→banner→post-boss'ta Fireball→victory · ölüm→restart→boss'ta seçim YİNE açılıyor mu (A8 kanıtı) · ikonlar bar'da · kontrol ipucu · boss arena hissi
+5. Shop **Echo→Gold kararı** (NLM kanon ihlali kesin; öneri=minimal Gold patch, freeze öncesi sığarsa)
+6. G2 standalone build smoke → G3 freeze (teslim −24h kod donar)
+
+**İŞ BÖLÜMÜ HATIRLATMA:** PixelLab gen=kullanıcı, indirme+wiring=Claude. rima-sonnet=READ-ONLY (diff döndürür); kod yazan agent=general-purpose. Editor.log ASLA Get-Content'le okunmaz (21GB RAM olayı) — stream-only.
+
+---
+
 ## ⏯️ RESUME (2026-06-10 — PIXELLAB ASSET KOŞUSU + DUAL-CLASS + TILESET ARAŞTIRMA — /clear sonrası ÖNCE `STAGING/SESSION_RESUME_2026-06-10.md` OKU)
 
 **📄 TAM DETAY = `STAGING/SESSION_RESUME_2026-06-10.md`** (state planı + ikon index→skill mapping + tüm object ID'ler). Bu blok özet.
