@@ -59,8 +59,19 @@ namespace RIMA
         private int echoOffersTaken;                // how many Echoes the player has bound this run
 
         private Warblade_SkillController skillController;
+        private Elementalist_SkillController elemSlotController;
         private GameObject               player;
         private RoomConfig               currentRoomConfig;
+
+        // F5 (2026-06-10): run-start class-kit draft pools. The opening draft offers 3 cards from
+        // this EXACT list (names must match SkillDatabase.skillName exactly).
+        // K1.2 (DEMO_DESIGN_PLAN_2026-06-10): SunderMark excluded (detonation synergy unreadable
+        // alone); Blink excluded (no-damage skill feels wrong as first pick).
+        private static readonly Dictionary<ClassType, string[]> ClassKits = new Dictionary<ClassType, string[]>
+        {
+            { ClassType.Warblade,     new[] { "Iron Charge", "Gravity Cleave", "Earthsplitter" } },
+            { ClassType.Elementalist, new[] { "Fireball", "Glacial Spike", "Chain Lightning" } },
+        };
 
         // ── Static query (SkillOfferGenerator erişim için) ──────
         public static int GetPassiveLevel(string skillName)
@@ -226,6 +237,62 @@ namespace RIMA
         {
             offerUI?.Hide();
             IsDraftActive = false;
+        }
+
+        /// <summary>
+        /// F5 (2026-06-10) run-start draft: 3 cards drawn ONLY from the primary class KIT
+        /// (Warblade/Elementalist demo kits). The pick lands in the first empty primary slot
+        /// (slot 0 = Q). Classes without a kit definition fall back to the normal draft.
+        /// </summary>
+        public void ShowOpeningKitDraft()
+        {
+            if (IsDraftActive || IsDraftPending) return;
+            EnsureDependencies();
+            if (offerUI == null)
+            {
+                Debug.LogWarning("[DraftManager] ShowOpeningKitDraft: offerUI bulunamadı!");
+                return;
+            }
+
+            var primary = PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade;
+            if (!ClassKits.TryGetValue(primary, out string[] kit))
+            {
+                Debug.LogWarning($"[DraftManager] No kit defined for {primary}; opening normal draft instead.");
+                ShowDraft();
+                return;
+            }
+
+            SkillDatabase.Instance?.EnsureBuilt();
+            var candidates = new List<SkillData>(kit.Length);
+            foreach (string name in kit)
+            {
+                var sd = SkillDatabase.Instance?.FindByName(name);
+                if (sd == null)
+                {
+                    Debug.LogWarning($"[DraftManager] Kit skill '{name}' not found in SkillDatabase.");
+                    continue;
+                }
+                if (!currentActiveSkills.Contains(sd)) candidates.Add(sd);
+            }
+
+            if (candidates.Count == 0)
+            {
+                Debug.LogWarning($"[DraftManager] Opening kit draft: no kit skills resolvable for {primary}; opening normal draft instead.");
+                ShowDraft();
+                return;
+            }
+
+            var offers = new List<RewardOffer>(3);
+            while (offers.Count < 3 && candidates.Count > 0)
+            {
+                int i = Random.Range(0, candidates.Count);
+                offers.Add(RewardOffer.FromSkill(candidates[i]));
+                candidates.RemoveAt(i);
+            }
+
+            IsDraftActive = true;
+            offerUI.Show(offers, OnOfferSelected, 1);
+            Debug.Log($"[DraftManager] Opening kit draft shown for {primary}: {offers.Count} cards.");
         }
 
         // ── Cross-class Echo offer (B5) ──────────────────────────
@@ -432,17 +499,42 @@ namespace RIMA
 
         // ── Yardımcılar ──────────────────────────────────────────
 
+        /// <summary>
+        /// F5 (2026-06-10): when the PRIMARY class is Elementalist, primary slots (0-3) live on
+        /// Elementalist_SkillController — its Q/E/R/F bindings are the enabled ones and SkillBarUI
+        /// reads its slots. The Warblade controller remains the host for secondary slots (4-5).
+        /// </summary>
+        private bool UseElementalistPrimary()
+        {
+            if ((PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade) != ClassType.Elementalist)
+                return false;
+
+            if (elemSlotController == null)
+            {
+                if (player == null) player = GameObject.FindGameObjectWithTag("Player");
+                elemSlotController = player != null ? player.GetComponent<Elementalist_SkillController>() : null;
+            }
+
+            return elemSlotController != null;
+        }
+
         private void AssignActive(SkillData skill, int slot)
         {
-            if (skillController != null && skill.skillType != null)
+            bool elemPrimarySlot = slot < 4 && UseElementalistPrimary();
+            Component host = elemPrimarySlot ? (Component)elemSlotController : skillController;
+
+            if (host != null && skill.skillType != null)
             {
-                var comp = skillController.GetComponent(skill.skillType) as SkillBase
-                        ?? skillController.GetComponentInChildren(skill.skillType) as SkillBase;
-                // Codex #1 fix: EnsureDefaultLoadout only AddComponents 4 skills; attach any other picked skill on demand.
+                var comp = host.GetComponent(skill.skillType) as SkillBase
+                        ?? host.GetComponentInChildren(skill.skillType) as SkillBase;
+                // Codex #1 fix: attach the picked skill component on demand.
                 if (comp == null)
-                    comp = skillController.gameObject.AddComponent(skill.skillType) as SkillBase;
+                    comp = host.gameObject.AddComponent(skill.skillType) as SkillBase;
                 if (comp != null)
-                    skillController.SetSlot(slot, comp);
+                {
+                    if (elemPrimarySlot) elemSlotController.SetSlot(slot, comp);
+                    else                 skillController.SetSlot(slot, comp);
+                }
                 else
                     Debug.LogWarning($"[Draft] '{skill.skillName}' bileşeni eklenemedi (skillType={skill.skillType}).");
             }
@@ -466,6 +558,13 @@ namespace RIMA
 
         private int FindNextPrimarySlot()
         {
+            if (UseElementalistPrimary())
+            {
+                for (int i = 0; i < 4; i++)
+                    if (elemSlotController.GetSlot(i) == null) return i;
+                return 0;
+            }
+
             if (skillController == null) return 0;
             for (int i = 0; i < 4; i++)
                 if (skillController.GetSlot(i) == null) return i;
@@ -482,7 +581,22 @@ namespace RIMA
 
         private int FindSlotOf(SkillData sd)
         {
-            if (skillController == null || sd.skillType == null) return -1;
+            if (sd.skillType == null) return -1;
+
+            // F5: Elementalist primary keeps its primary slots on its own controller.
+            if (UseElementalistPrimary())
+            {
+                var elemComp = elemSlotController.GetComponent(sd.skillType)
+                            ?? elemSlotController.GetComponentInChildren(sd.skillType);
+                if (elemComp != null)
+                {
+                    var elemSlots = elemSlotController.GetAllSlots();
+                    for (int i = 0; i < elemSlots.Length; i++)
+                        if (elemSlots[i] != null && elemSlots[i] == elemComp) return i;
+                }
+            }
+
+            if (skillController == null) return -1;
             var comp = skillController.GetComponent(sd.skillType)
                     ?? skillController.GetComponentInChildren(sd.skillType);
             if (comp == null) return -1;

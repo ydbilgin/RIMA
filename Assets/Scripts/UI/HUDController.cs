@@ -37,6 +37,9 @@ namespace RIMA
         private Image lowHpVignette;
 
         private TextMeshProUGUI roomNameLabel;
+        // K5.1: center entry banner (large, 1.5 s) — separate from the small persistent label.
+        private TextMeshProUGUI roomBannerLabel;
+        private Coroutine roomBannerCoroutine;
 
         private RectTransform interactionPanel;
         private TextMeshProUGUI interactionText;
@@ -345,6 +348,80 @@ namespace RIMA
             roomNameLabel.alpha = 0f;
         }
 
+        // ─── Room Label (K5.1 — persistent small label + entry banner) ────
+
+        /// <summary>
+        /// K5.1: Called once per room build with "ODA {n}/6 — {TİP}".
+        /// Shows a large 1.5 s center banner (fade-in 0.2 s / hold 0.9 s / fade-out 0.4 s) and
+        /// then keeps a small persistent label visible in the top-left below the HP bars.
+        /// </summary>
+        public void SetRoomLabel(string text)
+        {
+            // Persistent small label — always visible, no animation.
+            if (roomNameLabel != null)
+            {
+                roomNameLabel.text = text;
+                roomNameLabel.alpha = 0.80f;
+            }
+
+            // Center entry banner — timed fade.
+            if (roomBannerLabel == null) return;
+            if (roomBannerCoroutine != null) StopCoroutine(roomBannerCoroutine);
+            roomBannerCoroutine = StartCoroutine(ShowRoomBanner(text));
+        }
+
+        private IEnumerator ShowRoomBanner(string text)
+        {
+            roomBannerLabel.text = text;
+            // Fade in 0.2 s
+            float t = 0f;
+            while (t < 0.2f)
+            {
+                t += Time.unscaledDeltaTime;
+                roomBannerLabel.alpha = Mathf.Clamp01(t / 0.2f);
+                yield return null;
+            }
+            roomBannerLabel.alpha = 1f;
+
+            // Hold 0.9 s
+            yield return new WaitForSecondsRealtime(0.9f);
+
+            // Fade out 0.4 s
+            t = 0f;
+            while (t < 0.4f)
+            {
+                t += Time.unscaledDeltaTime;
+                roomBannerLabel.alpha = Mathf.Clamp01(1f - t / 0.4f);
+                yield return null;
+            }
+            roomBannerLabel.alpha = 0f;
+            roomBannerCoroutine = null;
+        }
+
+        private void BuildRoomBannerLabel(RectTransform root)
+        {
+            var go = new GameObject("RoomBanner", typeof(RectTransform));
+            go.transform.SetParent(root, false);
+            var rt = go.GetComponent<RectTransform>();
+            // Upper third of screen, centered.
+            rt.anchorMin = new Vector2(0f, 1f);
+            rt.anchorMax = new Vector2(1f, 1f);
+            rt.pivot = new Vector2(0.5f, 1f);
+            rt.anchoredPosition = new Vector2(0f, -60f);
+            rt.sizeDelta = new Vector2(0f, 32f);
+
+            roomBannerLabel = go.AddComponent<TextMeshProUGUI>();
+            roomBannerLabel.text = "";
+            roomBannerLabel.fontSize = 22f;
+            roomBannerLabel.fontStyle = FontStyles.Bold;
+            roomBannerLabel.color = RimaUITheme.Cyan;
+            roomBannerLabel.alpha = 0f;
+            roomBannerLabel.alignment = TextAlignmentOptions.Center;
+            roomBannerLabel.outlineColor = new Color(0f, 0f, 0f, 0.75f);
+            roomBannerLabel.outlineWidth = 0.2f;
+            roomBannerLabel.raycastTarget = false;
+        }
+
         // ─── Interaction Prompt (preserved API) ─────────────────────────
 
         internal static string ComposeInteractionPrompt(string actionName)
@@ -425,6 +502,7 @@ namespace RIMA
             BuildResourceBar(root);
             BuildEchoDisplay(root);
             BuildRoomNameLabel(root);
+            BuildRoomBannerLabel(root);
             BuildInteractionPrompt(root);
             BuildControlHint(root);
             if (showMiniMap)

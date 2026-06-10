@@ -44,6 +44,8 @@ namespace RIMA
         private bool[] wasOnCooldown = new bool[SlotCount];
         private float[] readyFlashTimers = new float[SlotCount];
         private float[] synergyPulseTimers = new float[SlotCount];
+        // K1.1: tracks when secondary slots (indices 4-5, Z/X) have been unlocked and revealed
+        private bool secondarySlotsRevealed;
         private Color cachedClassAccent = RimaUITheme.ClassAccent(ClassType.Warblade);
         private bool controllersResolved;
         private GameObject cachedPlayer;
@@ -131,6 +133,8 @@ namespace RIMA
             controllersResolved = false;
             ResolveControllers();
             ScheduleLateResolveControllers();
+            // K1.1: reveal Z/X slots now that secondary class is unlocked
+            RevealSecondarySlots();
         }
 
         // ─── Build ──────────────────────────────────────────────────
@@ -251,6 +255,43 @@ namespace RIMA
                 bgImg.raycastTarget = true;
                 AttachDragHandler(slotGo, i);
             }
+        }
+
+        // ─── Secondary slot reveal (K1.1 — boss-clear unlock) ──────
+
+        /// <summary>
+        /// Called when secondary class is picked: scale-pops the last two slots (R/F = Z/X keybinds)
+        /// to draw the player's eye as the unlock draft fills them.
+        /// </summary>
+        public void RevealSecondarySlots()
+        {
+            if (secondarySlotsRevealed) return;
+            secondarySlotsRevealed = true;
+            StartCoroutine(SecondarySlotRevealPop());
+        }
+
+        private System.Collections.IEnumerator SecondarySlotRevealPop()
+        {
+            // Brief scale-pop on slots 4-5 (R/F, now Z/X keybinds) so the player notices them.
+            const float popDuration = 0.4f;
+            float t = 0f;
+            while (t < popDuration)
+            {
+                t += Time.unscaledDeltaTime;
+                float progress = t / popDuration;
+                float scale = 1f + 0.3f * Mathf.Sin(progress * Mathf.PI);
+                for (int i = 4; i < 6 && i < SlotCount; i++)
+                {
+                    if (slots[i].root != null)
+                        slots[i].root.transform.localScale = Vector3.one * scale;
+                }
+                yield return null;
+            }
+            for (int i = 4; i < 6 && i < SlotCount; i++)
+                if (slots[i].root != null)
+                    slots[i].root.transform.localScale = Vector3.one;
+
+            Debug.Log("[SkillBarUI] Secondary slots (Z/X) pop-revealed.");
         }
 
         // ─── Update ─────────────────────────────────────────────────

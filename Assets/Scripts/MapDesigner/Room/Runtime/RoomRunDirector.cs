@@ -345,6 +345,37 @@ namespace RIMA.MapDesigner.Room.Runtime
             ConfigureExitDoors(false);
 
             StartRoomEncounter();
+
+            // K5.1 (DEMO_DESIGN_PLAN): show "ODA n/6 — TİP" label + entry banner.
+            // Deferred by 1 frame so HUDController.Start() (which calls BuildHUD) has run first.
+            if (Application.isPlaying)
+                StartCoroutine(ShowRoomIdentityLabelDeferred());
+        }
+
+        private System.Collections.IEnumerator ShowRoomIdentityLabelDeferred()
+        {
+            yield return null; // one frame: lets HUDController.Start() → BuildHUD() run
+            ShowRoomIdentityLabel();
+        }
+
+        private void ShowRoomIdentityLabel()
+        {
+            int roomNumber = CurrentNodeId + 1;
+            int totalRooms = graph != null ? graph.nodes.Count : 6;
+            string typeName = CurrentRoomType switch
+            {
+                RIMA.RoomType.Combat   => "SAVAŞ",
+                RIMA.RoomType.Merchant => "TÜCCAR",
+                RIMA.RoomType.Boss     => "BOSS",
+                RIMA.RoomType.Elite    => "ELİT SAVAŞ",
+                RIMA.RoomType.Chest    => "SANDIK",
+                RIMA.RoomType.Forge    => "FORGE",
+                _                     => CurrentRoomType.ToString().ToUpperInvariant(),
+            };
+            // Post-boss final Combat node has no children = run terminal.
+            if (IsRunComplete) typeName = "SON ODA";
+            string label = $"ODA {roomNumber}/{totalRooms} — {typeName}";
+            HUDController.Instance?.SetRoomLabel(label);
         }
 
         private void ApplyFixedDemoCamera()
@@ -1143,6 +1174,9 @@ namespace RIMA.MapDesigner.Room.Runtime
             {
                 yield return ClearSlowMoBlip();
 
+                // K3.2 — P2: "ODA TEMİZLENDİ" flash immediately after slow-mo blip.
+                HUDController.Instance?.SetRoomStatus("ODA TEMİZLENDİ");
+
                 // ── Dual-class gate (Boss room clear) ─────────────────────────────────
                 // Fires when the Boss room is cleared. Boss is no longer the terminal node:
                 // after the player picks a secondary class and the unlock draft closes, we
@@ -1193,6 +1227,9 @@ namespace RIMA.MapDesigner.Room.Runtime
                     yield break;
                 }
 
+                // K3.2 — P2: 0.5 s pause before reward appears (gives slow-mo moment to breathe).
+                yield return new WaitForSecondsRealtime(0.5f);
+
                 activeReward = SpawnRewardPickup();
                 if (activeReward == null)
                 {
@@ -1201,6 +1238,10 @@ namespace RIMA.MapDesigner.Room.Runtime
                     clearSequence = null;
                     yield break;
                 }
+
+                // K3.2 — P2: reward spawn choreography — scale-pop + EchoPuffBurst + bob.
+                StartCoroutine(RewardSpawnPop(activeReward));
+
 
                 // ROOT FIX (Bug 1): wait for player to collect the reward, but enforce a hard
                 // timeout so a missed/skipped reward can never deadlock the run progression.
@@ -1316,6 +1357,17 @@ namespace RIMA.MapDesigner.Room.Runtime
             spriteRenderer.sortingLayerName = "Entities";
             spriteRenderer.sortingOrder = 0;
 
+            // K3.1 (DEMO_DESIGN_PLAN): IsoSorter for correct depth-sorting (baseOrder=+5 = in front
+            // of same-tile props/cliffs). Proje kuralı: "dinamik/yerde-duran her sprite IsoSorter taşır".
+            var isoSorter = rewardObject.AddComponent<IsoSorter>();
+            // Set baseOrder via field reflection (serialized) so it applies from first LateUpdate.
+            var baseOrderField = typeof(IsoSorter).GetField("baseOrder",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (baseOrderField != null) baseOrderField.SetValue(isoSorter, 5);
+
+            // K3.2 (P2): idle bob so the reward reads as "alive / pick me up".
+            rewardObject.AddComponent<PlaceholderFloat>();
+
             CircleCollider2D collider = rewardObject.AddComponent<CircleCollider2D>();
             collider.isTrigger = true;
             collider.radius = Mathf.Max(0.05f, rewardColliderRadius);
@@ -1323,6 +1375,41 @@ namespace RIMA.MapDesigner.Room.Runtime
             RewardPickup pickup = rewardObject.AddComponent<RewardPickup>();
             Debug.Log($"[RoomRunDirector] RewardPickup spawned at {rewardObject.transform.position}");
             return pickup;
+        }
+
+        /// <summary>
+        /// K3.2 (P2): scale-pop (0→1.15→1.0 in 0.25s) + EchoPuffBurst cyan + light shake.
+        /// Runs in parallel with the main clear-sequence; safe if the reward is destroyed early.
+        /// </summary>
+        private System.Collections.IEnumerator RewardSpawnPop(RewardPickup reward)
+        {
+            if (reward == null) yield break;
+            Transform tf = reward.transform;
+
+            // Start scaled to 0 so the pop reads as "appearing from nothing".
+            tf.localScale = Vector3.zero;
+
+            // EchoPuffBurst cyan materialize puff.
+            EchoPuffBurst.Spawn(tf.position, 0.5f, dissolve: false, moteCount: 9);
+
+            // Light screen shake (null-safe: ScreenShakeDriver may not be present in all scenes).
+            RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.08f, 0.2f);
+
+            // Scale-pop: 0 → 1.15 → 1.0 over 0.25 s.
+            const float popTime = 0.25f;
+            float t = 0f;
+            while (t < popTime && reward != null)
+            {
+                t += Time.unscaledDeltaTime;
+                float progress = t / popTime;
+                // Ease-out overshoot curve: grows past 1.15 then settles at 1.0.
+                float scale = progress < 0.7f
+                    ? Mathf.Lerp(0f, 1.15f, progress / 0.7f)
+                    : Mathf.Lerp(1.15f, 1.0f, (progress - 0.7f) / 0.3f);
+                if (tf != null) tf.localScale = Vector3.one * scale;
+                yield return null;
+            }
+            if (tf != null) tf.localScale = Vector3.one;
         }
 
         /// <summary>
