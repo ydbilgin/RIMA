@@ -1236,6 +1236,13 @@ namespace RIMA
 
         private void OnBackClicked()
         {
+            // FIX 3: when in chamber-embed mode close the overlay instead of navigating away.
+            ChamberSelectBootstrap chamber = GetComponent<ChamberSelectBootstrap>();
+            if (chamber != null && chamber.CloseChamberOverlay())
+            {
+                return;
+            }
+
             UIManager.Instance?.ResumeGame();
             SceneManager.LoadScene("MainMenu");
             Destroy(gameObject);

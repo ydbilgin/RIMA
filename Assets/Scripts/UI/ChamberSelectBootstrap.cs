@@ -240,6 +240,14 @@ namespace RIMA
                 SetClassicOverlayVisible(false);
             }
 
+            // FIX 2 (broad): while dummy overlay is open, suppress ALL world prompts and skip interaction.
+            if (dummySelectOpen)
+            {
+                HidePrompt();
+                RefreshEchoVisuals();
+                return;
+            }
+
             if (pendingConfirmClass != ClassType.None)
             {
                 bool stillNearPending = IsNearClassStation(pendingConfirmClass, ClassConfirmRadius, out EchoStation pendingStation);
@@ -1144,15 +1152,32 @@ namespace RIMA
             dummyLight.pointLightOuterRadius = 3.0f;
             dummyLight.color = new Color(0.50f, 0.76f, 1f, 1f);
 
-            // FIX E: scale label/bar offsets with dummy size so they sit above the bigger sprite.
-            float dummyLabelHeight = 0.95f + (chamberDummyScale - 0.72f) * 0.4f;
+            // FIX 1: Derive bar/label world-Y from sprite bounds so they sit above the sprite top
+            //        regardless of PPU, scale, or sprite sheet.  bar.bottom = sprite.bounds.max.y + margin.
+            //        sprite.bounds is pivot-relative local space; scale × localMax → world offset from pivot.
+            float spriteTopWorld;
+            if (sr.sprite != null)
+            {
+                spriteTopWorld = dummy.transform.position.y + sr.sprite.bounds.max.y * dummyS;
+            }
+            else
+            {
+                // Fallback: use the old heuristic if sprite is missing.
+                spriteTopWorld = dummy.transform.position.y + 0.95f + (chamberDummyScale - 0.72f) * 0.4f - 0.30f;
+            }
+            const float barMargin    = 0.18f;   // gap between sprite top and bar bottom
+            const float barHeight    = 0.13f;   // matches CreateDummyHpBar Back sprite scale.y
+            const float labelGap     = 0.10f;   // gap between bar top and name label bottom
+            float barCenterY  = spriteTopWorld + barMargin + barHeight * 0.5f;
+            float labelCenterY = barCenterY + barHeight * 0.5f + labelGap + 0.12f; // +0.12 = half text height
+
             // FIX 2: Name label says "Dummy"; show/hide on hover (default hidden).
-            TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, dummy.transform.position + new Vector3(0f, dummyLabelHeight + 0.20f, 0f), 2.6f);
+            TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, new Vector3(dummy.transform.position.x, labelCenterY, dummy.transform.position.z), 2.6f);
             hpLabel.text = "Dummy";
             hpLabel.gameObject.SetActive(false);   // hidden until hover
             ScreenshotMode.Register(hpLabel.gameObject, "TrainingDummy_HP");
             // FIX 2b: HP bar first (no separate number label above it).
-            DummyHpBar hpBar = CreateDummyHpBar(dummy.transform, dummy.transform.position + new Vector3(0f, dummyLabelHeight - 0.30f, 0f));
+            DummyHpBar hpBar = CreateDummyHpBar(dummy.transform, new Vector3(dummy.transform.position.x, barCenterY, dummy.transform.position.z));
             hpBar.RootGo.SetActive(false);   // hidden until hover
             // FIX 2b: HP number INSIDE the bar (centered on the red fill area).
             TMP_Text hpNumberLabel = CreateWorldText("TrainingDummy_HPNumber", hpBar.RootGo.transform,
@@ -1601,6 +1626,23 @@ namespace RIMA
             RefreshEchoVisuals();
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: attuned to {cls}; PlayerClassManager.SelectedClass synchronized.");
             busyAttuning = false;
+        }
+
+        /// <summary>
+        /// FIX 3: Called by CharacterSelectScreen.OnBackClicked when running in chamber-embed mode.
+        /// Closes the overlay and resets state so the world prompt can reappear.
+        /// </summary>
+        public bool CloseChamberOverlay()
+        {
+            if (!dummySelectOpen && !classicTabOpen)
+            {
+                return false;   // not in chamber-embed mode, caller should handle normally
+            }
+
+            dummySelectOpen = false;
+            classicTabOpen = false;
+            SetClassicOverlayVisible(false);
+            return true;
         }
 
         public bool AcceptClassicSelectionFromPopup(ClassType cls)
