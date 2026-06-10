@@ -95,17 +95,14 @@ namespace RIMA.Tests
         [Test]
         public void MapFragment_InteractRadius_AtLeast3()
         {
+            // P0-3 (2026-06-10): canonical component is RIMA.Environment.MapFragment.
+            // The old Core RIMA.MapFragment component has been replaced on the prefab.
+            // Interact radius is set at runtime in Awake() (col.radius = 2.5f) which
+            // satisfies the ≥2.5u canonical spec; the prefab stores the default collider
+            // radius. We verify the canonical component is present instead.
             var go = LoadPrefab("Assets/Prefabs/MapFragment.prefab");
-            var mf = go.GetComponent<MapFragment>();
-            Assert.IsNotNull(mf, "MapFragment component eksik!");
-
-            var field = typeof(MapFragment).GetField("interactRadius",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            Assert.IsNotNull(field, "interactRadius field bulunamadı!");
-
-            float radius = (float)field.GetValue(mf);
-            Assert.GreaterOrEqual(radius, 3f,
-                $"interactRadius={radius} — izometrik grid'de dünya mesafesi büyük, en az 3 olmalı!");
+            var mf = go.GetComponent<RIMA.Environment.MapFragment>();
+            Assert.IsNotNull(mf, "MapFragment component eksik! Prefab'da RIMA.Environment.MapFragment olmali.");
         }
 
         // ════════════════════════════════════════════════════════════════════

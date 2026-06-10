@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5812966496342042810}
   - component: {fileID: 2104410972907677957}
   - component: {fileID: 6578747032677754745}
-  - component: {fileID: 3645436519077344997}
+  - component: {fileID: 4523678901234567890}
   m_Layer: 0
   m_Name: MapFragment
   m_TagString: Untagged
@@ -129,7 +129,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.4
---- !u!114 &3645436519077344997
+--- !u!114 &4523678901234567890
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,11 +138,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3790092419008331794}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81cb176bbb9aea243b289acf0b7dcdd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RIMA.MapFragment
-  interactRadius: 3
-  bobAmplitude: 0.12
-  bobSpeed: 2.5
-  glowPulseSpeed: 3
-  revealSteps: 1
+  m_Script: {fileID: 11500000, guid: 9603a0707e0a7a042854c0ce810da241, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RIMA.Environment.MapFragment
+  playerTag: Player

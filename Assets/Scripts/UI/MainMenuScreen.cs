@@ -25,26 +25,12 @@ namespace RIMA
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoInit()
         {
+            // P0-5 CLEANUP (2026-06-10): Canonical path is scene-backed MainMenuController.
+            // Legacy procedural spawn disabled to prevent chamber-bypass. Post-demo removal scheduled.
+            // (OVERLAP_CLEANUP_DECISION_2026-06-09.md, HEDEF 2)
             EnsureEventSystemHook();
             EnsureEventSystem();
-
-            // Never create the legacy procedural menu when loading scene-backed UI or game/test scenes directly.
-            var activeScene = SceneManager.GetActiveScene().name;
-            if (activeScene == "_IsoGame" ||
-                activeScene == "_Arena" ||
-                activeScene == "PlayableArena_Test01" ||
-                activeScene == "MainMenu" ||
-                activeScene == "CharacterSelect" ||
-                activeScene == "RoomPipelineTest" ||
-                activeScene == "_FazMVP_Demo")
-            {
-                return;
-            }
-            if (_gameStarted) return;
-            if (Object.FindFirstObjectByType<MainMenuScreen>() != null) return;
-            var go = new GameObject("[MainMenuScreen]");
-            DontDestroyOnLoad(go);
-            go.AddComponent<MainMenuScreen>();
+            return;
         }
 
         private static void EnsureEventSystemHook()

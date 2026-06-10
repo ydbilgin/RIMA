@@ -149,11 +149,23 @@ namespace RIMA
                 return;
             }
 
-            int room = RuntimeRoomManager.Instance?.CurrentRoom ?? 1;
+            int room = GetLiveRoomDepth();
             if (room == ForgeRoom1 || room == ForgeRoom2) return;
             if (IsNonDraftRoom(currentRoomConfig)) return;
 
             StartCoroutine(ShowDraftDelayed(RoomClearDraftDelay));
+        }
+
+        /// <summary>
+        /// Returns the live room depth using RoomRunDirector when available (canonical demo path),
+        /// falling back to RuntimeRoomManager for legacy scenes.
+        /// Depth = CurrentNodeId + 1 so the first room = 1, second = 2, etc. matching ForgeRoom1/2 milestones.
+        /// </summary>
+        private static int GetLiveRoomDepth()
+        {
+            var run = Object.FindFirstObjectByType<RIMA.MapDesigner.Room.Runtime.RoomRunDirector>();
+            if (run != null) return run.CurrentNodeId + 1;
+            return RuntimeRoomManager.Instance?.CurrentRoom ?? 1;
         }
 
         /// <summary>
@@ -190,7 +202,7 @@ namespace RIMA
 
             IsDraftActive = true;
 
-            int room = RuntimeRoomManager.Instance?.CurrentRoom ?? 1;
+            int room = GetLiveRoomDepth();
 
             // ── Forge milestone: Forge UI kendi akışını yönetir ───
             if (room == ForgeRoom1)
@@ -237,6 +249,29 @@ namespace RIMA
         {
             offerUI?.Hide();
             IsDraftActive = false;
+        }
+
+        /// <summary>
+        /// P0-7 (2026-06-10): Called when the opening-kit draft times out so the player is never
+        /// left skill-less. Picks the first available kit skill for the primary class and equips it
+        /// into slot 0 (Q) silently — no UI, no audio, just a log.
+        /// </summary>
+        public void ForcePickFirstOpeningKitSkill()
+        {
+            EnsureDependencies();
+            var primary = PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade;
+            if (!ClassKits.TryGetValue(primary, out string[] kit)) return;
+
+            SkillDatabase.Instance?.EnsureBuilt();
+            foreach (string name in kit)
+            {
+                var sd = SkillDatabase.Instance?.FindByName(name);
+                if (sd == null || currentActiveSkills.Contains(sd)) continue;
+                AssignActive(sd, 0);
+                Debug.Log($"[DraftManager] Opening kit timeout — auto-picked '{sd.skillName}' into slot 0 for {primary}.");
+                return;
+            }
+            Debug.LogWarning($"[DraftManager] ForcePickFirstOpeningKitSkill: no resolvable kit skill for {primary}.");
         }
 
         /// <summary>

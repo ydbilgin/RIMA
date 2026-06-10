@@ -100,8 +100,37 @@ namespace RIMA
             UpdateEchoDisplay();
 
             var player = GameObject.FindGameObjectWithTag("Player");
-            if (player == null) return;
+            if (player == null)
+            {
+                // P0-8: player not spawned yet (EnsureHUD runs before EnsurePlayerAtSpawn in some frames).
+                // Retry binding until player appears, up to ~2 seconds (20 × 0.1 s).
+                StartCoroutine(LateBindPlayerCoroutine());
+                return;
+            }
 
+            BindPlayer(player);
+        }
+
+        /// <summary>P0-8: retry binding up to ~2 s so HUD never starts with empty HP / resource.</summary>
+        private System.Collections.IEnumerator LateBindPlayerCoroutine()
+        {
+            const int maxRetries = 20;
+            const float interval = 0.1f;
+            for (int i = 0; i < maxRetries; i++)
+            {
+                yield return new WaitForSecondsRealtime(interval);
+                var p = GameObject.FindGameObjectWithTag("Player");
+                if (p != null)
+                {
+                    BindPlayer(p);
+                    yield break;
+                }
+            }
+            Debug.LogWarning("[HUDController] Player not found after 2s — HP/resource bar will remain empty.");
+        }
+
+        private void BindPlayer(GameObject player)
+        {
             currentClass = PlayerClassManager.Instance != null
                 ? PlayerClassManager.Instance.PrimaryClass
                 : ClassType.Warblade;
@@ -112,14 +141,17 @@ namespace RIMA
 
             if (resourceSystem != null)
             {
+                resourceSystem.OnResourceChanged.RemoveListener(OnResourceChanged); // idempotent guard
                 resourceSystem.OnResourceChanged.AddListener(OnResourceChanged);
                 OnResourceChanged(resourceSystem.Current, resourceSystem.Max);
             }
 
             if (playerHealth != null)
             {
+                playerHealth.OnHealthChanged.RemoveListener(OnHPChanged);
                 playerHealth.OnHealthChanged.AddListener(OnHPChanged);
-                playerHealth.OnDamageTaken.AddListener(OnPlayerDamaged); // hit-stop + flash on taking damage
+                playerHealth.OnDamageTaken.RemoveListener(OnPlayerDamaged);
+                playerHealth.OnDamageTaken.AddListener(OnPlayerDamaged);
                 OnHPChanged(playerHealth.CurrentHP, playerHealth.MaxHP);
             }
 

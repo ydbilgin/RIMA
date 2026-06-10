@@ -251,8 +251,10 @@ namespace RIMA.MapDesigner.Room.Runtime
                 openTimer += Time.unscaledDeltaTime;
                 if (openTimer >= DraftAutoCloseTimeoutSec)
                 {
-                    Debug.LogWarning($"[RoomRunDirector] Opening kit draft not resolved after {DraftAutoCloseTimeoutSec}s — force-closing to unblock run.");
+                    Debug.LogWarning($"[RoomRunDirector] Opening kit draft not resolved after {DraftAutoCloseTimeoutSec}s — force-picking first kit skill to unblock run.");
                     draft.HideDraft();
+                    // P0-7: auto-equip so player is never skill-less after timeout
+                    draft.ForcePickFirstOpeningKitSkill();
                     break;
                 }
                 yield return null;
