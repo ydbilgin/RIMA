@@ -601,7 +601,12 @@ namespace RIMA
                 "Arcane Blast" or
                 "Backstab" or
                 "Shadow Step" or
-                "Fan of Knives";
+                "Fan of Knives" or
+                // Demo retire: IronCounter (savunma-duruşu — demo'da karmaşık) ve
+                // IroncladMomentum (WBPassive kaydı var ama IroncladMomentum:SkillBase aktif — kayıt
+                // hatası, draft'a girerse sessiz bozulur)
+                "Iron Counter" or
+                "Ironclade Momentum";
         }
     }
 }
