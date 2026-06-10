@@ -31,10 +31,10 @@ namespace RIMA
         private const string ChamberExitPortalEditorPath = "Assets/Resources/Environment/Portal/portal_rift.png";
         private const string ChamberExitPortalResourcePath = "Environment/Portal/portal_rift";
         private const string ArenaRunSceneName = "_Arena";
-        private const float ClassInteractRadius = 2.0f;
-        private const float ClassConfirmRadius = 2.2f;
-        private const float DoorInteractRadius = 3.5f;
-        private const float DummyInteractRadius = 3.5f;
+        private const float ClassInteractRadius = 1.5f;
+        private const float ClassConfirmRadius = 1.7f;
+        private const float DoorInteractRadius = 2.5f;
+        private const float DummyInteractRadius = 1.6f;
         private const int StandRowCount = 5;
 
         [SerializeField, Min(1f)] private float chamberCameraFitMultiplier = 1.04f;
@@ -1152,27 +1152,31 @@ namespace RIMA
             dummyLight.pointLightOuterRadius = 3.0f;
             dummyLight.color = new Color(0.50f, 0.76f, 1f, 1f);
 
-            // FIX 1: Derive bar/label world-Y from sprite bounds so they sit above the sprite top
-            //        regardless of PPU, scale, or sprite sheet.  bar.bottom = sprite.bounds.max.y + margin.
-            //        sprite.bounds is pivot-relative local space; scale × localMax → world offset from pivot.
+            // FIX 1: Derive bar/label world-Y from sprite bounds so they sit above the VISIBLE sprite top.
+            //        sprite.bounds.max.y covers the full FullRect including transparent padding.
+            //        We apply a visible-ratio correction (0.78) to approximate the opaque pixel top.
+            //        This is the fallback path — texture.isReadable is not guaranteed at runtime for
+            //        imported sprites, so per-pixel scanning is unreliable. 0.78 calibrated empirically
+            //        to place the bar flush with the character head.
+            const float visibleRatioCorrection = 0.78f;
             float spriteTopWorld;
             if (sr.sprite != null)
             {
-                spriteTopWorld = dummy.transform.position.y + sr.sprite.bounds.max.y * dummyS;
+                spriteTopWorld = dummy.transform.position.y + sr.sprite.bounds.max.y * dummyS * visibleRatioCorrection;
             }
             else
             {
                 // Fallback: use the old heuristic if sprite is missing.
                 spriteTopWorld = dummy.transform.position.y + 0.95f + (chamberDummyScale - 0.72f) * 0.4f - 0.30f;
             }
-            const float barMargin    = 0.18f;   // gap between sprite top and bar bottom
+            const float barMargin    = 0.05f;   // compact gap between visible sprite top and bar bottom
             const float barHeight    = 0.13f;   // matches CreateDummyHpBar Back sprite scale.y
-            const float labelGap     = 0.10f;   // gap between bar top and name label bottom
+            const float labelGap     = 0.03f;   // tight gap between bar top and name label bottom
             float barCenterY  = spriteTopWorld + barMargin + barHeight * 0.5f;
-            float labelCenterY = barCenterY + barHeight * 0.5f + labelGap + 0.12f; // +0.12 = half text height
+            float labelCenterY = barCenterY + barHeight * 0.5f + labelGap + 0.09f; // +0.09 = half text height at 1.6
 
             // FIX 2: Name label says "Dummy"; show/hide on hover (default hidden).
-            TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, new Vector3(dummy.transform.position.x, labelCenterY, dummy.transform.position.z), 2.6f);
+            TMP_Text hpLabel = CreateWorldText("TrainingDummy_HP", dummy.transform, new Vector3(dummy.transform.position.x, labelCenterY, dummy.transform.position.z), 1.6f);
             hpLabel.text = "Dummy";
             hpLabel.gameObject.SetActive(false);   // hidden until hover
             ScreenshotMode.Register(hpLabel.gameObject, "TrainingDummy_HP");
