@@ -295,7 +295,7 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 7a2f29c39a1fec840b992ed32375e17a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bdba7fc5a93c41a4693e82d61099250d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4183381208128310339}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff118ae0793675e45b5540ba616ffefe, type: 3}
   m_Name: 
@@ -333,6 +333,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
   knockbackResistance: 0
+  isKnockdownable: 1
+  defaultKnockdownProfile: {fileID: 0}
 --- !u!114 &5815682689781037712
 MonoBehaviour:
   m_ObjectHideFlags: 0
