@@ -31,6 +31,14 @@ namespace RIMA
         /// <summary>RoomClearedSequence'in WaitUntil için polling yapar.</summary>
         public bool IsDraftActive { get; private set; }
 
+        /// <summary>
+        /// Secondary class seçildiğinde ShowDraftDelayed coroutine başlatılır ama
+        /// IsDraftActive henüz false'dur (2 sn gecikme var). Bu flag o pencereyi kapatır:
+        /// coroutine başlayınca true, ShowDraft() çalışmaya başlayınca false.
+        /// RoomClearSequence hem IsDraftPending hem IsDraftActive'i bekler.
+        /// </summary>
+        public bool IsDraftPending { get; private set; }
+
         public UnityEvent<SkillData> OnSkillPicked = new UnityEvent<SkillData>();
 
         /// <summary>
@@ -91,7 +99,13 @@ namespace RIMA
             if (PlayerClassManager.Instance != null)
                 PlayerClassManager.Instance.OnSecondaryClassSelected += _ =>
                 {
-                    offerGenerator.nextDraftIsUnlock = true;
+                    // Auto-created instances (DraftManager_Auto) have no serialized refs yet —
+                    // resolve them here, not just in ShowDraft(), or this lambda NREs and the
+                    // unlock draft never opens.
+                    EnsureDependencies();
+                    if (offerGenerator != null)
+                        offerGenerator.nextDraftIsUnlock = true;
+                    IsDraftPending = true;   // flag raised before the 2 s delay so WaitWhile sees it immediately
                     StartCoroutine(ShowDraftDelayed(2f));
                 };
         }
@@ -154,6 +168,7 @@ namespace RIMA
         /// <summary> Oda temizlendikten veya boss yenildikten sonra çağrılır. </summary>
         public void ShowDraft()
         {
+            IsDraftPending = false;  // delay penceresi kapandı; aktif durum IsDraftActive'e devredildi
             EnsureDependencies();
             if (offerGenerator == null || offerUI == null)
             {

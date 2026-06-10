@@ -1,7 +1,10 @@
+using System;
+using System.Reflection;
 using NUnit.Framework;
 using RIMA.MapDesigner.Room.Runtime;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Object = UnityEngine.Object;
 
 namespace RIMA.Tests.Room
 {
@@ -172,6 +175,73 @@ namespace RIMA.Tests.Room
 
             Assert.AreEqual(ClassType.None, manager.SecondaryClass,
                 "SelectSecondaryClass must reject ClassType equal to PrimaryClass.");
+
+            Object.DestroyImmediate(go);
+        }
+
+        // ── Unlock-draft race condition contract tests ───────────────────────────
+
+        [Test]
+        [Category("Contract")]
+        public void DraftManager_HasIsDraftPendingProperty_PublicReadable()
+        {
+            // Contract: IsDraftPending must exist as a public bool property so
+            // RoomClearSequence can include the 2 s ShowDraftDelayed window in its wait.
+            // Without this property the race condition (door opens before draft appears) recurs.
+            Assembly rimaAssembly = null;
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (asm.GetType("RIMA.DraftManager") != null)
+                {
+                    rimaAssembly = asm;
+                    break;
+                }
+            }
+            Assert.IsNotNull(rimaAssembly, "Could not locate RIMA runtime assembly.");
+
+            var type = rimaAssembly.GetType("RIMA.DraftManager");
+            Assert.IsNotNull(type, "RIMA.DraftManager not found.");
+
+            var prop = type.GetProperty("IsDraftPending", BindingFlags.Public | BindingFlags.Instance);
+            Assert.IsNotNull(prop,
+                "DraftManager.IsDraftPending public property not found. " +
+                "This property bridges the 2 s ShowDraftDelayed gap so RoomClearSequence " +
+                "waits for the unlock draft before opening the exit door.");
+            Assert.AreEqual(typeof(bool), prop.PropertyType,
+                "DraftManager.IsDraftPending must be bool.");
+        }
+
+        [Test]
+        [Category("Contract")]
+        public void DraftManager_IsDraftPending_DefaultsFalse()
+        {
+            // A newly created DraftManager (no MonoBehaviour lifecycle) must start with
+            // IsDraftPending = false so the WaitWhile loop exits immediately on a fresh run.
+            Assembly rimaAssembly = null;
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (asm.GetType("RIMA.DraftManager") != null)
+                {
+                    rimaAssembly = asm;
+                    break;
+                }
+            }
+            Assert.IsNotNull(rimaAssembly, "Could not locate RIMA runtime assembly.");
+
+            var type = rimaAssembly.GetType("RIMA.DraftManager");
+            Assert.IsNotNull(type, "RIMA.DraftManager not found.");
+
+            var go = new GameObject("DraftManager_ContractTest");
+            var dm = go.AddComponent(type) as MonoBehaviour;
+            Assert.IsNotNull(dm, "Could not add DraftManager as MonoBehaviour.");
+
+            var prop = type.GetProperty("IsDraftPending", BindingFlags.Public | BindingFlags.Instance);
+            Assert.IsNotNull(prop, "IsDraftPending property missing — run preceding test first.");
+
+            bool value = (bool)prop.GetValue(dm);
+            Assert.IsFalse(value,
+                "DraftManager.IsDraftPending must be false on a fresh instance. " +
+                "A true default would cause RoomClearSequence to stall forever.");
 
             Object.DestroyImmediate(go);
         }

@@ -947,10 +947,28 @@ namespace RIMA.MapDesigner.Room.Runtime
                         PlayerClassManager.Instance == null ||
                         PlayerClassManager.Instance.SecondaryClass != ClassType.None);
 
-                    // Wait for the unlock draft (opened by DraftManager on OnSecondaryClassSelected)
-                    // to close before opening the exit door.
-                    yield return new WaitWhile(() =>
-                        DraftManager.Instance != null && DraftManager.Instance.IsDraftActive);
+                    // Wait for the unlock draft to fully complete before opening the exit door.
+                    // IsDraftPending covers the 2 s ShowDraftDelayed window (race condition fix):
+                    // secondary class is selected → IsDraftPending=true → 2 s later ShowDraft()
+                    // runs → IsDraftPending=false, IsDraftActive=true → player picks → IsDraftActive=false.
+                    // Without IsDraftPending the old WaitWhile(IsDraftActive) would pass immediately
+                    // because IsDraftActive is still false during the delay, opening the door too early.
+                    // Timeout mirrors DraftAutoCloseTimeoutSec so this wait can never softlock the run.
+                    {
+                        float unlockDraftTimer = 0f;
+                        while (DraftManager.Instance != null &&
+                               (DraftManager.Instance.IsDraftPending || DraftManager.Instance.IsDraftActive))
+                        {
+                            unlockDraftTimer += Time.unscaledDeltaTime;
+                            if (unlockDraftTimer >= DraftAutoCloseTimeoutSec)
+                            {
+                                Debug.LogWarning($"[RoomRunDirector] Unlock draft not closed after {DraftAutoCloseTimeoutSec}s — force-closing to unblock run (node={CurrentNodeId}).");
+                                DraftManager.Instance.HideDraft();
+                                break;
+                            }
+                            yield return null;
+                        }
+                    }
                 }
 
                 // ── Run-complete check (post-boss Combat terminal node) ────────────────
