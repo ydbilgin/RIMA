@@ -282,6 +282,8 @@ namespace RIMA.Editor.MapDesigner
                         if (template == null) continue;
 
                         string path = AssetDatabase.GetAssetPath(template);
+                        // Boş path (import/build anı) Mono'da Path.GetDirectoryName'de ArgumentException üretir.
+                        if (string.IsNullOrEmpty(path)) continue;
                         if (!MatchesRoomSearch(template, path)) continue;
 
                         string folder = Path.GetDirectoryName(path)?.Replace('\\', '/');
@@ -428,7 +430,7 @@ namespace RIMA.Editor.MapDesigner
             IReadOnlyList<PropDefinitionSO> pool = RoomTemplateAutoPropsUtility.LoadPropPool();
             if (pool == null || pool.Count == 0)
             {
-                EditorUtility.DisplayDialog("Auto Props", "No prop pool found. Check Assets/Data/Props/PropRegistry.asset.", "OK");
+                EditorUtility.DisplayDialog("Auto Props", "No prop pool found. Check Assets/Resources/Props/PropRegistry.asset.", "OK");
                 return;
             }
 

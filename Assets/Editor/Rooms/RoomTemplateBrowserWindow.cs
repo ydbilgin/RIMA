@@ -61,6 +61,9 @@ namespace RIMA.EditorTools
             foreach (var template in templates)
             {
                 string path = AssetDatabase.GetAssetPath(template);
+                // GetAssetPath, asset import/build sırasında geçici olarak "" dönebilir;
+                // Mono'da Path.GetDirectoryName("") ArgumentException fırlatır → GUILayout state bozulur.
+                if (string.IsNullOrEmpty(path)) continue;
                 if (!string.IsNullOrEmpty(search) &&
                     !template.name.ToLowerInvariant().Contains(search.ToLowerInvariant()))
                 {
