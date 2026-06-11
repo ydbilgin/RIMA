@@ -177,6 +177,24 @@ namespace RIMA
             { "victory.btn.play_again",     "TEKRAR OYNA" },
             { "victory.stats.summary",      "ODA: {0}    LEŞ: {1}    SÜRE: {2}" },
 
+            // Director Mode
+            { "director.stats.title",       "STATS" },
+            { "director.stats.hint",        "Canlı ClassStatRuntime düzenleme" },
+            { "director.stats.maxHP",       "MAKS CAN" },
+            { "director.stats.physPower",   "FİZİKSEL GÜÇ" },
+            { "director.stats.abilityPower","YETENEK GÜCÜ" },
+            { "director.stats.attackSpeedMult", "SALDIRI HIZI" },
+            { "director.stats.moveSpeed",   "HAREKET HIZI" },
+            { "director.stats.debugGlobalDamageMult", "DEBUG HASAR ÇARPANI" },
+            { "director.stats.reset",       "RESET" },
+            { "director.stats.save",        "SAVE" },
+            { "director.stats.export",      "EXPORT" },
+            { "director.stats.status.live", "{0} runtime canlı" },
+            { "director.stats.status.reset","{0} profil değerlerine döndü" },
+            { "director.stats.status.saved","{0} preset kaydedildi" },
+            { "director.stats.status.exported","{0} JSON panoya kopyalandı" },
+            { "director.stats.status.no_manager","PlayerClassManager yok" },
+
             // Kodeks
             { "codex.title",                "YETENEK KODEKSİ" },
             { "codex.empty",                "BU SINIF İÇİN KAYITLI YETENEK YOK" },
@@ -299,6 +317,24 @@ namespace RIMA
             { "victory.btn.main_menu",      "MAIN MENU" },
             { "victory.btn.play_again",     "PLAY AGAIN" },
             { "victory.stats.summary",      "CHAMBER: {0}    KILLS: {1}    TIME: {2}" },
+
+            // Director Mode
+            { "director.stats.title",       "STATS" },
+            { "director.stats.hint",        "Live ClassStatRuntime editing" },
+            { "director.stats.maxHP",       "MAX HP" },
+            { "director.stats.physPower",   "PHYS POWER" },
+            { "director.stats.abilityPower","ABILITY POWER" },
+            { "director.stats.attackSpeedMult", "ATTACK SPEED" },
+            { "director.stats.moveSpeed",   "MOVE SPEED" },
+            { "director.stats.debugGlobalDamageMult", "DEBUG DAMAGE MULT" },
+            { "director.stats.reset",       "RESET" },
+            { "director.stats.save",        "SAVE" },
+            { "director.stats.export",      "EXPORT" },
+            { "director.stats.status.live", "{0} runtime live" },
+            { "director.stats.status.reset","{0} reset to profile" },
+            { "director.stats.status.saved","{0} preset saved" },
+            { "director.stats.status.exported","{0} JSON copied to clipboard" },
+            { "director.stats.status.no_manager","PlayerClassManager missing" },
 
             // Codex
             { "codex.title",                "SKILL CODEX" },

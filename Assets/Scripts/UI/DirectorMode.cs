@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using RIMA.Balance;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -49,14 +51,18 @@ namespace RIMA
 
         private readonly List<TabBinding> tabs = new List<TabBinding>();
         private readonly Dictionary<DirectorTab, CanvasGroup> panels = new Dictionary<DirectorTab, CanvasGroup>();
+        private readonly List<StatSliderBinding> statSliders = new List<StatSliderBinding>();
+        private readonly List<LocalizedTextBinding> localizedTexts = new List<LocalizedTextBinding>();
 
         private CanvasGroup rootGroup;
         private TextMeshProUGUI subtitleText;
         private TextMeshProUGUI startButtonText;
         private TextMeshProUGUI modeStripText;
+        private TextMeshProUGUI statsStatusText;
         private Camera directorCamera;
         private Vector3 targetCameraPosition;
         private bool hasCameraTarget;
+        private bool suppressStatSliderCallbacks;
 
         public DirectorModeState State { get; private set; } = DirectorModeState.Test;
         public DirectorTab ActiveTab { get; private set; } = DirectorTab.Spawn;
@@ -85,13 +91,16 @@ namespace RIMA
             Instance = this;
             LoadEditorSkin();
             BuildOverlay();
+            Loc.OnLanguageChanged += RefreshLocalizedText;
+            RefreshLocalizedText();
             SetState(DirectorModeState.Test);
             ShowTab(DirectorTab.Spawn);
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.BackQuote))
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.backquoteKey.wasPressedThisFrame)
             {
                 ToggleState();
             }
@@ -107,6 +116,21 @@ namespace RIMA
             if (Instance == this)
             {
                 Instance = null;
+            }
+
+            Loc.OnLanguageChanged -= RefreshLocalizedText;
+        }
+
+        private void OnEnable()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+
+            if (rootGroup == null || panels.Count == 0 || tabs.Count == 0)
+            {
+                RebuildOverlayRuntime();
             }
         }
 
@@ -157,6 +181,11 @@ namespace RIMA
                 group.blocksRaycasts = active;
             }
 
+            if (tab == DirectorTab.Stats)
+            {
+                RefreshStatsSlidersFromRuntime();
+            }
+
             OnTabChanged?.Invoke(tab);
         }
 
@@ -188,11 +217,17 @@ namespace RIMA
 
         private void UpdateFreeCamera(float dt)
         {
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null)
+            {
+                return;
+            }
+
             Vector2 input = Vector2.zero;
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) input.y += 1f;
-            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) input.y -= 1f;
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) input.x += 1f;
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) input.x -= 1f;
+            if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) input.y += 1f;
+            if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) input.y -= 1f;
+            if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) input.x += 1f;
+            if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) input.x -= 1f;
 
             MoveCameraTarget(input, dt);
             ApplyCameraLerp(dt);
@@ -291,6 +326,33 @@ namespace RIMA
             BuildBottomTelemetryStrip(root);
         }
 
+        private void RebuildOverlayRuntime()
+        {
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                Transform child = transform.GetChild(i);
+                if (child.name == "Canvas_DirectorOverlay")
+                {
+                    DestroyImmediate(child.gameObject);
+                }
+            }
+
+            tabs.Clear();
+            panels.Clear();
+            statSliders.Clear();
+            localizedTexts.Clear();
+            rootGroup = null;
+            statsStatusText = null;
+
+            LoadEditorSkin();
+            BuildOverlay();
+            Loc.OnLanguageChanged -= RefreshLocalizedText;
+            Loc.OnLanguageChanged += RefreshLocalizedText;
+            RefreshLocalizedText();
+            ApplyStateText();
+            ShowTab(ActiveTab);
+        }
+
         private void BuildTopBadge(RectTransform root)
         {
             RectTransform badge = CreatePanel("TopBadge", root, ribbonBase, new Color(0.48f, 0.18f, 0.06f, 0.92f), Image.Type.Sliced);
@@ -361,7 +423,7 @@ namespace RIMA
 
             AddEmptyPanel(content, DirectorTab.Spawn, "SPAWN", "yakinda");
             AddEmptyPanel(content, DirectorTab.ClassSkill, "CLASS & SKILL", "yakinda");
-            AddEmptyPanel(content, DirectorTab.Stats, "STATS", "yakinda");
+            AddStatsPanel(content);
             AddEmptyPanel(content, DirectorTab.Build, "BUILD", "yakinda");
             AddEmptyPanel(content, DirectorTab.Map, "MAP", "yakinda");
             AddEmptyPanel(content, DirectorTab.Telemetry, "TELEMETRY", "yakinda");
@@ -393,6 +455,247 @@ namespace RIMA
             TextMeshProUGUI footer = CreateText("FooterModeText", panel, "PLACE / ERASE / PAINT / INSPECT", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
             footer.color = new Color(1f, 0.55f, 0.18f, 0.88f);
             Anchor(footer.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 22f), new Vector2(-80f, 28f));
+        }
+
+        private void AddStatsPanel(RectTransform parent)
+        {
+            RectTransform panel = CreateFill("Panel_" + DirectorTab.Stats, parent);
+            CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
+            panels[DirectorTab.Stats] = group;
+
+            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            RectTransform header = CreateFill("Header", panel);
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.stats.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            localizedTexts.Add(new LocalizedTextBinding(titleText, "director.stats.title"));
+
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.stats.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            localizedTexts.Add(new LocalizedTextBinding(hint, "director.stats.hint"));
+
+            RectTransform rows = CreatePanel("StatsRows", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
+            Anchor(rows, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(860f, 390f));
+
+            VerticalLayoutGroup layout = rows.gameObject.AddComponent<VerticalLayoutGroup>();
+            layout.padding = new RectOffset(18, 18, 18, 18);
+            layout.spacing = 12f;
+            layout.childAlignment = TextAnchor.UpperLeft;
+            layout.childControlHeight = false;
+            layout.childControlWidth = true;
+            layout.childForceExpandHeight = false;
+            layout.childForceExpandWidth = true;
+
+            AddStatRow(rows, "maxHP", "director.stats.maxHP", 1f, 300f, true, HtmlColor("#C82026"), s => s.maxHP, (s, v) => s.maxHP = Mathf.RoundToInt(v));
+            AddStatRow(rows, "physPower", "director.stats.physPower", 0f, 300f, false, HtmlColor("#E89020"), s => s.physPower, (s, v) => s.physPower = v);
+            AddStatRow(rows, "abilityPower", "director.stats.abilityPower", 0f, 300f, false, HtmlColor("#E89020"), s => s.abilityPower, (s, v) => s.abilityPower = v);
+            AddStatRow(rows, "attackSpeedMult", "director.stats.attackSpeedMult", 0.25f, 3f, false, HtmlColor("#00FFCC"), s => s.attackSpeedMult, (s, v) => s.attackSpeedMult = v);
+            AddStatRow(rows, "moveSpeed", "director.stats.moveSpeed", 0f, 12f, false, HtmlColor("#00FFCC"), s => s.moveSpeed, (s, v) => s.moveSpeed = v);
+            AddStatRow(rows, "debugGlobalDamageMult", "director.stats.debugGlobalDamageMult", 0f, 5f, false, HtmlColor("#E89020"), s => s.debugGlobalDamageMult, (s, v) => s.debugGlobalDamageMult = v);
+
+            RectTransform actions = CreateFill("StatsActions", panel);
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 74f), new Vector2(640f, 54f));
+
+            Button reset = CreateButton("Button_ResetStats", actions, menuButton, Color.white);
+            Anchor(reset.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(150f, 42f));
+            reset.onClick.AddListener(ResetStatsFromProfile);
+            AddButtonText(reset, "director.stats.reset");
+
+            Button save = CreateButton("Button_SaveStats", actions, menuButton, Color.white);
+            Anchor(save.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(170f, 0f), new Vector2(150f, 42f));
+            save.onClick.AddListener(SaveStatsPreset);
+            AddButtonText(save, "director.stats.save");
+
+            Button export = CreateButton("Button_ExportStats", actions, ribbonBase, new Color(0.80f, 0.34f, 0.09f, 1f));
+            Anchor(export.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(340f, 0f), new Vector2(200f, 48f));
+            export.onClick.AddListener(ExportStatsJson);
+            AddButtonText(export, "director.stats.export");
+
+            statsStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            statsStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Anchor(statsStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+
+            RefreshStatsSlidersFromRuntime();
+        }
+
+        private void AddStatRow(RectTransform parent, string statKey, string locKey, float minValue, float maxValue, bool wholeNumbers, Color color, Func<ClassStatRuntime, float> read, Action<ClassStatRuntime, float> write)
+        {
+            RectTransform row = CreateFill("Row_" + statKey, parent);
+            row.sizeDelta = new Vector2(0f, 44f);
+            LayoutElement layout = row.gameObject.AddComponent<LayoutElement>();
+            layout.preferredHeight = 44f;
+            layout.minHeight = 44f;
+
+            TextMeshProUGUI label = CreateText("TMP_Label", row, Loc.T(locKey), 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            label.color = color;
+            Anchor(label.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(240f, 34f));
+            localizedTexts.Add(new LocalizedTextBinding(label, locKey));
+
+            Slider slider = CreateStatSlider(row, statKey, minValue, maxValue, wholeNumbers, color);
+            Anchor(slider.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(260f, 0f), new Vector2(410f, 32f));
+
+            TextMeshProUGUI valueText = CreateText("TMP_Value", row, "", 20f, FontStyles.Bold, TextAlignmentOptions.MidlineRight);
+            Anchor(valueText.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(690f, 0f), new Vector2(110f, 34f));
+
+            StatSliderBinding binding = new StatSliderBinding(statKey, slider, valueText, read, write);
+            statSliders.Add(binding);
+            slider.onValueChanged.AddListener(value => OnStatSliderChanged(binding, value));
+        }
+
+        private Slider CreateStatSlider(RectTransform parent, string statKey, float minValue, float maxValue, bool wholeNumbers, Color fillColor)
+        {
+            RectTransform root = CreateFill("Slider_" + statKey, parent);
+
+            Image background = CreateImage("Background", root, null, new Color(0.06f, 0.07f, 0.09f, 0.95f), Image.Type.Simple);
+            Stretch(background.rectTransform, Vector2.zero, Vector2.one, new Vector2(0f, 10f), new Vector2(0f, -10f));
+
+            RectTransform fillArea = CreateFill("Fill Area", root);
+            Stretch(fillArea, Vector2.zero, Vector2.one, new Vector2(0f, 10f), new Vector2(0f, -10f));
+            Image fill = CreateImage("Fill", fillArea, null, fillColor, Image.Type.Simple);
+            Stretch(fill.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            RectTransform handleArea = CreateFill("Handle Slide Area", root);
+            Stretch(handleArea, Vector2.zero, Vector2.one, new Vector2(0f, 2f), new Vector2(0f, -2f));
+            Image handle = CreateImage("Handle", handleArea, null, new Color(0.96f, 0.94f, 0.86f, 1f), Image.Type.Simple);
+            Anchor(handle.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(18f, 28f));
+
+            Slider slider = root.gameObject.AddComponent<Slider>();
+            slider.minValue = minValue;
+            slider.maxValue = maxValue;
+            slider.wholeNumbers = wholeNumbers;
+            slider.targetGraphic = handle;
+            slider.fillRect = fill.rectTransform;
+            slider.handleRect = handle.rectTransform;
+            slider.direction = Slider.Direction.LeftToRight;
+            return slider;
+        }
+
+        private void AddButtonText(Button button, string locKey)
+        {
+            TextMeshProUGUI label = CreateText("TMP", button.transform as RectTransform, Loc.T(locKey), 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            localizedTexts.Add(new LocalizedTextBinding(label, locKey));
+        }
+
+        private void OnStatSliderChanged(StatSliderBinding binding, float value)
+        {
+            if (suppressStatSliderCallbacks)
+            {
+                return;
+            }
+
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                SetStatsStatus("director.stats.status.no_manager");
+                return;
+            }
+
+            ClassStatRuntime stats = manager.EnsureCurrentPrimaryStats();
+            binding.Write(stats, value);
+            manager.ApplyCurrentPrimaryStatsToPlayer();
+            binding.SetValueText(binding.Read(stats));
+            SetStatsStatus("director.stats.status.live", manager.PrimaryClass);
+        }
+
+        private void RefreshStatsSlidersFromRuntime()
+        {
+            if (statSliders.Count == 0)
+            {
+                return;
+            }
+
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                SetStatsStatus("director.stats.status.no_manager");
+                return;
+            }
+
+            ClassStatRuntime stats = manager.EnsureCurrentPrimaryStats();
+            suppressStatSliderCallbacks = true;
+            foreach (StatSliderBinding binding in statSliders)
+            {
+                float value = binding.Read(stats);
+                binding.Slider.SetValueWithoutNotify(value);
+                binding.SetValueText(value);
+            }
+            suppressStatSliderCallbacks = false;
+            SetStatsStatus("director.stats.status.live", manager.PrimaryClass);
+        }
+
+        private void ResetStatsFromProfile()
+        {
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                SetStatsStatus("director.stats.status.no_manager");
+                return;
+            }
+
+            manager.ResetCurrentPrimaryStatsFromProfile();
+            RefreshStatsSlidersFromRuntime();
+            SetStatsStatus("director.stats.status.reset", manager.PrimaryClass);
+        }
+
+        private void SaveStatsPreset()
+        {
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                SetStatsStatus("director.stats.status.no_manager");
+                return;
+            }
+
+            ClassStatRuntime stats = manager.EnsureCurrentPrimaryStats();
+            string json = JsonUtility.ToJson(stats);
+            PlayerPrefs.SetString("rima.director.stats." + manager.PrimaryClass, json);
+            PlayerPrefs.Save();
+            Debug.Log("[DirectorMode] Saved Stats preset: " + json);
+            SetStatsStatus("director.stats.status.saved", manager.PrimaryClass);
+        }
+
+        private void ExportStatsJson()
+        {
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                SetStatsStatus("director.stats.status.no_manager");
+                return;
+            }
+
+            string json = JsonUtility.ToJson(manager.EnsureCurrentPrimaryStats(), true);
+            GUIUtility.systemCopyBuffer = json;
+            Debug.Log("[DirectorMode] Stats export: " + json);
+            SetStatsStatus("director.stats.status.exported", manager.PrimaryClass);
+        }
+
+        private void SetStatsStatus(string locKey, params object[] args)
+        {
+            if (statsStatusText != null)
+            {
+                statsStatusText.text = args != null && args.Length > 0 ? Loc.T(locKey, args) : Loc.T(locKey);
+            }
+        }
+
+        private void RefreshLocalizedText()
+        {
+            foreach (LocalizedTextBinding binding in localizedTexts)
+            {
+                if (binding.Text != null)
+                {
+                    binding.Text.text = Loc.T(binding.Key);
+                }
+            }
+        }
+
+        private static Color HtmlColor(string html)
+        {
+            return ColorUtility.TryParseHtmlString(html, out Color color) ? color : Color.white;
         }
 
         private void BuildWorldCursorOverlay(RectTransform root)
@@ -520,6 +823,48 @@ namespace RIMA
             menuButton = menuButton != null ? menuButton : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/menu_button.png");
             tooltipBox = tooltipBox != null ? tooltipBox : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/tooltip_box.png");
 #endif
+        }
+
+        private sealed class StatSliderBinding
+        {
+            public readonly string Key;
+            public readonly Slider Slider;
+            public readonly TextMeshProUGUI ValueText;
+            public readonly Func<ClassStatRuntime, float> Read;
+            public readonly Action<ClassStatRuntime, float> Write;
+
+            public StatSliderBinding(string key, Slider slider, TextMeshProUGUI valueText, Func<ClassStatRuntime, float> read, Action<ClassStatRuntime, float> write)
+            {
+                Key = key;
+                Slider = slider;
+                ValueText = valueText;
+                Read = read;
+                Write = write;
+            }
+
+            public void SetValueText(float value)
+            {
+                if (ValueText == null)
+                {
+                    return;
+                }
+
+                ValueText.text = Slider != null && Slider.wholeNumbers
+                    ? Mathf.RoundToInt(value).ToString()
+                    : value.ToString("0.##");
+            }
+        }
+
+        private readonly struct LocalizedTextBinding
+        {
+            public readonly TextMeshProUGUI Text;
+            public readonly string Key;
+
+            public LocalizedTextBinding(TextMeshProUGUI text, string key)
+            {
+                Text = text;
+                Key = key;
+            }
         }
 
         private readonly struct TabBinding

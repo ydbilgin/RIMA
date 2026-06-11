@@ -30,6 +30,12 @@ namespace RIMA
             Instance = this;
         }
 
+        private void OnEnable()
+        {
+            if (Instance == null)
+                Instance = this;
+        }
+
         private void Start()
         {
             if (applyPrimaryOnStart)
@@ -164,13 +170,47 @@ namespace RIMA
             if (profile == null) return;
 
             CurrentPrimaryStats = profile.CreateRuntimeCopy();
+            ApplyCurrentPrimaryStatsToPlayer(player);
+        }
 
-            player.GetComponent<PlayerStats>()?.SetMaxHP(CurrentPrimaryStats.maxHP);
+        public ClassStatRuntime EnsureCurrentPrimaryStats()
+        {
+            if (CurrentPrimaryStats != null && !ReferenceEquals(CurrentPrimaryStats, ClassStatRuntime.Neutral))
+                return CurrentPrimaryStats;
+
+            ClassStatProfile profile = ResolveClassStatDatabase()?.GetProfile(PrimaryClass);
+            CurrentPrimaryStats = profile != null ? profile.CreateRuntimeCopy() : new ClassStatRuntime { classType = PrimaryClass };
+            return CurrentPrimaryStats;
+        }
+
+        public void ApplyCurrentPrimaryStatsToPlayer()
+        {
+            ApplyCurrentPrimaryStatsToPlayer(GameObject.FindGameObjectWithTag("Player"));
+        }
+
+        public void ApplyCurrentPrimaryStatsToPlayer(GameObject player)
+        {
+            if (player == null) return;
+
+            EnsureCurrentPrimaryStats();
+            AddIfMissing<PlayerStats>(player).SetMaxHP(CurrentPrimaryStats.maxHP);
             player.GetComponent<PlayerController>()?.SetMoveSpeed(CurrentPrimaryStats.moveSpeed);
 
             var attack = player.GetComponent<PlayerAttack>();
             if (attack != null)
                 attack.attackSpeedMult = CurrentPrimaryStats.attackSpeedMult;
+        }
+
+        public ClassStatRuntime ResetCurrentPrimaryStatsFromProfile()
+        {
+            ClassStatProfile profile = ResolveClassStatDatabase()?.GetProfile(PrimaryClass);
+            if (profile != null)
+                CurrentPrimaryStats = profile.CreateRuntimeCopy();
+            else
+                CurrentPrimaryStats = new ClassStatRuntime { classType = PrimaryClass };
+
+            ApplyCurrentPrimaryStatsToPlayer();
+            return CurrentPrimaryStats;
         }
 
         private ClassStatDatabase ResolveClassStatDatabase()
