@@ -51,6 +51,7 @@ MonoBehaviour:
   - safe
   difficultyTags: []
   blockerTags: []
+  lightingProfile: {fileID: 0}
   props:
   - propDefinitionGuid: b50be24c830a450ba0ccd36625e57c31
     tilePosition: {x: 2, y: 5}

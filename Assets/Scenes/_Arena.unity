@@ -491,6 +491,10 @@ MonoBehaviour:
   propRegistry: {fileID: 11400000, guid: 689a397c1f24cea45a647679894d5ba9, type: 2}
   propsContainer: {fileID: 2057430149}
   spawnProps: 1
+  enableAutoDecoration: 0
+  decorationRegistry: {fileID: 0}
+  decorationsContainer: {fileID: 0}
+  lightingContainer: {fileID: 0}
   gatesContainer: {fileID: 656218086}
   gateNorthSprite: {fileID: 21300000, guid: 50adff2905201df4497f4003a57b2de2, type: 3}
   gateWestSprite: {fileID: 21300000, guid: f84d5b0e194f16b409c93c21e87e71cf, type: 3}
@@ -1002,8 +1006,8 @@ MonoBehaviour:
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.4
+  m_Color: {r: 0.62, g: 0.66, b: 0.74, a: 1}
+  m_Intensity: 0.22
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000c152ab78203fe36d018c8647352e60231d371d4dc8000000028c86470000000064442a27038c8647048c8647058c8647068c8647
@@ -1914,7 +1918,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 596ea5bc9f8704e459aed8db3bb357d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

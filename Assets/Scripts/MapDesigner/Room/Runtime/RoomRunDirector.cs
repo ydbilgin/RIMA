@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RIMA.Background;
 using RIMA.Encounter;
 using RIMA.MapDesigner.Room.Data;
 using RIMA.Shop;
@@ -179,6 +180,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             StopClearSequences();
             DestroyActiveReward();
             ClearActiveEnemies();
+            BuildPersistentBackgroundIfPresent();
 
             if (forceDemoSequence)
             {
@@ -201,6 +203,15 @@ namespace RIMA.MapDesigner.Room.Runtime
             if (Application.isPlaying && isActiveAndEnabled)
             {
                 StartCoroutine(OpeningKitDraftSequence());
+            }
+        }
+
+        private static void BuildPersistentBackgroundIfPresent()
+        {
+            PersistentBackgroundController background = FindObjectOfType<PersistentBackgroundController>();
+            if (background != null)
+            {
+                background.BuildIfEnabled();
             }
         }
 

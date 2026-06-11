@@ -68,6 +68,7 @@ MonoBehaviour:
   - elite
   difficultyTags: []
   blockerTags: []
+  lightingProfile: {fileID: 11400000, guid: 671ce35cbec8bc04fa7d83d01468e9fb, type: 2}
   props:
   - propDefinitionGuid: 4193dd8caa840684fb876815e3780064
     tilePosition: {x: 2, y: 15}

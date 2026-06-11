@@ -5,6 +5,7 @@ using RIMA.MapDesigner.Props;
 using RIMA.MapDesigner.Props.Runtime;
 using RIMA.MapDesigner.Room.Data;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 namespace RIMA.MapDesigner.Room.Runtime
@@ -36,6 +37,14 @@ namespace RIMA.MapDesigner.Room.Runtime
         [Tooltip("When false, template props are skipped entirely: no prop objects AND no prop-footprint floor support cells (floor + cliff only). RoomRunDirector turns this off for Combat/Elite rooms — prop clusters at the spawn were soft-locking the player against the south cliff.")]
         public bool spawnProps = true;
 
+        [Header("Auto Decoration (visual-only)")]
+        [SerializeField] private bool enableAutoDecoration = false;
+        [SerializeField] private PropRegistrySO decorationRegistry;
+        [SerializeField] private Transform decorationsContainer;
+
+        [Header("Lighting")]
+        [SerializeField] private Transform lightingContainer;
+
         [Header("Door Gates")]
         [SerializeField] private Transform gatesContainer;
         [SerializeField] private Sprite gateNorthSprite;
@@ -56,6 +65,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private float gateRowSpacing = 2.4f;
 
         private const string OverlayTilemapName = "OverlayTilemap";
+        private const string LightingContainerName = "Lighting";
 
         private static readonly Vector3Int SouthWestNeighbor = new Vector3Int(-1, 0, 0);
         private static readonly Vector3Int SouthEastNeighbor = new Vector3Int(0, -1, 0);
@@ -85,6 +95,11 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         public void Build(RoomTemplateSO template)
         {
+            Build(template, 0);
+        }
+
+        public void Build(RoomTemplateSO template, int runSeed)
+        {
             if (template == null)
             {
                 Debug.LogWarning("[IsoRoomBuilder] Cannot build null room template.");
@@ -113,9 +128,13 @@ namespace RIMA.MapDesigner.Room.Runtime
             int cliffCellCount = BuildCliffs(floorCells);
             BuildBoundary(template, floorCells);
             BuildMarkers(template);
+            ApplyLighting(template);
             int propCount = spawnProps ? BuildProps(template) : 0;
+            int decorationCount = (enableAutoDecoration && decorationRegistry != null)
+                ? RoomDecorationPass.Apply(template, floorCells, grid, decorationsContainer, decorationRegistry, runSeed)
+                : 0;
 
-            Debug.Log($"[IsoRoomBuilder] Built {template.roomId}: {floorCells.Count} floor, {overlayCellCount} overlay, {cliffCellCount} cliff, {propCount} props.");
+            Debug.Log($"[IsoRoomBuilder] Built {template.roomId}: {floorCells.Count} floor, {overlayCellCount} overlay, {cliffCellCount} cliff, {propCount} props, {decorationCount} decor.");
         }
 
         private bool ResolveRequiredReferences()
@@ -221,6 +240,16 @@ namespace RIMA.MapDesigner.Room.Runtime
                 propsContainer = CreateContainer("Props");
             }
 
+            if (decorationsContainer == null)
+            {
+                decorationsContainer = CreateContainer("Decorations");
+            }
+
+            if (lightingContainer == null)
+            {
+                lightingContainer = CreateContainer(LightingContainerName);
+            }
+
             if (gatesContainer == null)
             {
                 gatesContainer = CreateContainer("Gates");
@@ -243,6 +272,8 @@ namespace RIMA.MapDesigner.Room.Runtime
             DestroyChildren(cliffContainer);
             DestroyChildren(markerContainer);
             DestroyChildren(propsContainer);
+            DestroyChildren(decorationsContainer);
+            DestroyChildren(lightingContainer);
             DestroyChildren(gatesContainer);
         }
 
@@ -620,6 +651,57 @@ namespace RIMA.MapDesigner.Room.Runtime
             Vector3 markerCenter = grid.GetCellCenterWorld(new Vector3Int(tilePosition.x, tilePosition.y, 0));
             marker.transform.position = new Vector3(markerCenter.x, markerCenter.y, 0f);
             return marker;
+        }
+
+        private void ApplyLighting(RoomTemplateSO template)
+        {
+            RoomLightingProfileSO profile = template != null ? template.lightingProfile : null;
+            if (profile == null)
+            {
+                return;
+            }
+
+            GameObject globalObject = new GameObject("Global Light 2D");
+            globalObject.transform.SetParent(lightingContainer, false);
+            Light2D globalLight = globalObject.AddComponent<Light2D>();
+            globalLight.lightType = Light2D.LightType.Global;
+            globalLight.color = profile.globalColor;
+            globalLight.intensity = Mathf.Max(0f, profile.globalIntensity);
+
+            if (profile.pointLights == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < profile.pointLights.Count; i++)
+            {
+                RoomLightingProfileSO.PointLightSpec spec = profile.pointLights[i];
+                if (spec == null)
+                {
+                    continue;
+                }
+
+                GameObject lightObject = new GameObject($"Point Light 2D {i + 1}");
+                lightObject.transform.SetParent(lightingContainer, false);
+                lightObject.transform.position = ResolveLightingWorldPosition(template.bounds, spec.normalizedRoomPosition);
+
+                Light2D pointLight = lightObject.AddComponent<Light2D>();
+                pointLight.lightType = Light2D.LightType.Point;
+                pointLight.color = spec.color;
+                pointLight.intensity = Mathf.Max(0f, spec.intensity);
+                pointLight.pointLightOuterRadius = Mathf.Max(0.01f, spec.outerRadius);
+                pointLight.pointLightInnerRadius = Mathf.Clamp(spec.innerRadius, 0f, pointLight.pointLightOuterRadius);
+            }
+        }
+
+        private Vector3 ResolveLightingWorldPosition(RectInt bounds, Vector2 normalizedRoomPosition)
+        {
+            float normalizedX = Mathf.Clamp01(normalizedRoomPosition.x);
+            float normalizedY = Mathf.Clamp01(normalizedRoomPosition.y);
+            int tileX = bounds.xMin + Mathf.RoundToInt(normalizedX * Mathf.Max(0, bounds.width - 1));
+            int tileY = bounds.yMin + Mathf.RoundToInt(normalizedY * Mathf.Max(0, bounds.height - 1));
+            Vector3 center = grid.GetCellCenterWorld(new Vector3Int(tileX, tileY, 0));
+            return new Vector3(center.x, center.y, -1f);
         }
 
         public bool TryGetLastFloorWorldBounds(out Bounds bounds)

@@ -60,6 +60,7 @@ MonoBehaviour:
   - boss
   difficultyTags: []
   blockerTags: []
+  lightingProfile: {fileID: 11400000, guid: fe7bf177891fcc84aad66f7a0ce6a512, type: 2}
   props:
   - propDefinitionGuid: f39d32fa19793394dab9cda4a588e1fe
     tilePosition: {x: 2, y: 17}

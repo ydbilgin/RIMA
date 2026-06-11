@@ -76,6 +76,7 @@ MonoBehaviour:
   - combat
   difficultyTags: []
   blockerTags: []
+  lightingProfile: {fileID: 11400000, guid: 4bda5cf2eebe4d64b806222b4be8407a, type: 2}
   props:
   - propDefinitionGuid: c8d6352c766cc994495a3e58bddbe73a
     tilePosition: {x: 20, y: 16}

@@ -26,6 +26,9 @@ namespace RIMA.MapDesigner.Room.Data
         public List<string> difficultyTags = new List<string>();
         public List<string> blockerTags = new List<string>();
 
+        [Header("Lighting")]
+        public RoomLightingProfileSO lightingProfile;
+
         [Header("Props (Sprint 12)")]
         public List<RIMA.MapDesigner.Props.PropPlacementData> props = new List<RIMA.MapDesigner.Props.PropPlacementData>();
 
