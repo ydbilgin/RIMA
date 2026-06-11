@@ -35,27 +35,32 @@ namespace RIMA
         private const float ClassConfirmRadius = 1.7f;
         private const float DoorInteractRadius = 2.5f;
         private const float DummyInteractRadius = 1.6f;
-        private const int StandRowCount = 5;
-
-        [SerializeField, Min(1f)] private float chamberCameraFitMultiplier = 1.04f;
-        [SerializeField, Min(0f)] private float chamberCameraFitPadding = 0.35f;
-        [SerializeField, Min(1f)] private float chamberCameraMinimumOrthographicSize = 5.8f;
+        [SerializeField, Min(1f)] private float chamberCameraFitMultiplier = 1.08f;
+        [SerializeField, Min(0f)] private float chamberCameraFitPadding = 0.55f;
+        [SerializeField, Min(1f)] private float chamberCameraMinimumOrthographicSize = 6.2f;
         [SerializeField, Range(0.45f, 0.72f)] private float chamberPlayerScreenY = 0.60f;
-        // DEMO camera consistency: must match RoomRunDirector.fixedOrthographicSize (5.0) so the
-        // chamber -> _Arena transition has no zoom pop. (OVERLAP/DEMO Faz 1.)
-        [SerializeField, Range(2.8f, 7f)] private float chamberCameraOrthoSize = 5.0f;
+        // Chamber fit baseline; CalculateChamberCameraOrthoSize expands this when the crescent needs it.
+        [SerializeField, Range(2.8f, 8f)] private float chamberCameraOrthoSize = 6.2f;
         [SerializeField, Min(0f)] private float chamberGlobalLightIntensity = 1.10f;
         [SerializeField, Min(0f)] private float chamberFillLightIntensity = 0.35f;
         // FIX E: dummy scale and cell override (x=0,y=0 means use auto placement)
         [SerializeField] private Vector2Int chamberDummyCellOverride = new Vector2Int(0, 0);
         [SerializeField, Range(0.8f, 2.5f)] private float chamberDummyScale = 1.70f;
 
-        // DEMO LOCK (2026-06-10): only Warblade + Elementalist have ClassKits + controller-routing.
-        // Kit-less classes (Ranger, Shadowblade, Ronin, etc.) produce an empty skill bar and are
-        // excluded until their kits land. Expand when per-class kits are ready.
+        // DEMO LOCK (2026-06-10): all echoes are visible, but only Warblade + Elementalist
+        // can be selected until every class has a complete demo-safe kit.
         private static readonly ClassType[] ChamberClasses =
         {
-            ClassType.Warblade, ClassType.Elementalist,
+            ClassType.Warblade,
+            ClassType.Elementalist,
+            ClassType.Shadowblade,
+            ClassType.Ranger,
+            ClassType.Ravager,
+            ClassType.Ronin,
+            ClassType.Gunslinger,
+            ClassType.Brawler,
+            ClassType.Summoner,
+            ClassType.Hexer,
         };
 
         private static readonly Vector2Int ExitCell = new(14, 18);
@@ -286,7 +291,13 @@ namespace RIMA
                 highlightedClass = nearbyClass;
                 SetClassicOverlayVisible(classicTabOpen);
 
-                if (!IsUnlocked(nearbyClass))
+                if (!IsDemoSelectable(nearbyClass))
+                {
+                    ShowPrompt(Vector3.zero,
+                        $"{nearbyClass.ToString().ToUpperInvariant()} — Kilitli",
+                        PromptTint.Unaffordable);
+                }
+                else if (!IsUnlocked(nearbyClass))
                 {
                     int cost = UnlockCost(nearbyClass);
                     bool affordable = CanUnlock(nearbyClass);
@@ -571,54 +582,51 @@ namespace RIMA
             if (!TryGetFloorBounds(out int minX, out int maxX, out int minY, out int maxY))
             {
                 chamberSpawnCell = new Vector2Int(ExitCell.x, 6);
-                chamberDummyCell = new Vector2Int(ExitCell.x - 5, 9);
+                chamberDummyCell = new Vector2Int(ExitCell.x, 11);
                 BuildFallbackStationLayout();
                 return;
             }
 
-            int axisX = Mathf.Clamp(ExitCell.x, minX + 2, maxX - 2);
-            int frontY = minY + 4;
-            chamberSpawnCell = PickNearestWalkableCell(new Vector2Int(axisX, frontY), new HashSet<Vector2Int>(), 10);
+            int minU = minX - maxY;
+            int maxU = maxX - minY;
+            int minV = minX + minY;
+            int maxV = maxX + maxY;
+            int axisU = Mathf.RoundToInt((minU + maxU) * 0.5f);
+            int projectedWidth = Mathf.Max(12, maxU - minU + 1);
+            int projectedHeight = Mathf.Max(12, maxV - minV + 1);
+            int horizontalRadius = Mathf.Clamp(
+                Mathf.RoundToInt(projectedWidth * 0.30f),
+                12,
+                Mathf.Max(12, projectedWidth / 2 - 4));
+            int verticalRadius = Mathf.Clamp(
+                Mathf.RoundToInt(horizontalRadius * 0.50f),
+                5,
+                Mathf.Max(5, projectedHeight / 4));
+            int arcCenterV = Mathf.Clamp(maxV - 18, minV + 20, maxV - 10);
 
-            // FIX D: wider column offset — use ~25% of usable width, min 5 cells, max 7 cells.
-            // This spreads figures to use the full available floor so labels never overlap.
-            int usableWidth = Mathf.Max(10, maxX - minX + 1);
-            int columnOffset = Mathf.Clamp(Mathf.RoundToInt(usableWidth * 0.25f), 5, 7);
-            int firstRowY = Mathf.Max(chamberSpawnCell.y + 4, minY + 5);
-            int lastRowY = Mathf.Min(ExitCell.y - 3, maxY - 3);
-            if (lastRowY < firstRowY + StandRowCount - 1)
+            Vector2Int ProjectedToCell(int u, int v)
             {
-                firstRowY = Mathf.Clamp(minY + 4, minY + 1, maxY - StandRowCount - 2);
-                lastRowY = Mathf.Min(maxY - 3, firstRowY + (StandRowCount - 1) * 2);
+                int x = Mathf.RoundToInt((v + u) * 0.5f);
+                int y = Mathf.RoundToInt((v - u) * 0.5f);
+                return new Vector2Int(
+                    Mathf.Clamp(x, minX + 2, maxX - 2),
+                    Mathf.Clamp(y, minY + 2, maxY - 2));
             }
 
-            // Two straight columns, evenly spaced, deterministic.
-            // FIX 3a: EQUAL SPACING — compute ideal Y positions first, then snap X only.
-            // By locking each row's Y to the exact Lerp value, all rows have equal vertical gaps.
-            // We only snap X (left/right columns), never Y, so the column stays visually uniform.
-            HashSet<Vector2Int> reserved = new HashSet<Vector2Int> { chamberSpawnCell, ExitCell };
-            List<EchoStationLayout> leftLayouts = new List<EchoStationLayout>(StandRowCount);
-            List<EchoStationLayout> rightLayouts = new List<EchoStationLayout>(StandRowCount);
-            for (int row = 0; row < StandRowCount; row++)
+            HashSet<Vector2Int> reserved = new HashSet<Vector2Int> { ExitCell };
+            const float startDeg = 200f;
+            const float endDeg = 340f;
+            for (int i = 0; i < ChamberClasses.Length; i++)
             {
-                float k = StandRowCount <= 1 ? 0f : row / (float)(StandRowCount - 1);
-                int y = Mathf.RoundToInt(Mathf.Lerp(firstRowY, lastRowY, k));
-
-                // Snap X within the same row only — try ideal X first, then ±1 on X at same Y.
-                Vector2Int leftIdeal = new Vector2Int(axisX - columnOffset, y);
-                Vector2Int left = PickNearestWalkableSameRowY(leftIdeal, reserved, 5);
-                reserved.Add(left);
-                Vector2Int rightIdeal = new Vector2Int(axisX + columnOffset, y);
-                Vector2Int right = PickNearestWalkableSameRowY(rightIdeal, reserved, 5);
-                reserved.Add(right);
-
-                leftLayouts.Add(new EchoStationLayout(left));
-                rightLayouts.Add(new EchoStationLayout(right));
+                float t = ChamberClasses.Length <= 1 ? 0f : i / (float)(ChamberClasses.Length - 1);
+                float angle = Mathf.Lerp(startDeg, endDeg, t) * Mathf.Deg2Rad;
+                int targetU = axisU + Mathf.RoundToInt(horizontalRadius * Mathf.Cos(angle));
+                int targetV = arcCenterV + Mathf.RoundToInt(verticalRadius * Mathf.Sin(angle));
+                Vector2Int target = ProjectedToCell(targetU, targetV);
+                Vector2Int cell = PickNearestWalkableCell(target, reserved, 6);
+                stationLayouts.Add(new EchoStationLayout(cell));
+                reserved.Add(cell);
             }
-
-            // Left column = indices 0,2,4,6,8 ; right column = 1,3,5,7,9
-            stationLayouts.AddRange(leftLayouts);
-            stationLayouts.AddRange(rightLayouts);
 
             // FIX E: use Inspector override if set (non-zero), else auto-place.
             if (chamberDummyCellOverride.x != 0 || chamberDummyCellOverride.y != 0)
@@ -627,39 +635,39 @@ namespace RIMA
             }
             else
             {
-                // Collect all station cell positions so we can enforce a hard clearance gap.
-                List<Vector2Int> allStationCells = new List<Vector2Int>(stationLayouts.Count);
-                foreach (EchoStationLayout sl in stationLayouts)
-                {
-                    allStationCells.Add(sl.cell);
-                }
-
-                // Target the front-left open area: left of the left figure column AND near spawn level.
-                // Figure stations start at firstRowY (spawn.y + 4 or higher), so placing the dummy
-                // near spawn.y + 2 keeps it well below (in Y) the entire station zone.
-                // dummyTargetX: as far left as the floor allows, at least 3 cells past the left column.
-                int dummyTargetX = Mathf.Clamp(minX + 3, minX + 2, axisX - columnOffset - 3);
-                // Use spawn Y + 2 so the dummy is in the front-floor zone, below all figure rows.
-                int dummyTargetY = Mathf.Clamp(chamberSpawnCell.y + 2, minY + 3, maxY - 3);
-                chamberDummyCell = PickNearestWalkableCellClearOfStations(
-                    new Vector2Int(dummyTargetX, dummyTargetY),
-                    reserved, allStationCells, axisX, 12);
+                int dummyV = arcCenterV - Mathf.RoundToInt(verticalRadius * 0.55f);
+                chamberDummyCell = PickNearestWalkableCell(ProjectedToCell(axisU, dummyV), reserved, 8);
             }
+
+            reserved.Add(chamberDummyCell);
+            int spawnV = chamberDummyCell.x + chamberDummyCell.y - 5;
+            chamberSpawnCell = PickNearestWalkableCell(ProjectedToCell(axisU, spawnV), reserved, 10);
         }
 
         private void BuildFallbackStationLayout()
         {
             stationLayouts.Clear();
-            for (int row = 0; row < StandRowCount; row++)
+            int centerX = ExitCell.x;
+            int arcBackY = 16;
+            int horizontalRadius = 9;
+            int verticalRadius = 5;
+            const float startDeg = 200f;
+            const float endDeg = 340f;
+            HashSet<Vector2Int> reserved = new HashSet<Vector2Int>();
+            for (int i = 0; i < ChamberClasses.Length; i++)
             {
-                int y = 10 + row * 2;
-                stationLayouts.Add(new EchoStationLayout(new Vector2Int(ExitCell.x - 4, y)));
-            }
+                float t = ChamberClasses.Length <= 1 ? 0f : i / (float)(ChamberClasses.Length - 1);
+                float angle = Mathf.Lerp(startDeg, endDeg, t) * Mathf.Deg2Rad;
+                Vector2Int cell = new Vector2Int(
+                    centerX + Mathf.RoundToInt(horizontalRadius * Mathf.Cos(angle)),
+                    arcBackY + Mathf.RoundToInt(verticalRadius * Mathf.Sin(angle)));
+                while (reserved.Contains(cell))
+                {
+                    cell.x++;
+                }
 
-            for (int row = 0; row < StandRowCount; row++)
-            {
-                int y = 10 + row * 2;
-                stationLayouts.Add(new EchoStationLayout(new Vector2Int(ExitCell.x + 4, y)));
+                reserved.Add(cell);
+                stationLayouts.Add(new EchoStationLayout(cell));
             }
         }
 
@@ -937,7 +945,9 @@ namespace RIMA
 
         private void SpawnPlayer()
         {
-            currentClass = PlayerClassManager.SelectedClass != ClassType.None && IsUnlocked(PlayerClassManager.SelectedClass)
+            currentClass = PlayerClassManager.SelectedClass != ClassType.None &&
+                           IsDemoSelectable(PlayerClassManager.SelectedClass) &&
+                           IsUnlocked(PlayerClassManager.SelectedClass)
                 ? PlayerClassManager.SelectedClass
                 : ClassType.Warblade;
             PlayerClassManager.SelectedClass = currentClass;
@@ -1073,7 +1083,7 @@ namespace RIMA
                 };
             }
 
-            Debug.Log("[ChamberSelectBootstrap] Class figures spawned as 5 left + 5 right Hades-style stands around the spawn-to-portal axis.");
+            Debug.Log("[ChamberSelectBootstrap] Class figures spawned as a 10-class crescent around the chamber centerline.");
         }
 
         private SpriteRenderer CreateEchoPedestal(Transform root, ClassType cls, Vector3 baseWorld, out Light2D pedestalLight)
@@ -1448,8 +1458,7 @@ namespace RIMA
                 disabledUrpPixelPerfectCamera = urpPpc;
             }
 
-            // FIX 2: Use hero-scale zoom (chamberCameraOrthoSize) so the player fills more screen.
-            float orthoSize = chamberCameraOrthoSize;
+            float orthoSize = CalculateChamberCameraOrthoSize();
             chamberCamera.orthographicSize = orthoSize;
 
             CameraZoom zoom = chamberCamera.GetComponent<CameraZoom>();
@@ -1524,6 +1533,28 @@ namespace RIMA
             }
 
             return null;
+        }
+
+        private float CalculateChamberCameraOrthoSize()
+        {
+            Bounds bounds = CalculateChamberBounds();
+            float aspect = chamberCamera != null && chamberCamera.aspect > 0.01f
+                ? chamberCamera.aspect
+                : 16f / 9f;
+            float baseSize = Mathf.Max(chamberCameraOrthoSize, chamberCameraMinimumOrthographicSize);
+
+            if (player == null)
+            {
+                return baseSize;
+            }
+
+            float offsetFactor = 2f * chamberPlayerScreenY - 1f;
+            float leftRequired = Mathf.Abs(player.position.x - bounds.min.x) / aspect;
+            float rightRequired = Mathf.Abs(bounds.max.x - player.position.x) / aspect;
+            float bottomRequired = Mathf.Abs(player.position.y - bounds.min.y) / Mathf.Max(0.1f, 1f - offsetFactor);
+            float topRequired = Mathf.Abs(bounds.max.y - player.position.y) / Mathf.Max(0.1f, 1f + offsetFactor);
+            float required = Mathf.Max(leftRequired, rightRequired, bottomRequired, topRequired) + chamberCameraFitPadding;
+            return Mathf.Max(baseSize, required * chamberCameraFitMultiplier);
         }
 
         private Bounds CalculateChamberBounds()
@@ -1657,6 +1688,12 @@ namespace RIMA
                 return false;
             }
 
+            if (!IsDemoSelectable(cls))
+            {
+                InvokeClassicSelect(currentClass);
+                return true;
+            }
+
             if (!IsUnlocked(cls))
             {
                 TryUnlockFromPopup(cls);
@@ -1672,6 +1709,11 @@ namespace RIMA
 
         private void TryUnlockFromPopup(ClassType cls)
         {
+            if (!IsDemoSelectable(cls))
+            {
+                return;
+            }
+
             if (!CanUnlock(cls))
             {
                 return;
@@ -1823,7 +1865,7 @@ namespace RIMA
         {
             foreach (EchoStation station in stations.Values)
             {
-                bool unlocked = IsUnlocked(station.classType);
+                bool unlocked = IsDemoSelectable(station.classType) && IsUnlocked(station.classType);
                 bool highlighted = station.classType == highlightedClass;
                 bool occupied = station.classType == currentClass;
 
@@ -1925,6 +1967,11 @@ namespace RIMA
         private static bool IsUnlocked(ClassType cls)
         {
             return ClassUnlockPolicy.IsUnlocked(cls);
+        }
+
+        private static bool IsDemoSelectable(ClassType cls)
+        {
+            return cls == ClassType.Warblade || cls == ClassType.Elementalist;
         }
 
         private static bool CanUnlock(ClassType cls)

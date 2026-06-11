@@ -229,9 +229,25 @@ namespace RIMA.Tests.Chamber
 
             ClassType[] classes = (ClassType[])field.GetValue(null);
             Assert.IsNotNull(classes, "T4: ChamberClasses array is null.");
-            // DEMO LOCK (2026-06-10): only Warblade + Elementalist have kits + controller-routing.
-            // Array is 2 until remaining classes get their kits.
-            Assert.AreEqual(2, classes.Length, "T4: Expected exactly 2 demo chamber classes (Warblade+Elementalist).");
+            // DEMO LOCK (2026-06-10): all 10 echoes are visible, but only
+            // Warblade + Elementalist are demo-selectable.
+            Assert.AreEqual(10, classes.Length, "T4: Expected exactly 10 visible chamber classes.");
+
+            MethodInfo isDemoSelectable = typeof(ChamberSelectBootstrap).GetMethod(
+                "IsDemoSelectable",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.IsNotNull(isDemoSelectable, "T4: IsDemoSelectable method not found via reflection.");
+
+            int demoSelectableCount = 0;
+            foreach (ClassType cls in classes)
+            {
+                if ((bool)isDemoSelectable.Invoke(null, new object[] { cls }))
+                {
+                    demoSelectableCount++;
+                }
+            }
+
+            Assert.AreEqual(2, demoSelectableCount, "T4: Expected exactly 2 demo-selectable classes.");
 
             // Unlocked starters must be present.
             Assert.Contains(ClassType.Warblade, classes,
