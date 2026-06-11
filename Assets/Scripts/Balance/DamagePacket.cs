@@ -12,6 +12,7 @@ namespace RIMA.Balance
         public GameObject attacker;
         public GameObject target;
         public bool isCrit;
+        public bool bypassStatScaling;
         public float critMultiplier;
         public string sourceId;
 
@@ -24,7 +25,8 @@ namespace RIMA.Balance
             string sourceId = "",
             bool isCrit = false,
             float critMultiplier = 1.5f,
-            ElementTag elementTag = ElementTag.None)
+            ElementTag elementTag = ElementTag.None,
+            bool bypassStatScaling = false)
         {
             return new DamagePacket
             {
@@ -36,6 +38,7 @@ namespace RIMA.Balance
                 target = target,
                 sourceId = sourceId,
                 isCrit = isCrit,
+                bypassStatScaling = bypassStatScaling,
                 critMultiplier = critMultiplier
             };
         }

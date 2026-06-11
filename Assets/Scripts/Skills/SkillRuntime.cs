@@ -112,7 +112,8 @@ namespace RIMA
                 health != null ? health.gameObject : null,
                 element,
                 isCrit,
-                elementTag: ElementTag.None);
+                elementTag: ElementTag.None,
+                bypassStatScaling: true);
             DealDamage(health, packet, popup, attacker, hitDirection, element, isCrit, applyStatusMultiplier);
         }
 

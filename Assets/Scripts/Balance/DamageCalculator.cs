@@ -27,13 +27,15 @@ namespace RIMA.Balance
         {
             attackerStats ??= ClassStatRuntime.Neutral;
 
-            float statMultiplier = packet.damageType switch
-            {
-                DamageType.Physical => attackerStats.physPower / 100f,
-                DamageType.Ability => attackerStats.abilityPower / 100f,
-                DamageType.True => 1f,
-                _ => 1f
-            };
+            float statMultiplier = packet.bypassStatScaling
+                ? 1f
+                : packet.damageType switch
+                {
+                    DamageType.Physical => attackerStats.physPower / 100f,
+                    DamageType.Ability => attackerStats.abilityPower / 100f,
+                    DamageType.True => 1f,
+                    _ => 1f
+                };
 
             float rawIdentityBuild = Mathf.Max(0f, attackerStats.identityBuildMultiplier);
             float cappedIdentityBuild = Mathf.Min(rawIdentityBuild, IdentityBuildCap);
