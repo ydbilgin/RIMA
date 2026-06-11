@@ -58,6 +58,8 @@ namespace RIMA
         private float attackTimer;
         private Animator anim;
         private AttackTokenType attackTokenType;
+        private Sprite fallbackSprite;
+        private Material fallbackMaterial;
 
         // ─── Init ────────────────────────────────────────────────────────────
 
@@ -113,24 +115,36 @@ namespace RIMA
         private void EnsureVisibleSprite()
         {
             if (SR == null) return;
+            SR.sortingLayerName = "Entities";
             if (SR.sprite != null && SR.sprite.texture != null) return;
 
-            // Renkli placeholder oluştur
-            var tex = new Texture2D(48, 48);
-            var pixels = new Color[48 * 48];
-            var c = new Color(0.85f, 0.15f, 0.15f, 1f); // kırmızı = düşman
-            for (int i = 0; i < pixels.Length; i++) pixels[i] = c;
-            tex.SetPixels(pixels);
-            tex.Apply();
-            tex.filterMode = FilterMode.Point;
+            if (fallbackSprite == null)
+            {
+                // Renkli placeholder oluştur
+                var tex = new Texture2D(48, 48);
+                var pixels = new Color[48 * 48];
+                var c = new Color(0.85f, 0.15f, 0.15f, 1f); // kırmızı = düşman
+                for (int i = 0; i < pixels.Length; i++) pixels[i] = c;
+                tex.SetPixels(pixels);
+                tex.Apply();
+                tex.filterMode = FilterMode.Point;
 
-            SR.sprite = Sprite.Create(tex, new Rect(0, 0, 48, 48), new Vector2(0.5f, 0.5f), 48f);
+                fallbackSprite = Sprite.Create(tex, new Rect(0, 0, 48, 48), new Vector2(0.5f, 0.5f), 48f);
+            }
+
+            SR.sprite = fallbackSprite;
             SR.color = Color.white;
 
             // Unlit material — URP 2D lit sorun çıkarıyor
-            var shader = Shader.Find("Sprites/Default");
-            if (shader != null)
-                SR.sharedMaterial = new Material(shader);
+            if (fallbackMaterial == null)
+            {
+                var shader = Shader.Find("Sprites/Default");
+                if (shader != null)
+                    fallbackMaterial = new Material(shader);
+            }
+
+            if (fallbackMaterial != null)
+                SR.sharedMaterial = fallbackMaterial;
         }
 
         // ─── Update / FixedUpdate ────────────────────────────────────────────
@@ -151,6 +165,11 @@ namespace RIMA
 
             float dist = Vector2.Distance(transform.position, Player.position);
             UpdateState(dist);
+        }
+
+        private void LateUpdate()
+        {
+            EnsureVisibleSprite();
         }
 
         private void UpdateState(float dist)
