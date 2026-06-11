@@ -27,6 +27,8 @@ namespace RIMA
         private const float ReadyFlashDuration = 0.18f;
         private const float SynergyPulseDuration = 0.45f;
         private const float SynergyPulseScale = 0.12f;
+        private static readonly Color BasicAttackRimColor = new Color(0.91f, 0.56f, 0.13f, 0.90f); // #E89020
+        private static readonly Color BasicAttackBgColor = new Color(0.23f, 0.10f, 0.29f, 0.88f);  // #3A1A4A
 
         // Bar slots → gameplay actions (CONTROL_SCHEME_SYNTHESIS_S6 §7): LMB, RMB, Q, E, R, F.
         private static readonly GameAction[] SlotActions =
@@ -49,6 +51,8 @@ namespace RIMA
         private Color cachedClassAccent = RimaUITheme.ClassAccent(ClassType.Warblade);
         private bool controllersResolved;
         private GameObject cachedPlayer;
+        private ClassType cachedBasicAttackClass = ClassType.None;
+        private BasicAttackProfile cachedBasicAttackProfile;
 
         // ── Drag-drop state (shared across all SlotDragHandlers) ────
         /// <summary>The SkillBarUI currently hosting an active drag. Null when idle.</summary>
@@ -65,6 +69,7 @@ namespace RIMA
             public Image cdOverlay;
             public Image glowBorder;
             public TextMeshProUGUI keyLabel;
+            public TextMeshProUGUI nameLabel;
             public TextMeshProUGUI cdTimer;   // optional numeric countdown (5s+ cooldowns)
             public float size;
         }
@@ -204,11 +209,11 @@ namespace RIMA
                     bgImg.sprite = slotBgSprite;
                     bgImg.type   = Image.Type.Simple;  // sprite scales to fit; no stretch artifacts
                     bgImg.preserveAspect = false;
-                    bgImg.color  = Color.white;
+                    bgImg.color  = i < SkillBarOffset ? BasicAttackBgColor : Color.white;
                 }
                 else
                 {
-                    bgImg.color = new Color(0.028f, 0.035f, 0.059f, 0.88f);
+                    bgImg.color = i < SkillBarOffset ? BasicAttackBgColor : new Color(0.028f, 0.035f, 0.059f, 0.88f);
                 }
                 bgImg.raycastTarget = false;
 
@@ -227,11 +232,11 @@ namespace RIMA
                     rimImg.sprite = rimSprite;
                     rimImg.type   = Image.Type.Simple;  // transparent-fill border ring, scales fine
                     rimImg.preserveAspect = false;
-                    rimImg.color  = new Color(0.110f, 0.157f, 0.208f, 0.35f); // empty state: #1C2535 @35%
+                    rimImg.color  = i < SkillBarOffset ? BasicAttackRimColor : new Color(0.110f, 0.157f, 0.208f, 0.35f); // empty state: #1C2535 @35%
                 }
                 else
                 {
-                    rimImg.color = new Color(0.110f, 0.157f, 0.208f, 0.35f);
+                    rimImg.color = i < SkillBarOffset ? BasicAttackRimColor : new Color(0.110f, 0.157f, 0.208f, 0.35f);
                 }
                 rimImg.raycastTarget = false;
 
@@ -291,6 +296,23 @@ namespace RIMA
                 keyRt.pivot     = new Vector2(1f, 0f);
                 keyRt.anchoredPosition = new Vector2(-1f, 1f);
 
+                // Display-only attack slot name, populated from BasicAttackProfile for LMB/RMB.
+                var nameGo  = MakeChild(slotGo.transform, "Name", size * 0.70f, size * 0.24f);
+                var nameTxt = nameGo.AddComponent<TextMeshProUGUI>();
+                nameTxt.text       = "";
+                nameTxt.fontSize   = i < 2 ? 8f : 7f;
+                nameTxt.fontStyle  = FontStyles.Bold;
+                nameTxt.color      = new Color(1f, 0.80f, 0.48f, 0.92f);
+                nameTxt.alignment  = TextAlignmentOptions.BottomLeft;
+                nameTxt.outlineColor = new Color(0.016f, 0.024f, 0.051f, 0.90f);
+                nameTxt.outlineWidth = 0.22f;
+                nameTxt.raycastTarget = false;
+                var nameRt = nameGo.GetComponent<RectTransform>();
+                nameRt.anchorMin = new Vector2(0f, 0f);
+                nameRt.anchorMax = new Vector2(0f, 0f);
+                nameRt.pivot     = new Vector2(0f, 0f);
+                nameRt.anchoredPosition = new Vector2(3f, 2f);
+
                 slots[i] = new SlotUI
                 {
                     root       = slotGo,
@@ -301,6 +323,7 @@ namespace RIMA
                     cdTimer    = cdTimerTxt,
                     glowBorder = glowImg,
                     keyLabel   = keyTxt,
+                    nameLabel  = nameTxt,
                     size       = size
                 };
 
@@ -365,8 +388,14 @@ namespace RIMA
                 if (synergyPulseTimers[i] > 0f)
                     synergyPulseTimers[i] = Mathf.Max(0f, synergyPulseTimers[i] - Time.unscaledDeltaTime);
 
-                // Slots 0-1 (LMB/RMB) are attack slots with no skill; always render empty.
+                // Slots 0-1 (LMB/RMB) are display-only basic attack slots.
                 // Slots 2-5 (Q/E/R/F) map to controller skill slots 0-3.
+                if (i < SkillBarOffset)
+                {
+                    UpdateBasicAttackSlot(i);
+                    continue;
+                }
+
                 int ctrlIndex = i - SkillBarOffset;
                 if (ctrlIndex >= 0 && ctrlIndex < active)
                     UpdateSlot(i, GetActiveSlot(ctrlIndex));
@@ -465,6 +494,8 @@ namespace RIMA
                 return;
             }
 
+            if (ui.nameLabel != null) ui.nameLabel.text = "";
+
             // Icon — BUG-4 (2026-06-10): SkillBase.icon is never serialized on runtime-attached
             // skill components, so the bar showed dark squares while 72 icons sat unused in the
             // registry. Resolve from SkillIconRegistry by skillName (fallback: type name) once
@@ -542,6 +573,46 @@ namespace RIMA
             ApplySynergyPulse(i, ui);
         }
 
+        private void UpdateBasicAttackSlot(int i)
+        {
+            var ui = slots[i];
+            if (ui.root == null) return;
+
+            BasicAttackProfile profile = GetActiveBasicAttackProfile();
+            Sprite icon = i == 0 ? profile?.lmbIcon : profile?.rmbIcon;
+            string displayName = i == 0 ? profile?.lmbName : profile?.rmbName;
+
+            ui.icon.sprite = icon;
+            ui.icon.color = icon != null ? Color.white : new Color(0.91f, 0.56f, 0.13f, 0.35f);
+            ui.cdOverlay.fillAmount = 0f;
+            ui.glowBorder.color = new Color(BasicAttackRimColor.r, BasicAttackRimColor.g, BasicAttackRimColor.b, 0.45f);
+            if (ui.rim != null) ui.rim.color = BasicAttackRimColor;
+            if (ui.bg != null) ui.bg.color = BasicAttackBgColor;
+            if (ui.cdTimer != null) ui.cdTimer.text = "";
+            if (ui.nameLabel != null) ui.nameLabel.text = string.IsNullOrWhiteSpace(displayName) ? SlotLabel(i) : displayName;
+            if (ui.root != null) ui.root.transform.localScale = Vector3.one;
+            synergyPulseTimers[i] = 0f;
+            wasOnCooldown[i] = false;
+            readyFlashTimers[i] = 0f;
+        }
+
+        private BasicAttackProfile GetActiveBasicAttackProfile()
+        {
+            ClassType type = PlayerClassManager.Instance != null
+                ? PlayerClassManager.Instance.PrimaryClass
+                : ClassType.Warblade;
+
+            if (type == ClassType.None)
+                type = ClassType.Warblade;
+
+            if (cachedBasicAttackProfile != null && cachedBasicAttackClass == type)
+                return cachedBasicAttackProfile;
+
+            cachedBasicAttackClass = type;
+            cachedBasicAttackProfile = Resources.Load<BasicAttackProfile>($"Combat/BasicAttack/BasicAttackProfile_{type}");
+            return cachedBasicAttackProfile;
+        }
+
         private void UpdateSlotEmpty(int i)
         {
             var ui = slots[i];
@@ -553,6 +624,7 @@ namespace RIMA
             ui.glowBorder.color = Color.clear;
             if (ui.rim != null) ui.rim.color = new Color(0.110f, 0.157f, 0.208f, 0.35f); // #1C2535 @35%
             if (ui.cdTimer != null) ui.cdTimer.text = "";
+            if (ui.nameLabel != null) ui.nameLabel.text = "";
             if (ui.root != null) ui.root.transform.localScale = Vector3.one;
             synergyPulseTimers[i] = 0f;
             wasOnCooldown[i] = false;

@@ -25,6 +25,12 @@ namespace RIMA
         public ClassType classType;
         public BasicAttackBehaviorType behaviorType;
 
+        [Header("UI Display")]
+        public Sprite lmbIcon;
+        public Sprite rmbIcon;
+        public string lmbName = "LMB";
+        public string rmbName = "RMB";
+
         [Header("Melee Combo")]
         public int comboLength = 3;
         public float comboWindow = 1.2f;
