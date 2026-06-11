@@ -1,6 +1,7 @@
 using UnityEngine;
 using RIMA.Combat;
 using RIMA.Audio;
+using RIMA.Balance;
 
 namespace RIMA
 {
@@ -65,23 +66,17 @@ namespace RIMA
                 var hp = col.GetComponent<Health>();
                 if (hp == null || hp.IsDead) continue;
 
-                var status = col.GetComponent<StatusEffectSystem>();
-                int finalDmg = status != null
-                    ? Mathf.RoundToInt(dmg * status.damageMultiplierIncoming)
-                    : dmg;
-
-                hp.TakeDamage(finalDmg);
                 bool isFinisher = step == profile.comboLength - 1;
-                CombatEventBus.PublishHit(new HitEvent
-                {
-                    worldPos = col.transform.position,
-                    attacker = owner.gameObject,
-                    target = col.gameObject,
-                    damage = finalDmg,
-                    element = "physical",
-                    isCrit = isFinisher,
-                    hitDirection = facing
-                });
+                var packet = DamagePacket.Create(
+                    dmg,
+                    profile.lmbDamageType,
+                    profile.lmbSourceType,
+                    owner.gameObject,
+                    col.gameObject,
+                    "basic_lmb",
+                    isFinisher,
+                    elementTag: profile.lmbElementTag);
+                int finalDmg = SkillRuntime.DealDamage(hp, packet, false, owner.gameObject, facing, applyStatusMultiplier: true);
                 // T2: light vs heavy swing SFX (finisher = heavy tier)
                 if (isFinisher)
                 {

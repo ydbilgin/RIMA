@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using RIMA.Combat;
+using RIMA.Balance;
 
 namespace RIMA
 {
@@ -103,9 +104,39 @@ namespace RIMA
         public static void DealDamage(Health health, int damage, bool popup, GameObject attacker, Vector2? hitDirection,
             string element = "skill", bool isCrit = false, bool applyStatusMultiplier = true)
         {
-            if (health == null || health.IsDead) return;
+            var packet = DamagePacket.Create(
+                damage,
+                DamageType.Physical,
+                DamageSourceType.Skill,
+                attacker,
+                health != null ? health.gameObject : null,
+                element,
+                isCrit,
+                elementTag: ElementTag.None);
+            DealDamage(health, packet, popup, attacker, hitDirection, element, isCrit, applyStatusMultiplier);
+        }
 
-            int finalDamage = damage;
+        public static int DealDamage(Health health, DamagePacket packet, bool popup = true)
+        {
+            return DealDamage(health, packet, popup, packet.attacker, null);
+        }
+
+        public static int DealDamage(Health health, DamagePacket packet, bool popup, GameObject attacker, Vector2? hitDirection,
+            string element = null, bool? isCrit = null, bool applyStatusMultiplier = true)
+        {
+            if (health == null || health.IsDead) return 0;
+
+            if (packet.target == null)
+                packet.target = health.gameObject;
+            if (packet.attacker == null)
+                packet.attacker = attacker;
+
+            ClassStatRuntime attackerStats = PlayerClassManager.Instance != null
+                ? PlayerClassManager.Instance.CurrentPrimaryStats
+                : ClassStatRuntime.Neutral;
+            var result = DamageCalculator.Calculate(packet, attackerStats);
+
+            int finalDamage = result.finalDamage;
             if (applyStatusMultiplier)
             {
                 var status = health.GetComponent<StatusEffectSystem>();
@@ -114,9 +145,14 @@ namespace RIMA
             }
 
             health.TakeDamage(finalDamage);
-            PublishSkillHit(health, finalDamage, attacker, hitDirection, element, isCrit);
+            string hitElement = element ?? (packet.elementTag != ElementTag.None
+                ? packet.elementTag.ToString().ToLowerInvariant()
+                : packet.damageType.ToString().ToLowerInvariant());
+            PublishSkillHit(health, finalDamage, packet.attacker, hitDirection, hitElement, isCrit ?? packet.isCrit);
             if (popup)
                 DamagePopup.Show(health.transform.position, finalDamage);
+
+            return finalDamage;
         }
 
         public static void PublishSkillHit(Health health, int damage, GameObject attacker = null, Vector2? hitDirection = null,

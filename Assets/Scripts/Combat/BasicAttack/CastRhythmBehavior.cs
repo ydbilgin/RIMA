@@ -43,7 +43,7 @@ namespace RIMA
         {
             owner.Controller.FaceCombatTarget();
 
-            owner.CommitTimer = profile.projectileCooldown;
+            owner.CommitTimer = owner.ApplyAttackSpeed(profile.projectileCooldown);
             owner.ComboTimer = 0f;
             owner.ComboStep = 0;
 
@@ -78,6 +78,14 @@ namespace RIMA
 
             var projectile = go.AddComponent<PlayerProjectile>();
             projectile.Init(dir * profile.projectileSpeed, damage, life: 2.2f, piercing: false, attacker: owner.gameObject);
+            projectile.SetDamagePacket(RIMA.Balance.DamagePacket.Create(
+                damage,
+                profile.lmbDamageType,
+                profile.lmbSourceType,
+                owner.gameObject,
+                null,
+                "basic_lmb",
+                elementTag: GetElementTag(elementalist)));
             projectile.SetOnHit(hit =>
             {
                 elementalist?.RegisterRiftBoltHit(empowered);
@@ -103,6 +111,18 @@ namespace RIMA
                 ElementalistElement.Frost => new Color(0.34f, 0.82f, 1f, 0.92f),
                 ElementalistElement.Light => new Color(1f, 0.9f, 0.36f, 0.95f),
                 _ => new Color(0.34f, 0.82f, 1f, 0.92f)
+            };
+        }
+
+        private static RIMA.Balance.ElementTag GetElementTag(Elementalist_SkillController elementalist)
+        {
+            if (elementalist == null) return RIMA.Balance.ElementTag.None;
+            return elementalist.ActiveElement switch
+            {
+                ElementalistElement.Fire => RIMA.Balance.ElementTag.Fire,
+                ElementalistElement.Frost => RIMA.Balance.ElementTag.Frost,
+                ElementalistElement.Light => RIMA.Balance.ElementTag.Lightning,
+                _ => RIMA.Balance.ElementTag.None
             };
         }
 

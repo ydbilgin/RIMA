@@ -19,6 +19,11 @@ namespace RIMA
 
         public float MoveSpeed => moveSpeed;
 
+        public void SetMoveSpeed(float value)
+        {
+            moveSpeed = Mathf.Max(0f, value);
+        }
+
         [Header("Dash")]
         [SerializeField] private float dashSpeed = 18f;
         [SerializeField] private float dashDuration = 0.15f;

@@ -39,6 +39,8 @@ MonoBehaviour:
   - 0.1
   - 0.12
   - 0.18
+  hitImpulses: []
+  knockdownProfile: {fileID: 0}
   projectileDamage: 18
   projectileSpeed: 15
   projectileCooldown: 0.34
@@ -47,4 +49,10 @@ MonoBehaviour:
   rmbDamage: 34
   rmbRadius: 2.2
   rmbCooldown: 1.5
+  lmbDamageType: 0
+  lmbElementTag: 0
+  rmbDamageType: 0
+  rmbElementTag: 0
+  lmbSourceType: 1
+  rmbSourceType: 2
   cancelWindowFraction: -1

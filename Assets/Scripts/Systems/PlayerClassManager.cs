@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using RIMA.Balance;
 
 namespace RIMA
 {
@@ -14,12 +15,14 @@ namespace RIMA
 
         public ClassType PrimaryClass   { get; private set; } = ClassType.Warblade;
         public ClassType SecondaryClass { get; private set; } = ClassType.None;
+        public ClassStatRuntime CurrentPrimaryStats { get; private set; } = ClassStatRuntime.Neutral;
 
         public event Action OnClassSelectionRequested;
         public event Action<ClassType> OnSecondaryClassSelected;
         public event Action<ClassType> OnPrimaryClassSet;
 
         [SerializeField] private bool applyPrimaryOnStart;
+        [SerializeField] private ClassStatDatabase classStatDatabase;
 
         private void Awake()
         {
@@ -150,8 +153,31 @@ namespace RIMA
             }
 
             ApplyBasicAttackProfile(player, type);
+            ApplyClassStats(player, type);
             ApplyPrimaryClassVisual(player, type);
             ApplyWeaponVisual(player, type);
+        }
+
+        private void ApplyClassStats(GameObject player, ClassType type)
+        {
+            ClassStatProfile profile = ResolveClassStatDatabase()?.GetProfile(type);
+            if (profile == null) return;
+
+            CurrentPrimaryStats = profile.CreateRuntimeCopy();
+
+            player.GetComponent<PlayerStats>()?.SetMaxHP(CurrentPrimaryStats.maxHP);
+            player.GetComponent<PlayerController>()?.SetMoveSpeed(CurrentPrimaryStats.moveSpeed);
+
+            var attack = player.GetComponent<PlayerAttack>();
+            if (attack != null)
+                attack.attackSpeedMult = CurrentPrimaryStats.attackSpeedMult;
+        }
+
+        private ClassStatDatabase ResolveClassStatDatabase()
+        {
+            if (classStatDatabase == null)
+                classStatDatabase = Resources.Load<ClassStatDatabase>("Balance/Classes/ClassStatDatabase");
+            return classStatDatabase;
         }
 
         public void SwitchClass(ClassType type) => SetPrimaryClass(type);

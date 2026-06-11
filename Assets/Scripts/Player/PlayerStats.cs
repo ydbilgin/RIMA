@@ -30,6 +30,12 @@ namespace RIMA
             currentHP = Mathf.Min(maxHP, currentHP + amount);
         }
 
+        public void SetMaxHP(float value, bool refill = true)
+        {
+            maxHP = Mathf.Max(1f, value);
+            currentHP = refill ? maxHP : Mathf.Min(currentHP, maxHP);
+        }
+
         public bool IsDead => currentHP <= 0f;
     }
 }

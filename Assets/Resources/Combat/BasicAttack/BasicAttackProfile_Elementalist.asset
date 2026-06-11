@@ -21,6 +21,7 @@ MonoBehaviour:
   comboLength: 3
   comboWindow: 0
   commitment: 0.34
+  attackStartup: 0.08
   comboDamage: 12000000120000001c000000
   hitRange:
   - 6
@@ -38,6 +39,8 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  hitImpulses: []
+  knockdownProfile: {fileID: 0}
   projectileDamage: 18
   projectileSpeed: 15
   projectileCooldown: 0.34
@@ -46,3 +49,10 @@ MonoBehaviour:
   rmbDamage: 0
   rmbRadius: 0
   rmbCooldown: 0
+  lmbDamageType: 1
+  lmbElementTag: 0
+  rmbDamageType: 1
+  rmbElementTag: 3
+  lmbSourceType: 1
+  rmbSourceType: 2
+  cancelWindowFraction: -1

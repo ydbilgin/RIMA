@@ -26,6 +26,7 @@ namespace RIMA
 
         [HideInInspector] public float outgoingDamageMultiplier = 1f;
         [HideInInspector] public int baseDamage = 0;
+        [HideInInspector] public float attackSpeedMult = 1f;
 
         internal int ComboStep { get; set; }
         internal float ComboTimer { get; set; }
@@ -294,6 +295,11 @@ namespace RIMA
         internal void EmitSlashArc(Vector2 facingDirection, int step)
         {
             slashArcVFX?.Emit(facingDirection, step);
+        }
+
+        internal float ApplyAttackSpeed(float seconds)
+        {
+            return seconds / Mathf.Max(0.01f, attackSpeedMult);
         }
 
         private void OnDrawGizmosSelected()

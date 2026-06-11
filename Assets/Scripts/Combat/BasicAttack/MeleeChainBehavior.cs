@@ -131,11 +131,18 @@ namespace RIMA
             foreach (var health in SkillRuntime.EnemiesInCircle(
                 owner.transform.position, profile.rmbRadius))
             {
-                SkillRuntime.DealDamage(health, profile.rmbDamage);
+                SkillRuntime.DealDamage(health, RIMA.Balance.DamagePacket.Create(
+                    profile.rmbDamage,
+                    profile.rmbDamageType,
+                    profile.rmbSourceType,
+                    owner.gameObject,
+                    health.gameObject,
+                    "basic_rmb",
+                    elementTag: profile.rmbElementTag));
                 health.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Stunned, 0.45f);
             }
 
-            rageOutletTimer = profile.rmbCooldown;
+            rageOutletTimer = owner.ApplyAttackSpeed(profile.rmbCooldown);
             LightPulse.Emit(new Color(0.85f, 0.36f, 0.2f), 1f, 0.08f);
         }
     }

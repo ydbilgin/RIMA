@@ -1,4 +1,5 @@
 using UnityEngine;
+using RIMA.Balance;
 
 namespace RIMA
 {
@@ -59,6 +60,14 @@ namespace RIMA
         public int rmbDamage = 34;
         public float rmbRadius = 2.2f;
         public float rmbCooldown = 1.5f;
+
+        [Header("Damage Scaling")]
+        public DamageType lmbDamageType = DamageType.Physical;
+        public ElementTag lmbElementTag = ElementTag.None;
+        public DamageType rmbDamageType = DamageType.Physical;
+        public ElementTag rmbElementTag = ElementTag.None;
+        public DamageSourceType lmbSourceType = DamageSourceType.LMB;
+        public DamageSourceType rmbSourceType = DamageSourceType.RMB;
 
         [Header("Dash-Cancel")]
         [Tooltip("-1 = use class default. 0 = not cancellable. 0-1 = cancel window fraction of commit duration.")]

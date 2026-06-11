@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using RIMA.Combat;
+using RIMA.Balance;
 
 namespace RIMA
 {
@@ -24,6 +25,8 @@ namespace RIMA
         private int knockbackForce;
         private GameObject attacker;
         private string hitElement = "projectile";
+        private bool hasDamagePacket;
+        private DamagePacket damagePacket;
         private Action<Collider2D> onHit;
 
         public void Init(
@@ -65,6 +68,12 @@ namespace RIMA
             onHit = callback;
         }
 
+        public void SetDamagePacket(DamagePacket packet)
+        {
+            damagePacket = packet;
+            hasDamagePacket = true;
+        }
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player")) return;
@@ -72,11 +81,23 @@ namespace RIMA
             var hp = other.GetComponent<Health>();
             if (hp == null || hp.IsDead) return;
 
-            hp.TakeDamage(damage);
             Vector2 hitDirection = GetComponent<Rigidbody2D>() != null
                 ? GetComponent<Rigidbody2D>().linearVelocity.normalized
                 : ((Vector2)other.transform.position - (Vector2)transform.position).normalized;
-            SkillRuntime.PublishSkillHit(hp, damage, attacker != null ? attacker : gameObject, hitDirection, hitElement);
+            int finalDamage;
+            if (hasDamagePacket)
+            {
+                damagePacket.target = other.gameObject;
+                if (damagePacket.attacker == null)
+                    damagePacket.attacker = attacker != null ? attacker : gameObject;
+                finalDamage = SkillRuntime.DealDamage(hp, damagePacket, false, damagePacket.attacker, hitDirection);
+            }
+            else
+            {
+                finalDamage = damage;
+                hp.TakeDamage(finalDamage);
+                SkillRuntime.PublishSkillHit(hp, finalDamage, attacker != null ? attacker : gameObject, hitDirection, hitElement);
+            }
             onHit?.Invoke(other);
 
             var status = other.GetComponent<StatusEffectSystem>();
