@@ -390,6 +390,70 @@ namespace RIMA
             }
         }
 
+        internal void ShowSlotTooltip(int visualIndex, Vector2 screenPosition)
+        {
+            SkillData data = GetSkillDataForVisualSlot(visualIndex);
+            if (data == null || string.IsNullOrWhiteSpace(data.description)) return;
+
+            EnsureTooltipSystem();
+            TooltipSystem.Instance?.Show(TooltipSystem.FormatSkill(data), screenPosition);
+        }
+
+        internal void HideSlotTooltip()
+        {
+            TooltipSystem.Instance?.Hide();
+        }
+
+        private SkillData GetSkillDataForVisualSlot(int visualIndex)
+        {
+            int ctrlIndex = visualIndex - SkillBarOffset;
+            if (ctrlIndex < 0 || ctrlIndex >= GetActiveSlotCount()) return null;
+
+            SkillBase skill = GetActiveSlot(ctrlIndex);
+            if (skill == null || string.IsNullOrEmpty(skill.skillName)) return null;
+
+            EnsureSkillDatabase();
+            var data = SkillDatabase.Instance?.FindByName(skill.skillName);
+            if (data != null) return data;
+
+            var all = SkillDatabase.Instance?.GetAll();
+            if (all == null) return null;
+
+            System.Type skillType = skill.GetType();
+            for (int i = 0; i < all.Count; i++)
+            {
+                if (all[i] != null && all[i].skillType == skillType)
+                    return all[i];
+            }
+
+            return null;
+        }
+
+        private static void EnsureSkillDatabase()
+        {
+            if (SkillDatabase.Instance != null)
+            {
+                SkillDatabase.Instance.EnsureBuilt();
+                return;
+            }
+
+            var existing = FindObjectOfType<SkillDatabase>();
+            if (existing != null)
+            {
+                existing.EnsureBuilt();
+                return;
+            }
+
+            var go = new GameObject("SkillDatabase_Auto");
+            go.AddComponent<SkillDatabase>();
+        }
+
+        private void EnsureTooltipSystem()
+        {
+            if (TooltipSystem.Instance != null) return;
+            gameObject.AddComponent<TooltipSystem>();
+        }
+
         private void UpdateSlot(int i, SkillBase skill)
         {
             var ui = slots[i];
@@ -731,12 +795,18 @@ namespace RIMA
             // Only highlight if a drag is in progress (from a sibling slot on the same bar).
             if (SkillBarUI.ActiveDragBar == bar && SkillBarUI.ActiveDragIndex != slotIndex)
                 SetHighlight(true);
+
+            if (SkillBarUI.ActiveDragBar == null)
+                bar?.ShowSlotTooltip(slotIndex, UnityEngine.InputSystem.Mouse.current != null
+                    ? UnityEngine.InputSystem.Mouse.current.position.ReadValue()
+                    : Vector2.zero);
         }
 
         public void OnPointerExit(PointerEventData _)
         {
             SetHighlight(false);
             if (hoveredTarget == this) hoveredTarget = null;
+            bar?.HideSlotTooltip();
         }
 
         private void SetHighlight(bool on)
@@ -751,6 +821,7 @@ namespace RIMA
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
+            bar?.HideSlotTooltip();
             SkillBarUI.ActiveDragBar = bar;
             SkillBarUI.ActiveDragIndex = slotIndex;
 

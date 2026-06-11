@@ -1,4 +1,5 @@
 using TMPro;
+using RIMA.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -106,7 +107,7 @@ namespace RIMA
             overlayRt.anchorMax = Vector2.one;
             overlayRt.offsetMin = overlayRt.offsetMax = Vector2.zero;
             var overlayImg = overlayGo.GetComponent<Image>();
-            overlayImg.color = RimaUITheme.OverlayDark;
+            overlayImg.color = RimaUITheme.Act1Overlay;
             overlayImg.raycastTarget = true;
 
             // Center panel
@@ -117,11 +118,24 @@ namespace RIMA
             panelRt.anchorMax = new Vector2(0.5f, 0.5f);
             panelRt.pivot = new Vector2(0.5f, 0.5f);
             panelRt.anchoredPosition = Vector2.zero;
-            panelRt.sizeDelta = new Vector2(320f, 340f);
+            panelRt.sizeDelta = new Vector2(356f, 366f);
             var panelImg = panelGo.GetComponent<Image>();
-            panelImg.sprite = RimaUITheme.ResourceFrame;
+            panelImg.sprite = RimaUITheme.Act1PanelFrame;
             panelImg.type = Image.Type.Sliced;
-            panelImg.color = RimaUITheme.PanelTint;
+            panelImg.color = new Color(RimaUITheme.Act1PanelFill.r, RimaUITheme.Act1PanelFill.g, RimaUITheme.Act1PanelFill.b, 0.96f);
+
+            var innerGlowGo = new GameObject("VoidInnerGlow", typeof(RectTransform), typeof(Image));
+            innerGlowGo.transform.SetParent(panelRt, false);
+            var innerGlowRt = innerGlowGo.GetComponent<RectTransform>();
+            innerGlowRt.anchorMin = Vector2.zero;
+            innerGlowRt.anchorMax = Vector2.one;
+            innerGlowRt.offsetMin = new Vector2(12f, 12f);
+            innerGlowRt.offsetMax = new Vector2(-12f, -12f);
+            var innerGlowImg = innerGlowGo.GetComponent<Image>();
+            innerGlowImg.sprite = RimaUITheme.Act1PanelFrame;
+            innerGlowImg.type = Image.Type.Sliced;
+            innerGlowImg.color = new Color(RimaUITheme.Act1VoidPurple.r, RimaUITheme.Act1VoidPurple.g, RimaUITheme.Act1VoidPurple.b, 0.22f);
+            innerGlowImg.raycastTarget = false;
 
             // Title
             var titleGo = new GameObject("Title", typeof(RectTransform));
@@ -134,15 +148,29 @@ namespace RIMA
             titleRt.sizeDelta = new Vector2(0f, 36f);
             var titleTmp = titleGo.AddComponent<TextMeshProUGUI>();
             titleTmp.text = "PAUSED";
-            titleTmp.fontSize = 22f;
+            titleTmp.fontSize = 24f;
             titleTmp.fontStyle = FontStyles.Bold;
-            titleTmp.color = RimaUITheme.Gold;
+            titleTmp.color = RimaUITheme.Act1Ember;
             titleTmp.alignment = TextAlignmentOptions.Center;
             titleTmp.raycastTarget = false;
 
+            var ruleGo = new GameObject("TitleRule", typeof(RectTransform), typeof(Image));
+            ruleGo.transform.SetParent(panelRt, false);
+            var ruleRt = ruleGo.GetComponent<RectTransform>();
+            ruleRt.anchorMin = new Vector2(0.5f, 1f);
+            ruleRt.anchorMax = new Vector2(0.5f, 1f);
+            ruleRt.pivot = new Vector2(0.5f, 1f);
+            ruleRt.anchoredPosition = new Vector2(0f, -58f);
+            ruleRt.sizeDelta = new Vector2(246f, 6f);
+            var ruleImg = ruleGo.GetComponent<Image>();
+            ruleImg.sprite = RimaUITheme.Act1TitleRule;
+            ruleImg.type = Image.Type.Sliced;
+            ruleImg.color = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.68f);
+            ruleImg.raycastTarget = false;
+
             // Buttons — vertical layout, centered
-            float startY = -80f;
-            float step   = 52f;
+            float startY = -84f;
+            float step   = 50f;
 
             AddButton(panelRt, "RESUME",      new Vector2(0f, startY + step * 0), OnResume);
             AddButton(panelRt, "SETTINGS",    new Vector2(0f, startY - step * 1), OnSettings);
@@ -160,12 +188,16 @@ namespace RIMA
             rt.anchorMax = new Vector2(0.5f, 1f);
             rt.pivot = new Vector2(0.5f, 1f);
             rt.anchoredPosition = pos;
-            rt.sizeDelta = new Vector2(220f, 40f);
+            rt.sizeDelta = new Vector2(236f, 38f);
 
             var img = btnGo.AddComponent<Image>();
-            img.sprite = RimaUITheme.ResourceFrame;
+            img.sprite = RimaUITheme.Act1ButtonFrame;
             img.type = Image.Type.Sliced;
-            img.color = new Color(RimaUITheme.Cyan.r, RimaUITheme.Cyan.g, RimaUITheme.Cyan.b, 0.25f);
+            img.color = new Color(RimaUITheme.Act1ButtonFill.r, RimaUITheme.Act1ButtonFill.g, RimaUITheme.Act1ButtonFill.b, 0.96f);
+
+            var outline = btnGo.AddComponent<Outline>();
+            outline.effectColor = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.55f);
+            outline.effectDistance = Vector2.one;
 
             var txtGo = new GameObject("Label", typeof(RectTransform));
             txtGo.transform.SetParent(rt, false);
@@ -178,13 +210,26 @@ namespace RIMA
             tmp.text = label;
             tmp.fontSize = 14f;
             tmp.fontStyle = FontStyles.Bold;
-            tmp.color = Color.white;
+            tmp.color = RimaUITheme.CharSelectParchment;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.raycastTarget = false;
 
             var btn = btnGo.AddComponent<Button>();
             btn.targetGraphic = img;
+            btn.transition = Selectable.Transition.ColorTint;
+            btn.colors = new ColorBlock
+            {
+                normalColor = new Color(RimaUITheme.Act1ButtonFill.r, RimaUITheme.Act1ButtonFill.g, RimaUITheme.Act1ButtonFill.b, 0.96f),
+                highlightedColor = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.40f),
+                pressedColor = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.58f),
+                selectedColor = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.42f),
+                disabledColor = new Color(RimaUITheme.Act1Slate.r, RimaUITheme.Act1Slate.g, RimaUITheme.Act1Slate.b, 0.30f),
+                colorMultiplier = 1f,
+                fadeDuration = 0.08f
+            };
             btn.onClick.AddListener(onClick);
+
+            btnGo.AddComponent<RimaUIButtonFeedback>();
         }
 
         // ─── Button actions ─────────────────────────────────────────────────

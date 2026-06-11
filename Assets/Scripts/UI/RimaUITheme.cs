@@ -48,6 +48,14 @@ namespace RIMA
         public static readonly Color CharSelectStatEmpty    = new Color(0.102f, 0.106f, 0.133f, 1f);  // #1A1B22
         public static readonly Color CharSelectLockedText   = new Color(0.420f, 0.380f, 0.480f, 1f);
 
+        // Act 1 UI canon: cold slate foundation, void-purple overlay, ember accents.
+        public static readonly Color Act1Slate       = new Color(0.227f, 0.239f, 0.259f, 1f); // #3A3D42
+        public static readonly Color Act1VoidPurple  = new Color(0.227f, 0.102f, 0.290f, 1f); // #3A1A4A
+        public static readonly Color Act1Ember       = new Color(0.910f, 0.565f, 0.125f, 1f); // #E89020
+        public static readonly Color Act1PanelFill   = new Color(0.035f, 0.036f, 0.047f, 0.92f);
+        public static readonly Color Act1Overlay     = new Color(0.075f, 0.035f, 0.095f, 0.88f);
+        public static readonly Color Act1ButtonFill  = new Color(0.105f, 0.090f, 0.125f, 0.94f);
+
         // ── HP Bar States ─────────────────────────────────────────────────
         public static readonly Color HpHealthy    = new Color(0.29f, 0.62f, 0.75f, 1f); // #4A9EBF  >60%
         public static readonly Color HpWarning    = new Color(0.78f, 0.45f, 0.16f, 1f); // #C8742A  30-60%
@@ -234,6 +242,10 @@ namespace RIMA
         private static Sprite _frameSprite;
         private static Sprite _promptSprite;
         private static Sprite _skillSlotSprite;
+        private static Sprite _act1PanelSprite;
+        private static Sprite _act1ButtonSprite;
+        private static Sprite _act1IconWellSprite;
+        private static Sprite _act1RuleSprite;
 
         /// <summary>Dark glass panel (main panels, reward cards, char sheet).</summary>
         public static Sprite SmallPanelFrame => _panelSprite ??= MakeRoundedRect(
@@ -256,6 +268,26 @@ namespace RIMA
         public static Sprite SkillSlotFrame => _skillSlotSprite ??= MakeRoundedRect(
             64, 64, 10, new Color(0.06f, 0.07f, 0.10f, 0.92f),
             new Color(0.18f, 0.24f, 0.32f, 0.65f), 2);
+
+        public static Sprite Act1PanelFrame => _act1PanelSprite ??= MakeRoundedRect(
+            96, 96, 8,
+            new Color(Act1PanelFill.r, Act1PanelFill.g, Act1PanelFill.b, 0.94f),
+            new Color(Act1Ember.r, Act1Ember.g, Act1Ember.b, 0.55f), 2);
+
+        public static Sprite Act1ButtonFrame => _act1ButtonSprite ??= MakeRoundedRect(
+            96, 32, 5,
+            Act1ButtonFill,
+            new Color(Act1Ember.r, Act1Ember.g, Act1Ember.b, 0.72f), 2);
+
+        public static Sprite Act1IconWell => _act1IconWellSprite ??= MakeRoundedRect(
+            48, 48, 6,
+            new Color(0.065f, 0.055f, 0.080f, 0.96f),
+            new Color(Act1Ember.r, Act1Ember.g, Act1Ember.b, 0.62f), 2);
+
+        public static Sprite Act1TitleRule => _act1RuleSprite ??= MakeRoundedRect(
+            96, 8, 3,
+            new Color(Act1Ember.r, Act1Ember.g, Act1Ember.b, 0.78f),
+            new Color(Act1Slate.r, Act1Slate.g, Act1Slate.b, 0.55f), 1);
 
         // ── Procedural Skill Bar sprites (slot + bar backing, no PNG asset needed) ──
 
@@ -584,4 +616,3 @@ namespace RIMA
         }
     }
 }
-

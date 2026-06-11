@@ -115,26 +115,38 @@ namespace RIMA
             var overlay = MakePanel("Overlay", root);
             SetStretch(overlay, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             var overlayImg = overlay.GetComponent<Image>();
-            overlayImg.color = new Color(0.012f, 0.018f, 0.026f, 0.92f);
+            overlayImg.color = RimaUITheme.Act1Overlay;
             overlayImg.raycastTarget = true;
+
+            var slateWash = MakePanel("SlateWash", overlay);
+            SetStretch(slateWash, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            var slateWashImg = slateWash.GetComponent<Image>();
+            slateWashImg.color = new Color(RimaUITheme.Act1Slate.r, RimaUITheme.Act1Slate.g, RimaUITheme.Act1Slate.b, 0.30f);
+            slateWashImg.raycastTarget = false;
+
+            var voidWash = MakePanel("VoidWash", overlay);
+            SetStretch(voidWash, new Vector2(0.36f, 0f), Vector2.one, Vector2.zero, Vector2.zero);
+            var voidWashImg = voidWash.GetComponent<Image>();
+            voidWashImg.color = new Color(RimaUITheme.Act1VoidPurple.r, RimaUITheme.Act1VoidPurple.g, RimaUITheme.Act1VoidPurple.b, 0.36f);
+            voidWashImg.raycastTarget = false;
 
             var frame = MakePanel("Frame", overlay);
             SetStretch(frame, new Vector2(0.06f, 0.07f), new Vector2(0.94f, 0.92f), Vector2.zero, Vector2.zero);
             var frameImg = frame.GetComponent<Image>();
-            frameImg.sprite = RimaUITheme.ResourceFrame;
+            frameImg.sprite = RimaUITheme.Act1PanelFrame;
             frameImg.type = Image.Type.Sliced;
-            frameImg.color = new Color(RimaUITheme.CharSelectCyan.r, RimaUITheme.CharSelectCyan.g, RimaUITheme.CharSelectCyan.b, 0.72f);
+            frameImg.color = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.78f);
             frameImg.raycastTarget = false;
 
             var panel = MakePanel("Panel", frame);
             SetStretch(panel, Vector2.zero, Vector2.one, new Vector2(2f, 2f), new Vector2(-2f, -2f));
             var panelImg = panel.GetComponent<Image>();
-            panelImg.sprite = RimaUITheme.SmallPanelFrame;
+            panelImg.sprite = RimaUITheme.Act1PanelFrame;
             panelImg.type = Image.Type.Sliced;
-            panelImg.color = new Color(0.024f, 0.028f, 0.038f, 0.86f);
+            panelImg.color = new Color(RimaUITheme.Act1PanelFill.r, RimaUITheme.Act1PanelFill.g, RimaUITheme.Act1PanelFill.b, 0.94f);
             panelImg.raycastTarget = false;
 
-            var title = MakeText(Loc.T("codex.title"), panel, 26f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
+            var title = MakeText(Loc.T("codex.title"), panel, 28f, FontStyles.Bold, RimaUITheme.Act1Ember);
             title.alignment = TextAlignmentOptions.Left;
             var titleRt = title.rectTransform;
             titleRt.anchorMin = new Vector2(0f, 1f);
@@ -143,7 +155,19 @@ namespace RIMA
             titleRt.anchoredPosition = new Vector2(32f, -22f);
             titleRt.sizeDelta = new Vector2(-64f, 36f);
 
-            classTitle = MakeText("", panel, 18f, FontStyles.Bold, RimaUITheme.CharSelectCyan);
+            var titleRule = MakePanel("TitleRule", panel);
+            titleRule.anchorMin = new Vector2(0f, 1f);
+            titleRule.anchorMax = new Vector2(1f, 1f);
+            titleRule.pivot = new Vector2(0f, 1f);
+            titleRule.anchoredPosition = new Vector2(32f, -62f);
+            titleRule.sizeDelta = new Vector2(-64f, 6f);
+            var titleRuleImg = titleRule.GetComponent<Image>();
+            titleRuleImg.sprite = RimaUITheme.Act1TitleRule;
+            titleRuleImg.type = Image.Type.Sliced;
+            titleRuleImg.color = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.62f);
+            titleRuleImg.raycastTarget = false;
+
+            classTitle = MakeText("", panel, 18f, FontStyles.Bold, RimaUITheme.CharSelectParchment);
             classTitle.alignment = TextAlignmentOptions.Left;
             var classTitleRt = classTitle.rectTransform;
             classTitleRt.anchorMin = new Vector2(0f, 1f);
@@ -177,7 +201,7 @@ namespace RIMA
                 ClassType cls = Classes[i];
                 var buttonRt = MakePanel(cls.ToString(), classButtonRoot);
                 var img = buttonRt.GetComponent<Image>();
-                img.sprite = RimaUITheme.ResourceFrame;
+                img.sprite = RimaUITheme.Act1ButtonFrame;
                 img.type = Image.Type.Sliced;
                 img.raycastTarget = true;
                 classButtonFrames[cls] = img;
@@ -203,7 +227,9 @@ namespace RIMA
             SetStretch(viewport, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(32f, 32f), new Vector2(-32f, -214f));
             viewport.gameObject.AddComponent<RectMask2D>();
             var viewportImg = viewport.GetComponent<Image>();
-            viewportImg.color = new Color(0f, 0f, 0f, 0f);
+            viewportImg.sprite = RimaUITheme.Act1PanelFrame;
+            viewportImg.type = Image.Type.Sliced;
+            viewportImg.color = new Color(RimaUITheme.Act1VoidPurple.r, RimaUITheme.Act1VoidPurple.g, RimaUITheme.Act1VoidPurple.b, 0.20f);
             viewportImg.raycastTarget = true;
 
             skillContent = MakeRect("Content", viewport);
@@ -240,16 +266,15 @@ namespace RIMA
         {
             foreach (var kv in classButtonFrames)
             {
-                Color accent = RimaUITheme.ClassAccent(kv.Key);
                 kv.Value.color = kv.Key == selectedClass
-                    ? new Color(accent.r, accent.g, accent.b, 0.78f)
-                    : new Color(RimaUITheme.CharSelectIronGrey.r, RimaUITheme.CharSelectIronGrey.g, RimaUITheme.CharSelectIronGrey.b, 0.82f);
+                    ? new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.82f)
+                    : new Color(RimaUITheme.Act1Slate.r, RimaUITheme.Act1Slate.g, RimaUITheme.Act1Slate.b, 0.72f);
             }
 
             if (classTitle != null)
             {
                 classTitle.text = selectedClass.ToString().ToUpperInvariant();
-                classTitle.color = RimaUITheme.ClassAccent(selectedClass);
+                classTitle.color = RimaUITheme.Act1Ember;
             }
         }
 
@@ -296,11 +321,11 @@ namespace RIMA
             layout.minHeight = implemented ? 58f : 34f;
 
             var rowImg = row.GetComponent<Image>();
-            rowImg.sprite = RimaUITheme.SmallPanelFrame;
+            rowImg.sprite = RimaUITheme.Act1PanelFrame;
             rowImg.type = Image.Type.Sliced;
             rowImg.color = implemented
-                ? new Color(0.030f, 0.034f, 0.046f, 0.72f)
-                : new Color(0.010f, 0.010f, 0.014f, 0.58f);
+                ? new Color(RimaUITheme.Act1Slate.r, RimaUITheme.Act1Slate.g, RimaUITheme.Act1Slate.b, 0.54f)
+                : new Color(RimaUITheme.Act1VoidPurple.r, RimaUITheme.Act1VoidPurple.g, RimaUITheme.Act1VoidPurple.b, 0.36f);
             rowImg.raycastTarget = implemented;
 
             var stripe = MakePanel("Accent", row);
@@ -328,9 +353,9 @@ namespace RIMA
             iconFrame.anchoredPosition = new Vector2(30f, 0f);
             iconFrame.sizeDelta = new Vector2(38f, 38f);
             var frameImg = iconFrame.GetComponent<Image>();
-            frameImg.sprite = RimaUITheme.SmallPanelFrame;
+            frameImg.sprite = RimaUITheme.Act1IconWell;
             frameImg.type = Image.Type.Sliced;
-            frameImg.color = new Color(accent.r, accent.g, accent.b, 0.25f);
+            frameImg.color = new Color(RimaUITheme.Act1Ember.r, RimaUITheme.Act1Ember.g, RimaUITheme.Act1Ember.b, 0.34f);
             frameImg.raycastTarget = false;
 
             Sprite icon = skill.icon != null ? skill.icon : RimaUITheme.PassiveIcon(skill.skillName);

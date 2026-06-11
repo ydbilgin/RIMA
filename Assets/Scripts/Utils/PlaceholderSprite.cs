@@ -18,7 +18,7 @@ namespace RIMA
 
         private Texture2D _tex; // prevent GC
 
-        private void Awake()
+        private void OnEnable()
         {
             var sr = GetComponent<SpriteRenderer>();
             if (sr.sprite != null) return; // Gerçek sprite varsa dokunma

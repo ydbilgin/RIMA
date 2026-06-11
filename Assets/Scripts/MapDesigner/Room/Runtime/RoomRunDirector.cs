@@ -1384,7 +1384,7 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             spriteRenderer.color = Color.white;
             spriteRenderer.sortingLayerName = "Entities";
-            spriteRenderer.sortingOrder = 0;
+            spriteRenderer.sortingOrder = 5;
 
             // K3.1 (DEMO_DESIGN_PLAN): IsoSorter for correct depth-sorting (baseOrder=+5 = in front
             // of same-tile props/cliffs). Proje kuralı: "dinamik/yerde-duran her sprite IsoSorter taşır".
