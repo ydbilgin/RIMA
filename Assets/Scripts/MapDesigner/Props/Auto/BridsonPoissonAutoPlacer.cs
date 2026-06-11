@@ -1,8 +1,6 @@
-#if UNITY_EDITOR
 using System.Collections.Generic;
 using RIMA.MapDesigner.Composition;
 using RIMA.MapDesigner.Room.Data;
-using UnityEditor;
 using UnityEngine;
 
 namespace RIMA.MapDesigner.Props.Auto
@@ -245,9 +243,7 @@ namespace RIMA.MapDesigner.Props.Auto
 
         private static string ResolvePropGuid(PropDefinitionSO prop)
         {
-            string path = prop != null ? AssetDatabase.GetAssetPath(prop) : string.Empty;
-            string guid = string.IsNullOrEmpty(path) ? string.Empty : AssetDatabase.AssetPathToGUID(path);
-            return string.IsNullOrEmpty(guid) && prop != null ? prop.propId : guid;
+            return prop != null ? prop.propId : string.Empty;
         }
 
         private static bool ContainsRole(CompositionRole[] roles, CompositionRole role)
@@ -261,4 +257,3 @@ namespace RIMA.MapDesigner.Props.Auto
         }
     }
 }
-#endif

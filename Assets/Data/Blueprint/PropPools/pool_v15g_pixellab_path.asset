@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8170545606006226233
+--- !u!114 &-7448174913844120186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_path_pixellab_pilot_tile_6
+  m_Name: pool_v15g_pixellab_path_pixellab_pilot_tile_4
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_path_pixellab_pilot_tile_6
-  visual: {fileID: 21300000, guid: 00c662e9d1b40ab49be7e7597e520e4b, type: 3}
+  propId: pool_v15g_pixellab_path_pixellab_pilot_tile_4
+  visual: {fileID: 21300000, guid: d0640a18cf8963a4ea09861103a3a413, type: 3}
   footprint: {x: 1, y: 1}
   hasCollision: 0
   blocksMovement: 0
@@ -44,11 +44,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
   poolId: pool_v15g_pixellab_path
   entries:
-  - prop: {fileID: 2315749370863440291}
+  - prop: {fileID: -7448174913844120186}
     weight: 1
-  - prop: {fileID: -8170545606006226233}
+  - prop: {fileID: 1120147351054287972}
     weight: 1
---- !u!114 &2315749370863440291
+--- !u!114 &1120147351054287972
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,10 +58,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_path_pixellab_pilot_tile_4
+  m_Name: pool_v15g_pixellab_path_pixellab_pilot_tile_6
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_path_pixellab_pilot_tile_4
-  visual: {fileID: 21300000, guid: d0640a18cf8963a4ea09861103a3a413, type: 3}
+  propId: pool_v15g_pixellab_path_pixellab_pilot_tile_6
+  visual: {fileID: 21300000, guid: 00c662e9d1b40ab49be7e7597e520e4b, type: 3}
   footprint: {x: 1, y: 1}
   hasCollision: 0
   blocksMovement: 0
