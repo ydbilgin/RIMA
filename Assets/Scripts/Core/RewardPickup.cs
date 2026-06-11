@@ -35,11 +35,15 @@ namespace RIMA
             transform.localScale = new Vector3(pickupVisualScale, pickupVisualScale, transform.localScale.z);
             if (sr != null && sr.sprite == null)
             {
-                Sprite riftShard = Resources.Load<Sprite>("Props/edge_filler_rift_shard");
+                Sprite riftShard = Resources.Load<Sprite>("UI/RIMA/RIMA_UI_Node_Chest_1");
                 if (riftShard != null)
                 {
                     sr.sprite = riftShard;
                     sr.color  = new Color(0.28f, 0.88f, 1f, 1f);  // cyan tint matching RIMA brand
+                }
+                else
+                {
+                    Debug.LogWarning("[RewardPickup] Failed to load UI/RIMA/RIMA_UI_Node_Chest_1 fallback sprite.");
                 }
             }
 

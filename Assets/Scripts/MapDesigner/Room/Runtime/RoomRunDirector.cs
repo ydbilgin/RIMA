@@ -124,7 +124,7 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         private const string DefaultPlayerPrefabPath = "Prefabs/Warblade";
         private const string DefaultEncounterBankPath = "Encounters/Act1_EncounterBank_Pilot";
-        private const string DefaultRewardSpritePath = "UI/RIMA/RIMA_UI_Node_Chest";
+        private const string DefaultRewardSpritePath = "UI/RIMA/RIMA_UI_Node_Chest_1";
         private const string DefaultEnemyPrefabEditorPath = "Assets/Prefabs/Enemies/FractureImp.prefab";
         private const string DefaultBossPrefabEditorPath = "Assets/Prefabs/Enemies/Boss/PenitentSovereign.prefab";
 
