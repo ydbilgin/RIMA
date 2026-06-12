@@ -1,0 +1,14 @@
+# Class Stats v0.1 — Short Table
+
+| Class | Arketip | Hasar tipi | maxHP | Phys | AP | AtkSpd | Move | 5-bar |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| Warblade | Bruiser / Breaker | Phys | 115 | 110 | 70 | 0.90 | 4.35 | 4/4/2/4/2 |
+| Elementalist | Mage / Controller | AP | 80 | 65 | 125 | 1.00 | 4.45 | 5/2/3/4/4 |
+| Shadowblade | Assassin / Mobility | Phys | 80 | 95 | 80 | 1.35 | 4.75 | 4/2/5/3/5 |
+| Ranger | Ranged / Trap-control | Phys | 85 | 105 | 80 | 1.05 | 4.65 | 4/2/4/5/4 |
+| Ravager | Berserker / HP-trade | Phys | 125 | 115 | 65 | 0.85 | 4.35 | 5/4/2/3/4 |
+| Ronin | Precision / Iaido burst | Phys | 85 | 115 | 75 | 1.00 | 4.60 | 4/2/4/3/5 |
+| Gunslinger | Run-and-gun ranged | Phys | 85 | 100 | 80 | 1.25 | 4.75 | 4/2/5/3/4 |
+| Brawler | Combo tank / Launcher | Phys | 130 | 95 | 65 | 1.20 | 4.45 | 4/5/3/5/4 |
+| Summoner | Minion AP / Sacrifice | AP | 75 | 60 | 105 | 0.95 | 4.40 | 4/2/2/5/5 |
+| Hexer | Curse AP / Stack burst | AP | 75 | 60 | 115 | 0.90 | 4.35 | 4/2/2/5/5 |
