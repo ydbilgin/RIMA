@@ -19,6 +19,8 @@
 3. **Görsel playtest:** Director aç (` tuş) → B + C1/C2/C3/C6.
 4. Kalan: **C5 Map** (öneri child-choice nav) · **C4 Build** (PaintCell refactor riskli) · HUD Layout · Faz D · Loc TR (ı/ğ/ş).
 
+**⭐ ÇOK ÖNEMLİ — Modular design felsefesi (2026-06-12, laurethstudio çekirdek):** `STAGING/MODULAR_ABILITY_DECISION_2026-06-12.md` (video 9CQgPaHAV1E + council). Stüdyo-seviyesi disiplin → memory `project_modular_design_philosophy.md`. **SONUÇ:** demo-öncesi "ucuz DRY temizliği" cx ile test edildi → 3 hedefin 3'ü de ÇÖKTÜ (AOE 5/5 skill-özel · targeting 5/5 farklı · passive 1/15 fit) → modüler temizlik İŞİ YOK, mevcut bespoke haklı. Post-demo opt-in SkillRecipe SO spec'i geçerli kalır. **NOT:** `CombatContract` runtime gate DEĞİL (test sözleşmesi); cx batchmode test Unity-açıkken çalışmaz.
+
 **Durum:** 22 commit push'lı (`github.com/ydbilgin/RIMA`). Gece detay → `STAGING/AUTONOMOUS_RUN_2026-06-12.md`. Kararlar: damage taksonomisi + HUD layout DECISION dosyalarında.
 
 ---
