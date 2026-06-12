@@ -60,6 +60,9 @@ namespace RIMA
 
         private Warblade_SkillController skillController;
         private Elementalist_SkillController elemSlotController;
+        private Ranger_SkillController rangerSlotController;
+        private Shadowblade_SkillController shadowSlotController;
+        private RoninController roninSlotController;
         private GameObject               player;
         private RoomConfig               currentRoomConfig;
 
@@ -373,6 +376,28 @@ namespace RIMA
             offerUI.Show(offers, OnOfferSelected);
         }
 
+        public bool TryDirectorAssignSkill(SkillData skill, int slot, out string error)
+        {
+            error = null;
+            if (skill == null) { error = "skill missing"; return false; }
+            if (skill.isPassive) { error = "passive skills do not use slots"; return false; }
+            if (skill.skillType == null) { error = $"{skill.skillName} has no runtime skill component"; return false; }
+            if (slot < 0 || slot > 3) { error = "slot must be 0..3"; return false; }
+
+            EnsureDependencies();
+            if (player == null) player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) { error = "player missing"; return false; }
+
+            Component host = ResolvePrimarySlotHost();
+            if (host == null) { error = "primary skill controller missing"; return false; }
+
+            RemoveOwnedSkill(GetControllerSlot(host, slot));
+            AssignActive(skill, slot);
+            OnSkillPicked.Invoke(skill);
+            Debug.Log($"[DraftManager] Director assigned '{skill.skillName}' to slot {slot}.");
+            return true;
+        }
+
         // ── Seçim akışı ──────────────────────────────────────────
 
         private void OnOfferSelected(RewardOffer chosen, int _ignored)
@@ -553,10 +578,70 @@ namespace RIMA
             return elemSlotController != null;
         }
 
+        private Component ResolvePrimarySlotHost()
+        {
+            if (player == null) player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return null;
+
+            ClassType primary = PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade;
+            switch (primary)
+            {
+                case ClassType.Elementalist:
+                    elemSlotController = player.GetComponent<Elementalist_SkillController>()
+                                      ?? player.AddComponent<Elementalist_SkillController>();
+                    return elemSlotController;
+                case ClassType.Ranger:
+                    rangerSlotController = player.GetComponent<Ranger_SkillController>()
+                                        ?? player.AddComponent<Ranger_SkillController>();
+                    return rangerSlotController;
+                case ClassType.Shadowblade:
+                    shadowSlotController = player.GetComponent<Shadowblade_SkillController>()
+                                        ?? player.AddComponent<Shadowblade_SkillController>();
+                    return shadowSlotController;
+                case ClassType.Ronin:
+                    roninSlotController = player.GetComponent<RoninController>()
+                                       ?? player.AddComponent<RoninController>();
+                    return roninSlotController;
+                default:
+                    skillController = player.GetComponent<Warblade_SkillController>()
+                                   ?? player.AddComponent<Warblade_SkillController>();
+                    return skillController;
+            }
+        }
+
+        private static SkillBase GetControllerSlot(Component host, int slot)
+        {
+            if (host is Warblade_SkillController wb) return wb.GetSlot(slot);
+            if (host is Elementalist_SkillController el) return el.GetSlot(slot);
+            if (host is Ranger_SkillController rg) return rg.GetSlot(slot);
+            if (host is Shadowblade_SkillController sh) return sh.GetSlot(slot);
+            if (host is RoninController rn) return rn.GetSlot(slot);
+            return null;
+        }
+
+        private static void SetControllerSlot(Component host, int slot, SkillBase skill)
+        {
+            if (host is Warblade_SkillController wb) wb.SetSlot(slot, skill);
+            else if (host is Elementalist_SkillController el) el.SetSlot(slot, skill);
+            else if (host is Ranger_SkillController rg) rg.SetSlot(slot, skill);
+            else if (host is Shadowblade_SkillController sh) sh.SetSlot(slot, skill);
+            else if (host is RoninController rn) rn.SetSlot(slot, skill);
+        }
+
+        private void RemoveOwnedSkill(SkillBase skill)
+        {
+            if (skill == null) return;
+            System.Type type = skill.GetType();
+            for (int i = currentActiveSkills.Count - 1; i >= 0; i--)
+            {
+                if (currentActiveSkills[i] != null && currentActiveSkills[i].skillType == type)
+                    currentActiveSkills.RemoveAt(i);
+            }
+        }
+
         private void AssignActive(SkillData skill, int slot)
         {
-            bool elemPrimarySlot = slot < 4 && UseElementalistPrimary();
-            Component host = elemPrimarySlot ? (Component)elemSlotController : skillController;
+            Component host = slot < 4 ? ResolvePrimarySlotHost() : skillController;
 
             if (host != null && skill.skillType != null)
             {
@@ -567,8 +652,10 @@ namespace RIMA
                     comp = host.gameObject.AddComponent(skill.skillType) as SkillBase;
                 if (comp != null)
                 {
-                    if (elemPrimarySlot) elemSlotController.SetSlot(slot, comp);
-                    else                 skillController.SetSlot(slot, comp);
+                    comp.skillName = skill.skillName;
+                    comp.icon = skill.icon;
+                    comp.cooldown = skill.cooldown;
+                    SetControllerSlot(host, slot, comp);
                 }
                 else
                     Debug.LogWarning($"[Draft] '{skill.skillName}' bileşeni eklenemedi (skillType={skill.skillType}).");

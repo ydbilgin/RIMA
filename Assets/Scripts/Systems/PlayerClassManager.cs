@@ -12,6 +12,7 @@ namespace RIMA
     {
         public static PlayerClassManager Instance { get; private set; }
         public static ClassType SelectedClass = ClassType.None;
+        public static bool DirectorBypassClassUnlock { get; set; }
 
         public ClassType PrimaryClass   { get; private set; } = ClassType.Warblade;
         public ClassType SecondaryClass { get; private set; } = ClassType.None;
@@ -49,7 +50,7 @@ namespace RIMA
         public void SetPrimaryClass(ClassType type)
         {
             if (type == ClassType.None) return;
-            if (!ClassUnlockPolicy.IsUnlocked(type))
+            if (!DirectorBypassClassUnlock && !ClassUnlockPolicy.IsUnlocked(type))
             {
                 Debug.LogWarning($"[PlayerClassManager] Locked primary class rejected: {type}");
                 return;

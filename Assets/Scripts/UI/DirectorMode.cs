@@ -41,6 +41,7 @@ namespace RIMA
         [SerializeField] private Sprite minimapFrame;
         [SerializeField] private Sprite slotNormal;
         [SerializeField] private Sprite slotActive;
+        [SerializeField] private Sprite rewardCard;
         [SerializeField] private Sprite ribbonBase;
         [SerializeField] private Sprite menuButton;
         [SerializeField] private Sprite tooltipBox;
@@ -52,13 +53,18 @@ namespace RIMA
         private readonly List<TabBinding> tabs = new List<TabBinding>();
         private readonly Dictionary<DirectorTab, CanvasGroup> panels = new Dictionary<DirectorTab, CanvasGroup>();
         private readonly List<StatSliderBinding> statSliders = new List<StatSliderBinding>();
+        private readonly List<ClassButtonBinding> classButtons = new List<ClassButtonBinding>();
+        private readonly List<SkillCardBinding> skillCards = new List<SkillCardBinding>();
         private readonly List<LocalizedTextBinding> localizedTexts = new List<LocalizedTextBinding>();
 
         private CanvasGroup rootGroup;
         private TextMeshProUGUI subtitleText;
         private TextMeshProUGUI startButtonText;
         private TextMeshProUGUI modeStripText;
+        private TextMeshProUGUI classSkillStatusText;
         private TextMeshProUGUI statsStatusText;
+        private RectTransform classSkillCardsRoot;
+        private SkillData selectedDirectorSkill;
         private Camera directorCamera;
         private Vector3 targetCameraPosition;
         private bool hasCameraTarget;
@@ -66,6 +72,20 @@ namespace RIMA
 
         public DirectorModeState State { get; private set; } = DirectorModeState.Test;
         public DirectorTab ActiveTab { get; private set; } = DirectorTab.Spawn;
+
+        private static readonly ClassType[] DirectorClasses =
+        {
+            ClassType.Warblade,
+            ClassType.Elementalist,
+            ClassType.Shadowblade,
+            ClassType.Ranger,
+            ClassType.Ravager,
+            ClassType.Ronin,
+            ClassType.Gunslinger,
+            ClassType.Brawler,
+            ClassType.Summoner,
+            ClassType.Hexer
+        };
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -185,6 +205,10 @@ namespace RIMA
             {
                 RefreshStatsSlidersFromRuntime();
             }
+            else if (tab == DirectorTab.ClassSkill)
+            {
+                RefreshClassSkillPanel();
+            }
 
             OnTabChanged?.Invoke(tab);
         }
@@ -213,6 +237,30 @@ namespace RIMA
         public bool IsTabInteractableForValidation(DirectorTab tab)
         {
             return panels.TryGetValue(tab, out CanvasGroup group) && group.alpha > 0.99f && group.interactable && group.blocksRaycasts;
+        }
+
+        public void SelectClassForValidation(ClassType type)
+        {
+            SelectDirectorClass(type);
+        }
+
+        public bool AssignSkillForValidation(string skillName, int slot)
+        {
+            SkillData skill = FindDirectorSkill(skillName);
+            if (skill == null)
+            {
+                SetClassSkillStatus("director.class_skill.status.skill_missing", skillName);
+                return false;
+            }
+
+            selectedDirectorSkill = skill;
+            return AssignSelectedSkillToSlot(slot);
+        }
+
+        public bool AssignBasicAttackButtonsForValidation()
+        {
+            return AssignBasicAction(GameAction.Attack, "<Mouse>/leftButton")
+                & AssignBasicAction(GameAction.ClassSecondary, "<Mouse>/rightButton");
         }
 
         private void UpdateFreeCamera(float dt)
@@ -340,9 +388,14 @@ namespace RIMA
             tabs.Clear();
             panels.Clear();
             statSliders.Clear();
+            classButtons.Clear();
+            skillCards.Clear();
             localizedTexts.Clear();
             rootGroup = null;
+            classSkillStatusText = null;
             statsStatusText = null;
+            classSkillCardsRoot = null;
+            selectedDirectorSkill = null;
 
             LoadEditorSkin();
             BuildOverlay();
@@ -422,7 +475,7 @@ namespace RIMA
             Stretch(content, Vector2.zero, Vector2.one, new Vector2(150f, 120f), new Vector2(-40f, -130f));
 
             AddEmptyPanel(content, DirectorTab.Spawn, "SPAWN", "yakinda");
-            AddEmptyPanel(content, DirectorTab.ClassSkill, "CLASS & SKILL", "yakinda");
+            AddClassSkillPanel(content);
             AddStatsPanel(content);
             AddEmptyPanel(content, DirectorTab.Build, "BUILD", "yakinda");
             AddEmptyPanel(content, DirectorTab.Map, "MAP", "yakinda");
@@ -455,6 +508,65 @@ namespace RIMA
             TextMeshProUGUI footer = CreateText("FooterModeText", panel, "PLACE / ERASE / PAINT / INSPECT", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
             footer.color = new Color(1f, 0.55f, 0.18f, 0.88f);
             Anchor(footer.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 22f), new Vector2(-80f, 28f));
+        }
+
+        private void AddClassSkillPanel(RectTransform parent)
+        {
+            RectTransform panel = CreateFill("Panel_" + DirectorTab.ClassSkill, parent);
+            CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
+            panels[DirectorTab.ClassSkill] = group;
+
+            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            RectTransform header = CreateFill("Header", panel);
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.class_skill.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            localizedTexts.Add(new LocalizedTextBinding(titleText, "director.class_skill.title"));
+
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.class_skill.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            localizedTexts.Add(new LocalizedTextBinding(hint, "director.class_skill.hint"));
+
+            RectTransform classGrid = CreatePanel("ClassGrid", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
+            Anchor(classGrid, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(520f, 288f));
+            GridLayoutGroup classLayout = classGrid.gameObject.AddComponent<GridLayoutGroup>();
+            classLayout.padding = new RectOffset(14, 14, 14, 14);
+            classLayout.spacing = new Vector2(10f, 10f);
+            classLayout.cellSize = new Vector2(92f, 74f);
+            classLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            classLayout.constraintCount = 5;
+
+            for (int i = 0; i < DirectorClasses.Length; i++)
+                AddClassButton(classGrid, DirectorClasses[i]);
+
+            classSkillCardsRoot = CreatePanel("SkillCards", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
+            Anchor(classSkillCardsRoot, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(590f, -132f), new Vector2(-90f, 410f));
+            GridLayoutGroup skillLayout = classSkillCardsRoot.gameObject.AddComponent<GridLayoutGroup>();
+            skillLayout.padding = new RectOffset(16, 16, 16, 16);
+            skillLayout.spacing = new Vector2(12f, 12f);
+            skillLayout.cellSize = new Vector2(218f, 92f);
+            skillLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            skillLayout.constraintCount = 3;
+
+            RectTransform actions = CreateFill("ClassSkillActions", panel);
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 78f), new Vector2(990f, 54f));
+
+            AddSkillSlotButton(actions, "Button_AssignQ", "director.class_skill.assign.q", 0, new Vector2(0f, 0f));
+            AddSkillSlotButton(actions, "Button_AssignE", "director.class_skill.assign.e", 1, new Vector2(122f, 0f));
+            AddSkillSlotButton(actions, "Button_AssignR", "director.class_skill.assign.r", 2, new Vector2(244f, 0f));
+            AddSkillSlotButton(actions, "Button_AssignF", "director.class_skill.assign.f", 3, new Vector2(366f, 0f));
+            AddBasicButton(actions, "Button_LMB", "director.class_skill.assign.lmb", GameAction.Attack, "<Mouse>/leftButton", new Vector2(520f, 0f));
+            AddBasicButton(actions, "Button_RMB", "director.class_skill.assign.rmb", GameAction.ClassSecondary, "<Mouse>/rightButton", new Vector2(674f, 0f));
+
+            classSkillStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            classSkillStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Anchor(classSkillStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+
+            RefreshClassSkillPanel();
         }
 
         private void AddStatsPanel(RectTransform parent)
@@ -579,6 +691,219 @@ namespace RIMA
             TextMeshProUGUI label = CreateText("TMP", button.transform as RectTransform, Loc.T(locKey), 18f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             localizedTexts.Add(new LocalizedTextBinding(label, locKey));
+        }
+
+        private void AddClassButton(RectTransform parent, ClassType type)
+        {
+            Button button = CreateButton("Button_Class_" + type, parent, slotNormal, Color.white);
+            TextMeshProUGUI label = CreateText("TMP_Label", button.transform as RectTransform, type.ToString(), 15f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(5f, 6f), new Vector2(-5f, -6f));
+            label.enableWordWrapping = true;
+
+            button.onClick.AddListener(() => SelectDirectorClass(type));
+            classButtons.Add(new ClassButtonBinding(type, button.GetComponent<Image>()));
+        }
+
+        private void AddSkillSlotButton(RectTransform parent, string name, string locKey, int slot, Vector2 position)
+        {
+            Button button = CreateButton(name, parent, menuButton, Color.white);
+            Anchor(button.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), position, new Vector2(108f, 42f));
+            button.onClick.AddListener(() => AssignSelectedSkillToSlot(slot));
+            AddButtonText(button, locKey);
+        }
+
+        private void AddBasicButton(RectTransform parent, string name, string locKey, GameAction action, string bindingPath, Vector2 position)
+        {
+            Button button = CreateButton(name, parent, ribbonBase, new Color(0.80f, 0.34f, 0.09f, 1f));
+            Anchor(button.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), position, new Vector2(138f, 46f));
+            button.onClick.AddListener(() => AssignBasicAction(action, bindingPath));
+            AddButtonText(button, locKey);
+        }
+
+        private void SelectDirectorClass(ClassType type)
+        {
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                SetClassSkillStatus("director.class_skill.status.no_manager");
+                return;
+            }
+
+            PlayerClassManager.DirectorBypassClassUnlock = true;
+            try
+            {
+                manager.SetPrimaryClass(type);
+            }
+            finally
+            {
+                PlayerClassManager.DirectorBypassClassUnlock = false;
+            }
+
+            selectedDirectorSkill = null;
+            RefreshClassSkillPanel();
+            SetClassSkillStatus("director.class_skill.status.class", type);
+        }
+
+        private void RefreshClassSkillPanel()
+        {
+            RefreshClassButtons();
+            RebuildSkillCards();
+        }
+
+        private void RefreshClassButtons()
+        {
+            ClassType active = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.None;
+            foreach (ClassButtonBinding binding in classButtons)
+            {
+                if (binding.Background != null)
+                    binding.Background.sprite = binding.Type == active && slotActive != null ? slotActive : slotNormal;
+            }
+        }
+
+        private void RebuildSkillCards()
+        {
+            if (classSkillCardsRoot == null) return;
+
+            for (int i = classSkillCardsRoot.childCount - 1; i >= 0; i--)
+                DestroyRuntimeObject(classSkillCardsRoot.GetChild(i).gameObject);
+            skillCards.Clear();
+
+            EnsureSkillDatabase();
+            ClassType active = PlayerClassManager.Instance != null ? PlayerClassManager.Instance.PrimaryClass : ClassType.Warblade;
+            List<SkillData> all = SkillDatabase.Instance != null ? SkillDatabase.Instance.GetAll() : null;
+            if (all == null) return;
+
+            int count = 0;
+            for (int i = 0; i < all.Count; i++)
+            {
+                SkillData skill = all[i];
+                if (skill == null || skill.classType != active || skill.isPassive || !skill.isImplemented) continue;
+                AddSkillCard(classSkillCardsRoot, skill);
+                count++;
+            }
+
+            if (count == 0)
+                SetClassSkillStatus("director.class_skill.status.no_skills", active);
+        }
+
+        private void AddSkillCard(RectTransform parent, SkillData skill)
+        {
+            Button button = CreateButton("Button_Skill_" + SanitizeName(skill.skillName), parent, rewardCard, Color.white);
+            RectTransform rt = button.transform as RectTransform;
+
+            TextMeshProUGUI title = CreateText("TMP_Title", rt, skill.skillName, 17f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(14f, 44f), new Vector2(-12f, -8f));
+
+            TextMeshProUGUI desc = CreateText("TMP_Desc", rt, skill.description, 11f, FontStyles.Normal, TextAlignmentOptions.TopLeft);
+            desc.color = new Color(0.78f, 0.84f, 0.86f, 0.76f);
+            desc.enableWordWrapping = true;
+            Stretch(desc.rectTransform, Vector2.zero, Vector2.one, new Vector2(14f, 8f), new Vector2(-12f, -38f));
+
+            button.onClick.AddListener(() => SelectDirectorSkill(skill));
+            skillCards.Add(new SkillCardBinding(skill, button.GetComponent<Image>()));
+        }
+
+        private void SelectDirectorSkill(SkillData skill)
+        {
+            selectedDirectorSkill = skill;
+            RefreshSkillCards();
+            SetClassSkillStatus("director.class_skill.status.selected", skill.skillName);
+        }
+
+        private void RefreshSkillCards()
+        {
+            foreach (SkillCardBinding binding in skillCards)
+            {
+                if (binding.Background != null)
+                    binding.Background.color = binding.Skill == selectedDirectorSkill ? new Color(1f, 0.72f, 0.34f, 1f) : Color.white;
+            }
+        }
+
+        private bool AssignSelectedSkillToSlot(int slot)
+        {
+            if (selectedDirectorSkill == null)
+            {
+                SetClassSkillStatus("director.class_skill.status.no_skill_selected");
+                return false;
+            }
+
+            DraftManager draft = DraftManager.Instance;
+            if (draft == null)
+            {
+                SetClassSkillStatus("director.class_skill.status.no_draft");
+                return false;
+            }
+
+            if (!draft.TryDirectorAssignSkill(selectedDirectorSkill, slot, out string error))
+            {
+                SetClassSkillStatus("director.class_skill.status.assign_failed", error);
+                return false;
+            }
+
+            SetClassSkillStatus("director.class_skill.status.assigned", selectedDirectorSkill.skillName, SlotLabel(slot));
+            return true;
+        }
+
+        private bool AssignBasicAction(GameAction action, string bindingPath)
+        {
+            if (!KeyBindManager.TrySetBinding(action, bindingPath, out string error))
+            {
+                SetClassSkillStatus("director.class_skill.status.binding_failed", error);
+                return false;
+            }
+
+            SetClassSkillStatus("director.class_skill.status.binding", KeyBindManager.PathToLabel(bindingPath));
+            return true;
+        }
+
+        private SkillData FindDirectorSkill(string skillName)
+        {
+            if (string.IsNullOrEmpty(skillName)) return null;
+            EnsureSkillDatabase();
+            return SkillDatabase.Instance != null ? SkillDatabase.Instance.FindByName(skillName) : null;
+        }
+
+        private static void EnsureSkillDatabase()
+        {
+            if (SkillDatabase.Instance != null) { SkillDatabase.Instance.EnsureBuilt(); return; }
+            SkillDatabase existing = FindAnyObjectByType<SkillDatabase>();
+            if (existing != null) { existing.EnsureBuilt(); return; }
+            GameObject go = new GameObject("SkillDatabase_Director");
+            go.AddComponent<SkillDatabase>();
+        }
+
+        private void SetClassSkillStatus(string locKey, params object[] args)
+        {
+            if (classSkillStatusText != null)
+                classSkillStatusText.text = args != null && args.Length > 0 ? Loc.T(locKey, args) : Loc.T(locKey);
+        }
+
+        private static string SlotLabel(int slot)
+        {
+            switch (slot)
+            {
+                case 0: return "Q";
+                case 1: return "E";
+                case 2: return "R";
+                case 3: return "F";
+                default: return "?";
+            }
+        }
+
+        private static string SanitizeName(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return "Unknown";
+            char[] chars = value.ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+                if (!char.IsLetterOrDigit(chars[i])) chars[i] = '_';
+            return new string(chars);
+        }
+
+        private static void DestroyRuntimeObject(UnityEngine.Object target)
+        {
+            if (target == null) return;
+            if (Application.isPlaying) Destroy(target);
+            else DestroyImmediate(target);
         }
 
         private void OnStatSliderChanged(StatSliderBinding binding, float value)
@@ -819,6 +1144,7 @@ namespace RIMA
             minimapFrame = minimapFrame != null ? minimapFrame : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/minimap_frame.png");
             slotNormal = slotNormal != null ? slotNormal : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/slot_normal.png");
             slotActive = slotActive != null ? slotActive : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/slot_active.png");
+            rewardCard = rewardCard != null ? rewardCard : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/reward_card.png");
             ribbonBase = ribbonBase != null ? ribbonBase : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/ribbon_base.png");
             menuButton = menuButton != null ? menuButton : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/menu_button.png");
             tooltipBox = tooltipBox != null ? tooltipBox : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/tooltip_box.png");
@@ -864,6 +1190,30 @@ namespace RIMA
             {
                 Text = text;
                 Key = key;
+            }
+        }
+
+        private readonly struct ClassButtonBinding
+        {
+            public readonly ClassType Type;
+            public readonly Image Background;
+
+            public ClassButtonBinding(ClassType type, Image background)
+            {
+                Type = type;
+                Background = background;
+            }
+        }
+
+        private readonly struct SkillCardBinding
+        {
+            public readonly SkillData Skill;
+            public readonly Image Background;
+
+            public SkillCardBinding(SkillData skill, Image background)
+            {
+                Skill = skill;
+                Background = background;
             }
         }
 
