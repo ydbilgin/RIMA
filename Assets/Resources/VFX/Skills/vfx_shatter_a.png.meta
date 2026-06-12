@@ -1,0 +1,1040 @@
+fileFormatVersion: 2
+guid: 6cc3b34d43d414f4fa6e9475699b7bfb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1438644819258288968
+    second: vfx_shatter_a_0
+  - first:
+      213: 404317959946108239
+    second: vfx_shatter_a_1
+  - first:
+      213: 210931795838776364
+    second: vfx_shatter_a_2
+  - first:
+      213: -8110939397399692987
+    second: vfx_shatter_a_3
+  - first:
+      213: 606848439705205660
+    second: vfx_shatter_a_4
+  - first:
+      213: 8939310644783881701
+    second: vfx_shatter_a_5
+  - first:
+      213: 5762299016144834044
+    second: vfx_shatter_a_6
+  - first:
+      213: 2288467819779324888
+    second: vfx_shatter_a_7
+  - first:
+      213: 2735141389759406404
+    second: vfx_shatter_a_8
+  - first:
+      213: -4789745279884791225
+    second: vfx_shatter_a_9
+  - first:
+      213: 2281880590686348743
+    second: vfx_shatter_a_10
+  - first:
+      213: 1279443304942474917
+    second: vfx_shatter_a_11
+  - first:
+      213: 2930719051267013446
+    second: vfx_shatter_a_12
+  - first:
+      213: -1832066161735302725
+    second: vfx_shatter_a_13
+  - first:
+      213: 1425642329457866052
+    second: vfx_shatter_a_14
+  - first:
+      213: 8910797358387288142
+    second: vfx_shatter_a_15
+  - first:
+      213: -4192915592168614122
+    second: vfx_shatter_a_16
+  - first:
+      213: -4456636094326021901
+    second: vfx_shatter_a_17
+  - first:
+      213: 3191401659313996444
+    second: vfx_shatter_a_18
+  - first:
+      213: -9177921547710812060
+    second: vfx_shatter_a_19
+  - first:
+      213: 1572023340041271866
+    second: vfx_shatter_a_20
+  - first:
+      213: 8098040559026033614
+    second: vfx_shatter_a_21
+  - first:
+      213: 6695612395251228203
+    second: vfx_shatter_a_22
+  - first:
+      213: -6736464004227381037
+    second: vfx_shatter_a_23
+  - first:
+      213: -8502764572740432284
+    second: vfx_shatter_a_24
+  - first:
+      213: -8491379018586727648
+    second: vfx_shatter_a_25
+  - first:
+      213: 1811889774341540007
+    second: vfx_shatter_a_26
+  - first:
+      213: -2318413886466029747
+    second: vfx_shatter_a_27
+  - first:
+      213: 2874480553073442958
+    second: vfx_shatter_a_28
+  - first:
+      213: 2448456150546822373
+    second: vfx_shatter_a_29
+  - first:
+      213: -1877822083579931657
+    second: vfx_shatter_a_30
+  - first:
+      213: 7904251237997183169
+    second: vfx_shatter_a_31
+  - first:
+      213: 3707319600068616642
+    second: vfx_shatter_a_32
+  - first:
+      213: 5944391782532799210
+    second: vfx_shatter_a_33
+  - first:
+      213: 3286870513439318256
+    second: vfx_shatter_a_34
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: vfx_shatter_a_0
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 43
+        width: 63
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84ba8d147d717f310800000000000000
+      internalID: 1438644819258288968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_1
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 94
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4df5eada0d6c9500800000000000000
+      internalID: 404317959946108239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_2
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 103
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c243ecac9516de200800000000000000
+      internalID: 210931795838776364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_3
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 103
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54935477797207f80800000000000000
+      internalID: -8110939397399692987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_4
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 98
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9bf021d075fb6800800000000000000
+      internalID: 606848439705205660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_5
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 92
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ed163f3bafce0c70800000000000000
+      internalID: 8939310644783881701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_6
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 74
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfd45eadc6cc7ff40800000000000000
+      internalID: 5762299016144834044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_7
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 75
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dbfbd57b5542cf10800000000000000
+      internalID: 2288467819779324888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_8
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 75
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 441e3134a9c25f520800000000000000
+      internalID: 2735141389759406404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_9
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 76
+        width: 18
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 742fcdb8b08678db0800000000000000
+      internalID: -4789745279884791225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_10
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 52
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c5e7bbae4edaaf10800000000000000
+      internalID: 2281880590686348743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_11
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 67
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a6195538ee71c110800000000000000
+      internalID: 1279443304942474917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_12
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 57
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64b7d3313710ca820800000000000000
+      internalID: 2930719051267013446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_13
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 65
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb101c858813396e0800000000000000
+      internalID: -1832066161735302725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_14
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 42
+        width: 23
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 445b8103526e8c310800000000000000
+      internalID: 1425642329457866052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_15
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 48
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e48d92c6cf289ab70800000000000000
+      internalID: 8910797358387288142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_16
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 46
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 617d793eb75cfc5c0800000000000000
+      internalID: -4192915592168614122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_17
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 38
+        width: 32
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f06380a519d622c0800000000000000
+      internalID: -4456636094326021901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_18
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 41
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c92c00f76e22a4c20800000000000000
+      internalID: 3191401659313996444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_19
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 29
+        width: 29
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4603b44aaf871a080800000000000000
+      internalID: -9177921547710812060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_20
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 38
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3a78c916e2f0d510800000000000000
+      internalID: 1572023340041271866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_21
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 35
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec3d371bbf4026070800000000000000
+      internalID: 8098040559026033614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_22
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 21
+        width: 10
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2ed6a4aff79bec50800000000000000
+      internalID: 6695612395251228203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_23
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 40
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d842d1fda54382a0800000000000000
+      internalID: -6736464004227381037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_24
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 26
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46ec701bbac100a80800000000000000
+      internalID: -8502764572740432284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_25
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 22
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02bdee795cf882a80800000000000000
+      internalID: -8491379018586727648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_26
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 18
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a84ac36620252910800000000000000
+      internalID: 1811889774341540007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_27
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 26
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d470cde8ad653dfd0800000000000000
+      internalID: -2318413886466029747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_28
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 34
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8006b755d434e720800000000000000
+      internalID: 2874480553073442958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_29
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 13
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e4b67d75e9aaf120800000000000000
+      internalID: 2448456150546822373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_30
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 21
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f395dc93c2a0f5e0800000000000000
+      internalID: -1877822083579931657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_31
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 14
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c083485f9a81bd60800000000000000
+      internalID: 7904251237997183169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_32
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 16
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c1eee6b88b037330800000000000000
+      internalID: 3707319600068616642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_33
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 17
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aea5e9bd4d8be7250800000000000000
+      internalID: 5944391782532799210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vfx_shatter_a_34
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 17
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f0a140415f4d9d20800000000000000
+      internalID: 3286870513439318256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      vfx_shatter_a_0: 1438644819258288968
+      vfx_shatter_a_1: 404317959946108239
+      vfx_shatter_a_10: 2281880590686348743
+      vfx_shatter_a_11: 1279443304942474917
+      vfx_shatter_a_12: 2930719051267013446
+      vfx_shatter_a_13: -1832066161735302725
+      vfx_shatter_a_14: 1425642329457866052
+      vfx_shatter_a_15: 8910797358387288142
+      vfx_shatter_a_16: -4192915592168614122
+      vfx_shatter_a_17: -4456636094326021901
+      vfx_shatter_a_18: 3191401659313996444
+      vfx_shatter_a_19: -9177921547710812060
+      vfx_shatter_a_2: 210931795838776364
+      vfx_shatter_a_20: 1572023340041271866
+      vfx_shatter_a_21: 8098040559026033614
+      vfx_shatter_a_22: 6695612395251228203
+      vfx_shatter_a_23: -6736464004227381037
+      vfx_shatter_a_24: -8502764572740432284
+      vfx_shatter_a_25: -8491379018586727648
+      vfx_shatter_a_26: 1811889774341540007
+      vfx_shatter_a_27: -2318413886466029747
+      vfx_shatter_a_28: 2874480553073442958
+      vfx_shatter_a_29: 2448456150546822373
+      vfx_shatter_a_3: -8110939397399692987
+      vfx_shatter_a_30: -1877822083579931657
+      vfx_shatter_a_31: 7904251237997183169
+      vfx_shatter_a_32: 3707319600068616642
+      vfx_shatter_a_33: 5944391782532799210
+      vfx_shatter_a_34: 3286870513439318256
+      vfx_shatter_a_4: 606848439705205660
+      vfx_shatter_a_5: 8939310644783881701
+      vfx_shatter_a_6: 5762299016144834044
+      vfx_shatter_a_7: 2288467819779324888
+      vfx_shatter_a_8: 2735141389759406404
+      vfx_shatter_a_9: -4789745279884791225
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
