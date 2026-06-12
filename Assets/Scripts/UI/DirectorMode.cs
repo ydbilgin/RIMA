@@ -2,10 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using RIMA.Balance;
 using RIMA.Encounter;
@@ -61,6 +64,11 @@ namespace RIMA
         private readonly List<SpawnEnemyBinding> spawnEnemies = new List<SpawnEnemyBinding>();
         private readonly List<GameObject> directorSpawnedEnemies = new List<GameObject>();
         private readonly List<LocalizedTextBinding> localizedTexts = new List<LocalizedTextBinding>();
+        private readonly List<DamageTelemetryRecord> telemetryRecords = new List<DamageTelemetryRecord>();
+        private readonly Dictionary<DamageSourceType, int> telemetryDamageBySource = new Dictionary<DamageSourceType, int>();
+        private readonly Dictionary<Health, float> telemetryFirstHitTimes = new Dictionary<Health, float>();
+        private readonly Dictionary<Health, UnityAction> telemetryDeathListeners = new Dictionary<Health, UnityAction>();
+        private readonly List<TelemetrySourceBinding> telemetrySourceBindings = new List<TelemetrySourceBinding>();
 
         private CanvasGroup rootGroup;
         private TextMeshProUGUI subtitleText;
@@ -69,6 +77,10 @@ namespace RIMA
         private TextMeshProUGUI spawnStatusText;
         private TextMeshProUGUI classSkillStatusText;
         private TextMeshProUGUI statsStatusText;
+        private TextMeshProUGUI telemetryDpsText;
+        private TextMeshProUGUI telemetryTtkText;
+        private TextMeshProUGUI telemetryEventCountText;
+        private TextMeshProUGUI telemetryStatusText;
         private RectTransform spawnPaletteRoot;
         private RectTransform classSkillCardsRoot;
         private SpawnEnemyBinding selectedSpawnEnemy;
@@ -80,10 +92,15 @@ namespace RIMA
         private bool hasCameraTarget;
         private bool suppressStatSliderCallbacks;
         private float spawnGhostPulse;
+        private float telemetryLastTtk = -1f;
+        private float telemetryLastRefreshTime = -1f;
+        private string telemetryLastCsv = "";
 
         private const string DirectorWaveResourcePath = "Encounters/Act1_Wave_Pilot";
         private const float SpawnGridSize = 1f;
         private const float EraseRadius = 0.7f;
+        private const float TelemetryDpsWindowSeconds = 5f;
+        private const float TelemetryRefreshInterval = 0.15f;
 
         public DirectorModeState State { get; private set; } = DirectorModeState.Test;
         public DirectorTab ActiveTab { get; private set; } = DirectorTab.Spawn;
@@ -134,6 +151,8 @@ namespace RIMA
 
         private void Update()
         {
+            UpdateTelemetryDisplay(false);
+
             Keyboard keyboard = Keyboard.current;
             if (keyboard != null && keyboard.backquoteKey.wasPressedThisFrame)
             {
@@ -159,6 +178,8 @@ namespace RIMA
             }
 
             HideSpawnGhost();
+            SkillRuntime.OnDamageApplied -= OnDamageAppliedTelemetry;
+            ClearTelemetryDeathListeners();
             Loc.OnLanguageChanged -= RefreshLocalizedText;
         }
 
@@ -173,6 +194,14 @@ namespace RIMA
             {
                 RebuildOverlayRuntime();
             }
+
+            SkillRuntime.OnDamageApplied -= OnDamageAppliedTelemetry;
+            SkillRuntime.OnDamageApplied += OnDamageAppliedTelemetry;
+        }
+
+        private void OnDisable()
+        {
+            SkillRuntime.OnDamageApplied -= OnDamageAppliedTelemetry;
         }
 
         public void ToggleState()
@@ -317,6 +346,32 @@ namespace RIMA
         public bool HasSpawnGhostForValidation()
         {
             return spawnGhost != null && spawnGhost.activeSelf && spawnGhostRenderer != null && spawnGhostRenderer.sprite != null;
+        }
+
+        public int TelemetryEventCountForValidation()
+        {
+            return telemetryRecords.Count;
+        }
+
+        public float TelemetryDpsForValidation()
+        {
+            return CalculateTelemetryDps(Time.unscaledTime);
+        }
+
+        public int TelemetrySourceDamageForValidation(DamageSourceType sourceType)
+        {
+            return telemetryDamageBySource.TryGetValue(sourceType, out int damage) ? damage : 0;
+        }
+
+        public string ExportTelemetryCsvForValidation()
+        {
+            telemetryLastCsv = BuildTelemetryCsv();
+            return telemetryLastCsv;
+        }
+
+        public void ClearTelemetryForValidation()
+        {
+            ClearTelemetry();
         }
 
         private void UpdateFreeCamera(float dt)
@@ -542,7 +597,7 @@ namespace RIMA
             AddStatsPanel(content);
             AddEmptyPanel(content, DirectorTab.Build, "BUILD", "yakinda");
             AddEmptyPanel(content, DirectorTab.Map, "MAP", "yakinda");
-            AddEmptyPanel(content, DirectorTab.Telemetry, "TELEMETRY", "yakinda");
+            AddTelemetryPanel(content);
         }
 
         private void AddSpawnPanel(RectTransform parent)
@@ -1047,6 +1102,118 @@ namespace RIMA
             RefreshStatsSlidersFromRuntime();
         }
 
+        private void AddTelemetryPanel(RectTransform parent)
+        {
+            RectTransform panel = CreateFill("Panel_" + DirectorTab.Telemetry, parent);
+            CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
+            panels[DirectorTab.Telemetry] = group;
+
+            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            RectTransform header = CreateFill("Header", panel);
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.telemetry.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            localizedTexts.Add(new LocalizedTextBinding(titleText, "director.telemetry.title"));
+
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.telemetry.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            localizedTexts.Add(new LocalizedTextBinding(hint, "director.telemetry.hint"));
+
+            RectTransform metrics = CreateFill("TelemetryMetrics", panel);
+            Anchor(metrics, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(900f, 128f));
+
+            telemetryDpsText = AddTelemetryMetric(metrics, "MetricDps", "director.telemetry.dps", HtmlColor("#E89020"), new Vector2(0f, 0f));
+            telemetryTtkText = AddTelemetryMetric(metrics, "MetricTtk", "director.telemetry.ttk", HtmlColor("#FFD24A"), new Vector2(300f, 0f));
+            telemetryEventCountText = AddTelemetryMetric(metrics, "MetricEvents", "director.telemetry.events", HtmlColor("#00FFCC"), new Vector2(600f, 0f));
+
+            RectTransform breakdown = CreatePanel("TelemetrySourceBreakdown", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
+            Anchor(breakdown, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -292f), new Vector2(760f, 322f));
+
+            VerticalLayoutGroup layout = breakdown.gameObject.AddComponent<VerticalLayoutGroup>();
+            layout.padding = new RectOffset(18, 18, 18, 18);
+            layout.spacing = 8f;
+            layout.childAlignment = TextAnchor.UpperLeft;
+            layout.childControlHeight = false;
+            layout.childControlWidth = true;
+            layout.childForceExpandHeight = false;
+            layout.childForceExpandWidth = true;
+
+            AddTelemetrySourceRow(breakdown, DamageSourceType.LMB);
+            AddTelemetrySourceRow(breakdown, DamageSourceType.RMB);
+            AddTelemetrySourceRow(breakdown, DamageSourceType.Skill);
+            AddTelemetrySourceRow(breakdown, DamageSourceType.Dot);
+            AddTelemetrySourceRow(breakdown, DamageSourceType.Minion);
+            AddTelemetrySourceRow(breakdown, DamageSourceType.Item);
+            AddTelemetrySourceRow(breakdown, DamageSourceType.Unknown);
+
+            RectTransform actions = CreateFill("TelemetryActions", panel);
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 74f), new Vector2(520f, 54f));
+
+            Button reset = CreateButton("Button_ClearTelemetry", actions, menuButton, Color.white);
+            Anchor(reset.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(150f, 42f));
+            reset.onClick.AddListener(ClearTelemetry);
+            AddButtonText(reset, "director.telemetry.clear");
+
+            Button export = CreateButton("Button_ExportTelemetryCsv", actions, ribbonBase, new Color(0.80f, 0.34f, 0.09f, 1f));
+            Anchor(export.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(170f, 0f), new Vector2(210f, 48f));
+            export.onClick.AddListener(ExportTelemetryCsv);
+            AddButtonText(export, "director.telemetry.export");
+
+            telemetryStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            telemetryStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Anchor(telemetryStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+
+            UpdateTelemetryDisplay(true);
+        }
+
+        private TextMeshProUGUI AddTelemetryMetric(RectTransform parent, string name, string locKey, Color color, Vector2 position)
+        {
+            RectTransform card = CreatePanel(name, parent, rewardCard, Color.white, Image.Type.Sliced);
+            Anchor(card, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), position, new Vector2(276f, 110f));
+
+            TextMeshProUGUI label = CreateText("TMP_Label", card, Loc.T(locKey), 18f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            label.color = color;
+            Stretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 62f), new Vector2(-18f, -12f));
+            localizedTexts.Add(new LocalizedTextBinding(label, locKey));
+
+            TextMeshProUGUI value = CreateText("TMP_Value", card, "0", 34f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(value.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 12f), new Vector2(-18f, -44f));
+            return value;
+        }
+
+        private void AddTelemetrySourceRow(RectTransform parent, DamageSourceType sourceType)
+        {
+            RectTransform row = CreateFill("Row_Source_" + sourceType, parent);
+            row.sizeDelta = new Vector2(0f, 32f);
+            LayoutElement layout = row.gameObject.AddComponent<LayoutElement>();
+            layout.preferredHeight = 32f;
+            layout.minHeight = 32f;
+
+            Color color = SourceTelemetryColor(sourceType);
+            TextMeshProUGUI label = CreateText("TMP_Label", row, sourceType.ToString().ToUpperInvariant(), 18f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            label.color = color;
+            Anchor(label.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(118f, 28f));
+
+            Image background = CreateImage("BarBackground", row, null, new Color(0.06f, 0.07f, 0.09f, 0.95f), Image.Type.Simple);
+            Anchor(background.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(132f, 0f), new Vector2(420f, 20f));
+
+            Image fill = CreateImage("BarFill", background.rectTransform, null, color, Image.Type.Filled);
+            fill.type = Image.Type.Filled;
+            fill.fillMethod = Image.FillMethod.Horizontal;
+            fill.fillOrigin = (int)Image.OriginHorizontal.Left;
+            fill.fillAmount = 0f;
+            Stretch(fill.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            TextMeshProUGUI value = CreateText("TMP_Value", row, "0  0%", 18f, FontStyles.Bold, TextAlignmentOptions.MidlineRight);
+            Anchor(value.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(570f, 0f), new Vector2(130f, 28f));
+
+            telemetrySourceBindings.Add(new TelemetrySourceBinding(sourceType, fill, value));
+        }
+
         private void AddStatRow(RectTransform parent, string statKey, string locKey, float minValue, float maxValue, bool wholeNumbers, Color color, Func<ClassStatRuntime, float> read, Action<ClassStatRuntime, float> write)
         {
             RectTransform row = CreateFill("Row_" + statKey, parent);
@@ -1420,6 +1587,261 @@ namespace RIMA
             }
         }
 
+        private void OnDamageAppliedTelemetry(DamageTelemetryEvent telemetryEvent)
+        {
+            if (telemetryEvent.FinalDamage <= 0)
+            {
+                return;
+            }
+
+            DamagePacket packet = telemetryEvent.Packet;
+            DamageSourceType sourceType = packet.sourceType;
+            Health target = telemetryEvent.TargetHealth;
+            float eventTime = telemetryEvent.UnscaledTime;
+
+            telemetryRecords.Add(new DamageTelemetryRecord(
+                eventTime,
+                telemetryEvent.FinalDamage,
+                packet.damageType,
+                packet.elementTag,
+                sourceType,
+                packet.sourceId,
+                ObjectName(packet.attacker),
+                target != null ? ObjectName(target.gameObject) : ObjectName(packet.target)));
+
+            telemetryDamageBySource.TryGetValue(sourceType, out int currentDamage);
+            telemetryDamageBySource[sourceType] = currentDamage + telemetryEvent.FinalDamage;
+
+            if (target != null && !telemetryFirstHitTimes.ContainsKey(target))
+            {
+                telemetryFirstHitTimes[target] = eventTime;
+                UnityAction listener = () => OnTelemetryTargetDeath(target);
+                telemetryDeathListeners[target] = listener;
+                if (target.OnDeath != null)
+                {
+                    target.OnDeath.AddListener(listener);
+                }
+            }
+
+            if (target != null && target.IsDead)
+            {
+                CompleteTelemetryTtk(target, eventTime);
+            }
+
+            if (telemetryStatusText != null)
+            {
+                telemetryStatusText.text = Loc.T("director.telemetry.status.live", telemetryEvent.FinalDamage, sourceType);
+            }
+
+            UpdateTelemetryDisplay(true);
+        }
+
+        private void OnTelemetryTargetDeath(Health target)
+        {
+            CompleteTelemetryTtk(target, Time.unscaledTime);
+        }
+
+        private void CompleteTelemetryTtk(Health target, float deathTime)
+        {
+            if (target == null || !telemetryFirstHitTimes.TryGetValue(target, out float startTime))
+            {
+                return;
+            }
+
+            telemetryLastTtk = Mathf.Max(0f, deathTime - startTime);
+            RemoveTelemetryDeathListener(target);
+            telemetryFirstHitTimes.Remove(target);
+            UpdateTelemetryDisplay(true);
+        }
+
+        private void ClearTelemetry()
+        {
+            telemetryRecords.Clear();
+            telemetryDamageBySource.Clear();
+            telemetryFirstHitTimes.Clear();
+            ClearTelemetryDeathListeners();
+            telemetryLastTtk = -1f;
+            telemetryLastCsv = "";
+            if (telemetryStatusText != null)
+            {
+                telemetryStatusText.text = Loc.T("director.telemetry.status.cleared");
+            }
+            UpdateTelemetryDisplay(true);
+        }
+
+        private void ClearTelemetryDeathListeners()
+        {
+            foreach (KeyValuePair<Health, UnityAction> pair in telemetryDeathListeners)
+            {
+                if (pair.Key != null && pair.Key.OnDeath != null)
+                {
+                    pair.Key.OnDeath.RemoveListener(pair.Value);
+                }
+            }
+
+            telemetryDeathListeners.Clear();
+        }
+
+        private void RemoveTelemetryDeathListener(Health target)
+        {
+            if (target == null || !telemetryDeathListeners.TryGetValue(target, out UnityAction listener))
+            {
+                return;
+            }
+
+            if (target.OnDeath != null)
+            {
+                target.OnDeath.RemoveListener(listener);
+            }
+            telemetryDeathListeners.Remove(target);
+        }
+
+        private void UpdateTelemetryDisplay(bool force)
+        {
+            float now = Time.unscaledTime;
+            if (!force && now - telemetryLastRefreshTime < TelemetryRefreshInterval)
+            {
+                return;
+            }
+
+            telemetryLastRefreshTime = now;
+
+            if (telemetryDpsText != null)
+            {
+                telemetryDpsText.text = CalculateTelemetryDps(now).ToString("0.0", CultureInfo.InvariantCulture);
+            }
+
+            if (telemetryTtkText != null)
+            {
+                telemetryTtkText.text = telemetryLastTtk >= 0f
+                    ? telemetryLastTtk.ToString("0.00", CultureInfo.InvariantCulture) + "s"
+                    : "--";
+            }
+
+            if (telemetryEventCountText != null)
+            {
+                telemetryEventCountText.text = telemetryRecords.Count.ToString(CultureInfo.InvariantCulture);
+            }
+
+            int totalDamage = 0;
+            foreach (KeyValuePair<DamageSourceType, int> pair in telemetryDamageBySource)
+            {
+                totalDamage += pair.Value;
+            }
+
+            for (int i = 0; i < telemetrySourceBindings.Count; i++)
+            {
+                TelemetrySourceBinding binding = telemetrySourceBindings[i];
+                telemetryDamageBySource.TryGetValue(binding.SourceType, out int sourceDamage);
+                float ratio = totalDamage > 0 ? (float)sourceDamage / totalDamage : 0f;
+                if (binding.Fill != null)
+                {
+                    binding.Fill.fillAmount = ratio;
+                }
+                if (binding.ValueText != null)
+                {
+                    binding.ValueText.text = sourceDamage.ToString(CultureInfo.InvariantCulture) + "  " + (ratio * 100f).ToString("0", CultureInfo.InvariantCulture) + "%";
+                }
+            }
+        }
+
+        private float CalculateTelemetryDps(float now)
+        {
+            float oldest = now;
+            int damage = 0;
+            for (int i = telemetryRecords.Count - 1; i >= 0; i--)
+            {
+                DamageTelemetryRecord record = telemetryRecords[i];
+                if (now - record.Time > TelemetryDpsWindowSeconds)
+                {
+                    break;
+                }
+
+                damage += record.FinalDamage;
+                oldest = Mathf.Min(oldest, record.Time);
+            }
+
+            if (damage <= 0)
+            {
+                return 0f;
+            }
+
+            float duration = Mathf.Clamp(now - oldest, 0.1f, TelemetryDpsWindowSeconds);
+            return damage / duration;
+        }
+
+        private void ExportTelemetryCsv()
+        {
+            telemetryLastCsv = BuildTelemetryCsv();
+            GUIUtility.systemCopyBuffer = telemetryLastCsv;
+            Debug.Log("[DirectorMode] Telemetry CSV export:\n" + telemetryLastCsv);
+            if (telemetryStatusText != null)
+            {
+                telemetryStatusText.text = Loc.T("director.telemetry.status.exported", telemetryRecords.Count);
+            }
+        }
+
+        private string BuildTelemetryCsv()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("time,finalDamage,damageType,elementTag,sourceType,sourceId,attacker,target");
+            for (int i = 0; i < telemetryRecords.Count; i++)
+            {
+                DamageTelemetryRecord record = telemetryRecords[i];
+                builder.Append(record.Time.ToString("0.000", CultureInfo.InvariantCulture));
+                builder.Append(',');
+                builder.Append(record.FinalDamage.ToString(CultureInfo.InvariantCulture));
+                builder.Append(',');
+                builder.Append(record.DamageType);
+                builder.Append(',');
+                builder.Append(record.ElementTag);
+                builder.Append(',');
+                builder.Append(record.SourceType);
+                builder.Append(',');
+                AppendCsv(builder, record.SourceId);
+                builder.Append(',');
+                AppendCsv(builder, record.AttackerName);
+                builder.Append(',');
+                AppendCsv(builder, record.TargetName);
+                builder.AppendLine();
+            }
+            return builder.ToString();
+        }
+
+        private static void AppendCsv(StringBuilder builder, string value)
+        {
+            value ??= "";
+            bool quote = value.IndexOfAny(new[] { ',', '"', '\n', '\r' }) >= 0;
+            if (!quote)
+            {
+                builder.Append(value);
+                return;
+            }
+
+            builder.Append('"');
+            builder.Append(value.Replace("\"", "\"\""));
+            builder.Append('"');
+        }
+
+        private static string ObjectName(GameObject go)
+        {
+            return go != null ? go.name : "";
+        }
+
+        private static Color SourceTelemetryColor(DamageSourceType sourceType)
+        {
+            switch (sourceType)
+            {
+                case DamageSourceType.LMB: return HtmlColor("#F4F0E6");
+                case DamageSourceType.RMB: return HtmlColor("#00FFCC");
+                case DamageSourceType.Skill: return HtmlColor("#E89020");
+                case DamageSourceType.Dot: return HtmlColor("#7B3FA8");
+                case DamageSourceType.Minion: return HtmlColor("#FFF0B0");
+                case DamageSourceType.Item: return HtmlColor("#FFD24A");
+                default: return HtmlColor("#8A9098");
+            }
+        }
+
         private void RefreshLocalizedText()
         {
             foreach (LocalizedTextBinding binding in localizedTexts)
@@ -1603,6 +2025,44 @@ namespace RIMA
             {
                 Text = text;
                 Key = key;
+            }
+        }
+
+        private readonly struct DamageTelemetryRecord
+        {
+            public readonly float Time;
+            public readonly int FinalDamage;
+            public readonly DamageType DamageType;
+            public readonly ElementTag ElementTag;
+            public readonly DamageSourceType SourceType;
+            public readonly string SourceId;
+            public readonly string AttackerName;
+            public readonly string TargetName;
+
+            public DamageTelemetryRecord(float time, int finalDamage, DamageType damageType, ElementTag elementTag, DamageSourceType sourceType, string sourceId, string attackerName, string targetName)
+            {
+                Time = time;
+                FinalDamage = finalDamage;
+                DamageType = damageType;
+                ElementTag = elementTag;
+                SourceType = sourceType;
+                SourceId = sourceId;
+                AttackerName = attackerName;
+                TargetName = targetName;
+            }
+        }
+
+        private readonly struct TelemetrySourceBinding
+        {
+            public readonly DamageSourceType SourceType;
+            public readonly Image Fill;
+            public readonly TextMeshProUGUI ValueText;
+
+            public TelemetrySourceBinding(DamageSourceType sourceType, Image fill, TextMeshProUGUI valueText)
+            {
+                SourceType = sourceType;
+                Fill = fill;
+                ValueText = valueText;
             }
         }
 

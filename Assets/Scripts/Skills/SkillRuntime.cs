@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using RIMA.Combat;
@@ -7,6 +8,8 @@ namespace RIMA
 {
     public static class SkillRuntime
     {
+        public static event Action<DamageTelemetryEvent> OnDamageApplied;
+
         public static SkillStateTracker State(Component component)
         {
             return component != null ? State(component.gameObject) : null;
@@ -24,7 +27,7 @@ namespace RIMA
         {
             Health result = null;
             float best = maxDistance * maxDistance;
-            foreach (var enemy in Object.FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
+            foreach (var enemy in UnityEngine.Object.FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
             {
                 if (enemy == null) continue;
                 var health = enemy.GetComponent<Health>();
@@ -146,6 +149,7 @@ namespace RIMA
             }
 
             health.TakeDamage(finalDamage);
+            OnDamageApplied?.Invoke(new DamageTelemetryEvent(packet, result, finalDamage, health, Time.unscaledTime));
             string hitElement = element ?? (packet.elementTag != ElementTag.None
                 ? packet.elementTag.ToString().ToLowerInvariant()
                 : packet.damageType.ToString().ToLowerInvariant());
@@ -199,7 +203,7 @@ namespace RIMA
             renderer.sortingLayerName = "VFX";
             renderer.sortingOrder = 20;
 
-            Object.Destroy(go, life);
+            UnityEngine.Object.Destroy(go, life);
             return go;
         }
 
@@ -228,6 +232,24 @@ namespace RIMA
             var projectile = go.AddComponent<PlayerProjectile>();
             projectile.Init(direction * speed, damage, life: life, attacker: owner);
             return projectile;
+        }
+    }
+
+    public readonly struct DamageTelemetryEvent
+    {
+        public readonly DamagePacket Packet;
+        public readonly DamageCalculationResult Calculation;
+        public readonly int FinalDamage;
+        public readonly Health TargetHealth;
+        public readonly float UnscaledTime;
+
+        public DamageTelemetryEvent(DamagePacket packet, DamageCalculationResult calculation, int finalDamage, Health targetHealth, float unscaledTime)
+        {
+            Packet = packet;
+            Calculation = calculation;
+            FinalDamage = finalDamage;
+            TargetHealth = targetHealth;
+            UnscaledTime = unscaledTime;
         }
     }
 }

@@ -223,6 +223,16 @@ namespace RIMA
             { "director.stats.status.saved","{0} preset kaydedildi" },
             { "director.stats.status.exported","{0} JSON panoya kopyalandı" },
             { "director.stats.status.no_manager","PlayerClassManager yok" },
+            { "director.telemetry.title",   "TELEMETRI" },
+            { "director.telemetry.hint",    "DPS, TTK, hasar kaynagi ve CSV export" },
+            { "director.telemetry.dps",     "DPS 5S" },
+            { "director.telemetry.ttk",     "SON TTK" },
+            { "director.telemetry.events",  "EVENT" },
+            { "director.telemetry.clear",   "TEMIZLE" },
+            { "director.telemetry.export",  "CSV EXPORT" },
+            { "director.telemetry.status.live", "+{0} hasar kaydedildi ({1})" },
+            { "director.telemetry.status.cleared", "Telemetri temizlendi" },
+            { "director.telemetry.status.exported", "{0} event CSV panoya kopyalandi" },
 
             // Kodeks
             { "codex.title",                "YETENEK KODEKSİ" },
@@ -393,6 +403,16 @@ namespace RIMA
             { "director.stats.status.saved","{0} preset saved" },
             { "director.stats.status.exported","{0} JSON copied to clipboard" },
             { "director.stats.status.no_manager","PlayerClassManager missing" },
+            { "director.telemetry.title",   "TELEMETRY" },
+            { "director.telemetry.hint",    "DPS, TTK, damage source, and CSV export" },
+            { "director.telemetry.dps",     "DPS 5S" },
+            { "director.telemetry.ttk",     "LAST TTK" },
+            { "director.telemetry.events",  "EVENTS" },
+            { "director.telemetry.clear",   "CLEAR" },
+            { "director.telemetry.export",  "CSV EXPORT" },
+            { "director.telemetry.status.live", "+{0} damage recorded ({1})" },
+            { "director.telemetry.status.cleared", "Telemetry cleared" },
+            { "director.telemetry.status.exported", "{0} events copied as CSV" },
 
             // Codex
             { "codex.title",                "SKILL CODEX" },
