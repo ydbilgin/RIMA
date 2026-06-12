@@ -26,9 +26,11 @@ Model = Dead Cells "tek statik sprite + engine juice". Spec v3 (council+ChatGPT 
 - [x] A1 SkillVfx engine core + 5 archetype → commit `72b27aca` (compile-clean, combat untouched, Opus self-QC PASS)
 - [x] A2 PixelLab hero shapes → `vfx_explosion_a/b` + `vfx_shatter_a/b` (128² gri) `Assets/Resources/VFX/Skills/`. **NOT:** backblaze host shell'den erişilemez → `api.pixellab.ai/mcp/objects/{id}/download` ile indirildi (sandbox-disabled).
 - [x] A3 5 archetype → A1 commit'ine dahil (CastFlash/ImpactBurst/MeleeArc/GroundCrack/ChainBolt/ProjectileTrail)
-- [~] A4 Tier1 wiring (Fireball/Warblade-basic/Gravity-Cleave) → cx dispatch (background `bzzo2p9we`)
-- [ ] A5 Play-mode QA · B indicator (proc/stack) · C backlog review-fix
-Verify-reuse: slash_arc/glacial_spike/frozen_orb/meteor/cracks_bones ZATEN var (cx) → sadece explosion+shatter üretildi. Council A1=self-QC (1 dosya); tam council A4 gate'inde.
+- [x] A4 Tier1 wiring → commit `0a36b7ef`; rima-qc council FAIL (2 gerçek bug) → fix `f86ccf10` (ImpactBurst leak + whiteout). #2 runner-null = false-positive (Unity != overload). Combat diff-verified untouched.
+- [x] A5 görsel QA (best-effort) — edit-mode sprite render+tint DOĞRULANDI (explosion/shatter/slash in-engine). **NOT:** near-white explosion sprite'ta tint zayıf (additive+dark-bg telafi eder; follow-up). Tam motion/kompozisyon = kullanıcı Play-test.
+- [~] C backlog review-fix → cx dispatch (background `bzh263f2o`): A1 finisher≠crit · A3 Ranger+HeatGauge×2 packet · A2 defender-stat · B1 zero-damage+HealthTests flip · E1/E2/B2 TODO. Gate=UnityMCP run_tests (CombatContract+Health+DifficultyBalance). A4 Director HARİÇ (Play-mode-only).
+- [ ] B indicator (proc/stack) — sırada
+Verify-reuse: slash/ice/orb/meteor/cracks ZATEN var → sadece explosion+shatter üretildi. cx test-gate Unity-açıkken in-editor run_tests ile (batchmode değil).
 
 **Durum:** 22 commit push'lı (`github.com/ydbilgin/RIMA`). Gece detay → `STAGING/AUTONOMOUS_RUN_2026-06-12.md`. Kararlar: damage taksonomisi + HUD layout DECISION dosyalarında.
 
