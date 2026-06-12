@@ -1,0 +1,23 @@
+{
+  "package": "RIMA Skill VFX Production Spec Review",
+  "date": "2026-06-12",
+  "repo": "github.com/ydbilgin/RIMA",
+  "branch": "master",
+  "verdict": "KOŞULLU ONAY",
+  "files": [
+    "00_PROMPT_FOR_CLAUDE.md",
+    "01_REVIEW_DECISION.md",
+    "02_EVIDENCE_MAP.md",
+    "03_SECTION_8_ANSWERS.md",
+    "04_REQUIRED_CHANGES_BEFORE_PRODUCTION.md",
+    "05_IMPLEMENTATION_PLAN.md",
+    "06_TEST_VISUAL_QA_CHECKLIST.md",
+    "07_CLAUDE_SHORT_TASK.md",
+    "08_REVIEW_SUMMARY_FOR_OPUS.md"
+  ],
+  "must_change_before_production": [
+    "Fix Lightning color from #FFD24A to #FFE600.",
+    "Use static SkillVfx facade backed by VfxProfile/registry.",
+    "Add explicit pixel-art VFX rules: point filter, chunky sprites, no default soft particles, pooling, no per-cast material allocation, PPU 64."
+  ]
+}

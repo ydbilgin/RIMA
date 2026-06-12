@@ -135,3 +135,46 @@ cx basic'leri göremedi (dosya verilmemişti). Üretim kapsamına EKLE: `Assets/
 Play-mode görsel (Unity AÇIK, world-space → screenshot yakalar), kör commit YOK, combat doğruluğu (DamagePacket/hitbox) additive katmanla DEĞİŞMEZ. Telegraph ayrımı: player VFX = dışa/burst/parlak/order≥20; enemy = içe/geometrik/fill/order 1-5 (3.1 Pro şekil-dili).
 
 **Durum:** Council ONAY (lean revizyonla). Bekleyen: ChatGPT review → reconcile → ÜRETİM dispatch.
+
+---
+
+# 🔒 v3 — ChatGPT RECONCILE (BAĞLAYICI — üretim öncesi son hali)
+
+ChatGPT review (`STAGING/_inbox`/yüklenen paket): **KOŞULLU ONAY**, 3 şart. Reconcile + Opus kararı:
+
+## Şart 1 — Lightning rengi → `#FFE600`
+✅ ZATEN uygulandı (v2, §3 + Palette). Crit `#FFD24A` element rengi olarak kullanılmaz. KAPANDI.
+
+## Şart 2 — "static façade + VfxProfile registry" (TEK gerçek çatışma)
+**Skor:** SO/profile isteyen = ChatGPT + 3.1 Pro (2). İstemeyen = cx + Flash + v2-Opus (3).
+**Opus kararı: SO-registry HAYIR (demo), ama ChatGPT'nin asıl derdini v2 ZATEN karşılıyor — açık yazıyorum:**
+- ChatGPT'nin korkusu = "config skill script'lerine hardcode magic-number olarak dağılır". v2'de **dağılmıyor**: görsel tunable'lar (lifetime/scale/particle-count/sorting) **PREFAB üzerinde** yaşıyor (inspector'dan ayarlanır, designer-friendly) — kodda değil. Renk = **kilitli taksonomi Palette** (runtime değişmez, kodda olması DOĞRU).
+- 3.1 Pro'nun "Frost köşeli, Fire yuvarlak (şekil farkı)" noktası = particle-tint ile çözülmez. **Ama v3 bunu zaten ayırıyor:** şekil-kritik efektler (frost shatter, ground crack, melee arc) = **authored flipbook/sprite** (tint değil). Particle burst'ler = runtime-tint (ucuz, sadece renk). Yani şekil farkı authored asset'te, renk farkı Palette'te → registry'siz çözülür.
+- **Sonuç:** v2'nin per-skill `[SerializeField] prefab` + static `SkillVfx.SpawnTinted` helper'ı KALIR. VfxProfile SO-registry = **post-demo upgrade path** (skill sayısı 8→30+ olunca veya per-archetype default config paylaşımı gerçekten gerekince). Modüler ders: soyutlamayı ölçek hak edince ekle.
+
+## Şart 3 — Sert pixel-art kuralları (ChatGPT checklist ADOPTE)
+Üretimde ZORUNLU (spec'e eklendi):
+- Particle texture = chunky kare/elmas shard, **default soft circle YASAK**.
+- Import: **Point filter, compression yok, mipmap yok** (pixel texture).
+- Particle count: burst 8-20, major cast/impact max 24. Lifetime: burst/spark 0.08-0.35s.
+- **`new Material(...)` cast/hit loop içinde YASAK** (cx red-flag: ChainLightning.cs:79 → cached shared material).
+- Tüm VFX `VFX` sorting layer + explicit order≥20 (helper zorlar; prefab'lar 0 geliyor).
+- **PPU 64** konvansiyonu; `ElementalistRuntimeVisuals` PPU-32 placeholder'ları SADECE geçici.
+- Additive sadece çekirdek particle; ana alpha-blend (whiteout önlemi).
+
+## ChatGPT eksik-listesi (ADOPTE — spec'e eklendi)
+- **Ses-sync hook:** her VFX çağrısına opsiyonel `sfxId` kancası (audio asset placeholder olsa bile yapı hazır). Üretimde stub.
+- **Screen-shake / hit-stop koordinasyonu:** VFX bunları TETİKLEMEZ, mevcut sistem varsa onunla senkron çağrılır (Iron Charge/Earthsplitter impact'inde hafif shake — sistem varsa, onaylıysa). Combat timing DEĞİŞMEZ.
+- **Material reuse kuralı:** archetype başına tek paylaşılan material; per-cast allocation yok.
+- **8-yön tutarlılığı:** projectile + melee arc 8-yön sprite/flip mantığıyla (Fireball konvansiyonu) hizalı.
+- **Telegraph ayrımı:** (v2'de var) player = dışa/burst/parlak/order≥20; enemy = içe/geometrik/fill/order1-5.
+- **VFX QA recipe:** boş oda + combat oda; her skill; basic ×20 spam (GC/material spike testi); demo zoom; karanlık zemin; yakında enemy VFX (telegraph ayrımı kontrol). Play-mode görsel capture, kör commit YOK.
+
+## Üretim öncelik (council + ChatGPT MERGE)
+**Tier 1 (önce, sınıf-hissini tanımlar):** Fireball · Warblade basic · Gravity Cleave.
+**Tier 2:** Chain Lightning · Iron Charge · Earthsplitter.
+**Tier 3:** Glacial Spike (combo okunaklılığı notu) · Elementalist basic bolt.
+Kural: 8 bespoke mini-sinema DEĞİL → 5 reusable archetype (CastFlash/ImpactBurst/ProjectileTrail/MeleeArc/GroundCrack+ChainBolt) kur, skill başına tune.
+
+## İKİ KAPI DA GEÇTİ
+Council = ONAY (lean). ChatGPT = KOŞULLU ONAY → 3 şart reconcile edildi (1 zaten yapıldı, 2 v2 zaten karşılıyor + post-demo path, 3 adopte). **Spec ÜRETİME HAZIR.** Sonraki adım: Faz 1 (SkillVfx çekirdeği + 5 archetype) → Tier 1 wiring → Play-mode QA. Melee arc sprite'ı = kullanıcı çizer (gelene kadar geçici prosedürel).
