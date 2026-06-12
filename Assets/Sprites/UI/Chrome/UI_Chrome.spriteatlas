@@ -57,10 +57,37 @@ SpriteAtlas:
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
-    packedSpriteRenderDataKeys: []
+    packedSpriteRenderDataKeys:
+    - e16c0f8278e87fa45b8c43749d9592fc: 21300000
+    - 94a856f3c7fbf9c4db815faccd15a6db: 21300000
+    - 6d6d516698a75bf44a03add23b34c1ab: 21300000
+    - 3b404828dda8d7e459e989f3f30dca3e: 21300000
+    - 3bf39b49dc295614d858924362c2d4a9: 21300000
+    - ad05dbead4c77d34184cc94aae3948b2: 21300000
+    - 8fd21efa81a94f249b5f0912613a7503: 21300000
+    - 0778509c24d21ed4192a973437f37cdf: 21300000
+    - a6e0825f0df0d114192be8da8903035b: 21300000
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites: []
-  m_PackedSpriteNamesToIndex: []
+  m_PackedSprites:
+  - {fileID: 21300000, guid: e16c0f8278e87fa45b8c43749d9592fc, type: 3}
+  - {fileID: 21300000, guid: 94a856f3c7fbf9c4db815faccd15a6db, type: 3}
+  - {fileID: 21300000, guid: 6d6d516698a75bf44a03add23b34c1ab, type: 3}
+  - {fileID: 21300000, guid: 3b404828dda8d7e459e989f3f30dca3e, type: 3}
+  - {fileID: 21300000, guid: 3bf39b49dc295614d858924362c2d4a9, type: 3}
+  - {fileID: 21300000, guid: ad05dbead4c77d34184cc94aae3948b2, type: 3}
+  - {fileID: 21300000, guid: 8fd21efa81a94f249b5f0912613a7503, type: 3}
+  - {fileID: 21300000, guid: 0778509c24d21ed4192a973437f37cdf, type: 3}
+  - {fileID: 21300000, guid: a6e0825f0df0d114192be8da8903035b, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - tooltip_box
+  - reward_card
+  - slot_active
+  - slot_normal
+  - slot_lmb_rmb
+  - node_frame
+  - ribbon_base
+  - menu_button
+  - minimap_frame
   m_RenderDataMap: {}
   m_Tag: UI_Chrome
   m_IsVariant: 0

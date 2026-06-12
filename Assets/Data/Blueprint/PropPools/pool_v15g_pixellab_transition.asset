@@ -1,6 +1,96 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8891929445933574255
+--- !u!114 &-9083658617583115226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
+  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_15
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
+  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_15
+  visual: {fileID: 21300000, guid: 558d47d2e8ba11e43921ff6a70247d3c, type: 3}
+  footprint: {x: 1, y: 1}
+  hasCollision: 0
+  blocksMovement: 0
+  colliderShape: 0
+  colliderFootprintRatio: 0.7
+  colliderOffset: {x: 0, y: 0}
+  isTrigger: 0
+  colliderLayer: 
+  ySortPivot: {x: 0.5, y: 0}
+  validTerrainIds: []
+  isFeatureAnchor: 0
+  shadowSprite: {fileID: 0}
+  shadowOffset: {x: 0, y: -0.08}
+  shadowScale: {x: 1.1, y: 0.4}
+  shadowAlpha: 0.35
+  lightingProfileId: 
+--- !u!114 &-7853128783532399404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
+  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_7
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
+  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_7
+  visual: {fileID: 21300000, guid: 637ecc683a0467a46a2f71955c80aee2, type: 3}
+  footprint: {x: 1, y: 1}
+  hasCollision: 0
+  blocksMovement: 0
+  colliderShape: 0
+  colliderFootprintRatio: 0.7
+  colliderOffset: {x: 0, y: 0}
+  isTrigger: 0
+  colliderLayer: 
+  ySortPivot: {x: 0.5, y: 0}
+  validTerrainIds: []
+  isFeatureAnchor: 0
+  shadowSprite: {fileID: 0}
+  shadowOffset: {x: 0, y: -0.08}
+  shadowScale: {x: 1.1, y: 0.4}
+  shadowAlpha: 0.35
+  lightingProfileId: 
+--- !u!114 &-6174114744991453992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
+  m_Name: pool_v15g_pixellab_transition_pixellab_dirt_tile_0
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
+  propId: pool_v15g_pixellab_transition_pixellab_dirt_tile_0
+  visual: {fileID: 21300000, guid: 082db26b8a74aec4bb3d32baf1679b48, type: 3}
+  footprint: {x: 1, y: 1}
+  hasCollision: 0
+  blocksMovement: 0
+  colliderShape: 0
+  colliderFootprintRatio: 0.7
+  colliderOffset: {x: 0, y: 0}
+  isTrigger: 0
+  colliderLayer: 
+  ySortPivot: {x: 0.5, y: 0}
+  validTerrainIds: []
+  isFeatureAnchor: 0
+  shadowSprite: {fileID: 0}
+  shadowOffset: {x: 0, y: -0.08}
+  shadowScale: {x: 1.1, y: 0.4}
+  shadowAlpha: 0.35
+  lightingProfileId: 
+--- !u!114 &-3733225524862777362
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30,7 +120,37 @@ MonoBehaviour:
   shadowScale: {x: 1.1, y: 0.4}
   shadowAlpha: 0.35
   lightingProfileId: 
---- !u!114 &-7475870378629426066
+--- !u!114 &-3113470232552248938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
+  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_13
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
+  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_13
+  visual: {fileID: 21300000, guid: 392d778416dd7f640a5f7a7c61ca09cd, type: 3}
+  footprint: {x: 1, y: 1}
+  hasCollision: 0
+  blocksMovement: 0
+  colliderShape: 0
+  colliderFootprintRatio: 0.7
+  colliderOffset: {x: 0, y: 0}
+  isTrigger: 0
+  colliderLayer: 
+  ySortPivot: {x: 0.5, y: 0}
+  validTerrainIds: []
+  isFeatureAnchor: 0
+  shadowSprite: {fileID: 0}
+  shadowOffset: {x: 0, y: -0.08}
+  shadowScale: {x: 1.1, y: 0.4}
+  shadowAlpha: 0.35
+  lightingProfileId: 
+--- !u!114 &-1401353272827696684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,7 +180,7 @@ MonoBehaviour:
   shadowScale: {x: 1.1, y: 0.4}
   shadowAlpha: 0.35
   lightingProfileId: 
---- !u!114 &-5439330445429080732
+--- !u!114 &-271862372352279282
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -70,70 +190,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_dirt_tile_4
+  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_3
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_dirt_tile_4
-  visual: {fileID: 21300000, guid: 6736b5fa3db0ca04ea8d321c4cf640bb, type: 3}
-  footprint: {x: 1, y: 1}
-  hasCollision: 0
-  blocksMovement: 0
-  colliderShape: 0
-  colliderFootprintRatio: 0.7
-  colliderOffset: {x: 0, y: 0}
-  isTrigger: 0
-  colliderLayer: 
-  ySortPivot: {x: 0.5, y: 0}
-  validTerrainIds: []
-  isFeatureAnchor: 0
-  shadowSprite: {fileID: 0}
-  shadowOffset: {x: 0, y: -0.08}
-  shadowScale: {x: 1.1, y: 0.4}
-  shadowAlpha: 0.35
-  lightingProfileId: 
---- !u!114 &-2405611176415009447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_dirt_tile_8
-  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_dirt_tile_8
-  visual: {fileID: 21300000, guid: c8e230fad59c7d049b145211a678465b, type: 3}
-  footprint: {x: 1, y: 1}
-  hasCollision: 0
-  blocksMovement: 0
-  colliderShape: 0
-  colliderFootprintRatio: 0.7
-  colliderOffset: {x: 0, y: 0}
-  isTrigger: 0
-  colliderLayer: 
-  ySortPivot: {x: 0.5, y: 0}
-  validTerrainIds: []
-  isFeatureAnchor: 0
-  shadowSprite: {fileID: 0}
-  shadowOffset: {x: 0, y: -0.08}
-  shadowScale: {x: 1.1, y: 0.4}
-  shadowAlpha: 0.35
-  lightingProfileId: 
---- !u!114 &-1936232210680503415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_9
-  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_9
-  visual: {fileID: 21300000, guid: 1297608eb7d405c44b09797f1d7d25c0, type: 3}
+  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_3
+  visual: {fileID: 21300000, guid: 82e043f3888db3744afafd027ea4ee0f, type: 3}
   footprint: {x: 1, y: 1}
   hasCollision: 0
   blocksMovement: 0
@@ -164,31 +224,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.BlueprintPropPoolSO
   poolId: pool_v15g_pixellab_transition
   entries:
-  - prop: {fileID: 6395504689485499785}
+  - prop: {fileID: 3630725755139994261}
     weight: 1
-  - prop: {fileID: 9045401794759694919}
+  - prop: {fileID: -271862372352279282}
     weight: 1
-  - prop: {fileID: 189940256179621621}
+  - prop: {fileID: 8304973527480608590}
     weight: 1
-  - prop: {fileID: 7962506026937910520}
+  - prop: {fileID: -7853128783532399404}
     weight: 1
-  - prop: {fileID: -1936232210680503415}
+  - prop: {fileID: 4604799932053638028}
     weight: 1
-  - prop: {fileID: -7475870378629426066}
+  - prop: {fileID: -1401353272827696684}
     weight: 1
-  - prop: {fileID: 460678972668224691}
+  - prop: {fileID: -3113470232552248938}
     weight: 1
-  - prop: {fileID: 3825752452806070634}
+  - prop: {fileID: -9083658617583115226}
     weight: 1
-  - prop: {fileID: 8260356351680079827}
+  - prop: {fileID: -6174114744991453992}
     weight: 1
-  - prop: {fileID: -8891929445933574255}
+  - prop: {fileID: -3733225524862777362}
     weight: 1
-  - prop: {fileID: -5439330445429080732}
+  - prop: {fileID: 4722534154733277788}
     weight: 1
-  - prop: {fileID: -2405611176415009447}
+  - prop: {fileID: 1604475621754187856}
     weight: 1
---- !u!114 &189940256179621621
+--- !u!114 &1604475621754187856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,10 +258,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_5
+  m_Name: pool_v15g_pixellab_transition_pixellab_dirt_tile_8
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_5
-  visual: {fileID: 21300000, guid: 5f1641c1d53b15d4dacc7a1c9667f451, type: 3}
+  propId: pool_v15g_pixellab_transition_pixellab_dirt_tile_8
+  visual: {fileID: 21300000, guid: c8e230fad59c7d049b145211a678465b, type: 3}
   footprint: {x: 1, y: 1}
   hasCollision: 0
   blocksMovement: 0
@@ -218,67 +278,7 @@ MonoBehaviour:
   shadowScale: {x: 1.1, y: 0.4}
   shadowAlpha: 0.35
   lightingProfileId: 
---- !u!114 &460678972668224691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_13
-  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_13
-  visual: {fileID: 21300000, guid: 392d778416dd7f640a5f7a7c61ca09cd, type: 3}
-  footprint: {x: 1, y: 1}
-  hasCollision: 0
-  blocksMovement: 0
-  colliderShape: 0
-  colliderFootprintRatio: 0.7
-  colliderOffset: {x: 0, y: 0}
-  isTrigger: 0
-  colliderLayer: 
-  ySortPivot: {x: 0.5, y: 0}
-  validTerrainIds: []
-  isFeatureAnchor: 0
-  shadowSprite: {fileID: 0}
-  shadowOffset: {x: 0, y: -0.08}
-  shadowScale: {x: 1.1, y: 0.4}
-  shadowAlpha: 0.35
-  lightingProfileId: 
---- !u!114 &3825752452806070634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_15
-  m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_15
-  visual: {fileID: 21300000, guid: 558d47d2e8ba11e43921ff6a70247d3c, type: 3}
-  footprint: {x: 1, y: 1}
-  hasCollision: 0
-  blocksMovement: 0
-  colliderShape: 0
-  colliderFootprintRatio: 0.7
-  colliderOffset: {x: 0, y: 0}
-  isTrigger: 0
-  colliderLayer: 
-  ySortPivot: {x: 0.5, y: 0}
-  validTerrainIds: []
-  isFeatureAnchor: 0
-  shadowSprite: {fileID: 0}
-  shadowOffset: {x: 0, y: -0.08}
-  shadowScale: {x: 1.1, y: 0.4}
-  shadowAlpha: 0.35
-  lightingProfileId: 
---- !u!114 &6395504689485499785
+--- !u!114 &3630725755139994261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -308,7 +308,7 @@ MonoBehaviour:
   shadowScale: {x: 1.1, y: 0.4}
   shadowAlpha: 0.35
   lightingProfileId: 
---- !u!114 &7962506026937910520
+--- !u!114 &4604799932053638028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -318,10 +318,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_7
+  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_9
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_7
-  visual: {fileID: 21300000, guid: 637ecc683a0467a46a2f71955c80aee2, type: 3}
+  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_9
+  visual: {fileID: 21300000, guid: 1297608eb7d405c44b09797f1d7d25c0, type: 3}
   footprint: {x: 1, y: 1}
   hasCollision: 0
   blocksMovement: 0
@@ -338,7 +338,7 @@ MonoBehaviour:
   shadowScale: {x: 1.1, y: 0.4}
   shadowAlpha: 0.35
   lightingProfileId: 
---- !u!114 &8260356351680079827
+--- !u!114 &4722534154733277788
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -348,10 +348,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_dirt_tile_0
+  m_Name: pool_v15g_pixellab_transition_pixellab_dirt_tile_4
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_dirt_tile_0
-  visual: {fileID: 21300000, guid: 082db26b8a74aec4bb3d32baf1679b48, type: 3}
+  propId: pool_v15g_pixellab_transition_pixellab_dirt_tile_4
+  visual: {fileID: 21300000, guid: 6736b5fa3db0ca04ea8d321c4cf640bb, type: 3}
   footprint: {x: 1, y: 1}
   hasCollision: 0
   blocksMovement: 0
@@ -368,7 +368,7 @@ MonoBehaviour:
   shadowScale: {x: 1.1, y: 0.4}
   shadowAlpha: 0.35
   lightingProfileId: 
---- !u!114 &9045401794759694919
+--- !u!114 &8304973527480608590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -378,10 +378,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3598c40cd292336428bf9a213ba05eb9, type: 3}
-  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_3
+  m_Name: pool_v15g_pixellab_transition_pixellab_pilot_tile_5
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.MapDesigner.SO.PropDefinitionSO
-  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_3
-  visual: {fileID: 21300000, guid: 82e043f3888db3744afafd027ea4ee0f, type: 3}
+  propId: pool_v15g_pixellab_transition_pixellab_pilot_tile_5
+  visual: {fileID: 21300000, guid: 5f1641c1d53b15d4dacc7a1c9667f451, type: 3}
   footprint: {x: 1, y: 1}
   hasCollision: 0
   blocksMovement: 0
