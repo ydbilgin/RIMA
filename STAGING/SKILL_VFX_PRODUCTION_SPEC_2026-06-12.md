@@ -1,3 +1,5 @@
+> **⚠️ v2 — COUNCIL SENTEZLENDİ (2026-06-12). En alttaki "COUNCIL SYNTHESIS" bölümü §2/§3/§8'i GEÇERSİZ KILAR (lean'e çekildi). Aşağıdaki taslak bağlam için duruyor; bağlayıcı olan v2 sentezdir. Sıra: ChatGPT review → Opus reconcile → ÜRETİM.**
+
 # SKILL VFX PRODUCTION SPEC — 2026-06-12 (DRAFT, onay bekliyor)
 
 **Amaç:** Demo'da Warblade + Elementalist skill'lerinin "mantıklı, güzel görünen" VFX'e kavuşması. Şu an çoğu skill **prosedürel placeholder** (beyaz daire/çatlak, `ElementalistRuntimeVisuals.cs` — dosyada bile "TODO: replace" yazıyor).
@@ -34,7 +36,7 @@ public static class SkillVfx {
     public static void Play(VfxArchetype archetype, VfxElement element, Vector3 pos, Vector2 dir = default);
 }
 ```
-- **Renk taksonomisi (KİLİT — DAMAGE_TYPE_TAXONOMY_DECISION):** Physical=ember `#E89020` · Fire `#FF6A1F` · Frost `#7FE0FF` · Lightning `#FFD24A` · Void `#7B3FA8` · Arcane/magic cyan `#00FFCC`.
+- **Renk taksonomisi (KİLİT — DAMAGE_TYPE_TAXONOMY_DECISION):** Physical=ember `#E89020` · Fire `#FF6A1F` · Frost `#7FE0FF` · Lightning `#FFE600` (DÜZELTİLDİ — eski `#FFD24A` Crit ile çakışıyordu) · Void `#7B3FA8` · Arcane/magic cyan `#00FFCC`. Crit `#FFD24A` ayrıdır, VFX'te element rengi olarak KULLANMA.
 - Pooling: GC spike yok (demo'da skill spam). Mevcut prefab'lar (HitSpark/DeathBurst/HandGlowVFX/RiftGlowVFX) yeniden kullanılır, sıfırdan değil.
 - Sorting: `sortingLayerName="VFX"`, order 20+ (Fireball'daki konvansiyonla tutarlı).
 
@@ -75,3 +77,61 @@ public static class SkillVfx {
 3. Chain Lightning LineRenderer vs particle-trail — pixel-art'ta hangisi daha temiz?
 4. Melee swing arc: prosedürel mesh/trail mi, yoksa elle çizilmiş arc sprite mi (kullanıcı çizer)?
 5. Demo süresi içinde 8 VFX gerçekçi mi, yoksa öncelik sırası (Fireball + 2 Warblade önce) mi?
+
+---
+
+# 🔒 COUNCIL SYNTHESIS — v2 (BAĞLAYICI — yukarıdaki §2/§3/§8'i geçersiz kılar)
+
+**Danışmanlar:** cx (feasibility, kod-temelli) · Gemini 3.1 Pro (deep arch) · Gemini 3.5 Flash (lean). Sentez: Opus. Ham çıktılar: `_process/2026-06/_council_*_vfx-spec.md` + `CODEX_DONE_yekta.md`.
+
+## Anlaşmazlık + Opus kararı
+**Mimari (3'lü ayrım):** 3.1 Pro → SO-VfxProfile (data-driven, en yapısal) · cx → static SkillVfx (orta) · Flash → sistemsiz, per-skill SerializeField (en yalın).
+**KARAR (cx+Flash ağırlıklı, modüler ders taze):** SO-VfxProfile YOK (overkill — gerçek authored varyant yokken erken soyutlama). Pooling YOK (Flash: 100-200 spawn/demo GC-spike yapmaz; cx: prefab'larda `stopAction:2` pooling'i mayınlı yapıyor). Flash'ın "hiç sistem yok"u da fazla gevşek → **tek tekrar eden şey element→renk eşlemesi + sorting-fix**, onu ~20 satırlık minik static helper'a koy.
+
+## Mimari (LOCK)
+```csharp
+public enum VfxElement { Physical, Fire, Frost, Lightning, Void, Arcane }
+public static class SkillVfx {
+    static readonly Dictionary<VfxElement,Color> Palette = { Physical:#E89020, Fire:#FF6A1F,
+        Frost:#7FE0FF, Lightning:#FFE600, Void:#7B3FA8, Arcane:#00FFCC };
+    // prefab'ı instantiate eder, element rengine tint'ler, sorting'i "VFX"/order≥20'ye ZORLAR
+    // (cx red-flag: prefab'lar sorting layer=0 geliyor), stopAction=Destroy ile kendini siler.
+    public static void SpawnTinted(GameObject prefab, Vector3 pos, VfxElement element, Vector2 dir = default);
+}
+```
+- Per-skill: `[SerializeField] GameObject castPrefab/travelPrefab/impactPrefab`. Skill kendi Execute() hook'unda `SkillVfx.SpawnTinted(...)` çağırır.
+- **Pooling YOK** (Instantiate/Destroy). **SO YOK.** Post-demo profiler spike gösterirse pooling eklenir.
+
+## §8 açık sorular — ÇÖZÜLDÜ
+1. **Particle yöntemi:** HİBRİT, chunky particle'a yatık (cx+Flash). Flipbook sadece authored silüet gerektirenlere: frost shatter, ground crack, melee arc. Default soft particle YASAK → texture 4-16px, **Point filter**, max 8-20 particle, alpha-blend ana + additive sadece çekirdek (3.1 Pro whiteout uyarısı). 2D Light flash sadece impact anı 0.1-0.2s.
+2. **API:** static `SkillVfx` (cx+Flash). SO-VfxProfile post-demo.
+3. **Chain Lightning:** LineRenderer (3 advisor hemfikir; `SpawnArcVisual` ZATEN var). **FIX:** `ChainLightning.cs:79` her arc'ta `new Material` → tek paylaşılan cached Material (cx perf red-flag).
+4. **Melee arc:** elle-çizilmiş smear arc sprite (3.1 Pro+cx) = **kullanıcı çizer** ([[feedback_user_draws_weapons_claude_mounts]] mantığı). Gelene kadar geçici prosedürel LineRenderer arc.
+5. **Kapsam:** 8 VFX cila riski (cx+Flash). Hedef 8 (6 kit + 2 basic) AMA **öncelik sırasıyla**, demo-zamanı bitince kalan placeholder kalır.
+
+## Üretim öncelik sırası (cx+Flash birleşik)
+1. **Fireball** (8-dir sprite hazır → trail + impact patlaması)
+2. **Warblade basic** (en sık tetiklenen → slash arc + HitSpark)
+3. **Iron Charge** (dash trail + toz + impact, hafif shake)
+4. **Glacial Spike** (shatter + chill tint — combo okunaklılığı için şart)
+5. **Chain Lightning** (mevcut LineRenderer cleanup + material-cache fix)
+6. **Gravity Cleave** (pull vortex — fizik anına bağlı)
+7. **Earthsplitter** (ground crack flipbook decal, Floor layer, particle DEĞİL)
+8. **Elementalist basic** (mini magic bolt)
+
+## cx red-flag'leri — ÜRETİMDE ZORUNLU FIX
+- Prefab sorting layer `0` → `SkillVfx.SpawnTinted` "VFX"/order≥20'ye zorlasın.
+- `ChainLightning.cs:79` material-per-arc → cached shared material.
+- HandGlowVFX/RiftGlowVFX looping/controller prefab → one-shot pool/spawn yoluna SOKMA; cast-glow için ayrı attach.
+- Impact bazları = HitSpark/DeathBurst (gerçek one-shot, order 30). Tint'le.
+
+## Hook noktaları (cx kod-temelli, additive-safe — DamagePacket/hitbox DOKUNULMAZ)
+Fireball `Fireball.cs:42-49/64-68`+SetOnHit · Glacial Spike `GlacialSpike.cs:35-40/43-65` · Chain Lightning `ChainLightning.cs:29-39/63-82` · Iron Charge `IronCharge.cs:36-54/61-75` · Gravity Cleave `GravityCleave.cs:30-52` · Earthsplitter `Earthsplitter.cs:26-46`.
+
+## Basic attack BLOCKED → çözüm
+cx basic'leri göremedi (dosya verilmemişti). Üretim kapsamına EKLE: `Assets/Scripts/Combat/BasicAttack/BasicAttackBehaviorBase.cs · MeleeChainBehavior.cs · CastRhythmBehavior.cs · BasicAttackProfile.cs`.
+
+## Doğrulama (değişmez)
+Play-mode görsel (Unity AÇIK, world-space → screenshot yakalar), kör commit YOK, combat doğruluğu (DamagePacket/hitbox) additive katmanla DEĞİŞMEZ. Telegraph ayrımı: player VFX = dışa/burst/parlak/order≥20; enemy = içe/geometrik/fill/order 1-5 (3.1 Pro şekil-dili).
+
+**Durum:** Council ONAY (lean revizyonla). Bekleyen: ChatGPT review → reconcile → ÜRETİM dispatch.
