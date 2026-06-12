@@ -49,7 +49,9 @@ namespace RIMA
         public void TakeDamage(int amount)
         {
             if (IsDead || immune) return;
+            if (amount <= 0) return;
             OnDamageTaken?.Invoke(amount);
+            // TODO E1: 100% damage reduction still floors positive hits to 1 until DR semantics are defined.
             int effective = Mathf.Max(1, Mathf.RoundToInt(amount * incomingDamageMultiplier));
             currentHP = Mathf.Max(0, currentHP - effective);
             if (Time.time >= _nextHitImpactTime)

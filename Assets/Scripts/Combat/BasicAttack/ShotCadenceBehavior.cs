@@ -54,6 +54,14 @@ namespace RIMA
                 (Vector2)owner.transform.position + dir * 0.35f,
                 dir, profile.projectileSpeed, damage,
                 new Color(0.4f, 0.95f, 0.42f, 0.95f), scale, 3f, "RiftArrow_Runtime", owner.gameObject);
+            projectile.SetDamagePacket(RIMA.Balance.DamagePacket.Create(
+                damage,
+                profile.lmbDamageType,
+                profile.lmbSourceType,
+                owner.gameObject,
+                null,
+                charged ? "basic_lmb_charged" : "basic_lmb",
+                elementTag: profile.lmbElementTag));
 
             projectile.SetOnHit(hit =>
             {

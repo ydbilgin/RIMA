@@ -116,6 +116,7 @@ namespace RIMA
                 element,
                 isCrit,
                 elementTag: ElementTag.None,
+                // TODO E2: bypassStatScaling still allows crit/cap modifiers; define if raw damage should bypass those too.
                 bypassStatScaling: true);
             DealDamage(health, packet, popup, attacker, hitDirection, element, isCrit, applyStatusMultiplier);
         }
@@ -135,10 +136,9 @@ namespace RIMA
             if (packet.attacker == null)
                 packet.attacker = attacker;
 
-            ClassStatRuntime attackerStats = PlayerClassManager.Instance != null
-                ? PlayerClassManager.Instance.CurrentPrimaryStats
-                : ClassStatRuntime.Neutral;
-            var result = DamageCalculator.Calculate(packet, attackerStats);
+            ClassStatRuntime attackerStats = ResolveCombatStats(packet.attacker);
+            ClassStatRuntime defenderStats = ResolveCombatStats(packet.target);
+            var result = DamageCalculator.Calculate(packet, attackerStats, defenderStats);
 
             int finalDamage = result.finalDamage;
             if (applyStatusMultiplier)
@@ -158,6 +158,15 @@ namespace RIMA
                 DamagePopup.Show(health.transform.position, finalDamage);
 
             return finalDamage;
+        }
+
+        public static ClassStatRuntime ResolveCombatStats(GameObject actor)
+        {
+            if (actor != null && actor.CompareTag("Player") && PlayerClassManager.Instance != null)
+                return PlayerClassManager.Instance.CurrentPrimaryStats ?? ClassStatRuntime.Neutral;
+
+            // TODO: ICombatStatsProvider when enemies carry stats.
+            return ClassStatRuntime.Neutral;
         }
 
         public static void PublishSkillHit(Health health, int damage, GameObject attacker = null, Vector2? hitDirection = null,

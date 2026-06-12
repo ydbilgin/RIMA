@@ -60,10 +60,10 @@ namespace RIMA.Tests
         }
 
         [Test]
-        public void TakeDamage_ZeroDamage_StillDeals1()
+        public void TakeDamage_ZeroDamage_IsNoOp()
         {
             sut.TakeDamage(0);
-            Assert.AreEqual(99, sut.CurrentHP, "0 hasar bile minimum 1 etken hasar verir.");
+            Assert.AreEqual(100, sut.CurrentHP, "0 hasar HP degistirmez.");
         }
 
         [Test]

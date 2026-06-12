@@ -73,8 +73,8 @@ namespace RIMA
                     profile.lmbSourceType,
                     owner.gameObject,
                     col.gameObject,
-                    "basic_lmb",
-                    isFinisher,
+                    sourceId: isFinisher ? "basic_lmb_finisher" : "basic_lmb",
+                    isCrit: false,
                     elementTag: profile.lmbElementTag);
                 int finalDmg = SkillRuntime.DealDamage(hp, packet, false, owner.gameObject, facing, applyStatusMultiplier: true);
                 // T2: light vs heavy swing SFX (finisher = heavy tier)

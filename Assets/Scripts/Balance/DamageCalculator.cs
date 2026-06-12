@@ -55,11 +55,14 @@ namespace RIMA.Balance
             float defenseMultiplier = GetDefenseMultiplier(packet.damageType, defenderStats);
             rawDamage *= defenseMultiplier;
 
-            int finalDamage = Mathf.Max(1, Mathf.RoundToInt(rawDamage));
+            int finalDamage = packet.baseDamage <= 0
+                ? 0
+                : Mathf.Max(1, Mathf.RoundToInt(rawDamage));
 
             int postureOverflowDamage = 0;
             if (overflowMultiplier > 0f)
             {
+                // TODO: Route postureOverflowDamage to the future posture-break consumer.
                 postureOverflowDamage = Mathf.RoundToInt(packet.baseDamage * statMultiplier * overflowMultiplier);
             }
 

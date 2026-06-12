@@ -92,6 +92,14 @@ namespace RIMA
                     ? new Color(1f, 0.55f, 0.12f, 0.95f)   // orange-hot overheated
                     : new Color(1f, 0.85f, 0.28f, 0.90f),   // warm gold normal
                 scale, 2.5f, "DualFire_Runtime", owner.gameObject);
+            projectile.SetDamagePacket(RIMA.Balance.DamagePacket.Create(
+                damage,
+                profile.lmbDamageType,
+                profile.lmbSourceType,
+                owner.gameObject,
+                null,
+                overheated ? "basic_lmb_overheated" : "basic_lmb",
+                elementTag: profile.lmbElementTag));
 
             projectile.SetOnHit(hit =>
             {
@@ -131,6 +139,14 @@ namespace RIMA
                 (Vector2)owner.transform.position + dir * 0.35f,
                 dir, profile.projectileSpeed * 1.2f, damage,
                 new Color(1f, 0.72f, 0.18f, 0.95f), 0.36f, 2.8f, "HipShot_Runtime", owner.gameObject);
+            projectile.SetDamagePacket(RIMA.Balance.DamagePacket.Create(
+                damage,
+                profile.rmbDamageType,
+                profile.rmbSourceType,
+                owner.gameObject,
+                null,
+                hasHeat ? "basic_rmb_heat" : "basic_rmb",
+                elementTag: profile.rmbElementTag));
 
             projectile.SetOnHit(hit =>
             {
