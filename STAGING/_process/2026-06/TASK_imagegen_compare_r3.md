@@ -9,7 +9,7 @@ Use your built-in image generation capability (the `image_gen` / `$imagegen` too
 Top-down 3/4 high-angle game environment backdrop for a dark fantasy roguelite dungeon room, the Shattered Keep. Broken slate-grey stone floor (#3A3D42) and crumbling castle walls, deep void-purple shadows (#3A1A4A) pooling in the corners, a single warm ember-orange light source (#E89020) casting glow across the floor, faint sparing cyan magical accents (#00FFCC, less than 15 percent of the scene). Flat painterly illustration style, muted desaturated palette, low ambient lighting, atmospheric and moody. No characters, no text, no UI, no photoreal rendering.
 
 ## Save to (exact absolute path)
-F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\imagegen\_compare_2026-06-12\r3_codeximages.png
+F:\Antigravity Projeler\2d roguelite\RIMA\STAGING\imagegen\_compare_2026-06-12\r4_cxdispatch.png
 
 ## Report
 Two lines only: the final absolute path, and the pixel width x height. If you cannot access the image generation tool, write BLOCKED and the reason.

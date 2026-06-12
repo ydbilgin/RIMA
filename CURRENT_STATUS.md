@@ -1,31 +1,25 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-12 — GECE OTONOM BİTTİ, sabah toplu kontrol bekliyor)
+## ⏯️ RESUME (2026-06-12 — review-fix planı HAZIR, uygulama + ChatGPT batch yeni session'da)
 
-**⚠️ MODEL:** Orchestrator=Opus. Writer=cx, reviewer=council (writer≠reviewer).
-**cx profil:** laurethayday→yasinderyabilgin→yekta. Detay log → `STAGING/AUTONOMOUS_RUN_2026-06-12.md` (sabah notları + biriken minörler orada).
+**⚠️ MODEL:** Orchestrator=Opus. Writer=cx dispatch, reviewer=council (writer≠reviewer).
 
-**🌙 GECE SONUCU — 8 commit, hepsi gate'li + council-review'lı (görsel hariç):**
-- ✅ Semboller `e09533b2` (3 node sembol, QC PASS)
-- ✅ **Faz A** `169e198e` + fix `d8629d45` — stat çekirdeği + damage taksonomisi. council PASS (rima-qc+Gemini, 10 class tabloyla birebir)
-- ✅ **Faz B** `ddd3a97` — Director iskelet (toggle/cam/6-tab/chrome/Jersey10). yapısal PASS
-- ✅ **Faz C3 Stats** `d3a3b9d1` · **C2 Class&Skill** `5b5abda0` · **C1 Spawn** `9de1f94c` · **C6 Telemetry** `c8fd57a0` — hepsi rima-qc PASS (PARTIAL minörlerle)
-- **4/6 C sekmesi bitti.** Tüm Director commit'leri `[visual unverified]` → **GÖRSEL DOĞRULAMA SABAH**.
+**🖼️ GÖRSEL SKILL'LERİ (bu session yeniden düzenlendi):**
+- `/agy_image` = ax→agy (Imagen), 1024² opak. `/codex_image` = cx dispatch→Codex gpt-image-2. (eski `generate_image` + `codex-images` skill'i KALDIRILDI). Detay → [[feedback_image_skill_naming]].
+- **KANIT:** bare `codex exec` / `cx <profil> exec` passthrough Windows'ta non-interactive **asılı kalıyor**; **`cx dispatch` tek güvenilir codex yolu** (smoke test: dispatch 24s, bare 5dk+ hang). Görsel kıyas: `STAGING/imagegen/_compare_2026-06-12/` (Imagen + gpt-image-2 ikisi de iyi; gpt-image-2 top-down çerçeve daha iyi).
 
-**⛔ BLOCKED / SABAHA KALAN:**
-- **C5 Map** — BLOCKED: `JumpToNode(node-id)` YOK. Var: `DungeonGraph.Generate(seed,depth)` (reroll ✅) + `RoomRunDirector.AdvanceTo(choiceIndex)` (child-choice nav). KARAR GEREK: keyfi node-jump (yeni riskli hook) mı, child-choice nav mı? **Öneri: child-choice nav (güvenli), keyfi jump opsiyonel.**
-- **C4 Build** — bilinçli ertelendi (PaintCell public + IMGUI sök refactor en riskli, blind yapılmadı).
-- **HUD Layout** (B'ye bağlı) + **Faz D** cila + **Loc TR cleanup** (ı/ğ/ş eksik, 3 review'da çıktı).
+**🔍 CHATGPT OVERNIGHT REVIEW → COUNCIL → KARAR (bu session):**
+- ChatGPT review paketi geldi (`STAGING/_inbox/chatgpt_overnight_review_2026-06-12/`), Claude gerçek kodla **5 bulgu CONFIRMED**, council (cx+3.1Pro+Flash) risk-denetledi.
+- **KARAR DOSYASI:** `STAGING/OVERNIGHT_REVIEW_FIX_DECISION_2026-06-12.md` (uygula sırası + test-kırılma + 3.1Pro'nun ekstra E1/E2'si).
+- **UYGULANMADI** — yeni session'da: A1 finisher≠crit · A3 packet bypass (Ranger+HeatGauge×2) · A2 lean defender-stat helper · B1 zero-damage (**+ `HealthTests.cs:66` assert ÇEVİR**) · B2/E1/E2 TODO. Tek cx dispatch + CombatContract gate. **A4 Director raycast = Play-mode'da doğrula, kör commit YOK.**
 
-**✅ KARARLAR KİLİT:**
-- Damage taksonomisi → `DAMAGE_TYPE_TAXONOMY_DECISION_2026-06-12.md`
-- HUD Layout → `HUD_LAYOUT_DECISION_2026-06-12.md`
+**📦 SONRAKİ ADIM (yeni session):**
+1. **Review-fix dispatch** (yukarıdaki plan, karar dosyasından).
+2. **ChatGPT batch review:** `STAGING/CHATGPT_BATCH_REVIEW_PACKAGE_2026-06-12.md` (4 batch, tek tek). C4 numeric-tablo doğrulaması Batch 3'te.
+3. **Görsel playtest:** Director aç (` tuş) → B + C1/C2/C3/C6.
+4. Kalan: **C5 Map** (öneri child-choice nav) · **C4 Build** (PaintCell refactor riskli) · HUD Layout · Faz D · Loc TR (ı/ğ/ş).
 
-**📦 SABAH:**
-1. **Görsel playtest:** Director aç (` tuş) → B iskelet + C1/C2/C3/C6 sekmeleri göz at
-2. **C5 Map** kararı ver → dispatch · **C4 Build** dispatch (PaintCell refactor dikkat)
-3. HUD Layout + Faz D + Loc TR-karakter cleanup
-4. AUTONOMOUS_RUN "SABAH NOTLARI" bölümündeki minörleri ele al
+**Durum:** 22 commit push'lı (`github.com/ydbilgin/RIMA`). Gece detay → `STAGING/AUTONOMOUS_RUN_2026-06-12.md`. Kararlar: damage taksonomisi + HUD layout DECISION dosyalarında.
 
 ---
 *Önceki session blokları git history'de.*
