@@ -95,6 +95,7 @@ namespace RIMA
             {
                 // Immediate (legacy / attackStartup == 0).
                 owner.EmitSlashArc(owner.Controller.FacingDirection, step);
+                SkillVfx.MeleeArc(GetHitCenter(owner, profile, step), owner.Controller.FacingDirection, VfxElement.Physical);
                 ApplyMeleeHit(owner, profile, step, chainMult);
                 TriggerWarbladeFinisher(profile, step, owner);
             }
@@ -109,11 +110,18 @@ namespace RIMA
             // via PlayerAttack.CurrentStrikeFraction). EmitSlashArc -> SlashArcVFX.Emit;
             // VFXRouter handles downstream hit/kill bursts via CombatEventBus in ApplyMeleeHit.
             _pendingOwner.EmitSlashArc(_pendingOwner.Controller.FacingDirection, _pendingStep);
+            SkillVfx.MeleeArc(GetHitCenter(_pendingOwner, _pendingProfile, _pendingStep), _pendingOwner.Controller.FacingDirection, VfxElement.Physical);
             ApplyMeleeHit(_pendingOwner, _pendingProfile, _pendingStep, _pendingChainMult);
             TriggerWarbladeFinisher(_pendingProfile, _pendingStep, _pendingOwner);
 
             _pendingOwner   = null;
             _pendingProfile = null;
+        }
+
+        private static Vector2 GetHitCenter(PlayerAttack owner, BasicAttackProfile profile, int step)
+        {
+            Vector2 facing = owner.Controller.FacingDirection;
+            return (Vector2)owner.transform.position + facing * profile.GetHitRangeForStep(step);
         }
 
         private static void TriggerWarbladeFinisher(BasicAttackProfile profile, int step, PlayerAttack owner)

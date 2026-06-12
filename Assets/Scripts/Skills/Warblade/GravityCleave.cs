@@ -34,6 +34,11 @@ namespace RIMA
             if (chain == null) chain = ChainWindowTracker.For(this);
             bool chained = chain != null && chain.IsOpen(ChainWindowTracker.IronChargeNextHit);
 
+            Vector3 center = transform.position;
+            Vector2 facingDir = player != null ? player.FacingDirection : Vector2.right;
+            SkillVfx.MeleeArc(center, facingDir, VfxElement.Void);
+            SkillVfx.GroundCrack(center, VfxElement.Physical);
+
             var hits = Physics2D.OverlapCircleAll(transform.position, radius, LayerMask.GetMask("Enemy"));
             foreach (var h in hits)
             {
@@ -42,6 +47,7 @@ namespace RIMA
                 if (hp == null || hp.IsDead) continue;
 
                 SkillRuntime.DealDamage(hp, baseDamage, this);
+                SkillVfx.ImpactBurst(h.transform.position, VfxElement.Void);
 
                 // Çek
                 var rb = h.GetComponent<Rigidbody2D>();

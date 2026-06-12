@@ -41,6 +41,8 @@ namespace RIMA
 
         protected override void Execute()
         {
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Fire);
+
             if (Time.time - lastCastTime > consecutiveWindow) consecutiveCasts = 0;
             consecutiveCasts++;
             lastCastTime = Time.time;
@@ -65,7 +67,34 @@ namespace RIMA
                 ? Instantiate(projectilePrefab, origin, Quaternion.identity)
                 : CreateRuntimeFireball(origin, dir);
             var proj = go.GetComponent<PlayerProjectile>();
-            if (proj != null) proj.Init(dir * projectileSpeed, damage, applyBurning: true, burnDuration: burnDuration, life: 3f);
+            SkillVfx.ProjectileTrail(go, VfxElement.Fire);
+            if (proj != null)
+            {
+                proj.Init(dir * projectileSpeed, damage, applyBurning: true, burnDuration: burnDuration, life: 3f);
+                proj.SetOnHit(hit => PlayFireballImpact(hit != null ? hit.transform.position : go.transform.position));
+            }
+        }
+
+        private static void PlayFireballImpact(Vector3 hitPos)
+        {
+            SkillVfx.ImpactBurst(hitPos, VfxElement.Fire);
+
+            Sprite explosion = Resources.Load<Sprite>("VFX/Skills/vfx_explosion_a");
+            if (explosion == null)
+            {
+                Sprite[] sprites = Resources.LoadAll<Sprite>("VFX/Skills/vfx_explosion_a");
+                if (sprites != null && sprites.Length > 0)
+                    explosion = sprites[0];
+            }
+            if (explosion == null) return;
+
+            var source = new GameObject("Fireball_ExplosionBurst_Source");
+            source.SetActive(false);
+            var renderer = source.AddComponent<SpriteRenderer>();
+            renderer.sprite = explosion;
+
+            SkillVfx.PlayBurst(source, hitPos, VfxElement.Fire, 0.55f, 1.45f, 0.28f);
+            Destroy(source);
         }
 
         private GameObject CreateRuntimeFireball(Vector3 origin, Vector2 aimDir)
