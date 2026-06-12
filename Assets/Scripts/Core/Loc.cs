@@ -178,6 +178,16 @@ namespace RIMA
             { "victory.stats.summary",      "ODA: {0}    LEŞ: {1}    SÜRE: {2}" },
 
             // Director Mode
+            { "director.spawn.title",       "SPAWN" },
+            { "director.spawn.hint",        "Dusman sec, dunya tikla koy, sag tik sil" },
+            { "director.spawn.clear",       "TEMIZLE" },
+            { "director.spawn.status.loaded", "{0} dusman hazir" },
+            { "director.spawn.status.selected", "{0} secildi" },
+            { "director.spawn.status.spawned", "{0} yerlestirildi - toplam {1}" },
+            { "director.spawn.status.erased", "Silindi - toplam {0}" },
+            { "director.spawn.status.erase_none", "Silinecek Director mob yok" },
+            { "director.spawn.status.cleared", "Director spawnlari temizlendi" },
+            { "director.spawn.status.no_wave", "Encounter wave bulunamadi" },
             { "director.class_skill.title", "CLASS & SKILL" },
             { "director.class_skill.hint", "Sinif degistir, draft skill sec, LMB/RMB basic ata" },
             { "director.class_skill.assign.q", "Q ATA" },
@@ -338,6 +348,16 @@ namespace RIMA
             { "victory.stats.summary",      "CHAMBER: {0}    KILLS: {1}    TIME: {2}" },
 
             // Director Mode
+            { "director.spawn.title",       "SPAWN" },
+            { "director.spawn.hint",        "Pick an enemy, click world to place, right-click to erase" },
+            { "director.spawn.clear",       "CLEAR" },
+            { "director.spawn.status.loaded", "{0} enemies ready" },
+            { "director.spawn.status.selected", "{0} selected" },
+            { "director.spawn.status.spawned", "{0} placed - total {1}" },
+            { "director.spawn.status.erased", "Erased - total {0}" },
+            { "director.spawn.status.erase_none", "No Director mob under cursor" },
+            { "director.spawn.status.cleared", "Director spawns cleared" },
+            { "director.spawn.status.no_wave", "Encounter wave missing" },
             { "director.class_skill.title", "CLASS & SKILL" },
             { "director.class_skill.hint", "Swap class, pick draft skill, assign LMB/RMB basic" },
             { "director.class_skill.assign.q", "ASSIGN Q" },

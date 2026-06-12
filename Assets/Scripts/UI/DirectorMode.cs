@@ -1,11 +1,14 @@
 #if DEMO_BUILD || DEVELOPMENT_BUILD || UNITY_EDITOR
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using RIMA.Balance;
+using RIMA.Encounter;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -55,20 +58,32 @@ namespace RIMA
         private readonly List<StatSliderBinding> statSliders = new List<StatSliderBinding>();
         private readonly List<ClassButtonBinding> classButtons = new List<ClassButtonBinding>();
         private readonly List<SkillCardBinding> skillCards = new List<SkillCardBinding>();
+        private readonly List<SpawnEnemyBinding> spawnEnemies = new List<SpawnEnemyBinding>();
+        private readonly List<GameObject> directorSpawnedEnemies = new List<GameObject>();
         private readonly List<LocalizedTextBinding> localizedTexts = new List<LocalizedTextBinding>();
 
         private CanvasGroup rootGroup;
         private TextMeshProUGUI subtitleText;
         private TextMeshProUGUI startButtonText;
         private TextMeshProUGUI modeStripText;
+        private TextMeshProUGUI spawnStatusText;
         private TextMeshProUGUI classSkillStatusText;
         private TextMeshProUGUI statsStatusText;
+        private RectTransform spawnPaletteRoot;
         private RectTransform classSkillCardsRoot;
+        private SpawnEnemyBinding selectedSpawnEnemy;
+        private GameObject spawnGhost;
+        private SpriteRenderer spawnGhostRenderer;
         private SkillData selectedDirectorSkill;
         private Camera directorCamera;
         private Vector3 targetCameraPosition;
         private bool hasCameraTarget;
         private bool suppressStatSliderCallbacks;
+        private float spawnGhostPulse;
+
+        private const string DirectorWaveResourcePath = "Encounters/Act1_Wave_Pilot";
+        private const float SpawnGridSize = 1f;
+        private const float EraseRadius = 0.7f;
 
         public DirectorModeState State { get; private set; } = DirectorModeState.Test;
         public DirectorTab ActiveTab { get; private set; } = DirectorTab.Spawn;
@@ -128,6 +143,11 @@ namespace RIMA
             if (State == DirectorModeState.Director)
             {
                 UpdateFreeCamera(Time.unscaledDeltaTime);
+                UpdateSpawnTool(Time.unscaledDeltaTime);
+            }
+            else
+            {
+                HideSpawnGhost();
             }
         }
 
@@ -138,6 +158,7 @@ namespace RIMA
                 Instance = null;
             }
 
+            HideSpawnGhost();
             Loc.OnLanguageChanged -= RefreshLocalizedText;
         }
 
@@ -263,6 +284,41 @@ namespace RIMA
                 & AssignBasicAction(GameAction.ClassSecondary, "<Mouse>/rightButton");
         }
 
+        public bool SelectFirstSpawnEnemyForValidation()
+        {
+            EnsureSpawnPaletteLoaded();
+            if (spawnEnemies.Count == 0)
+                return false;
+
+            SelectSpawnEnemy(spawnEnemies[0]);
+            return selectedSpawnEnemy.Prefab != null;
+        }
+
+        public int DirectorSpawnedEnemyCountForValidation()
+        {
+            PruneDirectorSpawnedEnemies();
+            return directorSpawnedEnemies.Count;
+        }
+
+        public bool SpawnSelectedEnemyAtForValidation(Vector2 position)
+        {
+            EnsureSpawnPaletteLoaded();
+            if ((selectedSpawnEnemy == null || selectedSpawnEnemy.Prefab == null) && spawnEnemies.Count > 0)
+                SelectSpawnEnemy(spawnEnemies[0]);
+
+            return SpawnSelectedEnemy(SnapWorld(position)) != null;
+        }
+
+        public bool EraseDirectorEnemyAtForValidation(Vector2 position)
+        {
+            return EraseDirectorEnemyAt(SnapWorld(position));
+        }
+
+        public bool HasSpawnGhostForValidation()
+        {
+            return spawnGhost != null && spawnGhost.activeSelf && spawnGhostRenderer != null && spawnGhostRenderer.sprite != null;
+        }
+
         private void UpdateFreeCamera(float dt)
         {
             Keyboard keyboard = Keyboard.current;
@@ -363,6 +419,7 @@ namespace RIMA
             RectTransform root = rootGroup.transform as RectTransform;
 
             Image dimmer = CreateImage("ScreenDimmer", root, null, new Color(0.031f, 0.027f, 0.063f, 0.35f), Image.Type.Simple);
+            dimmer.raycastTarget = false;
             Stretch(dimmer.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             BuildTopBadge(root);
@@ -390,12 +447,18 @@ namespace RIMA
             statSliders.Clear();
             classButtons.Clear();
             skillCards.Clear();
+            spawnEnemies.Clear();
+            directorSpawnedEnemies.Clear();
             localizedTexts.Clear();
             rootGroup = null;
+            spawnStatusText = null;
             classSkillStatusText = null;
             statsStatusText = null;
+            spawnPaletteRoot = null;
             classSkillCardsRoot = null;
+            selectedSpawnEnemy = null;
             selectedDirectorSkill = null;
+            HideSpawnGhost();
 
             LoadEditorSkin();
             BuildOverlay();
@@ -474,12 +537,362 @@ namespace RIMA
             RectTransform content = CreateFill("ContentArea", root);
             Stretch(content, Vector2.zero, Vector2.one, new Vector2(150f, 120f), new Vector2(-40f, -130f));
 
-            AddEmptyPanel(content, DirectorTab.Spawn, "SPAWN", "yakinda");
+            AddSpawnPanel(content);
             AddClassSkillPanel(content);
             AddStatsPanel(content);
             AddEmptyPanel(content, DirectorTab.Build, "BUILD", "yakinda");
             AddEmptyPanel(content, DirectorTab.Map, "MAP", "yakinda");
             AddEmptyPanel(content, DirectorTab.Telemetry, "TELEMETRY", "yakinda");
+        }
+
+        private void AddSpawnPanel(RectTransform parent)
+        {
+            RectTransform panel = CreateFill("Panel_" + DirectorTab.Spawn, parent);
+            CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
+            panels[DirectorTab.Spawn] = group;
+
+            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            RectTransform header = CreateFill("Header", panel);
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.spawn.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            localizedTexts.Add(new LocalizedTextBinding(titleText, "director.spawn.title"));
+
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.spawn.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            localizedTexts.Add(new LocalizedTextBinding(hint, "director.spawn.hint"));
+
+            spawnPaletteRoot = CreatePanel("EnemyPalette", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
+            Anchor(spawnPaletteRoot, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(-90f, 330f));
+
+            GridLayoutGroup paletteLayout = spawnPaletteRoot.gameObject.AddComponent<GridLayoutGroup>();
+            paletteLayout.padding = new RectOffset(16, 16, 16, 16);
+            paletteLayout.spacing = new Vector2(12f, 12f);
+            paletteLayout.cellSize = new Vector2(168f, 78f);
+            paletteLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            paletteLayout.constraintCount = 5;
+
+            RectTransform actions = CreateFill("SpawnActions", panel);
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 74f), new Vector2(520f, 54f));
+
+            Button clear = CreateButton("Button_ClearDirectorSpawns", actions, menuButton, Color.white);
+            Anchor(clear.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), Vector2.zero, new Vector2(180f, 42f));
+            clear.onClick.AddListener(ClearDirectorSpawns);
+            AddButtonText(clear, "director.spawn.clear");
+
+            spawnStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            spawnStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
+            Anchor(spawnStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+
+            EnsureSpawnPaletteLoaded();
+        }
+
+        private void EnsureSpawnPaletteLoaded()
+        {
+            if (spawnPaletteRoot == null || spawnEnemies.Count > 0)
+                return;
+
+            EncounterWaveSO wave = Resources.Load<EncounterWaveSO>(DirectorWaveResourcePath);
+            if (wave == null || wave.entries == null || wave.entries.Count == 0)
+            {
+                SetSpawnStatus("director.spawn.status.no_wave");
+                return;
+            }
+
+            HashSet<GameObject> seen = new HashSet<GameObject>();
+            for (int i = 0; i < wave.entries.Count; i++)
+            {
+                EncounterEnemyEntry entry = wave.entries[i];
+                if (entry == null || entry.prefab == null || seen.Contains(entry.prefab))
+                    continue;
+
+                seen.Add(entry.prefab);
+                AddSpawnEnemyButton(spawnPaletteRoot, entry);
+            }
+
+            if (spawnEnemies.Count > 0)
+            {
+                SelectSpawnEnemy(spawnEnemies[0]);
+                SetSpawnStatus("director.spawn.status.loaded", spawnEnemies.Count);
+            }
+            else
+            {
+                SetSpawnStatus("director.spawn.status.no_wave");
+            }
+        }
+
+        private void AddSpawnEnemyButton(RectTransform parent, EncounterEnemyEntry entry)
+        {
+            string label = entry.prefab != null ? entry.prefab.name : entry.enemyType.ToString();
+            Button button = CreateButton("Button_Spawn_" + SanitizeName(label), parent, slotNormal, Color.white);
+            RectTransform rt = button.transform as RectTransform;
+
+            Image swatch = CreateImage("Swatch", rt, null, EnemyTypeColor(entry.enemyType), Image.Type.Simple);
+            Anchor(swatch.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(12f, 0f), new Vector2(18f, 44f));
+
+            TextMeshProUGUI title = CreateText("TMP_Label", rt, label, 16f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(38f, 22f), new Vector2(-10f, -8f));
+            title.enableWordWrapping = true;
+
+            TextMeshProUGUI meta = CreateText("TMP_Meta", rt, entry.enemyType.ToString(), 11f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            meta.color = new Color(0.78f, 0.84f, 0.86f, 0.70f);
+            Stretch(meta.rectTransform, Vector2.zero, Vector2.one, new Vector2(38f, 6f), new Vector2(-10f, -48f));
+
+            SpawnEnemyBinding binding = new SpawnEnemyBinding(entry.enemyType, entry.prefab, button.GetComponent<Image>());
+            button.onClick.AddListener(() => SelectSpawnEnemy(binding));
+            spawnEnemies.Add(binding);
+        }
+
+        private void SelectSpawnEnemy(SpawnEnemyBinding binding)
+        {
+            selectedSpawnEnemy = binding;
+            RefreshSpawnButtons();
+            RebuildSpawnGhost();
+            if (binding != null)
+                SetSpawnStatus("director.spawn.status.selected", binding.Label);
+        }
+
+        private void RefreshSpawnButtons()
+        {
+            foreach (SpawnEnemyBinding binding in spawnEnemies)
+            {
+                if (binding.Background != null)
+                    binding.Background.sprite = binding == selectedSpawnEnemy && slotActive != null ? slotActive : slotNormal;
+            }
+        }
+
+        private void UpdateSpawnTool(float dt)
+        {
+            if (ActiveTab != DirectorTab.Spawn)
+            {
+                HideSpawnGhost();
+                return;
+            }
+
+            EnsureSpawnPaletteLoaded();
+
+            Mouse mouse = Mouse.current;
+            if (mouse == null || selectedSpawnEnemy == null || selectedSpawnEnemy.Prefab == null)
+            {
+                HideSpawnGhost();
+                return;
+            }
+
+            Vector2 screen = mouse.position.ReadValue();
+            Vector3 snapped = SnapWorld(MouseScreenToWorld(screen));
+
+            UpdateSpawnGhost(snapped, dt);
+
+            if (IsPointerOverDirectorUi())
+                return;
+
+            if (mouse.leftButton.wasPressedThisFrame)
+                SpawnSelectedEnemy(snapped);
+            else if (mouse.rightButton.wasPressedThisFrame)
+                EraseDirectorEnemyAt(snapped);
+        }
+
+        private GameObject SpawnSelectedEnemy(Vector3 position)
+        {
+            if (selectedSpawnEnemy == null || selectedSpawnEnemy.Prefab == null)
+                return null;
+
+            GameObject instance = Instantiate(selectedSpawnEnemy.Prefab, position, Quaternion.identity);
+            instance.name = selectedSpawnEnemy.Prefab.name + "_Director";
+            instance.tag = "Enemy";
+            directorSpawnedEnemies.Add(instance);
+
+            Health health = instance.GetComponent<Health>();
+            if (health == null)
+                health = instance.AddComponent<Health>();
+
+            GameObject tracked = instance;
+            health.OnDeath.AddListener(() => directorSpawnedEnemies.Remove(tracked));
+            StartCoroutine(PopSpawn(instance.transform));
+            SetSpawnStatus("director.spawn.status.spawned", selectedSpawnEnemy.Label, directorSpawnedEnemies.Count);
+            return instance;
+        }
+
+        private bool EraseDirectorEnemyAt(Vector3 position)
+        {
+            PruneDirectorSpawnedEnemies();
+            GameObject target = FindDirectorEnemyAt(position);
+            if (target == null)
+            {
+                SetSpawnStatus("director.spawn.status.erase_none");
+                return false;
+            }
+
+            directorSpawnedEnemies.Remove(target);
+            DestroyRuntimeObject(target);
+            SetSpawnStatus("director.spawn.status.erased", directorSpawnedEnemies.Count);
+            return true;
+        }
+
+        private GameObject FindDirectorEnemyAt(Vector3 position)
+        {
+            Collider2D[] hits = Physics2D.OverlapCircleAll(position, EraseRadius);
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i] == null)
+                    continue;
+
+                GameObject hit = hits[i].attachedRigidbody != null ? hits[i].attachedRigidbody.gameObject : hits[i].gameObject;
+                if (directorSpawnedEnemies.Contains(hit))
+                    return hit;
+            }
+
+            GameObject nearest = null;
+            float nearestSqr = EraseRadius * EraseRadius;
+            for (int i = 0; i < directorSpawnedEnemies.Count; i++)
+            {
+                GameObject enemy = directorSpawnedEnemies[i];
+                if (enemy == null)
+                    continue;
+
+                float sqr = ((Vector2)enemy.transform.position - (Vector2)position).sqrMagnitude;
+                if (sqr <= nearestSqr)
+                {
+                    nearest = enemy;
+                    nearestSqr = sqr;
+                }
+            }
+
+            return nearest;
+        }
+
+        private void ClearDirectorSpawns()
+        {
+            for (int i = directorSpawnedEnemies.Count - 1; i >= 0; i--)
+            {
+                GameObject enemy = directorSpawnedEnemies[i];
+                if (enemy != null)
+                    DestroyRuntimeObject(enemy);
+            }
+
+            directorSpawnedEnemies.Clear();
+            SetSpawnStatus("director.spawn.status.cleared");
+        }
+
+        private void PruneDirectorSpawnedEnemies()
+        {
+            for (int i = directorSpawnedEnemies.Count - 1; i >= 0; i--)
+            {
+                if (directorSpawnedEnemies[i] == null)
+                    directorSpawnedEnemies.RemoveAt(i);
+            }
+        }
+
+        private void RebuildSpawnGhost()
+        {
+            HideSpawnGhost();
+            if (selectedSpawnEnemy == null || selectedSpawnEnemy.Prefab == null)
+                return;
+
+            SpriteRenderer prefabRenderer = selectedSpawnEnemy.Prefab.GetComponentInChildren<SpriteRenderer>();
+            GameObject ghost = new GameObject("DirectorSpawnGhost", typeof(SpriteRenderer));
+            SpriteRenderer renderer = ghost.GetComponent<SpriteRenderer>();
+            renderer.sprite = prefabRenderer != null ? prefabRenderer.sprite : null;
+            renderer.sharedMaterial = prefabRenderer != null ? prefabRenderer.sharedMaterial : null;
+            renderer.sortingLayerName = prefabRenderer != null ? prefabRenderer.sortingLayerName : "Entities";
+            renderer.sortingOrder = prefabRenderer != null ? prefabRenderer.sortingOrder + 8 : 8;
+            renderer.color = new Color(0f, 1f, 0.8f, 0.42f);
+            ghost.transform.localScale = selectedSpawnEnemy.Prefab.transform.localScale;
+
+            spawnGhost = ghost;
+            spawnGhostRenderer = renderer;
+            spawnGhostPulse = 0f;
+        }
+
+        private void UpdateSpawnGhost(Vector3 position, float dt)
+        {
+            if (spawnGhost == null || spawnGhostRenderer == null)
+                RebuildSpawnGhost();
+
+            if (spawnGhost == null)
+                return;
+
+            spawnGhost.SetActive(true);
+            spawnGhost.transform.position = position;
+            spawnGhostPulse += dt * 6f;
+            float pulse = 0.92f + Mathf.Sin(spawnGhostPulse) * 0.04f;
+            spawnGhost.transform.localScale = selectedSpawnEnemy.Prefab.transform.localScale * pulse;
+        }
+
+        private void HideSpawnGhost()
+        {
+            if (spawnGhost != null)
+                DestroyRuntimeObject(spawnGhost);
+
+            spawnGhost = null;
+            spawnGhostRenderer = null;
+        }
+
+        private IEnumerator PopSpawn(Transform target)
+        {
+            if (target == null)
+                yield break;
+
+            Vector3 baseScale = target.localScale;
+            float time = 0f;
+            const float duration = 0.14f;
+            while (time < duration && target != null)
+            {
+                time += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(time / duration);
+                float scale = 1f + Mathf.Sin(t * Mathf.PI) * 0.18f;
+                target.localScale = baseScale * scale;
+                yield return null;
+            }
+
+            if (target != null)
+                target.localScale = baseScale;
+        }
+
+        private Vector3 MouseScreenToWorld(Vector2 screen)
+        {
+            CacheCameraTarget();
+            if (directorCamera == null)
+                return Vector3.zero;
+
+            Vector3 world = directorCamera.ScreenToWorldPoint(new Vector3(screen.x, screen.y, -directorCamera.transform.position.z));
+            world.z = 0f;
+            return world;
+        }
+
+        private static Vector3 SnapWorld(Vector3 world)
+        {
+            return new Vector3(
+                Mathf.Round(world.x / SpawnGridSize) * SpawnGridSize,
+                Mathf.Round(world.y / SpawnGridSize) * SpawnGridSize,
+                0f);
+        }
+
+        private static bool IsPointerOverDirectorUi()
+        {
+            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        }
+
+        private void SetSpawnStatus(string locKey, params object[] args)
+        {
+            if (spawnStatusText != null)
+                spawnStatusText.text = args != null && args.Length > 0 ? Loc.T(locKey, args) : Loc.T(locKey);
+        }
+
+        private static Color EnemyTypeColor(EncounterEnemyType type)
+        {
+            switch (type)
+            {
+                case EncounterEnemyType.FractureImp: return HtmlColor("#C82026");
+                case EncounterEnemyType.SeamCrawler: return HtmlColor("#00FFCC");
+                case EncounterEnemyType.PenitentBruiser: return HtmlColor("#E89020");
+                case EncounterEnemyType.VoidThrall: return HtmlColor("#8F5CFF");
+                default: return HtmlColor("#D8D0B0");
+            }
         }
 
         private void AddEmptyPanel(RectTransform parent, DirectorTab tab, string title, string placeholder)
@@ -1215,6 +1628,22 @@ namespace RIMA
                 Skill = skill;
                 Background = background;
             }
+        }
+
+        private sealed class SpawnEnemyBinding
+        {
+            public readonly EncounterEnemyType Type;
+            public readonly GameObject Prefab;
+            public readonly Image Background;
+
+            public SpawnEnemyBinding(EncounterEnemyType type, GameObject prefab, Image background)
+            {
+                Type = type;
+                Prefab = prefab;
+                Background = background;
+            }
+
+            public string Label => Prefab != null ? Prefab.name : Type.ToString();
         }
 
         private readonly struct TabBinding
