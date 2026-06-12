@@ -83,7 +83,11 @@ namespace RIMA
                 return;
             }
 
-            PlayBurst(CreateRuntimeSpritePrefab("ImpactBurst", null), pos, element);
+            // Fallback template is a scene object, not an asset — destroy it after the instance spawns
+            // (PlayBurst already Instantiated from it). Without this it leaks one GameObject per call in builds.
+            GameObject template = CreateRuntimeSpritePrefab("ImpactBurst", null);
+            PlayBurst(template, pos, element);
+            Object.Destroy(template);
         }
 
         public static void ProjectileTrail(GameObject go, VfxElement element)
@@ -262,7 +266,8 @@ namespace RIMA
             ParticleSystemRenderer[] particleRenderers = root.GetComponentsInChildren<ParticleSystemRenderer>(true);
             for (int i = 0; i < particleRenderers.Length; i++)
             {
-                particleRenderers[i].sharedMaterial = SharedAdditiveMaterial;
+                // Keep the prefab's own material — forcing additive on every spawn blows out large soft
+                // particles (whiteout). Spec: additive is core-only (PlayBurst opts in via ApplyAdditiveCore).
                 ForceSorting(particleRenderers[i], SortingOrder + 10);
             }
 
