@@ -120,6 +120,19 @@ namespace RIMA.UI.BuildMode
         private float ghostPulse;
         private bool lastGhostValid;
 
+        // --- ISO-grid overlay (consolidation item 6 — user: "no grid") ---
+        // A pooled set of world-space LineRenderer diamonds drawn around the camera while Build Mode
+        // is active, so the iso cell layout is visible (and screenshot-verifiable, unlike a
+        // ScreenSpaceOverlay canvas). Built lazily, shown/hidden with the build session, rebuilt only
+        // when the visible cell window changes (no per-cell per-frame GC).
+        private const int GridOverlayRadius = 14;             // cells out from the centre cell each axis
+        private static readonly Color GridLineColor = new Color(0.71f, 0.74f, 0.79f, 0.16f); // dim slate
+        private GameObject gridOverlay;
+        private readonly List<LineRenderer> gridLines = new List<LineRenderer>();
+        private Material gridLineMaterial;
+        private Vector3Int gridOverlayCentre;
+        private bool gridOverlayBuilt;
+
         // --- UI (runtime, no prefab) ---
         private Canvas paletteCanvas;
         private RectTransform paletteRoot;
@@ -172,6 +185,7 @@ namespace RIMA.UI.BuildMode
                 ResolveSceneRefs();
                 EnsurePaletteUi();
                 SetPaletteVisible(true);
+                ShowGridOverlay();
                 ActiveTool = BuildTool.Prop; // enter always starts on the prop tool (Phase 1/2 default).
                 if (selectedIndex < 0 && palette.Count > 0) SelectPalette(0);
                 RefreshToolHighlight();
@@ -180,6 +194,7 @@ namespace RIMA.UI.BuildMode
             else
             {
                 HideGhost();
+                HideGridOverlay();
                 SetPaletteVisible(false);
                 // Disable the tile brush too (hide its cursor highlight + working-copy state).
                 // Non-creating: never spawn a brush just to disable one that never existed.
@@ -254,6 +269,9 @@ namespace RIMA.UI.BuildMode
 
             ResolveSceneRefs();
             HandleKeyboard();
+
+            // Refresh the iso-grid overlay's visible window (rebuilds only when the centre cell moves).
+            RefreshGridOverlay();
 
             // PHASE 3 tool-exclusivity: exactly ONE tool's cursor/click handler runs per frame.
             // When the tile brush is active the prop cursor must NOT run (no ghost, no place) and
@@ -620,6 +638,144 @@ namespace RIMA.UI.BuildMode
             if (ghost != null) DestroyRuntimeObject(ghost);
             ghost = null;
             ghostRenderer = null;
+        }
+
+        // ---------------------------------------------------------------- iso-grid overlay
+
+        /// <summary>Build (lazily) + show the iso-grid overlay. Gated on Build Mode being active.</summary>
+        private void ShowGridOverlay()
+        {
+            if (!IsBuildModeActive || !BuildModeController.IsActive) return;
+            ResolveSceneRefs();
+            if (grid == null) return; // can be fake-null under DisableDomainReload until a room loads.
+
+            if (gridOverlay == null)
+            {
+                gridOverlay = new GameObject("BuildGridOverlay");
+                gridOverlay.transform.position = Vector3.zero;
+            }
+            gridOverlay.SetActive(true);
+            gridOverlayBuilt = false; // force a rebuild on the next refresh so the window is current.
+            RefreshGridOverlay();
+        }
+
+        /// <summary>
+        /// Rebuild the pooled diamond LineRenderers only when the camera-centre cell changes, so a
+        /// stationary camera draws zero per-frame garbage. Diamonds use the neighbour-midpoint method
+        /// (NEVER rectangular cellX*size math) so they tile seamlessly on the iso Grid.
+        /// </summary>
+        private void RefreshGridOverlay()
+        {
+            if (gridOverlay == null || !gridOverlay.activeSelf) return;
+            if (!IsBuildModeActive || !BuildModeController.IsActive) return;
+            if (grid == null) return;
+
+            Vector3Int centre = CameraCentreCell();
+            if (gridOverlayBuilt && centre == gridOverlayCentre) return; // window unchanged, nothing to do.
+            gridOverlayCentre = centre;
+            gridOverlayBuilt = true;
+
+            int side = GridOverlayRadius * 2 + 1;
+            int needed = side * side;
+            EnsureGridLinePool(needed);
+
+            int li = 0;
+            for (int dy = -GridOverlayRadius; dy <= GridOverlayRadius; dy++)
+            {
+                for (int dx = -GridOverlayRadius; dx <= GridOverlayRadius; dx++)
+                {
+                    Vector3Int cell = new Vector3Int(centre.x + dx, centre.y + dy, centre.z);
+                    SetDiamond(gridLines[li++], cell);
+                }
+            }
+
+            // Disable any pooled lines beyond what this window needs (shrunk window / smaller radius).
+            for (int i = li; i < gridLines.Count; i++)
+            {
+                if (gridLines[i] != null) gridLines[i].enabled = false;
+            }
+        }
+
+        // Centre the overlay window on the cell under the camera (cursor-independent so the grid is
+        // stable while painting). Uses the iso WorldToCell, consistent with placement.
+        private Vector3Int CameraCentreCell()
+        {
+            if (buildCamera == null) buildCamera = Camera.main;
+            Vector3 world = buildCamera != null ? buildCamera.transform.position : Vector3.zero;
+            world.z = 0f;
+            return grid.WorldToCell(world);
+        }
+
+        private void EnsureGridLinePool(int count)
+        {
+            if (gridLineMaterial == null)
+            {
+                // Unlit vertex-colour material so the lines render correctly in URP 2D.
+                gridLineMaterial = new Material(Shader.Find("Sprites/Default")) { hideFlags = HideFlags.DontSave };
+            }
+
+            while (gridLines.Count < count)
+            {
+                GameObject go = new GameObject("GridDiamond");
+                go.transform.SetParent(gridOverlay.transform, false);
+                LineRenderer lr = go.AddComponent<LineRenderer>();
+                lr.useWorldSpace = true;
+                lr.loop = true;
+                lr.positionCount = 4;
+                lr.widthMultiplier = 0.03f;
+                lr.numCornerVertices = 0;
+                lr.numCapVertices = 0;
+                lr.material = gridLineMaterial;
+                lr.startColor = GridLineColor;
+                lr.endColor = GridLineColor;
+                lr.sortingOrder = 32750; // just under the prop ghost (32760) so the ghost stays on top.
+                int layerId = SortingLayer.NameToID(PropsSortingLayer);
+                if (layerId != 0) lr.sortingLayerID = layerId;
+                lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                lr.receiveShadows = false;
+                gridLines.Add(lr);
+            }
+        }
+
+        // Diamond corners via the neighbour-midpoint method: each of top/right/bottom/left is the
+        // midpoint between this cell's centre and the corresponding 4-neighbour's centre. On an iso
+        // Grid this yields the cell's true rhombus and tiles seamlessly (council rule: no rect math).
+        private void SetDiamond(LineRenderer lr, Vector3Int cell)
+        {
+            if (lr == null) return;
+            Vector3 c = grid.GetCellCenterWorld(cell);
+            Vector3 up = grid.GetCellCenterWorld(cell + new Vector3Int(0, 1, 0));
+            Vector3 right = grid.GetCellCenterWorld(cell + new Vector3Int(1, 0, 0));
+            Vector3 down = grid.GetCellCenterWorld(cell + new Vector3Int(0, -1, 0));
+            Vector3 left = grid.GetCellCenterWorld(cell + new Vector3Int(-1, 0, 0));
+
+            Vector3 top = (c + up) * 0.5f;
+            Vector3 rgt = (c + right) * 0.5f;
+            Vector3 bot = (c + down) * 0.5f;
+            Vector3 lft = (c + left) * 0.5f;
+            top.z = rgt.z = bot.z = lft.z = 0f;
+
+            lr.enabled = true;
+            lr.SetPosition(0, top);
+            lr.SetPosition(1, rgt);
+            lr.SetPosition(2, bot);
+            lr.SetPosition(3, lft);
+        }
+
+        private void HideGridOverlay()
+        {
+            if (gridOverlay != null) gridOverlay.SetActive(false);
+            gridOverlayBuilt = false;
+        }
+
+        private void DestroyGridOverlay()
+        {
+            gridLines.Clear();
+            if (gridOverlay != null) DestroyRuntimeObject(gridOverlay);
+            gridOverlay = null;
+            if (gridLineMaterial != null) DestroyRuntimeObject(gridLineMaterial);
+            gridLineMaterial = null;
+            gridOverlayBuilt = false;
         }
 
         // ---------------------------------------------------------------- palette UI
@@ -1013,6 +1169,7 @@ namespace RIMA.UI.BuildMode
         private void TeardownAll()
         {
             HideGhost();
+            DestroyGridOverlay();
             for (int i = 0; i < placed.Count; i++)
             {
                 if (placed[i] != null) DestroyRuntimeObject(placed[i].instance);
@@ -1101,6 +1258,11 @@ namespace RIMA.UI.BuildMode
         }
 
         public int ActiveToolForValidation() => (int)ActiveTool;
+
+        // Grid-overlay lifecycle proof (consolidation item 6): the world-space overlay GameObject is
+        // active while Build Mode is active and inactive on exit. Needs a live Grid (PlayMode / a
+        // hand-built scene) to have been built.
+        public bool GridOverlayActiveForValidation() => gridOverlay != null && gridOverlay.activeSelf;
     }
 }
 #endif

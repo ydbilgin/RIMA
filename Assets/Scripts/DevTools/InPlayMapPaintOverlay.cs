@@ -33,6 +33,13 @@ namespace RIMA.DevTools
     {
         // ── Bootstrap (no manual scene wiring) ─────────────────────────────────
 
+        // CONSOLIDATION item 2 — RETIRED. This legacy IMGUI painter self-bootstrapped AND polled F2,
+        // which fought the uGUI Build Mode (BuildModeController) for the F2 toggle. The bootstrap +
+        // F2 polling are now gated behind RIMA_LEGACY_MAPPAINT, which is OFF by default, so this tool
+        // no longer self-activates and BuildModeController is the SOLE F2 owner. The file is kept (not
+        // deleted) so it can be re-enabled or salvaged for the post-demo UnifiedDesignerCore merge;
+        // re-enable by adding RIMA_LEGACY_MAPPAINT to the scripting define symbols.
+#if RIMA_LEGACY_MAPPAINT
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {
@@ -42,6 +49,7 @@ namespace RIMA.DevTools
             DontDestroyOnLoad(host);
             host.AddComponent<InPlayMapPaintOverlay>();
         }
+#endif
 
         // ── Layer selection ────────────────────────────────────────────────────
 
@@ -157,11 +165,16 @@ namespace RIMA.DevTools
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
+#if RIMA_LEGACY_MAPPAINT
+            // RETIRED (consolidation item 2): F2 belongs to BuildModeController now. This poll only
+            // compiles when the legacy define is explicitly enabled, so the overlay can never re-grab
+            // F2 in the demo build even if a stray instance is created by hand.
             if (keyboard != null && keyboard.f2Key.wasPressedThisFrame)
             {
                 SetVisible(!_visible);
                 if (_visible && _palette.Count == 0 && _propPalette.Count == 0 && _browserEntries.Count == 0) RebuildPalette();
             }
+#endif
 
             if (!_visible) return;
 

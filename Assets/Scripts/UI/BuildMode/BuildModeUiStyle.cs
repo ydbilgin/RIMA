@@ -30,23 +30,25 @@ namespace RIMA.UI.BuildMode
     internal static class BuildModeUiStyle
     {
         // ---- Act1 palette -------------------------------------------------------------------
-        public static readonly Color PanelBg      = Hex(0x16181C, 0.93f);  // dark slate panel
-        public static readonly Color PanelBorder  = Hex(0x3A3D42, 1.00f);  // slate edge
-        public static readonly Color HeaderText   = Hex(0xE8E8EC, 1.00f);  // off-white
-        public static readonly Color MutedText    = Hex(0x8A929C, 1.00f);  // muted slate-grey
-        public static readonly Color Ember        = Hex(0xE89020, 1.00f);  // primary / selected
-        public static readonly Color EmberDim     = Hex(0xE89020, 0.55f);  // accent bars / underline
-        public static readonly Color VoidPurple   = Hex(0x3A1A4A, 1.00f);  // subtle accent
-        public static readonly Color ButtonIdle   = Hex(0x2A2D32, 1.00f);  // unselected button fill
-        public static readonly Color ButtonBorder = Hex(0x3A3D42, 1.00f);  // unselected button edge
-        public static readonly Color SelectedText = Hex(0x16181C, 1.00f);  // dark text on ember fill
-        public static readonly Color HintBg       = Hex(0x101216, 0.95f);  // hint box (slightly darker)
+        // BRIGHTENED (consolidation item 6 — user: "too dark"). The slate ramp is lifted ~1.4-1.6x so
+        // panels/buttons/borders/muted text read on a lit display; ember/void/text-on-ember stay put.
+        public static readonly Color PanelBg      = Hex(0x202329, 0.93f);  // dark slate panel (lifted)
+        public static readonly Color PanelBorder  = Hex(0x4A4E55, 1.00f);  // slate edge (now visible)
+        public static readonly Color HeaderText   = Hex(0xE8E8EC, 1.00f);  // off-white (unchanged)
+        public static readonly Color MutedText    = Hex(0xA6ADB6, 1.00f);  // muted slate-grey (lifted)
+        public static readonly Color Ember        = Hex(0xE89020, 1.00f);  // primary / selected (unchanged)
+        public static readonly Color EmberDim     = Hex(0xE89020, 0.55f);  // accent bars / underline (unchanged)
+        public static readonly Color VoidPurple   = Hex(0x3A1A4A, 1.00f);  // subtle accent (unchanged)
+        public static readonly Color ButtonIdle   = Hex(0x363A41, 1.00f);  // unselected button fill (raised)
+        public static readonly Color ButtonBorder = Hex(0x4A4E55, 1.00f);  // unselected button edge (visible)
+        public static readonly Color SelectedText = Hex(0x16181C, 1.00f);  // dark text on ember fill (unchanged)
+        public static readonly Color HintBg       = Hex(0x181B20, 0.95f);  // hint box (lifted, still darkest)
 
         // ---- NEW tokens (design spec 1.1 elevation ramp + state matrix) ----------------------
         // Depth is expressed by LIGHTER surfaces, never drop shadows (dark-UI convention).
-        public static readonly Color CardIdle       = Hex(0x22252B, 1.00f);  // asset card / raised tile (elev 2)
-        public static readonly Color SurfaceHover   = Hex(0x34373D, 1.00f);  // hover lighten
-        public static readonly Color SurfacePressed = Hex(0x1C1E22, 1.00f);  // press darken
+        public static readonly Color CardIdle       = Hex(0x2C2F36, 1.00f);  // asset card / raised tile (elev 2, lifted)
+        public static readonly Color SurfaceHover   = Hex(0x3E424A, 1.00f);  // hover lighten (nudged up)
+        public static readonly Color SurfacePressed = Hex(0x24272D, 1.00f);  // press darken (lifted)
         public static readonly Color BorderHover    = Hex(0x4A4E55, 1.00f);  // brightened edge on hover
         public static readonly Color EmberGlow      = Hex(0xE89020, 0.22f);  // selected-card outer wash
         public static readonly Color DisabledText   = Hex(0x8A929C, 0.45f);  // unavailable item / tool

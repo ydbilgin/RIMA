@@ -6,6 +6,7 @@ using RIMA.MapDesigner.Room.Data;
 using RIMA.MapDesigner.Room.Runtime;
 using RIMA.UI.BuildMode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 namespace RIMA
@@ -56,6 +57,17 @@ namespace RIMA
                 _instance = go.AddComponent<BuildModeController>();
                 return _instance;
             }
+        }
+
+        // Self-bootstrap so the F2/quote poll in Update() runs without scene wiring. Previously the
+        // controller was created lazily by DirectorMode's quote branch; that branch moved here, so
+        // nothing else would instantiate it. Mirrors DirectorMode.Bootstrap. Play-mode only, so the
+        // edit-mode DontDestroyOnLoad concern never applies. Uses the lazy Instance getter, which
+        // find-or-creates a DontDestroyOnLoad controller (DisableDomainReload-safe via the alive check).
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Bootstrap()
+        {
+            _ = Instance;
         }
 
         // Non-creating active check for callers that must not trigger lazy creation.
@@ -114,6 +126,13 @@ namespace RIMA
             }
 
             _instance = this;
+
+            // CONSOLIDATION item 1+2: claim F2 (+ quote) as the SOLE owner of the Build-Mode toggle.
+            // The legacy IMGUI InPlayMapPaintOverlay no longer self-activates or polls F2 (retired
+            // behind RIMA_LEGACY_MAPPAINT, off by default), so this controller is the only claimant.
+            // The registry surfaces a clear error if anything else ever tries to re-poll these keys.
+            InPlayToolKeyRegistry.RegisterExclusive(Key.F2, this);
+            InPlayToolKeyRegistry.RegisterExclusive(Key.Quote, this);
         }
 
         private void OnDestroy()
@@ -122,6 +141,10 @@ namespace RIMA
             {
                 _instance = null;
             }
+
+            // Release our key claims so a re-created controller (DisableDomainReload) can re-own them.
+            InPlayToolKeyRegistry.Release(Key.F2, this);
+            InPlayToolKeyRegistry.Release(Key.Quote, this);
 
             // Safety: never leave the rig in the disabled "build" state if this is torn down mid-mode.
             RestoreCameraRig();
@@ -139,7 +162,40 @@ namespace RIMA
             DestroyWorkingTemplate();
         }
 
-        /// <summary>Quote-key entry point. Wired from DirectorMode.Update() as a sibling to backquote.</summary>
+        // Layout-independent Build-Mode toggle. F2 is the primary key because its physical position
+        // is identical on every keyboard layout (the previous quoteKey did not map to the "
+        // a Turkish-layout user presses, so Build Mode never opened). quoteKey is kept for US layouts.
+        // Runs on THIS live instance every frame regardless of DirectorMode state; uses members
+        // directly (never the lazy Instance getter, which would DontDestroyOnLoad-throw in edit mode).
+        private void Update()
+        {
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null)
+            {
+                return;
+            }
+
+            // Only the registered owner polls the toggle keys (single-owner guard). If a stale
+            // duplicate exists under DisableDomainReload, re-claim so the live instance keeps the key.
+            if (keyboard.f2Key.wasPressedThisFrame && EnsureOwns(Key.F2))
+            {
+                Toggle();
+            }
+            else if (keyboard.quoteKey.wasPressedThisFrame && EnsureOwns(Key.Quote))
+            {
+                Toggle();
+            }
+        }
+
+        // Confirm this live instance owns the key; reclaim a key whose recorded owner is gone
+        // (DisableDomainReload can leave a stale claim from a previous play session).
+        private bool EnsureOwns(Key key)
+        {
+            if (InPlayToolKeyRegistry.Owns(key, this)) return true;
+            return InPlayToolKeyRegistry.RegisterExclusive(key, this);
+        }
+
+        /// <summary>Build-Mode toggle entry point (driven by this controller's Update on F2 / quote).</summary>
         public void Toggle()
         {
             if (IsBuildModeActive)
@@ -289,6 +345,58 @@ namespace RIMA
             WorkingTemplate.hideFlags = HideFlags.DontSave;
             WorkingTemplate.name = source.name + " (BuildWorkingCopy)";
         }
+
+        /// <summary>
+        /// CONSOLIDATION item 3 — explicit Save/Apply. Copies the session working copy back onto its
+        /// SOURCE RoomTemplateSO .asset (the live RoomRunDirector.CurrentTemplate) and persists it to
+        /// disk. The source is dirtied ONLY here, never during a session (the working copy stays a
+        /// DontSave clone until this is called), so unsaved edits are discarded on exit as designed.
+        ///
+        /// Editor-only write: EditorUtility.CopySerialized restores name + hideFlags afterwards so the
+        /// CopySerialized (which would otherwise overwrite them with the clone's "(BuildWorkingCopy)"
+        /// name / DontSave flag) cannot orphan the asset. In a player build it is a logged no-op.
+        /// Returns true if a write actually happened.
+        /// </summary>
+        public bool SaveWorkingTemplate()
+        {
+            if (WorkingTemplate == null)
+            {
+                Debug.LogWarning("[BuildMode] SaveWorkingTemplate: no working copy to save (enter Build Mode first).");
+                return false;
+            }
+
+            RoomRunDirector director = FindObjectOfType<RoomRunDirector>();
+            RoomTemplateSO source = director != null ? director.CurrentTemplate : null;
+            if (source == null)
+            {
+                Debug.LogWarning("[BuildMode] SaveWorkingTemplate: no source RoomTemplate to write back to.");
+                return false;
+            }
+
+#if UNITY_EDITOR
+            // Preserve the source asset's identity across the field-by-field copy.
+            string sourceName = source.name;
+            HideFlags sourceFlags = source.hideFlags;
+
+            UnityEditor.EditorUtility.CopySerialized(WorkingTemplate, source);
+
+            source.name = sourceName;
+            source.hideFlags = sourceFlags;
+
+            UnityEditor.EditorUtility.SetDirty(source);
+            UnityEditor.AssetDatabase.SaveAssets();
+            Debug.Log($"[BuildMode] Saved working copy back to source template '{sourceName}'.");
+            return true;
+#else
+            // Player build: no AssetDatabase. Persisting authored rooms at runtime is a post-demo
+            // concern (JSON sidecar path); for now Save is a logged no-op outside the Editor.
+            Debug.Log("[BuildMode] SaveWorkingTemplate is editor-only; ignored in a player build.");
+            return false;
+#endif
+        }
+
+        /// <summary>Data-proof hook for the regression suite (no screenshot). Mirrors SaveWorkingTemplate.</summary>
+        public bool SaveForValidation() => SaveWorkingTemplate();
 
         private void DestroyWorkingTemplate()
         {

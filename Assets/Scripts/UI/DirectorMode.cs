@@ -182,12 +182,8 @@ namespace RIMA
                 ToggleState();
             }
 
-            // Quote key = polished Build-Mode alias (Phase 1). The lazy getter never returns null,
-            // so no guard is needed; it drives the camera-zoom wrapper + forces the Build tab.
-            if (keyboard != null && keyboard.quoteKey.wasPressedThisFrame)
-            {
-                BuildModeController.Instance.Toggle();
-            }
+            // Build-Mode toggle (F2 / quote) now lives in BuildModeController.Update() so it fires
+            // regardless of DirectorMode state and cannot double-toggle. (Phase 1 quote branch moved.)
 
             if (State == DirectorModeState.Director)
             {
