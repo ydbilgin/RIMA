@@ -18,18 +18,18 @@ Read:
 Read all in parallel:
 - `TASARIM/MASTER_KARAR_BELGESI.md`
 - `TASARIM/FAZLAR/FAZ_MASTER.md`
-- `TASARIM/ANIMATION_REDESIGN.md`
+- `TASARIM/_ARCHIVE_2.5D_2026-05-12/ANIMATION_REDESIGN.md` (ARCHIVED — mob-only referans)
 - `TASARIM/GDD.md` (first 100 lines only)
 
 ## Step 3 — Conflict Check
 
 | Check | Source A | Source B |
 |---|---|---|
-| Class roster (10 classes?) | MEMORY: project_rima.md | MASTER_KARAR_BELGESI |
+| Class roster (10 classes?) | MEMORY: MEMORY.md index (project_rima.md 2026-06-13'te arşivlendi) | MASTER_KARAR_BELGESI Karar #4 |
 | Active phase | CURRENT_STATUS | FAZ_MASTER |
-| Sprite system (body+weapon separate?) | MEMORY: project_character_system.md | ANIMATION_REDESIGN |
-| PixelLab pipeline status | MEMORY: project_pixellab_pipeline.md | MASTER_KARAR_BELGESI |
-| Cross-class skill slots (2 slots?) | MEMORY: project_cross_class_skills.md | GDD |
+| Sprite system (body+weapon separate?) | MASTER_KARAR_BELGESI Karar #144 (weaponless body) | ANIMATION_REDESIGN (archived) |
+| PixelLab pipeline status | MEMORY: project_pixellab_character_states_workflow.md | MASTER_KARAR_BELGESI Karar #35/#41/#90 |
+| Cross-class skill slots (2 slots?) | MEMORY: project_cross_class_skills.md | GDD §7 (toplam 6 aktif slot, max 2 cross-class) |
 
 ## Step 4 — Stale Memory Detection
 
