@@ -1,6 +1,9 @@
 #if DEMO_BUILD || DEVELOPMENT_BUILD || UNITY_EDITOR
 using System.Collections;
+using System.Collections.Generic;
 using RIMA.CameraSystem;
+using RIMA.MapDesigner.Room.Data;
+using RIMA.MapDesigner.Room.Runtime;
 using RIMA.UI.BuildMode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -58,6 +61,20 @@ namespace RIMA
         // Non-creating active check for callers that must not trigger lazy creation.
         public static bool IsActive => _instance != null && _instance.IsBuildModeActive;
 
+        // PHASE 3.1 (audit MAJOR fix): the ONE shared working copy for the whole Build Mode session.
+        // Owned here (the lifecycle owner): created on EnterBuildMode (deep-copies the source's
+        // walkableGrid bool[] / overlayMask int[] / props List via Object.Instantiate), destroyed on
+        // ExitBuildMode + OnDestroy. BOTH tools (prop placement + tile/walkability brush) edit THIS
+        // single instance and ALWAYS point WalkabilityMap at it — so the live ground Tilemap, the
+        // pathing authority and the prop validator can never disagree, and the source .asset is never
+        // mutated/dirtied (disk write-back is Phase 4 on explicit command). DisableDomainReload-safe
+        // (DontSave hideFlags + nulled on teardown).
+        public RoomTemplateSO WorkingTemplate { get; private set; }
+
+        // Non-creating accessor for the active session's working copy.
+        public static RoomTemplateSO ActiveWorkingTemplate =>
+            _instance != null && _instance.IsBuildModeActive ? _instance.WorkingTemplate : null;
+
         [Header("Build framing")]
         [Tooltip("Camera orthographic size used while Build Mode is active (wider 'enter build' framing).")]
         [SerializeField, Min(1f)] private float buildOverviewOrthoSize = 9f;
@@ -81,6 +98,13 @@ namespace RIMA
 
         private Coroutine zoomRoutine;
 
+        // OVERLAP FIX: every OTHER root UI canvas we disabled on enter, restored verbatim on exit.
+        // Build Mode draws over the live game world; without this the reward/draft screen, HUD and
+        // class-select bleed THROUGH and around the build panels (unreadable overlap). We disable
+        // Canvas.enabled (NOT the GameObject) so each canvas keeps its full hierarchy/state and a
+        // simple re-enable restores it. Our own two overlay canvases + the EventSystem are exempt.
+        private readonly List<Canvas> hiddenCanvases = new List<Canvas>();
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -102,11 +126,17 @@ namespace RIMA
             // Safety: never leave the rig in the disabled "build" state if this is torn down mid-mode.
             RestoreCameraRig();
 
+            // Safety: never leave other UI canvases hidden if this is torn down mid-mode.
+            RestoreOtherUiCanvases();
+
             // Safety: never leave the Phase 2 placement layer active if torn down mid-mode.
             if (BuildPlacementController.Instance != null)
             {
                 BuildPlacementController.Instance.SetBuildModeActive(false);
             }
+
+            // Safety: never leak the runtime working copy if torn down mid-mode.
+            DestroyWorkingTemplate();
         }
 
         /// <summary>Quote-key entry point. Wired from DirectorMode.Update() as a sibling to backquote.</summary>
@@ -187,9 +217,18 @@ namespace RIMA
             director.SetState(DirectorModeState.Director);
             director.ShowTab(DirectorTab.Build);
 
+            // PHASE 3.1: create the ONE shared working copy before any tool spins up, so both the
+            // prop tool and the tile brush edit the same instance for the whole session.
+            CreateWorkingTemplate();
+
             // Phase 2 placement layer: enable the PropRegistry-driven palette + iso-grid ghost +
             // place/erase/rotate/flip/eyedropper/undo. Active ONLY while Build Mode is active.
+            // (Builds the palette overlay canvas, which the hide pass below must EXEMPT.)
             BuildPlacementController.Instance.SetBuildModeActive(true);
+
+            // OVERLAP FIX: now that our palette canvas exists, hide every OTHER active root UI canvas
+            // so only the Build Mode UI + the live game world are visible (no reward/HUD/class bleed).
+            HideOtherUiCanvases();
 
             StartZoom(buildOverviewOrthoSize, restoreRigOnComplete: false);
         }
@@ -203,12 +242,19 @@ namespace RIMA
 
             IsBuildModeActive = false;
 
+            // OVERLAP FIX: bring back every other UI canvas we hid on enter (reward/HUD/class-select).
+            RestoreOtherUiCanvases();
+
             // Disable the Phase 2 placement layer first (hides ghost + palette, drops undo history).
             // Authored props persist in the room template; only editor-only state is dropped.
             if (BuildPlacementController.Instance != null)
             {
                 BuildPlacementController.Instance.SetBuildModeActive(false);
             }
+
+            // PHASE 3.1: both tools are now down, so destroy the shared working copy. All session
+            // edits lived only on this runtime instance; the source .asset was never touched.
+            DestroyWorkingTemplate();
 
             // Restore DirectorMode to whatever state/tab the player was in before Build Mode.
             DirectorMode director = DirectorMode.Instance;
@@ -221,6 +267,45 @@ namespace RIMA
 
             // Lerp ortho back to the captured (already-crisp) size, then hand control to CameraZoom.
             StartZoom(capturedOrthoSize, restoreRigOnComplete: true);
+        }
+
+        // PHASE 3.1: deep-copy the live source template into the session working copy. Object.Instantiate
+        // on a ScriptableObject copies the serialized fields by value (walkableGrid bool[], overlayMask
+        // int[] and the props List are all duplicated), so every edit lands on the clone and the source
+        // .asset stays pristine. hideFlags = DontSave keeps the clone out of any scene/asset save.
+        private void CreateWorkingTemplate()
+        {
+            DestroyWorkingTemplate();
+
+            RoomRunDirector director = FindObjectOfType<RoomRunDirector>();
+            RoomTemplateSO source = director != null ? director.CurrentTemplate : null;
+            if (source == null)
+            {
+                Debug.LogWarning("[BuildMode] No active RoomTemplate; tools will operate without a working copy.");
+                return;
+            }
+
+            WorkingTemplate = Object.Instantiate(source);
+            WorkingTemplate.hideFlags = HideFlags.DontSave;
+            WorkingTemplate.name = source.name + " (BuildWorkingCopy)";
+        }
+
+        private void DestroyWorkingTemplate()
+        {
+            if (WorkingTemplate == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(WorkingTemplate);
+            }
+            else
+            {
+                DestroyImmediate(WorkingTemplate);
+            }
+            WorkingTemplate = null;
         }
 
         private void StartZoom(float targetOrthoSize, bool restoreRigOnComplete)
@@ -298,6 +383,47 @@ namespace RIMA
                 disabledCameraZoom.enabled = true;
                 disabledCameraZoom = null;
             }
+        }
+
+        /// <summary>
+        /// OVERLAP FIX. Hide every OTHER active root UI canvas in the scene so Build Mode shows only
+        /// its own panels over the live game world. Robust rule: FindObjectsOfType&lt;Canvas&gt;(true) ->
+        /// keep only ones that are a root canvas, currently enabled, and NOT one of ours; flip
+        /// Canvas.enabled = false (never the GameObject, so the canvas keeps its full state) and record
+        /// it. Our two overlay canvases (palette + tile brush) are exempt by reference; the EventSystem
+        /// is never a Canvas so it is untouched, and the cursor / ghost world objects are not canvases.
+        /// </summary>
+        private void HideOtherUiCanvases()
+        {
+            hiddenCanvases.Clear();
+
+            Canvas ownPalette = BuildPlacementController.Instance != null
+                ? BuildPlacementController.Instance.OwnCanvas : null;
+            Canvas ownBrush = BuildTileBrushController.InstanceIfExists != null
+                ? BuildTileBrushController.InstanceIfExists.OwnCanvas : null;
+
+            Canvas[] all = FindObjectsOfType<Canvas>(true);
+            foreach (Canvas c in all)
+            {
+                if (c == null) continue;
+                if (!c.isRootCanvas) continue;      // child/nested canvases follow their root.
+                if (!c.enabled) continue;           // already off; leave it off on restore.
+                if (c == ownPalette || c == ownBrush) continue; // never hide our own UI.
+
+                c.enabled = false;
+                hiddenCanvases.Add(c);
+            }
+        }
+
+        /// <summary>OVERLAP FIX. Re-enable exactly the canvases HideOtherUiCanvases disabled.</summary>
+        private void RestoreOtherUiCanvases()
+        {
+            for (int i = 0; i < hiddenCanvases.Count; i++)
+            {
+                Canvas c = hiddenCanvases[i];
+                if (c != null) c.enabled = true; // tolerant of canvases destroyed while in Build Mode.
+            }
+            hiddenCanvases.Clear();
         }
 
         // Mirrors ChamberSelectBootstrap.FindLegacyPixelPerfectCamera: the deprecated 2D-Extras

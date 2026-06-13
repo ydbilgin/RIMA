@@ -46,6 +46,14 @@ namespace RIMA.UI.BuildMode
     /// </summary>
     public sealed class BuildPlacementController : MonoBehaviour
     {
+        /// <summary>
+        /// PHASE 3 tool-exclusivity selector. Exactly ONE tool consumes an LMB/RMB click per frame
+        /// (the #1 review criterion — re-introducing the double-place bug = REJECT). HandleCursor
+        /// dispatches by ActiveTool BEFORE any leftButton read, so the Prop tool and the Tile/
+        /// Walkability brush can never both act on a single click.
+        /// </summary>
+        public enum BuildTool { Prop, Tile }
+
         private const string PropRegistryResourcePath = "Props/PropRegistry";
         private const string PropsSortingLayer = "Props";
         private const float EraseRadius = 0.6f;
@@ -68,6 +76,10 @@ namespace RIMA.UI.BuildMode
 
         public bool IsBuildModeActive { get; private set; }
 
+        // Build Mode's OWN overlay canvas. BuildModeController reads this to EXEMPT it from the
+        // enter-time "hide every other UI canvas" pass (so the panel never hides itself).
+        internal Canvas OwnCanvas => paletteCanvas;
+
         // --- Resolved-on-demand scene refs (tolerant of fake-null under DisableDomainReload) ---
         private Grid grid;
         private Camera buildCamera;
@@ -85,6 +97,13 @@ namespace RIMA.UI.BuildMode
         private bool flipX;
 
         private readonly BuildCommandStack commandStack = new BuildCommandStack();
+
+        // PHASE 3: shared undo history. The tile brush rides the SAME stack so Ctrl+Z/Y interleave
+        // prop + tile ops in one coherent history (a separate stack would split the history).
+        internal BuildCommandStack CommandStack => commandStack;
+
+        // PHASE 3 tool-exclusivity. Default = Prop (preserves Phase 1/2 behavior on enter).
+        public BuildTool ActiveTool { get; private set; } = BuildTool.Prop;
 
         // Tracks every prop this controller placed: placement record (in template.props) + instance.
         private sealed class PlacedProp
@@ -105,13 +124,14 @@ namespace RIMA.UI.BuildMode
         private Canvas paletteCanvas;
         private RectTransform paletteRoot;
         private TextMeshProUGUI statusLabel;
-        private readonly List<Image> paletteSwatches = new List<Image>();
+        private TextMeshProUGUI hintLabel;
+        private readonly List<BuildModeUiStyle.ButtonStyle> paletteSwatches = new List<BuildModeUiStyle.ButtonStyle>();
+        private BuildModeUiStyle.ButtonStyle propToolSwatch;
+        private BuildModeUiStyle.ButtonStyle tileToolSwatch;
         private bool paletteBuilt;
 
         private static readonly Color GhostGreen = new Color(0.25f, 0.95f, 0.45f, 0.50f);
         private static readonly Color GhostRed = new Color(0.95f, 0.28f, 0.28f, 0.50f);
-        private static readonly Color SlotIdle = new Color(0.10f, 0.13f, 0.16f, 0.85f);
-        private static readonly Color SlotSelected = new Color(0.17f, 0.85f, 0.85f, 0.95f);
 
         private void Awake()
         {
@@ -140,17 +160,53 @@ namespace RIMA.UI.BuildMode
                 ResolveSceneRefs();
                 EnsurePaletteUi();
                 SetPaletteVisible(true);
+                ActiveTool = BuildTool.Prop; // enter always starts on the prop tool (Phase 1/2 default).
                 if (selectedIndex < 0 && palette.Count > 0) SelectPalette(0);
+                RefreshToolHighlight();
                 UpdateStatus();
             }
             else
             {
                 HideGhost();
                 SetPaletteVisible(false);
+                // Disable the tile brush too (hide its cursor highlight + working-copy state).
+                // Non-creating: never spawn a brush just to disable one that never existed.
+                if (BuildTileBrushController.InstanceIfExists != null)
+                    BuildTileBrushController.InstanceIfExists.SetActive(false);
+                ActiveTool = BuildTool.Prop;
                 // Authored records persist in template.props; only the editor-only command history
                 // is dropped on exit (place/erase remain in the room, undo history does not bloat it).
                 commandStack.Clear();
             }
+        }
+
+        /// <summary>
+        /// PHASE 3 tool-exclusivity switch. Activates exactly one tool: hides the other tool's
+        /// cursor/ghost and enables the new one. HandleCursor then routes the click to ONLY this tool.
+        /// </summary>
+        public void SetActiveTool(BuildTool tool)
+        {
+            ActiveTool = tool;
+            if (tool == BuildTool.Prop)
+            {
+                if (BuildTileBrushController.InstanceIfExists != null)
+                    BuildTileBrushController.InstanceIfExists.SetActive(false);
+                RebuildGhost();
+            }
+            else // Tile
+            {
+                HideGhost(); // prop ghost must NOT render while the tile brush is active.
+                if (BuildTileBrushController.Instance != null)
+                    BuildTileBrushController.Instance.SetActive(true);
+            }
+            RefreshToolHighlight();
+            UpdateStatus();
+        }
+
+        private void RefreshToolHighlight()
+        {
+            BuildModeUiStyle.ApplySelected(propToolSwatch, ActiveTool == BuildTool.Prop);
+            BuildModeUiStyle.ApplySelected(tileToolSwatch, ActiveTool == BuildTool.Tile);
         }
 
         private void Update()
@@ -165,7 +221,18 @@ namespace RIMA.UI.BuildMode
 
             ResolveSceneRefs();
             HandleKeyboard();
-            HandleCursor();
+
+            // PHASE 3 tool-exclusivity: exactly ONE tool's cursor/click handler runs per frame.
+            // When the tile brush is active the prop cursor must NOT run (no ghost, no place) and
+            // BuildTileBrushController owns the click; vice versa for the prop tool.
+            if (ActiveTool == BuildTool.Prop)
+            {
+                HandleCursor();
+            }
+            else
+            {
+                HideGhost();
+            }
         }
 
         // ---------------------------------------------------------------- input
@@ -257,7 +324,10 @@ namespace RIMA.UI.BuildMode
         private bool ValidatePlacement(PropDefinitionSO def, Vector2Int origin, out string detail)
         {
             detail = string.Empty;
-            RoomTemplateSO template = CurrentTemplate();
+            // PHASE 3.1: validate against the shared working copy so brush walkability/overlay edits
+            // are honored (props can't land on a cell the brush just blocked, and can land on a cell
+            // the brush just made walkable).
+            RoomTemplateSO template = WorkingTemplate();
             if (template == null)
             {
                 detail = "No active room template.";
@@ -358,15 +428,16 @@ namespace RIMA.UI.BuildMode
             return go;
         }
 
-        // Apply a placement: write the record into template.props, spawn the instance, track it.
+        // Apply a placement: write the record into the WORKING COPY's props, spawn the instance,
+        // track it. PHASE 3.1: writes target the shared working copy (NOT the source .asset) and the
+        // source is NEVER SetDirty'd — disk write-back is Phase 4 on explicit user command.
         internal void ApplyPlace(PropDefinitionSO def, PropPlacementData data)
         {
-            RoomTemplateSO template = CurrentTemplate();
+            RoomTemplateSO template = WorkingTemplate();
             if (template == null) return;
             if (template.props == null) template.props = new List<PropPlacementData>();
 
             if (!template.props.Contains(data)) template.props.Add(data);
-            MarkTemplateDirty(template);
 
             GameObject go = SpawnInstance(def, data);
             placed.Add(new PlacedProp { def = def, data = data, instance = go });
@@ -374,13 +445,13 @@ namespace RIMA.UI.BuildMode
         }
 
         // Reverse a placement: destroy the instance, remove the record + tracking entry.
+        // PHASE 3.1: removes from the WORKING COPY's props; the source .asset is never touched.
         internal void RevertPlace(PropPlacementData data)
         {
-            RoomTemplateSO template = CurrentTemplate();
+            RoomTemplateSO template = WorkingTemplate();
             if (template != null && template.props != null)
             {
                 template.props.Remove(data);
-                MarkTemplateDirty(template);
             }
             for (int i = placed.Count - 1; i >= 0; i--)
             {
@@ -528,52 +599,97 @@ namespace RIMA.UI.BuildMode
             paletteCanvas = new GameObject("BuildPaletteCanvas").AddComponent<Canvas>();
             paletteCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
             paletteCanvas.sortingOrder = 5000;
-            paletteCanvas.gameObject.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            CanvasScaler scaler = paletteCanvas.gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
             paletteCanvas.gameObject.AddComponent<GraphicRaycaster>();
             DontDestroyOnLoad(paletteCanvas.gameObject);
 
-            paletteRoot = new GameObject("BuildPaletteRoot", typeof(RectTransform), typeof(Image)).GetComponent<RectTransform>();
+            // LEFT panel = BUILD. Premium dark-slate panel + 1px border via the shared style helper.
+            paletteRoot = new GameObject("BuildPaletteRoot", typeof(RectTransform)).GetComponent<RectTransform>();
             paletteRoot.SetParent(paletteCanvas.transform, false);
-            paletteRoot.anchorMin = new Vector2(0f, 0f);
-            paletteRoot.anchorMax = new Vector2(0f, 1f);
+            paletteRoot.anchorMin = new Vector2(0f, 0.5f);
+            paletteRoot.anchorMax = new Vector2(0f, 0.5f);
             paletteRoot.pivot = new Vector2(0f, 0.5f);
-            paletteRoot.anchoredPosition = new Vector2(16f, 0f);
-            paletteRoot.sizeDelta = new Vector2(210f, -120f);
-            paletteRoot.GetComponent<Image>().color = new Color(0.02f, 0.03f, 0.04f, 0.78f);
+            paletteRoot.sizeDelta = new Vector2(BuildModeUiStyle.PanelWidth, 620f);
+            paletteRoot.anchoredPosition = new Vector2(BuildModeUiStyle.Padding, 0f);
 
-            RectTransform title = MakeLabel(paletteRoot, "BUILD", 22f, FontStyles.Bold,
-                new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(10f, -10f), new Vector2(-10f, -38f), out _);
+            // MakePanel returns the CONTENT rect already inset by the border + Padding.
+            RectTransform content = BuildModeUiStyle.MakePanel(paletteRoot, "Panel", BuildModeUiStyle.PanelWidth);
 
-            RectTransform grid = new GameObject("Grid", typeof(RectTransform), typeof(GridLayoutGroup)).GetComponent<RectTransform>();
-            grid.SetParent(paletteRoot, false);
-            grid.anchorMin = new Vector2(0f, 0f);
-            grid.anchorMax = new Vector2(1f, 1f);
-            grid.offsetMin = new Vector2(8f, 44f);
-            grid.offsetMax = new Vector2(-8f, -44f);
-            GridLayoutGroup gl = grid.GetComponent<GridLayoutGroup>();
-            gl.cellSize = new Vector2(88f, 44f);
-            gl.spacing = new Vector2(6f, 6f);
-            gl.padding = new RectOffset(4, 4, 4, 4);
-            gl.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gl.constraintCount = 2;
+            float headerH = BuildModeUiStyle.MakeHeader(content, "BUILD");
+
+            // Segmented PROP | TILE control at the top. Selecting a tool routes ALL clicks to ONLY
+            // that tool (SetActiveTool) — the Phase 3 exclusivity selector surfaced in the live UI.
+            const float segH = 40f;
+            RectTransform seg = new GameObject("Segmented", typeof(RectTransform), typeof(HorizontalLayoutGroup)).GetComponent<RectTransform>();
+            seg.SetParent(content, false);
+            BuildModeUiStyle.Top(seg, segH, headerH);
+            HorizontalLayoutGroup hl = seg.GetComponent<HorizontalLayoutGroup>();
+            hl.spacing = BuildModeUiStyle.ItemGap;
+            hl.childControlWidth = true;
+            hl.childForceExpandWidth = true;
+            hl.childControlHeight = true;
+            hl.childForceExpandHeight = true;
+            propToolSwatch = BuildModeUiStyle.MakeButton(seg, "PROP");
+            propToolSwatch.label.alignment = TextAlignmentOptions.Center;
+            propToolSwatch.button.onClick.AddListener(() => SetActiveTool(BuildTool.Prop));
+            tileToolSwatch = BuildModeUiStyle.MakeButton(seg, "TILE");
+            tileToolSwatch.label.alignment = TextAlignmentOptions.Center;
+            tileToolSwatch.button.onClick.AddListener(() => SetActiveTool(BuildTool.Tile));
+
+            float topUsed = headerH + segH + BuildModeUiStyle.ItemGap;
+            const float hintH = 86f;
+
+            // Active tool's list: the prop palette as a vertical, premium button column.
+            RectTransform list = new GameObject("PropList", typeof(RectTransform), typeof(VerticalLayoutGroup)).GetComponent<RectTransform>();
+            list.SetParent(content, false);
+            list.anchorMin = new Vector2(0f, 0f);
+            list.anchorMax = new Vector2(1f, 1f);
+            list.offsetMin = new Vector2(0f, hintH + BuildModeUiStyle.ItemGap);
+            list.offsetMax = new Vector2(0f, -topUsed);
+            VerticalLayoutGroup vl = list.GetComponent<VerticalLayoutGroup>();
+            vl.spacing = BuildModeUiStyle.ItemGap;
+            vl.childControlHeight = true;
+            vl.childForceExpandHeight = false;
+            vl.childControlWidth = true;
+            vl.childForceExpandWidth = true;
 
             paletteSwatches.Clear();
             for (int i = 0; i < palette.Count; i++)
             {
                 int captured = i;
                 PropDefinitionSO def = palette[i];
-                Button b = MakeButton(grid, Label(def));
-                Image bg = b.GetComponent<Image>();
-                bg.color = SlotIdle;
-                paletteSwatches.Add(bg);
-                b.onClick.AddListener(() => SelectPalette(captured));
+                BuildModeUiStyle.ButtonStyle b = BuildModeUiStyle.MakeButton(list, Label(def));
+                b.button.gameObject.AddComponent<LayoutElement>().preferredHeight = 38f;
+                paletteSwatches.Add(b);
+                b.button.onClick.AddListener(() => SelectPalette(captured));
             }
 
-            MakeLabel(paletteRoot, "", 14f, FontStyles.Normal,
-                new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(8f, 8f), new Vector2(-8f, 38f), out statusLabel);
+            // Bottom-left hint box (hotkeys) + a one-line status line just above it.
+            hintLabel = BuildModeUiStyle.MakeHintBox(content, hintH);
+
+            statusLabel = new GameObject("Status", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
+            statusLabel.rectTransform.SetParent(content, false);
+            statusLabel.rectTransform.anchorMin = new Vector2(0f, 0f);
+            statusLabel.rectTransform.anchorMax = new Vector2(1f, 0f);
+            statusLabel.rectTransform.pivot = new Vector2(0.5f, 0f);
+            statusLabel.rectTransform.sizeDelta = new Vector2(0f, 20f);
+            statusLabel.rectTransform.anchoredPosition = new Vector2(0f, hintH + 4f);
+            statusLabel.font = BuildModeUiStyle.Font;
+            statusLabel.fontSize = 13f;
+            statusLabel.color = BuildModeUiStyle.MutedText;
+            statusLabel.alignment = TextAlignmentOptions.BottomLeft;
+            statusLabel.enableWordWrapping = false;
+            statusLabel.overflowMode = TextOverflowModes.Ellipsis;
+            statusLabel.raycastTarget = false;
 
             paletteBuilt = true;
             RefreshPaletteHighlight();
+            RefreshToolHighlight();
+            UpdateStatus();
         }
 
         private void BuildPalette()
@@ -612,8 +728,7 @@ namespace RIMA.UI.BuildMode
         {
             for (int i = 0; i < paletteSwatches.Count; i++)
             {
-                if (paletteSwatches[i] != null)
-                    paletteSwatches[i].color = i == selectedIndex ? SlotSelected : SlotIdle;
+                BuildModeUiStyle.ApplySelected(paletteSwatches[i], i == selectedIndex);
             }
         }
 
@@ -624,10 +739,18 @@ namespace RIMA.UI.BuildMode
 
         private void UpdateStatus(string prefix = "")
         {
-            if (statusLabel == null) return;
-            string sel = SelectedDef() != null ? Label(SelectedDef()) : "none";
-            statusLabel.text = $"{prefix}[{sel}] rot {rotationSteps * 90} flip {(flipX ? "Y" : "N")}\n" +
-                               $"[ ] rotate  F flip  E pick  Ctrl+Z/Y undo ({commandStack.UndoCount})";
+            if (statusLabel != null)
+            {
+                string sel = SelectedDef() != null ? Label(SelectedDef()) : "none";
+                statusLabel.text = $"{prefix}[{sel}]  rot {rotationSteps * 90}  flip {(flipX ? "Y" : "N")}";
+            }
+            if (hintLabel != null)
+            {
+                hintLabel.text =
+                    "LMB place   RMB erase\n" +
+                    "[ ] rotate   F flip   E pick\n" +
+                    $"Ctrl+Z/Y undo ({commandStack.UndoCount})";
+            }
         }
 
         // ---------------------------------------------------------------- resolution helpers
@@ -651,6 +774,16 @@ namespace RIMA.UI.BuildMode
         {
             if (runDirector == null) runDirector = FindObjectOfType<RoomRunDirector>();
             return runDirector != null ? runDirector.CurrentTemplate : null;
+        }
+
+        // PHASE 3.1 (audit MAJOR fix): the ONE session working copy owned by BuildModeController.
+        // ALL prop placement (validation + props list writes + walkability refresh) targets THIS copy
+        // so the prop tool and the tile brush share one authority and the source .asset is never
+        // mutated/dirtied. Falls back to the live source ONLY when Build Mode is inactive (e.g. a stray
+        // editor call) so reads never NRE.
+        private RoomTemplateSO WorkingTemplate()
+        {
+            return BuildModeController.ActiveWorkingTemplate ?? CurrentTemplate();
         }
 
         private void EnsureRoleMap(RoomTemplateSO template)
@@ -731,6 +864,9 @@ namespace RIMA.UI.BuildMode
             paletteCanvas = null;
             paletteRoot = null;
             statusLabel = null;
+            hintLabel = null;
+            propToolSwatch = null;
+            tileToolSwatch = null;
             paletteSwatches.Clear();
             paletteBuilt = false;
         }
@@ -740,53 +876,6 @@ namespace RIMA.UI.BuildMode
             if (target == null) return;
             if (Application.isPlaying) Destroy(target);
             else DestroyImmediate(target);
-        }
-
-        private static void MarkTemplateDirty(RoomTemplateSO template)
-        {
-#if UNITY_EDITOR
-            if (template != null) EditorUtility.SetDirty(template);
-#endif
-        }
-
-        // ---------------------------------------------------------------- tiny UI builders
-
-        private RectTransform MakeLabel(RectTransform parent, string text, float size, FontStyles style,
-            Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax, out TextMeshProUGUI tmp)
-        {
-            GameObject go = new GameObject("Label", typeof(RectTransform));
-            RectTransform rt = go.GetComponent<RectTransform>();
-            rt.SetParent(parent, false);
-            rt.anchorMin = anchorMin;
-            rt.anchorMax = anchorMax;
-            rt.offsetMin = offsetMin;
-            rt.offsetMax = offsetMax;
-            tmp = go.AddComponent<TextMeshProUGUI>();
-            tmp.text = text;
-            tmp.fontSize = size;
-            tmp.fontStyle = style;
-            tmp.color = new Color(0.86f, 0.9f, 0.92f, 0.95f);
-            tmp.enableWordWrapping = true;
-            return rt;
-        }
-
-        private Button MakeButton(RectTransform parent, string text)
-        {
-            GameObject go = new GameObject("Slot_" + text, typeof(RectTransform), typeof(Image), typeof(Button));
-            RectTransform rt = go.GetComponent<RectTransform>();
-            rt.SetParent(parent, false);
-            TextMeshProUGUI label = new GameObject("TMP", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
-            label.rectTransform.SetParent(rt, false);
-            label.rectTransform.anchorMin = Vector2.zero;
-            label.rectTransform.anchorMax = Vector2.one;
-            label.rectTransform.offsetMin = new Vector2(4f, 2f);
-            label.rectTransform.offsetMax = new Vector2(-4f, -2f);
-            label.text = text;
-            label.fontSize = 13f;
-            label.alignment = TextAlignmentOptions.Center;
-            label.enableWordWrapping = true;
-            label.color = Color.white;
-            return go.GetComponent<Button>();
         }
 
         // ---------------------------------------------------------------- *ForValidation (data-proof)
@@ -834,6 +923,18 @@ namespace RIMA.UI.BuildMode
             RebuildGhost();
             return true;
         }
+
+        // PHASE 3 tool-exclusivity proof: switch tools and read back the active tool / prop-ghost
+        // presence so the orchestrator can confirm ONE LMB acts through EXACTLY ONE tool.
+        // tool: 0 = Prop, 1 = Tile (matches the BuildTool enum order).
+        public bool SelectToolForValidation(int tool)
+        {
+            ResolveSceneRefs();
+            SetActiveTool(tool == 1 ? BuildTool.Tile : BuildTool.Prop);
+            return true;
+        }
+
+        public int ActiveToolForValidation() => (int)ActiveTool;
     }
 }
 #endif
