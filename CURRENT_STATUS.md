@@ -1,42 +1,26 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-13 — sunum ~1 HAFTA sonra (~20 Haz), UNITY IN-EDITOR Play Mode; yeni session devralıyor)
+## ⏯️ RESUME (2026-06-13 — sunum ~1 HAFTA sonra (~20 Haz), UNITY IN-EDITOR; yeni session devralıyor)
 
-> ⚠️ TIMELINE DÜZELTME: Demo "bugün" değil — sunum ~1 hafta sonra, **Unity Editor'de Play Mode** ile. `#if DEMO_BUILD…` gating in-editor'da sorun DEĞİL (UNITY_EDITOR tanımlı). Zaman var → Build Mode'u sırayla inşa ediyoruz.
+**⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=Claude Opus sub-agent (Agent model:opus / builder-opus; ax Opus DEĞİL) · review=auditor-opus veya cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash. Unity'ye dokunan her dispatch'e UNITY ERROR CHECK. E1-E8 aktif. **YENİ:** kota-aware routing → `python ~/.claude/quota.py --recommend` (Claude bol→execute Claude; detay memory `reference_quota_routing_tooling`). Yeni global agentlar: builder-opus(execute)/auditor-opus(review)/crafter-sonnet(light).
 
-**⚠️ ROUTING:** Orchestrator=Fable/Opus 4.8 · **execute=Claude Opus sub-agent** (Agent tool model:opus, ax Opus DEĞİL) · **review=cx** (writer≠reviewer, quota-aware profil) · **council=cx+ax Gemini 3.1 Pro+ax Gemini 3.5 Flash**. Unity'ye dokunan her dispatch'e UNITY ERROR CHECK satırı ZORUNLU. E1-E8 aktif. (Detay memory: `opus-executes-cx-reviews`, `unitymcp-error-check-in-dispatch`.)
+**🔴 İLK İŞ — arka planda koşan workflow:** `wj4doy5m6` (test-koşumlu editor consolidation) clear'dan SONRA bitebilir. Task-notification gelince: çıktısını oku → `STAGING/EDITOR_CONSOLIDATION_DECISION_2026-06-13.md`'ye göre doğrula → testler YEŞİL mi + audit verdict + **play-mode'da F2 ile aç, Save/grid/aydınlık data-proof** → temizse COMMIT. (Uncommitted kod olabilir: keybind fix + workflow'un düzenledikleri.) Workflow bitmemişse `/workflows` ile izle.
 
-**🎯 DEMO = BİTİRME BÜTÜNLEME TESLİMİ.** 3 ana doküman:
-- **`STAGING/DEMO_SUNUM_PLANI_2026-06-13.md`** = sunum ezberi (run-of-show + risk/fallback + F1 panel). Koreografi: stat beat'i LMB ile · Ravager'ı DPS demosunda kullanma · prop demosu reset'ten önce · sunum öncesi konsolu temizle · müzik YOK.
-- **`STAGING/BITIRME_DEMO_RAPORU_2026-06-13.md`** = hocaya sunulacak proje raporu (öğrenci dili, agentic AI dengeli). Yeni commit'lerle güncellenecek.
-- **`STAGING/GECE_RAPORU_2026-06-13.md`** = master gece raporu (tüm iş tablosu).
+**🏗️ ANA İŞ = OYUN-İÇİ SEVİYE EDİTÖRÜ (Build Mode).** Kullanıcı: tek, GÜZEL (aydınlık, grid'li), entegre (kaydeden), genişleyebilen-map, TEST-korumalı editör; "tekrar bu sorunla karşılaşmayalım". İleride taşınabilir framework (LaurethStudio.LevelEditor).
+- **Açılış tuşu = F2** (NOT `"`: kullanıcı Türkçe-Q klavyede, quoteKey tetiklenmiyor).
+- **🔴 KRİTİK KEŞİF:** Projede ZATEN F2'ye bağlı eski IMGUI editör VARMIŞ → `Assets/Scripts/DevTools/InPlayMapPaintOverlay.cs` (çirkin, ama kaydediyor + Editor `UnifiedDesignerCore` ile entegre). Benim uGUI Build Mode bundan habersiz kuruldu → F2 çakıştı. **Konsolidasyon = uGUI Build Mode tek editör, eski IMGUI F2 EMEKLİ. InPlayMapPaintOverlay'i YENİDEN KURMA.**
+- **Garbled yazı kökü:** `Jersey10-Regular SDF` static + fallback listesi BOŞ + TMP Settings fallback boş → LiberationSans dynamic-fallback bağla (consolidation workflow yapıyor).
+- **§3.5 TILE KANUNU:** grid=Isometric (fake-iso, floor451_0=64×64 kare, kamera düz). Yerleştirme HER ZAMAN Grid API (`WorldToCell`/`GetCellCenterWorld`/`SetTile`), ASLA dikdörtgen matematik.
 
-**✅ BU GECE PUSHLANAN (5 commit, hepsi cx-review'lı):**
-- `435e9eeb` Quick Reset · DealDamageRaw (balans birebir) · TelemetryClock pause donması · riftcrack→Resources
-- `523ca242` SetPlayerActive (Director/ölümde saldırı kapalı) · merkezi PublishKillIfDead (skill-kill juice)
-- `af4b1879` 3-lens tam oyun audit (combat 8 · state 15 · binding 6; tüm 🔴 fix) · /lint · DEMO_SUNUM_PLANI
-- `9ca74693` CharacterJuice (idle bob/tilt/lunge) · IsoSorter sortReference · dual-class Play-Mode kanıtı
-- `91780dc4` Director ekleri: **Dual-Class Draft butonu** + **Stat preset** (Tank/Glass/Default) [cx FAIL→fix→PASS]
+**📐 FAZ PLANI:** ✅P1 (F2→kamera-zoom+pause+overlap-hide) · ✅P2 (prop palette+iso ghost+rotate+erase+undo, prop tam hücre merkezine oturuyor) · ✅P3 (tile/walkability/overlay brush, working-copy no-pollution) · ✅Phase-A (data-driven Asset Catalog 4 genişletilebilir kategori + premium uGUI Asset Browser) → **⏳ CONSOLIDATION (workflow `wj4doy5m6`: F2 key-guard+tek-sahip, IMGUI emekli, Save, TMP fix, palet-aydınlat, grid overlay, regresyon test suite)** → P4 (light+runtime save/load) · P5 (select/move/delete). **POST-DEMO:** UnifiedDesignerCore'a kademeli merge · `ResizePreserveCells` (büyük-genişleyen map; gerçek-sonsuz/chunk DEĞİL) · production static TMP atlas (tam Türkçe glyph) · package extraction (LaurethStudio.LevelEditor: ISpaceMapper/IAssetCatalog/IPlacementValidator/ILevelStore/IPlaceable +Render/Input/Host adapter).
 
-**📊 DURUM:** 9/9 vaat çalışıyor. Vaat #8 dual-class UNCERTAIN→KANITLANDI (Play-Mode). EditMode baseline 541/11 fail (gece işlerinden YENİ fail yok).
+**📄 KARAR DOKÜMANLARI (STAGING):** INGAME_BUILD_MODE_DESIGN · BUILDMODE_TERRAIN_DECISION (organik terrain=ATLA, demo) · LEVEL_EDITOR_FRAMEWORK_DECISION · LEVEL_EDITOR_UI_DESIGN (asset_strategy=procedural-only) · EDITOR_CONSOLIDATION_DECISION (hepsi 2026-06-13).
 
-**🔄 YENİ SESSION İLK İŞ:** E2E playtest arka planda koşuyordu (Opus agent) → raporu OKU: `STAGING/_process/2026-06/_e2e_playtest_2026-06-13.md`. (Yoksa/yarımsa yeniden dispatch et — 10 adımlı demo akışı doğrulaması, task `_process/2026-06/_opus_e2e_playtest.md`.) Bulduğu 🔴 varsa demo öncesi fix.
+**✅ BU SESSION COMMIT'LERİ:** 70bf3ab7(lighting:intensity-0 global skip) · fbc21be9(P1) · bcf7b9a2(P2) · 8b995a49(terrain council) · c252898e(P3+UI overlap-hide+Act1 styling) · 355be485(framework council) · 3dbcdfba(Phase-A catalog+browser) · ac3c0fe9(consolidation council).
 
-**🏗️ BUILD MODE (yeni ANA İŞ — oyun-içi runtime map editörü, sunum öncesi):** Spec=`STAGING/INGAME_BUILD_MODE_DESIGN_2026-06-13.md` (ultracode R&D çıktısı). Hibrit tasarım, **~%70 zaten `DirectorMode.cs`'te var**. Konumlandırma: sanghendrix'in "canlı oyun üstünde düzenleme"si + RIMA ekstraları (prosedürel scatter, composition role, footprint+walkability/solvability doğrulama). **🔴 TILE KANUNU:** grid=Isometric (fake-iso/3-4 staggered, floor451_0=64×64 kare, kamera düz), yerleştirme HER ZAMAN Grid API (`WorldToCell`/`GetCellCenterWorld`/`SetTile`), ASLA dikdörtgen matematik (spec §3.5). **Sıra:** ✅P1 (kamera-zoom giriş `"` tuşu) → ✅P2 (prop palette+iso ghost+rotate+erase+undo, **prop tam hücre merkezine oturuyor runtime-kanıtlı**) → **P3 = BASİT hücre-otoriter tile/walkability/overlay brush (SIRADA)** → P4 light+runtime save/load → P5 selection/move. Her faz: builder-opus → auditor-opus/cx review → Unity runtime-doğrula. Commit'ler: 70bf3ab7(lighting) fbc21be9(P1) bcf7b9a2(P2).
-**🎨 TERRAIN COUNCIL KARARI** (`STAGING/BUILDMODE_TERRAIN_DECISION_2026-06-13.md`, oybirliği cx+ax Pro+ax Flash): world-space-texture/organik firça terrain = **DEMO İÇİN ATLA** (paradigma çatışması, pixel-art kırılır, görsel/lojik kopar, perf motivasyonu RIMA'da geçersiz, Act1 keskin-hat ister). **P3 organik DEĞİL, basit grid `SetTile` brush.** Terrain shader = POST-DEMO: RIMA'da **dormant TerrainBlend altyapısı VAR** (`Shaders/TerrainBlend.shader`+`TerrainBlendRenderer`+`MapLayerOrchestrator.useShaderBlend`) → sıfırdan değil uyandırarak, decorative underlay (lojik grid'e dokunmaz). DEFER MINOR: scene-reload stale buildCamera. NOT: cx yekta profilinde koştu (DISABLED olmalı) — codex_status kontrol. Demo tool durumu: 7 tool E2E-kanıtlı çalışıyor (in-editor); **Light placement YOK** (P4'te eklenecek).
+**🔁 KRONİK:** TMP/blueprint Play Mode'da kirleniyor → commit ÖNCESİ blueprint/.asset `git checkout --`. (TMP fallback kök fix consolidation'da; static-atlas tam fix post-demo.) Bu session play-mode'lar `.asset` KİRLETMEDİ (working-copy çalışıyor).
 
-**⏭️ KUYRUK (demo-koruma önce):**
-1. E2E raporu işle → kritik kırık varsa Opus fix + cx review
-2. Smoke test süiti: gece data-proof'larını KALICI teste çevir (DealDamageRaw/TelemetryClock/PublishKillIfDead/SetPlayerActive/preset → EditMode `RIMA_SmokeTests`) + cx review
-3. (Vakit kalırsa, KOZMETİK) Silah-ele-oturtma: `attachMode=Level1Static`→Level2, `spriteHandData` BOŞ→8 yön doldur, silah pivot DOĞRU. Silah TEK sprite (8 yön=rotation+flip+sort). ROLLBACK=enum geri. Level1 demoda "kabul edilebilir".
-4. NLM temizliği `/nlm-sync --cleanup-dry`→K4 (limit penceresi sonrası)
-5. Sabah paketi: GECE_RAPORU + hoca raporu final + 5-dk görsel kontrol listesi + push
-
-**📋 SABAH KULLANICI (5 dk):** bob hissi (Inspector `enableJuice` kapatılabilir) · yeni 2 buton (Dual-Class Draft + presets) · konsol temizle · sunum planını ezberle.
-
-**🔁 KRONİK:** Blueprint asset×6 + TMP fallback Play Mode'da kirleniyor → her commit ÖNCESİ `git checkout --` ile revert (kök fix=TMP static-atlas, DEMO SONRASI).
-
-**⏳ DEFER (demo sonrası):** Ravager LMB merkezi yol · debugGlobalDamageMult çıplak-yol kapsamı · Weakened/Scorch yetenek çarpanı · DamageZone çok-hedef tick · mob'lara CharacterJuice · PixelLab idle (anchor SONRASI) · backlog 13 · superpowers skill graft analizi · memory index-dışı ~20 dosya · LaurethStudio.
+**⏳ DEFER (editör sonrası / demo-koruma kuyruğu, ikincil):** E2E playtest 10/10 PASS edildi (`_process/2026-06/_e2e_playtest_2026-06-13.md`) · Smoke test süiti (gece data-proof'ları→EditMode) · silah-ele-oturtma · NLM cleanup · GECE_RAPORU/hoca raporu güncelle · Ravager LMB · Weakened/Scorch çarpanı · mob CharacterJuice · memory index-dışı ~20 dosya · `quota.py` v2 codex-reaktif hook.
 
 ---
-*Önceki bloklar git history'de.*
+*Önceki bloklar git history'de. Demo 9/9 vaat çalışıyor (E2E-kanıtlı); editör = sunuma kadar ana geliştirme.*
