@@ -140,12 +140,25 @@ namespace RIMA
             ClassType.Ronin
         };
 
+        // Game-entry scenes where DirectorMode (a dev/demo overlay) must NOT auto-appear, so the real
+        // MainMenu -> CharacterSelect -> gameplay flow stays clean. AfterSceneLoad fires ONCE at the
+        // initial scene: full-flow Play boots into MainMenu -> Director never spawns the whole session;
+        // dev/demo entry (F5 Play Arena, or opening _Arena / a test scene directly) is any OTHER initial
+        // scene, where Director self-bootstraps exactly as before.
+        private static readonly string[] GameEntryScenes = { "MainMenu", "CharacterSelect" };
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {
             if (Instance != null)
             {
                 return;
+            }
+
+            string entryScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            foreach (string s in GameEntryScenes)
+            {
+                if (entryScene == s) return;
             }
 
             GameObject go = new GameObject("DirectorMode");
