@@ -737,23 +737,24 @@ namespace RIMA.UI.BuildMode
             }
         }
 
-        // Diamond corners via the neighbour-midpoint method: each of top/right/bottom/left is the
-        // midpoint between this cell's centre and the corresponding 4-neighbour's centre. On an iso
-        // Grid this yields the cell's true rhombus and tiles seamlessly (council rule: no rect math).
+        // Iso cell rhombus corners = true cell centre offset by HALF the cell size on each screen axis.
+        // (Earlier the corners were computed as midpoints between this cell's centre and its 4 neighbour
+        // centres — but a neighbour-midpoint is the shared-EDGE midpoint, so connecting the four produced
+        // a HALF-SIZE axis-aligned rectangle, not the cell diamond → overlay didn't match the floor tiles.
+        // Deriving corners from GetCellCenterWorld + grid.cellSize is iso-correct and tiles seamlessly;
+        // this is NOT the forbidden "rect math" (placement still uses WorldToCell/GetCellCenterWorld).)
         private void SetDiamond(LineRenderer lr, Vector3Int cell)
         {
             if (lr == null) return;
             Vector3 c = grid.GetCellCenterWorld(cell);
-            Vector3 up = grid.GetCellCenterWorld(cell + new Vector3Int(0, 1, 0));
-            Vector3 right = grid.GetCellCenterWorld(cell + new Vector3Int(1, 0, 0));
-            Vector3 down = grid.GetCellCenterWorld(cell + new Vector3Int(0, -1, 0));
-            Vector3 left = grid.GetCellCenterWorld(cell + new Vector3Int(-1, 0, 0));
+            Vector3 sz = grid.cellSize;
+            float hx = sz.x * 0.5f;
+            float hy = sz.y * 0.5f;
 
-            Vector3 top = (c + up) * 0.5f;
-            Vector3 rgt = (c + right) * 0.5f;
-            Vector3 bot = (c + down) * 0.5f;
-            Vector3 lft = (c + left) * 0.5f;
-            top.z = rgt.z = bot.z = lft.z = 0f;
+            Vector3 top = new Vector3(c.x, c.y + hy, 0f);
+            Vector3 rgt = new Vector3(c.x + hx, c.y, 0f);
+            Vector3 bot = new Vector3(c.x, c.y - hy, 0f);
+            Vector3 lft = new Vector3(c.x - hx, c.y, 0f);
 
             lr.enabled = true;
             lr.SetPosition(0, top);
