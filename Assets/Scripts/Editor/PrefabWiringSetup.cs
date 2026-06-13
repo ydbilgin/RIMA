@@ -31,7 +31,7 @@ namespace RIMA.Editor
         [MenuItem("Tools/RIMA/Prefabs/Create HandGlowVFX Prefab")]
         public static void CreateHandGlowVFXPrefab()
         {
-            const string path = "Assets/Prefabs/VFX/HandGlowVFX.prefab";
+            const string path = "Assets/Resources/Prefabs/VFX/HandGlowVFX.prefab";
             if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null)
             {
                 Debug.Log("[RIMA] HandGlowVFX prefab already exists — skipped.");

@@ -77,9 +77,9 @@ namespace RIMA
             fillGo.transform.localScale = new Vector3(barWidth, 0.05f, 1f);
             fillRenderer = fillGo.GetComponent<SpriteRenderer>();
             fillRenderer.sprite = white;
-            fillRenderer.color = GetTierColor(tier);
             fillRenderer.sortingOrder = 21;
             fillTransform = fillGo.transform;
+            UpdateFill(health.CurrentHP, health.MaxHP);
 
             // Tier label (E / C / M for Elite/Champion/MiniBoss)
             if (tier != TierType.Normal)
@@ -99,6 +99,8 @@ namespace RIMA
             fillTransform.localScale = new Vector3(barWidth * pct, s.y, s.z);
             // Shift left so bar shrinks from the right
             fillTransform.localPosition = new Vector3(-barWidth * (1f - pct) / 2f, 0f, -0.01f);
+            if (fillRenderer != null)
+                fillRenderer.color = Color.Lerp(new Color(0.85f, 0.15f, 0.15f), new Color(0.15f, 0.85f, 0.15f), Mathf.Clamp01(pct));
         }
 
         private static Sprite CreateWhiteSprite()

@@ -57,7 +57,7 @@ namespace RIMA
             if (caster == null)
                 return;
 
-            GameObject prefab = LoadPrefab("Prefabs/VFX/HandGlowVFX", "Assets/Prefabs/VFX/HandGlowVFX.prefab");
+            GameObject prefab = LoadPrefab("Prefabs/VFX/HandGlowVFX", "Assets/Resources/Prefabs/VFX/HandGlowVFX.prefab");
             GameObject instance = SpawnTintedInstance(prefab, caster.position, element, default, caster);
             if (instance == null)
                 return;
@@ -74,8 +74,8 @@ namespace RIMA
 
         public static void ImpactBurst(Vector3 pos, VfxElement element)
         {
-            GameObject prefab = LoadPrefab("Prefabs/VFX/HitSpark", "Assets/Prefabs/VFX/HitSpark.prefab")
-                ?? LoadPrefab("Prefabs/VFX/DeathBurst", "Assets/Prefabs/VFX/DeathBurst.prefab");
+            GameObject prefab = LoadPrefab("Prefabs/VFX/HitSpark", "Assets/Resources/Prefabs/VFX/HitSpark.prefab")
+                ?? LoadPrefab("Prefabs/VFX/DeathBurst", "Assets/Resources/Prefabs/VFX/DeathBurst.prefab");
 
             if (prefab != null)
             {
@@ -121,7 +121,7 @@ namespace RIMA
             PlaySweep(arc, pos, dir, element, 0.18f);
             Object.Destroy(arc);
 
-            GameObject hitSpark = LoadPrefab("Prefabs/VFX/HitSpark", "Assets/Prefabs/VFX/HitSpark.prefab");
+            GameObject hitSpark = LoadPrefab("Prefabs/VFX/HitSpark", "Assets/Resources/Prefabs/VFX/HitSpark.prefab");
             if (hitSpark != null)
                 SpawnTinted(hitSpark, pos, element, dir);
         }
@@ -184,7 +184,7 @@ namespace RIMA
                 case VfxElement.Lightning:
                     return FromHex(0xFFE600);
                 case VfxElement.Void:
-                    return FromHex(0x7B3FA8);
+                    return FromHex(0xB36BFF);
                 case VfxElement.Arcane:
                     return FromHex(0x00FFCC);
                 default:
