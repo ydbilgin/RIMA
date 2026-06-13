@@ -125,10 +125,22 @@ namespace RIMA.UI.BuildMode
         private RectTransform paletteRoot;
         private TextMeshProUGUI statusLabel;
         private TextMeshProUGUI hintLabel;
-        private readonly List<BuildModeUiStyle.ButtonStyle> paletteSwatches = new List<BuildModeUiStyle.ButtonStyle>();
         private BuildModeUiStyle.ButtonStyle propToolSwatch;
         private BuildModeUiStyle.ButtonStyle tileToolSwatch;
         private bool paletteBuilt;
+
+        // --- PHASE A asset browser (data-driven catalog + thumbnail-card grid) ---
+        private readonly BuildModeAssetCatalog catalog = new BuildModeAssetCatalog();
+        private BuildModeUiStyle.TabHandle[] tabHandles;
+        private int activeCategory;                 // index into catalog.Categories
+        private TMP_InputField searchField;
+        private string searchTerm = string.Empty;
+        private BuildModeUiStyle.ScrollGrid assetGrid;
+        private GameObject emptyState;
+        // One built card per catalog entry of the active category (rebuilt on tab/filter change).
+        private readonly List<BuildModeUiStyle.AssetCard> cards = new List<BuildModeUiStyle.AssetCard>();
+        private readonly List<BuildModeAssetCatalog.AssetEntry> cardEntries = new List<BuildModeAssetCatalog.AssetEntry>();
+        private BuildModeAssetCatalog.AssetEntry selectedEntry;
 
         private static readonly Color GhostGreen = new Color(0.25f, 0.95f, 0.45f, 0.50f);
         private static readonly Color GhostRed = new Color(0.95f, 0.28f, 0.28f, 0.50f);
@@ -200,7 +212,28 @@ namespace RIMA.UI.BuildMode
                     BuildTileBrushController.Instance.SetActive(true);
             }
             RefreshToolHighlight();
+            AlignBrowserTabToTool(tool); // keep the asset-browser tab coherent with the segmented control.
             UpdateStatus();
+        }
+
+        // Point the browser at the category that matches the active tool WITHOUT re-firing the tool
+        // switch (avoids SetActiveTool <-> SelectCategory recursion). Only acts once the UI exists.
+        private void AlignBrowserTabToTool(BuildTool tool)
+        {
+            if (!paletteBuilt || tabHandles == null) return;
+            BuildModeAssetCatalog.AssetCategory want = tool == BuildTool.Tile
+                ? BuildModeAssetCatalog.AssetCategory.Tiles
+                : BuildModeAssetCatalog.AssetCategory.Props;
+            for (int i = 0; i < catalog.Categories.Count; i++)
+            {
+                if (catalog.Categories[i].category != want) continue;
+                if (i == activeCategory) return; // already showing the right tab.
+                activeCategory = i;
+                for (int t = 0; t < tabHandles.Length; t++)
+                    BuildModeUiStyle.ApplyTabSelected(tabHandles[t], t == activeCategory);
+                RebuildCards();
+                return;
+            }
         }
 
         private void RefreshToolHighlight()
@@ -613,7 +646,7 @@ namespace RIMA.UI.BuildMode
             paletteRoot.anchorMin = new Vector2(0f, 0.5f);
             paletteRoot.anchorMax = new Vector2(0f, 0.5f);
             paletteRoot.pivot = new Vector2(0f, 0.5f);
-            paletteRoot.sizeDelta = new Vector2(BuildModeUiStyle.PanelWidth, 620f);
+            paletteRoot.sizeDelta = new Vector2(BuildModeUiStyle.PanelWidth, 680f); // taller = grid room (spec sec 3).
             paletteRoot.anchoredPosition = new Vector2(BuildModeUiStyle.Padding, 0f);
 
             // MakePanel returns the CONTENT rect already inset by the border + Padding.
@@ -624,49 +657,54 @@ namespace RIMA.UI.BuildMode
             // Segmented PROP | TILE control at the top. Selecting a tool routes ALL clicks to ONLY
             // that tool (SetActiveTool) — the Phase 3 exclusivity selector surfaced in the live UI.
             const float segH = 40f;
-            RectTransform seg = new GameObject("Segmented", typeof(RectTransform), typeof(HorizontalLayoutGroup)).GetComponent<RectTransform>();
+            RectTransform seg = new GameObject("Segmented", typeof(RectTransform)).GetComponent<RectTransform>();
             seg.SetParent(content, false);
             BuildModeUiStyle.Top(seg, segH, headerH);
-            HorizontalLayoutGroup hl = seg.GetComponent<HorizontalLayoutGroup>();
-            hl.spacing = BuildModeUiStyle.ItemGap;
-            hl.childControlWidth = true;
-            hl.childForceExpandWidth = true;
-            hl.childControlHeight = true;
-            hl.childForceExpandHeight = true;
-            propToolSwatch = BuildModeUiStyle.MakeButton(seg, "PROP");
-            propToolSwatch.label.alignment = TextAlignmentOptions.Center;
+            BuildModeUiStyle.ButtonStyle[] toolSegs = BuildModeUiStyle.MakeSegmented(seg, new[] { "PROP", "TILE" });
+            propToolSwatch = toolSegs[0];
+            tileToolSwatch = toolSegs[1];
             propToolSwatch.button.onClick.AddListener(() => SetActiveTool(BuildTool.Prop));
-            tileToolSwatch = BuildModeUiStyle.MakeButton(seg, "TILE");
-            tileToolSwatch.label.alignment = TextAlignmentOptions.Center;
             tileToolSwatch.button.onClick.AddListener(() => SetActiveTool(BuildTool.Tile));
 
-            float topUsed = headerH + segH + BuildModeUiStyle.ItemGap;
+            // --- PHASE A ASSET BROWSER: data-driven tab bar -> search -> thumbnail-card grid. -----
+            // Builds the catalog from the live project data (PropRegistry -> Props, brush -> Tiles).
+            catalog.Build(registry);
+
+            const float tabsH = 26f;
+            const float searchH = 30f;
             const float hintH = 86f;
+            float browserTop = headerH + segH + BuildModeUiStyle.ItemGap;
 
-            // Active tool's list: the prop palette as a vertical, premium button column.
-            RectTransform list = new GameObject("PropList", typeof(RectTransform), typeof(VerticalLayoutGroup)).GetComponent<RectTransform>();
-            list.SetParent(content, false);
-            list.anchorMin = new Vector2(0f, 0f);
-            list.anchorMax = new Vector2(1f, 1f);
-            list.offsetMin = new Vector2(0f, hintH + BuildModeUiStyle.ItemGap);
-            list.offsetMax = new Vector2(0f, -topUsed);
-            VerticalLayoutGroup vl = list.GetComponent<VerticalLayoutGroup>();
-            vl.spacing = BuildModeUiStyle.ItemGap;
-            vl.childControlHeight = true;
-            vl.childForceExpandHeight = false;
-            vl.childControlWidth = true;
-            vl.childForceExpandWidth = true;
-
-            paletteSwatches.Clear();
-            for (int i = 0; i < palette.Count; i++)
+            // Category tab bar (data-driven over catalog.Categories).
+            RectTransform tabRow = new GameObject("Tabs", typeof(RectTransform)).GetComponent<RectTransform>();
+            tabRow.SetParent(content, false);
+            BuildModeUiStyle.Top(tabRow, tabsH, browserTop);
+            List<BuildModeUiStyle.TabSpec> tabSpecs = new List<BuildModeUiStyle.TabSpec>();
+            for (int i = 0; i < catalog.Categories.Count; i++)
             {
-                int captured = i;
-                PropDefinitionSO def = palette[i];
-                BuildModeUiStyle.ButtonStyle b = BuildModeUiStyle.MakeButton(list, Label(def));
-                b.button.gameObject.AddComponent<LayoutElement>().preferredHeight = 38f;
-                paletteSwatches.Add(b);
-                b.button.onClick.AddListener(() => SelectPalette(captured));
+                BuildModeAssetCatalog.AssetCategoryGroup g = catalog.Categories[i];
+                tabSpecs.Add(new BuildModeUiStyle.TabSpec { label = g.label, count = g.Count, dot = g.dot });
             }
+            tabHandles = BuildModeUiStyle.MakeTabBar(tabRow, tabSpecs, SelectCategory);
+
+            // Search field.
+            RectTransform searchRow = new GameObject("SearchRow", typeof(RectTransform)).GetComponent<RectTransform>();
+            searchRow.SetParent(content, false);
+            BuildModeUiStyle.Top(searchRow, searchH, browserTop + tabsH + BuildModeUiStyle.Space1);
+            searchField = BuildModeUiStyle.MakeSearchField(searchRow, OnSearchChanged);
+
+            // Scrollable thumbnail-card grid (2 cols @ 96x116) filling the middle band.
+            float gridTop = browserTop + tabsH + searchH + (BuildModeUiStyle.Space1 * 2f);
+            RectTransform gridRow = new GameObject("GridRow", typeof(RectTransform)).GetComponent<RectTransform>();
+            gridRow.SetParent(content, false);
+            gridRow.anchorMin = new Vector2(0f, 0f);
+            gridRow.anchorMax = new Vector2(1f, 1f);
+            gridRow.offsetMin = new Vector2(0f, hintH + BuildModeUiStyle.ItemGap);
+            gridRow.offsetMax = new Vector2(0f, -gridTop);
+            assetGrid = BuildModeUiStyle.MakeScrollGrid(gridRow, new Vector2(96f, 116f), 2);
+            emptyState = BuildModeUiStyle.MakeEmptyState(assetGrid.viewport, "No assets",
+                "Try another category or clear search.");
+            emptyState.SetActive(false);
 
             // Bottom-left hint box (hotkeys) + a one-line status line just above it.
             hintLabel = BuildModeUiStyle.MakeHintBox(content, hintH);
@@ -687,9 +725,120 @@ namespace RIMA.UI.BuildMode
             statusLabel.raycastTarget = false;
 
             paletteBuilt = true;
-            RefreshPaletteHighlight();
+            // Default the browser to the Props category (preserves Phase 1/2 enter behavior).
+            activeCategory = 0;
+            SelectCategory(0);
             RefreshToolHighlight();
             UpdateStatus();
+        }
+
+        // ---------------------------------------------------------------- asset browser (Phase A)
+
+        /// <summary>
+        /// Data-driven category switch (tab click). Highlights the tab, rebuilds the card grid for the
+        /// new category, and aligns the tool: Props -> Prop tool; Tiles -> Tile tool. Lights/Decals are
+        /// stub categories (empty grid + empty-state). The browser only ROUTES selection; placement
+        /// logic stays in the existing prop tool / tile brush.
+        /// </summary>
+        private void SelectCategory(int index)
+        {
+            if (catalog.Categories.Count == 0) return;
+            activeCategory = Mathf.Clamp(index, 0, catalog.Categories.Count - 1);
+            for (int i = 0; i < tabHandles.Length; i++)
+                BuildModeUiStyle.ApplyTabSelected(tabHandles[i], i == activeCategory);
+
+            BuildModeAssetCatalog.AssetCategory cat = catalog.Categories[activeCategory].category;
+            if (cat == BuildModeAssetCatalog.AssetCategory.Props && ActiveTool != BuildTool.Prop)
+                SetActiveTool(BuildTool.Prop);
+            else if (cat == BuildModeAssetCatalog.AssetCategory.Tiles && ActiveTool != BuildTool.Tile)
+                SetActiveTool(BuildTool.Tile);
+
+            RebuildCards();
+        }
+
+        private void OnSearchChanged(string term)
+        {
+            searchTerm = term ?? string.Empty;
+            RebuildCards();
+        }
+
+        // Rebuild the thumbnail-card grid for the active category, applying the search filter. Cards
+        // are torn down + rebuilt (the demo catalog is small; a future large registry would pool).
+        private void RebuildCards()
+        {
+            for (int i = 0; i < cards.Count; i++)
+                if (cards[i] != null && cards[i].root != null) DestroyRuntimeObject(cards[i].root.gameObject);
+            cards.Clear();
+            cardEntries.Clear();
+
+            BuildModeAssetCatalog.AssetCategoryGroup group =
+                activeCategory >= 0 && activeCategory < catalog.Categories.Count ? catalog.Categories[activeCategory] : null;
+            if (group != null)
+            {
+                for (int i = 0; i < group.entries.Count; i++)
+                {
+                    BuildModeAssetCatalog.AssetEntry e = group.entries[i];
+                    if (!PassesFilter(e, searchTerm)) continue;
+                    BuildModeAssetCatalog.AssetEntry captured = e;
+                    BuildModeUiStyle.AssetCard card = BuildModeUiStyle.MakeAssetCard(
+                        assetGrid.content, e.icon, e.displayName, () => SelectEntry(captured));
+                    BuildModeUiStyle.ApplyCardDisabled(card, !e.enabled);
+                    cards.Add(card);
+                    cardEntries.Add(e);
+                }
+            }
+
+            if (emptyState != null) emptyState.SetActive(cards.Count == 0);
+            RefreshPaletteHighlight();
+        }
+
+        // Case-insensitive substring filter with '-' exclude tokens (spec 2.5.2). e.g. "table -broken".
+        private static bool PassesFilter(BuildModeAssetCatalog.AssetEntry entry, string term)
+        {
+            if (string.IsNullOrWhiteSpace(term)) return true;
+            string name = (entry.displayName ?? string.Empty).ToLowerInvariant();
+            string[] tokens = term.ToLowerInvariant().Split(' ');
+            bool hasInclude = false;
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                string tok = tokens[i].Trim();
+                if (tok.Length == 0) continue;
+                if (tok[0] == '-')
+                {
+                    string ex = tok.Substring(1);
+                    if (ex.Length > 0 && name.Contains(ex)) return false;
+                }
+                else
+                {
+                    hasInclude = true;
+                    if (!name.Contains(tok)) return false;
+                }
+            }
+            return hasInclude || true;
+        }
+
+        /// <summary>
+        /// Card click. Routes the SELECTED catalog entry to the existing tool: a Props entry drives
+        /// the Phase 2 prop tool (SelectPalette); a Tiles entry drives the Phase 3 brush mode. No
+        /// placement logic is duplicated here.
+        /// </summary>
+        private void SelectEntry(BuildModeAssetCatalog.AssetEntry entry)
+        {
+            if (entry == null) return;
+            selectedEntry = entry;
+            if (entry.category == BuildModeAssetCatalog.AssetCategory.Props && entry.payload is PropDefinitionSO def)
+            {
+                int idx = palette.IndexOf(def);
+                if (idx >= 0) SelectPalette(idx);
+            }
+            else if (entry.category == BuildModeAssetCatalog.AssetCategory.Tiles && entry.payload is int mode)
+            {
+                if (ActiveTool != BuildTool.Tile) SetActiveTool(BuildTool.Tile);
+                if (BuildTileBrushController.Instance != null)
+                    BuildTileBrushController.Instance.SetMode((BuildTileBrushController.BrushMode)mode);
+                UpdateStatus($"Selected {entry.displayName}. ");
+            }
+            RefreshPaletteHighlight();
         }
 
         private void BuildPalette()
@@ -724,11 +873,21 @@ namespace RIMA.UI.BuildMode
             UpdateStatus($"Selected {Label(palette[index])}. ");
         }
 
+        // Highlight the card matching the current selection. For Props the authority is the prop
+        // tool's selectedIndex (so eyedropper/SelectPalette keep the card in sync); for Tiles it is
+        // the last-selected tile entry. Cards not in the active category simply don't exist now.
         private void RefreshPaletteHighlight()
         {
-            for (int i = 0; i < paletteSwatches.Count; i++)
+            PropDefinitionSO selDef = SelectedDef();
+            for (int i = 0; i < cards.Count; i++)
             {
-                BuildModeUiStyle.ApplySelected(paletteSwatches[i], i == selectedIndex);
+                BuildModeAssetCatalog.AssetEntry e = cardEntries[i];
+                bool isSel;
+                if (e.category == BuildModeAssetCatalog.AssetCategory.Props)
+                    isSel = selDef != null && ReferenceEquals(e.payload, selDef);
+                else
+                    isSel = ReferenceEquals(e, selectedEntry);
+                BuildModeUiStyle.ApplyCardSelected(cards[i], isSel);
             }
         }
 
@@ -867,7 +1026,14 @@ namespace RIMA.UI.BuildMode
             hintLabel = null;
             propToolSwatch = null;
             tileToolSwatch = null;
-            paletteSwatches.Clear();
+            tabHandles = null;
+            searchField = null;
+            searchTerm = string.Empty;
+            assetGrid = null;
+            emptyState = null;
+            cards.Clear();
+            cardEntries.Clear();
+            selectedEntry = null;
             paletteBuilt = false;
         }
 
