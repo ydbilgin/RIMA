@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><title>RIMA Decals Batch 1</title>
+<style>
+body{background:#262626;color:#ddd;font-family:sans-serif;margin:16px}
+.grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.cell{background:#3a3a3a;border:1px solid #555;padding:6px;text-align:center;border-radius:4px}
+.cell img{width:96px;height:96px;image-rendering:pixelated;background:#454545;display:block;margin:0 auto}
+.idx{color:#6cf;font-weight:bold;font-size:12px}
+.lbl{font-size:10px;color:#bbb;margin-top:4px;min-height:30px;line-height:1.2}
+h1{font-size:16px} .grp{color:#6cf;margin:14px 0 2px}
+</style></head><body>
+<h1>RIMA — Batch 1 Floor Decals / Tiny Props (64 @ 32px) — object add7e574 — tag rima_decal_v1</h1>
+<p>Koyu kart = oyundaki floor zemini (şeffaf decal üstte). Tutulacak/atılacak index'leri söyle.</p>
+<div class="grid" id="g"></div>
+<script>
+const base="https://backblaze.pixellab.ai/file/pixellab-characters/objects/f587b47a-7c0e-4f37-a6c9-7d311a2c935f/add7e574-d7ac-4ada-9993-6ee18c571f57/rotations/frame_";
+const labels=["small hairline floor crack","medium jagged floor crack","branching floor crack","chipped stone tile corner","broken stone tile fragment","old impact crater scorch","spiderweb crack cluster","cracked flagstone seam","worn parallel scratch lines","shallow gouge scrape mark","cluster of broken floor tiles","scattered floor chip bits","grey ash smear","scattered ash patch","dark dried blood stain","dried blood splatter spots","black soot scorch mark","dark grime stain","faded dark stain ring","fine dust patch","small pebble cluster","loose gravel scatter","pair of stone shards","small rubble pile","broken brick piece","cracked masonry chunk","scattered edge debris bits","fallen stone trim fragment","crumbled mortar dust","shattered tile shards","thin glowing cyan rift seam","short glowing cyan rift crack","branching glowing cyan rift crack","sealed cyan crack faint glow","small glowing cyan rune dot","glowing cyan rune line","circular cyan rune fragment","cyan ritual glyph fragment","cyan portal residue smear","blue ash burn scorch","cyan elite floor sigil","large cyan boss floor sigil","small bone fragment","tiny cracked skull","scattered bone shards","rusted broken iron shackle","short rusted chain fragment","coiled rusted chain","broken iron blade tip","torn cloth scrap","tattered banner shred","small rolled parchment scroll","cracked clay bowl shard","pile of old rusted coins","single small candle stub","burnt candle remnant","faint glowing blue ember","tiny glowing cyan rift crystal shard","small empty offering bowl","small carved ritual stone marker","small stone brazier base stub","glowing cyan warning rune mark","golden reward sparkle ground mark","cyan shrine ground glyph marker"];
+const g=document.getElementById('g');
+labels.forEach((l,i)=>{g.innerHTML+=`<div class="cell"><div class="idx">[${i}]</div><img src="${base}${i}.png" loading="lazy"><div class="lbl">${l}</div></div>`;});
+</script></body></html>

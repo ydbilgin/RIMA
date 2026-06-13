@@ -195,10 +195,18 @@ Bu satır yoksa sub-agent dosyaları kendi başına okur → context israfı + d
 ## NLM Auth Recovery
 Auth expired → bash `nlm login` çalıştır → otomatik auth (Chrome açılır) → komutu tekrar dene.
 
-## Token Saving
+## Token Saving — Context Economy E1-E8 (2026-06-13 LOCK, detay: memory `feedback_context_economy_rules.md`)
 - Session start: PROJECT_RULES.md + CURRENT_STATUS.md only.
-- Bulk mechanical work → Codex (GPT 5.5). Bulk analysis → Gemini (2.5 Pro).
+- Bulk mechanical work → Codex (GPT 5.5). Bulk analysis → Gemini.
 - `/lint` at: phase transitions, 5+ decisions, before asset work.
+- **E1:** Agent/dispatch çıktısı DOSYAYA yazılır; dönüş ≤10 satır özet + yol. Rapor içeriği dönüşe gömülmez. (Her dispatch brief'ine bu satır eklenir.)
+- **E2:** 200+ satır dosya → Grep ile bölge bul + offset'li kısmi Read. Tam-Read sadece küçük dosyada; Grep'te head_limit.
+- **E3:** Uzun iş = background + bildirim. Poll yok; output'un sadece tail'i okunur; sub-agent transcript'i asla.
+- **E4:** Envanter/çok-dosyalı tarama = ax_flash → dosya; orchestrator sadece karar bölümünü okur.
+- **E5:** Unity execute_code compact özet-string döndürür; screenshot dosyaya, gerekirse 1 Read.
+- **E6:** Session içinde aynı dosya 2. kez Read edilmez; Edit-sonrası doğrulama-Read gereksiz.
+- **E7:** Memory dosyası = tek gerçek ~30 satır + recall-kalite description; bayat dosya süpersede-notla derhal arşive.
+- **E8:** Review PASS / faz geçişi / 20+ mesaj → CURRENT_STATUS lean güncelle + `/clear`; %70+ doluluk → `/save-session` öner.
 
 ## Output Economy
 - **Mechanical work**: terse, fragments OK.
