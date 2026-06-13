@@ -1,32 +1,30 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-12 — review-fix planı HAZIR, uygulama + ChatGPT batch yeni session'da)
+## ⏯️ RESUME (2026-06-13 GECE — otonom doğrulama+fix turu BİTTİ; Faz 6 kullanıcı testi BUGÜN)
 
-**⚠️ MODEL:** Orchestrator=Opus. Writer=cx dispatch, reviewer=council (writer≠reviewer).
+**⚠️ MODEL:** Orchestrator=Fable 5 (kullanıcı geçirdi). Writer=cx, reviewer=council, Opus=sub-agent dispatch.
 
-**🖼️ GÖRSEL SKILL'LERİ (bu session yeniden düzenlendi):**
-- `/agy_image` = ax→agy (Imagen), 1024² opak. `/codex_image` = cx dispatch→Codex gpt-image-2. (eski `generate_image` + `codex-images` skill'i KALDIRILDI). Detay → [[feedback_image_skill_naming]].
-- **KANIT:** bare `codex exec` / `cx <profil> exec` passthrough Windows'ta non-interactive **asılı kalıyor**; **`cx dispatch` tek güvenilir codex yolu** (smoke test: dispatch 24s, bare 5dk+ hang). Görsel kıyas: `STAGING/imagegen/_compare_2026-06-12/` (Imagen + gpt-image-2 ikisi de iyi; gpt-image-2 top-down çerçeve daha iyi).
+**✅ BU TUR BİTENLER (kanıt: `STAGING/playtest_caps_2026-06-13/`):**
+- **3-tanık E2E proof (rima-qc PASS):** Fable/Opus + ax Gemini 3.1 Pro + ax Opus 4.6 bağımsız play-mode koşusu → physPower 50→250 ⇒ finalDamage 50→250 birebir. ax/cx'in UnityMCP'yi otonom sürebildiği AMPİRİK kanıtlandı.
+- **Gerçek vuruş kanıtı (QC coverage-gap kapandı):** packetized DealDamage canlı düşmanda → HP düşüşü 10→50 (5×, calc ile çapraz-doğrulandı) + telemetry events +2, DPS 600, düşman öldü.
+- **Fable playtest** (`fable/_NOTES.md`): Elementalist canlı geçiş + Fireball TryActivate gerçek cast ✓ · düşman AI kovalıyor (BaseMobBehavior+MobAttack_Melee) ✓ · ölüm akışı VAR (DeathScreenCanvas+input kilidi) ✓ · console tüm tur 0 error.
+- **flag#1 FIX (cx, diff-QC PASS):** rift_crystal → `Assets/Resources/DirectorProps/` + `Resources.Load` (editor fallback korundu). Play-mode'da palette Resources yolundan yüklendi, doğrulandı.
+- **flag#2 FIX:** rift_crystal 1.8× + Light2D 1.6 → demo'da belirgin (screenshot var).
+- **VFX tint doğrulandı:** Fire/Lightning/Frost ayrışıyor (`vfx_hitspark_simulated.png`, ps.Simulate tekniği) — `[visual unverified]` kalkabilir. ⚠️ Void koyu zeminde zayıf (minor palette lighten, cx'lik).
+- **🖼️ BACKDROP CANLI:** init_01 PPU32 → MEVCUT parallax iskeleti `L1_BG_Far`'a native 21.25×12 takıldı (unlit asset mat, tint .82). L2/L3 placeholder perdeleri OFF (art bekliyor), L4_Fog α=0.12. +2 cyan RiftPulse Light2D (LightFlicker). Play-mode parallax ✓. `backdrop_native.png`.
+- **Drift triage:** 7 gürültü dosyası revert ×2 (PropPool/Profile/TMP **her play'de yeniden kirleniyor** — kök neden TMP dynamic fallback atlas; kalıcı fix=static atlas, cx backlog).
+- **LaurethStudio playbook:** `STAGING/LAURETHSTUDIO_PLAYBOOK_EXTRACTION_2026-06-13.md` (Opus çıkarımı; ~%70 zaten global skill, eksikler bootstrap-project'e doküman-kuralı).
 
-**🔍 CHATGPT OVERNIGHT REVIEW → COUNCIL → KARAR (bu session):**
-- ChatGPT review paketi geldi (`STAGING/_inbox/chatgpt_overnight_review_2026-06-12/`), Claude gerçek kodla **5 bulgu CONFIRMED**, council (cx+3.1Pro+Flash) risk-denetledi.
-- **KARAR DOSYASI:** `STAGING/OVERNIGHT_REVIEW_FIX_DECISION_2026-06-12.md` (uygula sırası + test-kırılma + 3.1Pro'nun ekstra E1/E2'si).
-- **UYGULANMADI** — yeni session'da: A1 finisher≠crit · A3 packet bypass (Ranger+HeatGauge×2) · A2 lean defender-stat helper · B1 zero-damage (**+ `HealthTests.cs:66` assert ÇEVİR**) · B2/E1/E2 TODO. Tek cx dispatch + CombatContract gate. **A4 Director raycast = Play-mode'da doğrula, kör commit YOK.**
+**🚩 BUGÜN (kullanıcı testi + prova notları):**
+1. **Ölüm GERİ DÖNÜŞSÜZ** — Heal ölüde no-op, respawn yok → sunumcu ölürse scene restart. PROVA EZBERİ.
+2. Ölüyken Director class-switch controller enable ediyor (IsDead check yok) — minor, istenirse cx guard.
+3. Düşman HP bar full canda KIRMIZI (kozmetik kafa karışıklığı).
+4. 🔴 **VFX build-safety:** HitSpark/DeathBurst Resources dışında → standalone'da görünmez (rift_crystal sınıfı bug; editor-canlı demoya blocker DEĞİL) → cx task bekliyor.
+5. Council vision verdikt: `council_vision_verdict.md` (ax Pro dispatch edildi, sonucu oku).
+6. Fireball aim idle-yönde ıskalar (input-bağımlı, demo'da mouse-aim var — bilgi).
 
-**📦 SONRAKİ ADIM (yeni session):**
-1. **Review-fix dispatch** (yukarıdaki plan, karar dosyasından).
-2. **ChatGPT batch review:** `STAGING/CHATGPT_BATCH_REVIEW_PACKAGE_2026-06-12.md` (4 batch, tek tek). C4 numeric-tablo doğrulaması Batch 3'te.
-3. **Görsel playtest:** Director aç (` tuş) → B + C1/C2/C3/C6.
-4. Kalan: **C5 Map** (öneri child-choice nav) · **C4 Build** (PaintCell refactor riskli) · HUD Layout · Faz D · Loc TR (ı/ğ/ş).
-
-**⭐ ÇOK ÖNEMLİ — Modular design felsefesi (2026-06-12, laurethstudio çekirdek):** `STAGING/MODULAR_ABILITY_DECISION_2026-06-12.md` (video 9CQgPaHAV1E + council). Stüdyo-seviyesi disiplin → memory `project_modular_design_philosophy.md`. **SONUÇ:** demo-öncesi "ucuz DRY temizliği" cx ile test edildi → 3 hedefin 3'ü de ÇÖKTÜ (AOE 5/5 skill-özel · targeting 5/5 farklı · passive 1/15 fit) → modüler temizlik İŞİ YOK, mevcut bespoke haklı. Post-demo opt-in SkillRecipe SO spec'i geçerli kalır. **NOT:** `CombatContract` runtime gate DEĞİL (test sözleşmesi); cx batchmode test Unity-açıkken çalışmaz.
-
-**🎨 VFX SPRINT (otonom, 2026-06-12) — TAMAM. Plan: `STAGING/SKILL_VFX_IMPLEMENTATION_PLAN_2026-06-12.md`. Model = Dead Cells "tek statik sprite + engine juice".**
-- ✅ **VFX sistemi:** `Assets/Scripts/VFX/SkillVfx.cs` (static tint/additive/scale-fade + 6 archetype) `72b27aca`+fix`f86ccf10` (rima-qc FAIL→fix). Hero sprite explosion+shatter `27dcb0ef`. Tier1 wiring (Fireball/Warblade-basic/Gravity-Cleave) `0a36b7ef`. Combat untouched (diff-verified).
-- ✅ **Backlog combat review-fix** `cfa15a1e`: A1 finisher≠crit · A3 Ranger+HeatGauge×2 packet · A2 defender-stat (armor/MR canlı) · B1 zero-damage no-op + HealthTests flip · E1/E2/B2 TODO. **29/29 EditMode test yeşil.** A4 Director raycast HARİÇ (Play-mode-only).
-- ⏳ **KALAN (next session):** (1) **Play-mode görsel onay** — VFX commit'leri `[visual unverified]`; Director'da Fireball/Warblade-basic/Gravity-Cleave tetikle, juice+telegraph bak. Near-white explosion tint zayıf olabilir (mid-grey re-tint veya HDR follow-up). (2) **A4 Director raycast** Play-mode'da doğrula. (3) **B indicator layer** (proc/stack, WoW-addon — Fireball 3-stack/element-stack/SkillStateTracker yüzeye çıkar; HUD Layout ile) — spec `SKILL_VFX_IMPLEMENTATION_PLAN` §C.
-
-**Durum:** 22 commit push'lı (`github.com/ydbilgin/RIMA`). Gece detay → `STAGING/AUTONOMOUS_RUN_2026-06-12.md`. Kararlar: damage taksonomisi + HUD layout DECISION dosyalarında.
+**⚠️ UNCOMMITTED:** Faz 2 + bugünün tüm fix'leri (DirectorMode.cs, _Arena.unity backdrop, rift_crystal Resources move, Backdrops/, testler, edge_filler PPU32) — kullanıcı onayı bekliyor. PropPool/TMP gürültüsü commit ÖNCESİ tekrar revert edilmeli (kronik).
+- **🆕 cx skill:** `effort:<low|medium|high|xhigh>` + `timeout:<sn>` token desteği eklendi. ax: `--model` bayrağı ile model-paralel (Unity-süren işler hâlâ seri — tek socket).
 
 ---
 *Önceki session blokları git history'de.*

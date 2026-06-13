@@ -1,0 +1,36 @@
+{
+  "preview_mockup": "00_preview_mockups/preview_run_map_mockup.png",
+  "source_sheets": [
+    "01_source_sheets/sheet_runmap_nodes.png",
+    "01_source_sheets/sheet_rarity_ribbons.png",
+    "01_source_sheets/sheet_minimap_markers.png",
+    "01_source_sheets/sheet_minimap_frame.png"
+  ],
+  "individual_assets_bgmagenta": {
+    "nodes": [
+      "node_combat",
+      "node_elite",
+      "node_boss",
+      "node_merchant",
+      "node_chest",
+      "node_forge",
+      "node_event",
+      "node_hidden",
+      "node_current_combat_glow",
+      "node_connection_kit"
+    ],
+    "ribbons": [
+      "reward_rarity_ribbon_common",
+      "reward_rarity_ribbon_rare",
+      "reward_rarity_ribbon_epic"
+    ],
+    "markers": [
+      "minimap_player_marker",
+      "minimap_room_tile",
+      "minimap_door_marker"
+    ],
+    "frame": [
+      "minimap_frame_280x220_style"
+    ]
+  }
+}
