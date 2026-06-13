@@ -84,19 +84,18 @@ namespace RIMA
             Vector2 hitDirection = GetComponent<Rigidbody2D>() != null
                 ? GetComponent<Rigidbody2D>().linearVelocity.normalized
                 : ((Vector2)other.transform.position - (Vector2)transform.position).normalized;
-            int finalDamage;
             if (hasDamagePacket)
             {
                 damagePacket.target = other.gameObject;
                 if (damagePacket.attacker == null)
                     damagePacket.attacker = attacker != null ? attacker : gameObject;
-                finalDamage = SkillRuntime.DealDamage(hp, damagePacket, false, damagePacket.attacker, hitDirection);
+                SkillRuntime.DealDamage(hp, damagePacket, false, damagePacket.attacker, hitDirection);
             }
             else
             {
-                finalDamage = damage;
-                hp.TakeDamage(finalDamage);
-                SkillRuntime.PublishSkillHit(hp, finalDamage, attacker != null ? attacker : gameObject, hitDirection, hitElement);
+                // Packet'siz dal eski çıplak hp.TakeDamage(damage) davranışını BİREBİR korur: hiçbir çarpan
+                // (status/identity/situational/debug/defense) uygulanmaz. Tek-publish DealDamageRaw içinde sürer.
+                SkillRuntime.DealDamageRaw(hp, damage, attacker != null ? attacker : gameObject, hitDirection, hitElement);
             }
             onHit?.Invoke(other);
 

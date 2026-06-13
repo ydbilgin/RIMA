@@ -39,8 +39,10 @@ namespace RIMA
         private Health playerHealth;
         private CanvasGroup canvasGroup;
         private bool isDead;
+        private Coroutine deathRoutine;
 
         public int KillCount => RunStats.Kills;
+        public bool IsDeathActiveForDemo => isDead || (deathPanel != null && deathPanel.activeInHierarchy);
 
         private void Awake()
         {
@@ -88,7 +90,7 @@ namespace RIMA
             if (isDead) return;
             isDead = true;
             Debug.Log("[DeathScreenManager] Player died. Press R to restart.");
-            StartCoroutine(DeathSequence());
+            deathRoutine = StartCoroutine(DeathSequence());
         }
 
         private IEnumerator DeathSequence()
@@ -137,6 +139,37 @@ namespace RIMA
                 PlayerController ctrl = player.GetComponent<PlayerController>();
                 if (ctrl != null) ctrl.enabled = false;
             }
+
+            deathRoutine = null;
+        }
+
+        public void CancelDeathForDemo()
+        {
+            isDead = false;
+            if (deathRoutine != null)
+            {
+                StopCoroutine(deathRoutine);
+                deathRoutine = null;
+            }
+
+            if (canvasGroup != null)
+            {
+                canvasGroup.alpha = 0f;
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+            }
+
+            if (deathPanel != null)
+                deathPanel.SetActive(false);
+
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                PlayerController ctrl = player.GetComponent<PlayerController>();
+                if (ctrl != null) ctrl.enabled = true;
+            }
+
+            Time.timeScale = 1f;
         }
 
         public void RestartRun()

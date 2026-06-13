@@ -84,6 +84,11 @@ namespace RIMA
             OnHealthChanged?.Invoke(currentHP, maxHP);
         }
 
+        public void Revive()
+        {
+            RestoreToFull();
+        }
+
         /// <summary> Max HP'yi artırır, mevcut HP'ye de aynı miktarı ekler. </summary>
         public void AddMaxHP(int bonus)
         {

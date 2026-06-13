@@ -129,7 +129,7 @@ namespace RIMA
         public static void GroundCrack(Vector3 pos, VfxElement element)
         {
             Sprite sprite = Resources.Load<Sprite>("Sprites/Environment/Decals/floor_riftcrack")
-                ?? LoadSprite("Assets/Sprites/Environment/Decals/floor_riftcrack.png");
+                ?? LoadSprite("Assets/Resources/Sprites/Environment/Decals/floor_riftcrack.png");
 
             GameObject decal = CreateRuntimeSpritePrefab("GroundCrack", sprite);
             GameObject instance = SpawnTintedInstance(decal, pos, element, default, null);

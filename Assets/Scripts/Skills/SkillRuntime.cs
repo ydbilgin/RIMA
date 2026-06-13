@@ -121,6 +121,47 @@ namespace RIMA
             DealDamage(health, packet, popup, attacker, hitDirection, element, isCrit, applyStatusMultiplier);
         }
 
+        // Raw yol: nihai hasar = TAM OLARAK gelen amount. DamageCalculator'a HİÇ girmez; status/identity/
+        // situational/debug/defense çarpanlarının HİÇBİRİ uygulanmaz. Eski çıplak hp.TakeDamage(amount) davranışı.
+        // Tek-publish KORUNUR: OnDamageApplied + PublishSkillHit birer kez (telemetry/DPS bu hit'leri görür).
+        public static int DealDamageRaw(Health health, int amount, GameObject attacker, Vector2? hitDirection,
+            string element = "projectile", bool popup = false)
+        {
+            if (health == null || health.IsDead) return 0;
+
+            var packet = DamagePacket.Create(
+                amount,
+                DamageType.Physical,
+                DamageSourceType.Skill,
+                attacker,
+                health.gameObject,
+                element,
+                isCrit: false,
+                elementTag: ElementTag.None,
+                bypassStatScaling: true);
+
+            int finalDamage = amount;
+            health.TakeDamage(finalDamage);
+
+            // Telemetri için ham sonuç (çarpan yok): finalDamage = amount, çarpanlar nötr.
+            var result = new DamageCalculationResult
+            {
+                finalDamage = finalDamage,
+                statMultiplier = 1f,
+                cappedIdentityBuildMultiplier = 1f,
+                cappedSituationalMultiplier = 1f,
+                defenseMultiplier = 1f,
+                postureOverflowMultiplier = 0f,
+                postureOverflowDamage = 0
+            };
+            OnDamageApplied?.Invoke(new DamageTelemetryEvent(packet, result, finalDamage, health, Time.unscaledTime));
+            PublishSkillHit(health, finalDamage, attacker, hitDirection, element, isCrit: false);
+            if (popup)
+                DamagePopup.Show(health.transform.position, finalDamage);
+
+            return finalDamage;
+        }
+
         public static int DealDamage(Health health, DamagePacket packet, bool popup = true)
         {
             return DealDamage(health, packet, popup, packet.attacker, null);

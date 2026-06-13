@@ -87,6 +87,8 @@ namespace RIMA
         private TextMeshProUGUI telemetryTtkText;
         private TextMeshProUGUI telemetryEventCountText;
         private TextMeshProUGUI telemetryStatusText;
+        private TextMeshProUGUI statToastText;
+        private CanvasGroup statToastGroup;
         private RectTransform spawnPaletteRoot;
         private RectTransform propPaletteRoot;
         private RectTransform classSkillCardsRoot;
@@ -106,6 +108,12 @@ namespace RIMA
         private float telemetryLastTtk = -1f;
         private float telemetryLastRefreshTime = -1f;
         private string telemetryLastCsv = "";
+        private float telemetryLastDps;
+        private bool telemetryHasLastDps;
+        // Director pause sırasında DPS saatini dondurmak için biriken toplam pause süresi.
+        private float telemetryPausedTotal;
+        private float telemetryPauseStartTime = -1f;
+        private Coroutine statToastRoutine;
 
         private const string DirectorWaveResourcePath = "Encounters/Act1_Wave_Pilot";
         private const string DefaultRiftCrystalPrefabPath = "Assets/Resources/DirectorProps/rift_crystal.prefab";
@@ -114,6 +122,7 @@ namespace RIMA
         private const float EraseRadius = 0.7f;
         private const float TelemetryDpsWindowSeconds = 5f;
         private const float TelemetryRefreshInterval = 0.15f;
+        private const float StatToastDuration = 1.2f;
         private const int MaxDirectorSpawnedEnemies = 10;
 
         public DirectorModeState State { get; private set; } = DirectorModeState.Test;
@@ -225,12 +234,14 @@ namespace RIMA
             if (State == state)
             {
                 ApplyStateText();
-                Time.timeScale = state == DirectorModeState.Director ? 0f : 1f;
+                Time.timeScale = ResolveTimeScaleForState(state);
                 return;
             }
 
+            UpdateTelemetryPauseClock(state);
+
             State = state;
-            Time.timeScale = state == DirectorModeState.Director ? 0f : 1f;
+            Time.timeScale = ResolveTimeScaleForState(state);
             if (state == DirectorModeState.Director)
             {
                 CacheCameraTarget();
@@ -238,6 +249,23 @@ namespace RIMA
 
             ApplyStateText();
             OnStateChanged?.Invoke(State);
+        }
+
+        private float ResolveTimeScaleForState(DirectorModeState state)
+        {
+            if (state == DirectorModeState.Director)
+            {
+                return 0f;
+            }
+
+            DeathScreenManager deathScreen = FindDeathScreenManager();
+            return deathScreen != null && deathScreen.IsDeathActiveForDemo ? 0f : 1f;
+        }
+
+        private static DeathScreenManager FindDeathScreenManager()
+        {
+            DeathScreenManager[] managers = FindObjectsByType<DeathScreenManager>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            return managers.Length > 0 ? managers[0] : null;
         }
 
         public void ShowTab(DirectorTab tab)
@@ -467,7 +495,7 @@ namespace RIMA
 
         public float TelemetryDpsForValidation()
         {
-            return CalculateTelemetryDps(Time.unscaledTime);
+            return CalculateTelemetryDps(TelemetryClock());
         }
 
         public int TelemetrySourceDamageForValidation(DamageSourceType sourceType)
@@ -596,6 +624,7 @@ namespace RIMA
             BuildMinimapMini(root);
             BuildSelectionInspector(root);
             BuildBottomTelemetryStrip(root);
+            BuildStatToast(root);
         }
 
         private void RebuildOverlayRuntime()
@@ -624,6 +653,8 @@ namespace RIMA
             classSkillStatusText = null;
             statsStatusText = null;
             buildStatusText = null;
+            statToastText = null;
+            statToastGroup = null;
             spawnPaletteRoot = null;
             propPaletteRoot = null;
             classSkillCardsRoot = null;
@@ -896,6 +927,8 @@ namespace RIMA
             instance.name = selectedSpawnEnemy.Prefab.name + "_Director";
             instance.tag = "Enemy";
             directorSpawnedEnemies.Add(instance);
+            if (Application.isPlaying)
+                SkillVfx.ImpactBurst(position, VfxElement.Arcane);
 
             Health health = instance.GetComponent<Health>();
             if (health == null)
@@ -967,6 +1000,60 @@ namespace RIMA
 
             directorSpawnedEnemies.Clear();
             SetSpawnStatus("director.spawn.status.cleared");
+        }
+
+        private void DemoQuickReset()
+        {
+            Health playerHealth = FindPlayerHealth();
+            if (playerHealth != null)
+            {
+                playerHealth.Revive();
+            }
+
+            DeathScreenManager deathScreen = FindDeathScreenManager();
+            if (deathScreen != null)
+            {
+                deathScreen.CancelDeathForDemo();
+            }
+
+            ClearDirectorSpawns();
+            ClearDirectorProps();
+            Time.timeScale = 1f;
+            ApplyStateText();
+
+            if (modeStripText != null)
+            {
+                modeStripText.text = "DEMO RESET - HP FULL / SPAWNS CLEARED";
+            }
+        }
+
+        private static Health FindPlayerHealth()
+        {
+            GameObject player = null;
+            try
+            {
+                player = GameObject.FindGameObjectWithTag("Player");
+            }
+            catch (UnityException)
+            {
+                player = null;
+            }
+
+            if (player != null && player.TryGetComponent(out Health taggedHealth))
+            {
+                return taggedHealth;
+            }
+
+            Health[] healths = FindObjectsByType<Health>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            for (int i = 0; i < healths.Length; i++)
+            {
+                if (healths[i] != null && healths[i].CompareTag("Player"))
+                {
+                    return healths[i];
+                }
+            }
+
+            return null;
         }
 
         private void PruneDirectorSpawnedEnemies()
@@ -1960,11 +2047,57 @@ namespace RIMA
             }
 
             ClassStatRuntime stats = manager.EnsureCurrentPrimaryStats();
+            float oldValue = binding.Read(stats);
             float clamped = ClampStatValue(binding, value);
             binding.Write(stats, clamped);
             manager.ApplyCurrentPrimaryStatsToPlayer();
             binding.SetValueText(binding.Read(stats));
+            ShowStatToast(binding, oldValue, binding.Read(stats));
             SetStatsStatus("director.stats.status.live", manager.PrimaryClass);
+        }
+
+        private void ShowStatToast(StatSliderBinding binding, float oldValue, float newValue)
+        {
+            if (binding == null || statToastText == null || statToastGroup == null || Mathf.Approximately(oldValue, newValue))
+            {
+                return;
+            }
+
+            statToastText.text = binding.Key + " " + FormatStatValue(binding, oldValue) + " -> " + FormatStatValue(binding, newValue);
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            if (statToastRoutine != null)
+            {
+                StopCoroutine(statToastRoutine);
+            }
+
+            statToastRoutine = StartCoroutine(PlayStatToast());
+        }
+
+        private IEnumerator PlayStatToast()
+        {
+            statToastGroup.alpha = 1f;
+            float elapsed = 0f;
+            while (elapsed < StatToastDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float fade = Mathf.InverseLerp(StatToastDuration, StatToastDuration * 0.55f, elapsed);
+                statToastGroup.alpha = Mathf.Clamp01(fade);
+                yield return null;
+            }
+
+            statToastGroup.alpha = 0f;
+            statToastRoutine = null;
+        }
+
+        private static string FormatStatValue(StatSliderBinding binding, float value)
+        {
+            return binding.Slider != null && binding.Slider.wholeNumbers
+                ? Mathf.RoundToInt(value).ToString(CultureInfo.InvariantCulture)
+                : value.ToString("0.##", CultureInfo.InvariantCulture);
         }
 
         private static float ClampStatValue(StatSliderBinding binding, float value)
@@ -2068,7 +2201,9 @@ namespace RIMA
             DamagePacket packet = telemetryEvent.Packet;
             DamageSourceType sourceType = packet.sourceType;
             Health target = telemetryEvent.TargetHealth;
-            float eventTime = telemetryEvent.UnscaledTime;
+            // Pause-arındırılmış saat: damage yalnızca oyun akarken üretilir, bu yüzden kayıt zaman damgası
+            // TelemetryClock ile alınmalı (now ile aynı eksen). Olayın ham UnscaledTime'ı pause biriktirmez.
+            float eventTime = TelemetryClock();
 
             telemetryRecords.Add(new DamageTelemetryRecord(
                 eventTime,
@@ -2109,7 +2244,7 @@ namespace RIMA
 
         private void OnTelemetryTargetDeath(Health target)
         {
-            CompleteTelemetryTtk(target, Time.unscaledTime);
+            CompleteTelemetryTtk(target, TelemetryClock());
         }
 
         private void CompleteTelemetryTtk(Health target, float deathTime)
@@ -2133,6 +2268,12 @@ namespace RIMA
             ClearTelemetryDeathListeners();
             telemetryLastTtk = -1f;
             telemetryLastCsv = "";
+            telemetryLastDps = 0f;
+            telemetryHasLastDps = false;
+            telemetryLastRefreshTime = -1f;
+            // Pause saatini sıfırla; hâlâ pause'daysak başlangıcı yeni baz ana çek (offset birikmesin).
+            telemetryPausedTotal = 0f;
+            telemetryPauseStartTime = State == DirectorModeState.Director ? Time.unscaledTime : -1f;
             if (telemetryStatusText != null)
             {
                 telemetryStatusText.text = Loc.T("director.telemetry.status.cleared");
@@ -2169,7 +2310,7 @@ namespace RIMA
 
         private void UpdateTelemetryDisplay(bool force)
         {
-            float now = Time.unscaledTime;
+            float now = TelemetryClock();
             if (!force && now - telemetryLastRefreshTime < TelemetryRefreshInterval)
             {
                 return;
@@ -2216,8 +2357,40 @@ namespace RIMA
             }
         }
 
+        // Director pause süresini biriktir: pause'a girince başlangıcı kaydet, çıkınca süreyi toplama ekle.
+        // Böylece TelemetryClock pause boyunca ilerlemez ve DPS penceresi kaldığı yerden devam eder.
+        private void UpdateTelemetryPauseClock(DirectorModeState nextState)
+        {
+            bool wasPaused = State == DirectorModeState.Director;
+            bool willPause = nextState == DirectorModeState.Director;
+            if (willPause && !wasPaused)
+            {
+                telemetryPauseStartTime = Time.unscaledTime;
+            }
+            else if (!willPause && wasPaused && telemetryPauseStartTime >= 0f)
+            {
+                telemetryPausedTotal += Time.unscaledTime - telemetryPauseStartTime;
+                telemetryPauseStartTime = -1f;
+            }
+        }
+
+        // Pause süresinden arındırılmış telemetri saati. Kayıt zaman damgaları ve DPS yaşlandırması bunu kullanır.
+        // AKTİF pause aralığı da düşülür: pause boyunca saat DONAR (çıkışta toplama eklenene kadar beklemez).
+        private float TelemetryClock()
+        {
+            float activePause = (State == DirectorModeState.Director && telemetryPauseStartTime >= 0f)
+                ? Time.unscaledTime - telemetryPauseStartTime
+                : 0f;
+            return Time.unscaledTime - telemetryPausedTotal - activePause;
+        }
+
         private float CalculateTelemetryDps(float now)
         {
+            if (State == DirectorModeState.Director && telemetryHasLastDps)
+            {
+                return telemetryLastDps;
+            }
+
             float oldest = now;
             int damage = 0;
             for (int i = telemetryRecords.Count - 1; i >= 0; i--)
@@ -2234,11 +2407,15 @@ namespace RIMA
 
             if (damage <= 0)
             {
+                telemetryLastDps = 0f;
+                telemetryHasLastDps = true;
                 return 0f;
             }
 
             float duration = Mathf.Clamp(now - oldest, 0.1f, TelemetryDpsWindowSeconds);
-            return damage / duration;
+            telemetryLastDps = damage / duration;
+            telemetryHasLastDps = true;
+            return telemetryLastDps;
         }
 
         private void ExportTelemetryCsv()
@@ -2372,8 +2549,23 @@ namespace RIMA
 
             Button reset = CreateButton("Button_QuickReset", strip, menuButton, Color.white);
             Anchor(reset.GetComponent<RectTransform>(), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-12f, 0f), new Vector2(150f, 28f));
+            reset.onClick.AddListener(DemoQuickReset);
             TextMeshProUGUI label = CreateText("TMP", reset.transform as RectTransform, "QUICK RESET", 16f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+        }
+
+        private void BuildStatToast(RectTransform root)
+        {
+            RectTransform toast = CreatePanel("StatToast", root, menuButton, Color.white, Image.Type.Sliced);
+            Anchor(toast, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 170f), new Vector2(440f, 78f));
+            statToastGroup = toast.gameObject.AddComponent<CanvasGroup>();
+            statToastGroup.alpha = 0f;
+            statToastGroup.interactable = false;
+            statToastGroup.blocksRaycasts = false;
+
+            statToastText = CreateText("TMP", toast, "", 32f, FontStyles.Bold, TextAlignmentOptions.Center);
+            statToastText.color = HtmlColor("#00FFCC");
+            Stretch(statToastText.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 0f), new Vector2(-18f, 0f));
         }
 
         private RectTransform CreateFill(string name, Transform parent)
