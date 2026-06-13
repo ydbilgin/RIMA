@@ -72,16 +72,16 @@
 | Beat | Ne ters gidebilir (audit kanıtı) | Canlı fallback |
 |------|----------------------------------|----------------|
 | **B3 stat tuning** | physPower slider'ı yanlışlıkla bir **skill (Q/E/R/F) ile** test edilirse hasar DEĞİŞMEZ (audit_combat: 52/54 yetenek `bypassStatScaling:true`). Hoca "stat sistemi çalışmıyor" sanır. | **KESİN KURAL: sadece LMB temel saldırı ile göster.** Şüphede kalırsan debugGlobalDamageMult kullan (LMB'ye etki eder). |
-| **B3 Director'da tıklama** | Director'da dünyaya tıklama hem spawn hem **oyuncu saldırısı** tetikleyebilir (audit_state DM-1: PlayerAttack disable edilmiyor). | timeScale=0 olduğu için saldırı görünür ilerlemez; spawn'ı **UI üzerinden** değil net boş alana tıkla. Karışırsa Test'e dön-gir. |
+| **B3 Director'da tıklama** | ~~PlayerAttack disable edilmiyordu~~ → **FİX'LENDİ** (`523ca242`: SetPlayerActive — Director pause + ölüm ekranında saldırı kapalı, data-proof'lu). | Risk kalktı; yine de spawn'ı net boş alana tıkla. |
 | **B3 Telemetry pause'da** | Director'da (pause) Telemetry sekmesi açılınca 5sn pencere boşalıp **DPS=0** gösterebilir (B5, unscaled-time). | DPS'i **Test modunda** (timeScale=1) hasar verdikten hemen SONRA göster, sonra pause et. DPS-freeze fix uygulandıysa sorun yok (kontrol et). |
 | **B3 debugMult=0** | Slider 0'a çekilse bile her vuruş **min 1 hasar** geçer (Health.cs:54 floor, B11). "Hasarı sıfırladım" dersen telemetry yalanlar. | "Sıfır" deme; "minimuma indirdim" de. |
-| **B4 spawn/skill kill** | Skill/mermi ile öldürülen düşman **KILL sayılmaz + juice yok** (audit_state S-1: PublishKill sadece basic-attack'ta). Ravager LMB DPS'te görünmez (audit_combat #2). | Kill/juice göstereceksen **LMB ile öldür.** Ravager'ı LMB-DPS demosunda KULLANMA. |
+| **B4 spawn/skill kill** | ~~Skill kill'leri sayılmıyordu~~ → **FİX'LENDİ** (`523ca242`: merkezi PublishKillIfDead — skill kill'leri de juice tetikliyor, data-proof'lu). Ravager LMB DPS'te hâlâ görünmez (audit_combat #2, DEFER). | Ravager'ı LMB-DPS demosunda KULLANMA; gerisi serbest. |
 | **B4 prop görünmez** | Sprite'sız prop riski (`prop_b50be24..._7_5` boş SpriteRenderer, audit_unity). ~~`floor_riftcrack` Resources dışı~~ → **FİX'LENDİ** (2026-06-13 gece: GUID korunarak Resources'a taşındı, GroundCrack decal artık görünür). | rift_crystal yerleştir (Resources'ta VAR, doğrulandı). Boş quad çıkarsa sil, başka yere koy. |
-| **B5 QUICK RESET** | `DemoQuickReset` `ClearDirectorProps()` de çağırıyor → reset **yerleştirdiğin prop'ları da siler** (`DirectorMode.cs:1020`). Ayrıca PlayerAttack disable edilmiyor (audit_state D-1). | Prop demosunu reset'ten ÖNCE yap; reset'i en son göster. "Sahneyi temiz başlatıyor" diye anlat. |
+| **B5 QUICK RESET** | `DemoQuickReset` `ClearDirectorProps()` de çağırıyor → reset **yerleştirdiğin prop'ları da siler** (`DirectorMode.cs:1020`). ~~PlayerAttack~~ → fix'lendi (`523ca242`). | Prop demosunu reset'ten ÖNCE yap; reset'i en son göster. "Sahneyi temiz başlatıyor" diye anlat. |
 | **B5 timeScale çatışması** | Ölüm (timeScale=0) + Director toggle yarışı (B4/D-2) → ölü oyuncu + akan düşman + death screen aynı anda. | Ölünce **Director'a girme**, doğrudan QUICK RESET'e bas. |
 | **Genel — müzik** | `music_demo` Resources'ta YOK → **arka plan müziği çalmaz** (audit_unity HIGH). | Bahsetme; sessiz demo normal karşılanır. İstersen "ses tasarımı sonraki faz" de. |
 | **Genel — konsol** | Edit-mode'da 17 transient hata (RoomRunDirector/JSON, audit_unity). | Sunumdan ÖNCE konsolu temizle; runtime'da gerçek hata yok. |
-| **B6 boss/dual-class** | Boss'a kadar oynamak 10-dk slice'ı aşar; dual-class uçtan-uca prova EDİLMEDİ (UNCERTAIN). | Oynama, ANLAT (bkz. D). |
+| **B6 boss/dual-class** | Boss'a kadar oynamak 10-dk slice'ı aşar. ~~UNCERTAIN~~ → **KANITLANDI** (2026-06-13 gece Play-Mode data-proof: gate→seçim→controller 1→2, ManaSystem, 4 slot canlı; rapor `_process/2026-06/_dualclass_proof_2026-06-13.md`. Echo bind'i ayrı draft adımı — test dışı). | Oynama, ANLAT (bkz. D) — artık "kanıtlı çalışıyor" diyebilirsin. |
 
 **En riskli 2 beat:** (1) **B3 stat tuning** — yanlış skill seçimi tüm "stat sistemi" iddiasını çökertir (koreografi disiplini şart). (2) **B6 boss/dual-class** — canlı oynanması zaman/prova riski yüksek.
 
@@ -90,7 +90,7 @@
 ## (D) EKSİKLER / RİSKLİ VAATLER İÇİN KONUŞMA STRATEJİSİ
 
 **1. Dual-class (Vaat 8) canlı tetiklenemezse — DÜRÜST + KANITLI anlat:**
-> "Dual-class sistemi tam kodlu ve bağlı: ilk boss'u yenince oyun otomatik ikincil sınıf seçimi açıyor, sonra birleşik kit'i post-boss odasında oynuyorsun. Kod yolunu göstereyim." → `RoomRunDirector.cs:1199-1237` (dual-class gate) + `PlayerClassManager.AddSecondaryController` + `PlayerCrossClassBinding` (Echo) ekranda aç. Tasarım gerekçesi için NLM notebook'tan cross-class kararını çekebilirsin. **Asla "yok" deme — "bütünleşmiş, canlı boss-run zaman aldığı için kod üzerinden gösteriyorum" de.**
+> "Dual-class sistemi tam kodlu, bağlı ve **otomatik testle kanıtlı**: ilk boss'u yenince oyun ikincil sınıf seçimi açıyor; testte Warblade+Elementalist seçiminde skill controller 1→2'ye çıktı, mana sistemi eklendi, ikincil kitin 4 slotu canlı geldi." → İstersen `RoomRunDirector.cs:1199-1237` + kanıt raporu `_process/2026-06/_dualclass_proof_2026-06-13.md` ekranda aç. **Asla "yok" deme — "kanıtlı çalışıyor, canlı boss-run zaman aldığı için test kanıtı üzerinden gösteriyorum" de.**
 
 **2. 5/10 sınıf (Vaat 2) — fazlasını değil, derinliği vurgula:**
 > "Şu an 5 sınıf tam oynanabilir durumda (controller + kaynak + skill kit). Diğer 5'inin stat profilleri ve seçim ekranı hazır; in-game tool ve AI dispatch zincirim sayesinde controller'larını hızla tamamlıyorum." → 10 `*_StatProfile.asset` + CharacterSelect roster bunu görsel destekler. **Vaadi karşıladın (birden fazla = ✅); 10'u söz vermediysen 5 zaten yeterli.**

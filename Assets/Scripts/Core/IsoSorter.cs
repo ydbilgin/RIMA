@@ -17,6 +17,10 @@ namespace RIMA
         [Tooltip("Y offset for pivot correction (sprite'ın ayak noktası)")]
         [SerializeField] private float pivotOffsetY = 0f;
 
+        [Tooltip("Sıralama Y'sini bu transform'dan oku (null ise kendi transform'u). " +
+                 "CharacterJuice bob'u Body'yi oynattığında order titremesin diye root'a bağla.")]
+        [SerializeField] private Transform sortReference;
+
         private SpriteRenderer sr;
         private static readonly int SORT_SCALE = 100;
 
@@ -29,7 +33,8 @@ namespace RIMA
         {
             if (sr == null) return;
             // Aşağıdaki obje daha önde: pozitif Y → daha arkada → düşük order
-            float y = transform.position.y + pivotOffsetY;
+            Transform yRef = sortReference != null ? sortReference : transform;
+            float y = yRef.position.y + pivotOffsetY;
             sr.sortingOrder = baseOrder - Mathf.RoundToInt(y * SORT_SCALE);
         }
     }

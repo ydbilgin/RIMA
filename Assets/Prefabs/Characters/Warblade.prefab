@@ -128,6 +128,10 @@ PrefabInstance:
       propertyPath: m_LinearDamping
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 7741234598012345678, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: sortReference
+      value:
+      objectReference: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -150,6 +154,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7444985518921700907}
+    - targetCorrespondingSourceObject: {fileID: 3590611930566067720, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6797647236950189325}
   m_SourcePrefab: {fileID: 100100000, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
 --- !u!1 &6045311534637519706 stripped
 GameObject:
@@ -168,7 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3435327e25ff414b9305d0a94005419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.PlayerMovementController
-  moveSpeed: 4
 --- !u!114 &6149835107572577534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +245,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RIMA.Runtime::RIMA.KnockbackReceiver
   knockbackResistance: 0
+  isKnockdownable: 1
+  defaultKnockdownProfile: {fileID: 0}
 --- !u!114 &2501367934047808920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +263,7 @@ MonoBehaviour:
   dashSpeed: 18
   dashDuration: 0.15
   dashCooldown: 0.8
+  dashCliffGrace: 0.1
   commitmentMoveMult: 0.25
   combatFacingLockDuration: 0.18
 --- !u!114 &7444985518921700907
@@ -273,3 +282,25 @@ MonoBehaviour:
   slashArcVFX: {fileID: 0}
   outgoingDamageMultiplier: 1
   baseDamage: 0
+  attackSpeedMult: 1
+--- !u!114 &6797647236950189325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045311534637519706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef13d0040ae0e7e41844b7101f9aee3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.CharacterJuice
+  enableJuice: 1
+  bobAmplitudePx: 1
+  pixelsPerUnit: 64
+  idlePeriod: 2.2
+  walkPeriod: 0.35
+  tiltDegrees: 3.5
+  blendSpeed: 10
+  punchPixels: 2
+  punchDuration: 0.1
