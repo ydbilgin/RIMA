@@ -1,28 +1,37 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-13 GECE kapanış — DEMO GÜNÜ; yeni session sırası aşağıda)
+## ⏯️ RESUME (2026-06-13 SABAH — DEMO GÜNÜ; yeni session devralıyor)
 
-**⚠️ MODEL/ROUTING:** Orchestrator=Fable 5. cx=writer DA reviewer DA (farklı profil şartı); fallback=Opus self-review sub-agent; council=kritik/vision. Context Economy **E1-E8 AKTİF** (PROJECT_RULES Token Saving bölümü).
+**⚠️ ROUTING:** Orchestrator=Fable/Opus 4.8 · **execute=Claude Opus sub-agent** (Agent tool model:opus, ax Opus DEĞİL) · **review=cx** (writer≠reviewer, quota-aware profil) · **council=cx+ax Gemini 3.1 Pro+ax Gemini 3.5 Flash**. Unity'ye dokunan her dispatch'e UNITY ERROR CHECK satırı ZORUNLU. E1-E8 aktif. (Detay memory: `opus-executes-cx-reviews`, `unitymcp-error-check-in-dispatch`.)
 
-**🎯 YENİ SESSION SIRASI (kullanıcı kararı):**
-1. **/lint** — sıranın BAŞI (bugünkü büyük triyaj sonrası KB sağlık taraması)
-2. **cx İLK 3 sonucu:** `CODEX_DONE_<profil>.md` oku (task `STAGING/_process/2026-06/_cx_demo_ilk3.md`): ① ölü Quick Reset→gerçek demo-reset (Health.Revive+timeScale guard) ② PlayerProjectile telemetry dalı (Fireball CSV'ye düşsün) ③ stat toast+DPS freeze+dust-puff. **Review = cx FARKLI PROFİL**, fallback Opus self-review. PASS → commit.
-3. **PUSH** — lokalde ~9 commit bekliyor (`bdac35ef..7f8c68c6`+kapanış commit'i; ChatGPT-web advisor okusun)
-4. **NLM temizliği (Bölüm 1D):** `/nlm-sync --cleanup-dry` → K4: operasyonel kaynaklar notebook'tan çıkar, bayat tasarım re-sync
-5. Demo-günü RESUME'a güncelle
+**🎯 DEMO = BİTİRME BÜTÜNLEME TESLİMİ.** 3 ana doküman:
+- **`STAGING/DEMO_SUNUM_PLANI_2026-06-13.md`** = sunum ezberi (run-of-show + risk/fallback + F1 panel). Koreografi: stat beat'i LMB ile · Ravager'ı DPS demosunda kullanma · prop demosu reset'ten önce · sunum öncesi konsolu temizle · müzik YOK.
+- **`STAGING/BITIRME_DEMO_RAPORU_2026-06-13.md`** = hocaya sunulacak proje raporu (öğrenci dili, agentic AI dengeli). Yeni commit'lerle güncellenecek.
+- **`STAGING/GECE_RAPORU_2026-06-13.md`** = master gece raporu (tüm iş tablosu).
 
-**🎬 DEMO PROVA EZBERİ:** Stat beat'i **LMB temel saldırıyla** (Q/E/R/F `bypassStatScaling` → slider'a SAĞIR!) · evrensel kol=`debugGlobalDamageMult` · ölüm→Quick Reset butonu (İLK 3 sonrası) · recipe `STAGING/DEMO_TOOLS_SCOPE_DECISION_2026-06-12.md` · DirectorMode UI screenshot'ta görünmez (overlay) — council otomasyonu data-proof'la.
+**✅ BU GECE PUSHLANAN (5 commit, hepsi cx-review'lı):**
+- `435e9eeb` Quick Reset · DealDamageRaw (balans birebir) · TelemetryClock pause donması · riftcrack→Resources
+- `523ca242` SetPlayerActive (Director/ölümde saldırı kapalı) · merkezi PublishKillIfDead (skill-kill juice)
+- `af4b1879` 3-lens tam oyun audit (combat 8 · state 15 · binding 6; tüm 🔴 fix) · /lint · DEMO_SUNUM_PLANI
+- `9ca74693` CharacterJuice (idle bob/tilt/lunge) · IsoSorter sortReference · dual-class Play-Mode kanıtı
+- `91780dc4` Director ekleri: **Dual-Class Draft butonu** + **Stat preset** (Tank/Glass/Default) [cx FAIL→fix→PASS]
 
-**✅ BU SESSION BİTENLER (kanıt: `STAGING/playtest_caps_2026-06-13/`):**
-- 3-tanık E2E (Gemini 3.1 Pro + ax Opus 4.6 + orchestrator) physPower 50→250 ⇒ dmg 50→250 birebir; rima-qc PASS · gerçek-vuruş kanıtı (HP 10→50, telemetry+2, DPS 600) · Fable playtest (`fable/_NOTES.md`)
-- FIX'ler (hepsi review'lı commit'te): rift_crystal Resources+1.3× · VFX prefab Resources (GUID korundu) · Void tint · HP bar gradyan · IsDead guard · backdrop FAR CANLI (L1_BG_Far + 2 RiftPulse, vision PASS)
-- 🔴 Fable-5 reviewer kritik bulguları → `STAGING/DEMO_POLISH_BACKLOG_2026-06-13.md` (16 fikir; İLK 3 cx'te, kalan 13 DEFER)
-- Temizlik `7f8c68c6`: .claude 27 artifact + memory 15 arşiv/3 dedup + MEMORY.md 67 satır + STAGING 10 zip arşivi [council KOŞULLU ONAY→uygulandı]
-- Skill reorg (rapor `_process/2026-06/_skill_reorg_report.md`): nlm/council(--model'e modernize)/promptforge/codex-task/rima-conventions → RIMA lokal; global nlm-sync=env-zorunlu, commit=git-kök, image yolları=CWD, p/ask_gemini=--model; generic varyantlar `.claude/_archive/2026-06-13/commands_generic_variants/` (stüdyo kiti adayı)
-- LaurethStudio paketi `F:/LaurethStudio/_INBOX_RIMA_2026-06-13/` (4 dosya) + prompt'lar kullanıcıya verildi; AYRI NLM notebook kararı
-- Context Economy E1-E8 → PROJECT_RULES + memory ⭐
+**📊 DURUM:** 9/9 vaat çalışıyor. Vaat #8 dual-class UNCERTAIN→KANITLANDI (Play-Mode). EditMode baseline 541/11 fail (gece işlerinden YENİ fail yok).
 
-**⏳ DEFER (demo SONRASI):** TMP static-atlas (kronik gürültü kök fix — demo gecesi font'a dokunma) · backlog kalan 13 · `EnemyTier.GetTierColor` dead-code · LaurethStudio (kendi session'ı).
+**🔄 YENİ SESSION İLK İŞ:** E2E playtest arka planda koşuyordu (Opus agent) → raporu OKU: `STAGING/_process/2026-06/_e2e_playtest_2026-06-13.md`. (Yoksa/yarımsa yeniden dispatch et — 10 adımlı demo akışı doğrulaması, task `_process/2026-06/_opus_e2e_playtest.md`.) Bulduğu 🔴 varsa demo öncesi fix.
+
+**⏭️ KUYRUK (demo-koruma önce):**
+1. E2E raporu işle → kritik kırık varsa Opus fix + cx review
+2. Smoke test süiti: gece data-proof'larını KALICI teste çevir (DealDamageRaw/TelemetryClock/PublishKillIfDead/SetPlayerActive/preset → EditMode `RIMA_SmokeTests`) + cx review
+3. (Vakit kalırsa, KOZMETİK) Silah-ele-oturtma: `attachMode=Level1Static`→Level2, `spriteHandData` BOŞ→8 yön doldur, silah pivot DOĞRU. Silah TEK sprite (8 yön=rotation+flip+sort). ROLLBACK=enum geri. Level1 demoda "kabul edilebilir".
+4. NLM temizliği `/nlm-sync --cleanup-dry`→K4 (limit penceresi sonrası)
+5. Sabah paketi: GECE_RAPORU + hoca raporu final + 5-dk görsel kontrol listesi + push
+
+**📋 SABAH KULLANICI (5 dk):** bob hissi (Inspector `enableJuice` kapatılabilir) · yeni 2 buton (Dual-Class Draft + presets) · konsol temizle · sunum planını ezberle.
+
+**🔁 KRONİK:** Blueprint asset×6 + TMP fallback Play Mode'da kirleniyor → her commit ÖNCESİ `git checkout --` ile revert (kök fix=TMP static-atlas, DEMO SONRASI).
+
+**⏳ DEFER (demo sonrası):** Ravager LMB merkezi yol · debugGlobalDamageMult çıplak-yol kapsamı · Weakened/Scorch yetenek çarpanı · DamageZone çok-hedef tick · mob'lara CharacterJuice · PixelLab idle (anchor SONRASI) · backlog 13 · superpowers skill graft analizi · memory index-dışı ~20 dosya · LaurethStudio.
 
 ---
 *Önceki bloklar git history'de.*
