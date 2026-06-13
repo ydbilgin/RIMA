@@ -89,16 +89,7 @@ namespace RIMA
                 }
 
                 if (hp.IsDead)
-                {
-                    CombatEventBus.PublishKill(new KillEvent
-                    {
-                        worldPos = col.transform.position,
-                        killer = owner.gameObject,
-                        victim = col.gameObject,
-                        mobFamily = col.tag
-                    });
                     AudioManager.Play(Sfx.EnemyDeath);
-                }
                 rage?.OnHitEnemy();
 
                 if (!hp.IsDead && col.TryGetComponent(out KnockbackReceiver kb))

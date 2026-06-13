@@ -235,6 +235,7 @@ namespace RIMA
             {
                 ApplyStateText();
                 Time.timeScale = ResolveTimeScaleForState(state);
+                SetPlayerActiveForState(state);
                 return;
             }
 
@@ -242,6 +243,7 @@ namespace RIMA
 
             State = state;
             Time.timeScale = ResolveTimeScaleForState(state);
+            SetPlayerActiveForState(state);
             if (state == DirectorModeState.Director)
             {
                 CacheCameraTarget();
@@ -260,6 +262,22 @@ namespace RIMA
 
             DeathScreenManager deathScreen = FindDeathScreenManager();
             return deathScreen != null && deathScreen.IsDeathActiveForDemo ? 0f : 1f;
+        }
+
+        private static void SetPlayerActiveForState(DirectorModeState state)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (state == DirectorModeState.Director)
+            {
+                PlayerController.SetPlayerActive(player, false);
+                return;
+            }
+
+            DeathScreenManager deathScreen = FindDeathScreenManager();
+            if (deathScreen == null || !deathScreen.IsDeathActiveForDemo)
+            {
+                PlayerController.SetPlayerActive(player, true);
+            }
         }
 
         private static DeathScreenManager FindDeathScreenManager()
@@ -1018,7 +1036,9 @@ namespace RIMA
 
             ClearDirectorSpawns();
             ClearDirectorProps();
+            SetState(DirectorModeState.Test);
             Time.timeScale = 1f;
+            PlayerController.SetPlayerActive(playerHealth != null ? playerHealth.gameObject : GameObject.FindGameObjectWithTag("Player"), true);
             ApplyStateText();
 
             if (modeStripText != null)

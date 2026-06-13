@@ -19,6 +19,17 @@ namespace RIMA
 
         public float MoveSpeed => moveSpeed;
 
+        public static void SetPlayerActive(GameObject player, bool active)
+        {
+            if (player == null) return;
+
+            if (player.TryGetComponent(out PlayerController controller))
+                controller.enabled = active;
+
+            if (player.TryGetComponent(out PlayerAttack attack))
+                attack.enabled = active;
+        }
+
         public void SetMoveSpeed(float value)
         {
             moveSpeed = Mathf.Max(0f, value);

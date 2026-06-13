@@ -134,11 +134,7 @@ namespace RIMA
             }
 
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                PlayerController ctrl = player.GetComponent<PlayerController>();
-                if (ctrl != null) ctrl.enabled = false;
-            }
+            PlayerController.SetPlayerActive(player, false);
 
             deathRoutine = null;
         }
@@ -163,11 +159,7 @@ namespace RIMA
                 deathPanel.SetActive(false);
 
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                PlayerController ctrl = player.GetComponent<PlayerController>();
-                if (ctrl != null) ctrl.enabled = true;
-            }
+            PlayerController.SetPlayerActive(player, true);
 
             Time.timeScale = 1f;
         }

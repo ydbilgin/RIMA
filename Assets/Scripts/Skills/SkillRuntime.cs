@@ -156,6 +156,7 @@ namespace RIMA
             };
             OnDamageApplied?.Invoke(new DamageTelemetryEvent(packet, result, finalDamage, health, Time.unscaledTime));
             PublishSkillHit(health, finalDamage, attacker, hitDirection, element, isCrit: false);
+            PublishKillIfDead(health, attacker);
             if (popup)
                 DamagePopup.Show(health.transform.position, finalDamage);
 
@@ -195,10 +196,25 @@ namespace RIMA
                 ? packet.elementTag.ToString().ToLowerInvariant()
                 : packet.damageType.ToString().ToLowerInvariant());
             PublishSkillHit(health, finalDamage, packet.attacker, hitDirection, hitElement, isCrit ?? packet.isCrit);
+            PublishKillIfDead(health, packet.attacker);
             if (popup)
                 DamagePopup.Show(health.transform.position, finalDamage);
 
             return finalDamage;
+        }
+
+        private static void PublishKillIfDead(Health health, GameObject killer)
+        {
+            if (health == null || !health.IsDead) return;
+
+            killer ??= GameObject.FindGameObjectWithTag("Player");
+            CombatEventBus.PublishKill(new KillEvent
+            {
+                worldPos = health.transform.position,
+                killer = killer,
+                victim = health.gameObject,
+                mobFamily = health.tag
+            });
         }
 
         public static ClassStatRuntime ResolveCombatStats(GameObject actor)
