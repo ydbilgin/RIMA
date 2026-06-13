@@ -38,12 +38,12 @@
 
 | # | İş | Durum |
 |---|---|---|
-| Dual-class buton fix | 3 review bulgusu (overlay/death-guard/visibility) fix'lendi, Play-Mode kanıtlı | 🔄 doğrulama review cx'te |
-| Stat preset butonları | cx PASS | ⏳ buton fix ile birlikte commit |
-| Silah-ele-oturtma (Level2 + 8 yön) | teşhis hazır | ⏳ |
+| Dual-class buton + stat preset | `91780dc4` commit+push | ✅ cx FAIL→fix→PASS |
+| **E2E playtest (10 adım)** | **10/10 PASS, DEMO-HAZIR, 0 error** — tüm gece fix'leri data-proof'lu | ✅ rapor `_e2e_playtest_2026-06-13.md` |
+| Hoca soru-cevap hazırlığı | `STAGING/DEMO_HOCA_SORU_CEVAP_2026-06-13.md` | ✅ (sunum=sohbet, ezber değil) |
 | Smoke test süiti (kalıcı testler) | — | ⏳ |
-| E2E playtest | — | ⏳ |
-| NLM temizliği | 07:20 limit reset sonrası | ⏳ |
+| Silah-ele-oturtma (kozmetik, opsiyonel) | teşhis hazır | ⏳ vakit kalırsa |
+| NLM temizliği | limit reset sonrası | ⏳ |
 
 ## 6. DÜRÜST NOTLAR (gizlenmeyen)
 
