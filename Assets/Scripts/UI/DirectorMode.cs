@@ -76,6 +76,8 @@ namespace RIMA
         private readonly List<TelemetrySourceBinding> telemetrySourceBindings = new List<TelemetrySourceBinding>();
 
         private CanvasGroup rootGroup;
+        private GameObject overlayCanvasGo;
+        private bool secondaryClassListenerHooked;
         private TextMeshProUGUI subtitleText;
         private TextMeshProUGUI startButtonText;
         private TextMeshProUGUI modeStripText;
@@ -92,6 +94,7 @@ namespace RIMA
         private RectTransform spawnPaletteRoot;
         private RectTransform propPaletteRoot;
         private RectTransform classSkillCardsRoot;
+        private Button dualClassDraftButton;
         private SpawnEnemyBinding selectedSpawnEnemy;
         private PropBinding selectedProp;
         private GameObject spawnGhost;
@@ -199,6 +202,7 @@ namespace RIMA
             HideSpawnGhost();
             HidePropGhost();
             SkillRuntime.OnDamageApplied -= OnDamageAppliedTelemetry;
+            UnhookSecondaryClassListener();
             ClearTelemetryDeathListeners();
             Loc.OnLanguageChanged -= RefreshLocalizedText;
         }
@@ -217,11 +221,53 @@ namespace RIMA
 
             SkillRuntime.OnDamageApplied -= OnDamageAppliedTelemetry;
             SkillRuntime.OnDamageApplied += OnDamageAppliedTelemetry;
+
+            TryHookSecondaryClassListener();
         }
 
         private void OnDisable()
         {
             SkillRuntime.OnDamageApplied -= OnDamageAppliedTelemetry;
+            UnhookSecondaryClassListener();
+        }
+
+        // BULGU 3: secondary class seçilince dual-class butonunu gizle. LEAK'siz: tek abonelik + simetrik cleanup.
+        private void TryHookSecondaryClassListener()
+        {
+            if (secondaryClassListenerHooked)
+            {
+                return;
+            }
+
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                return;
+            }
+
+            manager.OnSecondaryClassSelected += OnSecondaryClassSelected;
+            secondaryClassListenerHooked = true;
+        }
+
+        private void UnhookSecondaryClassListener()
+        {
+            if (!secondaryClassListenerHooked)
+            {
+                return;
+            }
+
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager != null)
+            {
+                manager.OnSecondaryClassSelected -= OnSecondaryClassSelected;
+            }
+
+            secondaryClassListenerHooked = false;
+        }
+
+        private void OnSecondaryClassSelected(ClassType type)
+        {
+            RefreshDualClassDraftButton();
         }
 
         public void ToggleState()
@@ -246,6 +292,8 @@ namespace RIMA
             SetPlayerActiveForState(state);
             if (state == DirectorModeState.Director)
             {
+                // Dual-class draft sırasında gizlenmiş olabilir; Director'a dönünce overlay'i geri getir.
+                SetOverlayVisible(true);
                 CacheCameraTarget();
             }
 
@@ -617,6 +665,7 @@ namespace RIMA
         {
             GameObject canvasGo = new GameObject("Canvas_DirectorOverlay", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canvasGo.transform.SetParent(transform, false);
+            overlayCanvasGo = canvasGo;
 
             Canvas canvas = canvasGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -667,6 +716,7 @@ namespace RIMA
             directorPlacedProps.Clear();
             localizedTexts.Clear();
             rootGroup = null;
+            overlayCanvasGo = null;
             spawnStatusText = null;
             classSkillStatusText = null;
             statsStatusText = null;
@@ -679,6 +729,7 @@ namespace RIMA
             selectedSpawnEnemy = null;
             selectedProp = null;
             selectedDirectorSkill = null;
+            dualClassDraftButton = null;
             HideSpawnGhost();
             HidePropGhost();
 
@@ -1529,6 +1580,12 @@ namespace RIMA
             Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
             localizedTexts.Add(new LocalizedTextBinding(hint, "director.class_skill.hint"));
 
+            dualClassDraftButton = CreateButton("Button_DualClassDraft", header, ribbonBase, new Color(0.55f, 0.22f, 0.62f, 1f));
+            Anchor(dualClassDraftButton.GetComponent<RectTransform>(), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-30f, 0f), new Vector2(260f, 54f));
+            dualClassDraftButton.onClick.AddListener(TriggerDualClassDraft);
+            TextMeshProUGUI dualLabel = CreateText("TMP", dualClassDraftButton.transform as RectTransform, "DUAL-CLASS DRAFT", 20f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(dualLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
             RectTransform classGrid = CreatePanel("ClassGrid", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
             Anchor(classGrid, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(520f, 288f));
             GridLayoutGroup classLayout = classGrid.gameObject.AddComponent<GridLayoutGroup>();
@@ -1624,6 +1681,29 @@ namespace RIMA
             Anchor(export.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(340f, 0f), new Vector2(200f, 48f));
             export.onClick.AddListener(ExportStatsJson);
             AddButtonText(export, "director.stats.export");
+
+            // ÖZELLİK 2 — Stat preset butonları (TANK / GLASS CANNON / VARSAYILAN).
+            // Mevcut slider setter yolunu (OnStatSliderChanged) çağırır; toast'lar doğal tetiklenir.
+            RectTransform presets = CreateFill("StatPresets", panel);
+            Anchor(presets, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 134f), new Vector2(640f, 54f));
+
+            Button tank = CreateButton("Button_PresetTank", presets, menuButton, new Color(0.30f, 0.42f, 0.30f, 1f));
+            Anchor(tank.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(180f, 46f));
+            tank.onClick.AddListener(ApplyTankPreset);
+            TextMeshProUGUI tankLabel = CreateText("TMP", tank.transform as RectTransform, "TANK", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(tankLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            Button glass = CreateButton("Button_PresetGlassCannon", presets, menuButton, new Color(0.52f, 0.24f, 0.24f, 1f));
+            Anchor(glass.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(196f, 0f), new Vector2(200f, 46f));
+            glass.onClick.AddListener(ApplyGlassCannonPreset);
+            TextMeshProUGUI glassLabel = CreateText("TMP", glass.transform as RectTransform, "GLASS CANNON", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(glassLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            Button def = CreateButton("Button_PresetDefault", presets, menuButton, Color.white);
+            Anchor(def.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(412f, 0f), new Vector2(180f, 46f));
+            def.onClick.AddListener(ApplyDefaultPreset);
+            TextMeshProUGUI defLabel = CreateText("TMP", def.transform as RectTransform, "VARSAYILAN", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(defLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             statsStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
             statsStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
@@ -1894,6 +1974,114 @@ namespace RIMA
         {
             RefreshClassButtons();
             RebuildSkillCards();
+            RefreshDualClassDraftButton();
+        }
+
+        // ÖZELLİK 1 — "DUAL-CLASS DRAFT" butonu yalnız oyuncunun ikincil sınıfı YOKKEN görünür/aktif olur.
+        private void RefreshDualClassDraftButton()
+        {
+            if (dualClassDraftButton == null)
+            {
+                return;
+            }
+
+            bool available = IsDualClassDraftAvailable();
+            dualClassDraftButton.gameObject.SetActive(available);
+            dualClassDraftButton.interactable = available;
+        }
+
+        private static bool IsDualClassDraftAvailable()
+        {
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            return manager != null && manager.SecondaryClass == ClassType.None;
+        }
+
+        // RoomRunDirector'daki dual-class gate'in çağırdığı yolun AYNISI (PlayerClassManager.TriggerClassSelection).
+        // ClassSelectionUI bu event'e abone — seçim overlay'i canlı açılır.
+        private void TriggerDualClassDraft()
+        {
+            // BULGU 2: ölüm/death-screen guard (SelectDirectorClass ile aynı semantik).
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            Health playerHealth = player != null ? player.GetComponentInChildren<Health>() : null;
+            DeathScreenManager deathScreen = FindDeathScreenManager();
+            if ((playerHealth != null && playerHealth.IsDead)
+                || (deathScreen != null && deathScreen.IsDeathActiveForDemo))
+            {
+                SetClassSkillStatus("director.class_skill.status.player_dead");
+                return;
+            }
+
+            PlayerClassManager manager = PlayerClassManager.Instance;
+            if (manager == null)
+            {
+                SetClassSkillStatus("director.class_skill.status.no_manager");
+                return;
+            }
+
+            // OnEnable'da manager hazır olmayabilir; tetik anında garanti hook (idempotent).
+            TryHookSecondaryClassListener();
+
+            if (manager.SecondaryClass != ClassType.None)
+            {
+                RefreshDualClassDraftButton();
+                return;
+            }
+
+            // BULGU 1: Director overlay (sortingOrder 950) ClassSelectionUI'ı (190) örter.
+            // SetState(Test) yetmez — overlay canvas'ı fiilen gizle ki seçim UI'ı topmost olsun.
+            // Seçim bitince Director KAPALI kalır; kullanıcı backquote ile geri açar.
+            if (State == DirectorModeState.Director)
+            {
+                SetState(DirectorModeState.Test);
+            }
+            SetOverlayVisible(false);
+
+            manager.TriggerClassSelection();
+            RefreshDualClassDraftButton();
+        }
+
+        // Director overlay canvas'ını fiilen göster/gizle (görünürlük + raycast birlikte kesilir).
+        private void SetOverlayVisible(bool visible)
+        {
+            if (overlayCanvasGo != null)
+            {
+                overlayCanvasGo.SetActive(visible);
+            }
+        }
+
+        public void TriggerDualClassDraftForValidation()
+        {
+            EnsureOverlayReadyForValidation();
+            TriggerDualClassDraft();
+        }
+
+        public bool IsDualClassDraftAvailableForValidation()
+        {
+            EnsureOverlayReadyForValidation();
+            return IsDualClassDraftAvailable();
+        }
+
+        // "tank" | "glasscannon" | "default" — preset uygula (slider setter yolundan geçer).
+        public bool ApplyStatPresetForValidation(string presetId)
+        {
+            EnsureOverlayReadyForValidation();
+            switch ((presetId ?? string.Empty).Trim().ToLowerInvariant())
+            {
+                case "tank":
+                    ApplyTankPreset();
+                    return true;
+                case "glasscannon":
+                case "glass_cannon":
+                case "glass":
+                    ApplyGlassCannonPreset();
+                    return true;
+                case "default":
+                case "varsayilan":
+                    ApplyDefaultPreset();
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         private void RefreshClassButtons()
@@ -2201,6 +2389,54 @@ namespace RIMA
             GUIUtility.systemCopyBuffer = json;
             Debug.Log("[DirectorMode] Stats export: " + json);
             SetStatsStatus("director.stats.status.exported", manager.PrimaryClass);
+        }
+
+        // ── Stat preset'leri ─────────────────────────────────────────────────
+        // Tüm değerler ilgili slider min/max aralığından seçildi. Uygulama mevcut
+        // SetStatForValidation → OnStatSliderChanged yolundan geçer (yeni stat yolu YOK);
+        // her stat için stat toast'ı doğal olarak tetiklenir.
+        private void ApplyTankPreset()
+        {
+            // Yüksek HP, düşük hasar: armor stat'ı yok → savunma = yüksek maxHP + düşük hasar çarpanı.
+            ApplyStatPreset(
+                ("maxHP", 300f),
+                ("physPower", 40f),
+                ("abilityPower", 40f),
+                ("attackSpeedMult", 0.9f),
+                ("moveSpeed", 5f),
+                ("debugGlobalDamageMult", 0.5f));
+        }
+
+        private void ApplyGlassCannonPreset()
+        {
+            // Uç hasar, düşük savunma (düşük maxHP).
+            ApplyStatPreset(
+                ("maxHP", 30f),
+                ("physPower", 220f),
+                ("abilityPower", 220f),
+                ("attackSpeedMult", 2.2f),
+                ("moveSpeed", 8f),
+                ("debugGlobalDamageMult", 4.5f));
+        }
+
+        private void ApplyDefaultPreset()
+        {
+            // VARSAYILAN = profil default'ları (Quick Reset/Reset ile aynı kaynak).
+            ResetStatsFromProfile();
+        }
+
+        private void ApplyStatPreset(params (string key, float value)[] entries)
+        {
+            if (PlayerClassManager.Instance == null)
+            {
+                SetStatsStatus("director.stats.status.no_manager");
+                return;
+            }
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                SetStatForValidation(entries[i].key, entries[i].value);
+            }
         }
 
         private void SetStatsStatus(string locKey, params object[] args)
