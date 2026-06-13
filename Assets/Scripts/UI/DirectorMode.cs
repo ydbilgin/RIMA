@@ -175,9 +175,18 @@ namespace RIMA
             UpdateTelemetryDisplay(false);
 
             Keyboard keyboard = Keyboard.current;
-            if (keyboard != null && keyboard.backquoteKey.wasPressedThisFrame)
+            // Backquote is inert while Build Mode owns the state, else its raw ToggleState would
+            // desync DirectorMode from the camera rig that Build Mode parked.
+            if (keyboard != null && keyboard.backquoteKey.wasPressedThisFrame && !BuildModeController.IsActive)
             {
                 ToggleState();
+            }
+
+            // Quote key = polished Build-Mode alias (Phase 1). The lazy getter never returns null,
+            // so no guard is needed; it drives the camera-zoom wrapper + forces the Build tab.
+            if (keyboard != null && keyboard.quoteKey.wasPressedThisFrame)
+            {
+                BuildModeController.Instance.Toggle();
             }
 
             if (State == DirectorModeState.Director)

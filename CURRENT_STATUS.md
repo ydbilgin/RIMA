@@ -1,6 +1,8 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-13 SABAH — DEMO GÜNÜ; yeni session devralıyor)
+## ⏯️ RESUME (2026-06-13 — sunum ~1 HAFTA sonra (~20 Haz), UNITY IN-EDITOR Play Mode; yeni session devralıyor)
+
+> ⚠️ TIMELINE DÜZELTME: Demo "bugün" değil — sunum ~1 hafta sonra, **Unity Editor'de Play Mode** ile. `#if DEMO_BUILD…` gating in-editor'da sorun DEĞİL (UNITY_EDITOR tanımlı). Zaman var → Build Mode'u sırayla inşa ediyoruz.
 
 **⚠️ ROUTING:** Orchestrator=Fable/Opus 4.8 · **execute=Claude Opus sub-agent** (Agent tool model:opus, ax Opus DEĞİL) · **review=cx** (writer≠reviewer, quota-aware profil) · **council=cx+ax Gemini 3.1 Pro+ax Gemini 3.5 Flash**. Unity'ye dokunan her dispatch'e UNITY ERROR CHECK satırı ZORUNLU. E1-E8 aktif. (Detay memory: `opus-executes-cx-reviews`, `unitymcp-error-check-in-dispatch`.)
 
@@ -19,6 +21,8 @@
 **📊 DURUM:** 9/9 vaat çalışıyor. Vaat #8 dual-class UNCERTAIN→KANITLANDI (Play-Mode). EditMode baseline 541/11 fail (gece işlerinden YENİ fail yok).
 
 **🔄 YENİ SESSION İLK İŞ:** E2E playtest arka planda koşuyordu (Opus agent) → raporu OKU: `STAGING/_process/2026-06/_e2e_playtest_2026-06-13.md`. (Yoksa/yarımsa yeniden dispatch et — 10 adımlı demo akışı doğrulaması, task `_process/2026-06/_opus_e2e_playtest.md`.) Bulduğu 🔴 varsa demo öncesi fix.
+
+**🏗️ BUILD MODE (yeni ANA İŞ — oyun-içi runtime map editörü, sunum öncesi):** Spec=`STAGING/INGAME_BUILD_MODE_DESIGN_2026-06-13.md` (ultracode R&D çıktısı). Hibrit tasarım, **~%70 zaten `DirectorMode.cs`'te var**. Konumlandırma: sanghendrix'in "canlı oyun üstünde düzenleme"si + RIMA ekstraları (prosedürel scatter, composition role, footprint+walkability/solvability doğrulama). **🔴 TILE KANUNU:** grid=Isometric (fake-iso/3-4 staggered, floor451_0=64×64 kare, kamera düz), yerleştirme HER ZAMAN Grid API (`WorldToCell`/`GetCellCenterWorld`/`SetTile`), ASLA dikdörtgen matematik (spec §3.5). **Sıra:** ✅P1 kamera-zoom giriş (`"` tuşu) → **P2 ghost+rotate+palette+undo (SIRADA)** → P3 tile/walkability brush → P4 light+auto-scatter+runtime save/load → P5 selection/move. Her faz: builder-opus kodlar → auditor-opus/cx review → Unity'de doğrula. **P1 BİTTİ+runtime-doğrulandı** (BuildModeController.cs + DirectorMode quote-branch; auditor CONDITIONAL→fix'ler uygulandı: lazy-getter DisableDomainReload-safe [runtime BLOCKER], backquote-guard, Destroy(gameObject)). DEFER MINOR: scene-reload stale buildCamera. Demo tool durumu: 7 tool E2E-kanıtlı çalışıyor (in-editor); **Light placement YOK** (P4'te eklenecek).
 
 **⏭️ KUYRUK (demo-koruma önce):**
 1. E2E raporu işle → kritik kırık varsa Opus fix + cx review
