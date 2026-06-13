@@ -661,12 +661,20 @@ namespace RIMA.MapDesigner.Room.Runtime
                 return;
             }
 
-            GameObject globalObject = new GameObject("Global Light 2D");
-            globalObject.transform.SetParent(lightingContainer, false);
-            Light2D globalLight = globalObject.AddComponent<Light2D>();
-            globalLight.lightType = Light2D.LightType.Global;
-            globalLight.color = profile.globalColor;
-            globalLight.intensity = Mathf.Max(0f, profile.globalIntensity);
+            // A non-positive global intensity means this room adds no ambient of its own (the
+            // scene's baseline global light is the ambient source). Spawning a zero-intensity
+            // global here adds a second global Light2D on the same blend style, which contributes
+            // nothing visually and only triggers URP's "More than one global light" warning.
+            // Only create one when it would actually light the room.
+            if (profile.globalIntensity > 0f)
+            {
+                GameObject globalObject = new GameObject("Global Light 2D");
+                globalObject.transform.SetParent(lightingContainer, false);
+                Light2D globalLight = globalObject.AddComponent<Light2D>();
+                globalLight.lightType = Light2D.LightType.Global;
+                globalLight.color = profile.globalColor;
+                globalLight.intensity = profile.globalIntensity;
+            }
 
             if (profile.pointLights == null)
             {
