@@ -1,6 +1,7 @@
 #if DEMO_BUILD || DEVELOPMENT_BUILD || UNITY_EDITOR
 using System.Collections;
 using RIMA.CameraSystem;
+using RIMA.UI.BuildMode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -100,6 +101,12 @@ namespace RIMA
 
             // Safety: never leave the rig in the disabled "build" state if this is torn down mid-mode.
             RestoreCameraRig();
+
+            // Safety: never leave the Phase 2 placement layer active if torn down mid-mode.
+            if (BuildPlacementController.Instance != null)
+            {
+                BuildPlacementController.Instance.SetBuildModeActive(false);
+            }
         }
 
         /// <summary>Quote-key entry point. Wired from DirectorMode.Update() as a sibling to backquote.</summary>
@@ -180,6 +187,10 @@ namespace RIMA
             director.SetState(DirectorModeState.Director);
             director.ShowTab(DirectorTab.Build);
 
+            // Phase 2 placement layer: enable the PropRegistry-driven palette + iso-grid ghost +
+            // place/erase/rotate/flip/eyedropper/undo. Active ONLY while Build Mode is active.
+            BuildPlacementController.Instance.SetBuildModeActive(true);
+
             StartZoom(buildOverviewOrthoSize, restoreRigOnComplete: false);
         }
 
@@ -191,6 +202,13 @@ namespace RIMA
             }
 
             IsBuildModeActive = false;
+
+            // Disable the Phase 2 placement layer first (hides ghost + palette, drops undo history).
+            // Authored props persist in the room template; only editor-only state is dropped.
+            if (BuildPlacementController.Instance != null)
+            {
+                BuildPlacementController.Instance.SetBuildModeActive(false);
+            }
 
             // Restore DirectorMode to whatever state/tab the player was in before Build Mode.
             DirectorMode director = DirectorMode.Instance;

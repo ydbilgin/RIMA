@@ -954,6 +954,14 @@ namespace RIMA
                 if (ActiveTab == DirectorTab.Build)
                 {
                     HideSpawnGhost();
+                    // Phase 2: while Build Mode is active, BuildPlacementController is the SOLE
+                    // placer/ghost on the Build tab. Suppress the legacy square-snap prop tool so
+                    // a single LMB click does not place two props / render two ghosts.
+                    if (BuildModeController.IsActive)
+                    {
+                        HidePropGhost();
+                        return;
+                    }
                     UpdatePropTool(dt);
                     return;
                 }
