@@ -35,7 +35,10 @@ namespace RIMA
             transform.localScale = new Vector3(pickupVisualScale, pickupVisualScale, transform.localScale.z);
             if (sr != null && sr.sprite == null)
             {
-                Sprite riftShard = Resources.Load<Sprite>("UI/RIMA/RIMA_UI_Node_Chest_1");
+                // The chest art is a 2-sprite SHEET; Resources.Load only returns the first (wrong,
+                // 10x36) slice and can't address "_1" by path — load the sheet and pick the 62x72 icon.
+                Sprite[] sheet = Resources.LoadAll<Sprite>("UI/RIMA/RIMA_UI_Node_Chest");
+                Sprite riftShard = sheet != null ? System.Array.Find(sheet, s => s != null && s.name == "RIMA_UI_Node_Chest_1") : null;
                 if (riftShard != null)
                 {
                     sr.sprite = riftShard;
@@ -43,7 +46,7 @@ namespace RIMA
                 }
                 else
                 {
-                    Debug.LogWarning("[RewardPickup] Failed to load UI/RIMA/RIMA_UI_Node_Chest_1 fallback sprite.");
+                    Debug.LogWarning("[RewardPickup] Failed to load RIMA_UI_Node_Chest_1 fallback sprite from sheet UI/RIMA/RIMA_UI_Node_Chest.");
                 }
             }
 

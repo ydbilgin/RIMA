@@ -124,7 +124,11 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         private const string DefaultPlayerPrefabPath = "Prefabs/Warblade";
         private const string DefaultEncounterBankPath = "Encounters/Act1_EncounterBank_Pilot";
-        private const string DefaultRewardSpritePath = "UI/RIMA/RIMA_UI_Node_Chest_1";
+        // The chest art is a 2-sprite SHEET; Resources.Load cannot address a sub-sprite by path+suffix
+        // (old ".../Chest_1" returned NULL -> invisible reward; ".../Chest" returns the wrong 10x36 _0
+        // slice). Load the sheet and pick the usable 62x72 icon by sub-name via LoadRewardChestSprite().
+        private const string DefaultRewardSpritePath = "UI/RIMA/RIMA_UI_Node_Chest";
+        private const string RewardSpriteSubName = "RIMA_UI_Node_Chest_1";
         private const string DefaultEnemyPrefabEditorPath = "Assets/Prefabs/Enemies/FractureImp.prefab";
         private const string DefaultBossPrefabEditorPath = "Assets/Prefabs/Enemies/Boss/PenitentSovereign.prefab";
 
@@ -1129,7 +1133,7 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             if (rewardSprite == null)
             {
-                rewardSprite = Resources.Load<Sprite>(DefaultRewardSpritePath);
+                rewardSprite = LoadRewardChestSprite();
             }
 
             EnsureEnemyContainer();
@@ -1180,9 +1184,10 @@ namespace RIMA.MapDesigner.Room.Runtime
             clearSequence = StartCoroutine(RoomClearSequence());
         }
 
-        // BUG-1 FIX: was 12s — too short; player gets 90s to walk to the reward before it
-        // auto-grants (ForceCollect). Run never deadlocks AND reward is never silently discarded.
-        private const float RewardAutoCollectTimeoutSec = 90f;
+        // 0 = NO auto-collect timeout (user 2026-06-13: an uncollected reward must NOT disappear or
+        // auto-grant). The collect loop guards on `> 0f`, so 0 makes the reward persist until the
+        // player takes it with G; the exit door simply waits for the pickup. (Was 90s ForceCollect.)
+        private const float RewardAutoCollectTimeoutSec = 0f;
 
         // How many real-time seconds to wait for a draft UI to close before forcing it away.
         private const float DraftAutoCloseTimeoutSec = 90f;
@@ -1356,6 +1361,14 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
         }
 
+        // Loads the 62x72 chest icon from the multi-sprite sheet by sub-name (Resources.Load returns
+        // only the first slice, so LoadAll + name match is required). Returns null if not found.
+        private static Sprite LoadRewardChestSprite()
+        {
+            Sprite[] sheet = Resources.LoadAll<Sprite>(DefaultRewardSpritePath);
+            return sheet != null ? System.Array.Find(sheet, s => s != null && s.name == RewardSpriteSubName) : null;
+        }
+
         private RewardPickup SpawnRewardPickup()
         {
             EnsureDraftManager();
@@ -1376,7 +1389,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
             else
             {
-                Sprite loaded = Resources.Load<Sprite>(DefaultRewardSpritePath);
+                Sprite loaded = LoadRewardChestSprite();
                 if (loaded != null)
                     spriteRenderer.sprite = loaded;
                 // else leave null — RewardPickup.Awake() will load the rift-shard fallback
