@@ -26,6 +26,7 @@ namespace RIMA
 
         private Vector2 lastDir = Vector2.down;
         private bool _isDead = false;
+        private Sprite _fallbackSprite;
 
         private void Awake()
         {
@@ -36,8 +37,26 @@ namespace RIMA
             sr     = GetComponentInParent<SpriteRenderer>();
             if (sr == null) sr = GetComponent<SpriteRenderer>();
 
+            // Cache the authored prefab sprite as a fallback. Some enemies' idle clips reference
+            // sprite frames that were archived out of Assets/ (e.g. FractureImp, Penitent), so the
+            // animator drives the SpriteRenderer to null each frame → invisible body. LateUpdate
+            // runs AFTER the Animator's per-frame sprite write (player loop order:
+            // DirectorUpdateAnimationEnd → ScriptRunBehaviourLateUpdate), so restoring here wins
+            // and persists. (Full idle animation needs the archived frames re-imported — post-demo;
+            // this keeps the enemy VISIBLE meanwhile.)
+            if (sr != null) _fallbackSprite = sr.sprite;
+
             if (health != null)
                 health.OnDeath.AddListener(OnDeath);
+        }
+
+        // Runs after the Animator's per-frame sprite write; restores the cached sprite when a
+        // broken clip drove SpriteRenderer.sprite to null.
+        private void LateUpdate()
+        {
+            if (_isDead || sr == null) return;
+            if (sr.sprite == null && _fallbackSprite != null)
+                sr.sprite = _fallbackSprite;
         }
 
         private void Update()

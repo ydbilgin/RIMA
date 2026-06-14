@@ -32,6 +32,16 @@ namespace RIMA
         private PlayerAttack     attack;
         private Animator         anim;
         private SpriteRenderer   sr;
+        private Health           health;
+
+        // Persistent sprite-keeper (mirrors EnemyAnimator). Some classes' idle clips point at
+        // missing/stale sprite GUIDs (e.g. Elementalist idle clips → GUID 927669a7, dropped), so the
+        // animator drives the Body SpriteRenderer to null EVERY frame → invisible. The one-time class
+        // fallback in PlayerClassManager is overwritten next frame; this restores the cached class
+        // idle sprite each LateUpdate (after the animator's write). No-ops for classes whose animator
+        // produces a valid sprite (Warblade). Post-demo: re-point the broken idle clips and this
+        // keeper becomes inert. Source = PlayerClassManager.SetFallbackSprite after class-apply.
+        private Sprite fallbackSprite;
 
         // ─── Parameter hashes ────────────────────────────────────────────────
 
@@ -63,6 +73,7 @@ namespace RIMA
         {
             controller = GetComponent<PlayerController>();
             attack     = GetComponent<PlayerAttack>();
+            health     = GetComponent<Health>();
             anim       = GetComponentInChildren<Animator>();
             // Animator ile aynı GameObject'teki SR'ı al (Sprite child).
             // GetComponentInChildren root'u da arar — Player root'ta ayrı SR var,
@@ -122,6 +133,30 @@ namespace RIMA
             anim.SetBool(IsDashHash,  controller.IsDashing);
 
             wasCombatFacingOverride = combatOverrideActive;
+        }
+
+        // Runs after the Animator's per-frame sprite write; restores the cached class idle sprite
+        // when a broken idle clip drove the Body SpriteRenderer.sprite to null. Skipped while dead
+        // so a death animation that clears the sprite isn't fought (mirrors EnemyAnimator._isDead).
+        private void LateUpdate()
+        {
+            if (sr == null || fallbackSprite == null) return;
+            // Health is often added to the player AFTER PlayerAnimator.Awake (RoomRunDirector /
+            // ChamberSelectBootstrap AddIfMissing<Health> post-instantiate), so resolve it lazily
+            // until present. Death guard: skip the restore once dead so a sprite-clearing death
+            // animation isn't fought (mirrors EnemyAnimator._isDead).
+            if (health == null) health = GetComponent<Health>();
+            if (health != null && health.IsDead) return;
+            if (sr.sprite == null) sr.sprite = fallbackSprite;
+        }
+
+        // ─── Sprite-keeper wiring ──────────────────────────────────────────────
+
+        /// <summary>PlayerClassManager publishes the chosen class idle sprite here after class-apply
+        /// so the keeper has a valid (non-null) fallback even when the animator never produces one.</summary>
+        public void SetFallbackSprite(Sprite sprite)
+        {
+            if (sprite != null) fallbackSprite = sprite;
         }
 
         // ─── Combo ───────────────────────────────────────────────────────────

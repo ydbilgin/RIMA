@@ -244,13 +244,34 @@ namespace RIMA
                 }
             }
 
-            // Static-idle fallback. When this class HAS an AnimatorController the controller's
-            // idle clips drive real sprite curves (8-way facing), so overwriting the SpriteRenderer
-            // here would fight the Animator and freeze the body on a single static frame — skip it.
-            // For classes WITHOUT a controller, set the class's idle sprite so the visual still
-            // matches the class.
-            if (!animatorDriving)
+            // Static-idle fallback. When this class HAS an AnimatorController whose idle clips
+            // resolve to real sprite assets (e.g. Warblade), the animator drives the body each
+            // frame, so overwriting the SpriteRenderer here would fight it — skip the fallback.
+            // But some classes' idle clips point at MISSING/stale sprite GUIDs (e.g. Elementalist
+            // clips were never re-pointed after a re-import), so the animator drives the body to
+            // null → invisible. Detect that by reading the body SR after Rebind+Update and, if the
+            // sprite is still null, fall back to ApplyClassIdleSprite (loads by name from Resources,
+            // bypassing the broken clip GUIDs). Classes WITHOUT a controller always get the fallback.
+            if (!animatorDriving || FindBodySprite(player) == null)
                 ApplyClassIdleSprite(player, type);
+        }
+
+        // Shared "Body"-name SpriteRenderer search; falls back to the first SR found.
+        private static SpriteRenderer FindBodyRenderer(GameObject player)
+        {
+            SpriteRenderer body = null;
+            foreach (SpriteRenderer candidate in player.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                if (candidate != null && candidate.gameObject.name == "Body") return candidate;
+                if (body == null) body = candidate;
+            }
+            return body;
+        }
+
+        private static Sprite FindBodySprite(GameObject player)
+        {
+            SpriteRenderer body = FindBodyRenderer(player);
+            return body != null ? body.sprite : null;
         }
 
         private static void ApplyClassIdleSprite(GameObject player, ClassType type)
@@ -263,16 +284,15 @@ namespace RIMA
                 return;
             }
 
-            SpriteRenderer body = null;
-            foreach (SpriteRenderer candidate in player.GetComponentsInChildren<SpriteRenderer>(true))
-            {
-                if (candidate != null && candidate.gameObject.name == "Body") { body = candidate; break; }
-                if (body == null) body = candidate;
-            }
-
+            SpriteRenderer body = FindBodyRenderer(player);
             if (body == null) return;
             body.sprite = idle;
             body.color = Color.white;
+
+            // Publish to the PlayerAnimator persistent keeper so a broken idle clip that nulls the
+            // body sprite EVERY frame (e.g. Elementalist) is restored each LateUpdate, not just once.
+            player.GetComponentInChildren<PlayerAnimator>(true)?.SetFallbackSprite(idle);
+
             Debug.Log($"[PlayerClassManager] Class visual applied: {type} sprite '{idle.name}' on '{body.gameObject.name}'.");
         }
 

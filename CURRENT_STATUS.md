@@ -25,7 +25,9 @@
 
 **✅ P6 TAMAM (silah polish):** ölü `WeaponSprite` placeholder Player.prefab'tan silindi (0 ref, variant inherit) + `WeaponDatabase.asset` Warblade `anchorOffset` (0.2,0.1)→(0.02,0.33) → grip ELDE (SE pixel-perfect gap 0.000/0.002; eskiden 0.5u kopuktu; "+0.50" idle-pre-sync hâliymiş, OrientationSync per-facing sync ediyor). Beyaz daire=Light2D scene-view gizmo (bug değil). auditor PASS-nits (full council skip=prefab/data hygiene, kod-logic yok). NIT: 2 variant prefab'da zararsız dangling m_SpriteSortPoint override (Unity sonraki save'de düşürür).
 
-**📋 SIRA (task board):** P7 verified screenshot seti (scene_view) → P8 tool UI → P9 hoca raporu(EN SON).
+**✅ P7.5 TAMAM (demo-kritik invisible-sprite — P7 verification yakaladı):** Elementalist player + FractureImp/Penitent enemy body'leri runtime'da NULL render ediyordu (animator clip'leri stale/missing sprite GUID → her frame null yazıyor). **FIX A regresyonu** = facing-batch `9557791f` animatorDriving gate fallback'i kaldırmıştı. Fix: `PlayerAnimator` persistent LateUpdate sprite-keeper (Warblade no-op, death-guard'lı, multi-frame 90/90 kanıt) + `EnemyAnimator` keeper (2/16 enemy, _isDead-guard) + `PlayerClassManager` keeper'a publish. **4/4 council FAIL→fix oybirliği + auditor final PASS.** DEFER (post-demo, ROOT): Elementalist idle clip GUID onarımı (927669a7→mevcut sprite) = tam animasyon; enemy archived-frame re-import; keeper o zaman no-op olur.
+
+**📋 SIRA (task board):** P7 screenshot setini tamamla (Elementalist+combat artık görünür) → P8 tool UI → P9 hoca raporu(EN SON).
 
 **🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 
