@@ -8,7 +8,7 @@ allowed-tools: Bash
 Run the command below and return its output verbatim. Do not add commentary.
 
 ```bash
-NB=30ddffa5-292f-4248-8e77-68074af901be
+NB=$(cat .claude/nlm.local 2>/dev/null)
 FILE="$ARGUMENTS"
 REPO="F:/Antigravity Projeler/2d roguelite/RIMA"
 STATE="$REPO/.claude/nlm_sync_state.txt"

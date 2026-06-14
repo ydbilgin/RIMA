@@ -67,7 +67,7 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 | Memory drift | NLM canonical > local memory > prompt iteration. Çakışmada NLM kazanır, local memory NLM'e uygun revize |
 
 **Drift Hierarchy (kim doğru):**
-1. **NLM canonical** (notebook 30ddffa5-292f-4248-8e77-68074af901be — RIMA design docs source)
+1. **NLM canonical** (notebook ID = `.claude/nlm.local` gizli/gitignored — RIMA design docs source)
 2. **Local memory** (MEMORY/ klasörü — point-in-time observations, 14+ days olunca stale risk)
 3. **Prompt iteration / STAGING draft** (en oynak, drift kaynağı)
 
@@ -161,9 +161,9 @@ Sub-agent token overhead artık düşük → **serbestçe spawn et**. Eşik:
 ## NotebookLM — HARD RULE (Context Source)
 **Proje dosyalarını direkt okuma. Tüm bağlam NotebookLM MCP üzerinden gelir.**
 
-- **LIVE Notebook ID:** `30ddffa5-292f-4248-8e77-68074af901be` (RIMA design knowledge base — 2026-05+ canonical)
+- **LIVE Notebook ID:** `.claude/nlm.local`'dan oku (gitignored, repo'ya konmaz; private memory'de de var)
 - MCP tool (tercih varsa): `mcp__notebooklm__notebook_query`
-- CLI fallback (her ortam çalışır): `uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "soru"`
+- CLI fallback (her ortam çalışır): `uvx --from notebooklm-mcp-cli nlm notebook query $(cat .claude/nlm.local) "soru"`
 - Dosya oku: **sadece** NotebookLM yetersiz kalırsa, sadece ilgili satır aralıklarını.
 - **YASAK Notebook ID'ler:** `ed3c8952-417c-4988-84a7-425d25ba3b08`, `06a27df3-79e6-43da-a550-2937149af0a4` (eski, deprecated)
 
@@ -172,7 +172,7 @@ Sub-agent token overhead artık düşük → **serbestçe spawn et**. Eşik:
 
 ```
 NLM ACCESS: If you need RIMA design context, query NLM first via:
-  uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "<your question>"
+  NB=$(cat .claude/nlm.local); uvx --from notebooklm-mcp-cli nlm notebook query $NB "<your question>"
 Direct-read sadece: CURRENT_STATUS.md / .claude/PROJECT_RULES.md / kod / STAGING / memory files.
 ```
 

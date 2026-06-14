@@ -132,3 +132,6 @@ STAGING/_outbox/
 STAGING/unity_compile_*.log
 # Orphan .meta for STAGING PNGs (the PNGs themselves are *.png-ignored)
 STAGING/**/*.png.meta
+
+# NLM notebook ID (private — repo disi)
+.claude/nlm.local

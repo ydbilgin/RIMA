@@ -13,7 +13,7 @@ Write `STAGING/_process/<YYYY-MM>/_council_cx_<slug>.md` (create the month dir i
 ACTIVE RULES: (1) think before coding (2) min code, no speculation (3) surgical — listed files only (4) BLOCKED if unclear.
 NLM ACCESS: If you need RIMA design context, query NLM first via:
   uvx --from notebooklm-mcp-cli nlm notebook query <NLM_NOTEBOOK_ID> "<your question>"
-  (NLM_NOTEBOOK_ID: bu proje için CLAUDE.md/PROJECT_RULES'tan al; RIMA default=30ddffa5-292f-4248-8e77-68074af901be)
+  (NLM_NOTEBOOK_ID: NB=$(cat .claude/nlm.local 2>/dev/null) ile oku — repo'da gizli/gitignored, ham ID repo'ya konmaz)
 Direct-read only: CURRENT_STATUS.md / .claude/PROJECT_RULES.md / code / STAGING / memory files.
 
 # Amaç

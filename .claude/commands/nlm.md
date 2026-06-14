@@ -8,7 +8,7 @@ allowed-tools: Bash
 Run the command below and return its output verbatim. Do not add commentary.
 
 ```bash
-uvx --from notebooklm-mcp-cli nlm notebook query 30ddffa5-292f-4248-8e77-68074af901be "$ARGUMENTS" 2>&1
+uvx --from notebooklm-mcp-cli nlm notebook query $(cat .claude/nlm.local 2>/dev/null) "$ARGUMENTS" 2>&1
 ```
 
 **Usage:** `/nlm warblade skill stagger nasıl tetiklenir?`

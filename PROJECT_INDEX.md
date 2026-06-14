@@ -23,7 +23,7 @@ Repo'ya ilk kez bağlanan AI veya insan için zorunlu okuma.
 
 `C:\Users\ydbil\.claude\projects\F--Antigravity-Projeler-2d-roguelite-RIMA\memory\MEMORY.md`
 Canonical bilgi index'i (hard rules, routing, proje durumu, teknik referanslar).
-NLM notebook ID: `30ddffa5-292f-4248-8e77-68074af901be` (tasarım ayrıntısı orada).
+NLM notebook ID: gizli (`.claude/nlm.local`, gitignored — repo'ya konmaz). Tasarım ayrıntısı NLM'de.
 
 ---
 
