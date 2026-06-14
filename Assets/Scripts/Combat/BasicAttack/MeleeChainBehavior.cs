@@ -94,7 +94,8 @@ namespace RIMA
             else
             {
                 // Immediate (legacy / attackStartup == 0).
-                owner.EmitSlashArc(owner.Controller.FacingDirection, step);
+                // Warblade basic swing uses the ember SkillVfx.MeleeArc sprite only; the old blue
+                // SlashArcVFX LineRenderer was removed here to avoid a doubled, color-clashing arc.
                 SkillVfx.MeleeArc(GetHitCenter(owner, profile, step), owner.Controller.FacingDirection, VfxElement.Physical);
                 ApplyMeleeHit(owner, profile, step, chainMult);
                 TriggerWarbladeFinisher(profile, step, owner);
@@ -107,9 +108,10 @@ namespace RIMA
             if (_pendingOwner == null || _pendingProfile == null) return;
 
             // STRIKE FRAME (fires at t = attackStartup, aligned to the swing's strike fraction
-            // via PlayerAttack.CurrentStrikeFraction). EmitSlashArc -> SlashArcVFX.Emit;
+            // via PlayerAttack.CurrentStrikeFraction). Warblade basic swing uses the ember
+            // SkillVfx.MeleeArc sprite only; the old blue SlashArcVFX LineRenderer was removed
+            // here to avoid a doubled, color-clashing arc.
             // VFXRouter handles downstream hit/kill bursts via CombatEventBus in ApplyMeleeHit.
-            _pendingOwner.EmitSlashArc(_pendingOwner.Controller.FacingDirection, _pendingStep);
             SkillVfx.MeleeArc(GetHitCenter(_pendingOwner, _pendingProfile, _pendingStep), _pendingOwner.Controller.FacingDirection, VfxElement.Physical);
             ApplyMeleeHit(_pendingOwner, _pendingProfile, _pendingStep, _pendingChainMult);
             TriggerWarbladeFinisher(_pendingProfile, _pendingStep, _pendingOwner);

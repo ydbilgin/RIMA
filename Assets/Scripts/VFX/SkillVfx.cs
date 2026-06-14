@@ -42,11 +42,17 @@ namespace RIMA
             Runner.Run(ScaleFadeAndDestroy(instance, scaleFrom, scaleTo, Mathf.Max(0.01f, life), 0f));
         }
 
-        public static void PlaySweep(GameObject arcSprite, Vector3 pos, Vector2 dir, VfxElement element, float life = 0.2f)
+        public static void PlaySweep(GameObject arcSprite, Vector3 pos, Vector2 dir, VfxElement element, float life = 0.2f, bool additiveSprite = false)
         {
             GameObject instance = SpawnTintedInstance(arcSprite, pos, element, dir, null);
             if (instance == null)
                 return;
+
+            // Additive blend makes the element tint read as glow over the base sprite. The slash
+            // base art is intrinsically teal, so a multiply tint to ember reads muddy (teal x orange
+            // = greenish-brown); additive pushes it cleanly toward the element color instead.
+            if (additiveSprite)
+                ApplyAdditiveSprite(instance, Palette(element));
 
             instance.transform.localScale = Vector3.one * 0.8f;
             Runner.Run(ScaleFadeAndDestroy(instance, 0.8f, 1.15f, Mathf.Max(0.01f, life), 18f));
@@ -114,11 +120,13 @@ namespace RIMA
 
         public static void MeleeArc(Vector3 pos, Vector2 dir, VfxElement element)
         {
-            Sprite sprite = Resources.Load<Sprite>("VFX/Skills/slash_arc_main")
-                ?? Resources.Load<Sprite>("VFX/Skills/slash_arc_crescent");
+            // crescent is the more neutral/brighter base (lower chroma, larger near-white mass) so the
+            // additive element tint reads cleaner than on the more saturated teal slash_arc_main.
+            Sprite sprite = Resources.Load<Sprite>("VFX/Skills/slash_arc_crescent")
+                ?? Resources.Load<Sprite>("VFX/Skills/slash_arc_main");
 
             GameObject arc = CreateRuntimeSpritePrefab("MeleeArc", sprite);
-            PlaySweep(arc, pos, dir, element, 0.18f);
+            PlaySweep(arc, pos, dir, element, 0.18f, additiveSprite: true);
             Object.Destroy(arc);
 
             GameObject hitSpark = LoadPrefab("Prefabs/VFX/HitSpark", "Assets/Resources/Prefabs/VFX/HitSpark.prefab");
@@ -395,6 +403,29 @@ namespace RIMA
             ParticleSystemRenderer[] particleRenderers = instance.GetComponentsInChildren<ParticleSystemRenderer>(true);
             for (int i = 0; i < particleRenderers.Length; i++)
                 particleRenderers[i].sharedMaterial = SharedAdditiveMaterial;
+        }
+
+        // Switches sprite renderers to additive blend and amplifies the element color so a teal base
+        // sprite reads as a clean element glow. Element-agnostic: scales the whole color uniformly so
+        // its dominant channel reaches AdditiveTargetPeak (>1) while keeping channel RATIOS intact,
+        // so hue is preserved for any element (ember-orange Physical, purple Void, future elements).
+        private const float AdditiveTargetPeak = 1.5f;
+
+        private static void ApplyAdditiveSprite(GameObject instance, Color color)
+        {
+            float peak = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
+            float factor = peak > 0.0001f ? AdditiveTargetPeak / peak : 1f;
+            Color boosted = new Color(color.r * factor, color.g * factor, color.b * factor);
+
+            SpriteRenderer[] spriteRenderers = instance.GetComponentsInChildren<SpriteRenderer>(true);
+            for (int i = 0; i < spriteRenderers.Length; i++)
+            {
+                if (spriteRenderers[i] == null)
+                    continue;
+
+                spriteRenderers[i].sharedMaterial = SharedAdditiveMaterial;
+                spriteRenderers[i].color = new Color(boosted.r, boosted.g, boosted.b, spriteRenderers[i].color.a);
+            }
         }
 
         private static void ForceSorting(Renderer renderer, int order)

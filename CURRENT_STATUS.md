@@ -21,7 +21,9 @@
 
 **🟠 DEFERRED FOLLOW-UP (post-demo):** Skill-slot **other-class host desteği** — HasFreePrimarySlot/FindNextPrimarySlot/FindSlotOf/BuildBandReplaceCandidates Warblade/Elementalist hardcode; Ranger/Shadowblade/Ronin selectable olmadan `ResolvePrimarySlotHost` ile genelleştir (yoksa slot-0 clobber+replace bypass). cx+ax Pro CRITICAL ama demo-erişilemez (P3: sadece W+E selectable). + chest room-depth gating (P1) + tooltip→SO encapsulation (P2).
 
-**📋 SIRA (task board):** P5 mavi-arc(re-diag) → P6 silah polish → P7 screenshot → P8 tool UI → P9 hoca raporu(EN SON).
+**✅ P5 TAMAM (mavi-arc #3):** Warblade swing'de çift arc (mavi LineRenderer + ember sprite) → tek **ember** sprite (mavi kaldırıldı; SlashArcVFX/Ravager korundu) + `ApplyAdditiveSprite` element-agnostik hue-koruyan tint (`1.5/max(r,g,b)`; Physical→ember, Void→mor kanıtlı; GravityCleave Void regresyonu orchestrator-QC'de yakalanıp P5b'de düzeltildi). 4-advisor (3 PASS, ax Pro FAIL=mimari/post-demo) + auditor PASS. DEFER: nötr base slash sprite (user art, tam #E89020), data-driven arc, VFX birleştirme, production HSV shader.
+
+**📋 SIRA (task board):** P6 silah polish + WeaponSprite temizle → P7 screenshot → P8 tool UI → P9 hoca raporu(EN SON).
 
 **🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 
