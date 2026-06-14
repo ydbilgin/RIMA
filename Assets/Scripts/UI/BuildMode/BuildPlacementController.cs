@@ -68,7 +68,11 @@ namespace RIMA.UI.BuildMode
                 _instance = FindObjectOfType<BuildPlacementController>();
                 if (_instance != null) return _instance;
                 GameObject go = new GameObject("BuildPlacementController");
-                DontDestroyOnLoad(go);
+                // Play-mode: persist across scene loads. Edit-mode: DontDestroyOnLoad leaks on scene
+                // close ("objects not cleaned up" warning); keep it a normal scene object that dies
+                // with the scene but is never saved (DontSaveInEditor).
+                if (Application.isPlaying) DontDestroyOnLoad(go);
+                else go.hideFlags = HideFlags.DontSaveInEditor;
                 _instance = go.AddComponent<BuildPlacementController>();
                 return _instance;
             }
@@ -795,7 +799,8 @@ namespace RIMA.UI.BuildMode
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
             paletteCanvas.gameObject.AddComponent<GraphicRaycaster>();
-            DontDestroyOnLoad(paletteCanvas.gameObject);
+            if (Application.isPlaying) DontDestroyOnLoad(paletteCanvas.gameObject);
+            else paletteCanvas.gameObject.hideFlags = HideFlags.DontSaveInEditor;
 
             // LEFT panel = BUILD. Premium dark-slate panel + 1px border via the shared style helper.
             paletteRoot = new GameObject("BuildPaletteRoot", typeof(RectTransform)).GetComponent<RectTransform>();
