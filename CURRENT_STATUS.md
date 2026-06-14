@@ -30,9 +30,26 @@
 **✅ P7.5c TAMAM (enemy combat görünürlüğü):** P7.5 enemy keeper `sprite==null` guard'ı combat'ta yetmiyordu — `BaseMobBehavior.EnsureVisibleSprite` her frame **isimsiz kırmızı placeholder** basıyordu (sprite null değil). Fix: EnemyAnimator `[DefaultExecutionOrder(100)]` (LateUpdate en son) + guard `sprite==null || IsNullOrEmpty(name)` → gerçek sprite kırmızıyı eziyor; PlayerAnimator `texture==null` defensive. 3 sprite-süren enemy (FractureImp/HalfThrall/Penitent) kapsanıyor. 4/4 council PASS + auditor PASS. Combat 40/40 frame görünür (screenshot kanıt). **DEFER ROOT:** clip sprite ref'lerini re-import/re-point → iki keeper inert; BaseMobBehavior kırmızı yerine gerçek cache; guard birleştir (Sprite.IsValid).
 **✅ P7 TAMAM (verified screenshot seti):** `_verified_shots_2026-06-14/` — Warblade weapon/ember, Elementalist (P7.5 kanıt), arena, combat (P7.5c kanıt). Overlay UI (tooltip/skillbar/draft) MCP'de çıkmaz → data-proof prior _done docs'ta.
 
-**🔴 YENİ SESSION İLK İŞ — Tooltip layout bug (kullanıcı 2026-06-14 ekran kanıtı):** Bir şeyin üstüne gelince tooltip **dikey mavi şerit** olarak çıkıyor (metin karakter-karakter dikey diziliyor = panel GENİŞLİĞİ çökmüş). HER YERDE (skill bar + draft kartları, hepsi `TooltipSystem`). P2'de tooltip'i "görünür" yaptık + metni data-proof'ladık ama **overlay UI MCP screenshot'ta çıkmadığı için layout'u göremedik** (görsel kontrol=kullanıcı). Muhtemel kök: `TooltipSystem.BuildTooltip` panel/text RectTransform — preferredWidth/ContentSizeFitter/max-width yok → 1-char-genişlik wrap. Fix sonrası kullanıcıdan görsel teyit ŞART (MCP göremez). Dosya: `Assets/Scripts/UI/TooltipSystem.cs`.
+## 🔴 YENİ SESSION — DEMO POLISH BACKLOG
+*(kullanıcı 2026-06-14 play-test ekran kanıtları; emir: "hepsini not et yeni session'da yapalım". Sıra: önce fonksiyonel buglar → UI → art. ⚠️ Overlay UI MCP screenshot'ta ÇIKMAZ → her UI fix sonrası KULLANICIDAN görsel teyit ŞART; P2 metni doğruydu ama dikey-şerit layout'unu MCP göremedi.)*
 
-**📋 SIRA (task board):** Tooltip layout (yukarı, İLK) → P8 tool UI/UX → P9 hoca raporu docx (EN SON).
+**🐞 FONKSİYONEL (ÖNCE — gameplay correctness):**
+- **F1. Reward item room-leak:** yeni odaya geçince önceki odanın dönen ödül/satın-alınabilir item'ları (Restorative Shield / Rift-Forged Edge / Vitality Crystal) HÂLÂ duruyor → oda geçişinde despawn olmalı. Grep reward pickup / RoomRunDirector transition / Echo spawner.
+- **F2. Reward al → KART ÇIKMIYOR:** odada ödülü alınca ödül kayboluyor ama HİÇBİR draft kartı çıkmıyor. (P1 data-proven'dı; gerçek-play'de Echo/reward yolu kartı göstermiyor.) Grep ShowDraftWithSkill / Echo reward→draft akışı.
+
+**✨ FEATURE/JUICE:**
+- **J1. Reward slow-motion (Hades-vari):** ödül alma anında oyun slow-mo'ya geçsin (Time.timeScale juice).
+
+**🖥️ UI/UX (=P8):**
+- **U1. Tooltip dikey-şerit → güzel KART:** hover'da tooltip dikey mavi şerit (panel genişliği çökmüş→1-char wrap); skill bar + draft kartları (`TooltipSystem`). Kök: `BuildTooltip` panel/text preferredWidth/ContentSizeFitter yok. `Assets/Scripts/UI/TooltipSystem.cs`. (Skill-bar hover→düzgün kart AYNI fix; wiring P2'de var.)
+- **U2. Codex (YETENEK KODEKSİ) scroll yok:** liste altta kesiliyor; ScrollRect gerek.
+- **U3. Kaynak barları (HP/mana/rage):** class-özel, daha okunabilir + bar içinde SAYI ("84/120"). Sol-üst HUD resource-bar.
+- **U4. "ODA TEMİZLENDİ" mesajı:** ortada/belirgin (şu an sol-üst küçük).
+
+**🎨 ART (ayrı track — ÖNCE KARAR):**
+- **A1. Oda/arena görseli "saçma":** cliff-tile ada beğenilmedi → custom art (agy_image=Imagen / codex_image=gpt-image-2 / pixellab). Canon=cliff-tile, painted=legacy [[project-room-canon-cliff-tile-2026-06-13]] → art'a dönmek canon-revizyon, ÖNCE netleştir (yeni tileset? backdrop? prop?).
+
+**SONRA:** P9 hoca raporu docx (EN SON).
 
 **🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 
