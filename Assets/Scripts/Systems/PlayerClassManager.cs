@@ -226,14 +226,17 @@ namespace RIMA
         private static void ApplyPrimaryClassVisual(GameObject player, ClassType type)
         {
             var anim = player.GetComponentInChildren<Animator>();
+            bool animatorDriving = false;
             if (anim != null)
             {
                 var ctrl = Resources.Load<RuntimeAnimatorController>($"Characters/{type}/{type}");
                 if (ctrl != null)
                 {
                     anim.runtimeAnimatorController = ctrl;
+                    anim.enabled = true;
                     anim.Rebind();
                     anim.Update(0f);
+                    animatorDriving = true;
                 }
                 else
                 {
@@ -241,11 +244,13 @@ namespace RIMA
                 }
             }
 
-            // Sprite fallback (BUG-1 2026-06-10): the demo animator clips are EMPTY placeholders —
-            // they drive no sprite curves, so after a controller swap the SpriteRenderer keeps
-            // whatever class sprite the prefab shipped with (Warblade). Set the selected class's
-            // idle sprite explicitly so the visual always matches the class, animator or not.
-            ApplyClassIdleSprite(player, type);
+            // Static-idle fallback. When this class HAS an AnimatorController the controller's
+            // idle clips drive real sprite curves (8-way facing), so overwriting the SpriteRenderer
+            // here would fight the Animator and freeze the body on a single static frame — skip it.
+            // For classes WITHOUT a controller, set the class's idle sprite so the visual still
+            // matches the class.
+            if (!animatorDriving)
+                ApplyClassIdleSprite(player, type);
         }
 
         private static void ApplyClassIdleSprite(GameObject player, ClassType type)

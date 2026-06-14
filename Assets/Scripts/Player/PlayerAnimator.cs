@@ -5,9 +5,11 @@ namespace RIMA
     /// <summary>
     /// Tüm animator parametrelerini tek yerden yönetir.
     ///
-    /// 4-way diagonal visual-direction system for isometric combat.
-    /// Movement input is snapped to one of the camera-relative diagonals and the
-    /// last snapped direction is preserved when movement stops.
+    /// 8-way visual-direction system (S/SE/E/NE/N/NW/W/SW).
+    /// Movement / facing input is snapped to the nearest of 8 directions and the
+    /// last snapped direction is preserved when movement stops. The emitted DirX/DirY
+    /// pair (each in {-1,0,1}) matches the Warblade controller's AnyState thresholds:
+    /// cardinals zero one axis; diagonals set both to ±1.
     ///
     /// Animator'da gereken parametreler:
     ///   float  Speed       — 0=idle, 1=run
@@ -18,7 +20,12 @@ namespace RIMA
     ///   int    ComboStep   — 0/1/2 = normal · 3/4/5 = skill sonrası chained
     ///   trigger Attack     — her vuruşta tetiklenir
     /// </summary>
-    [RequireComponent(typeof(PlayerController))]
+    // NOTE: intentionally NOT [RequireComponent(typeof(PlayerController))]. The base
+    // Player.prefab is controller-less by design — each concrete player instance
+    // (Warblade variant, arena scene placement) supplies its own PlayerController.
+    // RequireComponent here would force a second PlayerController onto the base, which
+    // would then duplicate against every instance's own. PlayerAnimator null-guards the
+    // controller, so the dependency is enforced softly instead.
     public class PlayerAnimator : MonoBehaviour
     {
         private PlayerController controller;
@@ -61,6 +68,11 @@ namespace RIMA
             // GetComponentInChildren root'u da arar — Player root'ta ayrı SR var,
             // yanlış olanı döndürürdü.
             sr = anim != null ? anim.GetComponent<SpriteRenderer>() : GetComponentInChildren<SpriteRenderer>();
+            // 8-full-sprite scheme: each direction is a distinct sprite, so flipX must
+            // stay false (a separate weapon hand-anchor reads facing; mirroring the body
+            // would desync the weapon hand side). Clear it once defensively; do NOT clear
+            // it every frame.
+            if (sr != null) sr.flipX = false;
         }
 
         private void OnEnable()
@@ -79,7 +91,7 @@ namespace RIMA
 
         private void Update()
         {
-            if (anim == null || anim.runtimeAnimatorController == null) return;
+            if (controller == null || anim == null || anim.runtimeAnimatorController == null) return;
 
             bool combatOverrideActive = controller.HasCombatFacingOverride;
             bool combatOverrideJustEnded = wasCombatFacingOverride && !combatOverrideActive;
@@ -89,8 +101,8 @@ namespace RIMA
             {
                 lastDir    = dir.normalized;
                 Vector2 targetFacing = combatOverrideJustEnded && controller.IsMoving
-                    ? SnapToFourDiagonal(controller.MovementFacingDirection, movementFacingBeforeCombat)
-                    : SnapToFourDiagonal(lastDir, lastFacing);
+                    ? SnapToEight(controller.MovementFacingDirection, movementFacingBeforeCombat)
+                    : SnapToEight(lastDir, lastFacing);
 
                 if (!combatOverrideActive && controller.IsMoving)
                     movementFacingBeforeCombat = targetFacing;
@@ -99,8 +111,6 @@ namespace RIMA
                     ? ApplyFacingImmediately(targetFacing)
                     : ResolveMovementFacing(targetFacing);
             }
-
-            if (sr != null) sr.flipX = false;
 
             bool showMovement = controller.IsMoving && !combatOverrideActive;
 
@@ -127,7 +137,7 @@ namespace RIMA
         private void HandleCombatFacingChanged()
         {
             if (controller != null && !controller.HasCombatFacingOverride && controller.IsMoving)
-                movementFacingBeforeCombat = SnapToFourDiagonal(controller.MovementFacingDirection, lastFacing);
+                movementFacingBeforeCombat = SnapToEight(controller.MovementFacingDirection, lastFacing);
             ApplyCombatFacingImmediately();
         }
 
@@ -139,25 +149,30 @@ namespace RIMA
             if (anim != null) anim.SetTrigger(IsDeadHash);
         }
 
-        // Returns one of the 4 isometric diagonal facings: NE, NW, SW, SE.
-        private static Vector2 SnapToFourDiagonal(Vector2 dir, Vector2 previousFacing)
+        // Returns one of the 8 facings (S, SE, E, NE, N, NW, W, SW) as a (DirX,DirY)
+        // pair with each component in {-1,0,1}. The angle is quantised to the nearest
+        // 45° sector; cardinals zero one axis, diagonals set both to ±1 — matching the
+        // Warblade controller's AnyState DirX/DirY thresholds (±0.5 bands).
+        private static Vector2 SnapToEight(Vector2 dir, Vector2 previousFacing)
         {
             if (dir.sqrMagnitude <= 0.0001f) return previousFacing;
 
-            const float axisEpsilon = 0.001f;
-            float x = Mathf.Abs(dir.x) > axisEpsilon
-                ? Mathf.Sign(dir.x)
-                : DiagonalAxisOrDefault(previousFacing.x, 1f);
-            float y = Mathf.Abs(dir.y) > axisEpsilon
-                ? Mathf.Sign(dir.y)
-                : DiagonalAxisOrDefault(previousFacing.y, -1f);
+            // Sector index 0..7 measured CCW from +X (East). Each sector spans 45°.
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg; // -180..180
+            int sector = Mathf.RoundToInt(angle / 45f) & 7;          // wrap into 0..7
 
-            return new Vector2(x, y);
-        }
-
-        private static float DiagonalAxisOrDefault(float value, float fallback)
-        {
-            return Mathf.Abs(value) > 0.001f ? Mathf.Sign(value) : fallback;
+            // sector → (x,y) in {-1,0,1}: 0=E 1=NE 2=N 3=NW 4=W 5=SW 6=S 7=SE
+            switch (sector)
+            {
+                case 0: return new Vector2( 1f,  0f); // E
+                case 1: return new Vector2( 1f,  1f); // NE
+                case 2: return new Vector2( 0f,  1f); // N
+                case 3: return new Vector2(-1f,  1f); // NW
+                case 4: return new Vector2(-1f,  0f); // W
+                case 5: return new Vector2(-1f, -1f); // SW
+                case 6: return new Vector2( 0f, -1f); // S
+                default: return new Vector2( 1f, -1f); // SE (sector 7)
+            }
         }
 
         private Vector2 ResolveMovementFacing(Vector2 targetFacing)
@@ -194,7 +209,7 @@ namespace RIMA
             if (dir.sqrMagnitude <= 0.0001f) return;
 
             lastDir = dir.normalized;
-            lastFacing = ApplyFacingImmediately(SnapToFourDiagonal(lastDir, lastFacing));
+            lastFacing = ApplyFacingImmediately(SnapToEight(lastDir, lastFacing));
 
             if (anim == null || anim.runtimeAnimatorController == null) return;
             anim.SetFloat(DirXHash, lastFacing.x);
