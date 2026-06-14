@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/_IsoGame.unity
     guid: 170024b9cdc150349a6633ade977ccee
   - enabled: 0
-    path: Assets/Scenes/Test/PlayableArena_Test01.unity
-    guid: e7a9a5b06c574fb2beff599c4f5282f4
-  - enabled: 0
     path: Assets/Scenes/_IsoGame_Map02.unity
     guid: 73692af3ba195e546b7514d30c829729
   - enabled: 0
