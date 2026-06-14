@@ -25,9 +25,9 @@ Golden-path dışı her şey = "bilinen limitasyon", post-demo.
 - **A1** arena görseli (canon-revizyon → ÖNCE netleştir) · **P9** hoca raporu docx (EN SON).
 - ⚠️ Overlay UI MCP screenshot'ta ÇIKMAZ → her UI fix sonrası kullanıcıdan görsel teyit ŞART.
 
-**🟠 DEFERRED (post-demo):** skill-slot other-class host (ResolvePrimarySlotHost) · chest room-depth gating · tooltip→SO encapsulation · graphify-out lokasyon stabilizasyonu + commit-stamp · Elementalist/enemy clip GUID onarımı (keeper'lar o zaman no-op) · ponytail /ponytail-review checklist · **NLM proper cleanup** (8 canonical straggler + 5 guide-suspect + 728 STAGING triage; notebook **300-cap**'te → önce prune, [[reference-nlm-source-cap-300]]) · STAGING/root "klasör düzgün temizliği".
+**🟠 DEFERRED (post-demo):** skill-slot other-class host (ResolvePrimarySlotHost) · chest room-depth gating · tooltip→SO encapsulation · Elementalist/enemy clip GUID onarımı (keeper'lar o zaman no-op) · ponytail /ponytail-review checklist · `Assets/Scripts/graphify-out/` (624 cache Unity ağacında, gitignored/regenerable → sil/taşı) · hidden `.cx_dispatch`/`.ax_dispatch` done-file birikmesi (minör).
 
-**🧹 2026-06-14 akşam housekeeping (DONE):** Logo kilitlendi (çapraz-rift `diag_05`/`02`/`03` → BRANDING, `RIMA_LOGO_DECISION_2026-06-14.md`) · /lint #2-4 (PROJECT_RULES routing banner, MEMORY footer, 20 dosya arşiv) · NLM reconcile (14 stale sil, canonical sync, CURRENT_STATUS taze, 300/0-dup) · PixelLab 31 dosya → global `~/.claude/PIXELLAB_REFERENCE.md` · `PROJECT_INDEX.md` giriş noktası oluşturuldu · global CLAUDE.md'ye RIMA cross-session pointer.
+**🧹 2026-06-14 akşam housekeeping (DONE):** Logo kilitlendi (çapraz-rift `diag_05`/`02`/`03` → BRANDING, `RIMA_LOGO_DECISION_2026-06-14.md`) · /lint #2-4 (PROJECT_RULES routing banner, MEMORY footer, 20 dosya arşiv) · **NLM structure fix** (junk %26 → **230 kaynak/0-dup/~70 boş**, 8 straggler eklendi, [[reference-nlm-source-cap-300]]) · **STAGING 546→214** (332 junk arşiv) · **memory 268→257** + `_INVENTORY_2026-06-14.md` · PixelLab 31 dosya → global `~/.claude/PIXELLAB_REFERENCE.md` · `PROJECT_INDEX.md` giriş noktası · global CLAUDE.md RIMA cross-session pointer · 5 commit, working tree temiz.
 
 ---
 *Önceki bloklar git history'de: P1-P7.5c (skill/tooltip/arc/weapon/invisible-sprite) + facing/render batch DONE+pushed (`938e8da9`); demo E2E 10/10 + 9/9 sistem.*
