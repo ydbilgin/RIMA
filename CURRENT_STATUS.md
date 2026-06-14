@@ -1,29 +1,22 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-13 akşam — sunum ~20 Haz; YENİ SESSION OTONOM DEVAM EDER)
+## ⏯️ RESUME (2026-06-14 — sunum ~20 Haz; OTONOM DEVAM)
 
-**⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=Claude Opus sub-agent · review=auditor-opus/cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · E1-E8 · Unity dispatch'e UNITY ERROR CHECK · cx profil: **yasinderyabilgin(birincil)→yekta(son); laurethayday SİLİNDİ**.
+**⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=Claude Opus sub-agent · review=auditor-opus/cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · E1-E8. **HARD: aynı anda TEK Unity-süren ajan** (eşzamanlı MCP = python köprü çökmesi); paralel=read-only/filesystem. cx profil: yasinderyabilgin→yekta(son).
 
-**🔒 STATE DİSİPLİNİ (ZORUNLU — kullanıcı 2026-06-13: "hiçbir şey birbirine karışmamalı"):**
-- Normal Play = full-flow: `playModeStartScene=MainMenu` + EditorPrefs `RIMA_PlayFromStartScene=true` → Play→MainMenu→CharacterSelect→_Arena, Director gate OFF (temiz). DOĞRULANDI: entry=MainMenu → `DirectorMode.Instance=NULL`.
-- **Dev/_Arena testi = F5 (RimaDevShortcuts) kullan** (pref'e dokunmaz). **ASLA `playModeStartScene=null` bırakma**; debug bitince MainMenu'ye geri al. (Bir kez bunu unutup Director'ı geri getirdim — tekrarlama.)
-- Commit ÖNCESİ pollution temizle: blueprint `.asset` + LiberationSans Fallback `git checkout --`; `Assets/InitTestScene*.unity` SİL **AMA** tracked `ebd0160c` restore et (pre-existing junk a754c640).
+**🔒 STATE DİSİPLİNİ:** Play=full-flow (`playModeStartScene=MainMenu`, dokunma/null bırakma). Commit öncesi pollution temizle. Play mode'u iş bitince STOP'la.
 
-**✅ BU SESSION COMMIT'LERİ (hepsi play-mode doğrulandı):** `47b59399`(Jersey dynamic rebake=garbled fix) · `9d47dc3c`(editör consolidation, EditMode 25/25+PlayMode 8/8) · `b21649cc`(③ F2 grid overlay gerçek-elmas) · `53ad5f1d`(①② DirectorMode full-flow'da gate) · `79f1c98d`(ödül: doğru chest sub-sprite + timeout=0 kalıcı) · `25cfbf8f`(research+laureth+logo task).
+**✅ COMMIT BATCH TAMAM (2026-06-14, auditor-opus PASS):** Facing fix #1 (4dir→`SnapToEight` 8-yön, flipX once-in-Awake, `[RequireComponent]` kaldırıldı, `PlayerClassManager` animator-driving gate, `Player.prefab` Animator@Body) · Test01 arşivi (→`_Archive` + EditorBuildSettings girdisi silindi) · BuildMode leak fix #10. Pollution gitignore'landı (zips/_inbox/_outbox/compile-log/orphan png.meta). **PUSH BEKLİYOR** (origin master geride; kullanıcı onayı bekliyor).
 
-**🎨 LOGO:** 10 konsept `STAGING/imagegen/rima_logos_20260613/` (gitignored, diskte). **Öneri: logo_01=ana wordmark · logo_10=title key-art · logo_09=app ikon.**
+**🟡 TEK AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→"objects not cleaned up" uyarısı yok) — derlendi + auditor PASS, ama Unity'de canlı tekrar test edilmedi; conservative hideFlags guard, benign.
 
-**📐 RIMA TANIMI (rapora):** RIMA = "RIft MArch" kısaltması + Latince "rima"=çatlak/yarık. Rift March=yarığın amansız ilerleyişi; Architect dünyayı kasıtlı kırdı=**The Fracturing** (void üstü süzülen taş adalar). Ton="Vivid Vulnerability". Palet: slate #3A3D42 · cyan #00FFCC(odak) · void #3A1A4A · amber #E89020.
-
-**📋 OTONOM BACKLOG (mantıksal sıra — rapor verified görsel istediği için ÖNCE oyun sunulabilir olmalı):**
-1. **F+#4 (KÖK TEŞHİSLİ):** _Arena runtime Player'da **Animator+PlayerAnimator YOK**; `Prefabs/Warblade` prefab'ında da yok; `PlayerPrefabSetup` animator bağlamıyor → statik sprite, 8-yön çalışmıyor, silah `FacingDirection`'a bağlı olduğu için sabit. **`PlayerAnimator.cs`=4-diagonal AMA S59 kanon=8-yön → UYUMSUZ → bu kararı COUNCIL'a sor.** Sonra anim sistemini bağla + silah-elde.
-2. #2 skill bar **tooltip** (hover'da okunmuyor; `TooltipSystem`+`SkillBarUI` var, wiring eksik).
-3. #1/#3 skill akışı: run-start **auto-attack** (ilk skill yok) + ödül sonrası 2. skill gelmiyor + **4-slot dolu davranış kararı** (belli mi `DraftManager`/`SkillBarUI`'da bak).
-4. **Verified screenshot seti** (oyun düzgün görününce; çöp/bug'lı ekran YOK).
-5. **35-40 SAYFA HOCA RAPORU (docx):** RIMA tanımı + 9 demo sistemi + tasarım + tooling + verified görseller, güzel+mantıklı bölümler. (Director Mode TASARIMI zayıf + oyunun ana teması DEĞİL → rapora koyma/öne çıkarma; dev tool olarak gated.)
-6. Defer: C/④ editör↔oyun senkron (incremental+test) · agy_image çoklu-üretim kalıcı fix · post-demo: static TMP atlas, save-write-back live test, framework extraction.
-
-**📄 KARARLAR (STAGING):** ROOM_TOOLS_GAMEMODE_DECISION · EDITOR_CONSOLIDATION_DECISION · LEVEL_EDITOR_* · research: `_process/2026-06/_research_pixellab_yt` + `_research_sanghendrix` (PixelLab pipeline: States-first/V3/Interpolate/style-ref; sanghendrix: occlusion-fade/in-game-editor-button).
+**📋 BACKLOG (sıra):**
+1. **PUSH** (kullanıcı onayı) — sonra:
+2. **F2 KARARI bekliyor:** F2 & `"` ikisi de Build Mode toggle; `DirectorMode.Instance=null`→normal play'de inert. Karar: (a)dev-gated kalsın (b)editor-build'de hep çalışsın (c)başka
+3. Silah tuning #2 (polish) · boş `WeaponSprite` placeholder temizle
+4. Mavi-arc #3 · Tooltip #4 · Skill akışı #5 — teşhisler `STAGING/_process/2026-06/_diag_tooltip_skillflow_2026-06-13.md` (2.skill bug=`AssignActive` skillType==null sessiz yutuyor + `ChestBehavior` GetAll() filtrelenmemiş)
+5. Verified screenshot seti #6 — **scene_view capture KULLAN**
+6. Tool UI/UX #7 · Hoca raporu docx #8 (EN SON)
 
 ---
-*Önceki bloklar git history'de. Demo 9/9 vaat çalışıyor; F+#4 facing = sıradaki kök iş.*
+*Önceki bloklar git history'de. F2 kararı = sıradaki iş.*

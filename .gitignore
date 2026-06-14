@@ -124,3 +124,11 @@ _backup_*/
 _archive_root_junk*/
 _archive_sprites_*~/
 .antigravitycli/
+
+# STAGING transient I/O & heavy archives — local only (2026-06-14)
+STAGING/_archive/zips_*/
+STAGING/_inbox/
+STAGING/_outbox/
+STAGING/unity_compile_*.log
+# Orphan .meta for STAGING PNGs (the PNGs themselves are *.png-ignored)
+STAGING/**/*.png.meta

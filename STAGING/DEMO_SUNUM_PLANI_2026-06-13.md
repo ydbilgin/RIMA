@@ -104,3 +104,17 @@
 
 ---
 *LIVE doküman. Üst seviye doğru. Prova sonrası UNCERTAIN maddeleri (dual-class uçtan-uca, TR-klavye backquote, DPS-freeze fix durumu) güncelle.*
+
+---
+
+## (E) F1 DEBUG PANELİ — CEPTEKİ YEDEK TOOL'LAR (council keşfi 2026-06-13 gece)
+
+`DemoDebugPanel` (F1 ile açılır) zaten şunları içeriyor — YENİ KOD GEREKMEDEN sunumda kullanılabilir:
+| Buton | Ne yapar | Sunumda ne işe yarar |
+|---|---|---|
+| **God Mode** (toggle) | Her frame SetImmune+RestoreToFull | Ölüm riskini tamamen kapatır — riskli beat'lerden önce aç |
+| **Kill All Mobs** | Enemy tag'li tüm Health'leri öldürür | Oda temizliğini bekletmeden draft/kapı akışına geç |
+| **Force Room Clear / Restart Room / Next Room / oda atlama** | Oda akış kontrolü | Boss odasına hızlı ulaşmak / akışı hocaya hızlı gezdirmek |
+
+Anlatı: "Director Mode sunum tool'um, F1 paneli geliştirme debug tool'um — ikisini de kendim yazdım" (tooling hikâyesini güçlendirir, gizlenecek bir şey değil).
+DİKKAT: God Mode açıkken stat-tuning hasar beat'i NORMAL çalışır (gelen hasarı keser, çıkan hasarı değil) ama ölüm→Quick Reset beat'ini göstermeden önce God Mode'u KAPAT.
