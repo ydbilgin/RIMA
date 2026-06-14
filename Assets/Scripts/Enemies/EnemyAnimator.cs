@@ -9,6 +9,12 @@ namespace RIMA
     /// 4-yön + flip: sağa bakan yönlerde (DirX > 0) sprite flip edilir,
     /// animator'a negatif DirX gönderilir → sol clip kullanılır.
     /// </summary>
+    // LateUpdate sprite-keeper must run AFTER BaseMobBehavior.LateUpdate (default order 0),
+    // which re-applies a runtime red 48x48 placeholder every frame when the animator clip drove
+    // the sprite to null. A positive execution order makes this keeper the LAST writer so the real
+    // authored sprite wins (otherwise Unity's undefined same-GameObject LateUpdate order let the red
+    // placeholder overwrite us).
+    [DefaultExecutionOrder(100)]
     [RequireComponent(typeof(Animator))]
     public class EnemyAnimator : MonoBehaviour
     {
@@ -50,12 +56,17 @@ namespace RIMA
                 health.OnDeath.AddListener(OnDeath);
         }
 
-        // Runs after the Animator's per-frame sprite write; restores the cached sprite when a
-        // broken clip drove SpriteRenderer.sprite to null.
+        // Runs after the Animator's AND BaseMobBehavior's per-frame sprite writes (see
+        // DefaultExecutionOrder above). FractureImp/Penitent clips drive SpriteRenderer.sprite to
+        // null every frame, then BaseMobBehavior.EnsureVisibleSprite fills a runtime red 48x48
+        // placeholder (a NON-NULL sprite with an empty name) — so a plain `sprite == null` guard
+        // never fires and the body stays a red square. Restore the cached authored sprite whenever
+        // the current sprite is missing OR is that nameless runtime placeholder. Asset-backed
+        // animation frames (working enemies) carry a real sprite name and are left untouched.
         private void LateUpdate()
         {
-            if (_isDead || sr == null) return;
-            if (sr.sprite == null && _fallbackSprite != null)
+            if (_isDead || sr == null || _fallbackSprite == null) return;
+            if (sr.sprite == null || string.IsNullOrEmpty(sr.sprite.name))
                 sr.sprite = _fallbackSprite;
         }
 

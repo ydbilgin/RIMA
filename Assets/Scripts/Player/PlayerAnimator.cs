@@ -147,7 +147,10 @@ namespace RIMA
             // animation isn't fought (mirrors EnemyAnimator._isDead).
             if (health == null) health = GetComponent<Health>();
             if (health != null && health.IsDead) return;
-            if (sr.sprite == null) sr.sprite = fallbackSprite;
+            // Broadened from `sprite == null`: a clip can also write a NON-NULL but textureless
+            // sprite (the same failure class that left enemy bodies as empty squares), which the
+            // null-only guard missed. Restore the cached class idle sprite in both cases.
+            if (sr.sprite == null || sr.sprite.texture == null) sr.sprite = fallbackSprite;
         }
 
         // ─── Sprite-keeper wiring ──────────────────────────────────────────────

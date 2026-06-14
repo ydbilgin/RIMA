@@ -27,7 +27,10 @@
 
 **✅ P7.5 TAMAM (demo-kritik invisible-sprite — P7 verification yakaladı):** Elementalist player + FractureImp/Penitent enemy body'leri runtime'da NULL render ediyordu (animator clip'leri stale/missing sprite GUID → her frame null yazıyor). **FIX A regresyonu** = facing-batch `9557791f` animatorDriving gate fallback'i kaldırmıştı. Fix: `PlayerAnimator` persistent LateUpdate sprite-keeper (Warblade no-op, death-guard'lı, multi-frame 90/90 kanıt) + `EnemyAnimator` keeper (2/16 enemy, _isDead-guard) + `PlayerClassManager` keeper'a publish. **4/4 council FAIL→fix oybirliği + auditor final PASS.** DEFER (post-demo, ROOT): Elementalist idle clip GUID onarımı (927669a7→mevcut sprite) = tam animasyon; enemy archived-frame re-import; keeper o zaman no-op olur.
 
-**📋 SIRA (task board):** P7 screenshot setini tamamla (Elementalist+combat artık görünür) → P8 tool UI → P9 hoca raporu(EN SON).
+**✅ P7.5c TAMAM (enemy combat görünürlüğü):** P7.5 enemy keeper `sprite==null` guard'ı combat'ta yetmiyordu — `BaseMobBehavior.EnsureVisibleSprite` her frame **isimsiz kırmızı placeholder** basıyordu (sprite null değil). Fix: EnemyAnimator `[DefaultExecutionOrder(100)]` (LateUpdate en son) + guard `sprite==null || IsNullOrEmpty(name)` → gerçek sprite kırmızıyı eziyor; PlayerAnimator `texture==null` defensive. 3 sprite-süren enemy (FractureImp/HalfThrall/Penitent) kapsanıyor. 4/4 council PASS + auditor PASS. Combat 40/40 frame görünür (screenshot kanıt). **DEFER ROOT:** clip sprite ref'lerini re-import/re-point → iki keeper inert; BaseMobBehavior kırmızı yerine gerçek cache; guard birleştir (Sprite.IsValid).
+**✅ P7 TAMAM (verified screenshot seti):** `_verified_shots_2026-06-14/` — Warblade weapon/ember, Elementalist (P7.5 kanıt), arena, combat (P7.5c kanıt). Overlay UI (tooltip/skillbar/draft) MCP'de çıkmaz → data-proof prior _done docs'ta.
+
+**📋 SIRA (task board):** P8 tool UI/UX → P9 hoca raporu docx (EN SON).
 
 **🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 
