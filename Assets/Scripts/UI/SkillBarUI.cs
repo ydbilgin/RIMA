@@ -421,11 +421,95 @@ namespace RIMA
 
         internal void ShowSlotTooltip(int visualIndex, Vector2 screenPosition)
         {
+            // Basic-attack slots (visual idx < SkillBarOffset) have no SkillData — build text
+            // from the class BasicAttackProfile the bar already loads.
+            if (visualIndex < SkillBarOffset)
+            {
+                string basic = BuildBasicAttackTooltip(visualIndex);
+                if (string.IsNullOrWhiteSpace(basic)) return;
+                EnsureTooltipSystem();
+                TooltipSystem.Instance?.Show(basic, screenPosition);
+                return;
+            }
+
             SkillData data = GetSkillDataForVisualSlot(visualIndex);
-            if (data == null || string.IsNullOrWhiteSpace(data.description)) return;
+            // Relaxed: a slot with a name but no description still tips (name-only tooltip).
+            if (data == null || string.IsNullOrWhiteSpace(data.skillName)) return;
 
             EnsureTooltipSystem();
             TooltipSystem.Instance?.Show(TooltipSystem.FormatSkill(data), screenPosition);
+        }
+
+        /// <summary>
+        /// Tooltip text for the LMB/RMB basic-attack slots, sourced from BasicAttackProfile.
+        /// </summary>
+        private string BuildBasicAttackTooltip(int visualIndex)
+        {
+            BasicAttackProfile profile = GetActiveBasicAttackProfile();
+            if (profile == null) return null;
+
+            bool isLmb = visualIndex == 0;
+            string name = isLmb ? profile.lmbName : profile.rmbName;
+            if (string.IsNullOrWhiteSpace(name)) name = SlotLabel(visualIndex);
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"<size=12><b>{name}</b></size>  <color=#FFA07A>{(isLmb ? "Temel Saldırı" : "Temel Yetenek")}</color>");
+            sb.AppendLine("────────────────────");
+
+            if (isLmb)
+            {
+                sb.AppendLine($"<color=#87CEEB>Hasar:</color> {GetLmbTooltipDamage(profile)}");
+            }
+            else
+            {
+                // Non-damaging RMB abilities (element-switch, phase-step, blood-pact) have no
+                // damage value — suppress the line rather than show "Hasar: 0" (mirrors the
+                // rmbCost>0 / rmbCooldown>0 guards below).
+                int rmbDmg = GetRmbTooltipDamage(profile);
+                if (rmbDmg > 0)
+                    sb.AppendLine($"<color=#87CEEB>Hasar:</color> {rmbDmg}");
+                if (profile.rmbCost > 0)
+                    sb.AppendLine($"<color=#5FD35F>Maliyet:</color> {profile.rmbCost}");
+                if (profile.rmbCooldown > 0f)
+                    sb.AppendLine($"<color=#87CEEB>CD:</color> {profile.rmbCooldown:F1}s");
+            }
+
+            return sb.ToString();
+        }
+
+        // LMB damage source mirrors the active BasicAttack behavior: combo behaviors
+        // (Melee/MarkPulse/IaidoStance) hit with comboDamage[0]; projectile/strike behaviors
+        // (CastRhythm/ShotCadence/VeilStrike/HeatGauge) hit with projectileDamage.
+        private static int GetLmbTooltipDamage(BasicAttackProfile profile)
+        {
+            switch (profile.behaviorType)
+            {
+                case BasicAttackBehaviorType.CastRhythm:
+                case BasicAttackBehaviorType.ShotCadence:
+                case BasicAttackBehaviorType.VeilStrike:
+                case BasicAttackBehaviorType.HeatGauge:
+                    return profile.projectileDamage;
+                default: // Melee, MarkPulse, IaidoStance
+                    return (profile.comboDamage != null && profile.comboDamage.Length > 0)
+                        ? profile.comboDamage[0]
+                        : profile.projectileDamage;
+            }
+        }
+
+        // RMB damage source mirrors the active BasicAttack behavior's RMB hit:
+        // ShotCadence (Tactical Roll arrow) + HeatGauge (Hip Shot) both fire projectileDamage;
+        // all others (Melee/IaidoStance Rage Outlet, plus the non-damaging RMBs of
+        // MarkPulse/CastRhythm/VeilStrike) read the asset-configured rmbDamage.
+        private static int GetRmbTooltipDamage(BasicAttackProfile profile)
+        {
+            switch (profile.behaviorType)
+            {
+                case BasicAttackBehaviorType.ShotCadence:
+                case BasicAttackBehaviorType.HeatGauge:
+                    return profile.projectileDamage;
+                default:
+                    return profile.rmbDamage;
+            }
         }
 
         internal void HideSlotTooltip()

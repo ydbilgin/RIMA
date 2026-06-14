@@ -12,9 +12,10 @@
 
 **🔁 OTONOM LOOP (kullanıcı emri 2026-06-14):** her faz = execute(Opus sub) → gate(auditor-opus + council 4-advisor) → fix → commit → sonraki. Faz listesi = task board P1-P9.
 
-**✅ P1 TAMAM (skill reward 2b):** `DraftManager`(AssignActive skill/skillType/host null-guard + bind-gated bookkeeping; ShowDraftWithSkill EnsureDependencies+IsDraftActive) + `ChestBehavior`(chest pool→`GetPool(primary,secondary)`=off-class+retired+placeholder eler). 4-advisor council + auditor-opus PASS. Data-proof: GetPool Warblade=23 temiz; dead-entry=0. DEFER: chest room-depth/rarity gating (council).
+**✅ P1 TAMAM (skill reward 2b):** `DraftManager`(null-guard + bind-gated bookkeeping; ShowDraftWithSkill EnsureDependencies+IsDraftActive) + `ChestBehavior`(chest→`GetPool(primary,secondary)`). 4-advisor council + auditor PASS. DEFER: chest room-depth/rarity gating.
+**✅ P2 TAMAM (tooltip):** basic slot 0-1 tooltip (BasicAttackProfile) + behaviorType-aware LMB/RMB hasar (Ranger RMB 0→18 fix) + TooltipSystem EnsureBuilt lazy/idempotent + FormatSkill desc-guard + non-damaging RMB "Hasar:0" gizle. 4-advisor council (cx FAIL→fix) + auditor PASS. DEFER: tooltip→SO encapsulation refactor; Destroy(this) NIT.
 
-**📋 SIRA (task board):** P2 tooltip → P3 run-start(2a, in-game test) → P4 4-slot edge(2c) → P5 mavi-arc(re-diag) → P6 silah polish → P7 screenshot → P8 tool UI → P9 hoca raporu(EN SON).
+**📋 SIRA (task board):** P3 run-start(2a, in-game test) → P4 4-slot edge(2c) → P5 mavi-arc(re-diag) → P6 silah polish → P7 screenshot → P8 tool UI → P9 hoca raporu(EN SON).
 
 **🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 

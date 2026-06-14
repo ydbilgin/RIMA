@@ -26,6 +26,7 @@ namespace RIMA
 
         private Coroutine showCoroutine;
         private bool isVisible;
+        private bool built;
 
         private void Awake()
         {
@@ -35,6 +36,17 @@ namespace RIMA
 
         private void Start()
         {
+            EnsureBuilt();
+        }
+
+        /// <summary>
+        /// Build the tooltip panel lazily and idempotently. Safe to call before Start()
+        /// runs (e.g. when the component is AddComponent'd the same frame as the first hover),
+        /// and a no-op on every subsequent call so the panel is never duplicated.
+        /// </summary>
+        private void EnsureBuilt()
+        {
+            if (built && tooltipPanel != null) return;
             BuildTooltip();
         }
 
@@ -42,6 +54,8 @@ namespace RIMA
         {
             canvas = GetComponentInParent<Canvas>() ?? FindObjectOfType<Canvas>();
             if (canvas == null) return;
+
+            built = true;
 
             // Tooltip panel
             tooltipPanel = new GameObject("Tooltip", typeof(RectTransform));
@@ -98,6 +112,8 @@ namespace RIMA
         /// </summary>
         public void Show(string content, Vector2? screenPosition = null)
         {
+            EnsureBuilt(); // first Show may land before Start() — guarantee a ready panel
+
             if (showCoroutine != null)
                 StopCoroutine(showCoroutine);
 
@@ -247,9 +263,12 @@ namespace RIMA
             sb.AppendLine($"<size=12><b>{skill.skillName}</b></size>  <color={tierColor}>{skill.tier}</color>");
             sb.AppendLine("────────────────────");
 
-            // Description
-            sb.AppendLine(skill.description);
-            sb.AppendLine();
+            // Description (name-only skills have no description → no blank line)
+            if (!string.IsNullOrWhiteSpace(skill.description))
+            {
+                sb.AppendLine(skill.description);
+                sb.AppendLine();
+            }
 
             // Stats
             if (!skill.isPassive)
