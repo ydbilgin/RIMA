@@ -122,9 +122,10 @@ All agents (Claude, Codex, Gemini) read from `MEMORY/`. All must commit after ch
 | `/update-config` | Configure Claude Code settings/hooks/permissions |
 | `/accounts` | Check all Claude account rate limit status |
 
-## Agent Routing (S61 LOCKED — 2026-05-14)
+## Agent Routing (S61 — 2026-05-14) — ⚠️ KISMEN SUPERSEDED (2026-06-13)
+> **GÜNCEL ROUTING (tek-gerçek):** Orchestrator=**Opus 4.8** · execute=**Opus sub-agent** · review=auditor-opus/cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · `rima-codex` agent **KALDIRILDI → `cx dispatch`**. Kaynak: MEMORY `opus_executes_cx_reviews` + `review_routing_2026-06-13` + CURRENT_STATUS RESUME. Aşağıdaki S61 tablosu **tarihsel referans** (Sonnet-orkestra dönemi).
 
-**Orchestrator = Sonnet (default).** Opus sadece gerçekten gerektiğinde.
+**(S61 tarihsel) Orchestrator = Sonnet (default).** Opus sadece gerçekten gerektiğinde.
 
 ### Model Seçim Kuralı
 | Model | Ne zaman |

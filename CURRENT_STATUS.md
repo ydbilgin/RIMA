@@ -1,57 +1,33 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-14 — sunum ~20 Haz; OTONOM DEVAM)
+## ⏯️ RESUME (2026-06-14 akşam — sunum ~20 Haz; ANALİZ BİTTİ → EXECUTION)
 
-**⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=Claude Opus sub-agent · review=auditor-opus/cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · E1-E8. **HARD: aynı anda TEK Unity-süren ajan** (eşzamanlı MCP = python köprü çökmesi); paralel=read-only/filesystem. cx profil: yasinderyabilgin→yekta(son).
+**⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=Opus sub-agent · review=auditor-opus/cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · E1-E8. HARD: aynı anda TEK Unity-süren ajan. cx profil: yasinderyabilgin→yekta(son).
 
-**🔒 STATE DİSİPLİNİ:** Play=full-flow (`playModeStartScene=MainMenu`, dokunma/null bırakma). Commit öncesi pollution temizle. Play mode'u iş bitince STOP'la.
+**🔒 STATE:** Play=full-flow (`playModeStartScene=MainMenu`, dokunma/null bırakma). Commit öncesi pollution temizle. Play bitince STOP.
 
-**✅ COMMIT BATCH TAMAM + PUSHED (2026-06-14, auditor-opus PASS):** Facing fix #1 (4dir→`SnapToEight` 8-yön, flipX once-in-Awake, `[RequireComponent]` kaldırıldı, `PlayerClassManager` animator-driving gate, `Player.prefab` Animator@Body) · Test01 arşivi (→`_Archive` + EditorBuildSettings girdisi silindi) · BuildMode leak fix #10. Pollution gitignore'landı. 4 commit `938e8da9`→origin master.
+**🧭 STRATEJİ KİLİTLENDİ (2026-06-14, 4× council + 2×2 deney; detay decision dosyaları):**
+- **Sunum tezi:** RIMA = "oyun değil **environment + ilk vertical slice**"; domain-specific (genel framework/engine DEME); eksen **%20 oyun / %60 mimari / %20 graphify-audit**; centerpiece=**Edit-to-Play video**. → `STAGING/PRESENTATION_VISION_DECISION_2026-06-14.md` · [[project-presentation-vision]]
+- **Graphify config:** map=**AST-only** · bug-hunt=**deep+opus** cerrahi (≤25 dosya) · deep+sonnet elendi · global LLM=post-demo. → [[reference-graphify-config-policy]]
+- **Graphify update:** on-demand **full rebuild** (`STAGING/_process/2026-06/graphify_fullmap/build_ast_map.py`), per-commit/incremental DEĞİL. Full map mevcut: `graphify_fullmap/graphify-out/` (6925 node; **god-node 6/10=editor → "environment" veri-kanıtı**). → [[reference-graphify-update-policy]]
+- **Ponytail:** tam plugin SKIP; post-demo sadece /ponytail-review checklist. → `STAGING/ponytail_ADOPTION_DECISION_2026-06-14.md` · [[reference-ponytail-verdict]]
+- **F2 tanısı (cerrahi graphify):** #1 `RewardPickup.DraftThenOpenExit` sessiz `ShowDraft` return huni (muhtemelen downstream semptom) · #2 Forge oda 4/8 early-return · #3 dep early-return · #4 Echo seç→bind(kart yok) · #5 Chest'te Echo case yok. → `STAGING/_process/2026-06/f2_echo_graphify_deepopus.json`
 
-**✅ F2 KARARI:** dev-gated KALSIN — mevcut davranış (DirectorMode.Instance=null→normal play'de inert) kasıtlı/doğru, kod değişikliği YOK.
+**🎯 SIRADAKİ = EXECUTION, golden-path-first** (3 advisor + orchestrator hemfikir; "tüm oyunu bug'sız yap" tuzağına düşme — sadece videodaki akış kusursuz olsun):
+1. **Edit-to-Play storyboard** yaz/kilitle (saniye-saniye — en yüksek getiri).
+2. **F2:** minimal repro (1 log/assertion ile gerçek tetikleyiciyi doğrula) → en küçük fix → playtest. 5'i KÖRLEMESİNE fixleme YOK.
+3. **Video kaydı** + doğrula.
+Golden-path dışı her şey = "bilinen limitasyon", post-demo.
 
-**🔁 OTONOM LOOP (kullanıcı emri 2026-06-14):** her faz = execute(Opus sub) → gate(auditor-opus + council 4-advisor) → fix → commit → sonraki. Faz listesi = task board P1-P9.
+**🔴 DEMO POLISH BACKLOG** (golden-path filtresinden geçir — sadece videodaki akışı bozanı ez):
+- **F1** reward room-leak (oda geçişinde önceki ödül kalıyor→despawn) · **F2** reward al→kart çıkmıyor (tanı yukarıda).
+- **J1** reward slow-mo juice · **U1** tooltip dikey-şerit→kart (`TooltipSystem` preferredWidth/ContentSizeFitter) · **U2** Codex scroll · **U3** kaynak barları+sayı · **U4** "ODA TEMİZLENDİ" ortala.
+- **A1** arena görseli (canon-revizyon → ÖNCE netleştir) · **P9** hoca raporu docx (EN SON).
+- ⚠️ Overlay UI MCP screenshot'ta ÇIKMAZ → her UI fix sonrası kullanıcıdan görsel teyit ŞART.
 
-**✅ P1 TAMAM (skill reward 2b):** `DraftManager`(null-guard + bind-gated bookkeeping; ShowDraftWithSkill EnsureDependencies+IsDraftActive) + `ChestBehavior`(chest→`GetPool(primary,secondary)`). 4-advisor council + auditor PASS. DEFER: chest room-depth/rarity gating.
-**✅ P2 TAMAM (tooltip):** basic slot 0-1 tooltip (BasicAttackProfile) + behaviorType-aware LMB/RMB hasar (Ranger RMB 0→18 fix) + TooltipSystem EnsureBuilt lazy/idempotent + FormatSkill desc-guard + non-damaging RMB "Hasar:0" gizle. 4-advisor council (cx FAIL→fix) + auditor PASS. DEFER: tooltip→SO encapsulation refactor; Destroy(this) NIT.
+**🟠 DEFERRED (post-demo):** skill-slot other-class host (ResolvePrimarySlotHost) · chest room-depth gating · tooltip→SO encapsulation · graphify-out lokasyon stabilizasyonu + commit-stamp · Elementalist/enemy clip GUID onarımı (keeper'lar o zaman no-op) · ponytail /ponytail-review checklist · **NLM proper cleanup** (8 canonical straggler + 5 guide-suspect + 728 STAGING triage; notebook **300-cap**'te → önce prune, [[reference-nlm-source-cap-300]]) · STAGING/root "klasör düzgün temizliği".
 
-**✅ P3 KOD DEĞİŞİKLİĞİ YOK (run-start 2a):** demo seçilebilir = Warblade+Elementalist (IsDemoSelectable her giriş noktasında kilitli), ikisinin de ClassKits opening-kit'i var → run-start gap erişilemez. In-game doğrulandı (Q=Gravity Cleave/Glacial Spike). Köşe vakalar güvenli (kit-siz→ShowDraft fallthrough asla boş bırakmaz). auditor CONFIRMED-NO-FIX. Latent post-demo: ClassKits genişlet (DraftManager:73-77).
-
-**✅ P4 TAMAM (4-slot-full edge 2c):** `DraftManager` band-aware replace trigger (HasFree*Slot) + slot-0 clobber abort + cross-band candidate filter (BuildBandReplaceCandidates) + OnReplaceChosen softlock harden. 4-advisor council (3 FAIL→demo-erişilemez other-class gap; cross-band+softlock FOLD edildi) + auditor final PASS.
-
-**🟠 DEFERRED FOLLOW-UP (post-demo):** Skill-slot **other-class host desteği** — HasFreePrimarySlot/FindNextPrimarySlot/FindSlotOf/BuildBandReplaceCandidates Warblade/Elementalist hardcode; Ranger/Shadowblade/Ronin selectable olmadan `ResolvePrimarySlotHost` ile genelleştir (yoksa slot-0 clobber+replace bypass). cx+ax Pro CRITICAL ama demo-erişilemez (P3: sadece W+E selectable). + chest room-depth gating (P1) + tooltip→SO encapsulation (P2).
-
-**✅ P5 TAMAM (mavi-arc #3):** Warblade swing'de çift arc (mavi LineRenderer + ember sprite) → tek **ember** sprite (mavi kaldırıldı; SlashArcVFX/Ravager korundu) + `ApplyAdditiveSprite` element-agnostik hue-koruyan tint (`1.5/max(r,g,b)`; Physical→ember, Void→mor kanıtlı; GravityCleave Void regresyonu orchestrator-QC'de yakalanıp P5b'de düzeltildi). 4-advisor (3 PASS, ax Pro FAIL=mimari/post-demo) + auditor PASS. DEFER: nötr base slash sprite (user art, tam #E89020), data-driven arc, VFX birleştirme, production HSV shader.
-
-**✅ P6 TAMAM (silah polish):** ölü `WeaponSprite` placeholder Player.prefab'tan silindi (0 ref, variant inherit) + `WeaponDatabase.asset` Warblade `anchorOffset` (0.2,0.1)→(0.02,0.33) → grip ELDE (SE pixel-perfect gap 0.000/0.002; eskiden 0.5u kopuktu; "+0.50" idle-pre-sync hâliymiş, OrientationSync per-facing sync ediyor). Beyaz daire=Light2D scene-view gizmo (bug değil). auditor PASS-nits (full council skip=prefab/data hygiene, kod-logic yok). NIT: 2 variant prefab'da zararsız dangling m_SpriteSortPoint override (Unity sonraki save'de düşürür).
-
-**✅ P7.5 TAMAM (demo-kritik invisible-sprite — P7 verification yakaladı):** Elementalist player + FractureImp/Penitent enemy body'leri runtime'da NULL render ediyordu (animator clip'leri stale/missing sprite GUID → her frame null yazıyor). **FIX A regresyonu** = facing-batch `9557791f` animatorDriving gate fallback'i kaldırmıştı. Fix: `PlayerAnimator` persistent LateUpdate sprite-keeper (Warblade no-op, death-guard'lı, multi-frame 90/90 kanıt) + `EnemyAnimator` keeper (2/16 enemy, _isDead-guard) + `PlayerClassManager` keeper'a publish. **4/4 council FAIL→fix oybirliği + auditor final PASS.** DEFER (post-demo, ROOT): Elementalist idle clip GUID onarımı (927669a7→mevcut sprite) = tam animasyon; enemy archived-frame re-import; keeper o zaman no-op olur.
-
-**✅ P7.5c TAMAM (enemy combat görünürlüğü):** P7.5 enemy keeper `sprite==null` guard'ı combat'ta yetmiyordu — `BaseMobBehavior.EnsureVisibleSprite` her frame **isimsiz kırmızı placeholder** basıyordu (sprite null değil). Fix: EnemyAnimator `[DefaultExecutionOrder(100)]` (LateUpdate en son) + guard `sprite==null || IsNullOrEmpty(name)` → gerçek sprite kırmızıyı eziyor; PlayerAnimator `texture==null` defensive. 3 sprite-süren enemy (FractureImp/HalfThrall/Penitent) kapsanıyor. 4/4 council PASS + auditor PASS. Combat 40/40 frame görünür (screenshot kanıt). **DEFER ROOT:** clip sprite ref'lerini re-import/re-point → iki keeper inert; BaseMobBehavior kırmızı yerine gerçek cache; guard birleştir (Sprite.IsValid).
-**✅ P7 TAMAM (verified screenshot seti):** `_verified_shots_2026-06-14/` — Warblade weapon/ember, Elementalist (P7.5 kanıt), arena, combat (P7.5c kanıt). Overlay UI (tooltip/skillbar/draft) MCP'de çıkmaz → data-proof prior _done docs'ta.
-
-## 🔴 YENİ SESSION — DEMO POLISH BACKLOG
-*(kullanıcı 2026-06-14 play-test ekran kanıtları; emir: "hepsini not et yeni session'da yapalım". Sıra: önce fonksiyonel buglar → UI → art. ⚠️ Overlay UI MCP screenshot'ta ÇIKMAZ → her UI fix sonrası KULLANICIDAN görsel teyit ŞART; P2 metni doğruydu ama dikey-şerit layout'unu MCP göremedi.)*
-
-**🐞 FONKSİYONEL (ÖNCE — gameplay correctness):**
-- **F1. Reward item room-leak:** yeni odaya geçince önceki odanın dönen ödül/satın-alınabilir item'ları (Restorative Shield / Rift-Forged Edge / Vitality Crystal) HÂLÂ duruyor → oda geçişinde despawn olmalı. Grep reward pickup / RoomRunDirector transition / Echo spawner.
-- **F2. Reward al → KART ÇIKMIYOR:** odada ödülü alınca ödül kayboluyor ama HİÇBİR draft kartı çıkmıyor. (P1 data-proven'dı; gerçek-play'de Echo/reward yolu kartı göstermiyor.) Grep ShowDraftWithSkill / Echo reward→draft akışı.
-
-**✨ FEATURE/JUICE:**
-- **J1. Reward slow-motion (Hades-vari):** ödül alma anında oyun slow-mo'ya geçsin (Time.timeScale juice).
-
-**🖥️ UI/UX (=P8):**
-- **U1. Tooltip dikey-şerit → güzel KART:** hover'da tooltip dikey mavi şerit (panel genişliği çökmüş→1-char wrap); skill bar + draft kartları (`TooltipSystem`). Kök: `BuildTooltip` panel/text preferredWidth/ContentSizeFitter yok. `Assets/Scripts/UI/TooltipSystem.cs`. (Skill-bar hover→düzgün kart AYNI fix; wiring P2'de var.)
-- **U2. Codex (YETENEK KODEKSİ) scroll yok:** liste altta kesiliyor; ScrollRect gerek.
-- **U3. Kaynak barları (HP/mana/rage):** class-özel, daha okunabilir + bar içinde SAYI ("84/120"). Sol-üst HUD resource-bar.
-- **U4. "ODA TEMİZLENDİ" mesajı:** ortada/belirgin (şu an sol-üst küçük).
-
-**🎨 ART (ayrı track — ÖNCE KARAR):**
-- **A1. Oda/arena görseli "saçma":** cliff-tile ada beğenilmedi → custom art (agy_image=Imagen / codex_image=gpt-image-2 / pixellab). Canon=cliff-tile, painted=legacy [[project-room-canon-cliff-tile-2026-06-13]] → art'a dönmek canon-revizyon, ÖNCE netleştir (yeni tileset? backdrop? prop?).
-
-**SONRA:** P9 hoca raporu docx (EN SON).
-
-**🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
+**🧹 2026-06-14 akşam housekeeping (DONE):** Logo kilitlendi (çapraz-rift `diag_05`/`02`/`03` → BRANDING, `RIMA_LOGO_DECISION_2026-06-14.md`) · /lint #2-4 (PROJECT_RULES routing banner, MEMORY footer, 20 dosya arşiv) · NLM reconcile (14 stale sil, canonical sync, CURRENT_STATUS taze, 300/0-dup) · PixelLab 31 dosya → global `~/.claude/PIXELLAB_REFERENCE.md` · `PROJECT_INDEX.md` giriş noktası oluşturuldu · global CLAUDE.md'ye RIMA cross-session pointer.
 
 ---
-*Önceki bloklar git history'de. Sıradaki: P2 tooltip.*
+*Önceki bloklar git history'de: P1-P7.5c (skill/tooltip/arc/weapon/invisible-sprite) + facing/render batch DONE+pushed (`938e8da9`); demo E2E 10/10 + 9/9 sistem.*

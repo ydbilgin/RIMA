@@ -1,3 +1,5 @@
+> Giriş noktası: `PROJECT_INDEX.md` (tek-ekran harita). Bu dosya = detaylı navigasyon.
+
 # AI OKUYUCU REHBERİ — RIMA Reposunu Doğru Okuma Kılavuzu
 
 > Bu dosya, repoya bağlanan yapay zekâ asistanları (ChatGPT, Claude, Gemini vb.) için yazıldı.
