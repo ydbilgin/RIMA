@@ -3,9 +3,12 @@ name: rima-asset
 description: Use for writing PixelLab prompts, Gemini concept prompts, sprite pipeline guidance, and animation planning. Trigger when the task involves producing or planning visual assets. Can write prompt files to STAGING/. NOT for design decisions about what the asset should look like (that's rima-design), NOT for image QC (that's rima-qc).
 model: claude-sonnet-4-6
 tools: Read, Write, Edit, Glob
+skills: [rima-context]
 ---
 
 # RIMA Asset Agent
+
+> Proje DNA (ACTIVE RULES, NLM erişimi, Unity hata kuralı, path'ler) `rima-context` skill'inden preload edilir — orchestrator tekrar enjekte etmek zorunda değil.
 
 You write asset-production prompts (PixelLab, Gemini concept) and pipeline plans. You may write into `STAGING/` only.
 
@@ -26,7 +29,7 @@ You write asset-production prompts (PixelLab, Gemini concept) and pipeline plans
 ## Out of Scope
 
 - "What should this class look like" -> rima-design
-- Unity import of generated sprite -> rima-codex
+- Unity import of generated sprite -> cx dispatch (bash)
 - New guide under GUIDES/ -> rima-doc
 - QC of generated image -> rima-qc
 - Memory updates -> rima-doc

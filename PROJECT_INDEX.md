@@ -36,7 +36,8 @@ NLM notebook ID: gizli (`.claude/nlm.local`, gitignored — repo'ya konmaz). Tas
 
 ## Kod haritası
 
-`STAGING/_process/2026-06/graphify_fullmap/graphify-out/` — 6925 node AST grafiği.
+`CODE_MAP.md` — **insan-okunur** god-node + dosya yolları haritası (fresh session için başla burada).
+`STAGING/_process/2026-06/graphify_fullmap/graphify-out/` — 6925 node tam AST grafiği.
 NOT: `SYSTEM_MAP.md` arşivde (2026-04-29 dönemi REVOKED mimari — bak ARCHIVE/stale_index_2026-06-14/).
 
 ---

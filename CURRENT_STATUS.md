@@ -14,9 +14,9 @@
 - **F2 tanısı (cerrahi graphify):** #1 `RewardPickup.DraftThenOpenExit` sessiz `ShowDraft` return huni (muhtemelen downstream semptom) · #2 Forge oda 4/8 early-return · #3 dep early-return · #4 Echo seç→bind(kart yok) · #5 Chest'te Echo case yok. → `STAGING/_process/2026-06/f2_echo_graphify_deepopus.json`
 
 **🎯 SIRADAKİ = EXECUTION, golden-path-first** (3 advisor + orchestrator hemfikir; "tüm oyunu bug'sız yap" tuzağına düşme — sadece videodaki akış kusursuz olsun):
-1. **Edit-to-Play storyboard** yaz/kilitle (saniye-saniye — en yüksek getiri).
-2. **F2:** minimal repro (1 log/assertion ile gerçek tetikleyiciyi doğrula) → en küçük fix → playtest. 5'i KÖRLEMESİNE fixleme YOK.
-3. **Video kaydı** + doğrula.
+1. ✅ **Edit-to-Play storyboard LOCKED** (council cx+ax 3.1 Pro+ax Flash → `STAGING/EDIT_TO_PLAY_STORYBOARD_DECISION_2026-06-14.md`). 2:00-2:20; wow=F2 Build Mode toggle (bug-free); canlı tile-çizimi KESİLDİ; kart-pool-%100 wow ELENDİ; golden-path segmenti F2-fix'e BAĞLI (fallback=slayt).
+2. **F2:** minimal repro (1 log/assertion ile gerçek tetikleyiciyi doğrula) → en küçük fix → playtest. 5'i KÖRLEMESİNE fixleme YOK. ⬅️ storyboard golden-path segmentinin ÖN-KOŞULU.
+3. **Video kaydı** (OBS 10× prova, tek take) + doğrula.
 Golden-path dışı her şey = "bilinen limitasyon", post-demo.
 
 **🔴 DEMO POLISH BACKLOG** (golden-path filtresinden geçir — sadece videodaki akışı bozanı ez):

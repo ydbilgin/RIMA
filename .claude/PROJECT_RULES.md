@@ -52,6 +52,16 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 - PPU: **64**
 - **YASAK:** 2.5D mimarisi, 3D environment + billboard, 128px detaylı karakter, KayKit/Blender 3D pipeline (S57-S58 REVOKED)
 
+### Unity Error Check (HARD RULE — her Unity-süren görev, 2026-06-15)
+İş bitince `mcp__UnityMCP__read_console` (Error+Warning) çağrılır. Sonra:
+- Hata **KENDİ değişikliğinden** kaynaklı → **ÇÖZ** (çözemezsen `BLOCKED` yaz, sessizce partial bırakma).
+- Hata **ÖNCEDEN VAR / görevle İLGİSİZ** → raporda **BİLDİR** (silme/refactor etme — Karpathy #3 cerrahi).
+- Her durumda console durumu raporda belirtilir (0-sürpriz; "compile oldu, bitti" YETERSİZ).
+
+Unity-süren her dispatch brief'ine standart satır eklenir:
+`UNITY ERROR CHECK: iş bitince read_console (Error+Warning); kendi hatanı ÇÖZ, ilgisiz/önceden-var hatayı BİLDİR (silme), raporda console durumunu yaz.`
+Hook DEĞİL kural: per-tool-call hook her çağrıda token tekrar harcar; kural context'e bir kez girer (token-economy). İlgili memory: `feedback_unitymcp_error_check_in_dispatch`.
+
 ### Diğer
 5. **Konuşmayı bloklamadan çalış.** Background task'ları `run_in_background: true` ile çağır.
 6. **Sub-agent açmadan önce düşün.** Küçük iş için doğrudan tool call yap.
@@ -88,7 +98,8 @@ Sub-agent dispatch'inde her zaman ilk satır olarak inline ekle:
 | Dispatch task dosyaları (cx/ax görevleri) | `STAGING/_process/<YYYY-MM>/` |
 | `_done_* / _review_* / _research_* / _nlm_*` kayıtları | `STAGING/_process/<YYYY-MM>/` |
 | TASK_* — iş TAMAMLANINCA | `STAGING/_process/<YYYY-MM>/` taşınır |
-| Kararlar/spec'ler (kalıcı) | STAGING üst-seviye (LIVE) |
+| Üretilen script/log/test-output/görsel (`.py`/`.log`/`.png`/ara `.txt`/`.json`) | `STAGING/_process/<YYYY-MM>/` veya `STAGING/tools/` — **ASLA üst-seviye** (asıl kirletici budur; CLI process'leri buraya yazmalı) |
+| Kararlar/spec'ler (kalıcı) | STAGING üst-seviye (LIVE) — sadece `*_DECISION/PLAN/MASTER/SPEC/LOCK/AUDIT/BIBLE.md` |
 
 - `_process/` git-TRACKED'tir (izlenebilirlik korunur) ama `_` prefix'i sayesinde **nlm-sync taramaz** → NLM kirlenmez.
 - Kaçak birikirse: `powershell STAGING/tools/archive_staging_process.ps1` (whitelist-desenli, idempotent, SİLMEZ sadece taşır).
