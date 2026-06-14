@@ -6,17 +6,17 @@
 
 **🔒 STATE DİSİPLİNİ:** Play=full-flow (`playModeStartScene=MainMenu`, dokunma/null bırakma). Commit öncesi pollution temizle. Play mode'u iş bitince STOP'la.
 
-**✅ COMMIT BATCH TAMAM (2026-06-14, auditor-opus PASS):** Facing fix #1 (4dir→`SnapToEight` 8-yön, flipX once-in-Awake, `[RequireComponent]` kaldırıldı, `PlayerClassManager` animator-driving gate, `Player.prefab` Animator@Body) · Test01 arşivi (→`_Archive` + EditorBuildSettings girdisi silindi) · BuildMode leak fix #10. Pollution gitignore'landı (zips/_inbox/_outbox/compile-log/orphan png.meta). **PUSH BEKLİYOR** (origin master geride; kullanıcı onayı bekliyor).
+**✅ COMMIT BATCH TAMAM + PUSHED (2026-06-14, auditor-opus PASS):** Facing fix #1 (4dir→`SnapToEight` 8-yön, flipX once-in-Awake, `[RequireComponent]` kaldırıldı, `PlayerClassManager` animator-driving gate, `Player.prefab` Animator@Body) · Test01 arşivi (→`_Archive` + EditorBuildSettings girdisi silindi) · BuildMode leak fix #10. Pollution gitignore'landı. 4 commit `938e8da9`→origin master.
 
-**🟡 TEK AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→"objects not cleaned up" uyarısı yok) — derlendi + auditor PASS, ama Unity'de canlı tekrar test edilmedi; conservative hideFlags guard, benign.
+**✅ F2 KARARI:** dev-gated KALSIN — mevcut davranış (DirectorMode.Instance=null→normal play'de inert) kasıtlı/doğru, kod değişikliği YOK.
 
-**📋 BACKLOG (sıra):**
-1. **PUSH** (kullanıcı onayı) — sonra:
-2. **F2 KARARI bekliyor:** F2 & `"` ikisi de Build Mode toggle; `DirectorMode.Instance=null`→normal play'de inert. Karar: (a)dev-gated kalsın (b)editor-build'de hep çalışsın (c)başka
-3. Silah tuning #2 (polish) · boş `WeaponSprite` placeholder temizle
-4. Mavi-arc #3 · Tooltip #4 · Skill akışı #5 — teşhisler `STAGING/_process/2026-06/_diag_tooltip_skillflow_2026-06-13.md` (2.skill bug=`AssignActive` skillType==null sessiz yutuyor + `ChestBehavior` GetAll() filtrelenmemiş)
-5. Verified screenshot seti #6 — **scene_view capture KULLAN**
-6. Tool UI/UX #7 · Hoca raporu docx #8 (EN SON)
+**🔁 OTONOM LOOP (kullanıcı emri 2026-06-14):** her faz = execute(Opus sub) → gate(auditor-opus + council 4-advisor) → fix → commit → sonraki. Faz listesi = task board P1-P9.
+
+**✅ P1 TAMAM (skill reward 2b):** `DraftManager`(AssignActive skill/skillType/host null-guard + bind-gated bookkeeping; ShowDraftWithSkill EnsureDependencies+IsDraftActive) + `ChestBehavior`(chest pool→`GetPool(primary,secondary)`=off-class+retired+placeholder eler). 4-advisor council + auditor-opus PASS. Data-proof: GetPool Warblade=23 temiz; dead-entry=0. DEFER: chest room-depth/rarity gating (council).
+
+**📋 SIRA (task board):** P2 tooltip → P3 run-start(2a, in-game test) → P4 4-slot edge(2c) → P5 mavi-arc(re-diag) → P6 silah polish → P7 screenshot → P8 tool UI → P9 hoca raporu(EN SON).
+
+**🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 
 ---
-*Önceki bloklar git history'de. F2 kararı = sıradaki iş.*
+*Önceki bloklar git history'de. Sıradaki: P2 tooltip.*

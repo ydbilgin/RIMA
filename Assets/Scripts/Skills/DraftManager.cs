@@ -371,7 +371,17 @@ namespace RIMA
         /// <summary> Sandıktan gelen tek skill için doğrudan draft aç. </summary>
         public void ShowDraftWithSkill(SkillData skill)
         {
-            if (skill == null || offerUI == null) return;
+            if (skill == null) return;
+            if (IsDraftActive || IsDraftPending) return;
+            // Phase 1 skill-reward fix: the chest path skipped EnsureDependencies(), so when offerUI
+            // was unresolved (Auto instance) it silently returned and the 2nd skill never appeared.
+            EnsureDependencies();
+            if (offerUI == null)
+            {
+                Debug.LogWarning("[DraftManager] ShowDraftWithSkill: offerUI bulunamadı!");
+                return;
+            }
+            IsDraftActive = true;
             var offers = new System.Collections.Generic.List<RewardOffer> { RewardOffer.FromSkill(skill) };
             offerUI.Show(offers, OnOfferSelected);
         }
@@ -641,8 +651,25 @@ namespace RIMA
 
         private void AssignActive(SkillData skill, int slot)
         {
+            // Defensive: a null SkillData has nothing to bind or track.
+            if (skill == null) return;
+
+            // Phase 1 skill-reward fix: an unimplemented placeholder (skillType == null) has no
+            // bindable SkillBase, so binding nothing would leave a dead entry in currentActiveSkills
+            // that shows an empty slot. Skip it as a no-op instead so the slot stays usable.
+            if (skill.skillType == null)
+            {
+                Debug.LogWarning($"[Draft] '{skill.skillName}' atlandı — runtime skill bileşeni yok (skillType=null), slot {slot} boş bırakıldı.");
+                return;
+            }
+
             Component host = slot < 4 ? ResolvePrimarySlotHost() : skillController;
 
+            // Skill-reward fix-up (council 2026-06-14): only record the skill as owned once a
+            // SkillBase is actually bound. Previously the append ran even when host==null (no
+            // controller resolved) or the component failed to attach, leaving a dead/empty slot
+            // entry in currentActiveSkills.
+            bool bound = false;
             if (host != null && skill.skillType != null)
             {
                 var comp = host.GetComponent(skill.skillType) as SkillBase
@@ -656,11 +683,13 @@ namespace RIMA
                     comp.icon = skill.icon;
                     comp.cooldown = skill.cooldown;
                     SetControllerSlot(host, slot, comp);
+                    bound = true;
                 }
                 else
                     Debug.LogWarning($"[Draft] '{skill.skillName}' bileşeni eklenemedi (skillType={skill.skillType}).");
             }
-            if (!currentActiveSkills.Contains(skill))
+
+            if (bound && !currentActiveSkills.Contains(skill))
                 currentActiveSkills.Add(skill);
         }
 

@@ -129,8 +129,15 @@ namespace RIMA
             // 3. slot: skill (SkillDatabase'den rastgele) veya büyük heal
             if (SkillDatabase.Instance != null)
             {
-                var pool = SkillDatabase.Instance.GetAll();
-                if (pool.Count > 0)
+                // Skill-reward fix-up (council 2026-06-14): GetPool filters placeholders
+                // (isImplemented=false), retired offers AND class scope together, so the chest
+                // can no longer offer an unbindable, retired or off-class skill (e.g. a Ranger
+                // skill to a Warblade). Class comes from PlayerClassManager (default Warblade /
+                // None secondary). Room-depth/rarity gating intentionally deferred (separate, larger).
+                var primary = PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade;
+                var secondary = PlayerClassManager.Instance?.SecondaryClass ?? ClassType.None;
+                var pool = SkillDatabase.Instance.GetPool(primary, secondary);
+                if (pool != null && pool.Count > 0)
                 {
                     var pick = pool[Random.Range(0, pool.Count)];
                     offers.Add(RewardOffer.FromSkill(pick));
