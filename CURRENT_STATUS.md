@@ -17,7 +17,11 @@
 
 **✅ P3 KOD DEĞİŞİKLİĞİ YOK (run-start 2a):** demo seçilebilir = Warblade+Elementalist (IsDemoSelectable her giriş noktasında kilitli), ikisinin de ClassKits opening-kit'i var → run-start gap erişilemez. In-game doğrulandı (Q=Gravity Cleave/Glacial Spike). Köşe vakalar güvenli (kit-siz→ShowDraft fallthrough asla boş bırakmaz). auditor CONFIRMED-NO-FIX. Latent post-demo: ClassKits genişlet (DraftManager:73-77).
 
-**📋 SIRA (task board):** P4 4-slot edge(2c) → P5 mavi-arc(re-diag) → P6 silah polish → P7 screenshot → P8 tool UI → P9 hoca raporu(EN SON).
+**✅ P4 TAMAM (4-slot-full edge 2c):** `DraftManager` band-aware replace trigger (HasFree*Slot) + slot-0 clobber abort + cross-band candidate filter (BuildBandReplaceCandidates) + OnReplaceChosen softlock harden. 4-advisor council (3 FAIL→demo-erişilemez other-class gap; cross-band+softlock FOLD edildi) + auditor final PASS.
+
+**🟠 DEFERRED FOLLOW-UP (post-demo):** Skill-slot **other-class host desteği** — HasFreePrimarySlot/FindNextPrimarySlot/FindSlotOf/BuildBandReplaceCandidates Warblade/Elementalist hardcode; Ranger/Shadowblade/Ronin selectable olmadan `ResolvePrimarySlotHost` ile genelleştir (yoksa slot-0 clobber+replace bypass). cx+ax Pro CRITICAL ama demo-erişilemez (P3: sadece W+E selectable). + chest room-depth gating (P1) + tooltip→SO encapsulation (P2).
+
+**📋 SIRA (task board):** P5 mavi-arc(re-diag) → P6 silah polish → P7 screenshot → P8 tool UI → P9 hoca raporu(EN SON).
 
 **🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 

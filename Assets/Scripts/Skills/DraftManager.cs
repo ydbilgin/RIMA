@@ -487,28 +487,54 @@ namespace RIMA
 
         private void HandleActivePick(SkillData skill)
         {
-            int maxSlots = skillController?.SlotCount ?? 4;
-
-            if (currentActiveSkills.Count >= maxSlots)
+            // Bug-fix 2c (2026-06-14): the new pick lands in either the PRIMARY band (slots 0-3)
+            // or the SECONDARY band (slots 4-5). The old check compared currentActiveSkills.Count
+            // (primary + secondary combined) against a single SlotCount cap, so a half-empty primary
+            // band could still flip into replace-mode once the secondary band filled it past the cap
+            // (e.g. 2 primary + 2 secondary = 4 ≥ 4). Decide fullness against the band the pick targets.
+            bool secondary = IsSecondarySkill(skill);
+            if (secondary ? !HasFreeSecondarySlot() : !HasFreePrimarySlot())
             {
-                // Slot dolu → replace modu
+                // Targeted slot band is full → replace modu
+                // P4b cross-band fix (council 2026-06-14): only the pick's TARGET band may be
+                // replaced (primary pick → slots 0-3, secondary pick → 4-5). Passing the full
+                // currentActiveSkills let a primary pick clobber a secondary skill (or reverse).
                 pendingSkill = skill;
-                offerUI.ShowReplaceMode(currentActiveSkills, skill, OnReplaceChosen, OnSkipChosen);
+                offerUI.ShowReplaceMode(BuildBandReplaceCandidates(secondary), skill, OnReplaceChosen, OnSkipChosen);
                 return;
             }
 
-            int slot = IsSecondarySkill(skill) ? FindNextSecondarySlot() : FindNextPrimarySlot();
+            int slot = secondary ? FindNextSecondarySlot() : FindNextPrimarySlot();
             AssignActive(skill, slot);
             FinishPick(skill);
         }
 
         private void OnReplaceChosen(SkillData toReplace)
         {
-            if (pendingSkill == null || toReplace == null) return;
+            // P4b softlock harden (council 2026-06-14): returning without tearing down the UI/state
+            // left IsDraftActive=true with the panel open → softlock. Mirror BUG2 abort / OnSkipChosen.
+            if (pendingSkill == null || toReplace == null)
+            {
+                offerUI.Hide();
+                IsDraftActive = false;
+                pendingSkill = null;
+                return;
+            }
 
             // Eski skillin slot indeksini bul
             int replaceSlot = FindSlotOf(toReplace);
-            if (replaceSlot < 0) replaceSlot = FindNextPrimarySlot();
+            // Bug-fix 2c (2026-06-14): if the chosen skill can't be located in any controller slot,
+            // the old fallback was FindNextPrimarySlot() — but replace-mode only runs when slots are
+            // full, so that fallback returns 0 and silently clobbers slot 0. Abort the replace instead
+            // (keep the loadout intact); the pick is simply discarded rather than overwriting the wrong slot.
+            if (replaceSlot < 0)
+            {
+                Debug.LogWarning($"[Draft] Replace iptal — '{toReplace?.skillName}' hiçbir slotta bulunamadı, slot 0 korunuyor.");
+                pendingSkill = null;
+                offerUI.Hide();
+                IsDraftActive = false;
+                return;
+            }
 
             currentActiveSkills.Remove(toReplace);
             AssignActive(pendingSkill, replaceSlot);
@@ -705,6 +731,78 @@ namespace RIMA
         {
             var primary = PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade;
             return s.classType != ClassType.None && s.classType != primary;
+        }
+
+        /// <summary>
+        /// P4b cross-band fix (council 2026-06-14): build the replace-mode candidate list restricted
+        /// to the pick's TARGET band. Secondary band = slots 4-5 on the Warblade host; primary band =
+        /// slots 0-3 on the Elementalist host (if Elementalist-primary) else Warblade host. Host
+        /// resolution mirrors HasFree*/FindNext* so the candidates resolve back via FindSlotOf.
+        /// Each occupied slot's SkillBase is matched to its SkillData entry in currentActiveSkills by
+        /// skillType — so the chosen toReplace still locates its real slot in OnReplaceChosen.
+        /// </summary>
+        private List<SkillData> BuildBandReplaceCandidates(bool secondary)
+        {
+            var result = new List<SkillData>();
+
+            int start = secondary ? 4 : 0;
+            int end   = secondary ? 6 : 4;
+
+            Component host;
+            if (secondary)
+                host = skillController;                                // secondary band always on Warblade host
+            else if (UseElementalistPrimary())
+                host = elemSlotController;                             // Elementalist owns primary slots
+            else
+                host = skillController;                                // default Warblade primary host
+
+            if (host == null) return result;
+
+            for (int i = start; i < end; i++)
+            {
+                var slotSkill = GetControllerSlot(host, i);
+                if (slotSkill == null) continue;
+                System.Type t = slotSkill.GetType();
+
+                // Map the bound SkillBase back to its owning SkillData (same skillType key FindSlotOf uses).
+                for (int j = 0; j < currentActiveSkills.Count; j++)
+                {
+                    var sd = currentActiveSkills[j];
+                    if (sd != null && sd.skillType == t && !result.Contains(sd))
+                    {
+                        result.Add(sd);
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        // Bug-fix 2c (2026-06-14): per-band capacity probes for the replace-mode trigger. They mirror
+        // the host resolution of FindNext*Slot so "is the band full?" and "where does it land?" agree.
+        private bool HasFreePrimarySlot()
+        {
+            if (UseElementalistPrimary())
+            {
+                for (int i = 0; i < 4; i++)
+                    if (elemSlotController.GetSlot(i) == null) return true;
+                return false;
+            }
+
+            if (skillController == null) return true; // no controller yet → let AssignActive resolve one
+            for (int i = 0; i < 4; i++)
+                if (skillController.GetSlot(i) == null) return true;
+            return false;
+        }
+
+        private bool HasFreeSecondarySlot()
+        {
+            // Secondary band (Z/X) only exists once unlocked, and always lives on the Warblade host.
+            if (skillController == null || !skillController.SecondaryUnlocked) return false;
+            for (int i = 4; i < 6; i++)
+                if (skillController.GetSlot(i) == null) return true;
+            return false;
         }
 
         private int FindNextPrimarySlot()
