@@ -30,7 +30,9 @@
 **✅ P7.5c TAMAM (enemy combat görünürlüğü):** P7.5 enemy keeper `sprite==null` guard'ı combat'ta yetmiyordu — `BaseMobBehavior.EnsureVisibleSprite` her frame **isimsiz kırmızı placeholder** basıyordu (sprite null değil). Fix: EnemyAnimator `[DefaultExecutionOrder(100)]` (LateUpdate en son) + guard `sprite==null || IsNullOrEmpty(name)` → gerçek sprite kırmızıyı eziyor; PlayerAnimator `texture==null` defensive. 3 sprite-süren enemy (FractureImp/HalfThrall/Penitent) kapsanıyor. 4/4 council PASS + auditor PASS. Combat 40/40 frame görünür (screenshot kanıt). **DEFER ROOT:** clip sprite ref'lerini re-import/re-point → iki keeper inert; BaseMobBehavior kırmızı yerine gerçek cache; guard birleştir (Sprite.IsValid).
 **✅ P7 TAMAM (verified screenshot seti):** `_verified_shots_2026-06-14/` — Warblade weapon/ember, Elementalist (P7.5 kanıt), arena, combat (P7.5c kanıt). Overlay UI (tooltip/skillbar/draft) MCP'de çıkmaz → data-proof prior _done docs'ta.
 
-**📋 SIRA (task board):** P8 tool UI/UX → P9 hoca raporu docx (EN SON).
+**🔴 YENİ SESSION İLK İŞ — Tooltip layout bug (kullanıcı 2026-06-14 ekran kanıtı):** Bir şeyin üstüne gelince tooltip **dikey mavi şerit** olarak çıkıyor (metin karakter-karakter dikey diziliyor = panel GENİŞLİĞİ çökmüş). HER YERDE (skill bar + draft kartları, hepsi `TooltipSystem`). P2'de tooltip'i "görünür" yaptık + metni data-proof'ladık ama **overlay UI MCP screenshot'ta çıkmadığı için layout'u göremedik** (görsel kontrol=kullanıcı). Muhtemel kök: `TooltipSystem.BuildTooltip` panel/text RectTransform — preferredWidth/ContentSizeFitter/max-width yok → 1-char-genişlik wrap. Fix sonrası kullanıcıdan görsel teyit ŞART (MCP göremez). Dosya: `Assets/Scripts/UI/TooltipSystem.cs`.
+
+**📋 SIRA (task board):** Tooltip layout (yukarı, İLK) → P8 tool UI/UX → P9 hoca raporu docx (EN SON).
 
 **🟡 AÇIK VERIFY:** Leak fix #10 edit-mode runtime verify (build mode aç→sahne kapa→uyarı yok) — derlendi+auditor PASS, canlı tekrar yok; benign. (Not: play-EXIT'te "objects not cleaned up" benign teardown ayrı konu.)
 
