@@ -33,16 +33,16 @@ Resmî davranış (RIMA'da claude-code-guide ile doğrulandı; sen de teyit et, 
 
 ## 4. Senin için görev (araştır → uyarla → kaydet)
 1. **Araştır/doğrula:** Yukarıdaki CC gerçeklerini kendi ortamında teyit et. Fable-tabanlı orkestrasyonun (sizde executor farklı) bu pattern'i değiştirip değiştirmediğini değerlendir. Global base agent listenizi (`~/.claude/agents/`) ve mevcut proje agent'larınızı çıkar.
-2. **Tasarla:** `laureth-context` (veya uygun isim) skill'inin içeriğini kararlaştır — LaurethStudio'nun DNA'sı: proje kuralları, bilgi-tabanı erişimi (sizin NLM notebook'unuz), anahtar path'ler, çıktı disiplini. RIMA'nın rima-context'ini şablon al, RIMA'ya özel her şeyi (Unity, NLM ID, god-node) KENDİ projenle değiştir.
+2. **Tasarla:** `studio-context` skill'inin içeriğini kararlaştır (proje agent/skill prefix'i = **`studio`** → mixin `studio-context`, thin agent'lar `studio-<rol>` ör. `studio-design`) — LaurethStudio'nun DNA'sı: proje kuralları, bilgi-tabanı erişimi (sizin NLM notebook'unuz), anahtar path'ler, çıktı disiplini. RIMA'nın rima-context'ini şablon al, RIMA'ya özel her şeyi (Unity, NLM ID, god-node) KENDİ projenle değiştir.
 3. **Roster kararı:** Hangi proje-özel thin agent gerçekten gerekli (gerçek proje-yargısı), hangisi global base + context-skill ile karşılanır → dupliküleri ele.
 4. **Sınır kuralı:** Global base agent'ları ASLA proje-özel düzenleme. Tüm özelleştirme mixin skill'inde.
 5. **Kalıcı kaydet:**
-   - Proje memory'sine: bu mimari kararı + global/proje sınır kuralı + `laureth-context` tasarımı.
+   - Proje memory'sine: bu mimari kararı + global/proje sınır kuralı + `studio-context` tasarımı.
    - NLM notebook'unuza (varsa) sync.
    - Opsiyonel: pattern'i tekrar-kullanılabilir kılmak için global `bootstrap-project` skill'ine "her yeni proje = global base + `<proj>-context` mixin + thin agent" convention'ını öner/gömme.
 
 ## 5. Çıktı (LaurethStudio'dan beklenen)
-- `laureth-context` skill taslağı (içerik + path).
+- `studio-context` skill taslağı (içerik + path).
 - Thin agent roster önerisi (tut/ele tablosu, gerekçeli).
 - Kaydedilen memory/NLM kayıtlarının özeti.
 - Global base'e dokunulmadığının teyidi.

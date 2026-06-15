@@ -1,6 +1,6 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-14 akşam — sunum ~20 Haz; ANALİZ BİTTİ → EXECUTION)
+## ⏯️ RESUME (2026-06-15 — sunum ~20 Haz; tooling/housekeeping session bitti → EXECUTION'a DÖN)
 
 **⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=Opus sub-agent · review=auditor-opus/cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · E1-E8. HARD: aynı anda TEK Unity-süren ajan. cx profil: yasinderyabilgin→yekta(son).
 
@@ -22,12 +22,19 @@ Golden-path dışı her şey = "bilinen limitasyon", post-demo.
 **🔴 DEMO POLISH BACKLOG** (golden-path filtresinden geçir — sadece videodaki akışı bozanı ez):
 - **F1** reward room-leak (oda geçişinde önceki ödül kalıyor→despawn) · **F2** reward al→kart çıkmıyor (tanı yukarıda).
 - **J1** reward slow-mo juice · **U1** tooltip dikey-şerit→kart (`TooltipSystem` preferredWidth/ContentSizeFitter) · **U2** Codex scroll · **U3** kaynak barları+sayı · **U4** "ODA TEMİZLENDİ" ortala.
-- **A1** arena görseli (canon-revizyon → ÖNCE netleştir) · **P9** hoca raporu docx (EN SON).
+- **A1** arena görseli (canon-revizyon → ÖNCE netleştir) · **P9** hoca raporu docx (EN SON; **graphify figürleri HAZIR**: `STAGING/report/graphify/` native HTML+screenshot+Obsidian vault).
 - ⚠️ Overlay UI MCP screenshot'ta ÇIKMAZ → her UI fix sonrası kullanıcıdan görsel teyit ŞART.
 
 **🟠 DEFERRED (post-demo):** skill-slot other-class host (ResolvePrimarySlotHost) · chest room-depth gating · tooltip→SO encapsulation · Elementalist/enemy clip GUID onarımı (keeper'lar o zaman no-op) · ponytail /ponytail-review checklist · `Assets/Scripts/graphify-out/` (624 cache Unity ağacında, gitignored/regenerable → sil/taşı) · hidden `.cx_dispatch`/`.ax_dispatch` done-file birikmesi (minör).
 
-**🧹 2026-06-14 akşam housekeeping (DONE):** Logo kilitlendi (çapraz-rift `diag_05`/`02`/`03` → BRANDING, `RIMA_LOGO_DECISION_2026-06-14.md`) · /lint #2-4 (PROJECT_RULES routing banner, MEMORY footer, 20 dosya arşiv) · **NLM structure fix** (junk %26 → **230 kaynak/0-dup/~70 boş**, 8 straggler eklendi, [[reference-nlm-source-cap-300]]) · **STAGING 546→214** (332 junk arşiv) · **memory 268→257** + `_INVENTORY_2026-06-14.md` · PixelLab 31 dosya → global `~/.claude/PIXELLAB_REFERENCE.md` · `PROJECT_INDEX.md` giriş noktası · global CLAUDE.md RIMA cross-session pointer · 5 commit, working tree temiz.
+**🧹 2026-06-15 session (tooling/housekeeping — ⚠️ EXECUTION'a DOKUNULMADI, sıradaki o):**
+- **Agent mimarisi base+mixin:** `rima-context` skill + 6 agent `skills:[rima-context]`; rima-codex leak fix (`.claude/_agent_backups/`); stale drift temizliği · **CODE_MAP.md** + PROJECT_INDEX link.
+- **3 HARD RULE eklendi:** Unity-error-check (ilgili→çöz/ilgisiz→bildir) · STAGING non-md konvansiyon · **Graphify query-first** (cross-file soruda önce `graphify query`, ~71× ucuz; global CLAUDE.md+propagate / GEMINI.md / `.codex` / PROJECT_RULES / rima-context / AGENTS → [[graphify-query-first]]).
+- **Graphify DOĞRU kullanım netleşti:** asıl değer=**sorgu katmanı (AI hafızası)**, görsel ikincil. Rapor/P9 figürleri HAZIR: `STAGING/report/graphify/` (native HTML dense/file-level/closeup + screenshot) + Obsidian vault 7043-not (regenerable, commit'leme).
+- **STAGING 286→217** (69 non-md arşiv) + `/lint` hygiene check (Step 5b).
+- **Edit-to-Play storyboard LOCKED** (council) → `STAGING/EDIT_TO_PLAY_STORYBOARD_DECISION_2026-06-14.md`.
+- **PixelLab:** Discord izin maili council-onaylı (`STAGING/PIXELLAB_DISCORD_LEGAL_EMAIL_DRAFT_2026-06-15.md` — kullanıcı GÖNDERECEK, DM-first; contact `support@pixellab.ai`) · LaurethStudio 3 prompt (agent-arch / RIMA-briefing / graphify-adopt) `_process/`.
+- ⚠️ **Working tree COMMIT BEKLİYOR** (graphify figür/script + email + laureth prompt + PROJECT_RULES/rima-context/AGENTS/CODE_MAP). 1 commit `c9a72f33` atıldı (storyboard+sweep+agent-arch); gerisi açık.
 
 ---
 *Önceki bloklar git history'de: P1-P7.5c (skill/tooltip/arc/weapon/invisible-sprite) + facing/render batch DONE+pushed (`938e8da9`); demo E2E 10/10 + 9/9 sistem.*

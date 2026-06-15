@@ -25,6 +25,9 @@ Direct-read SADECE: `CURRENT_STATUS.md` · `.claude/PROJECT_RULES.md` · kod (`A
 - Hata **önceden var / ilgisiz** → raporda **BİLDİR** (silme/refactor etme).
 - Console durumu her zaman raporda; "compile oldu" yetersiz. Aynı anda TEK Unity-süren ajan.
 
+## GRAPHIFY QUERY-FIRST (çok-dosya/mimari soru)
+"X nasıl çalışıyor / Y'yi ne çağırıyor / hangi dosyalar arada / hangi dosya neye bağlı" gibi çok-dosya sorularında, 20 dosya okumadan ÖNCE projenin graphify grafını sorgula: `graphify query "..."` / `explain <node>` / `path <A> <B>`. RIMA grafı: `STAGING/_process/2026-06/graphify_fullmap/graphify-out/graph.json` (~71× ucuz). graphify = sorgulanabilir hafıza, görsel değil. [[graphify-query-first]]
+
 ## Anahtar path'ler / giriş noktaları
 - `PROJECT_INDEX.md` — tek-ekran giriş haritası · `CODE_MAP.md` — god-node + kod yolları
 - `CURRENT_STATUS.md` — anlık iş (RESUME) · `.claude/PROJECT_RULES.md` — tam kurallar

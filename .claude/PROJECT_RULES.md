@@ -62,6 +62,13 @@ Unity-süren her dispatch brief'ine standart satır eklenir:
 `UNITY ERROR CHECK: iş bitince read_console (Error+Warning); kendi hatanı ÇÖZ, ilgisiz/önceden-var hatayı BİLDİR (silme), raporda console durumunu yaz.`
 Hook DEĞİL kural: per-tool-call hook her çağrıda token tekrar harcar; kural context'e bir kez girer (token-economy). İlgili memory: `feedback_unitymcp_error_check_in_dispatch`.
 
+### Graphify Query-First (HARD RULE — 2026-06-15)
+Çok-dosya/mimari sorularda ("X nasıl çalışıyor / Y'yi ne çağırıyor / hangi dosyalar arada / hangi dosya neye bağlı") ÖNCE graphify sorgu katmanını kullan: `/graphify query "..."` (veya `explain <node>` / `path <A> <B>`) → graph.json index, bulk-read'den **~71× ucuz**. graphify'ın asıl değeri = **sorgulanabilir AI hafızası, görsel DEĞİL**.
+- **RIMA grafı:** `STAGING/_process/2026-06/graphify_fullmap/graphify-out/graph.json` (6925 node, AST). Tazelik: `--update`/rebuild (`build_ast_map.py`) = **0 token**. (Graf proje-bazlı — bu yol RIMA'ya özel.)
+- Görsel = native flag (`--obsidian`/`--graphml`→Gephi), elle script DEĞİL. god-node analizi (6/10 editor tezi) = geçerli ikincil kullanım.
+- **Dispatch brief satırı (Unity-dışı çok-dosya görevde ZORUNLU):** `GRAPHIFY: cross-file/mimari soruda önce graphify query (graph.json: STAGING/_process/2026-06/graphify_fullmap/graphify-out/), bulk-read'den ~71x ucuz.`
+Memory: [[graphify-query-first]] · cx: `~/.codex/memories/rima_graphify_query_first.md` · ax: `~/.gemini/GEMINI.md` · global: `~/.claude/CLAUDE.md`.
+
 ### Diğer
 5. **Konuşmayı bloklamadan çalış.** Background task'ları `run_in_background: true` ile çağır.
 6. **Sub-agent açmadan önce düşün.** Küçük iş için doğrudan tool call yap.

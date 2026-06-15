@@ -82,6 +82,7 @@ The orchestrator (Claude main thread) is the conductor. Agents are dumb workers 
 - Open ONLY paths the orchestrator listed in your prompt.
 - If you need a file that was not listed, stop and report missing context. Do not browse, do not glob, do not grep beyond your scope.
 - No file in your prompt -> no file you may open. Period.
+- **Graphify query-first (HARD RULE, ALL agents):** cross-file/architecture question ("what calls X", "how does Y flow", "which files are involved", "what depends on Z") -> query the project's graphify graph FIRST (`graphify query`/`explain`/`path` on graph.json), ~71x cheaper than bulk-reading. RIMA graph: `STAGING/_process/2026-06/graphify_fullmap/graphify-out/graph.json`. graphify = queryable index, not visualization.
 
 **Exception:** Antigravity (Codex) reads `ANTIGRAVITY.md` and operates within the allowed-files boundary specified in its task prompt.
 
