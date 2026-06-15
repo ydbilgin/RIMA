@@ -181,6 +181,9 @@ namespace RIMA
             RefreshLocalizedText();
             SetState(DirectorModeState.Test);
             ShowTab(DirectorTab.Spawn);
+            // State default'u zaten Test → yukarıdaki SetState same-state early-return yapar ve overlay'i
+            // gizlemez. Dev-direct girişte gameplay TEMİZ başlasın diye overlay'i açıkça gizle (2026-06-15).
+            SetOverlayVisible(false);
         }
 
         private void Update()
@@ -313,6 +316,12 @@ namespace RIMA
                 // Dual-class draft sırasında gizlenmiş olabilir; Director'a dönünce overlay'i geri getir.
                 SetOverlayVisible(true);
                 CacheCameraTarget();
+            }
+            else
+            {
+                // Test/gameplay: Director overlay'i gizle ki oyun ve director AYRI kalsın (2026-06-15).
+                // Overlay yalnız Director state'inde (backquote ile) görünür.
+                SetOverlayVisible(false);
             }
 
             ApplyStateText();
