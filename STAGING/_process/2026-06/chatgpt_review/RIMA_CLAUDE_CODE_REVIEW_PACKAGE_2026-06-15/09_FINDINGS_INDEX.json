@@ -1,0 +1,91 @@
+{
+  "repository": "ydbilgin/RIMA",
+  "branch_reviewed": "master",
+  "review_date": "2026-06-15",
+  "findings": [
+    {
+      "id": "RIMA-001",
+      "severity": "WOULD-BREAK-A-LIVE-DEMO",
+      "confidence": "CONFIRMED",
+      "title": "Conflicting Time.timeScale ownership",
+      "primary_file": "Assets/Scripts/UI/DirectorMode.cs"
+    },
+    {
+      "id": "RIMA-002",
+      "severity": "WOULD-BREAK-A-LIVE-DEMO",
+      "confidence": "SUSPECTED",
+      "title": "Director Mode may not bootstrap after normal menu entry",
+      "primary_file": "Assets/Scripts/UI/DirectorMode.cs"
+    },
+    {
+      "id": "RIMA-003",
+      "severity": "WOULD-BREAK-A-LIVE-DEMO",
+      "confidence": "CONFIRMED",
+      "title": "Build Mode can hide active modal UI",
+      "primary_file": "Assets/Scripts/UI/BuildModeController.cs"
+    },
+    {
+      "id": "RIMA-004",
+      "severity": "WOULD-BREAK-A-LIVE-DEMO",
+      "confidence": "SUSPECTED",
+      "title": "Room-clear delayed draft is not serialized",
+      "primary_file": "Assets/Scripts/Skills/DraftManager.cs"
+    },
+    {
+      "id": "RIMA-005",
+      "severity": "WOULD-BREAK-A-LIVE-DEMO",
+      "confidence": "CONFIRMED",
+      "title": "Anonymous secondary-class event subscription leaks",
+      "primary_file": "Assets/Scripts/Skills/DraftManager.cs"
+    },
+    {
+      "id": "RIMA-006",
+      "severity": "WOULD-BREAK-A-LIVE-DEMO",
+      "confidence": "CONFIRMED",
+      "title": "Reward timeout opens doors while draft may remain active",
+      "primary_file": "Assets/Scripts/Core/RewardPickup.cs"
+    },
+    {
+      "id": "RIMA-007",
+      "severity": "WOULD-BREAK-A-LIVE-DEMO",
+      "confidence": "SUSPECTED",
+      "title": "Opening draft coroutine may survive same-scene restart",
+      "primary_file": "Assets/Scripts/MapDesigner/Room/Runtime/RoomRunDirector.cs"
+    },
+    {
+      "id": "RIMA-008",
+      "severity": "COSMETIC",
+      "confidence": "CONFIRMED",
+      "title": "Build tool hotkeys fire while typing in search input",
+      "primary_file": "Assets/Scripts/UI/BuildMode/BuildPlacementController.cs"
+    },
+    {
+      "id": "RIMA-009",
+      "severity": "COSMETIC",
+      "confidence": "CONFIRMED",
+      "title": "Rapid Build Mode re-entry can drift camera baseline",
+      "primary_file": "Assets/Scripts/UI/BuildModeController.cs"
+    },
+    {
+      "id": "RIMA-010",
+      "severity": "CONTRACT-DEPENDENT",
+      "confidence": "SUSPECTED",
+      "title": "Positive base damage is clamped to at least one",
+      "primary_file": "Assets/Scripts/Balance/DamageCalculator.cs"
+    },
+    {
+      "id": "RIMA-011",
+      "severity": "NON-ISSUE-OR-FUTURE",
+      "confidence": "CONFIRMED",
+      "title": "Power scaling by /100f is correct",
+      "primary_file": "Assets/Scripts/Balance/DamageCalculator.cs"
+    },
+    {
+      "id": "RIMA-012",
+      "severity": "NON-ISSUE-OR-FUTURE",
+      "confidence": "CONFIRMED",
+      "title": "Posture overflow is explicitly future work",
+      "primary_file": "Assets/Scripts/Balance/DamageCalculator.cs"
+    }
+  ]
+}
