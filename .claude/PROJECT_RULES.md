@@ -141,7 +141,7 @@ All agents (Claude, Codex, Gemini) read from `MEMORY/`. All must commit after ch
 | `/accounts` | Check all Claude account rate limit status |
 
 ## Agent Routing (S61 — 2026-05-14) — ⚠️ KISMEN SUPERSEDED (2026-06-13)
-> **GÜNCEL ROUTING (tek-gerçek):** Orchestrator=**Opus 4.8** · execute=**Opus sub-agent** · review=auditor-opus/cx (writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · `rima-codex` agent **KALDIRILDI → `cx dispatch`**. Kaynak: MEMORY `opus_executes_cx_reviews` + `review_routing_2026-06-13` + CURRENT_STATUS RESUME. Aşağıdaki S61 tablosu **tarihsel referans** (Sonnet-orkestra dönemi).
+> **GÜNCEL ROUTING (tek-gerçek):** Orchestrator=**Opus 4.8** · execute=**crafter-sonnet (iyi-specli cerrahi/mekanik) / Opus sub-agent (yeni/tasarım-hassas)** + **zorunlu audit gate** (auditor-opus/cx, writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · `rima-codex` agent **KALDIRILDI → `cx dispatch`**. **Unity-süren execute = TEK serial ajan** (fan-out/worktree YOK). Kaynak: MEMORY `opus_executes_cx_reviews` (2026-06-15 REVİZYON) + `STAGING/SONNET_EXECUTE_AUDIT_ROUTING_2026-06-15.md` + CURRENT_STATUS RESUME. Aşağıdaki S61 tablosu **tarihsel referans** (Sonnet-orkestra dönemi).
 
 **(S61 tarihsel) Orchestrator = Sonnet (default).** Opus sadece gerçekten gerektiğinde.
 
