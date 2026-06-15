@@ -102,6 +102,14 @@ namespace RIMA
         {
             RoomLoader.OnRoomLoaded -= HandleRoomLoaded;
             RoomLoader.OnRoomCleared -= HandleRoomCleared;
+            if (PlayerClassManager.Instance != null)
+                PlayerClassManager.Instance.OnSecondaryClassSelected -= OnSecondaryClassSelectedDraft;
+        }
+
+        private void OnDestroy()
+        {
+            if (PlayerClassManager.Instance != null)
+                PlayerClassManager.Instance.OnSecondaryClassSelected -= OnSecondaryClassSelectedDraft;
         }
 
         private void Start()
@@ -111,17 +119,19 @@ namespace RIMA
                 skillController = player.GetComponent<Warblade_SkillController>();
 
             if (PlayerClassManager.Instance != null)
-                PlayerClassManager.Instance.OnSecondaryClassSelected += _ =>
-                {
-                    // Auto-created instances (DraftManager_Auto) have no serialized refs yet —
-                    // resolve them here, not just in ShowDraft(), or this lambda NREs and the
-                    // unlock draft never opens.
-                    EnsureDependencies();
-                    if (offerGenerator != null)
-                        offerGenerator.nextDraftIsUnlock = true;
-                    IsDraftPending = true;   // flag raised before the 2 s delay so WaitWhile sees it immediately
-                    StartCoroutine(ShowDraftDelayed(2f));
-                };
+                PlayerClassManager.Instance.OnSecondaryClassSelected += OnSecondaryClassSelectedDraft;
+        }
+
+        private void OnSecondaryClassSelectedDraft(ClassType _)
+        {
+            // Auto-created instances (DraftManager_Auto) have no serialized refs yet —
+            // resolve them here, not just in ShowDraft(), or this handler NREs and the
+            // unlock draft never opens.
+            EnsureDependencies();
+            if (offerGenerator != null)
+                offerGenerator.nextDraftIsUnlock = true;
+            IsDraftPending = true;   // flag raised before the 2 s delay so WaitWhile sees it immediately
+            StartCoroutine(ShowDraftDelayed(2f));
         }
 
         private IEnumerator ShowDraftDelayed(float delay)
@@ -194,6 +204,7 @@ namespace RIMA
         /// <summary> Oda temizlendikten veya boss yenildikten sonra çağrılır. </summary>
         public void ShowDraft()
         {
+            if (IsDraftActive) return;  // re-entry guard: çift-draft önle
             IsDraftPending = false;  // delay penceresi kapandı; aktif durum IsDraftActive'e devredildi
             EnsureDependencies();
             if (offerGenerator == null || offerUI == null)

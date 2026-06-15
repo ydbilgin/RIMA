@@ -215,6 +215,11 @@ namespace RIMA
                 return;
             }
 
+            // Guard: do not enter Build Mode while a draft or overlay is open (centerpiece protection).
+            if ((UIManager.Instance != null && UIManager.Instance.IsAnyOverlayOpen) ||
+                (DraftManager.Instance != null && (DraftManager.Instance.IsDraftActive || DraftManager.Instance.IsDraftPending)))
+                return;
+
             DirectorMode director = DirectorMode.Instance;
             if (director == null)
             {

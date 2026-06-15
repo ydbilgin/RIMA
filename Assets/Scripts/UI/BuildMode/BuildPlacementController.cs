@@ -294,6 +294,7 @@ namespace RIMA.UI.BuildMode
 
         private void HandleKeyboard()
         {
+            if (searchField != null && searchField.isFocused) return;  // search input active — suppress hotkeys
             Keyboard kb = Keyboard.current;
             if (kb == null) return;
 

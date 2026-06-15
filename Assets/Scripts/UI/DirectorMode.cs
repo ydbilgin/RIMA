@@ -322,6 +322,7 @@ namespace RIMA
                 // Test/gameplay: Director overlay'i gizle ki oyun ve director AYRI kalsın (2026-06-15).
                 // Overlay yalnız Director state'inde (backquote ile) görünür.
                 SetOverlayVisible(false);
+                hasCameraTarget = false;  // yeni odada eski Director koordinatına uçmayı önle
             }
 
             ApplyStateText();

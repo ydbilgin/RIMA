@@ -143,6 +143,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         private RewardPickup activeReward;
         private Coroutine clearSequence;
         private Coroutine slowMoSequence;
+        private Coroutine openingDraftSequence;
 
         public DungeonGraph Graph => graph;
         public int CurrentNodeId { get; private set; }
@@ -206,7 +207,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             // opening skill (slot 0 / Q). Play-mode only: EditMode tests call BeginRun directly.
             if (Application.isPlaying && isActiveAndEnabled)
             {
-                StartCoroutine(OpeningKitDraftSequence());
+                openingDraftSequence = StartCoroutine(OpeningKitDraftSequence());
             }
         }
 
@@ -231,6 +232,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         {
             if (openingDraftShown)
             {
+                openingDraftSequence = null;
                 yield break;
             }
 
@@ -242,6 +244,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             if (draft == null)
             {
                 Debug.LogWarning("[RoomRunDirector] Opening kit draft skipped: no DraftManager.");
+                openingDraftSequence = null;
                 yield break;
             }
 
@@ -274,6 +277,7 @@ namespace RIMA.MapDesigner.Room.Runtime
                 }
                 yield return null;
             }
+            openingDraftSequence = null;
         }
 
         public void BuildCurrentRoom()
@@ -1746,6 +1750,12 @@ namespace RIMA.MapDesigner.Room.Runtime
             {
                 StopCoroutine(slowMoSequence);
                 slowMoSequence = null;
+            }
+
+            if (openingDraftSequence != null)
+            {
+                StopCoroutine(openingDraftSequence);
+                openingDraftSequence = null;
             }
 
             RestoreGameplayTimeScale();
