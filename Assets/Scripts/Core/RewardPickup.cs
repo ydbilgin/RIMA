@@ -51,6 +51,12 @@ namespace RIMA
             }
 
             EnsurePromptVisuals();
+
+            // REWARD-02 fix: reward oda merkezine spawn olunca oyuncu zaten trigger'ın içinde
+            // olabilir. OnTriggerEnter2D yalnız "dışarıdan içeri geçiş"te ateşler → bu durumda
+            // playerInRange false kalır → G hiçbir şey yapmaz (soft-lock; ForceCollect timeout=0).
+            // Spawn-anı çakışmasını burada yakala.
+            CheckInitialPlayerOverlap();
         }
 
         private void Reset()
@@ -75,10 +81,43 @@ namespace RIMA
             ShowPrompt();
         }
 
+        // REWARD-02 fix: reward oyuncunun üstüne spawn olursa OnTriggerEnter2D ateşlemez.
+        // OnTriggerStay2D, çakışma sürdüğü her frame ateşler (oyuncu Rigidbody2D taşıdığından
+        // tetiklenir) → playerInRange'i geç de olsa true yapar, G çalışır.
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (collected || playerInRange || other == null || !other.CompareTag("Player")) return;
+
+            playerInRange = true;
+            ShowPrompt();
+        }
+
         private void OnTriggerExit2D(Collider2D other)
         {
             if (other == null || !other.CompareTag("Player")) return;
             ClearPlayerRange();
+        }
+
+        // REWARD-02 fix: Awake'te spawn-anı çakışma kontrolü. Player sleeping-rigidbody ise
+        // OnTriggerStay2D durabilir; bu tek seferlik kontrol o boşluğu kapatır (prompt + G hemen aktif).
+        private void CheckInitialPlayerOverlap()
+        {
+            if (collected || playerInRange) return;
+
+            float radius = 0.5f;
+            if (GetComponent<Collider2D>() is CircleCollider2D circle)
+                radius = circle.radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y);
+
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, Mathf.Max(0.1f, radius));
+            foreach (Collider2D hit in hits)
+            {
+                if (hit != null && hit.CompareTag("Player"))
+                {
+                    playerInRange = true;
+                    ShowPrompt();
+                    break;
+                }
+            }
         }
 
         /// <summary>
