@@ -1,6 +1,35 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-16 — **DEMO 19 HAZİRAN = 3 GÜN**; ⚠️ **REWARD-02 + UI-01 = demo-kritik KOD fix pending** (F2-GREEN YANLIŞ POZİTİFTİ) · PixelLab demo=SADECE warblade anim (council karar) · MCP 9.7.1→9.7.3 yapıldı (RESTART sonrası aktif))
+## ⏯️ RESUME (2026-06-16 — **DEMO 19 HAZİRAN = 3 GÜN** · OTONOM EXEC AKTIF, tam yetki)
+
+**🤖 OTONOM MANDAT (2026-06-16):** Kullanıcı tam-yetki otonom demo-tamamlama verdi (memory [[project-autonomous-demo-mandate-2026-06-16]]). Master plan = `STAGING/DEMO_MASTER_PLAN_2026-06-16.md` (planning workflow + 3 adversarial council). Kural: her task→council (adversarial, hata arar)→0-Unity-error→screenshot(SADECE oyun-içi/Unity). ChatGPT paketi açıldı (`STAGING/_process/2026-06/chatgpt_pkg_2026-06-16/`) — P0/P1+UI/UX+asset+egg AL, **4-cardinal REDDET** (8-yön LOCKED).
+**✅ DONE + VERIFIED (2026-06-16 exec):**
+- **T1 Director-bleed** — `IsBlockingUiOpen()` helper (UIManager.IsAnyOverlayOpen + ClassSelectionUI.IsOpen + DemoCompleteOverlay.IsActive) + backquote guard. Çift council (ax FAIL+cx RISK) softlock'ları buldu. DirectorMode/ClassSelectionUI/DemoCompleteOverlay.cs.
+- **T4 Chest bank** — RoomBankSO chestRooms+GetList+AllRooms + DemoRoomBank 2 chest tpl; data-proof GetList(Chest)=2, RRD.roomBank→DemoRoomBank, exit-slot=3, Pick non-null.
+- **B1 tooltip dikey** — SkillOfferUI kart-hover'da tooltip kaldırıldı (pulse korundu) + TooltipSystem MinWidth=220/wrapping → dikey-çöküş imkansız.
+- **B2 attack→cursor + B3 uzağa** — kök = stale PlayerPref `AttackAimMode=0`; fix = migration-key bump self-heal (PlayerController.cs +4/-1) + live pref=cursor. builder-opus + ax_flash council. (Cursor-aim infra zaten vardı; B3 aynı kök, menzil değil.)
+
+**⏸️ DEFERRED / PARTIAL:**
+- **T7 reward-chip (DATA-01):** cx PASS dedi ama PERSIST OLMADI + yaklaşım kusurlu (ax_pro). Düşük-etki, post-demo doğru-yaklaşımla. [[feedback-cx-verify-persistence]]
+- **LIFE-01:** 5 singleton guard'landı (DraftManager+RunStats+CheckpointManager+BuildTileBrush+AttackTokenManager zaten) AMA scene-close editör-uyarısı ("objects not cleaned up") **HÂLÂ çıkıyor** — kaynak statik analizle pinlenemedi. **Editör-only, build/gameplay'i BOZMAZ.** Kesin pin = runtime instrumentation (maliyetli) ya da benign kabul.
+- **B2-followup:** AimedShot(Ranger)/Blizzard(Elementalist) şarjlı skill'ler combat-lock sonrası FacingDirection okuyor → cache'le. Demo=Warblade, golden-path'te yok → post-demo.
+
+**🔁 REASSESS:** **B4 (kapı) yanlış-teşhis** — kapılar 0.8x0.7 TRIGGER (küçük, bloklamaz). Gerçek takılma = oda **CompositeCollider2D (14.4x9.2)** walkable boundary. → B4=B5 aynı iş.
+
+**🔴 KALAN — FAZ 1 (temiz play-walk; YÖNTEM: birkaç map test→fix→YENİ map+cliff-generate→re-test; bol screenshot → council DATA-eval). Test/screenshot=execution; sonuç-yargısı+fix-review=council.**
+- **B5 walkable:** birkaç mevcut map'i play-walk + screenshot → CompositeCollider2D görsel floor'a (orta-boşluklar dahil) uyuyor mu; gerekirse cliff/composite düzelt. SONRA yeni map + `RoomCliffSolver` cliff-generate → re-test + screenshot. Sonuçlar council'e.
+- **B6 F2/":** canlı testte `DirectorMode.Instance=NULL` (BuildModeController var) → F2 ölü. AMA o session ANORMAL'di (stale play) → **temiz dev-direct play ile DirectorMode bootstrap doğrula**. Ayrıca `EnterBuildMode` l.218-221 draft açıkken bloklar (by-design).
+- ⚠️ **run-map graph NULL** dev-direct'te (RunMapOverlay.director.Graph=null) → M boş. `buildOnStart`/iki-sistem(Core+MapDesigner) reconcile. Portal-bar önkoşulu.
+
+**🎮 BÜYÜK FEATURE'LAR (bug-fix sonrası, demo WOW/centerpiece):** F2/Director **oda-editörü** (zoom-out + prop yerleştir + **"Regenerate Cliff" = RoomCliffSolver.Solve** + InPlayMapPaintOverlay konsolide) → `STAGING/F2_DIRECTOR_ROOM_EDITOR_VISION_2026-06-16.md`. + **alt portal bar + mavi-ışın beam (T5)** + **büyük cliff mapler** + Director UI elden geçir + rapor screenshot'ları.
+
+**📁 KEY DOCS:** `STAGING/DEMO_MASTER_PLAN_2026-06-16.md` (sıralı, council) · `PLAYTEST_BUGS_2026-06-16.md` (6 bug + bulgular) · `F2_DIRECTOR_ROOM_EDITOR_VISION_2026-06-16.md` · ChatGPT paketi `_process/2026-06/chatgpt_pkg_2026-06-16/`.
+**🧠 DERSLER:** cx "PASS"≠persist (her cx Unity-işinde git status doğrula) · council gerçek bug yakalıyor (T1 softlock, T7 persist-fail, B2 timing) · **4-cardinal HER YERDE REJECT** (8-yön LOCKED) · tek-Unity-ajan SERİ · in-game/Unity screenshot.
+**📦 WORKING TREE:** büyük uncommitted (T1/T4/B1/B2 + LIFE-01 + ~5 STAGING doc); **commit MVP-green'de**. cx_profiles.local.json git rm (staged). dotnet `CliffPlacementRules.cs` stale csproj = pre-existing (Unity 0-error). Editör temiz (isPlaying=False, pmss=MainMenu).
+**🙏 KULLANICIDAN (bekliyor):** B1/B2 canlı test (cursor-aim + tooltip düzeldi mi?) + B5 için "tam nerede takılıyorsun?".
+
+*(Aşağısı önceki RESUME — tarihsel; üsttekiler güncel.)*
+## ⏯️ (önceki) RESUME (2026-06-16 — REWARD-02 fix + run-map branching + golden-path verify)
 
 **⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=**crafter-sonnet (iyi-specli cerrahi) / Opus (yeni/tasarım)** + **zorunlu audit gate** (auditor-opus/cx, writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · E1-E8. HARD: aynı anda TEK Unity-süren ajan. cx profil: yasinderyabilgin→yekta(son). Routing revizyonu (2026-06-15): `STAGING/SONNET_EXECUTE_AUDIT_ROUTING_2026-06-15.md`.
 

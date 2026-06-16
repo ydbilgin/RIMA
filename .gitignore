@@ -115,6 +115,10 @@ AGY_TASK*.md
 .agy_dispatch_state.json
 .agy_dispatch_relaunch.log
 .cx_dispatch_locks/
+.cx_dispatch/
+.ax_dispatch/
+# Large re-extractable reference package dumps (keep the source zip in Downloads)
+STAGING/_process/**/chatgpt_pkg_*/
 *.tmp
 *.tmp.*
 tmp/
