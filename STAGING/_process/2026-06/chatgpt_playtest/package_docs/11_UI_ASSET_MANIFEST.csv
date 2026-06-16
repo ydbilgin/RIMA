@@ -1,0 +1,18 @@
+﻿Category,Asset,SourceSize,UnityType,SliceBorder,States/Notes,Priority
+Chrome,panel_large_base,384x384,Sliced,"48,48,48,48","Base only, decoration separate",P1
+Chrome,panel_small_base,192x192,Sliced,"28,28,28,28",Tooltip/small modal,P1
+Buttons,button_primary,320x72,Sliced,"28,20,28,20",Idle base,P1
+Buttons,button_hover_overlay,320x72,Simple,-,Cyan overlay,P1
+HUD,vitality_frame,420x176,Sliced,"36,36,36,36",Class emblem socket,P1
+HUD,skill_slot_primary,96x96,Simple,-,LMB/RMB,P1
+HUD,skill_slot_secondary,76x76,Simple,-,Q/E/R/F/V,P1
+Reward,reward_card_base,384x576,Sliced,"40,40,40,40",No text,P1
+Reward,reward_combo_box,320x84,Sliced,"20,20,20,20",Min width enforced,P1
+Settings,slider_track,256x24,Sliced,"12,6,12,6",Fill separate,P2
+Settings,toggle_frame,96x40,Sliced,"16,12,16,12",On/off fill separate,P2
+Codex,skill_row,512x64,Sliced,"20,16,20,16",Selected overlay separate,P2
+Minimap,minimap_frame,256x256,Sliced,"32,32,32,32",Map content masked,P2
+WorldReward,egg_shell_base,96x96,Simple,-,Neutral dark shell,P1
+WorldReward,egg_crack_overlay_cyan,96x96,Simple,-,Glow overlay,P1
+WorldReward,reward_ground_ring,128x64,Simple,-,Rarity/state tint,P1
+FX,selected_soft_glow,256x256,Simple,-,Additive/alpha,P2
