@@ -1062,8 +1062,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -3935,7 +3935,7 @@ MonoBehaviour:
   encounterDifficulty: 10
   enemyContainer: {fileID: 0}
   cameraPadding: 2
-  forceDemoSequence: 1
+  forceDemoSequence: 0
   useFixedDemoCamera: 1
   fixedOrthographicSize: 5
   rewardSprite: {fileID: 0}
@@ -3945,7 +3945,7 @@ MonoBehaviour:
   fallbackTemplate: {fileID: 11400000, guid: 5ad60cbe32ed8664d88745ad4532cda4, type: 2}
   runSeed: 12345
   buildOnStart: 1
-  depthCount: 5
+  depthCount: 6
   bossPrefab: {fileID: 2119183627493839208, guid: ce8a23631ec35be4f9e41184e0884efb, type: 3}
   RoomCleared:
     m_PersistentCalls:
@@ -4189,8 +4189,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -4505,7 +4505,7 @@ Transform:
   m_GameObject: {fileID: 1378015737}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.44, y: 3.8, z: 25}
+  m_LocalPosition: {x: 1.4375, y: 3.796875, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

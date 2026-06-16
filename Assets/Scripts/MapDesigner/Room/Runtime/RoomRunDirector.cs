@@ -116,7 +116,8 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private RoomTemplateSO fallbackTemplate;
         [SerializeField] private int runSeed = 12345;
         [SerializeField] private bool buildOnStart = true;
-        [SerializeField] private int depthCount = 5;
+        // Design target = 6 depths (0..5): Combat → Combat → branch → Elite/Merchant → convergence → Boss.
+        [SerializeField] private int depthCount = 6;
 
         [Header("Boss Spawn (demo path)")]
         [Tooltip("Prefab spawned at the Boss node. Must have PenitentSovereign + Health components. Falls back to Resources/Prefabs/Enemies/Boss/PenitentSovereign.")]
@@ -195,6 +196,11 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
             else
             {
+                // Per-run seed: every BeginRun rolls a fresh seed so the branching map differs
+                // each run (demo thesis: "her run procedural değişen harita"). Deterministic given
+                // the seed, so the same seed reproduces the same map for demo replay.
+                runSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+                Debug.Log($"[RunMap] seed={runSeed} depthCount={depthCount}");
                 graph = DungeonGraph.Generate(runSeed, depthCount);
             }
 

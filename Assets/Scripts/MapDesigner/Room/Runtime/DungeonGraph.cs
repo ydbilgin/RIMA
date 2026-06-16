@@ -140,7 +140,6 @@ namespace RIMA.MapDesigner.Room.Runtime
                     {
                         id = nextId++,
                         depth = depth,
-                        roomType = RoomTypeAtDepth(random, depth, depthCount)
                     };
                     graph.nodes.Add(node);
                     row.Add(node);
@@ -148,6 +147,11 @@ namespace RIMA.MapDesigner.Room.Runtime
 
                 rows.Add(row);
             }
+
+            // RIMA-canon node mix (RUNMAP_BRANCHING_DESIGN_2026-06-16 + critic binding fixes):
+            // depth 0 = Combat (entry), last depth = Boss; mid-depths roll the weighted mix
+            // with a no-consecutive-Elite fairness guard, then a post-pass guarantees Merchant.
+            AssignRoomTypes(random, rows, depthCount);
 
             for (int depth = 0; depth < depthCount - 1; depth++)
             {
@@ -167,7 +171,40 @@ namespace RIMA.MapDesigner.Room.Runtime
             return random.Next(2, 4);
         }
 
-        private static RIMA.RoomType RoomTypeAtDepth(Random random, int depth, int depthCount)
+        // Mid-depth weighted node mix (RUNMAP_BRANCHING_DESIGN_2026-06-16):
+        //   Combat ~50% · Elite ~20% (no two consecutive Elites in generation order) ·
+        //   Chest ~15% · Merchant ~15% — plus a guaranteed-Merchant post-pass (>=1, mid-depth).
+        // Event / Forge / Curse / Rest are POST-DEMO (kept out of the mix).
+        private static void AssignRoomTypes(Random random, List<List<DungeonNode>> rows, int depthCount)
+        {
+            bool prevWasElite = false;
+            bool hasMerchant = false;
+            int lastMidDepth = depthCount - 2; // last branching depth before the boss
+
+            for (int depth = 0; depth < rows.Count; depth++)
+            {
+                List<DungeonNode> row = rows[depth];
+                for (int i = 0; i < row.Count; i++)
+                {
+                    RIMA.RoomType type = RollRoomType(random, depth, depthCount, prevWasElite);
+                    row[i].roomType = type;
+                    prevWasElite = type == RIMA.RoomType.Elite;
+                    if (type == RIMA.RoomType.Merchant)
+                    {
+                        hasMerchant = true;
+                    }
+                }
+            }
+
+            // Guaranteed Merchant (>=1, mid-depth). If the rolls produced none, deterministically
+            // convert a non-Elite mid-depth node to Merchant so the demo never loses the shop beat.
+            if (!hasMerchant)
+            {
+                ForceOneMerchant(random, rows, depthCount, lastMidDepth);
+            }
+        }
+
+        private static RIMA.RoomType RollRoomType(Random random, int depth, int depthCount, bool prevWasElite)
         {
             if (depth == 0)
             {
@@ -180,23 +217,62 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             int roll = random.Next(100);
-            if (roll < 55)
+
+            // Combat ~50%
+            if (roll < 50)
             {
                 return RIMA.RoomType.Combat;
             }
 
-            if (roll < 75)
+            // Elite ~20% — fairness guard: never two consecutive Elites (in generation order).
+            if (roll < 70)
             {
-                return RIMA.RoomType.Elite;
+                return prevWasElite ? RIMA.RoomType.Combat : RIMA.RoomType.Elite;
             }
 
-            if (roll < 90)
+            // Chest ~15%
+            if (roll < 85)
             {
                 return RIMA.RoomType.Chest;
             }
 
-            // Demo guard (F-008, STATICAUDIT_DECISION_2026-06-07): Event node demo kapsamı dışı — Combat/Elite/Reward/Boss only.
-            return RIMA.RoomType.Combat;
+            // Merchant ~15%
+            return RIMA.RoomType.Merchant;
+        }
+
+        // Deterministic fallback that turns one mid-depth node into a Merchant when the weighted
+        // rolls produced none. Prefers a non-Elite node (so it does not also break the Elite mix);
+        // walks mid-depths from the latest toward the earliest so the shop sits late (canon).
+        private static void ForceOneMerchant(Random random, List<List<DungeonNode>> rows, int depthCount, int lastMidDepth)
+        {
+            for (int depth = lastMidDepth; depth >= 1; depth--)
+            {
+                if (depth >= rows.Count)
+                {
+                    continue;
+                }
+
+                List<DungeonNode> row = rows[depth];
+                for (int i = 0; i < row.Count; i++)
+                {
+                    if (row[i].roomType != RIMA.RoomType.Elite && row[i].roomType != RIMA.RoomType.Boss)
+                    {
+                        row[i].roomType = RIMA.RoomType.Merchant;
+                        return;
+                    }
+                }
+            }
+
+            // Last resort (e.g. all mid nodes are Elite): convert the first mid node anyway.
+            for (int depth = 1; depth <= lastMidDepth && depth < rows.Count; depth++)
+            {
+                List<DungeonNode> row = rows[depth];
+                if (row.Count > 0)
+                {
+                    row[0].roomType = RIMA.RoomType.Merchant;
+                    return;
+                }
+            }
         }
 
         private static void ConnectRows(Random random, List<DungeonNode> current, List<DungeonNode> next)

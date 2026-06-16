@@ -155,6 +155,95 @@ namespace RIMA.Tests.Room
             }
         }
 
+        [Test]
+        public void Generate_GuaranteesAtLeastOneMerchant_AtMidDepth()
+        {
+            // RUNMAP_BRANCHING_DESIGN_2026-06-16 + critic binding fix: every generated run must
+            // contain >=1 Merchant node so the demo never loses the economy beat. Merchant only
+            // exists at mid-depths (1..maxDepth-1), so this invariant applies for depthCount >= 3.
+            int[] depthCounts = { 3, 4, 5, 6, 8 };
+            int[] seeds = { 0, 1, 2, 7, 13, 17, 23, 42, 77, 99, 123, 200, 333, 500, 777, 1000, 1234, 4242, 9999, 31337 };
+
+            foreach (int depthCount in depthCounts)
+            {
+                foreach (int seed in seeds)
+                {
+                    RuntimeDungeonGraph graph = RuntimeDungeonGraph.Generate(seed, depthCount);
+                    string context = $"seed={seed}, depthCount={depthCount}";
+
+                    int merchantCount = 0;
+                    foreach (RuntimeDungeonNode node in graph.nodes)
+                    {
+                        if (node.roomType == RIMA.RoomType.Merchant)
+                        {
+                            merchantCount++;
+                            Assert.Greater(node.depth, 0, $"Merchant must be mid-depth (not entry): {context}");
+                            Assert.Less(node.depth, graph.maxDepth, $"Merchant must be mid-depth (not boss): {context}");
+                        }
+                    }
+
+                    Assert.GreaterOrEqual(merchantCount, 1, $"No Merchant node found: {context}");
+                }
+            }
+        }
+
+        [Test]
+        public void Generate_NeverPlacesTwoConsecutiveElites_InGenerationOrder()
+        {
+            // Fairness guard (critic binding fix): the weighted mix must never emit two Elite nodes
+            // back-to-back in generation order. nodes are appended depth-by-depth, lane-by-lane, so
+            // adjacent entries in graph.nodes are the generation order the guard runs against.
+            int[] depthCounts = { 3, 5, 6, 8 };
+            int[] seeds = { 0, 1, 2, 7, 13, 17, 23, 42, 77, 99, 123, 200, 333, 500, 777, 1000, 1234, 4242, 9999, 31337 };
+
+            foreach (int depthCount in depthCounts)
+            {
+                foreach (int seed in seeds)
+                {
+                    RuntimeDungeonGraph graph = RuntimeDungeonGraph.Generate(seed, depthCount);
+                    string context = $"seed={seed}, depthCount={depthCount}";
+
+                    for (int i = 1; i < graph.nodes.Count; i++)
+                    {
+                        bool bothElite = graph.nodes[i].roomType == RIMA.RoomType.Elite
+                            && graph.nodes[i - 1].roomType == RIMA.RoomType.Elite;
+                        Assert.IsFalse(bothElite,
+                            $"Two consecutive Elite nodes at index {i - 1},{i}: {context}");
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void Generate_NeverGeneratesPostDemoNodeTypes()
+        {
+            // Demo node mix excludes Event / Forge / Curse / Corridor (post-demo). Only
+            // Combat / Elite / Chest / Merchant / Boss may appear.
+            int[] depthCounts = { 3, 5, 6, 8 };
+            int[] seeds = { 0, 1, 2, 7, 13, 17, 23, 42, 77, 99, 123, 200, 333, 500, 777, 1000, 1234, 4242, 9999, 31337 };
+
+            foreach (int depthCount in depthCounts)
+            {
+                foreach (int seed in seeds)
+                {
+                    RuntimeDungeonGraph graph = RuntimeDungeonGraph.Generate(seed, depthCount);
+                    string context = $"seed={seed}, depthCount={depthCount}";
+
+                    foreach (RuntimeDungeonNode node in graph.nodes)
+                    {
+                        RIMA.RoomType t = node.roomType;
+                        bool allowed = t == RIMA.RoomType.Combat
+                            || t == RIMA.RoomType.Elite
+                            || t == RIMA.RoomType.Chest
+                            || t == RIMA.RoomType.Merchant
+                            || t == RIMA.RoomType.Boss;
+                        Assert.IsTrue(allowed,
+                            $"Disallowed node type {t} at id={node.id} depth={node.depth}: {context}");
+                    }
+                }
+            }
+        }
+
         private static int HighestDepth(RuntimeDungeonGraph graph)
         {
             int highest = 0;
