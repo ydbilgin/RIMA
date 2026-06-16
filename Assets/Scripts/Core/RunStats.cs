@@ -9,6 +9,7 @@ namespace RIMA
     public sealed class RunStats : MonoBehaviour
     {
         private static RunStats instance;
+        private static bool _shuttingDown;
 
         private readonly HashSet<int> countedKills = new HashSet<int>();
         private Health playerHealth;
@@ -26,6 +27,7 @@ namespace RIMA
         {
             get
             {
+                if (_shuttingDown) return null;
                 EnsureInstance();
                 return instance;
             }
@@ -47,8 +49,16 @@ namespace RIMA
             EnsureInstance();
         }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            instance = null;
+            _shuttingDown = false;
+        }
+
         private static void EnsureInstance()
         {
+            if (_shuttingDown) return;
             if (instance != null) return;
 
             GameObject go = new GameObject("RunStats");
@@ -76,7 +86,11 @@ namespace RIMA
 
         private void OnDestroy()
         {
-            if (instance == this) instance = null;
+            if (instance == this)
+            {
+                instance = null;
+                _shuttingDown = true;
+            }
             SceneManager.sceneLoaded -= OnSceneLoaded;
             CombatEventBus.OnKill -= OnKill;
             RoomLoader.OnRoomChanged -= OnRoomChanged;
@@ -84,6 +98,11 @@ namespace RIMA
             RoomLoader.OnRoomCleared -= OnRoomCleared;
             RoomLoader.OnDemoComplete -= Freeze;
             UnhookPlayerHealth();
+        }
+
+        private void OnApplicationQuit()
+        {
+            _shuttingDown = true;
         }
 
         private void Update()

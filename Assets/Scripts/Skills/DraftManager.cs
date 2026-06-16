@@ -15,7 +15,21 @@ namespace RIMA
     /// </summary>
     public class DraftManager : MonoBehaviour
     {
-        public static DraftManager Instance { get; private set; }
+        private static DraftManager instance;
+        private static bool _shuttingDown;
+
+        public static DraftManager Instance
+        {
+            get => _shuttingDown ? null : instance;
+            private set => instance = value;
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            instance = null;
+            _shuttingDown = false;
+        }
 
         [Header("References")]
         [SerializeField] private SkillOfferGenerator offerGenerator;
@@ -110,6 +124,16 @@ namespace RIMA
         {
             if (PlayerClassManager.Instance != null)
                 PlayerClassManager.Instance.OnSecondaryClassSelected -= OnSecondaryClassSelectedDraft;
+            if (instance == this)
+            {
+                instance = null;
+                _shuttingDown = true;
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            _shuttingDown = true;
         }
 
         private void Start()

@@ -9,11 +9,20 @@ namespace RIMA.Save
         private const string CheckpointFileName = "checkpoint.json";
 
         private static CheckpointManager instance;
+        private static bool _shuttingDown;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            instance = null;
+            _shuttingDown = false;
+        }
 
         public static CheckpointManager Instance
         {
             get
             {
+                if (_shuttingDown) return null;
                 if (instance != null) return instance;
 
                 instance = FindFirstObjectByType<CheckpointManager>();
@@ -38,6 +47,20 @@ namespace RIMA.Save
 
             instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnApplicationQuit()
+        {
+            _shuttingDown = true;
+        }
+
+        private void OnDestroy()
+        {
+            if (instance == this)
+            {
+                instance = null;
+                _shuttingDown = true;
+            }
         }
 
         public void Save(CheckpointData data)

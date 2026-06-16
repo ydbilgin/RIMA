@@ -21,6 +21,10 @@ namespace RIMA
 
         private Canvas _canvas;
 
+        /// <summary>True while the victory overlay (sortingOrder 200) is on screen. DirectorMode reads
+        /// this so its overlay (950) never covers the victory screen (bypasses UIManager — council T1).</summary>
+        public static bool IsActive { get; private set; }
+
         public static void Show()
         {
             if (FindFirstObjectByType<DemoCompleteOverlay>() != null) return;
@@ -38,6 +42,7 @@ namespace RIMA
 
         private void Build()
         {
+            IsActive = true;
             Time.timeScale = 0f; // D1: full freeze — modal victory/CTA screen (UI runs unscaled, buttons still click).
             EnsureEventSystem();
 
@@ -162,6 +167,7 @@ namespace RIMA
 
         private void OnDestroy()
         {
+            IsActive = false;
             Time.timeScale = 1f;
         }
 

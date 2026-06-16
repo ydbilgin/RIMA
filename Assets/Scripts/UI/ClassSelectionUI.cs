@@ -95,6 +95,11 @@ namespace RIMA
             _instance = this;
         }
 
+        /// <summary>True while the dual-class selection overlay (sortingOrder 190) is on screen.
+        /// DirectorMode reads this so its overlay (950) never bleeds over / softlocks the selection
+        /// (this UI bypasses UIManager, so IsAnyOverlayOpen does not cover it — council T1 finding).</summary>
+        public static bool IsOpen => _instance != null && _instance._isOpen;
+
         private void OnEnable()
         {
             SubscribeToManager();

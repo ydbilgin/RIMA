@@ -53,11 +53,20 @@ namespace RIMA.UI.BuildMode
         private const string OverlayTilemapName = "OverlayTilemap";
 
         private static BuildTileBrushController _instance;
+        private static bool _shuttingDown;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            _instance = null;
+            _shuttingDown = false;
+        }
 
         public static BuildTileBrushController Instance
         {
             get
             {
+                if (_shuttingDown) return null;
                 if (_instance != null) return _instance;
                 _instance = FindObjectOfType<BuildTileBrushController>();
                 if (_instance != null) return _instance;
@@ -136,8 +145,17 @@ namespace RIMA.UI.BuildMode
 
         private void OnDestroy()
         {
-            if (_instance == this) _instance = null;
+            if (_instance == this)
+            {
+                _instance = null;
+                _shuttingDown = true;
+            }
             TeardownAll();
+        }
+
+        private void OnApplicationQuit()
+        {
+            _shuttingDown = true;
         }
 
         /// <summary>Enabled / disabled by BuildPlacementController.SetActiveTool. Active = show UI + cursor.</summary>

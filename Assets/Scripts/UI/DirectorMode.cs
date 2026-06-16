@@ -190,10 +190,18 @@ namespace RIMA
         {
             UpdateTelemetryDisplay(false);
 
+            // T1: the Director overlay must never share the screen with a blocking gameplay overlay
+            // (reward draft / skill codex / pause / settings / tab) — otherwise it bleeds behind/around
+            // those panels. Hide while one is open; restore on close. Runs before input so it cannot lag.
+            UpdateOverlayBleedGuard();
+
             Keyboard keyboard = Keyboard.current;
             // Backquote is inert while Build Mode owns the state, else its raw ToggleState would
             // desync DirectorMode from the camera rig that Build Mode parked.
-            if (keyboard != null && keyboard.backquoteKey.wasPressedThisFrame && !BuildModeController.IsActive)
+            // Backquote re-entry must be inert while a blocking UI owns the screen — otherwise toggling
+            // back to Director re-shows the overlay (950) over that UI (softlock) or desyncs state when
+            // it later closes (council T1: ax FAIL #1 + cx RISK).
+            if (keyboard != null && keyboard.backquoteKey.wasPressedThisFrame && !BuildModeController.IsActive && !IsBlockingUiOpen())
             {
                 ToggleState();
             }
@@ -2083,6 +2091,31 @@ namespace RIMA
             {
                 overlayCanvasGo.SetActive(visible);
             }
+        }
+
+        // T1 bleed guard: the Director overlay is shown only when in Director state AND no blocking UI
+        // is up; otherwise hidden. Toggles SetActive only on change, so it never fights SetState's own
+        // visibility writes.
+        private void UpdateOverlayBleedGuard()
+        {
+            if (overlayCanvasGo == null) return;
+            bool shouldShow = State == DirectorModeState.Director && !IsBlockingUiOpen();
+            if (overlayCanvasGo.activeSelf != shouldShow)
+            {
+                overlayCanvasGo.SetActive(shouldShow);
+            }
+        }
+
+        // Any UI that must own the screen alone. UIManager.IsAnyOverlayOpen covers reward draft / skill
+        // codex / pause / settings / tab (includes skillOfferOpen). ClassSelectionUI (dual-class, sorting
+        // 190) and DemoCompleteOverlay (victory, 200) bypass UIManager — both councils flagged that the
+        // Director overlay (950) covers them -> softlock. All checks are cheap static bools (safe per-frame).
+        private bool IsBlockingUiOpen()
+        {
+            if (UIManager.Instance != null && UIManager.Instance.IsAnyOverlayOpen) return true;
+            if (ClassSelectionUI.IsOpen) return true;
+            if (DemoCompleteOverlay.IsActive) return true;
+            return false;
         }
 
         public void TriggerDualClassDraftForValidation()

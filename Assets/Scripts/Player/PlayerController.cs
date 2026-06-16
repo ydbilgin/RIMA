@@ -82,7 +82,10 @@ namespace RIMA
         private InputAction dashAction;
         private const float MoveDeadzoneSqr = 0.01f;
         public const string AttackAimModePrefKey = "AttackAimMode";
-        private const string AttackAimModeCursorDefaultMigrationKey = "AttackAimModeCursorDefault_20260503";
+        // B2 fix (2026-06-16): a stale/accidental CharacterFacing pref left the basic attack aiming
+        // at movement-facing instead of the cursor. Bumping this one-shot key re-asserts the
+        // documented TowardsMouse default once per machine; the Settings toggle still works after.
+        private const string AttackAimModeCursorDefaultMigrationKey = "AttackAimModeCursorDefault_20260616";
 
         public Vector2 FacingDirection => HasCombatFacingOverride ? combatFacingDir : movementFacingDir;
         public Vector2 MovementFacingDirection => movementFacingDir;

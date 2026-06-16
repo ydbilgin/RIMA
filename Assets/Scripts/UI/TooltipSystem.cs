@@ -19,6 +19,11 @@ namespace RIMA
         [SerializeField] private Vector2 offset = new Vector2(15f, -15f);
         [SerializeField] private float padding = 10f;
 
+        private const float MinWidth = 220f;
+        private const float PreferredWidth = 280f;
+        private const float MaxWidth = 320f;
+        private const float MaxHeight = 400f;
+
         private GameObject tooltipPanel;
         private TextMeshProUGUI tooltipText;
         private RectTransform tooltipRect;
@@ -61,7 +66,7 @@ namespace RIMA
             tooltipPanel = new GameObject("Tooltip", typeof(RectTransform));
             tooltipPanel.transform.SetParent(canvas.transform, false);
             tooltipRect = tooltipPanel.GetComponent<RectTransform>();
-            tooltipRect.sizeDelta = new Vector2(280f, 150f);
+            tooltipRect.sizeDelta = new Vector2(PreferredWidth, 150f);
             tooltipRect.pivot = new Vector2(0f, 1f); // Top-left pivot
 
             // Translucent ink-wash: readable, but not an opaque UI box.
@@ -102,6 +107,7 @@ namespace RIMA
             tooltipText.color = new Color(0.86f, 0.94f, 0.96f);
             tooltipText.alignment = TextAlignmentOptions.TopLeft;
             tooltipText.enableWordWrapping = true;
+            tooltipText.overflowMode = TextOverflowModes.Overflow;
             tooltipText.raycastTarget = false;
 
             tooltipPanel.SetActive(false);
@@ -159,12 +165,12 @@ namespace RIMA
             // Set content
             tooltipText.text = content;
 
-            // Force text update to get correct size
-            tooltipText.ForceMeshUpdate();
-            Vector2 textSize = tooltipText.GetRenderedValues(false);
+            float width = PreferredWidth;
+            float textWidth = width - padding * 2f;
+            Vector2 textSize = tooltipText.GetPreferredValues(content, textWidth, 0f);
             tooltipRect.sizeDelta = new Vector2(
-                Mathf.Min(textSize.x + padding * 2f, 320f),
-                Mathf.Min(textSize.y + padding * 2f, 400f)
+                Mathf.Clamp(textSize.x + padding * 2f, MinWidth, MaxWidth),
+                Mathf.Min(textSize.y + padding * 2f, MaxHeight)
             );
 
             // Position (new Input System — legacy Input.mousePosition throws under InputSystem package)

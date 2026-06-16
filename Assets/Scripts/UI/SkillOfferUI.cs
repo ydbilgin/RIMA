@@ -69,7 +69,6 @@ namespace RIMA
 
             if (panel == null) BuildPanel();
             else panel.SetActive(true);
-            EnsureTooltipSystem();
             skillBar = FindObjectOfType<SkillBarUI>();
 
             string title = roomNumber > 0 ? Loc.T("draft.title_room", roomNumber) : Loc.T("draft.title_generic");
@@ -99,7 +98,6 @@ namespace RIMA
 
             if (panel == null) BuildPanel();
             else panel.SetActive(true);
-            EnsureTooltipSystem();
             skillBar = FindObjectOfType<SkillBarUI>();
 
             if (titleLabel != null) titleLabel.text = Loc.T("draft.slot_full");
@@ -833,7 +831,6 @@ namespace RIMA
                     RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.DraftHover, 0.55f);
                     _nextDraftHoverSfxTime = Time.unscaledTime + 0.1f;
                 }
-                ShowCardTooltip(state);
                 PulseOwnedChainSlots(state);
             }
             else if (state.PointerInsideCount == 0)
@@ -968,13 +965,6 @@ namespace RIMA
             SetScreenFlashAlpha(0f);
         }
 
-        private void ShowCardTooltip(CardJuiceState state)
-        {
-            if (state?.TooltipSkill == null) return;
-            EnsureTooltipSystem();
-            TooltipSystem.Instance?.Show(TooltipSystem.FormatSkill(state.TooltipSkill));
-        }
-
         private void PulseOwnedChainSlots(CardJuiceState state)
         {
             string skillName = state?.TooltipSkill?.skillName;
@@ -992,12 +982,6 @@ namespace RIMA
                 if (string.IsNullOrEmpty(other) || other == skillName) continue;
                 if (Chains(skillName, other)) skillBar.PulseSynergySlot(other);
             }
-        }
-
-        private void EnsureTooltipSystem()
-        {
-            if (TooltipSystem.Instance != null) return;
-            gameObject.AddComponent<TooltipSystem>();
         }
 
         private Color TierColor(RewardOffer offer)
