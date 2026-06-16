@@ -60,11 +60,38 @@ namespace RIMA.UI.BuildMode
 
         private static BuildPlacementController _instance;
 
+        // LIFE-01 fix: on play-exit teardown, a (null-checked) caller invoking the Instance getter
+        // would lazily spawn a fresh GameObject below, which Unity then reports as
+        // "objects were not cleaned up when closing the scene (BuildPlacementController)". Guard the
+        // getter so it never resurrects during shutdown. Static reset on each play-enter keeps this
+        // correct under Enter-Play-Mode DisableDomainReload (statics persist between sessions).
+        private static bool _isQuitting;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStaticsOnPlayEnter()
+        {
+            _isQuitting = false;
+            _instance = null;
+            // LIFE-01: instance OnApplicationQuit is unreliable because this controller is LAZY
+            // (may never be instantiated, so its OnApplicationQuit never fires). Subscribe statically
+            // so _isQuitting flips on play-exit even with no live instance. Dedup for DisableDomainReload.
+            Application.quitting -= OnAppQuitting;
+            Application.quitting += OnAppQuitting;
+        }
+
+        private static void OnAppQuitting() => _isQuitting = true;
+
+        /// <summary>Non-creating accessor: returns the live instance or null, NEVER spawns one.
+        /// Teardown / OnDestroy / OnDisable callers MUST use this (not Instance) so they cannot
+        /// resurrect the controller during scene close (LIFE-01 "objects not cleaned up" warning).</summary>
+        public static BuildPlacementController InstanceIfExists => _instance;
+
         public static BuildPlacementController Instance
         {
             get
             {
                 if (_instance != null) return _instance;
+                if (_isQuitting) return null; // LIFE-01: never resurrect during play-exit teardown
                 _instance = FindObjectOfType<BuildPlacementController>();
                 if (_instance != null) return _instance;
                 GameObject go = new GameObject("BuildPlacementController");
@@ -176,6 +203,13 @@ namespace RIMA.UI.BuildMode
         {
             if (_instance == this) _instance = null;
             TeardownAll();
+        }
+
+        // LIFE-01 fix: set before scene-close teardown runs so the Instance getter stops
+        // resurrecting this controller during play-exit (fires once, before the OnDestroy pass).
+        private void OnApplicationQuit()
+        {
+            _isQuitting = true;
         }
 
         /// <summary>Called by BuildModeController on enter/exit. Enable = build palette + ghost + input.</summary>

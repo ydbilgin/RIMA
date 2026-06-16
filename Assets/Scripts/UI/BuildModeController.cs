@@ -153,9 +153,9 @@ namespace RIMA
             RestoreOtherUiCanvases();
 
             // Safety: never leave the Phase 2 placement layer active if torn down mid-mode.
-            if (BuildPlacementController.Instance != null)
+            if (BuildPlacementController.InstanceIfExists != null)
             {
-                BuildPlacementController.Instance.SetBuildModeActive(false);
+                BuildPlacementController.InstanceIfExists.SetBuildModeActive(false);
             }
 
             // Safety: never leak the runtime working copy if torn down mid-mode.
@@ -308,9 +308,9 @@ namespace RIMA
 
             // Disable the Phase 2 placement layer first (hides ghost + palette, drops undo history).
             // Authored props persist in the room template; only editor-only state is dropped.
-            if (BuildPlacementController.Instance != null)
+            if (BuildPlacementController.InstanceIfExists != null)
             {
-                BuildPlacementController.Instance.SetBuildModeActive(false);
+                BuildPlacementController.InstanceIfExists.SetBuildModeActive(false);
             }
 
             // PHASE 3.1: both tools are now down, so destroy the shared working copy. All session
