@@ -69,6 +69,7 @@ namespace RIMA
 
             if (panel == null) BuildPanel();
             else panel.SetActive(true);
+            RoomMonologController.SetSuppressed(true);
             skillBar = FindObjectOfType<SkillBarUI>();
 
             string title = roomNumber > 0 ? Loc.T("draft.title_room", roomNumber) : Loc.T("draft.title_generic");
@@ -98,6 +99,7 @@ namespace RIMA
 
             if (panel == null) BuildPanel();
             else panel.SetActive(true);
+            RoomMonologController.SetSuppressed(true);
             skillBar = FindObjectOfType<SkillBarUI>();
 
             if (titleLabel != null) titleLabel.text = Loc.T("draft.slot_full");
@@ -151,7 +153,13 @@ namespace RIMA
         {
             ClearCards();
             if (panel != null) panel.SetActive(false);
+            RoomMonologController.SetSuppressed(false);
             if (UIManager.Instance != null) UIManager.Instance.CloseSkillOffer();
+        }
+
+        private void OnDisable()
+        {
+            RoomMonologController.SetSuppressed(false);
         }
 
         // ─── Build Panel ────────────────────────────────────────────

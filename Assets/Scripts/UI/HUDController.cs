@@ -7,7 +7,7 @@ namespace RIMA
 {
     /// <summary>
     /// Combat HUD — "Kan Çatlağı" (Ashen Glyph spec).
-    /// Top-left: HP bar (72×4), resource bar (48×3), transient room name.
+    /// Top-left: HP bar (212×16), resource bar (160×10), transient room name.
     /// Bottom-center: interaction prompt.
     /// No gold display, no objective arrow, no ESC handling (UIManager owns that).
     /// </summary>
@@ -51,11 +51,15 @@ namespace RIMA
         private ClassType  currentClass = ClassType.None;
 
         // ── HP bar dims (Ashen Glyph spec) ───────────────────────────────
-        private const float HpBarWidth  = 72f;
-        private const float HpBarHeight = 4f;
-        private const float ResBarWidth  = 48f;
-        private const float ResBarHeight = 3f;
+        private const float HpBarWidth  = 212f;
+        private const float HpBarHeight = 16f;
+        private const float ResBarWidth  = 160f;
+        private const float ResBarHeight = 10f;
         private const float HudMargin    = 12f;
+        private const float LowHpThreshold = 0.20f;
+        private const float LowHpMinAlpha = 0.12f;
+        private const float LowHpMaxAlpha = 0.18f;
+        private const float LowHpPulseSeconds = 0.90f;
 
         // ── Room name fade ───────────────────────────────────────────────
         private Coroutine roomNameCoroutine;
@@ -202,13 +206,13 @@ namespace RIMA
             if (hpLabel != null)
                 hpLabel.text = current.ToString();
 
-            // Pulse at <30%
-            if (pct <= 0.3f && pct > 0f && !isPulsing)
+            // Pulse at low HP.
+            if (pct <= LowHpThreshold && pct > 0f && !isPulsing)
                 hpPulseCoroutine = StartCoroutine(PulseBar(hpFillImage, RimaUITheme.HpCritical));
-            else if ((pct > 0.3f || pct <= 0f) && isPulsing)
+            else if ((pct > LowHpThreshold || pct <= 0f) && isPulsing)
                 StopPulse();
 
-            // Low-HP vignette: fade in below 35% HP, strongest near death (skip while a hit-flash owns it).
+            // Low-HP vignette: edge-only pulse under 20% HP; center stays transparent in the sprite.
             if (lowHpVignette != null && !hitFlashActive)
             {
                 Color vc = lowHpVignette.color;
@@ -239,7 +243,7 @@ namespace RIMA
             while (t < dur && lowHpVignette != null)
             {
                 t += Time.unscaledDeltaTime;
-                float flash = Mathf.Lerp(0.5f, 0f, t / dur);
+                float flash = Mathf.Lerp(0.22f, 0f, t / dur);
                 Color c = lowHpVignette.color;
                 c.a = Mathf.Max(SustainedVignetteAlpha(), flash); // composite over the sustained low-HP level
                 lowHpVignette.color = c;
@@ -258,7 +262,12 @@ namespace RIMA
         {
             if (playerHealth == null || playerHealth.MaxHP <= 0) return 0f;
             float pct = (float)playerHealth.CurrentHP / playerHealth.MaxHP;
-            return (pct > 0f && pct < 0.35f) ? Mathf.InverseLerp(0.35f, 0.08f, pct) * 0.55f : 0f;
+            if (pct <= 0f || pct >= LowHpThreshold) return 0f;
+
+            float severity = Mathf.InverseLerp(LowHpThreshold, 0f, pct);
+            float targetAlpha = Mathf.Lerp(LowHpMinAlpha, LowHpMaxAlpha, severity);
+            float pulseT = 0.5f + 0.5f * Mathf.Sin((Time.unscaledTime / LowHpPulseSeconds) * Mathf.PI * 2f);
+            return Mathf.Lerp(LowHpMinAlpha, targetAlpha, pulseT);
         }
 
         private IEnumerator PulseBar(Image img, Color baseColor)
@@ -624,12 +633,12 @@ namespace RIMA
             labelRt.anchorMin = new Vector2(0f, 1f);
             labelRt.anchorMax = new Vector2(0f, 1f);
             labelRt.pivot = new Vector2(1f, 1f);
-            labelRt.anchoredPosition = new Vector2(HudMargin - 4f, -HudMargin + 2f);
-            labelRt.sizeDelta = new Vector2(60f, 12f);
+            labelRt.anchoredPosition = new Vector2(HudMargin - 6f, -HudMargin);
+            labelRt.sizeDelta = new Vector2(68f, 16f);
 
             hpLabel = labelGo.AddComponent<TextMeshProUGUI>();
             hpLabel.text = "0";
-            hpLabel.fontSize = 10f;
+            hpLabel.fontSize = 14f;
             hpLabel.fontStyle = FontStyles.Bold;
             hpLabel.color = new Color(1f, 1f, 1f, 0.70f);
             hpLabel.alignment = TextAlignmentOptions.Right;

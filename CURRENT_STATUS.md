@@ -1,97 +1,34 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-16 — **DEMO 19 HAZİRAN = 3 GÜN** · OTONOM EXEC AKTIF, tam yetki)
+## ⏯️ RESUME (2026-06-17 — BİTİRME AŞAMASI · demo ~19 Haziran)
 
-**🤖 OTONOM MANDAT (2026-06-16):** Kullanıcı tam-yetki otonom demo-tamamlama verdi (memory [[project-autonomous-demo-mandate-2026-06-16]]). Master plan = `STAGING/DEMO_MASTER_PLAN_2026-06-16.md` (planning workflow + 3 adversarial council). Kural: her task→council (adversarial, hata arar)→0-Unity-error→screenshot(SADECE oyun-içi/Unity). ChatGPT paketi açıldı (`STAGING/_process/2026-06/chatgpt_pkg_2026-06-16/`) — P0/P1+UI/UX+asset+egg AL, **4-cardinal REDDET** (8-yön LOCKED).
-**✅ DONE + VERIFIED (2026-06-16 exec):**
-- **T1 Director-bleed** — `IsBlockingUiOpen()` helper (UIManager.IsAnyOverlayOpen + ClassSelectionUI.IsOpen + DemoCompleteOverlay.IsActive) + backquote guard. Çift council (ax FAIL+cx RISK) softlock'ları buldu. DirectorMode/ClassSelectionUI/DemoCompleteOverlay.cs.
-- **T4 Chest bank** — RoomBankSO chestRooms+GetList+AllRooms + DemoRoomBank 2 chest tpl; data-proof GetList(Chest)=2, RRD.roomBank→DemoRoomBank, exit-slot=3, Pick non-null.
-- **B1 tooltip dikey** — SkillOfferUI kart-hover'da tooltip kaldırıldı (pulse korundu) + TooltipSystem MinWidth=220/wrapping → dikey-çöküş imkansız.
-- **B2 attack→cursor + B3 uzağa** — kök = stale PlayerPref `AttackAimMode=0`; fix = migration-key bump self-heal (PlayerController.cs +4/-1) + live pref=cursor. builder-opus + ax_flash council. (Cursor-aim infra zaten vardı; B3 aynı kök, menzil değil.)
+**⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=**cx dispatch (bugra sağlam; yekta/yasinderyabilgin maxed)** + her iş sonrası **elle full-flow playtest** ("yeşil-assert ≠ çalışıyor"). HARD: TEK Unity-süren ajan (seri). cx hard-cap kaldırıldı. **PixelLab balance=0 (5125/5000) → yeni gen YOK** (reset'e kadar; Warblade/Elementalist animate bekler). Otonom mandat AKTİF: oynanabilir+güzel yap, playtest'le ayarla, mevcut asset'leri kullan.
 
-**⏸️ DEFERRED / PARTIAL:**
-- **T7 reward-chip (DATA-01):** cx PASS dedi ama PERSIST OLMADI + yaklaşım kusurlu (ax_pro). Düşük-etki, post-demo doğru-yaklaşımla. [[feedback-cx-verify-persistence]]
-- **LIFE-01:** 5 singleton guard'landı (DraftManager+RunStats+CheckpointManager+BuildTileBrush+AttackTokenManager zaten) AMA scene-close editör-uyarısı ("objects not cleaned up") **HÂLÂ çıkıyor** — kaynak statik analizle pinlenemedi. **Editör-only, build/gameplay'i BOZMAZ.** Kesin pin = runtime instrumentation (maliyetli) ya da benign kabul.
-- **B2-followup:** AimedShot(Ranger)/Blizzard(Elementalist) şarjlı skill'ler combat-lock sonrası FacingDirection okuyor → cache'le. Demo=Warblade, golden-path'te yok → post-demo.
+### 🎯 KARAR (canonical): `STAGING/DEMO_BITIRME_DECISION_2026-06-17.md`
+Council `wf_78b723a8` (23 agent) + telegraph spec + A1 prop import sentezi. **Tek cümle:** son ~1 günü CANLI Edit-to-Play hikâyesine harca; 6 biten sistemi koru; demo hocanın canlı provada gördüğü+duyduğu ile kazanılır.
 
-**🔁 REASSESS:** **B4 (kapı) yanlış-teşhis** — kapılar 0.8x0.7 TRIGGER (küçük, bloklamaz). Gerçek takılma = oda **CompositeCollider2D (14.4x9.2)** walkable boundary. → B4=B5 aynı iş.
+### 🔄 ŞU AN KOŞAN
+- 📸 **cx capture V3** (Unity) → bütün ekranlar taze+capture-truth; bitince `capture_v3/DONE_capture_v3.md` oku.
 
-**🔴 KALAN — FAZ 1 (temiz play-walk; YÖNTEM: birkaç map test→fix→YENİ map+cliff-generate→re-test; bol screenshot → council DATA-eval). Test/screenshot=execution; sonuç-yargısı+fix-review=council.**
-- **B5 walkable:** birkaç mevcut map'i play-walk + screenshot → CompositeCollider2D görsel floor'a (orta-boşluklar dahil) uyuyor mu; gerekirse cliff/composite düzelt. SONRA yeni map + `RoomCliffSolver` cliff-generate → re-test + screenshot. Sonuçlar council'e.
-- **B6 F2/":** canlı testte `DirectorMode.Instance=NULL` (BuildModeController var) → F2 ölü. AMA o session ANORMAL'di (stale play) → **temiz dev-direct play ile DirectorMode bootstrap doğrula**. Ayrıca `EnterBuildMode` l.218-221 draft açıkken bloklar (by-design).
-- ⚠️ **run-map graph NULL** dev-direct'te (RunMapOverlay.director.Graph=null) → M boş. `buildOnStart`/iki-sistem(Core+MapDesigner) reconcile. Portal-bar önkoşulu.
+### 🔒 KİLİTLİ SIRA (capture bitince Unity serbest → başla)
+1. **6 sistemi TEK kesintisiz dry-run'da RE-VERIFY** [manual] — SEAM'ler (F2/Director/portal); takılırsa dur-düzelt. **Non-negotiable.**
+2. **CombatJuice.prefab → `_Arena.unity`** [cx] — #1 etki/efor; stack kodlu ama _Arena'da YOK. TEST: play melee/kill juice + F2/Director sonrası.
+3. **`Enemy_SeloutOutline.mat` → FractureImp/HalfThrall/Penitent** [cx, step-2 ile batch] — koyu mob görünmezliği #1 kusur.
+4. **Arena döşeme 5-6 prop (KULLANICI elle) + room_current.json pre-bake/commit** [user+cx].
+5. **🎯 Telegraph: boss P2/P3 + `SpawnDelayedRing`/`FlashImpact`** [cx] — sistem ZATEN var (`Enemies/EnemyTelegraph.cs`); spec `ENEMY_TELEGRAPH_VFX_SPEC_2026-06-17.md`. windup↔hasar BİREBİR.
+6. **Merchant teardown boss-öncesi** [cx, canlı-bug ise] · 7. **capture-truth draft+runmap (OBS, EN SON)** · 8. opsiyonel UI-skin/scrim/music · 9. sunum run-sheet (graphify god-node=açılış).
 
-**🎮 BÜYÜK FEATURE'LAR (bug-fix sonrası, demo WOW/centerpiece):** F2/Director **oda-editörü** (zoom-out + prop yerleştir + **"Regenerate Cliff" = RoomCliffSolver.Solve** + InPlayMapPaintOverlay konsolide) → `STAGING/F2_DIRECTOR_ROOM_EDITOR_VISION_2026-06-16.md`. + **alt portal bar + mavi-ışın beam (T5)** + **büyük cliff mapler** + Director UI elden geçir + rapor screenshot'ları.
+### ⚠️ SÜRPRİZLER (önceki planı düzeltti)
+- **🔴 5-enemy black-blob wire = İPTAL** — canlı dalga (`Act1_Wave_Pilot`) sadece FractureImp/Penitent/HalfThrall spawn ediyor (zaten wired); 5 isimli prefab demo'da görünmez + anim frame'leri projede yok. RESUME'daki "ucuz wire" YANLIŞMIŞ.
+- **🔊 Audio zaten CANLI** (18/19 cue, 42 call-site) — sadece prova + 1 `music_demo.wav` (CC0) bed eksik.
+- **✅ A1 prop import DONE:** F2 AllProps 9→19, console 0, select_object_frames çağrılmadı (16 aday korundu).
+- **✅ Director IDE-skin DONE** (council-test PASS-WITH-NITS).
 
-**📁 KEY DOCS:** `STAGING/DEMO_MASTER_PLAN_2026-06-16.md` (sıralı, council) · `PLAYTEST_BUGS_2026-06-16.md` (6 bug + bulgular) · `F2_DIRECTOR_ROOM_EDITOR_VISION_2026-06-16.md` · ChatGPT paketi `_process/2026-06/chatgpt_pkg_2026-06-16/`.
-**🧠 DERSLER:** cx "PASS"≠persist (her cx Unity-işinde git status doğrula) · council gerçek bug yakalıyor (T1 softlock, T7 persist-fail, B2 timing) · **4-cardinal HER YERDE REJECT** (8-yön LOCKED) · tek-Unity-ajan SERİ · in-game/Unity screenshot.
-**📦 WORKING TREE:** büyük uncommitted (T1/T4/B1/B2 + LIFE-01 + ~5 STAGING doc); **commit MVP-green'de**. cx_profiles.local.json git rm (staged). dotnet `CliffPlacementRules.cs` stale csproj = pre-existing (Unity 0-error). Editör temiz (isPlaying=False, pmss=MainMenu).
-**🙏 KULLANICIDAN (bekliyor):** B1/B2 canlı test (cursor-aim + tooltip düzeldi mi?) + B5 için "tam nerede takılıyorsun?".
+### 📦 SONRAKİ PROCESS
+Karar sonrası: **commit+push → ChatGPT paketi** (GitHub erişimi var → repo+taze screenshot+DECISION+telegraph spec review). Sonra otonom execute+playtest loop.
 
-**🧵 S2 2026-06-16 (otonom — PixelLab bilgi + B6 diagnoz + asset council):**
-- ⚔️ **PixelLab prompt-craft ÇÖZÜLDÜ (council cx+ax Pro+ax Flash 3/3):** silahsız=silahı isimlendirme+uzuv-mekaniği tarif ("kolunu savuruyor" de, "kılıcını savuruyor" deme)+EMPTY HANDS+negatif silah-listesi; tutarlı-silahlı=armed-anchor-FIRST (palette-snap=false anchor → state'ler ondan palette-snap=true+AI-freedom 0.35); palette-snap RENGİ kilitler geometriyi değil. Mount infra ZATEN VAR (`HandAnchorAttach`+`SpriteHandData`+`WeaponDatabaseSO`). Reçete: `STAGING/PIXELLAB_WEAPONLESS_ARMED_PROMPTCRAFT_2026-06-16.md` + global `~/.claude/PIXELLAB_REFERENCE.md` §6 + memory. Council ham: `STAGING/_process/2026-06/pixellab_anim_council/`.
-- 🔎 **B6 run-map diagnoz (read-only, mutasyon YOK):** kod/wiring bug'ı YOK — `RunMapOverlay` _Arena'da var, `director`→canlı RoomRunDirector (enabled, buildOnStart:1, forceDemoSequence:0). "Graph=null" = anormal stale-play artifact'i. → temiz dev-direct play'de M-bas+screenshot ile doğrula (live Unity/user). Detay: `STAGING/_process/2026-06/demo_verify/B6_RUNMAP_DIAGNOSIS_2026-06-16.md`.
-- 📋 **EKSİK ASSET council önceliği (3 gün):** P1=warblade armed-anchor REDO+idle/run/LMB (KULLANICI PixelLab, ~4h) · energy-bolt core mermi (ORCH MCP ~5dk, sarı-top replace) · fireball+fire-impact+glacial-spike VFX (ORCH MCP, golden-path combat) · cliff backdrop/void-fill (Unity dizilim, "uçan oda" hissini engelle). P2=frozen-orb/light-beam (golden-path basmıyorsa post-demo) · portal-bar+mavi-beam T5 (vakit kalırsa). **P3 SKIP=run-map sembol/chrome** (mevcut buton/placeholder yeter). Asset ÜRETİMİ yapılmadı (kullanıcı QC'siz kredi harcanmadı) — "go" beklemede.
-- 📦 Working tree'ye eklendi: PIXELLAB_WEAPONLESS_ARMED_PROMPTCRAFT + B6 diagnoz + council folder + memory/global-ref güncellemeleri. Unity'ye DOKUNULMADI (0 mutasyon).
+### 🧠 KEY
+- DOKUNMA: GATE/Boss/HUD/reward-bleed/Build-placement/Director-skin/3-enemy-controller/spawnProps-false-gate/weaponless-anim.
+- Latent: PortalSpawn fail-open · standalone DEMO_BUILD define · [Obsolete] MainMenuScreen çift-EventSystem (entry dry-run'da doğrula).
 
-*(Aşağısı önceki RESUME — tarihsel; üsttekiler güncel.)*
-## ⏯️ (önceki) RESUME (2026-06-16 — REWARD-02 fix + run-map branching + golden-path verify)
-
-**⚠️ ROUTING:** Orchestrator=Opus 4.8 · execute=**crafter-sonnet (iyi-specli cerrahi) / Opus (yeni/tasarım)** + **zorunlu audit gate** (auditor-opus/cx, writer≠reviewer) · council=cx+ax 3.1 Pro+ax 3.5 Flash · E1-E8. HARD: aynı anda TEK Unity-süren ajan. cx profil: yasinderyabilgin→yekta(son). Routing revizyonu (2026-06-15): `STAGING/SONNET_EXECUTE_AUDIT_ROUTING_2026-06-15.md`.
-
-**🔒 STATE:** Play=full-flow (`playModeStartScene=MainMenu`, dokunma/null bırakma). Commit öncesi pollution temizle. Play bitince STOP.
-
-**✅ REWARD-02 FIX DONE + DUAL-VERIFIED (2026-06-16):** "F2 reward→kart GREEN, 0 fix" YANLIŞ POZİTİFTİ (ForceCollect menzil-bypass'ı maskelemişti). Gerçek G kırıktı: reward oda MERKEZİNE spawn + G yalnız `OnTriggerEnter2D`→reward üstüne spawn olunca Enter ateşlemez → G ölü + `RewardAutoCollectTimeoutSec=0` → soft-lock. **Fix:** `RewardPickup.cs` → `OnTriggerStay2D` + Awake `CheckInitialPlayerOverlap` (OverlapCircleAll). Compile 0-error; **cx + auditor-opus dual-review PASS** (writer≠reviewer; auditor: Unity6 query-flush + `QueriesStartInColliders:1` → Awake leg birincil yakalayıcı, 3 spawn yolunu kapsar; nit'ler minör). NO-REFACTOR korundu (TimeoutSec/iki-reward-sistem dokunulmadı). Kalan teyit: ForceCollect'siz canlı G repro = OBS provası. Detay: `STAGING/CHATGPT_PLAYTEST_EVAL_REWARD02_2026-06-16.md`.
-
-**🟢 GOLDEN-PATH LIVE-TEST DONE (2026-06-16, data-proof, dev-direct _Arena):** Sonuçlar `STAGING/_process/2026-06/demo_verify/LIVE_TEST_RESULTS_2026-06-16.md` (+plan `DEMO_GOLDENPATH_LIVE_TEST_PLAN_2026-06-16.md`, 8-beat workflow). ✅ GREEN: dev-direct bootstrap 0-error · **F2+" Build Mode aktif** (wiring+precondition) · **` Director aktif** · **REWARD-02 fix CANLI doğrulandı** (Player collider tag=Player, OverlapCircle predikatı TRUE) · paneller (Pause 5btn/Settings 17btn/Codex 10sınıf/HUD) yapısal-tam+okunabilir (fontNull=0) · stat→damage wiring (SetStatForValidation=true).
-**✅ METODOLOJİ DÜZELTİLDİ (eski "duvar" YANLIŞTI):** `manage_camera screenshot` (camerasız=ScreenCapture) **overlay UI'yi YAKALIYOR** (kanıt: KOŞU YOLU + reward draft çekildi) → eski "overlay çıkmaz" memory YANLIŞ. Input enjekte-EDİLEBİLİR (audit + repo presedanı `T2_GateFlowTest` two-update). ⇒ artık gerçek screenshot+input ile canlı verify yapılabiliyor. Düzeltme: `STAGING/DEMO_VERIFY_METHODOLOGY_CORRECTED_2026-06-16.md`. Memory `reference_unity_screenshot_method` GÜNCELLENMELİ.
-
-**🟢 2026-06-16 S2 CANLI BULGULAR (gerçek screenshot):**
-- ✅ **RUN-MAP (M) branching DONE + CANLI VERIFIED:** lineer sebep = `RoomRunDirector forceDemoSequence=true`. Fix (builder-opus, compile-temiz, **30/30 EditMode PASS**): DungeonGraph mid-mix Combat50/Elite20/Chest15/Merchant15 + no-consec-Elite + ForceOneMerchant · RoomRunDirector per-run UnityEngine.Random seed + depthCount 6 (kod default forceDemoSequence=true KORUNDU=toggle) · **`_Arena.unity` forceDemoSequence 1→0 + depthCount 5→6 (KAYITLI=fix)** · +3 test · full-reveal zaten var (fog yok). **Play-verify (orchestrator): branching DAG d0(3-dal)→...→d5 tek-Boss, tipler {Combat6/Merchant2/Elite2/Chest2/Boss1}, 3-kapı temiz, 0-error.** Design `STAGING/RUNMAP_BRANCHING_DESIGN_2026-06-16.md`+critic+`_impl_report.md`. ⚠️ NLM mix-oranları proxy (auth expired, post-demo doğrula). Canon sabit-topoloji bilinçli kırıldı (kullanıcı isteği). KALAN: M-overlay görsel screenshot + dal-navigasyon canlı tıklama (sonraki session).
-- ⭐ **Director Mode bleed = asıl UI bug + KARTLAR BOZUK DEĞİL:** reward draft + Director overlay aynı anda → üst yazı çakışması + Director sönük. Kartlar bleed'siz TERTEMİZ (screenshot kanıt). Fix: draft açılınca Director overlay tam gizle + okunabilirlik (`DirectorMode.cs:704-711` CanvasScaler match 0.5 / text alpha 0.70 / dimmer 0.35).
-- ⭐ **Console hata kök-neden = lazy-singleton dirilme deseni** (teardown'da `.Instance` getter GO spawn): bu-run AttackTokenManager, kullanıcı-run BuildPlacementController. Scene-close uyarısı (gameplay-kırmaz), post-demo batch quit-guard. BuildPlacementController'a quit-guard+InstanceIfExists eklendi (kısmi; ATM vb. kaldı).
-
-**🔴 SIRADAKİ (demo 19 Haz):** (1) ✅ Run-map branching DONE (data-verified; kalan: M-overlay görsel screenshot + dal-navigasyon canlı tık). (2) **Director bleed fix** (draft açılınca overlay tam gizle) **+ okunabilirlik** (`DirectorMode.cs:704-711` scaler match 0.5/text alpha/dimmer) + before/after screenshot. (3) **LIFE-01 batch** quit-guard (AttackTokenManager + diğer lazy-singletonlar — **graphify ile tara**, aşağı bak). (4) golden-path full verify (input enjekte + screenshot ARTIK çalışıyor → gerçek F2/`/G/ESC/combat). (5) **warblade anim** = kullanıcı PixelLab (council: demo=SADECE bu). MCP 9.7.3 (server tam-aktif=Claude Code restart). Canon: 4-cardinal REDDEDİLDİ (8-yön LOCKED).
-**🔎 GRAPHIFY notu (kullanıcı, sonraki session):** graphify code-graph **KOD-seviyesi çakışma/duplikasyon** bulur (ör. lazy-singleton anti-deseni TÜM manager'larda = LIFE-01 batch için ideal; iki-reward-sistem; god-node'lar) → `STAGING/_process/2026-06/graphify_fullmap/graphify-out/graph.json`'da `/graphify query` ile tara. ⚠️ AMA **görsel UI overlap/bleed (Director↔draft) graphify'dan ANLAŞILMAZ** — o runtime/screenshot işi (artık screenshot çalışıyor). Yani: kod-çakışma=graphify, görsel-çakışma=screenshot.
-
-**🧭 STRATEJİ KİLİTLENDİ (2026-06-14, 4× council + 2×2 deney; detay decision dosyaları):**
-- **Sunum tezi:** RIMA = "oyun değil **environment + ilk vertical slice**"; domain-specific (genel framework/engine DEME); eksen **%20 oyun / %60 mimari / %20 graphify-audit**; centerpiece=**Edit-to-Play video**. → `STAGING/PRESENTATION_VISION_DECISION_2026-06-14.md` · [[project-presentation-vision]]
-- **Graphify config:** map=**AST-only** · bug-hunt=**deep+opus** cerrahi (≤25 dosya) · deep+sonnet elendi · global LLM=post-demo. → [[reference-graphify-config-policy]]
-- **Graphify update:** on-demand **full rebuild** (`STAGING/_process/2026-06/graphify_fullmap/build_ast_map.py`), per-commit/incremental DEĞİL. Full map mevcut: `graphify_fullmap/graphify-out/` (6925 node; **god-node 6/10=editor → "environment" veri-kanıtı**). → [[reference-graphify-update-policy]]
-- **Ponytail:** tam plugin SKIP; post-demo sadece /ponytail-review checklist. → `STAGING/ponytail_ADOPTION_DECISION_2026-06-14.md` · [[reference-ponytail-verdict]]
-- **F2 tanısı (cerrahi graphify):** #1 `RewardPickup.DraftThenOpenExit` sessiz `ShowDraft` return huni (muhtemelen downstream semptom) · #2 Forge oda 4/8 early-return · #3 dep early-return · #4 Echo seç→bind(kart yok) · #5 Chest'te Echo case yok. → `STAGING/_process/2026-06/f2_echo_graphify_deepopus.json`
-
-**🎯 SIRADAKİ = EXECUTION, golden-path-first** (3 advisor + orchestrator hemfikir; "tüm oyunu bug'sız yap" tuzağına düşme — sadece videodaki akış kusursuz olsun):
-1. ✅ **Edit-to-Play storyboard LOCKED** (council cx+ax 3.1 Pro+ax Flash → `STAGING/EDIT_TO_PLAY_STORYBOARD_DECISION_2026-06-14.md`). 2:00-2:20; wow=F2 Build Mode toggle (bug-free); canlı tile-çizimi KESİLDİ; kart-pool-%100 wow ELENDİ; golden-path segmenti F2-fix'e BAĞLI (fallback=slayt).
-2. ✅ **F2 ÇÖZÜLDÜ = golden-path GREEN, 0 kod fix** (2026-06-15, council cx+ax Flash + 2 canlı repro → `STAGING/F2_ROOTCAUSE_DECISION_2026-06-15.md`). Gerçek spawn reward + ForceCollect → 3 kart render; ilk oda depth=1 (Forge 4/8 altı). F2 = Forge/Echo için bilinen limitasyon, post-demo. **Tek açık caveat: literal G-tuşu+menzil gate ForceCollect'le bypass edildi → video OBS provası nihai teyit.**
-3. ✅ **Golden-path segment verification TAMAM** (council cx+ax_flash → `STAGING/GOLDEN_PATH_VERIFICATION_DECISION_2026-06-15.md`): **Build Mode F2-toggle+placement BUG-FREE** (data-proof: prop persist+oyun devam, 0 error) · F1 code-confirmed non-issue · **stat→damage math empirik DOĞRULANDI** (LMB base100→phys50=50/phys250=250 lineer; Q/E/R/F bypassStatScaling=stat-deaf → koreografi SADECE LMB) · Telemetry code-confirmed wired. **Video ANA tezi (edit-to-play + stat→damage) tam doğrulandı.**
-4. ✅ **DEMO BATCH-FIX DONE + DUAL-VERIFIED (2026-06-15).** 6 cerrahi fix uygulandı (crafter-sonnet, yeni Sonnet-execute+audit kuralı) + **iki bağımsız cross-model verify** (cx + ax_opus): FIX-1/2/3/5 **PASS** · FIX-4 **waived** (fonksiyonel doğru, IsBuildModeActive-sonrası guard amacı karşılıyor; literal-placement nitpick) · FIX-6 **patched** (cx 3-çıkış null'lama) + 4.8-teyit. Compile **0-error**; YAPMA-listesi temiz (timescale/GameTimeCoordinator/draft-serialization/BuildMode-FSM/RewardPickup/Director-bootstrap dokunulmadı). Runtime smoke ertelendi → **OBS prova** (savunmacı guard/null = düşük risk). Detay → `STAGING/_process/2026-06/laureth_handoff/VERIFY_{cx,axopus}.md` + `BATCHFIX_RESULT.md`. ⚠️ timescale-patch(RIMA-001) = POST-DEMO (en-riskli, choreograph kapsıyor).
-5. ⚠️ **Director overlay bleed FIX UYGULANDI, RUNTIME-VERIFY EDİLMEDİ** (DirectorMode.cs Awake + SetState-else `SetOverlayVisible(false)`; compile temiz; uncommitted). Batch-fix'le birlikte runtime test et. Trigger-map → `STAGING/DIRECTOR_MODE_TRIGGERS_2026-06-15.md`.
-6. **DEMO SETUP (kritik, kod değil):** dev-direct `_Arena` koş (full-flow MainMenu → Director/BuildMode HİÇ kurulmaz, F2/backquote ÖLÜ — RIMA-002). maxHP slider'a dokunma (HP görsel yalan). draft/menu açıkken F2 yok. F12 panic hazır.
-7. **Video kaydı** (OBS 10× prova) — kullanıcı işi; batch-fix + runtime-verify sonrası. Film-proof'lar orada: G-collect + canlı stat→damage + telemetry.
-Golden-path dışı her şey = "bilinen limitasyon", post-demo.
-
-**🔴 DEMO POLISH BACKLOG** (golden-path filtresinden geçir — sadece videodaki akışı bozanı ez):
-- **F1** reward room-leak (oda geçişinde önceki ödül kalıyor→despawn) · ~~**F2** reward al→kart çıkmıyor~~ ✅ ÇÖZÜLDÜ (golden-path GREEN, 0 fix — F2_ROOTCAUSE_DECISION).
-- **J1** reward slow-mo juice · **U1** tooltip dikey-şerit→kart (`TooltipSystem` preferredWidth/ContentSizeFitter) · **U2** Codex scroll · **U3** kaynak barları+sayı · **U4** "ODA TEMİZLENDİ" ortala.
-- **A1** arena görseli (canon-revizyon → ÖNCE netleştir) · **P9** hoca raporu docx (EN SON; **graphify figürleri HAZIR**: `STAGING/report/graphify/` native HTML+screenshot+Obsidian vault).
-- ⚠️ Overlay UI MCP screenshot'ta ÇIKMAZ → her UI fix sonrası kullanıcıdan görsel teyit ŞART.
-
-**🗺️ RUN-MAP TASARIM KARARI (yeni session — council'le bak):** RIMA-özgü run-map (StS-tarzı dallı node haritası; kullanıcı referans görseli paylaştı: "Act 1 - Floor 0", HP bar, chest/combat/elite/boss/shop/event node'ları, dallanan kesikli yollar, RIMA bölgeleri Spacial Cliffs/Steel Aegis Cave/Mystifying Forest + RIMA element sembolleri). **HER RUN procedural DEĞİŞİR.** ⭐ **AÇIK KARAR:** oyuncu **tüm haritayı baştan TÜMÜYLE mi görür** (StS-tarzı tam stratejik planlama) yoksa **aşamalı/fog-of-war reveal mı?** ("full-run planı yapmadan ilerle" fikriyle düşünülecek). Mevcut iş: [[project-runmap-ui-asset-pipeline-2026-06-11]] (chrome=ChatGPT · sembol=PixelLab · çizgi=Unity; wiring bloker=enum köprüsü). Council değerlendirip karar verecek, sonra ilerlenecek.
-
-**🟠 DEFERRED (post-demo):** skill-slot other-class host (ResolvePrimarySlotHost) · chest room-depth gating · tooltip→SO encapsulation · Elementalist/enemy clip GUID onarımı (keeper'lar o zaman no-op) · ponytail /ponytail-review checklist · `Assets/Scripts/graphify-out/` (624 cache Unity ağacında, gitignored/regenerable → sil/taşı) · hidden `.cx_dispatch`/`.ax_dispatch` done-file birikmesi (minör).
-
-**🧹 2026-06-15 SESSION-2 ÖZET (F2 → verification → demo bug-sweep):**
-- F2 GREEN (0 fix) · Build Mode centerpiece BUG-FREE + stat→damage math doğrulandı (data-proof, `*ForValidation`) · F1 code-safe · Director overlay bleed FIX (uncommitted, verify-pending).
-- **Demo bug-sweep:** council 4-lens (cx+ax_pro+ax_flash+yapısal graphify) + **ChatGPT bağımsız review** (13dk, repo+kondanse-subgraph) → **6-fix batch SPEC + scope-kilit (NO refactor)**. ChatGPT paketi `STAGING/_process/2026-06/chatgpt_review/`; subgraph `STAGING/graphify_demo_subgraph_2026-06-15.md`; ChatGPT-review-prompt `STAGING/CHATGPT_REVIEW_PROMPT_2026-06-15.md`.
-- ⚠️ **graph.json gitignored (10MB) — repo'da YOK; GitHub origin 8 commit GERİDE (`65c44d1a`) ama demo KOD dosyaları aynı (push gerekmez ChatGPT için).**
-- ⚠️ **WORKING TREE COMMIT BEKLİYOR (BÜYÜK):** DirectorMode.cs fix + ~25 yeni STAGING doc (F2/verification/bugsweep/chatgpt-eval decision+council) + memory. Yeni session başında commit'le.
-- *(Session-1 housekeeping — agent base+mixin, 3 HARD RULE graphify-query-first, graphify figürleri, storyboard, PixelLab mail — commit'lendi: `c9a72f33`+`a281329c`.)*
-
-**🎬 2026-06-15 SESSION-3 ÖZET (LaurethStudio handoff → batch-fix → animasyon):**
-- **LaurethStudio handoff** council oybirliği = demo scope-lock HOLD, hepsi post-demo (B9>B7≥A2); **routing revizyonu** (Sonnet-execute+zorunlu audit); **demo batch-fix 6 fix DONE+dual-verified** (cx+ax_opus, FIX-4 waived/FIX-6 patch). Hepsi commit (`be5d46c7`/`09a55a38`/`d1a8685f`). Detay: [[project-laureth-handoff-council-2026-06-15]].
-- **Animasyon (council 2 tur):** warblade P1=idle/run/LMB (demo), Elementalist=idle/run/cast (post-demo); Q/E/R/F=reuse+SkillVfx; VFX=hybrid. **8 state MCP'den üretildi**; promptlar `STAGING/ANIM_PRODUCTION_HANDOFF_2026-06-15.md` (kullanıcı kendi koşturacak). **V3 ucuz/kullanılır, PRO pahalı-yok.** [[project-anim-production-2026-06-15]]
-- ✅ **SILAH KARARI ÇÖZÜLDÜ (council oybirliği cx+ax Pro+ax Flash):** demo = **(A) silahlı-bake** (greatsword; sprite-anim bone-yok → silahsız+mount POST-DEMO `WEAPONLESS_ANIM_WEAPON_MOUNT_PLAN.md`). ⚠️ warblade state'leri silahsız base'den üretildi → kılıç tutarsız olabilir → **armed-anchor'dan redo** (handoff §⚔️ greatsword prompt); Elementalist (caster) sorunsuz. OBS prova hâlâ kullanıcı işi.
-
----
-*Önceki bloklar git history'de: P1-P7.5c (skill/tooltip/arc/weapon/invisible-sprite) + facing/render batch DONE+pushed (`938e8da9`); demo E2E 10/10 + 9/9 sistem.*
+*(Detay: MEMORY.md + [[project-demo-bitirme-decision-2026-06-17]]. Önceki RESUME git'te.)*

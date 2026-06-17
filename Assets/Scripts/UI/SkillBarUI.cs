@@ -258,11 +258,11 @@ namespace RIMA
                 cdImg.fillAmount  = 0f;
                 cdImg.raycastTarget = false;
 
-                // ── Layer 5: CD numeric timer (font 10, cyan, top-center, hidden when not needed) ──
-                var cdTimerGo  = MakeChild(slotGo.transform, "CDTimer", size * 0.80f, size * 0.40f);
+                // ── Layer 5: CD numeric timer (readable, cyan, top-center, hidden when not needed) ──
+                var cdTimerGo  = MakeChild(slotGo.transform, "CDTimer", size * 0.86f, size * 0.46f);
                 var cdTimerTxt = cdTimerGo.AddComponent<TextMeshProUGUI>();
                 cdTimerTxt.text      = "";
-                cdTimerTxt.fontSize  = 10f;
+                cdTimerTxt.fontSize  = i < 2 ? 18f : 16f;
                 cdTimerTxt.fontStyle = FontStyles.Bold;
                 cdTimerTxt.color     = new Color(0.28f, 0.89f, 1f, 0.90f); // cyan
                 cdTimerTxt.alignment = TextAlignmentOptions.Center;
@@ -276,10 +276,10 @@ namespace RIMA
                 cdTimerRt.anchoredPosition = new Vector2(0f, -2f);
 
                 // ── Layer 6: Keybind label (lower-right, bold, outlined) ──
-                var keyGo  = MakeChild(slotGo.transform, "Key", size * 0.54f, size * 0.32f);
+                var keyGo  = MakeChild(slotGo.transform, "Key", size * 0.62f, size * 0.36f);
                 var keyTxt = keyGo.AddComponent<TextMeshProUGUI>();
                 keyTxt.text       = SlotLabel(i);
-                keyTxt.fontSize   = i < 2 ? 13f : 10f;
+                keyTxt.fontSize   = i < 2 ? 14f : 12f;
                 keyTxt.fontStyle  = FontStyles.Bold;
                 keyTxt.color      = new Color(0.86f, 0.92f, 0.96f, 0.92f);
                 keyTxt.alignment  = TextAlignmentOptions.BottomRight;

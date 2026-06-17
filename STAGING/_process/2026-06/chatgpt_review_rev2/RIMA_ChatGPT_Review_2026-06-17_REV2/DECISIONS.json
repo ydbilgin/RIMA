@@ -1,0 +1,52 @@
+{
+  "date": "2026-06-17",
+  "revision": 2,
+  "verdict": "KEEP_FUNCTIONAL_CORE_DIRECTOR_REDESIGN_BUILD_UX_POLISH",
+  "claude_assessment": {
+    "director_weakest": "AGREE",
+    "build_functional_ui_weak": "PARTIAL_AGREE_GRID_GEOMETRY_IS_INTENTIONAL",
+    "combat_blob_void_weak": "AGREE_EXPANDED",
+    "hud_too_minimal": "STRONGLY_AGREE",
+    "codex_professional": "PARTIAL_AGREE",
+    "boss_strong": "DISAGREE",
+    "merchant_strong": "DISAGREE",
+    "draft_improved": "PARTIAL_AGREE"
+  },
+  "p0": [
+    "capture_qa",
+    "boss_presentation",
+    "hud_readability",
+    "black_blob_readability",
+    "low_hp_vignette",
+    "director_shell"
+  ],
+  "p1": [
+    "build_grid_contrast_levels",
+    "build_hover_cell_and_footprint",
+    "build_valid_invalid_reason",
+    "build_asset_selection_feedback",
+    "build_status_bar"
+  ],
+  "build_mode_canonical": {
+    "tile_geometry": "128x64_isometric_diamond",
+    "grid_space": "world_space",
+    "grid_may_extend_beyond_current_floor": true,
+    "crop_grid_to_room_bounds": false,
+    "force_director_layout_migration": false,
+    "decision": "PRESERVE_LAYOUT_AND_GRID_APPLY_UX_POLISH"
+  },
+  "do_not_refactor": [
+    "build_mode_core",
+    "build_isometric_grid_geometry",
+    "director_spawn_stats_telemetry_core",
+    "working_copy_isolation",
+    "undo_redo",
+    "time_scale_contracts"
+  ],
+  "invalid_or_missing_visual_states": [
+    "09_director_stats_tab.png",
+    "19_tab_charactersheet.png",
+    "20_skill_offer_draft.png",
+    "21_runmap_open.png"
+  ]
+}

@@ -26,6 +26,7 @@ namespace RIMA
         private Coroutine lineRoutine;
         private Coroutine titleRoutine;
         private int skipToken;
+        private bool suppressed;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
@@ -37,6 +38,12 @@ namespace RIMA
         {
             if (string.IsNullOrWhiteSpace(text)) return;
             EnsureInstance().ShowLine(text);
+        }
+
+        public static void SetSuppressed(bool value)
+        {
+            if (!value && instance == null) return;
+            (value ? EnsureInstance() : instance).SetSuppressedInstance(value);
         }
 
         private static RoomMonologController EnsureInstance()
@@ -126,11 +133,25 @@ namespace RIMA
             titleRoutine = StartCoroutine(TitleSequence(main, subtitle));
         }
 
+        private void SetSuppressedInstance(bool value)
+        {
+            if (suppressed == value) return;
+
+            suppressed = value;
+            ApplySuppressionState();
+        }
+
+        private void ApplySuppressionState()
+        {
+            SetGroupVisible(lineGroup, !suppressed && lineRoutine != null && lineGroup.alpha > 0.001f);
+            SetGroupVisible(titleGroup, !suppressed && titleRoutine != null && titleGroup.alpha > 0.001f);
+        }
+
         private IEnumerator LineSequence(string text)
         {
             int token = skipToken;
             lineText.text = string.Empty;
-            lineGroup.gameObject.SetActive(true);
+            SetGroupVisible(lineGroup, true);
             yield return Fade(lineGroup, 0f, 1f, 0.15f, token);
 
             float elapsed = 0f;
@@ -145,7 +166,7 @@ namespace RIMA
             lineText.text = text;
             yield return Hold(LineHoldSeconds, token);
             yield return Fade(lineGroup, lineGroup.alpha, 0f, LineFadeSeconds, token);
-            lineGroup.gameObject.SetActive(false);
+            SetGroupVisible(lineGroup, false);
             lineRoutine = null;
         }
 
@@ -154,11 +175,11 @@ namespace RIMA
             int token = skipToken;
             titleText.text = main;
             subtitleText.text = subtitle;
-            titleGroup.gameObject.SetActive(true);
+            SetGroupVisible(titleGroup, true);
             yield return Fade(titleGroup, 0f, 1f, 0.45f, token);
             yield return Hold(1.8f, token);
             yield return Fade(titleGroup, titleGroup.alpha, 0f, 0.8f, token);
-            titleGroup.gameObject.SetActive(false);
+            SetGroupVisible(titleGroup, false);
             titleRoutine = null;
         }
 
@@ -176,6 +197,7 @@ namespace RIMA
         {
             float elapsed = 0f;
             group.alpha = from;
+            SetGroupVisible(group, to > 0f || from > 0f);
             while (elapsed < seconds && !Skipped(token))
             {
                 elapsed += Time.unscaledDeltaTime;
@@ -183,9 +205,16 @@ namespace RIMA
                 yield return null;
             }
             group.alpha = Skipped(token) ? 0f : to;
+            SetGroupVisible(group, group.alpha > 0.001f);
         }
 
         private bool Skipped(int token) => skipToken != token;
+
+        private void SetGroupVisible(CanvasGroup group, bool visible)
+        {
+            if (group == null) return;
+            group.gameObject.SetActive(visible && !suppressed);
+        }
 
         private void BuildUI()
         {
@@ -211,27 +240,27 @@ namespace RIMA
             RectTransform linePanel = CreatePanel("Panel", lineGroup.transform, new Vector2(540f, 46f));
             linePanel.anchorMin = linePanel.anchorMax = new Vector2(0.5f, 0f);
             linePanel.pivot = new Vector2(0.5f, 0f);
-            linePanel.anchoredPosition = new Vector2(0f, 34f);
+            linePanel.anchoredPosition = new Vector2(0f, 104f);
 
             lineText = CreateText("Text", linePanel, 13f, MonologCyan, TextAlignmentOptions.Center);
             Stretch(lineText.rectTransform, 24f, 8f);
 
             titleGroup = CreateGroup("RoomMonolog_Title", root);
-            RectTransform titlePanel = CreatePanel("Panel", titleGroup.transform, new Vector2(520f, 124f));
-            titlePanel.anchorMin = titlePanel.anchorMax = new Vector2(0.5f, 0.5f);
-            titlePanel.pivot = new Vector2(0.5f, 0.5f);
-            titlePanel.anchoredPosition = Vector2.zero;
+            RectTransform titlePanel = CreatePanel("Panel", titleGroup.transform, new Vector2(560f, 92f));
+            titlePanel.anchorMin = titlePanel.anchorMax = new Vector2(0.5f, 0f);
+            titlePanel.pivot = new Vector2(0.5f, 0f);
+            titlePanel.anchoredPosition = new Vector2(0f, 112f);
 
             titleText = CreateText("Title", titlePanel, 26f, RimaUITheme.TextPrimary, TextAlignmentOptions.Center);
             titleText.fontStyle = FontStyles.Bold;
-            titleText.rectTransform.anchorMin = new Vector2(0f, 0.48f);
-            titleText.rectTransform.anchorMax = new Vector2(1f, 0.9f);
+            titleText.rectTransform.anchorMin = new Vector2(0f, 0.46f);
+            titleText.rectTransform.anchorMax = new Vector2(1f, 0.92f);
             titleText.rectTransform.offsetMin = new Vector2(20f, 0f);
             titleText.rectTransform.offsetMax = new Vector2(-20f, 0f);
 
             subtitleText = CreateText("Subtitle", titlePanel, 14f, MonologCyan, TextAlignmentOptions.Center);
-            subtitleText.rectTransform.anchorMin = new Vector2(0f, 0.18f);
-            subtitleText.rectTransform.anchorMax = new Vector2(1f, 0.48f);
+            subtitleText.rectTransform.anchorMin = new Vector2(0f, 0.12f);
+            subtitleText.rectTransform.anchorMax = new Vector2(1f, 0.42f);
             subtitleText.rectTransform.offsetMin = new Vector2(20f, 0f);
             subtitleText.rectTransform.offsetMax = new Vector2(-20f, 0f);
 

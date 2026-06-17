@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f02a8792718023242b95a1c7cd91b722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RIMA.BaseMobBehavior
-  detectionRange: 6
+  detectionRange: 12
   attackRange: 0.8
   chaseSpeed: 4.5
   attackCooldown: 1

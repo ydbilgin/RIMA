@@ -169,6 +169,8 @@ namespace RIMA
         // directly (never the lazy Instance getter, which would DontDestroyOnLoad-throw in edit mode).
         private void Update()
         {
+            DirectorMode.EnsureRuntimeInstanceForCurrentScene();
+
             Keyboard keyboard = Keyboard.current;
             if (keyboard == null)
             {
@@ -220,7 +222,7 @@ namespace RIMA
                 (DraftManager.Instance != null && (DraftManager.Instance.IsDraftActive || DraftManager.Instance.IsDraftPending)))
                 return;
 
-            DirectorMode director = DirectorMode.Instance;
+            DirectorMode director = DirectorMode.Instance ?? DirectorMode.EnsureRuntimeInstanceForCurrentScene();
             if (director == null)
             {
                 Debug.LogWarning("[BuildMode] DirectorMode.Instance is null; cannot enter Build Mode.");

@@ -1,0 +1,83 @@
+{
+  "category": "BuildMode",
+  "asserts": [
+    {
+      "id": "BM-01",
+      "state": "entry",
+      "pre": { "IsActive": false, "ActiveWorkingTemplate": null },
+      "action": "BuildModeController.Instance.Toggle()",
+      "post": { "IsActive": true, "ActiveWorkingTemplate": "RoomTemplateSO", "DirectorMode.State": "Director", "TimeScale": 0, "GridOverlayActive": true },
+      "result": "PASS"
+    },
+    {
+      "id": "BM-02",
+      "state": "asset_selection",
+      "action": "BuildPlacementController.Instance.SelectFirstPropForValidation()",
+      "post": { "return": true },
+      "result": "PASS",
+      "note": "İlk prop başarıyla seçildi"
+    },
+    {
+      "id": "BM-03",
+      "state": "prop_placement",
+      "pre": { "PlacedCount": 0 },
+      "action": "PlaceForValidation(new Vector2Int(2,3))",
+      "post": {
+        "return": true,
+        "PlacedCount": 1,
+        "LastProp.tilePosition": "(2, 3)",
+        "LastProp.placedByUser": "BuildMode",
+        "TargetCell": "(2, 3)",
+        "CellMatch": true
+      },
+      "result": "PASS",
+      "note": "Tile doğru hücreye (2,3) yerleşti, placedByUser=BuildMode"
+    },
+    {
+      "id": "BM-04",
+      "state": "erase",
+      "pre": { "PlacedCount": 1 },
+      "action": "EraseForValidation(new Vector2Int(2,3))",
+      "post": { "return": true, "PlacedCount": 0, "Delta": -1 },
+      "result": "PASS"
+    },
+    {
+      "id": "BM-05",
+      "state": "undo_redo",
+      "action": "Place(1,1) → Undo → Redo",
+      "post": {
+        "afterPlace": 1,
+        "Undo_return": true, "afterUndo": 0,
+        "Redo_return": true, "afterRedo": 1
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "BM-06",
+      "state": "tile_tool_select",
+      "pre": { "ActiveTool": 0 },
+      "action": "SelectToolForValidation(1)",
+      "post": { "return": true, "ActiveTool": 1 },
+      "result": "PASS"
+    },
+    {
+      "id": "BM-07",
+      "state": "working_copy_isolation",
+      "post": {
+        "WorkingTemplate_hash": -303772,
+        "SourceAsset_hash": 56476,
+        "NotSameRef": true
+      },
+      "result": "PASS",
+      "note": "WorkingTemplate ve source asset farklı referanslar"
+    },
+    {
+      "id": "BM-08",
+      "state": "exit",
+      "action": "BuildModeController.Instance.Toggle() (exit)",
+      "post": { "IsActive": false, "ActiveWorkingTemplate": null, "TimeScale": 1 },
+      "result": "PASS"
+    }
+  ],
+  "summary": "8/8 PASS — Tile doğru hücreye yerleşiyor, asset doğru seçiliyor"
+}

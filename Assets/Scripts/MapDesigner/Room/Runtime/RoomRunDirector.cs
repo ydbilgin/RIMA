@@ -142,6 +142,7 @@ namespace RIMA.MapDesigner.Room.Runtime
         private readonly List<GameObject> activeDoors = new List<GameObject>();
         private readonly RoomRunLifecycle lifecycle = new RoomRunLifecycle();
         private RewardPickup activeReward;
+        private ShopRoomController activeShopController;
         private Coroutine clearSequence;
         private Coroutine slowMoSequence;
         private Coroutine openingDraftSequence;
@@ -189,6 +190,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             depthCount = Mathf.Max(2, requestedDepthCount);
             StopClearSequences();
             DestroyActiveReward();
+            DestroyActiveShop();
             ClearActiveEnemies();
             BuildPersistentBackgroundIfPresent();
 
@@ -319,6 +321,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             ResolveRuntimeReferences();
             StopClearSequences();
             DestroyActiveReward();
+            DestroyActiveShop();
             ClearActiveEnemies();
             lifecycle.BeginCombat();
 
@@ -911,6 +914,7 @@ namespace RIMA.MapDesigner.Room.Runtime
             GameObject bossInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
             bossInstance.name = "PenitentSovereign_Boss";
             bossInstance.tag = "Enemy";
+            AlignBossFeetToArena(bossInstance);
             if (enemyContainer != null)
                 bossInstance.transform.SetParent(enemyContainer, true);
             activeEnemies.Add(bossInstance);
@@ -941,8 +945,10 @@ namespace RIMA.MapDesigner.Room.Runtime
         {
             // Spawn ShopRoomController (self-contained; owns stands + cleanup on Destroy).
             Vector3 center = ResolveRoomCenter();
+            DestroyActiveShop();
             GameObject shopGO = new GameObject("ShopRoomController");
             ShopRoomController shopController = shopGO.AddComponent<ShopRoomController>();
+            activeShopController = shopController;
             shopController.Setup(center);
 
             // Advance lifecycle from Combat → DoorOpen so exit doors open immediately.
@@ -1177,6 +1183,62 @@ namespace RIMA.MapDesigner.Room.Runtime
                     DestroyRuntimeObject(enemyContainer.GetChild(i).gameObject);
                 }
             }
+        }
+
+        private void DestroyActiveShop()
+        {
+            if (activeShopController == null)
+            {
+                return;
+            }
+
+            activeShopController.Cleanup();
+            activeShopController.gameObject.SetActive(false);
+            DestroyRuntimeObject(activeShopController.gameObject);
+            activeShopController = null;
+        }
+
+        private void AlignBossFeetToArena(GameObject bossInstance)
+        {
+            if (bossInstance == null || builder == null || !builder.TryGetLastFloorWorldBounds(out Bounds floorBounds))
+            {
+                return;
+            }
+
+            SpriteRenderer spriteRenderer = bossInstance.GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                return;
+            }
+
+            bossInstance.transform.localScale = Vector3.one;
+            AlignSpriteBottomToColliderBase(bossInstance, spriteRenderer);
+
+            Bounds bossBounds = spriteRenderer.bounds;
+            float x = Mathf.Clamp(
+                bossInstance.transform.position.x,
+                floorBounds.min.x + bossBounds.extents.x,
+                floorBounds.max.x - bossBounds.extents.x);
+
+            float targetBottom = Mathf.Lerp(floorBounds.min.y, floorBounds.center.y, 0.28f);
+            float y = bossInstance.transform.position.y + (targetBottom - bossBounds.min.y);
+            bossInstance.transform.position = new Vector3(x, y, bossInstance.transform.position.z);
+        }
+
+        private static void AlignSpriteBottomToColliderBase(GameObject bossInstance, SpriteRenderer spriteRenderer)
+        {
+            Collider2D bodyCollider = bossInstance.GetComponent<Collider2D>();
+            if (bodyCollider == null)
+            {
+                return;
+            }
+
+            float deltaY = bodyCollider.bounds.min.y - spriteRenderer.bounds.min.y;
+            Transform spriteTransform = spriteRenderer.transform;
+            spriteTransform.position = new Vector3(
+                spriteTransform.position.x,
+                spriteTransform.position.y + deltaY,
+                spriteTransform.position.z);
         }
 
         private void HandleEncounterCleared()

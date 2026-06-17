@@ -129,7 +129,7 @@ namespace RIMA
         // ─── T6 Boss-A visual components ──────────────────────────────────────
 
         private SpriteRenderer rimSR;   // outline/rim layer
-        private static readonly Vector3 BossScale = new Vector3(1.75f, 1.75f, 1f); // 1.5-2× spec, midpoint
+        private static readonly Vector3 BossScale = Vector3.one; // prefab sprite child already carries the 2x boss read
 
         private void Awake()
         {
@@ -149,10 +149,10 @@ namespace RIMA
             var p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) player = p.transform;
 
-            // T6: 1.75× scale (Boss-A spec: 1.5-2× midpoint).
+            // Presentation scale is authored on the prefab child; avoid compounding it at runtime.
             transform.localScale = BossScale;
 
-            // T6: Rim-light layer — koyu cyan outline üstünde sprite yayını.
+            // T6: Rim-light layer — crimson/stone palette, restrained so the boss does not read as neon cyan.
             rimSR = BuildRimLayer();
 
             healthBar = FindAnyObjectByType<BossHealthBar>();
@@ -169,7 +169,7 @@ namespace RIMA
                 () => StartCoroutine(BossLoop()));
         }
 
-        /// <summary>Rim-light: sprites'in önüne koyu-cyan renkte küçük-ofset kopyası koyar.</summary>
+        /// <summary>Rim-light: sprites'in arkasına koyu crimson renkte küçük-ofset kopyası koyar.</summary>
         private SpriteRenderer BuildRimLayer()
         {
             if (sr == null) return null;
@@ -183,7 +183,7 @@ namespace RIMA
             rim.sprite       = sr.sprite;
             rim.sortingLayerName = sr.sortingLayerName;
             rim.sortingOrder = sr.sortingOrder - 1;
-            rim.color        = new Color(0.10f, 0.75f, 0.90f, 0.55f); // cyan rim
+            rim.color        = new Color(0.55f, 0.06f, 0.08f, 0.38f);
             rim.material     = sr.material;
 
             // Sprite değişimlerini izle (animasyon olursa).
@@ -905,4 +905,3 @@ namespace RIMA
         }
     }
 }
-

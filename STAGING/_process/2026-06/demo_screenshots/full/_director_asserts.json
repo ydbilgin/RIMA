@@ -1,0 +1,54 @@
+{
+  "category": "DirectorMode",
+  "asserts": [
+    {
+      "id": "DIR-01",
+      "state": "bootstrap",
+      "post": { "DirectorMode.Instance": "not null", "BuildModeController.Instance": "not null" },
+      "result": "PASS",
+      "note": "dev-direct _Arena'da tüm singleton'lar mevcut"
+    },
+    {
+      "id": "DIR-02",
+      "state": "toggle_open",
+      "action": "DirectorMode.Instance.ToggleState()",
+      "post": { "State": "Director", "TimeScale": 0 },
+      "result": "PASS"
+    },
+    {
+      "id": "DIR-03",
+      "state": "spawn_assert",
+      "pre": { "SpawnCount": 0 },
+      "action": "SelectFirstSpawnEnemyForValidation() + SpawnSelectedEnemyAtForValidation(Vector2(0,0))",
+      "post": { "Selected": true, "Spawned": true, "SpawnCount": 1, "Delta": 1 },
+      "result": "PASS"
+    },
+    {
+      "id": "DIR-04",
+      "state": "stat_assert",
+      "action": "SetStatForValidation('physPower', 177f)",
+      "post": { "SetStat_return": true, "PlayerClassManager.physPower": 177 },
+      "result": "PASS"
+    },
+    {
+      "id": "DIR-05",
+      "state": "telemetry_assert",
+      "post": {
+        "TelemetryEventCount": 0,
+        "DPS": 0,
+        "CSV_has_header": true,
+        "CSV_header": "time,finalDamage,damageType,elementTag,sourceType,sourceId,attacker,target"
+      },
+      "result": "PASS",
+      "note": "Event yok (combat olmadı) ama CSV header + export çalışıyor"
+    },
+    {
+      "id": "DIR-06",
+      "state": "toggle_close",
+      "action": "DirectorMode.Instance.ToggleState()",
+      "post": { "State": "Test", "TimeScale": 1 },
+      "result": "PASS"
+    }
+  ],
+  "summary": "6/6 PASS"
+}

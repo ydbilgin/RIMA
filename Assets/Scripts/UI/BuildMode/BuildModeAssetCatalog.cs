@@ -116,6 +116,7 @@ namespace RIMA.UI.BuildMode
                 PropDefinitionSO def = all[i];
                 if (def == null) continue;
                 Sprite icon = PropThumbnail(def);
+                if (icon == null) continue;
                 group.entries.Add(new AssetEntry
                 {
                     id = !string.IsNullOrEmpty(def.propId) ? def.propId : def.name,
@@ -123,7 +124,7 @@ namespace RIMA.UI.BuildMode
                     icon = icon,
                     category = AssetCategory.Props,
                     payload = def,                 // the prop tool consumes the SO on selection.
-                    enabled = true                 // a missing sprite still selects (shows fallback glyph).
+                    enabled = true
                 });
             }
         }

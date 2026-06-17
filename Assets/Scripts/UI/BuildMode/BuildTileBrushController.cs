@@ -124,6 +124,7 @@ namespace RIMA.UI.BuildMode
 
         // --- UI ---
         private Canvas brushCanvas;
+        private RectTransform brushRoot;
         private TextMeshProUGUI statusLabel;
         private TextMeshProUGUI hintLabel;
         private TextMeshProUGUI radiusLabel;
@@ -250,7 +251,7 @@ namespace RIMA.UI.BuildMode
             if (!painting)
             {
                 if (!lmbDown && !rmbDown) return;       // mid-hold that began elsewhere; ignore.
-                if (IsPointerOverUi()) return;          // press started over the panel.
+                if (IsPointerOverUi(mouse.position.ReadValue())) return; // press started over the panel.
                 painting = true;
                 paintingLeft = lmbDown || (!rmbDown && lmbHeld);
                 lastPaintedCell = new Vector3Int(int.MinValue, int.MinValue, 0); // force first commit.
@@ -725,6 +726,19 @@ namespace RIMA.UI.BuildMode
                     if (grid == null) grid = walk.floorTilemap.layoutGrid;
                 }
                 if (grid == null) grid = FindObjectOfType<Grid>();
+                if (groundTilemap == null && grid != null)
+                {
+                    foreach (Tilemap tm in grid.GetComponentsInChildren<Tilemap>(true))
+                    {
+                        if (tm == null || tm.gameObject.name == OverlayTilemapName) continue;
+                        if (tm.gameObject.name == "Ground")
+                        {
+                            groundTilemap = tm;
+                            break;
+                        }
+                        if (groundTilemap == null) groundTilemap = tm;
+                    }
+                }
             }
 
             if (runDirector == null) runDirector = FindObjectOfType<RoomRunDirector>();
@@ -746,9 +760,18 @@ namespace RIMA.UI.BuildMode
             return world;
         }
 
-        private static bool IsPointerOverUi()
+        private bool IsPointerOverUi(Vector2 screen)
         {
-            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+            if (ScreenPointInRect(brushRoot, screen)) return true;
+            BuildPlacementController placement = BuildPlacementController.InstanceIfExists;
+            return placement != null && placement.IsPointerOverBuildPanel(screen);
+        }
+
+        private static bool ScreenPointInRect(RectTransform rect, Vector2 screen)
+        {
+            return rect != null &&
+                rect.gameObject.activeInHierarchy &&
+                RectTransformUtility.RectangleContainsScreenPoint(rect, screen, null);
         }
 
         // ---------------------------------------------------------------- mode + UI
@@ -777,16 +800,16 @@ namespace RIMA.UI.BuildMode
 
             // RIGHT panel = TILE BRUSH. Same width / padding / border as the BUILD panel for a
             // consistent, deliberate look across both tools.
-            RectTransform root = new GameObject("BuildTileBrushRoot", typeof(RectTransform)).GetComponent<RectTransform>();
-            root.SetParent(brushCanvas.transform, false);
-            root.anchorMin = new Vector2(1f, 0.5f);
-            root.anchorMax = new Vector2(1f, 0.5f);
-            root.pivot = new Vector2(1f, 0.5f);
-            root.sizeDelta = new Vector2(BuildModeUiStyle.PanelWidth, 380f);
-            root.anchoredPosition = new Vector2(-BuildModeUiStyle.Padding, 0f);
+            brushRoot = new GameObject("BuildTileBrushRoot", typeof(RectTransform)).GetComponent<RectTransform>();
+            brushRoot.SetParent(brushCanvas.transform, false);
+            brushRoot.anchorMin = new Vector2(1f, 0.5f);
+            brushRoot.anchorMax = new Vector2(1f, 0.5f);
+            brushRoot.pivot = new Vector2(1f, 0.5f);
+            brushRoot.sizeDelta = new Vector2(BuildModeUiStyle.PanelWidth, 380f);
+            brushRoot.anchoredPosition = new Vector2(-BuildModeUiStyle.Padding, 0f);
 
             // MakePanel returns the CONTENT rect already inset by the border + Padding.
-            RectTransform content = BuildModeUiStyle.MakePanel(root, "Panel", BuildModeUiStyle.PanelWidth);
+            RectTransform content = BuildModeUiStyle.MakePanel(brushRoot, "Panel", BuildModeUiStyle.PanelWidth);
 
             float headerH = BuildModeUiStyle.MakeHeader(content, "TILE BRUSH");
 
@@ -878,6 +901,7 @@ namespace RIMA.UI.BuildMode
             HideCursor();
             if (brushCanvas != null) DestroyRuntimeObject(brushCanvas.gameObject);
             brushCanvas = null;
+            brushRoot = null;
             statusLabel = null;
             hintLabel = null;
             radiusLabel = null;

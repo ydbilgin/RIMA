@@ -156,7 +156,7 @@ namespace RIMA.UI.BuildMode
         // is active, so the iso cell layout is visible (and screenshot-verifiable, unlike a
         // ScreenSpaceOverlay canvas). Built lazily, shown/hidden with the build session, rebuilt only
         // when the visible cell window changes (no per-cell per-frame GC).
-        private const int GridOverlayRadius = 14;             // cells out from the centre cell each axis
+        private const int GridOverlayRadius = 22;             // cells out from the centre cell each axis
         private static readonly Color GridLineColor = new Color(0.71f, 0.74f, 0.79f, 0.16f); // dim slate
         private GameObject gridOverlay;
         private readonly List<LineRenderer> gridLines = new List<LineRenderer>();
@@ -396,7 +396,7 @@ namespace RIMA.UI.BuildMode
             bool valid = ValidatePlacement(def, origin, out string detail);
             UpdateGhost(cell, valid);
 
-            if (IsPointerOverUi()) return;
+            if (IsPointerOverBuildPanel(mouse.position.ReadValue())) return;
 
             if (mouse.leftButton.wasPressedThisFrame)
             {
@@ -1055,7 +1055,7 @@ namespace RIMA.UI.BuildMode
             IReadOnlyList<PropDefinitionSO> all = registry.AllProps;
             for (int i = 0; i < all.Count; i++)
             {
-                if (all[i] != null) palette.Add(all[i]);
+                if (all[i] != null && HasPlaceableSprite(all[i])) palette.Add(all[i]);
             }
         }
 
@@ -1170,9 +1170,11 @@ namespace RIMA.UI.BuildMode
             return world;
         }
 
-        private static bool IsPointerOverUi()
+        internal bool IsPointerOverBuildPanel(Vector2 screen)
         {
-            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+            return paletteRoot != null &&
+                paletteRoot.gameObject.activeInHierarchy &&
+                RectTransformUtility.RectangleContainsScreenPoint(paletteRoot, screen, null);
         }
 
         private PropDefinitionSO SelectedDef() => selectedIndex >= 0 && selectedIndex < palette.Count ? palette[selectedIndex] : null;
@@ -1191,6 +1193,16 @@ namespace RIMA.UI.BuildMode
                 && def.variantSprites[data.variantIndex] != null)
                 return def.variantSprites[data.variantIndex];
             return def.worldSprite;
+        }
+
+        private static bool HasPlaceableSprite(PropDefinitionSO def)
+        {
+            if (def == null) return false;
+            if (def.worldSprite != null) return true;
+            if (def.variantSprites == null) return false;
+            for (int i = 0; i < def.variantSprites.Length; i++)
+                if (def.variantSprites[i] != null) return true;
+            return false;
         }
 
         private static string GuidFor(PropDefinitionSO def)

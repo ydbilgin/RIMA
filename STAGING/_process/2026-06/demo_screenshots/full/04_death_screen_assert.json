@@ -1,0 +1,12 @@
+{
+  "state": "death_screen",
+  "pre": { "player_IsDead": true, "player_HP": 0 },
+  "action": "player HP=0 on scene load (dev-direct _Arena started with dead player)",
+  "post": {
+    "DeathScreenManager.IsDeathActiveForDemo": true,
+    "DeathScreen_GO_active": true,
+    "TimeScale": 0
+  },
+  "result": "PASS",
+  "note": "DeathScreen gösterimi doğru çalışıyor"
+}

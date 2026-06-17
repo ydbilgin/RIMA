@@ -19,7 +19,7 @@ namespace RIMA
         // ─── Config ──────────────────────────────────────────────────────────
 
         [Header("Detection")]
-        [SerializeField] public float detectionRange = 8f;
+        [SerializeField] public float detectionRange = 12f;
         [SerializeField] public float attackRange    = 1.5f;
 
         [Header("Movement")]
@@ -151,7 +151,15 @@ namespace RIMA
 
         protected virtual void Update()
         {
-            if (CurrentState == MobState.Dead || Player == null) return;
+            if (CurrentState == MobState.Dead) return;
+
+            // Re-acquire Player if lost (spawn-order race or scene reload)
+            if (Player == null)
+            {
+                var p = GameObject.FindGameObjectWithTag("Player");
+                if (p != null) Player = p.transform;
+                else return; // genuinely absent — skip this frame
+            }
 
             attackTimer -= Time.deltaTime;
 
@@ -189,6 +197,7 @@ namespace RIMA
                 Rb.linearVelocity = Vector2.zero;
                 return;
             }
+            // NOTE: Player null handled above; re-acquire happens in Update.
 
             float speedMult = StatusFx != null ? StatusFx.moveSpeedMultiplier : 1f;
             if (speedMult <= 0f) { Rb.linearVelocity = Vector2.zero; return; }

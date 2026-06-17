@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using RIMA.Balance;
 using RIMA.Encounter;
 
@@ -74,6 +75,7 @@ namespace RIMA
         private readonly Dictionary<Health, float> telemetryFirstHitTimes = new Dictionary<Health, float>();
         private readonly Dictionary<Health, UnityAction> telemetryDeathListeners = new Dictionary<Health, UnityAction>();
         private readonly List<TelemetrySourceBinding> telemetrySourceBindings = new List<TelemetrySourceBinding>();
+        private readonly List<RectTransform> directorPointerRects = new List<RectTransform>();
 
         private CanvasGroup rootGroup;
         private GameObject overlayCanvasGo;
@@ -128,6 +130,16 @@ namespace RIMA
         private const float StatToastDuration = 1.2f;
         private const int MaxDirectorSpawnedEnemies = 10;
 
+        private static readonly Color DirectorBase = new Color32(0x11, 0x13, 0x1A, 0xFF);
+        private static readonly Color DirectorPanel = new Color32(0x1B, 0x1F, 0x28, 0xFF);
+        private static readonly Color DirectorRaised = new Color32(0x25, 0x2A, 0x35, 0xFF);
+        private static readonly Color DirectorBorder = new Color32(0x34, 0x3B, 0x48, 0xFF);
+        private static readonly Color DirectorCyan = new Color32(0x55, 0xD6, 0xE3, 0xFF);
+        private static readonly Color DirectorEmber = new Color32(0xC8, 0x74, 0x2A, 0xFF);
+        private static readonly Color DirectorPurple = new Color32(0x9B, 0x5D, 0xE5, 0xFF);
+        private static readonly Color DirectorText = new Color32(0xF2, 0xEF, 0xE8, 0xFF);
+        private static readonly Color DirectorTextMuted = new Color32(0x9A, 0xA3, 0xB2, 0xFF);
+
         public DirectorModeState State { get; private set; } = DirectorModeState.Test;
         public DirectorTab ActiveTab { get; private set; } = DirectorTab.Spawn;
 
@@ -146,34 +158,77 @@ namespace RIMA
         // dev/demo entry (F5 Play Arena, or opening _Arena / a test scene directly) is any OTHER initial
         // scene, where Director self-bootstraps exactly as before.
         private static readonly string[] GameEntryScenes = { "MainMenu", "CharacterSelect" };
+        private static bool sceneLoadedHooked;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetBootstrapState()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            sceneLoadedHooked = false;
+            Instance = null;
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Bootstrap()
         {
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-            CheckAndSpawn(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            HookSceneLoaded();
         }
 
-        private static void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void BootstrapAfterSceneLoad()
         {
-            CheckAndSpawn(scene.name);
+            HookSceneLoaded();
+            EnsureRuntimeInstanceForCurrentScene();
         }
 
-        private static void CheckAndSpawn(string sceneName)
+        private static void HookSceneLoaded()
         {
-            if (Instance != null)
+            if (sceneLoadedHooked)
             {
                 return;
             }
 
-            foreach (string s in GameEntryScenes)
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            sceneLoadedHooked = true;
+        }
+
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            CheckAndSpawn(scene.name);
+        }
+
+        public static DirectorMode EnsureRuntimeInstanceForCurrentScene()
+        {
+            HookSceneLoaded();
+            return CheckAndSpawn(SceneManager.GetActiveScene().name);
+        }
+
+        private static DirectorMode CheckAndSpawn(string sceneName)
+        {
+            if (Instance != null)
             {
-                if (sceneName == s) return;
+                return Instance;
+            }
+
+            if (IsGameEntryScene(sceneName))
+            {
+                return null;
             }
 
             GameObject go = new GameObject("DirectorMode");
             DontDestroyOnLoad(go);
-            go.AddComponent<DirectorMode>();
+            return go.AddComponent<DirectorMode>();
+        }
+
+        private static bool IsGameEntryScene(string sceneName)
+        {
+            foreach (string s in GameEntryScenes)
+            {
+                if (sceneName == s) return true;
+            }
+
+            return false;
         }
 
         private void Awake()
@@ -394,7 +449,7 @@ namespace RIMA
                 bool active = binding.Tab == tab;
                 if (binding.Background != null)
                 {
-                    binding.Background.sprite = active && slotActive != null ? slotActive : slotNormal;
+                    binding.Background.color = active ? DirectorRaised : DirectorBase;
                 }
             }
 
@@ -732,11 +787,12 @@ namespace RIMA
             rootGroup = CreateFill("DirectorRoot", canvasGo.transform).gameObject.AddComponent<CanvasGroup>();
             RectTransform root = rootGroup.transform as RectTransform;
 
-            Image dimmer = CreateImage("ScreenDimmer", root, null, new Color(0.031f, 0.027f, 0.063f, 0.35f), Image.Type.Simple);
+            directorPointerRects.Clear();
+
+            Image dimmer = CreateImage("ScreenDimmer", root, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.18f), Image.Type.Simple);
             dimmer.raycastTarget = false;
             Stretch(dimmer.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-            BuildTopBadge(root);
             BuildTabRail(root);
             BuildContentArea(root);
             BuildWorldCursorOverlay(root);
@@ -744,6 +800,7 @@ namespace RIMA
             BuildSelectionInspector(root);
             BuildBottomTelemetryStrip(root);
             BuildStatToast(root);
+            BuildTopBadge(root);
         }
 
         private void RebuildOverlayRuntime()
@@ -796,32 +853,46 @@ namespace RIMA
 
         private void BuildTopBadge(RectTransform root)
         {
-            RectTransform badge = CreatePanel("TopBadge", root, ribbonBase, new Color(0.48f, 0.18f, 0.06f, 0.92f), Image.Type.Sliced);
-            Anchor(badge, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -24f), new Vector2(620f, 84f));
+            RectTransform badge = CreatePanel("TopAppBar", root, null, DirectorBase, Image.Type.Simple);
+            Anchor(badge, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -28f), new Vector2(0f, 56f));
+            RegisterDirectorPointerRect(badge);
 
-            TextMeshProUGUI title = CreateText("TMP_Title", badge, "DIRECTOR MODE", 32f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Anchor(title.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(32f, 12f), new Vector2(300f, 34f));
+            TextMeshProUGUI title = CreateText("TMP_Title", badge, "RIMA DIRECTOR", 24f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Anchor(title.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(80f, 0f), new Vector2(260f, 34f));
 
             subtitleText = CreateText("TMP_Subtitle", badge, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            subtitleText.color = new Color(0.82f, 0.92f, 0.94f, 0.86f);
-            Anchor(subtitleText.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(34f, -18f), new Vector2(330f, 28f));
+            subtitleText.color = DirectorTextMuted;
+            Anchor(subtitleText.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(336f, 0f), new Vector2(360f, 28f));
 
-            Button start = CreateButton("Button_StartTest", badge, ribbonBase, new Color(0.80f, 0.34f, 0.09f, 1f));
-            Anchor(start.GetComponent<RectTransform>(), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-30f, 0f), new Vector2(210f, 54f));
+            Button start = CreateButton("Button_StartTest", badge, null, DirectorCyan);
+            Anchor(start.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(20f, 0f), new Vector2(104f, 40f));
             start.onClick.AddListener(StartButtonPressed);
 
-            startButtonText = CreateText("TMP", start.transform as RectTransform, "", 24f, FontStyles.Bold, TextAlignmentOptions.Center);
+            startButtonText = CreateText("TMP", start.transform as RectTransform, "", 16f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(startButtonText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            Button step = CreateButton("Button_DirectorStep", badge, null, DirectorRaised);
+            Anchor(step.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(132f, 0f), new Vector2(92f, 40f));
+            step.interactable = false;
+            TextMeshProUGUI stepLabel = CreateText("TMP", step.transform as RectTransform, "STEP", 14f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(stepLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            Button reset = CreateButton("Button_QuickResetTop", badge, null, DirectorEmber);
+            Anchor(reset.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(246f, 0f), new Vector2(120f, 40f));
+            reset.onClick.AddListener(DemoQuickReset);
+            TextMeshProUGUI resetLabel = CreateText("TMP", reset.transform as RectTransform, "RESET", 14f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(resetLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
         }
 
         private void BuildTabRail(RectTransform root)
         {
-            RectTransform rail = CreatePanel("TabRail", root, null, new Color(0.05f, 0.06f, 0.08f, 0.80f), Image.Type.Simple);
-            Anchor(rail, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(0f, 0.5f), new Vector2(20f, 0f), new Vector2(96f, -180f));
+            RectTransform rail = CreatePanel("IconRail", root, null, DirectorBase, Image.Type.Simple);
+            Anchor(rail, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(0f, 0.5f), new Vector2(32f, -2f), new Vector2(64f, -88f));
+            RegisterDirectorPointerRect(rail);
 
             VerticalLayoutGroup layout = rail.gameObject.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(8, 8, 18, 18);
-            layout.spacing = 10f;
+            layout.padding = new RectOffset(8, 8, 16, 16);
+            layout.spacing = 8f;
             layout.childAlignment = TextAnchor.UpperCenter;
             layout.childControlHeight = false;
             layout.childControlWidth = true;
@@ -840,18 +911,15 @@ namespace RIMA
         {
             Button button = CreateButton("Button_Tab_" + tab, parent, slotNormal, Color.white);
             RectTransform rt = button.GetComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(80f, 76f);
+            rt.sizeDelta = new Vector2(48f, 56f);
 
             LayoutElement layout = button.gameObject.AddComponent<LayoutElement>();
-            layout.preferredHeight = 76f;
-            layout.minHeight = 76f;
+            layout.preferredHeight = 56f;
+            layout.minHeight = 56f;
 
-            TextMeshProUGUI text = CreateText("TMP_Label", rt, label, 14f, FontStyles.Bold, TextAlignmentOptions.Center);
-            Stretch(text.rectTransform, Vector2.zero, Vector2.one, new Vector2(4f, 8f), new Vector2(-4f, -8f));
+            TextMeshProUGUI text = CreateText("TMP_Label", rt, label, 12f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(text.rectTransform, Vector2.zero, Vector2.one, new Vector2(2f, 4f), new Vector2(-2f, -4f));
             text.enableWordWrapping = true;
-
-            Image icon = CreateImage("Icon", rt, null, new Color(1f, 0.55f, 0.18f, 0.35f), Image.Type.Simple);
-            Anchor(icon.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -10f), new Vector2(18f, 4f));
 
             button.onClick.AddListener(() => ShowTab(tab));
             tabs.Add(new TabBinding(tab, button.GetComponent<Image>()));
@@ -859,8 +927,10 @@ namespace RIMA
 
         private void BuildContentArea(RectTransform root)
         {
-            RectTransform content = CreateFill("ContentArea", root);
-            Stretch(content, Vector2.zero, Vector2.one, new Vector2(150f, 120f), new Vector2(-40f, -130f));
+            RectTransform content = CreatePanel("ContextLibrary", root, null, DirectorPanel, Image.Type.Simple);
+            Anchor(content, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(0f, 0.5f), new Vector2(224f, -2f), new Vector2(320f, -88f));
+            content.gameObject.AddComponent<RectMask2D>();
+            RegisterDirectorPointerRect(content);
 
             AddSpawnPanel(content);
             AddClassSkillPanel(content);
@@ -876,42 +946,43 @@ namespace RIMA
             CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
             panels[DirectorTab.Spawn] = group;
 
-            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            RectTransform window = CreatePanel("Window", panel, null, DirectorPanel, Image.Type.Simple);
             Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            window.GetComponent<Image>().raycastTarget = false;
 
             RectTransform header = CreateFill("Header", panel);
-            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(-32f, 72f));
 
-            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.spawn.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.spawn.title"), 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 24f), new Vector2(-16f, -2f));
             localizedTexts.Add(new LocalizedTextBinding(titleText, "director.spawn.title"));
 
-            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.spawn.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.spawn.hint"), 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = DirectorTextMuted;
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 2f), new Vector2(-16f, -34f));
             localizedTexts.Add(new LocalizedTextBinding(hint, "director.spawn.hint"));
 
-            spawnPaletteRoot = CreatePanel("EnemyPalette", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
-            Anchor(spawnPaletteRoot, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(-90f, 330f));
+            spawnPaletteRoot = CreatePanel("EnemyPalette", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
+            Anchor(spawnPaletteRoot, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(0f, 0.5f), new Vector2(0f, 2f), new Vector2(-32f, -180f));
 
             GridLayoutGroup paletteLayout = spawnPaletteRoot.gameObject.AddComponent<GridLayoutGroup>();
-            paletteLayout.padding = new RectOffset(16, 16, 16, 16);
-            paletteLayout.spacing = new Vector2(12f, 12f);
-            paletteLayout.cellSize = new Vector2(168f, 78f);
+            paletteLayout.padding = new RectOffset(12, 12, 12, 12);
+            paletteLayout.spacing = new Vector2(8f, 8f);
+            paletteLayout.cellSize = new Vector2(136f, 72f);
             paletteLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            paletteLayout.constraintCount = 5;
+            paletteLayout.constraintCount = 2;
 
             RectTransform actions = CreateFill("SpawnActions", panel);
-            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 74f), new Vector2(520f, 54f));
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(16f, 72f), new Vector2(-32f, 42f));
 
             Button clear = CreateButton("Button_ClearDirectorSpawns", actions, menuButton, Color.white);
-            Anchor(clear.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), Vector2.zero, new Vector2(180f, 42f));
+            Anchor(clear.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(0f, 38f));
             clear.onClick.AddListener(ClearDirectorSpawns);
             AddButtonText(clear, "director.spawn.clear");
 
-            spawnStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            spawnStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Anchor(spawnStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+            spawnStatusText = CreateText("TMP_Status", panel, "", 13f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            spawnStatusText.color = DirectorTextMuted;
+            Anchor(spawnStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(16f, 32f), new Vector2(-32f, 28f));
 
             EnsureSpawnPaletteLoaded();
         }
@@ -959,12 +1030,12 @@ namespace RIMA
             Image swatch = CreateImage("Swatch", rt, null, EnemyTypeColor(entry.enemyType), Image.Type.Simple);
             Anchor(swatch.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(12f, 0f), new Vector2(18f, 44f));
 
-            TextMeshProUGUI title = CreateText("TMP_Label", rt, label, 16f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(38f, 22f), new Vector2(-10f, -8f));
+            TextMeshProUGUI title = CreateText("TMP_Label", rt, label, 14f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(38f, 22f), new Vector2(-8f, -8f));
             title.enableWordWrapping = true;
 
-            TextMeshProUGUI meta = CreateText("TMP_Meta", rt, entry.enemyType.ToString(), 11f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            meta.color = new Color(0.78f, 0.84f, 0.86f, 0.70f);
+            TextMeshProUGUI meta = CreateText("TMP_Meta", rt, entry.enemyType.ToString(), 12f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            meta.color = DirectorTextMuted;
             Stretch(meta.rectTransform, Vector2.zero, Vector2.one, new Vector2(38f, 6f), new Vector2(-10f, -48f));
 
             SpawnEnemyBinding binding = new SpawnEnemyBinding(entry.enemyType, entry.prefab, button.GetComponent<Image>());
@@ -986,7 +1057,7 @@ namespace RIMA
             foreach (SpawnEnemyBinding binding in spawnEnemies)
             {
                 if (binding.Background != null)
-                    binding.Background.sprite = binding == selectedSpawnEnemy && slotActive != null ? slotActive : slotNormal;
+                    binding.Background.color = binding == selectedSpawnEnemy ? DirectorCyan : DirectorRaised;
             }
         }
 
@@ -1029,7 +1100,7 @@ namespace RIMA
 
             UpdateSpawnGhost(snapped, dt);
 
-            if (IsPointerOverDirectorUi())
+            if (IsPointerOverDirectorUi(screen))
                 return;
 
             if (mouse.leftButton.wasPressedThisFrame)
@@ -1281,9 +1352,20 @@ namespace RIMA
                 0f);
         }
 
-        private static bool IsPointerOverDirectorUi()
+        private bool IsPointerOverDirectorUi(Vector2 screen)
         {
-            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+            for (int i = 0; i < directorPointerRects.Count; i++)
+            {
+                RectTransform rect = directorPointerRects[i];
+                if (rect != null &&
+                    rect.gameObject.activeInHierarchy &&
+                    RectTransformUtility.RectangleContainsScreenPoint(rect, screen, null))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void SetSpawnStatus(string locKey, params object[] args)
@@ -1310,41 +1392,42 @@ namespace RIMA
             CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
             panels[DirectorTab.Build] = group;
 
-            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            RectTransform window = CreatePanel("Window", panel, null, DirectorPanel, Image.Type.Simple);
             Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            window.GetComponent<Image>().raycastTarget = false;
 
             RectTransform header = CreateFill("Header", panel);
-            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(-32f, 72f));
 
-            TextMeshProUGUI titleText = CreateText("TMP_Title", header, "BUILD", 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, "BUILD", 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 24f), new Vector2(-16f, -2f));
 
-            TextMeshProUGUI hint = CreateText("TMP_Hint", header, "Palette -> ghost -> left click place -> right click erase", 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, "Palette -> ghost -> place / erase", 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = DirectorTextMuted;
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 2f), new Vector2(-16f, -34f));
 
-            propPaletteRoot = CreatePanel("PropPalette", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
-            Anchor(propPaletteRoot, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(-90f, 330f));
+            propPaletteRoot = CreatePanel("PropPalette", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
+            Anchor(propPaletteRoot, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(0f, 0.5f), new Vector2(0f, 2f), new Vector2(-32f, -180f));
 
             GridLayoutGroup paletteLayout = propPaletteRoot.gameObject.AddComponent<GridLayoutGroup>();
-            paletteLayout.padding = new RectOffset(16, 16, 16, 16);
-            paletteLayout.spacing = new Vector2(12f, 12f);
-            paletteLayout.cellSize = new Vector2(168f, 78f);
+            paletteLayout.padding = new RectOffset(12, 12, 12, 12);
+            paletteLayout.spacing = new Vector2(8f, 8f);
+            paletteLayout.cellSize = new Vector2(136f, 72f);
             paletteLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            paletteLayout.constraintCount = 5;
+            paletteLayout.constraintCount = 2;
 
             RectTransform actions = CreateFill("BuildActions", panel);
-            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 74f), new Vector2(520f, 54f));
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(16f, 72f), new Vector2(-32f, 42f));
 
             Button clear = CreateButton("Button_ClearDirectorProps", actions, menuButton, Color.white);
-            Anchor(clear.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), Vector2.zero, new Vector2(180f, 42f));
+            Anchor(clear.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(0f, 38f));
             clear.onClick.AddListener(ClearDirectorProps);
-            TextMeshProUGUI clearLabel = CreateText("TMP", clear.transform as RectTransform, "CLEAR PROPS", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            TextMeshProUGUI clearLabel = CreateText("TMP", clear.transform as RectTransform, "CLEAR PROPS", 14f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(clearLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-            buildStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            buildStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Anchor(buildStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+            buildStatusText = CreateText("TMP_Status", panel, "", 13f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            buildStatusText.color = DirectorTextMuted;
+            Anchor(buildStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(16f, 32f), new Vector2(-32f, 28f));
 
             EnsurePropPaletteLoaded();
         }
@@ -1401,12 +1484,12 @@ namespace RIMA
             Image swatch = CreateImage("Swatch", rt, prefabRenderer != null ? prefabRenderer.sprite : null, HtmlColor("#2BD9D9"), Image.Type.Simple);
             Anchor(swatch.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(12f, 0f), new Vector2(32f, 44f));
 
-            TextMeshProUGUI title = CreateText("TMP_Label", rt, label, 16f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            TextMeshProUGUI title = CreateText("TMP_Label", rt, label, 14f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
             Stretch(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(52f, 22f), new Vector2(-10f, -8f));
             title.enableWordWrapping = true;
 
-            TextMeshProUGUI meta = CreateText("TMP_Meta", rt, "PROP", 11f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            meta.color = new Color(0.78f, 0.84f, 0.86f, 0.70f);
+            TextMeshProUGUI meta = CreateText("TMP_Meta", rt, "PROP", 12f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            meta.color = DirectorTextMuted;
             Stretch(meta.rectTransform, Vector2.zero, Vector2.one, new Vector2(52f, 6f), new Vector2(-10f, -48f));
 
             PropBinding binding = new PropBinding(prefab, button.GetComponent<Image>());
@@ -1428,7 +1511,7 @@ namespace RIMA
             foreach (PropBinding binding in propBindings)
             {
                 if (binding.Background != null)
-                    binding.Background.sprite = binding == selectedProp && slotActive != null ? slotActive : slotNormal;
+                    binding.Background.color = binding == selectedProp ? DirectorCyan : DirectorRaised;
             }
         }
 
@@ -1448,7 +1531,7 @@ namespace RIMA
 
             UpdatePropGhost(snapped, dt);
 
-            if (IsPointerOverDirectorUi())
+            if (IsPointerOverDirectorUi(screen))
                 return;
 
             if (mouse.leftButton.wasPressedThisFrame)
@@ -1597,26 +1680,27 @@ namespace RIMA
             CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
             panels[tab] = group;
 
-            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            RectTransform window = CreatePanel("Window", panel, null, DirectorPanel, Image.Type.Simple);
             Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            window.GetComponent<Image>().raycastTarget = false;
 
             RectTransform header = CreateFill("Header", panel);
-            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(-32f, 72f));
 
-            TextMeshProUGUI titleText = CreateText("TMP_Title", header, title, 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, title, 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 24f), new Vector2(-16f, -2f));
 
-            TextMeshProUGUI hint = CreateText("TMP_Hint", header, placeholder, 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, placeholder, 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = DirectorTextMuted;
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 2f), new Vector2(-16f, -34f));
 
-            TextMeshProUGUI soon = CreateText("TMP_Placeholder", panel, placeholder, 26f, FontStyles.Normal, TextAlignmentOptions.Center);
-            soon.color = new Color(0.82f, 0.92f, 0.94f, 0.58f);
-            Anchor(soon.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(360f, 80f));
+            TextMeshProUGUI soon = CreateText("TMP_Placeholder", panel, placeholder, 16f, FontStyles.Normal, TextAlignmentOptions.Center);
+            soon.color = DirectorTextMuted;
+            Anchor(soon.rectTransform, new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(-32f, 80f));
 
-            TextMeshProUGUI footer = CreateText("FooterModeText", panel, "PLACE / ERASE / PAINT / INSPECT", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
-            footer.color = new Color(1f, 0.55f, 0.18f, 0.88f);
-            Anchor(footer.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 22f), new Vector2(-80f, 28f));
+            TextMeshProUGUI footer = CreateText("FooterModeText", panel, "PLACE / ERASE / PAINT / INSPECT", 13f, FontStyles.Bold, TextAlignmentOptions.Center);
+            footer.color = DirectorCyan;
+            Anchor(footer.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 32f), new Vector2(-32f, 28f));
         }
 
         private void AddClassSkillPanel(RectTransform parent)
@@ -1625,61 +1709,63 @@ namespace RIMA
             CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
             panels[DirectorTab.ClassSkill] = group;
 
-            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            RectTransform window = CreatePanel("Window", panel, null, DirectorPanel, Image.Type.Simple);
             Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            window.GetComponent<Image>().raycastTarget = false;
 
             RectTransform header = CreateFill("Header", panel);
-            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(-32f, 72f));
 
-            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.class_skill.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.class_skill.title"), 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 24f), new Vector2(-16f, -2f));
             localizedTexts.Add(new LocalizedTextBinding(titleText, "director.class_skill.title"));
 
-            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.class_skill.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.class_skill.hint"), 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = DirectorTextMuted;
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 2f), new Vector2(-16f, -34f));
             localizedTexts.Add(new LocalizedTextBinding(hint, "director.class_skill.hint"));
 
-            dualClassDraftButton = CreateButton("Button_DualClassDraft", header, ribbonBase, new Color(0.55f, 0.22f, 0.62f, 1f));
-            Anchor(dualClassDraftButton.GetComponent<RectTransform>(), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-30f, 0f), new Vector2(260f, 54f));
+            dualClassDraftButton = CreateButton("Button_DualClassDraft", header, null, DirectorPurple);
+            Anchor(dualClassDraftButton.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, -44f), new Vector2(-32f, 36f));
             dualClassDraftButton.onClick.AddListener(TriggerDualClassDraft);
-            TextMeshProUGUI dualLabel = CreateText("TMP", dualClassDraftButton.transform as RectTransform, "DUAL-CLASS DRAFT", 20f, FontStyles.Bold, TextAlignmentOptions.Center);
+            TextMeshProUGUI dualLabel = CreateText("TMP", dualClassDraftButton.transform as RectTransform, "DUAL-CLASS DRAFT", 13f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(dualLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-            RectTransform classGrid = CreatePanel("ClassGrid", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
-            Anchor(classGrid, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(520f, 288f));
+            RectTransform classGrid = CreatePanel("ClassGrid", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
+            Anchor(classGrid, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(16f, -144f), new Vector2(-32f, 180f));
             GridLayoutGroup classLayout = classGrid.gameObject.AddComponent<GridLayoutGroup>();
-            classLayout.padding = new RectOffset(14, 14, 14, 14);
-            classLayout.spacing = new Vector2(10f, 10f);
-            classLayout.cellSize = new Vector2(92f, 74f);
+            classLayout.padding = new RectOffset(12, 12, 12, 12);
+            classLayout.spacing = new Vector2(8f, 8f);
+            classLayout.cellSize = new Vector2(130f, 50f);
             classLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            classLayout.constraintCount = 5;
+            classLayout.constraintCount = 2;
 
             for (int i = 0; i < DirectorClasses.Length; i++)
                 AddClassButton(classGrid, DirectorClasses[i]);
 
-            classSkillCardsRoot = CreatePanel("SkillCards", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
-            Anchor(classSkillCardsRoot, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(590f, -132f), new Vector2(-90f, 410f));
+            classSkillCardsRoot = CreatePanel("SkillCards", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
+            Anchor(classSkillCardsRoot, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(0f, 0.5f), new Vector2(16f, 130f), new Vector2(-32f, -348f));
+            classSkillCardsRoot.gameObject.AddComponent<RectMask2D>();
             GridLayoutGroup skillLayout = classSkillCardsRoot.gameObject.AddComponent<GridLayoutGroup>();
-            skillLayout.padding = new RectOffset(16, 16, 16, 16);
-            skillLayout.spacing = new Vector2(12f, 12f);
-            skillLayout.cellSize = new Vector2(218f, 92f);
+            skillLayout.padding = new RectOffset(12, 12, 12, 12);
+            skillLayout.spacing = new Vector2(8f, 8f);
+            skillLayout.cellSize = new Vector2(272f, 78f);
             skillLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            skillLayout.constraintCount = 3;
+            skillLayout.constraintCount = 1;
 
             RectTransform actions = CreateFill("ClassSkillActions", panel);
-            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 78f), new Vector2(990f, 54f));
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(16f, 106f), new Vector2(-32f, 88f));
 
             AddSkillSlotButton(actions, "Button_AssignQ", "director.class_skill.assign.q", 0, new Vector2(0f, 0f));
-            AddSkillSlotButton(actions, "Button_AssignE", "director.class_skill.assign.e", 1, new Vector2(122f, 0f));
-            AddSkillSlotButton(actions, "Button_AssignR", "director.class_skill.assign.r", 2, new Vector2(244f, 0f));
-            AddSkillSlotButton(actions, "Button_AssignF", "director.class_skill.assign.f", 3, new Vector2(366f, 0f));
-            AddBasicButton(actions, "Button_LMB", "director.class_skill.assign.lmb", GameAction.Attack, "<Mouse>/leftButton", new Vector2(520f, 0f));
-            AddBasicButton(actions, "Button_RMB", "director.class_skill.assign.rmb", GameAction.ClassSecondary, "<Mouse>/rightButton", new Vector2(674f, 0f));
+            AddSkillSlotButton(actions, "Button_AssignE", "director.class_skill.assign.e", 1, new Vector2(72f, 0f));
+            AddSkillSlotButton(actions, "Button_AssignR", "director.class_skill.assign.r", 2, new Vector2(144f, 0f));
+            AddSkillSlotButton(actions, "Button_AssignF", "director.class_skill.assign.f", 3, new Vector2(216f, 0f));
+            AddBasicButton(actions, "Button_LMB", "director.class_skill.assign.lmb", GameAction.Attack, "<Mouse>/leftButton", new Vector2(0f, -46f));
+            AddBasicButton(actions, "Button_RMB", "director.class_skill.assign.rmb", GameAction.ClassSecondary, "<Mouse>/rightButton", new Vector2(148f, -46f));
 
-            classSkillStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            classSkillStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Anchor(classSkillStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+            classSkillStatusText = CreateText("TMP_Status", panel, "", 13f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            classSkillStatusText.color = DirectorTextMuted;
+            Anchor(classSkillStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(16f, 32f), new Vector2(-32f, 28f));
 
             RefreshClassSkillPanel();
         }
@@ -1690,27 +1776,28 @@ namespace RIMA
             CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
             panels[DirectorTab.Stats] = group;
 
-            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            RectTransform window = CreatePanel("Window", panel, null, DirectorPanel, Image.Type.Simple);
             Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            window.GetComponent<Image>().raycastTarget = false;
 
             RectTransform header = CreateFill("Header", panel);
-            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(-32f, 72f));
 
-            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.stats.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.stats.title"), 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 24f), new Vector2(-16f, -2f));
             localizedTexts.Add(new LocalizedTextBinding(titleText, "director.stats.title"));
 
-            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.stats.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.stats.hint"), 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = DirectorTextMuted;
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 2f), new Vector2(-16f, -34f));
             localizedTexts.Add(new LocalizedTextBinding(hint, "director.stats.hint"));
 
-            RectTransform rows = CreatePanel("StatsRows", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
-            Anchor(rows, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(860f, 390f));
+            RectTransform rows = CreatePanel("StatsRows", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
+            Anchor(rows, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(16f, -132f), new Vector2(-32f, 312f));
 
             VerticalLayoutGroup layout = rows.gameObject.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(18, 18, 18, 18);
-            layout.spacing = 12f;
+            layout.padding = new RectOffset(12, 12, 12, 12);
+            layout.spacing = 8f;
             layout.childAlignment = TextAnchor.UpperLeft;
             layout.childControlHeight = false;
             layout.childControlWidth = true;
@@ -1725,49 +1812,49 @@ namespace RIMA
             AddStatRow(rows, "debugGlobalDamageMult", "director.stats.debugGlobalDamageMult", 0f, 5f, false, HtmlColor("#E89020"), s => s.debugGlobalDamageMult, (s, v) => s.debugGlobalDamageMult = v);
 
             RectTransform actions = CreateFill("StatsActions", panel);
-            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 74f), new Vector2(640f, 54f));
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(16f, 92f), new Vector2(-32f, 42f));
 
             Button reset = CreateButton("Button_ResetStats", actions, menuButton, Color.white);
-            Anchor(reset.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(150f, 42f));
+            Anchor(reset.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(86f, 38f));
             reset.onClick.AddListener(ResetStatsFromProfile);
             AddButtonText(reset, "director.stats.reset");
 
             Button save = CreateButton("Button_SaveStats", actions, menuButton, Color.white);
-            Anchor(save.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(170f, 0f), new Vector2(150f, 42f));
+            Anchor(save.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(96f, 0f), new Vector2(86f, 38f));
             save.onClick.AddListener(SaveStatsPreset);
             AddButtonText(save, "director.stats.save");
 
-            Button export = CreateButton("Button_ExportStats", actions, ribbonBase, new Color(0.80f, 0.34f, 0.09f, 1f));
-            Anchor(export.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(340f, 0f), new Vector2(200f, 48f));
+            Button export = CreateButton("Button_ExportStats", actions, null, DirectorEmber);
+            Anchor(export.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(192f, 0f), new Vector2(96f, 38f));
             export.onClick.AddListener(ExportStatsJson);
             AddButtonText(export, "director.stats.export");
 
             // ÖZELLİK 2 — Stat preset butonları (TANK / GLASS CANNON / VARSAYILAN).
             // Mevcut slider setter yolunu (OnStatSliderChanged) çağırır; toast'lar doğal tetiklenir.
             RectTransform presets = CreateFill("StatPresets", panel);
-            Anchor(presets, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 134f), new Vector2(640f, 54f));
+            Anchor(presets, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(16f, 142f), new Vector2(-32f, 42f));
 
             Button tank = CreateButton("Button_PresetTank", presets, menuButton, new Color(0.30f, 0.42f, 0.30f, 1f));
-            Anchor(tank.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(180f, 46f));
+            Anchor(tank.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(78f, 38f));
             tank.onClick.AddListener(ApplyTankPreset);
-            TextMeshProUGUI tankLabel = CreateText("TMP", tank.transform as RectTransform, "TANK", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            TextMeshProUGUI tankLabel = CreateText("TMP", tank.transform as RectTransform, "TANK", 12f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(tankLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             Button glass = CreateButton("Button_PresetGlassCannon", presets, menuButton, new Color(0.52f, 0.24f, 0.24f, 1f));
-            Anchor(glass.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(196f, 0f), new Vector2(200f, 46f));
+            Anchor(glass.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(88f, 0f), new Vector2(112f, 38f));
             glass.onClick.AddListener(ApplyGlassCannonPreset);
-            TextMeshProUGUI glassLabel = CreateText("TMP", glass.transform as RectTransform, "GLASS CANNON", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            TextMeshProUGUI glassLabel = CreateText("TMP", glass.transform as RectTransform, "GLASS", 12f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(glassLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             Button def = CreateButton("Button_PresetDefault", presets, menuButton, Color.white);
-            Anchor(def.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(412f, 0f), new Vector2(180f, 46f));
+            Anchor(def.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(210f, 0f), new Vector2(78f, 38f));
             def.onClick.AddListener(ApplyDefaultPreset);
-            TextMeshProUGUI defLabel = CreateText("TMP", def.transform as RectTransform, "VARSAYILAN", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            TextMeshProUGUI defLabel = CreateText("TMP", def.transform as RectTransform, "DEFAULT", 12f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(defLabel.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-            statsStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            statsStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Anchor(statsStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+            statsStatusText = CreateText("TMP_Status", panel, "", 13f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            statsStatusText.color = DirectorTextMuted;
+            Anchor(statsStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(16f, 32f), new Vector2(-32f, 28f));
 
             RefreshStatsSlidersFromRuntime();
         }
@@ -1778,34 +1865,35 @@ namespace RIMA
             CanvasGroup group = panel.gameObject.AddComponent<CanvasGroup>();
             panels[DirectorTab.Telemetry] = group;
 
-            RectTransform window = CreatePanel("Window", panel, minimapFrame, Color.white, Image.Type.Sliced);
+            RectTransform window = CreatePanel("Window", panel, null, DirectorPanel, Image.Type.Simple);
             Stretch(window, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            window.GetComponent<Image>().raycastTarget = false;
 
             RectTransform header = CreateFill("Header", panel);
-            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(-64f, 74f));
+            Anchor(header, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(-32f, 72f));
 
-            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.telemetry.title"), 30f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 26f), new Vector2(-34f, 0f));
+            TextMeshProUGUI titleText = CreateText("TMP_Title", header, Loc.T("director.telemetry.title"), 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(titleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 24f), new Vector2(-16f, -2f));
             localizedTexts.Add(new LocalizedTextBinding(titleText, "director.telemetry.title"));
 
-            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.telemetry.hint"), 20f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            hint.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 0f), new Vector2(-34f, -30f));
+            TextMeshProUGUI hint = CreateText("TMP_Hint", header, Loc.T("director.telemetry.hint"), 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            hint.color = DirectorTextMuted;
+            Stretch(hint.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 2f), new Vector2(-16f, -34f));
             localizedTexts.Add(new LocalizedTextBinding(hint, "director.telemetry.hint"));
 
             RectTransform metrics = CreateFill("TelemetryMetrics", panel);
-            Anchor(metrics, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -132f), new Vector2(900f, 128f));
+            Anchor(metrics, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(16f, -132f), new Vector2(-32f, 200f));
 
-            telemetryDpsText = AddTelemetryMetric(metrics, "MetricDps", "director.telemetry.dps", HtmlColor("#E89020"), new Vector2(0f, 0f));
-            telemetryTtkText = AddTelemetryMetric(metrics, "MetricTtk", "director.telemetry.ttk", HtmlColor("#FFD24A"), new Vector2(300f, 0f));
-            telemetryEventCountText = AddTelemetryMetric(metrics, "MetricEvents", "director.telemetry.events", HtmlColor("#00FFCC"), new Vector2(600f, 0f));
+            telemetryDpsText = AddTelemetryMetric(metrics, "MetricDps", "director.telemetry.dps", DirectorEmber, new Vector2(0f, 0f));
+            telemetryTtkText = AddTelemetryMetric(metrics, "MetricTtk", "director.telemetry.ttk", DirectorPurple, new Vector2(0f, -64f));
+            telemetryEventCountText = AddTelemetryMetric(metrics, "MetricEvents", "director.telemetry.events", DirectorCyan, new Vector2(0f, -128f));
 
-            RectTransform breakdown = CreatePanel("TelemetrySourceBreakdown", panel, null, new Color(0.02f, 0.025f, 0.035f, 0.28f), Image.Type.Simple);
-            Anchor(breakdown, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -292f), new Vector2(760f, 322f));
+            RectTransform breakdown = CreatePanel("TelemetrySourceBreakdown", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
+            Anchor(breakdown, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(0f, 0.5f), new Vector2(16f, 132f), new Vector2(-32f, -356f));
 
             VerticalLayoutGroup layout = breakdown.gameObject.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(18, 18, 18, 18);
-            layout.spacing = 8f;
+            layout.padding = new RectOffset(12, 12, 12, 12);
+            layout.spacing = 6f;
             layout.childAlignment = TextAnchor.UpperLeft;
             layout.childControlHeight = false;
             layout.childControlWidth = true;
@@ -1821,55 +1909,55 @@ namespace RIMA
             AddTelemetrySourceRow(breakdown, DamageSourceType.Unknown);
 
             RectTransform actions = CreateFill("TelemetryActions", panel);
-            Anchor(actions, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(42f, 74f), new Vector2(520f, 54f));
+            Anchor(actions, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(16f, 72f), new Vector2(-32f, 42f));
 
             Button reset = CreateButton("Button_ClearTelemetry", actions, menuButton, Color.white);
-            Anchor(reset.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(150f, 42f));
+            Anchor(reset.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(136f, 38f));
             reset.onClick.AddListener(ClearTelemetry);
             AddButtonText(reset, "director.telemetry.clear");
 
-            Button export = CreateButton("Button_ExportTelemetryCsv", actions, ribbonBase, new Color(0.80f, 0.34f, 0.09f, 1f));
-            Anchor(export.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(170f, 0f), new Vector2(210f, 48f));
+            Button export = CreateButton("Button_ExportTelemetryCsv", actions, null, DirectorEmber);
+            Anchor(export.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(150f, 0f), new Vector2(136f, 38f));
             export.onClick.AddListener(ExportTelemetryCsv);
             AddButtonText(export, "director.telemetry.export");
 
-            telemetryStatusText = CreateText("TMP_Status", panel, "", 18f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            telemetryStatusText.color = new Color(0.78f, 0.84f, 0.86f, 0.72f);
-            Anchor(telemetryStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(42f, 32f), new Vector2(-120f, 30f));
+            telemetryStatusText = CreateText("TMP_Status", panel, "", 13f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            telemetryStatusText.color = DirectorTextMuted;
+            Anchor(telemetryStatusText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(16f, 32f), new Vector2(-32f, 28f));
 
             UpdateTelemetryDisplay(true);
         }
 
         private TextMeshProUGUI AddTelemetryMetric(RectTransform parent, string name, string locKey, Color color, Vector2 position)
         {
-            RectTransform card = CreatePanel(name, parent, rewardCard, Color.white, Image.Type.Sliced);
-            Anchor(card, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), position, new Vector2(276f, 110f));
+            RectTransform card = CreatePanel(name, parent, null, DirectorRaised, Image.Type.Simple);
+            Anchor(card, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), position, new Vector2(0f, 56f));
 
-            TextMeshProUGUI label = CreateText("TMP_Label", card, Loc.T(locKey), 18f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            TextMeshProUGUI label = CreateText("TMP_Label", card, Loc.T(locKey), 12f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
             label.color = color;
-            Stretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 62f), new Vector2(-18f, -12f));
+            Stretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(12f, 28f), new Vector2(-12f, -4f));
             localizedTexts.Add(new LocalizedTextBinding(label, locKey));
 
-            TextMeshProUGUI value = CreateText("TMP_Value", card, "0", 34f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(value.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 12f), new Vector2(-18f, -44f));
+            TextMeshProUGUI value = CreateText("TMP_Value", card, "0", 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(value.rectTransform, Vector2.zero, Vector2.one, new Vector2(12f, 4f), new Vector2(-12f, -24f));
             return value;
         }
 
         private void AddTelemetrySourceRow(RectTransform parent, DamageSourceType sourceType)
         {
             RectTransform row = CreateFill("Row_Source_" + sourceType, parent);
-            row.sizeDelta = new Vector2(0f, 32f);
+            row.sizeDelta = new Vector2(0f, 28f);
             LayoutElement layout = row.gameObject.AddComponent<LayoutElement>();
-            layout.preferredHeight = 32f;
-            layout.minHeight = 32f;
+            layout.preferredHeight = 28f;
+            layout.minHeight = 28f;
 
             Color color = SourceTelemetryColor(sourceType);
-            TextMeshProUGUI label = CreateText("TMP_Label", row, sourceType.ToString().ToUpperInvariant(), 18f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            TextMeshProUGUI label = CreateText("TMP_Label", row, sourceType.ToString().ToUpperInvariant(), 12f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
             label.color = color;
-            Anchor(label.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(118f, 28f));
+            Anchor(label.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(74f, 24f));
 
             Image background = CreateImage("BarBackground", row, null, new Color(0.06f, 0.07f, 0.09f, 0.95f), Image.Type.Simple);
-            Anchor(background.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(132f, 0f), new Vector2(420f, 20f));
+            Anchor(background.rectTransform, new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0f, 0.5f), new Vector2(82f, 0f), new Vector2(-150f, 16f));
 
             Image fill = CreateImage("BarFill", background.rectTransform, null, color, Image.Type.Filled);
             fill.type = Image.Type.Filled;
@@ -1878,8 +1966,8 @@ namespace RIMA
             fill.fillAmount = 0f;
             Stretch(fill.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-            TextMeshProUGUI value = CreateText("TMP_Value", row, "0  0%", 18f, FontStyles.Bold, TextAlignmentOptions.MidlineRight);
-            Anchor(value.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(570f, 0f), new Vector2(130f, 28f));
+            TextMeshProUGUI value = CreateText("TMP_Value", row, "0  0%", 12f, FontStyles.Bold, TextAlignmentOptions.MidlineRight);
+            Anchor(value.rectTransform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0f, 0f), new Vector2(58f, 24f));
 
             telemetrySourceBindings.Add(new TelemetrySourceBinding(sourceType, fill, value));
         }
@@ -1887,21 +1975,21 @@ namespace RIMA
         private void AddStatRow(RectTransform parent, string statKey, string locKey, float minValue, float maxValue, bool wholeNumbers, Color color, Func<ClassStatRuntime, float> read, Action<ClassStatRuntime, float> write)
         {
             RectTransform row = CreateFill("Row_" + statKey, parent);
-            row.sizeDelta = new Vector2(0f, 44f);
+            row.sizeDelta = new Vector2(0f, 40f);
             LayoutElement layout = row.gameObject.AddComponent<LayoutElement>();
-            layout.preferredHeight = 44f;
-            layout.minHeight = 44f;
+            layout.preferredHeight = 40f;
+            layout.minHeight = 40f;
 
-            TextMeshProUGUI label = CreateText("TMP_Label", row, Loc.T(locKey), 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            TextMeshProUGUI label = CreateText("TMP_Label", row, Loc.T(locKey), 13f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
             label.color = color;
-            Anchor(label.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(240f, 34f));
+            Anchor(label.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(104f, 32f));
             localizedTexts.Add(new LocalizedTextBinding(label, locKey));
 
             Slider slider = CreateStatSlider(row, statKey, minValue, maxValue, wholeNumbers, color);
-            Anchor(slider.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(260f, 0f), new Vector2(410f, 32f));
+            Anchor(slider.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0f, 0.5f), new Vector2(108f, 0f), new Vector2(-178f, 30f));
 
-            TextMeshProUGUI valueText = CreateText("TMP_Value", row, "", 20f, FontStyles.Bold, TextAlignmentOptions.MidlineRight);
-            Anchor(valueText.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(690f, 0f), new Vector2(110f, 34f));
+            TextMeshProUGUI valueText = CreateText("TMP_Value", row, "", 13f, FontStyles.Bold, TextAlignmentOptions.MidlineRight);
+            Anchor(valueText.rectTransform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0f, 0f), new Vector2(54f, 32f));
 
             StatSliderBinding binding = new StatSliderBinding(statKey, slider, valueText, read, write);
             statSliders.Add(binding);
@@ -1912,7 +2000,7 @@ namespace RIMA
         {
             RectTransform root = CreateFill("Slider_" + statKey, parent);
 
-            Image background = CreateImage("Background", root, null, new Color(0.06f, 0.07f, 0.09f, 0.95f), Image.Type.Simple);
+            Image background = CreateImage("Background", root, null, DirectorBase, Image.Type.Simple);
             Stretch(background.rectTransform, Vector2.zero, Vector2.one, new Vector2(0f, 10f), new Vector2(0f, -10f));
 
             RectTransform fillArea = CreateFill("Fill Area", root);
@@ -1922,8 +2010,8 @@ namespace RIMA
 
             RectTransform handleArea = CreateFill("Handle Slide Area", root);
             Stretch(handleArea, Vector2.zero, Vector2.one, new Vector2(0f, 2f), new Vector2(0f, -2f));
-            Image handle = CreateImage("Handle", handleArea, null, new Color(0.96f, 0.94f, 0.86f, 1f), Image.Type.Simple);
-            Anchor(handle.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(18f, 28f));
+            Image handle = CreateImage("Handle", handleArea, null, DirectorText, Image.Type.Simple);
+            Anchor(handle.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(12f, 24f));
 
             Slider slider = root.gameObject.AddComponent<Slider>();
             slider.minValue = minValue;
@@ -1938,7 +2026,7 @@ namespace RIMA
 
         private void AddButtonText(Button button, string locKey)
         {
-            TextMeshProUGUI label = CreateText("TMP", button.transform as RectTransform, Loc.T(locKey), 18f, FontStyles.Bold, TextAlignmentOptions.Center);
+            TextMeshProUGUI label = CreateText("TMP", button.transform as RectTransform, Loc.T(locKey), 12f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             localizedTexts.Add(new LocalizedTextBinding(label, locKey));
         }
@@ -1964,7 +2052,7 @@ namespace RIMA
         private void AddSkillSlotButton(RectTransform parent, string name, string locKey, int slot, Vector2 position)
         {
             Button button = CreateButton(name, parent, menuButton, Color.white);
-            Anchor(button.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), position, new Vector2(108f, 42f));
+            Anchor(button.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), position, new Vector2(64f, 38f));
             button.onClick.AddListener(() => AssignSelectedSkillToSlot(slot));
             AddButtonText(button, locKey);
         }
@@ -1972,7 +2060,7 @@ namespace RIMA
         private void AddBasicButton(RectTransform parent, string name, string locKey, GameAction action, string bindingPath, Vector2 position)
         {
             Button button = CreateButton(name, parent, ribbonBase, new Color(0.80f, 0.34f, 0.09f, 1f));
-            Anchor(button.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), position, new Vector2(138f, 46f));
+            Anchor(button.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), position, new Vector2(134f, 38f));
             button.onClick.AddListener(() => AssignBasicAction(action, bindingPath));
             AddButtonText(button, locKey);
         }
@@ -2182,7 +2270,7 @@ namespace RIMA
             foreach (ClassButtonBinding binding in classButtons)
             {
                 if (binding.Background != null)
-                    binding.Background.sprite = binding.Type == active && slotActive != null ? slotActive : slotNormal;
+                    binding.Background.color = binding.Type == active ? DirectorCyan : DirectorRaised;
             }
         }
 
@@ -2220,8 +2308,8 @@ namespace RIMA
             TextMeshProUGUI title = CreateText("TMP_Title", rt, skill.skillName, 17f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
             Stretch(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(14f, 44f), new Vector2(-12f, -8f));
 
-            TextMeshProUGUI desc = CreateText("TMP_Desc", rt, skill.description, 11f, FontStyles.Normal, TextAlignmentOptions.TopLeft);
-            desc.color = new Color(0.78f, 0.84f, 0.86f, 0.76f);
+            TextMeshProUGUI desc = CreateText("TMP_Desc", rt, skill.description, 12f, FontStyles.Normal, TextAlignmentOptions.TopLeft);
+            desc.color = DirectorTextMuted;
             desc.enableWordWrapping = true;
             Stretch(desc.rectTransform, Vector2.zero, Vector2.one, new Vector2(14f, 8f), new Vector2(-12f, -38f));
 
@@ -2241,7 +2329,7 @@ namespace RIMA
             foreach (SkillCardBinding binding in skillCards)
             {
                 if (binding.Background != null)
-                    binding.Background.color = binding.Skill == selectedDirectorSkill ? new Color(1f, 0.72f, 0.34f, 1f) : Color.white;
+                    binding.Background.color = binding.Skill == selectedDirectorSkill ? DirectorCyan : DirectorRaised;
             }
         }
 
@@ -2866,39 +2954,51 @@ namespace RIMA
 
         private void BuildMinimapMini(RectTransform root)
         {
-            RectTransform minimap = CreatePanel("MinimapMini", root, minimapFrame, Color.white, Image.Type.Sliced);
-            Anchor(minimap, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-28f, -28f), new Vector2(180f, 180f));
-            CreateFill("NodeGraphMini", minimap);
+            RectTransform minimap = CreatePanel("MinimapMini", root, null, new Color(DirectorPanel.r, DirectorPanel.g, DirectorPanel.b, 0.92f), Image.Type.Simple);
+            Anchor(minimap, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-180f, -96f), new Vector2(312f, 80f));
+            RegisterDirectorPointerRect(minimap);
+
+            TextMeshProUGUI label = CreateText("TMP_Minimap", minimap, "ROOM 01  /  ACT I", 13f, FontStyles.Bold, TextAlignmentOptions.Center);
+            Stretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 18f), new Vector2(-18f, -18f));
         }
 
         private void BuildSelectionInspector(RectTransform root)
         {
-            RectTransform inspector = CreatePanel("SelectionInspector", root, tooltipBox, Color.white, Image.Type.Sliced);
-            Anchor(inspector, new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-28f, 112f), new Vector2(260f, 130f));
+            RectTransform inspector = CreatePanel("SelectionInspector", root, null, DirectorPanel, Image.Type.Simple);
+            Anchor(inspector, new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(1f, 0.5f), new Vector2(-170f, -2f), new Vector2(340f, -88f));
+            RegisterDirectorPointerRect(inspector);
 
-            TextMeshProUGUI name = CreateText("TMP_Name", inspector, "NO SELECTION", 18f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            Stretch(name.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 70f), new Vector2(-18f, -16f));
+            TextMeshProUGUI title = CreateText("TMP_Title", inspector, "INSPECTOR", 20f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Anchor(title.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(-40f, 36f));
 
-            TextMeshProUGUI stats = CreateText("TMP_RuntimeStats", inspector, "ID / HP / AI", 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            stats.color = new Color(0.78f, 0.84f, 0.86f, 0.70f);
-            Stretch(stats.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 36f), new Vector2(-18f, -42f));
+            RectTransform card = CreatePanel("SelectionCard", inspector, null, DirectorRaised, Image.Type.Simple);
+            Anchor(card, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -128f), new Vector2(-40f, 92f));
+
+            TextMeshProUGUI name = CreateText("TMP_Name", card, "NO SELECTION", 18f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            Stretch(name.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 44f), new Vector2(-16f, -12f));
+
+            TextMeshProUGUI stats = CreateText("TMP_RuntimeStats", card, "ID / HP / AI", 14f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            stats.color = DirectorTextMuted;
+            Stretch(stats.rectTransform, Vector2.zero, Vector2.one, new Vector2(16f, 16f), new Vector2(-16f, -44f));
 
             RectTransform buttons = CreateFill("Buttons", inspector);
-            Anchor(buttons, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 18f), new Vector2(-24f, 26f));
+            Anchor(buttons, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(-40f, 32f));
         }
 
         private void BuildBottomTelemetryStrip(RectTransform root)
         {
-            RectTransform strip = CreatePanel("BottomTelemetryStrip", root, menuButton, Color.white, Image.Type.Sliced);
-            Anchor(strip, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 20f), new Vector2(860f, 42f));
+            RectTransform strip = CreatePanel("BottomStatusBar", root, null, DirectorBase, Image.Type.Simple);
+            Anchor(strip, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 15f), new Vector2(0f, 30f));
+            RegisterDirectorPointerRect(strip);
 
-            modeStripText = CreateText("TMP_Mode", strip, "", 18f, FontStyles.Bold, TextAlignmentOptions.Center);
-            Stretch(modeStripText.rectTransform, Vector2.zero, Vector2.one, new Vector2(18f, 0f), new Vector2(-180f, 0f));
+            modeStripText = CreateText("TMP_Mode", strip, "", 13f, FontStyles.Bold, TextAlignmentOptions.Center);
+            modeStripText.color = DirectorCyan;
+            Stretch(modeStripText.rectTransform, Vector2.zero, Vector2.one, new Vector2(76f, 0f), new Vector2(-220f, 0f));
 
-            Button reset = CreateButton("Button_QuickReset", strip, menuButton, Color.white);
-            Anchor(reset.GetComponent<RectTransform>(), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-12f, 0f), new Vector2(150f, 28f));
+            Button reset = CreateButton("Button_QuickReset", strip, null, DirectorEmber);
+            Anchor(reset.GetComponent<RectTransform>(), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-76f, 0f), new Vector2(136f, 24f));
             reset.onClick.AddListener(DemoQuickReset);
-            TextMeshProUGUI label = CreateText("TMP", reset.transform as RectTransform, "QUICK RESET", 16f, FontStyles.Bold, TextAlignmentOptions.Center);
+            TextMeshProUGUI label = CreateText("TMP", reset.transform as RectTransform, "QUICK RESET", 12f, FontStyles.Bold, TextAlignmentOptions.Center);
             Stretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
         }
 
@@ -2927,7 +3027,11 @@ namespace RIMA
 
         private RectTransform CreatePanel(string name, Transform parent, Sprite sprite, Color color, Image.Type type)
         {
-            Image image = CreateImage(name, parent, sprite, color, type);
+            Image image = CreateImage(name, parent, null, color, Image.Type.Simple);
+            Outline outline = image.gameObject.AddComponent<Outline>();
+            outline.effectColor = DirectorBorder;
+            outline.effectDistance = new Vector2(1f, -1f);
+            outline.useGraphicAlpha = false;
             return image.rectTransform;
         }
 
@@ -2944,11 +3048,31 @@ namespace RIMA
 
         private Button CreateButton(string name, Transform parent, Sprite sprite, Color color)
         {
-            Image image = CreateImage(name, parent, sprite, color, sprite != null ? Image.Type.Sliced : Image.Type.Simple);
+            Image image = CreateImage(name, parent, null, NormalizeControlColor(color), Image.Type.Simple);
             Button button = image.gameObject.AddComponent<Button>();
             button.transition = Selectable.Transition.ColorTint;
             button.targetGraphic = image;
+            button.colors = ButtonColors(image.color);
             return button;
+        }
+
+        private static Color NormalizeControlColor(Color color)
+        {
+            return color == Color.white ? DirectorRaised : color;
+        }
+
+        private static ColorBlock ButtonColors(Color baseColor)
+        {
+            return new ColorBlock
+            {
+                normalColor = baseColor,
+                highlightedColor = Color.Lerp(baseColor, DirectorCyan, 0.28f),
+                pressedColor = Color.Lerp(baseColor, DirectorCyan, 0.44f),
+                selectedColor = Color.Lerp(baseColor, DirectorCyan, 0.36f),
+                disabledColor = new Color(DirectorRaised.r, DirectorRaised.g, DirectorRaised.b, 0.38f),
+                colorMultiplier = 1f,
+                fadeDuration = 0.08f
+            };
         }
 
         private TextMeshProUGUI CreateText(string name, RectTransform parent, string text, float size, FontStyles style, TextAlignmentOptions alignment)
@@ -2961,7 +3085,7 @@ namespace RIMA
             tmp.fontSize = size;
             tmp.fontStyle = style;
             tmp.alignment = alignment;
-            tmp.color = new Color(0.96f, 0.94f, 0.86f, 1f);
+            tmp.color = DirectorText;
             tmp.raycastTarget = false;
             return tmp;
         }
@@ -2983,10 +3107,18 @@ namespace RIMA
             rt.offsetMax = offsetMax;
         }
 
+        private void RegisterDirectorPointerRect(RectTransform rect)
+        {
+            if (rect != null && !directorPointerRects.Contains(rect))
+            {
+                directorPointerRects.Add(rect);
+            }
+        }
+
         private void LoadEditorSkin()
         {
 #if UNITY_EDITOR
-            jersey10Font = jersey10Font != null ? jersey10Font : AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/Jersey10/Jersey10-Regular SDF.asset");
+            jersey10Font = jersey10Font != null ? jersey10Font : AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset");
             minimapFrame = minimapFrame != null ? minimapFrame : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/minimap_frame.png");
             slotNormal = slotNormal != null ? slotNormal : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/slot_normal.png");
             slotActive = slotActive != null ? slotActive : AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Chrome/slot_active.png");

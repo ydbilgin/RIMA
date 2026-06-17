@@ -104,17 +104,42 @@ namespace RIMA.Shop
             return spr;
         }
 
-        private void OnDestroy()
+        public void Cleanup()
         {
             // Clean up any surviving stand GameObjects when this controller is destroyed
             // (e.g. on room advance / scene transition).
             for (int i = stands.Count - 1; i >= 0; i--)
             {
                 if (stands[i] != null)
-                    Destroy(stands[i].gameObject);
+                {
+                    stands[i].gameObject.SetActive(false);
+                    DestroyRuntimeObject(stands[i].gameObject);
+                }
             }
 
             stands.Clear();
+        }
+
+        private void OnDestroy()
+        {
+            Cleanup();
+        }
+
+        private static void DestroyRuntimeObject(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                DestroyImmediate(target);
+            }
         }
     }
 }
