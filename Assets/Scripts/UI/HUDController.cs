@@ -203,23 +203,18 @@ namespace RIMA
             if (hpFill != null)
                 hpFill.sizeDelta = new Vector2(HpBarWidth * pct, HpBarHeight);
 
-            // Fill color by threshold
-            if (hpFillImage != null)
-            {
-                Color c;
-                if (pct > 0.6f)      c = RimaUITheme.HpHealthy;
-                else if (pct > 0.3f) c = RimaUITheme.HpWarning;
-                else                  c = RimaUITheme.HpCritical;
-                hpFillImage.color = c;
-            }
+            // HP fill is ALWAYS crimson #C01020 — the class tint (cyan/etc.) must never bleed onto the
+            // HP bar; cyan is reserved for the resource/seal bar. The low-HP pulse below still shimmers it.
+            if (hpFillImage != null && !isPulsing)
+                hpFillImage.color = HpFillCrimson;
 
             // Number-only label: "314"
             if (hpLabel != null)
                 hpLabel.text = current.ToString();
 
-            // Pulse at low HP.
+            // Pulse at low HP (shimmer the crimson bar toward white — preserved low-HP feedback).
             if (pct <= LowHpThreshold && pct > 0f && !isPulsing)
-                hpPulseCoroutine = StartCoroutine(PulseBar(hpFillImage, RimaUITheme.HpCritical));
+                hpPulseCoroutine = StartCoroutine(PulseBar(hpFillImage, HpFillCrimson));
             else if ((pct > LowHpThreshold || pct <= 0f) && isPulsing)
                 StopPulse();
 
@@ -296,6 +291,8 @@ namespace RIMA
         {
             isPulsing = false;
             if (hpPulseCoroutine != null) { StopCoroutine(hpPulseCoroutine); hpPulseCoroutine = null; }
+            // Restore the steady crimson after a shimmer ends (pulse leaves a mid-lerp tint).
+            if (hpFillImage != null) hpFillImage.color = HpFillCrimson;
         }
 
         // ─── Resource (Rage) ────────────────────────────────────────────

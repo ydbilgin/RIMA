@@ -66,7 +66,11 @@ namespace RIMA.MapDesigner.Props.Runtime
 
             Vector2Int size = RotatedSize(propDef.footprintSize, rotationSteps);
             box.size = new Vector2(Mathf.Max(1, size.x), Mathf.Max(1, size.y));
-            box.offset = new Vector2(box.size.x * 0.5f, box.size.y * 0.5f);
+            // Base-centered: horizontally centered on the prop origin (x=0), resting its bottom edge on
+            // the base line (y=+halfHeight). The prop GameObject sits at the cell center with a bottom-
+            // anchored sprite, so a base-centered box puts the collider on the prop's feet/footprint —
+            // not floating up-and-right of the sprite (the old size*0.5 corner offset let you walk through).
+            box.offset = new Vector2(0f, box.size.y * 0.5f);
         }
 
         private static Vector2Int RotatedSize(Vector2Int original, int rotationSteps)
