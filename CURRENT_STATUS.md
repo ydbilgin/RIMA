@@ -1,22 +1,24 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-18 GECE → OTONOM RUN, kullanıcı yok) — demo ~19 Haziran
+## ⏯️ RESUME (2026-06-18 OTONOM RUN — TAMAMLANDI) — demo ~19 Haziran
 
-**Durum:** Tam-otonom maraton. Kullanıcı "council'e sık danış, her iş bitince status+memory güncelle, bağlam kopmasın" dedi. cx limitleri RESETLENDİ (tam council kullanılabilir). Tek-gerçek karar: `STAGING/PLAYTEST_POLISH_DECISION_2026-06-17.md`.
+**Durum:** Tam-otonom maraton bitti, 3 commit master'a düştü. cx limitleri reset (tam council kullanıldı). Demo + akademik rapor yarına hazır.
 
-### ✅ Bu run DONE (verified)
-- **Unity polish batch-2** — auditor-opus **PASS**: (A) HUD HP cyan→**crimson #C01020** (`HUDController` class-tint HP'yi override etmiyor artık; kök-neden `RimaUITheme.HpHealthy=#4A9EBF`), (B) `PropColliderAutoBuilder` offset taban-merkez `(0,halfH)` + SO blocksWalkable/footprint reuse (B-2 ölü kod dokunulmadı), (C) `RewardPickup` radius 0.45→0.22 + `Chasm` Decals layer + 0.4 merkez-collider. **Commit bekliyor.**
-- **Rapor revizyon r1** (ax_pro council): AI-tonu dengelendi (§8 kısaldı), ChatGPT-vari pasajlar budandı, yeni **"2.2 Klasör Yapısı + Sınıf Sorumlulukları"** eklendi, Şekil 3 caption düzeltildi → DOCX üretildi (0 placeholder). **r2 geliyor (figürler eklenince).**
-- 🔑 **KRİTİK BULGU:** Eski Şekil 6 `11_map_designer.png` = Map Designer DEĞİL → **masaüstü+Steam+"Task Bar Hero"** screenshot'ı (council haklıydı). r1'de silindi (doğru). Yerine gerçek Unity capture geliyor.
-- **PixelLab token güncellendi** (`.mcp.json`+`~/.claude.json`, eski 037c→yeni d17c). Canlı MCP **reconnect bekliyor** (`/mcp` → pixellab) → o zaman #9b Elementalist 8-yön açılır.
+### ✅ DONE + COMMIT (master)
+- `3493f523` **Unity polish batch-2** (auditor-opus PASS): HUD HP→crimson #C01020 (`HUDController`), `PropColliderAutoBuilder` offset taban-merkez, `RewardPickup` radius 0.45→0.22, `Chasm` Decals+merkez-collider. Console 0/0.
+- `0142abfa` **Akademik rapor r2** (`STAGING/report/RIMA_Senior_Design_Report.docx/.md`): council 3/3 PASS. 12 figür. **Şekil 6=6 oda cliff-island grid** (IsoRoomBuilder, gerçek oyun görünümü), **Şekil 7=JSON→tilemap schematic + door_graph**, **§8.6 İnsan-YZ iş bölümü** (dengeli ton). AI-odağı azaltıldı, ChatGPT-vari budandı, §2.2 klasör/sınıf yapısı eklendi. 0 placeholder. + `SUNUM_CANLI_CLI_DEMO.md` (hocaya 2-3 dk canlı CLI demo, güvenli, 6 adım+B-planı).
+- `b916f8ea` process artifacts (council kararları/dispatch/done) + CURRENT_STATUS.
+- 🔑 **DERS:** Eski Şekil 6 `11_map_designer.png` = masaüstü+Steam+"Task Bar Hero" screenshot'ıydı (Unity değil) → silindi. Odalar = tile+**auto-cliff yüzen ada** (IsoRoomBuilder.BuildCliffs); bare scratch sahne DÜZ/yanlış verir → _Arena rig'inde (void+ışık) render+revert-capture şart. Room-capture builder 1 blank InitTestScene leak'i bıraktı → temizlendi.
 
-### 🔄 IN-FLIGHT (arka plan ajanları)
-- **builder-opus (Unity, tek-ajan):** 6 Act-1 odası (`Act1_ShatteredKeep/json`) capture + 2×3 contact sheet + _Arena **Şekil 6** → `figures_2026-06-18/`. No-leak korumalı.
-- **crafter-sonnet (non-Unity):** rapor §8 "İnsan-AI iş bölümü" + hocaya canlı CLI demo script (`SUNUM_CANLI_CLI_DEMO.md`).
+### ⏳ KULLANICI AKSİYONU BEKLEYEN
+- **PixelLab `/mcp` reconnect** (token güncellendi `.mcp.json`+`~/.claude.json` d17c…) → #9b Elementalist 8-yön açılır.
+- Jersey10 font (M) + `capture_v3.zip` (untracked) working tree'de — BENİM DEĞİL, dokunulmadı.
 
-### ⏭️ PLAN
-Faz2: figürler+§8 rapora entegre (Şekil 6=_Arena, +oda grid, +JSON snippet) → DOCX r2. Faz3: **tam council (cx+axPro+axFlash)** rapor+demo review → kritik fix. Faz4: HER ŞEYİ commit + CURRENT_STATUS + memory.
+### 📋 KALAN DEMO KUYRUĞU (bu run'da yapılmadı)
+- **#9a Elementalist skill VFX** (Fireball dışı skillere trail/VFX — `SkillVfx`/`SkillRuntime`).
+- **#9b Elementalist 8-yön** (PixelLab reconnect sonrası char ID'den 8 yön indir→import).
+- Silah mount: SE doğrulandı, diğer 7 yön playtest-pending.
 
 ### 🔑 METOT / 🛑 DOKUNMA
-- **Screenshot (kanıtlı):** `manage_camera game_view` (HUD/overlay dahil) ve `scene_view` (dünya) = **saf Unity, masaüstü ASLA çıkmaz**. Editor pencereleri (Map Designer) çekilemez — sadece game/scene view. Oda yükle: `RIMA.Editor.Map.RoomLoaderMenu.LoadRoomJsonToActiveScene(path)`.
+- **Screenshot (kanıtlı):** `manage_camera game_view` (HUD/overlay) + `scene_view` (dünya) = saf Unity, masaüstü ASLA çıkmaz. Editor pencereleri (Map Designer) çekilemez. Oda→ada: `IsoRoomBuilder.Build(RoomTemplateSO)` _Arena rig'inde, revert-capture (no-leak).
 - DOKUNMA: GATE / Boss-akış / reward-bleed / Build-çekirdek / weaponless-anim / branching-seed. Prop collider B-2 refactor YAPMA.
