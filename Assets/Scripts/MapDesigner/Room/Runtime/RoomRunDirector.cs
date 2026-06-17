@@ -145,6 +145,10 @@ namespace RIMA.MapDesigner.Room.Runtime
         private Coroutine clearSequence;
         private Coroutine slowMoSequence;
         private Coroutine openingDraftSequence;
+        // FIX-1 (B1): reconcile watchdog — runs in parallel with RoomClearSequence and
+        // GUARANTEES the exit doors open (and timeScale is restored) even if the reward/draft
+        // chain throws, stalls, or never spawns a reward. Door-open is decoupled from reward.
+        private Coroutine reconcileSequence;
 
         public DungeonGraph Graph => graph;
         public int CurrentNodeId { get; private set; }
@@ -1192,6 +1196,87 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             clearSequence = StartCoroutine(RoomClearSequence());
+
+            // FIX-1 (B1) DECOUPLE + safety-net: independent watchdog so the exit doors and
+            // timeScale recover even if RoomClearSequence throws or stalls. Started here (on
+            // Cleared) so it is sarsılmaz — it does not depend on the reward chain succeeding.
+            if (reconcileSequence != null)
+            {
+                StopCoroutine(reconcileSequence);
+            }
+
+            reconcileSequence = StartCoroutine(RoomClearReconcile());
+        }
+
+        // FIX-1 (B1) safety-net window: how long (real seconds) after Cleared the watchdog waits
+        // before force-opening doors / restoring timeScale if the normal chain hasn't already.
+        // Covers the boss class-select draft (which legitimately keeps the room un-doored longer)
+        // by skipping the force while a draft is pending/active.
+        private const float RoomClearReconcileTimeoutSec = 3f;
+
+        /// <summary>
+        /// FIX-1 (B1): reconcile watchdog. Runs alongside RoomClearSequence and guarantees the
+        /// room never soft-locks: after RoomClearReconcileTimeoutSec real seconds in the Cleared
+        /// state with no reward AND no door, it forces the doors open and restores timeScale.
+        /// Door-opening is decoupled from reward-spawning (Binding of Isaac pattern: door-open is
+        /// logical/instant, it must not wait on reward or draft animation). It defers while a
+        /// draft (opening kit / boss class-select / reward draft) is legitimately pending/active,
+        /// and never fires if the run is already complete.
+        /// </summary>
+        private System.Collections.IEnumerator RoomClearReconcile()
+        {
+            float elapsed = 0f;
+
+            // Stay alive while the room is still resolving its clear (Cleared/RewardTaken).
+            while (lifecycle.State == RoomRunLifecycleState.Cleared
+                   || lifecycle.State == RoomRunLifecycleState.RewardTaken)
+            {
+                // Doors are already open (DoorOpen reached via the normal path) — nothing to do.
+                if (lifecycle.State == RoomRunLifecycleState.DoorOpen)
+                {
+                    break;
+                }
+
+                // A draft is legitimately holding the flow (opening kit, boss class-select, or the
+                // reward draft the player is actively picking). Pause the timer — do not force.
+                bool draftBlocking = DraftManager.Instance != null
+                    && (DraftManager.Instance.IsDraftPending || DraftManager.Instance.IsDraftActive);
+
+                // The player has a reward sitting in the room they haven't collected yet — that is
+                // an intentional wait (RewardAutoCollectTimeoutSec=0 means it never disappears), so
+                // don't force doors based on the reward, but DO keep the timeScale guard below.
+                bool rewardWaiting = activeReward != null && !activeReward.WasCollected;
+
+                if (!draftBlocking && !rewardWaiting)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    if (elapsed >= RoomClearReconcileTimeoutSec && !IsRunComplete)
+                    {
+                        Debug.LogWarning($"[RoomRunDirector] RoomClearReconcile: clear flow stalled after {RoomClearReconcileTimeoutSec}s (state={lifecycle.State}, reward={(activeReward != null)}). Forcing exit doors + timeScale recovery (node={CurrentNodeId}).");
+                        ForceOpenExitDoorsFromAnyClearedState();
+                        RestoreGameplayTimeScale();
+                        break;
+                    }
+                }
+                else
+                {
+                    // Reset the stall timer whenever a legitimate wait is in progress so the player
+                    // gets the full window after the draft closes / reward is taken.
+                    elapsed = 0f;
+                }
+
+                // Hard timeScale guard regardless of draft/reward: a slow-mo blip should never be
+                // stuck for multiple seconds during an active clear.
+                if (elapsed >= RoomClearReconcileTimeoutSec
+                    && Time.timeScale > 0f && Time.timeScale < 1f)
+                {
+                    RestoreGameplayTimeScale();
+                }
+
+                yield return null;
+            }
+
+            reconcileSequence = null;
         }
 
         // 0 = NO auto-collect timeout (user 2026-06-13: an uncollected reward must NOT disappear or

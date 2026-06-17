@@ -28,6 +28,12 @@
 **📦 WORKING TREE:** büyük uncommitted (T1/T4/B1/B2 + LIFE-01 + ~5 STAGING doc); **commit MVP-green'de**. cx_profiles.local.json git rm (staged). dotnet `CliffPlacementRules.cs` stale csproj = pre-existing (Unity 0-error). Editör temiz (isPlaying=False, pmss=MainMenu).
 **🙏 KULLANICIDAN (bekliyor):** B1/B2 canlı test (cursor-aim + tooltip düzeldi mi?) + B5 için "tam nerede takılıyorsun?".
 
+**🧵 S2 2026-06-16 (otonom — PixelLab bilgi + B6 diagnoz + asset council):**
+- ⚔️ **PixelLab prompt-craft ÇÖZÜLDÜ (council cx+ax Pro+ax Flash 3/3):** silahsız=silahı isimlendirme+uzuv-mekaniği tarif ("kolunu savuruyor" de, "kılıcını savuruyor" deme)+EMPTY HANDS+negatif silah-listesi; tutarlı-silahlı=armed-anchor-FIRST (palette-snap=false anchor → state'ler ondan palette-snap=true+AI-freedom 0.35); palette-snap RENGİ kilitler geometriyi değil. Mount infra ZATEN VAR (`HandAnchorAttach`+`SpriteHandData`+`WeaponDatabaseSO`). Reçete: `STAGING/PIXELLAB_WEAPONLESS_ARMED_PROMPTCRAFT_2026-06-16.md` + global `~/.claude/PIXELLAB_REFERENCE.md` §6 + memory. Council ham: `STAGING/_process/2026-06/pixellab_anim_council/`.
+- 🔎 **B6 run-map diagnoz (read-only, mutasyon YOK):** kod/wiring bug'ı YOK — `RunMapOverlay` _Arena'da var, `director`→canlı RoomRunDirector (enabled, buildOnStart:1, forceDemoSequence:0). "Graph=null" = anormal stale-play artifact'i. → temiz dev-direct play'de M-bas+screenshot ile doğrula (live Unity/user). Detay: `STAGING/_process/2026-06/demo_verify/B6_RUNMAP_DIAGNOSIS_2026-06-16.md`.
+- 📋 **EKSİK ASSET council önceliği (3 gün):** P1=warblade armed-anchor REDO+idle/run/LMB (KULLANICI PixelLab, ~4h) · energy-bolt core mermi (ORCH MCP ~5dk, sarı-top replace) · fireball+fire-impact+glacial-spike VFX (ORCH MCP, golden-path combat) · cliff backdrop/void-fill (Unity dizilim, "uçan oda" hissini engelle). P2=frozen-orb/light-beam (golden-path basmıyorsa post-demo) · portal-bar+mavi-beam T5 (vakit kalırsa). **P3 SKIP=run-map sembol/chrome** (mevcut buton/placeholder yeter). Asset ÜRETİMİ yapılmadı (kullanıcı QC'siz kredi harcanmadı) — "go" beklemede.
+- 📦 Working tree'ye eklendi: PIXELLAB_WEAPONLESS_ARMED_PROMPTCRAFT + B6 diagnoz + council folder + memory/global-ref güncellemeleri. Unity'ye DOKUNULMADI (0 mutasyon).
+
 *(Aşağısı önceki RESUME — tarihsel; üsttekiler güncel.)*
 ## ⏯️ (önceki) RESUME (2026-06-16 — REWARD-02 fix + run-map branching + golden-path verify)
 

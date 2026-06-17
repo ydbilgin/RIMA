@@ -29,8 +29,22 @@ namespace RIMA.MapDesigner.Room.Runtime
         private void OnGUI()
         {
             Event e = Event.current;
+            bool uiBlocking = UIManager.Instance != null && UIManager.Instance.IsAnyModalOpen;
+
+            if (show && uiBlocking)
+            {
+                show = false;
+            }
+
             if (e != null && e.type == EventType.KeyDown && e.keyCode == toggleKey)
             {
+                if (uiBlocking)
+                {
+                    show = false;
+                    e.Use();
+                    return;
+                }
+
                 show = !show;
                 e.Use();
             }
@@ -48,7 +62,14 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             EnsureStyles();
 
-            DrawRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.03f, 0.02f, 0.06f, 0.88f));
+            if (e != null && e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
+            {
+                show = false;
+                e.Use();
+                return;
+            }
+
+            DrawRect(new Rect(0, 0, Screen.width, Screen.height), new Color(0.03f, 0.02f, 0.06f, 0.99f));
             GUI.Label(new Rect(0, 26, Screen.width, 44), Loc.T("map.title"), titleStyle);
             GUI.Label(new Rect(0, 72, Screen.width, 24), Loc.T("map.subtitle"), subtitleStyle);
 
@@ -127,6 +148,11 @@ namespace RIMA.MapDesigner.Room.Runtime
                 }
 
                 GUI.Label(rect, $"{node.id}: {node.roomType}", nodeStyle);
+            }
+
+            if (e != null && e.type != EventType.Repaint && e.type != EventType.Layout)
+            {
+                e.Use();
             }
         }
 

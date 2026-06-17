@@ -150,15 +150,25 @@ namespace RIMA
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+            CheckAndSpawn(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        }
+
+        private static void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            CheckAndSpawn(scene.name);
+        }
+
+        private static void CheckAndSpawn(string sceneName)
+        {
             if (Instance != null)
             {
                 return;
             }
 
-            string entryScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             foreach (string s in GameEntryScenes)
             {
-                if (entryScene == s) return;
+                if (sceneName == s) return;
             }
 
             GameObject go = new GameObject("DirectorMode");
@@ -223,6 +233,9 @@ namespace RIMA
 
         private void OnDestroy()
         {
+            if (UIManager.Instance != null)
+                UIManager.Instance.SetDirectorModalOpen(false, null);
+
             if (Instance == this)
             {
                 Instance = null;
@@ -258,6 +271,8 @@ namespace RIMA
         {
             SkillRuntime.OnDamageApplied -= OnDamageAppliedTelemetry;
             UnhookSecondaryClassListener();
+            if (UIManager.Instance != null)
+                UIManager.Instance.SetDirectorModalOpen(false, null);
         }
 
         // BULGU 3: secondary class seçilince dual-class butonunu gizle. LEAK'siz: tek abonelik + simetrik cleanup.
@@ -705,6 +720,7 @@ namespace RIMA
 
             Canvas canvas = canvasGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.overrideSorting = true;
             canvas.sortingOrder = 950;
 
             CanvasScaler scaler = canvasGo.GetComponent<CanvasScaler>();
@@ -2091,6 +2107,10 @@ namespace RIMA
             {
                 overlayCanvasGo.SetActive(visible);
             }
+
+            Canvas canvas = overlayCanvasGo != null ? overlayCanvasGo.GetComponent<Canvas>() : null;
+            if (UIManager.Instance != null)
+                UIManager.Instance.SetDirectorModalOpen(visible && State == DirectorModeState.Director, canvas);
         }
 
         // T1 bleed guard: the Director overlay is shown only when in Director state AND no blocking UI
@@ -2103,6 +2123,9 @@ namespace RIMA
             if (overlayCanvasGo.activeSelf != shouldShow)
             {
                 overlayCanvasGo.SetActive(shouldShow);
+                Canvas canvas = overlayCanvasGo.GetComponent<Canvas>();
+                if (UIManager.Instance != null)
+                    UIManager.Instance.SetDirectorModalOpen(shouldShow, canvas);
             }
         }
 

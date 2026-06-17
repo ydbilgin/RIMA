@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace RIMA
 {
@@ -21,6 +23,14 @@ namespace RIMA
         private bool skillCodexOpen;
         private bool pauseOpen;
         private bool _menuPaused;
+        private bool directorModalOpen;
+        private Canvas directorModalCanvas;
+
+        private const int ModalBaseSortingOrder = 1200;
+        private const float ScrimAlpha = 0.75f;
+        private readonly List<Canvas> modalStack = new List<Canvas>(5);
+        private Canvas scrimCanvas;
+        private Image scrimImage;
 
         // ── Cached references ────────────────────────────────────────────
         private CharacterSheetUI sheetUI;
@@ -39,6 +49,7 @@ namespace RIMA
         public bool IsSkillCodexOpen => skillCodexOpen;
         public bool IsPauseOpen      => pauseOpen;
         public bool IsAnyOverlayOpen => tabOpen || settingsOpen || skillOfferOpen || skillCodexOpen || pauseOpen;
+        public bool IsAnyModalOpen   => IsAnyOverlayOpen || directorModalOpen;
 
         // ─── Lifecycle ───────────────────────────────────────────────────
 
@@ -85,6 +96,9 @@ namespace RIMA
             skillCodexOpen = false;
             pauseOpen = false;
             _menuPaused = false;
+            directorModalOpen = false;
+            directorModalCanvas = null;
+            SyncModalPresentation();
             Time.timeScale = 1f;
         }
 
@@ -194,6 +208,9 @@ namespace RIMA
             if (tabOpen)        CloseTab();
             if (pauseOpen)      ClosePause();
             _menuPaused = false;
+            directorModalOpen = false;
+            directorModalCanvas = null;
+            SyncModalPresentation();
 
             // Ensure timeScale is 1 even if overlay-close methods set it otherwise.
             Time.timeScale = 1f;
@@ -309,6 +326,13 @@ namespace RIMA
             ApplyTimeScale();
         }
 
+        public void SetDirectorModalOpen(bool isOpen, Canvas modalCanvas)
+        {
+            directorModalOpen = isOpen;
+            directorModalCanvas = isOpen ? modalCanvas : null;
+            SyncModalPresentation();
+        }
+
         public void TogglePause()
         {
             if (pauseOpen) ClosePause();
@@ -327,6 +351,9 @@ namespace RIMA
             skillCodexOpen = false;
             pauseOpen      = false;
             _menuPaused    = false;
+            directorModalOpen = false;
+            directorModalCanvas = null;
+            SyncModalPresentation();
             Time.timeScale = 1f;
         }
 
@@ -349,12 +376,86 @@ namespace RIMA
 
         private void ApplyTimeScale()
         {
+            SyncModalPresentation();
+
             if (skillOfferOpen || settingsOpen || skillCodexOpen || pauseOpen)
                 Time.timeScale = 0f;
             else if (tabOpen)
                 Time.timeScale = 0.1f;
             else
                 Time.timeScale = 1f;
+        }
+
+        private void SyncModalPresentation()
+        {
+            modalStack.Clear();
+
+            if (pauseOpen) AddModalCanvas(ResolveCanvas(pauseUI));
+            if (skillCodexOpen) AddModalCanvas(ResolveCanvas(skillCodexUI));
+            if (settingsOpen) AddModalCanvas(ResolveCanvas(settingsUI));
+            if (skillOfferOpen) AddModalCanvas(ResolveCanvas(FindAnyObjectByType<SkillOfferUI>()));
+            if (directorModalOpen && !IsAnyOverlayOpen) AddModalCanvas(directorModalCanvas);
+
+            for (int i = 0; i < modalStack.Count; i++)
+            {
+                Canvas canvas = modalStack[i];
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = ModalBaseSortingOrder + i * 10;
+            }
+
+            if (modalStack.Count == 0)
+            {
+                if (scrimCanvas != null) scrimCanvas.gameObject.SetActive(false);
+                return;
+            }
+
+            EnsureScrim();
+            scrimCanvas.sortingOrder = modalStack[modalStack.Count - 1].sortingOrder - 1;
+            scrimCanvas.gameObject.SetActive(true);
+        }
+
+        private void EnsureScrim()
+        {
+            if (scrimCanvas != null) return;
+
+            var go = new GameObject("UI_Scrim_Dimmer", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+            go.transform.SetParent(transform, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            scrimCanvas = go.GetComponent<Canvas>();
+            scrimCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            scrimCanvas.overrideSorting = true;
+
+            var scaler = go.GetComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
+
+            scrimImage = go.AddComponent<Image>();
+            scrimImage.color = new Color(0f, 0f, 0f, ScrimAlpha);
+            scrimImage.raycastTarget = true;
+            go.SetActive(false);
+        }
+
+        private void AddModalCanvas(Canvas canvas)
+        {
+            if (canvas == null || modalStack.Contains(canvas)) return;
+            modalStack.Add(canvas);
+        }
+
+        private static Canvas ResolveCanvas(Component component)
+        {
+            if (component == null) return null;
+            Canvas canvas = component.GetComponent<Canvas>();
+            if (canvas != null) return canvas;
+            canvas = component.GetComponentInChildren<Canvas>(true);
+            if (canvas != null) return canvas;
+            return component.GetComponentInParent<Canvas>();
         }
 
         // ─── Resolve cached refs ────────────────────────────────────────

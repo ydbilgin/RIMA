@@ -161,16 +161,11 @@ namespace RIMA
             var canvasGo = new GameObject("[SkillOfferPanel]", typeof(RectTransform));
             canvasGo.transform.SetParent(transform, false);
 
-            // Check for existing canvas on transform.root
-            var rootCanvas = GetComponentInParent<Canvas>();
-            if (rootCanvas == null)
-            {
-                var canvas = canvasGo.AddComponent<Canvas>();
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvas.sortingOrder = 1050;
-                canvasGo.AddComponent<CanvasScaler>();
-                canvasGo.AddComponent<GraphicRaycaster>();
-            }
+            var canvas = canvasGo.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 1050;
+            canvasGo.AddComponent<GraphicRaycaster>();
 
             panel = canvasGo;
             var panelRt = panel.GetComponent<RectTransform>();
