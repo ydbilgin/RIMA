@@ -42,7 +42,9 @@ RIMA = "sadece oyun değil — **environment + vertical slice + yeniden-kullanı
 
 ### 5. Game-feel / polish (KISMEN DONE 2026-06-17)
 - ✅ **CombatJuice** (damage number/hit-stop/screen-shake/camera-punch) — `_Arena`'ya bağlandı, **canlı doğrulandı** (hit→number, kill→freeze, timeScale-immune, ZERO leak, F2/Director seam OK). Combat artık "vuruyor" hissi veriyor. Rapor değeri: kodlu-ama-bağlanmamış stack'i keşfedip aktive etmek = "az iş, çok his".
-- ✅ **SeloutOutline** mat → 3 düşman (FractureImp/HalfThrall/Penitent). ⚠️ Caveat: shader saf-siyah pixel renklendiriyor → renkli sprite'ta subtle koyu-kenar (parlak halo değil); enemy-görünürlük kısmen, elle teyit gerek.
+- ✅ **Enemy readability** (SeloutOutline SUPERSEDED): `EnemyReadable.shader` gerçek silhouette outline (any-color) + ambient 0.22→0.35 → düşmanlar net pop, atmosfer korundu. **Gizli bug:** `EnsureVisibleSprite` her frame authored-material'i clobber ediyormuş (eski outline hiç render olmamış) → fixed. Rapor değeri: "görünmezlik" aslında bir material-clobber bug'ıydı, kök-nedene inildi.
+- ✅ **Telegraph refinements** (ChatGPT P1): Wrath **yeşil safe-ring** (danger'dan ayrı, "nereye dur" okunur) · origin-snapshot (telegraph == hasar pozisyonu) · FlashImpact finisher-only (çift-feedback yok).
+- ✅ **Music bed:** JaggedStone CC0 dungeon-ambience (akademik lisans-net, attribution yok), AudioManager loop vol 0.16 (SFX-altı).
 - ✅ **Telegraph** boss 6 saldırıya bağlandı (HolyLash cone / FractureStrike circle / ChainExplosion delayed-ring / SovereignsWrath outer+safe / FractureCharge dash-line / ShackleThrow) + snap. **Windup BİT-BİT senkron** (P3 0.85x dahil; ChainExplosion 3s ring = hasar anı) → "yalan telegraph" yok. Mevcut motor reuse, boss logic'e dokunulmadı. Rapor değeri: ARPG telegraph konvansiyonu — animasyonsuz bile saldırı okunabilir.
 - **Rapor cümlesi:** "Az asset'le maksimum his — engine-katmanı juice + telegraph konvansiyonları."
 
