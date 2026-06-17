@@ -136,16 +136,22 @@ namespace RIMA
             SR.sprite = fallbackSprite;
             SR.color = Color.white;
 
-            // Unlit material — URP 2D lit sorun çıkarıyor
-            if (fallbackMaterial == null)
+            // Unlit material — URP 2D lit sorun çıkarıyor. Only supply one when the renderer has
+            // NONE; never clobber an authored unlit material (e.g. Enemy_Readable's silhouette
+            // outline), otherwise this per-frame call (animator-nulls-sprite enemies) would reset
+            // the readability material to Sprites-Default every frame.
+            if (SR.sharedMaterial == null)
             {
-                var shader = Shader.Find("Sprites/Default");
-                if (shader != null)
-                    fallbackMaterial = new Material(shader);
-            }
+                if (fallbackMaterial == null)
+                {
+                    var shader = Shader.Find("Sprites/Default");
+                    if (shader != null)
+                        fallbackMaterial = new Material(shader);
+                }
 
-            if (fallbackMaterial != null)
-                SR.sharedMaterial = fallbackMaterial;
+                if (fallbackMaterial != null)
+                    SR.sharedMaterial = fallbackMaterial;
+            }
         }
 
         // ─── Update / FixedUpdate ────────────────────────────────────────────

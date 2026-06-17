@@ -172,6 +172,7 @@ MonoBehaviour:
   staggerDuration: 0.8
   useTelegraph: 1
   telegraphDuration: 0.35
+  thirdHitTellDuration: 0.3
 --- !u!114 &9219052869841983728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +290,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5733b44492dcc4149b7da1cab37ffaf7, type: 2}
+  - {fileID: 2100000, guid: 62c40fd7c00e68b48be06253bee00384, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
