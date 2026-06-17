@@ -33,6 +33,12 @@ namespace RIMA
         [SerializeField] private float duration        = 0.35f;
         [SerializeField] private bool  destroyOnComplete = true;
 
+        // Delayed-explosion mode: the marker holds at a steady high alpha for the
+        // first `holdFraction` of its life (reads as "this WILL explode here"),
+        // then flash-fades in the final stretch. Used by SpawnDelayedRing.
+        private bool  holdMode;
+        private const float HoldFraction = 0.80f;
+
         private LineRenderer  line;
         private SpriteRenderer decalSR;
         private Vector3 decalInitialScale;   // MINOR-4: cache non-uniform scale set by SpawnDecal
@@ -52,8 +58,26 @@ namespace RIMA
             elapsed += Time.deltaTime;
             float t   = duration <= 0f ? 1f : Mathf.Clamp01(elapsed / duration);
 
-            // Pulse: grow 0→peak over first 70%, then fade to 0.
-            float alphaT = t < 0.7f ? t / 0.7f : 1f - (t - 0.7f) / 0.3f;
+            float alphaT;
+            if (holdMode)
+            {
+                // Delayed-explosion: steady high alpha (hold), then fast flash-fade.
+                if (t < HoldFraction)
+                {
+                    alphaT = 1f;
+                }
+                else
+                {
+                    // Final stretch flickers (sin pulse) so the imminent blast reads.
+                    float ft = (t - HoldFraction) / (1f - HoldFraction);
+                    alphaT = Mathf.Abs(Mathf.Cos(ft * Mathf.PI * 3f)) * (1f - ft);
+                }
+            }
+            else
+            {
+                // Pulse: grow 0→peak over first 70%, then fade to 0.
+                alphaT = t < 0.7f ? t / 0.7f : 1f - (t - 0.7f) / 0.3f;
+            }
             float alpha  = decalPeakAlpha * alphaT;
 
             // Update decal sprite alpha
@@ -121,6 +145,23 @@ namespace RIMA
             Draw(BuildConePoints(Vector3.zero, direction, radius, angle, 24), false);
         }
 
+        /// <summary>
+        /// Fixed-position delayed-explosion ring (e.g. ChainExplosion ground markers).
+        /// The ring holds at full alpha while the blast charges, then flash-fades.
+        /// `delay` MUST equal the caller's real explosion windup so the warning is honest.
+        /// </summary>
+        public void ShowDelayedRing(Vector2 center, float radius, float delay)
+        {
+            holdMode = true;
+            duration = Mathf.Max(0.01f, delay);
+            transform.position = center;
+
+            float worldDiameter = radius * 2f;
+            SpawnDecal(CircleDecalPath, center, 0f, worldDiameter, worldDiameter);
+
+            Draw(BuildCirclePoints(Vector3.zero, radius, 40), true);
+        }
+
         // ── Static factory ───────────────────────────────────────────────────
 
         public static EnemyTelegraph SpawnCircle(Vector2 center, float radius, float duration)
@@ -142,6 +183,23 @@ namespace RIMA
             EnemyTelegraph t = Create("EnemyTelegraph_Cone");
             t.ShowCone(origin, direction, radius, angle, duration);
             return t;
+        }
+
+        /// <summary>Delayed-explosion ring; `delay` = the real explosion windup (e.g. ChainExplosion 3s).</summary>
+        public static EnemyTelegraph SpawnDelayedRing(Vector2 center, float radius, float delay)
+        {
+            EnemyTelegraph t = Create("EnemyTelegraph_DelayedRing");
+            t.ShowDelayedRing(center, radius, delay);
+            return t;
+        }
+
+        /// <summary>
+        /// Snap-to-damage feedback: short bright burst fired the instant a telegraph resolves.
+        /// Wraps the existing SkillVfx impact motor (self-destructing, additive); no new VFX engine.
+        /// </summary>
+        public static void FlashImpact(Vector2 pos, VfxElement element = VfxElement.Physical)
+        {
+            SkillVfx.ImpactBurst(pos, element);
         }
 
         // ── Geometry helpers ─────────────────────────────────────────────────

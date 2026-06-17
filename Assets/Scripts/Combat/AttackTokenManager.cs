@@ -59,10 +59,17 @@ namespace RIMA.Combat
 
         private void OnDestroy()
         {
+            // P0#4 (ChatGPT review 04 §3): only null the singleton here — do NOT set _shuttingDown.
+            // OnDestroy fires when the GO is destroyed during a death→restart SceneManager.LoadScene
+            // ("_Arena"). ResetStatics (SubsystemRegistration) runs only at play-mode ENTRY, not on a
+            // plain scene reload, so a _shuttingDown=true left here would make Instance return null for
+            // the entire restarted run → enemies could never acquire a melee token again. Setting only
+            // instance=null lets the next access lazy-create a fresh manager in the new scene.
+            // _shuttingDown is reserved for genuine app shutdown (OnApplicationQuit) so a manager is
+            // never re-created while the app is tearing down.
             if (instance == this)
             {
                 instance = null;
-                _shuttingDown = true;
             }
         }
 

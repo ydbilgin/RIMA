@@ -60,6 +60,7 @@ namespace RIMA
         private AttackTokenType attackTokenType;
         private Sprite fallbackSprite;
         private Material fallbackMaterial;
+        private bool _warnedMissingPlayer;
 
         // ─── Init ────────────────────────────────────────────────────────────
 
@@ -157,8 +158,20 @@ namespace RIMA
             if (Player == null)
             {
                 var p = GameObject.FindGameObjectWithTag("Player");
-                if (p != null) Player = p.transform;
-                else return; // genuinely absent — skip this frame
+                if (p != null) { Player = p.transform; _warnedMissingPlayer = false; }
+                else
+                {
+                    // P0#1 (ChatGPT review 04 §1): combat target/damage both depend on the "Player"
+                    // tag. Warn ONCE (not every frame) if no tagged player is ever found, so a missing
+                    // tag surfaces in the console instead of silently leaving the mob idle. Re-acquire
+                    // still retries every frame; the flag resets the moment a player appears.
+                    if (!_warnedMissingPlayer)
+                    {
+                        _warnedMissingPlayer = true;
+                        Debug.LogWarning("[BaseMobBehavior] No GameObject tagged 'Player' found — mob will stay idle until one appears (P0#1). Verify the runtime player root is tagged 'Player'.");
+                    }
+                    return; // genuinely absent — skip this frame
+                }
             }
 
             attackTimer -= Time.deltaTime;

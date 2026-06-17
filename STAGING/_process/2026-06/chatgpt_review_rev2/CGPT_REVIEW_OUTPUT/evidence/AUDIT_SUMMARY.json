@@ -1,0 +1,13 @@
+{
+  "png_count": 35,
+  "all_dimensions": "1920x1080",
+  "exact_sha_duplicates": 0,
+  "verdict_counts": {
+    "KEEP": 8,
+    "KEEP_SECONDARY": 4,
+    "RECAPTURE": 21,
+    "REMOVE": 1,
+    "RELABEL": 1
+  },
+  "reviewed_at_full_resolution": true
+}

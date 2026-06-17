@@ -1,8 +1,14 @@
+using System;
 using RIMA.Combat;
 using UnityEngine;
 
 namespace RIMA.Enemy.Telegraph
 {
+    // DEAD CODE (Karpathy-3 surgical): nothing instantiates/attaches this component-based
+    // telegraph system — the live telegraph is RIMA.EnemyTelegraph in
+    // Assets/Scripts/Enemies/EnemyTelegraph.cs (static factory). Kept (not deleted) in case
+    // EnemyOutlinePulse's body-flash idea is revived; marked Obsolete to flag the duplicate type name.
+    [Obsolete("Dead — live telegraph = Assets/Scripts/Enemies/EnemyTelegraph.cs (RIMA.EnemyTelegraph static factory).")]
     [DisallowMultipleComponent]
     public class EnemyTelegraph : MonoBehaviour
     {

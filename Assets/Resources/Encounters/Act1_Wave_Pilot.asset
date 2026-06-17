@@ -29,7 +29,7 @@ MonoBehaviour:
   - enemyType: 3
     prefab: {fileID: 4281498823748507438, guid: 85cf92ee9e4d4f14db740a803c741ad2, type: 3}
     count: 1
-    threatCost: 4
+    threatCost: 5
     weight: 1
     maxSimultaneous: 1
     t2Capable: 1

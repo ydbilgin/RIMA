@@ -148,6 +148,7 @@ namespace RIMA
         {
             var p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) player = p.transform;
+            else Debug.LogWarning("[PenitentSovereign] No GameObject tagged 'Player' at Start — will re-acquire each BossLoop frame (P0#2).");
 
             // Presentation scale is authored on the prefab child; avoid compounding it at runtime.
             transform.localScale = BossScale;
@@ -211,7 +212,15 @@ namespace RIMA
 
             while (!dead)
             {
-                if (player == null) { yield return null; continue; }
+                // P0#2 (ChatGPT review 04 §2): re-acquire the player every loop if the reference is
+                // lost (spawn-order race / player respawn), mirroring BaseMobBehavior.Update. Without
+                // this the boss could resolve null once in Start() and stay permanently idle.
+                if (player == null)
+                {
+                    var reacquired = GameObject.FindGameObjectWithTag("Player");
+                    if (reacquired != null) player = reacquired.transform;
+                    else { yield return null; continue; }
+                }
 
                 // Phase transition check — canon: chains break at 50% HP
                 if (!phaseTransitionDone && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.5f))
@@ -383,6 +392,7 @@ namespace RIMA
                 }
             }
 
+            EnemyTelegraph.FlashImpact((Vector2)transform.position + dir * (chainWhipLength * 0.5f));  // snap along the whip
             Debug.DrawLine(transform.position, (Vector2)transform.position + dir * chainWhipLength, Color.red, 0.5f);
         }
 
@@ -406,6 +416,7 @@ namespace RIMA
             }
 
             // Shake camera
+            EnemyTelegraph.FlashImpact(transform.position);  // snap at surge centre
             RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.40f, 0.40f);
 
             Debug.DrawRay(transform.position, Vector2.up * surgeRadius, Color.yellow, 0.5f);
@@ -415,6 +426,10 @@ namespace RIMA
         private IEnumerator Attack_ShackleThrow()
         {
             rb.linearVelocity = Vector2.zero;
+
+            // P1 teaching cue: short origin cast-flash (projectile itself stays "unannounced" by convention).
+            SkillVfx.CastFlash(gameObject, VfxElement.Physical);
+
             yield return StartCoroutine(Telegraph(telegraphDuration - 0.15f));
             if (dead || player == null) yield break;
 
@@ -426,6 +441,14 @@ namespace RIMA
         private IEnumerator Attack_HolyLash()
         {
             rb.linearVelocity = Vector2.zero;
+
+            // Ground telegraph: 180° cone toward the player, matched to the real windup.
+            if (player != null)
+            {
+                Vector2 lashDir = ((Vector2)player.position - (Vector2)transform.position).normalized;
+                EnemyTelegraph.SpawnCone(transform.position, lashDir, holyLashRadius, 180f, WindupSeconds(telegraphDuration));
+            }
+
             yield return StartCoroutine(Telegraph(telegraphDuration));
             if (dead || player == null) yield break;
 
@@ -443,6 +466,9 @@ namespace RIMA
                     h.GetComponent<KnockbackComponent>()?.ApplyKnockbackFrom(transform.position, 7f);
                 }
             }
+
+            // Snap-to-damage feedback at the arc origin.
+            EnemyTelegraph.FlashImpact((Vector2)transform.position + forward * (holyLashRadius * 0.5f));
         }
 
         // ─── Phase 2 Attacks ──────────────────────────────────────────────────
@@ -451,6 +477,10 @@ namespace RIMA
         private IEnumerator Attack_FractureStrike()
         {
             rb.linearVelocity = Vector2.zero;
+
+            // Ground telegraph: melee strike zone, matched to the 0.3s windup.
+            EnemyTelegraph.SpawnCircle(transform.position, meleeStopRange + 0.4f, WindupSeconds(0.3f));
+
             yield return StartCoroutine(Telegraph(0.3f));
             if (dead) yield break;
 
@@ -467,6 +497,7 @@ namespace RIMA
                 }
 
                 FlashColor(phase2Color, 0.08f);
+                EnemyTelegraph.FlashImpact(transform.position, VfxElement.Void);  // snap per strike
                 yield return new WaitForSeconds(0.18f);
             }
         }
@@ -493,6 +524,11 @@ namespace RIMA
             // Marker persists, then explodes. Phase 3 shortens the dodge window too (cx review Q3 — this
             // windup bypasses Telegraph()), floored at the reaction window so it never becomes unfair.
             float delay = phase3Active ? Mathf.Max(0.22f, chainExplosionDelay * 0.85f) : chainExplosionDelay;
+
+            // Ground telegraph: delayed-explosion ring whose lifetime == the real blast delay
+            // (ARPG-AoE convention — "this WILL detonate here in `delay` seconds").
+            EnemyTelegraph.SpawnDelayedRing(worldPos, chainExplosionRadius, delay);
+
             float elapsed = 0f;
             while (elapsed < delay)
             {
@@ -509,6 +545,7 @@ namespace RIMA
                 h.GetComponent<KnockbackComponent>()?.ApplyKnockbackFrom(worldPos, 9f);
             }
 
+            EnemyTelegraph.FlashImpact(worldPos, VfxElement.Void);  // snap at the blast
             RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.25f, 0.30f);
         }
 
@@ -516,6 +553,12 @@ namespace RIMA
         private IEnumerator Attack_SovereignsWrath()
         {
             rb.linearVelocity = Vector2.zero;
+
+            // Ground telegraph: outer danger ring + inner safe-zone ring, matched to the long windup.
+            float wrathWindup = WindupSeconds(telegraphDuration + 0.7f);
+            EnemyTelegraph.SpawnCircle(transform.position, wrathOuterRadius, wrathWindup);  // danger
+            EnemyTelegraph.SpawnCircle(transform.position, wrathSafeRadius, wrathWindup);   // safe centre
+
             // Longer telegraph — player needs time to find safe zone
             yield return StartCoroutine(Telegraph(telegraphDuration + 0.7f));
             if (dead) yield break;
@@ -530,6 +573,7 @@ namespace RIMA
                 h.GetComponent<Health>()?.TakeDamage(sovereignWrathDmg);
             }
 
+            EnemyTelegraph.FlashImpact(transform.position, VfxElement.Void);  // big snap at the boss centre
             RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.50f, 0.42f);
         }
 
@@ -538,6 +582,12 @@ namespace RIMA
         {
             rb.linearVelocity = Vector2.zero;
             if (player == null) yield break;
+
+            // Ground telegraph: pre-draw the dash lane toward the player, matched to the windup.
+            // Width = the dash hit radius (meleeStopRange + 0.3f) doubled, so the lane reads at true scale.
+            Vector2 chargeDir = ((Vector2)player.position - (Vector2)transform.position).normalized;
+            EnemyTelegraph.SpawnLine(transform.position, chargeDir, 16f, (meleeStopRange + 0.3f) * 2f,
+                                     WindupSeconds(telegraphDuration - 0.1f));
 
             yield return StartCoroutine(Telegraph(telegraphDuration - 0.1f));
             if (dead) yield break;
@@ -575,6 +625,7 @@ namespace RIMA
             }
 
             rb.linearVelocity = Vector2.zero;
+            EnemyTelegraph.FlashImpact(endPos, VfxElement.Void);  // snap at the dash terminus
             RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.35f, 0.35f);
         }
 
@@ -808,6 +859,16 @@ namespace RIMA
         }
 
         // ─── Telegraph Helper ─────────────────────────────────────────────────
+
+        /// <summary>
+        /// Mirrors the EXACT Phase-3 scaling that Telegraph() applies to a windup, so the
+        /// ground telegraph (EnemyTelegraph) duration stays in lock-step with the boss
+        /// color-pulse windup. Keep identical to the line in Telegraph() below.
+        /// </summary>
+        private float WindupSeconds(float baseDuration)
+        {
+            return phase3Active ? Mathf.Max(0.22f, baseDuration * 0.85f) : baseDuration;
+        }
 
         private IEnumerator Telegraph(float duration)
         {
