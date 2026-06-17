@@ -1,26 +1,22 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-18 → YENİ SESSION) — demo ~19 Haziran
+## ⏯️ RESUME (2026-06-18 GECE → OTONOM RUN, kullanıcı yok) — demo ~19 Haziran
 
-**Durum:** Playtest-polish maratonu + **2 RAPOR** teslim. cx KULLANILMADI (limit) → execute=Opus subagent + **ax_pro vision council**. Unity dev-test `_Arena`'dan (playModeStartScene MainMenu'ye geri yüklendi, no-leak OK). Karar/notlar tek-gerçek: `STAGING/PLAYTEST_POLISH_DECISION_2026-06-17.md`.
+**Durum:** Tam-otonom maraton. Kullanıcı "council'e sık danış, her iş bitince status+memory güncelle, bağlam kopmasın" dedi. cx limitleri RESETLENDİ (tam council kullanılabilir). Tek-gerçek karar: `STAGING/PLAYTEST_POLISH_DECISION_2026-06-17.md`.
 
-### ✅ Bu session DONE (hepsi verified)
-- **#7 boss can barı** — `BossHealthBar` hpFill sprite'sız Filled-Image'dı → 1x1 white sprite (artık hasara göre düşer).
-- **#1 prop Y-sıralama** — `Props` layer Entities ÜSTÜNDEydi (proplar hep karakter üstünde). Fix: dik prop→**Entities**, yer-decal(crack/bones/chasm)→**Decals** + `isFloorDecal` bool (`PropDefinitionSO`/`PropSorterRuntime`). Data-proof.
-- **#3 silah mount** — ax_pro tablosu: `WeaponDatabase.anchorOffset.y` 0.33→0.16 + 8-yön offset/rotation (`Player.prefab` OrientationSync). **SE doğrulandı; diğer 7 yön playtest-pending.**
-- **#6 HUD** — sol-alta taşındı (`HUDController`). Layout OK; ⚠️ renkler runtime class-tint (HP **cyan** görünüyor → crimson'a çekilecek).
-- **#8 Director** — skill listesi ScrollRect (Gravity Cleave artık görünür) + kart stil (`DirectorMode`).
-- **#10 F1 paneli** — `DemoDebugPanel` `#if`'ine DEMO_BUILD eklendi (F2'yle eşit; demo build'de artık var). Editörde zaten çalışıyordu.
-- **2 RAPOR:** `STAGING/report/RIMA_Senior_Design_Report.docx` (akademik, KTO formatı, kapak+logo, 12 bölüm) + `RIMA_Sunum_Kilavuzu.pdf` (4 sf sunum companion). Figürler `STAGING/report/figures_2026-06-18/` (logo dahil).
+### ✅ Bu run DONE (verified)
+- **Unity polish batch-2** — auditor-opus **PASS**: (A) HUD HP cyan→**crimson #C01020** (`HUDController` class-tint HP'yi override etmiyor artık; kök-neden `RimaUITheme.HpHealthy=#4A9EBF`), (B) `PropColliderAutoBuilder` offset taban-merkez `(0,halfH)` + SO blocksWalkable/footprint reuse (B-2 ölü kod dokunulmadı), (C) `RewardPickup` radius 0.45→0.22 + `Chasm` Decals layer + 0.4 merkez-collider. **Commit bekliyor.**
+- **Rapor revizyon r1** (ax_pro council): AI-tonu dengelendi (§8 kısaldı), ChatGPT-vari pasajlar budandı, yeni **"2.2 Klasör Yapısı + Sınıf Sorumlulukları"** eklendi, Şekil 3 caption düzeltildi → DOCX üretildi (0 placeholder). **r2 geliyor (figürler eklenince).**
+- 🔑 **KRİTİK BULGU:** Eski Şekil 6 `11_map_designer.png` = Map Designer DEĞİL → **masaüstü+Steam+"Task Bar Hero"** screenshot'ı (council haklıydı). r1'de silindi (doğru). Yerine gerçek Unity capture geliyor.
+- **PixelLab token güncellendi** (`.mcp.json`+`~/.claude.json`, eski 037c→yeni d17c). Canlı MCP **reconnect bekliyor** (`/mcp` → pixellab) → o zaman #9b Elementalist 8-yön açılır.
 
-### 📋 YENİ SESSION KUYRUĞU (öncelik)
-1. **Rapor revizyonu /council ile** (task #11): tüm figürleri gözden geçir (**Şekil 6 Unity değil**), AI-odağını azalt (bahset ama dengeli), **ne-ne-işe-yarıyor + dosya/klasör yapısı EKLE**, ChatGPT-vari gereksiz pasaj çıkar → `make_akademik_docx.py` yeniden üret. **SD-1/SD-2 kapak teyidi.**
-2. **Rapor Şekil 1 / karakter görseli** (task #9): silah tüm yönlerde oturunca YA DA **Elementalist (silahsız) ile** yeniden çek.
-3. **#9a Elementalist skill VFX** (task #8): Fireball dışı skillere trail/VFX bağla (`SkillVfx`/`SkillRuntime`).
-4. **#9b Elementalist 8-yön** — BLOCKED DEĞİL (düzeltme): PixelLab **char ID'den 8 yön seç/indir** → import. Rapordaki "8-yön BLOCKED" ifadesi de güncellenmeli.
-5. **#2 prop collider** (task #4): sandık/fıçı walk-through; `PropColliderAutoBuilder` footprint/offset (⚠️ B-2 refactor YAPMA, cerrahi data).
-6. **#5b/#4** (task #7): `RewardPickup` trigger radius daralt + yarık merkez-collider.
-7. **HUD HP rengi** cyan→crimson (runtime class-tint logic).
+### 🔄 IN-FLIGHT (arka plan ajanları)
+- **builder-opus (Unity, tek-ajan):** 6 Act-1 odası (`Act1_ShatteredKeep/json`) capture + 2×3 contact sheet + _Arena **Şekil 6** → `figures_2026-06-18/`. No-leak korumalı.
+- **crafter-sonnet (non-Unity):** rapor §8 "İnsan-AI iş bölümü" + hocaya canlı CLI demo script (`SUNUM_CANLI_CLI_DEMO.md`).
 
-### 🛑 DOKUNMA / KEY
-GATE / Boss-akış / reward-bleed / Build-çekirdek / weaponless-anim / branching-seed. · Screenshot: dünya=Main Camera direct-render ÇALIŞIR, overlay UI=no-camera full ScreenCapture ÇALIŞIR (9.7.3). · Önceki RESUME (2026-06-17 manuel-test TODO) git'te.
+### ⏭️ PLAN
+Faz2: figürler+§8 rapora entegre (Şekil 6=_Arena, +oda grid, +JSON snippet) → DOCX r2. Faz3: **tam council (cx+axPro+axFlash)** rapor+demo review → kritik fix. Faz4: HER ŞEYİ commit + CURRENT_STATUS + memory.
+
+### 🔑 METOT / 🛑 DOKUNMA
+- **Screenshot (kanıtlı):** `manage_camera game_view` (HUD/overlay dahil) ve `scene_view` (dünya) = **saf Unity, masaüstü ASLA çıkmaz**. Editor pencereleri (Map Designer) çekilemez — sadece game/scene view. Oda yükle: `RIMA.Editor.Map.RoomLoaderMenu.LoadRoomJsonToActiveScene(path)`.
+- DOKUNMA: GATE / Boss-akış / reward-bleed / Build-çekirdek / weaponless-anim / branching-seed. Prop collider B-2 refactor YAPMA.
