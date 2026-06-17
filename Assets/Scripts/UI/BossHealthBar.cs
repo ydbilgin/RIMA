@@ -148,6 +148,10 @@ namespace RIMA
 
             hpFill = fillGO.AddComponent<Image>();
             hpFill.color = CrimsonFill;
+            // A Filled Image needs a source sprite: with sprite==null Unity ignores fillAmount and
+            // always draws the full quad (bar looked stuck at 100% while phaseText updated correctly).
+            // A 1x1 white sprite is enough for a solid horizontal fill and needs no asset dependency.
+            hpFill.sprite = SolidSprite();
             hpFill.type  = Image.Type.Filled;
             hpFill.fillMethod = Image.FillMethod.Horizontal;
             hpFill.fillOrigin = 0;  // left to right
@@ -175,6 +179,20 @@ namespace RIMA
                         ? "PHASE II"
                         : "UNLEASHED";
             }
+        }
+
+        // Cached 1x1 white sprite so a runtime-built Filled Image actually clips by fillAmount
+        // (a null sprite renders the full quad regardless of fillAmount).
+        private static Sprite _solidSprite;
+        private static Sprite SolidSprite()
+        {
+            if (_solidSprite == null)
+            {
+                _solidSprite = Sprite.Create(
+                    Texture2D.whiteTexture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f), 1f);
+                _solidSprite.name = "BossHpFillSolid";
+            }
+            return _solidSprite;
         }
 
         private static void CreatePhaseNotch(string name, Transform parent, float anchorX)

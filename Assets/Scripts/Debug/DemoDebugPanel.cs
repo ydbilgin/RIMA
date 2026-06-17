@@ -1,4 +1,4 @@
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if DEMO_BUILD || DEVELOPMENT_BUILD || UNITY_EDITOR
 using RIMA.Systems.Map;
 using UnityEngine;
 using UnityEngine.InputSystem;

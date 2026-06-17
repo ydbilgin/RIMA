@@ -1743,15 +1743,37 @@ namespace RIMA
             for (int i = 0; i < DirectorClasses.Length; i++)
                 AddClassButton(classGrid, DirectorClasses[i]);
 
-            classSkillCardsRoot = CreatePanel("SkillCards", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
-            Anchor(classSkillCardsRoot, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(0f, 0.5f), new Vector2(16f, 130f), new Vector2(-32f, -348f));
-            classSkillCardsRoot.gameObject.AddComponent<RectMask2D>();
+            // SkillCards: scrollable list so a long skill set (e.g. Gravity Cleave) is never clipped.
+            // Hierarchy: SkillCards (ScrollRect + bg) → Viewport (Image + RectMask2D) → Content (Grid + SizeFitter).
+            RectTransform skillScroll = CreatePanel("SkillCards", panel, null, new Color(DirectorBase.r, DirectorBase.g, DirectorBase.b, 0.92f), Image.Type.Simple);
+            Anchor(skillScroll, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(0f, 0.5f), new Vector2(16f, 130f), new Vector2(-32f, -348f));
+            ScrollRect scrollRect = skillScroll.gameObject.AddComponent<ScrollRect>();
+            scrollRect.horizontal = false;
+            scrollRect.vertical = true;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
+            scrollRect.scrollSensitivity = 24f;
+            RegisterDirectorPointerRect(skillScroll);
+
+            RectTransform skillViewport = CreateFill("Viewport", skillScroll);
+            Image viewportImage = skillViewport.gameObject.AddComponent<Image>();
+            viewportImage.color = new Color(0f, 0f, 0f, 0f); // invisible but raycastable so drag/scroll works
+            skillViewport.gameObject.AddComponent<RectMask2D>();
+            scrollRect.viewport = skillViewport;
+
+            classSkillCardsRoot = CreateFill("Content", skillViewport);
+            classSkillCardsRoot.anchorMin = new Vector2(0f, 1f);
+            classSkillCardsRoot.anchorMax = new Vector2(1f, 1f);
+            classSkillCardsRoot.pivot = new Vector2(0.5f, 1f);
             GridLayoutGroup skillLayout = classSkillCardsRoot.gameObject.AddComponent<GridLayoutGroup>();
             skillLayout.padding = new RectOffset(12, 12, 12, 12);
             skillLayout.spacing = new Vector2(8f, 8f);
             skillLayout.cellSize = new Vector2(272f, 78f);
             skillLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             skillLayout.constraintCount = 1;
+            ContentSizeFitter skillFitter = classSkillCardsRoot.gameObject.AddComponent<ContentSizeFitter>();
+            skillFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            skillFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            scrollRect.content = classSkillCardsRoot;
 
             RectTransform actions = CreateFill("ClassSkillActions", panel);
             Anchor(actions, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(16f, 106f), new Vector2(-32f, 88f));
@@ -2304,6 +2326,14 @@ namespace RIMA
         {
             Button button = CreateButton("Button_Skill_" + SanitizeName(skill.skillName), parent, rewardCard, Color.white);
             RectTransform rt = button.transform as RectTransform;
+            Image cardBg = button.GetComponent<Image>();
+            cardBg.color = DirectorRaised; // raised card #252A35 against the panel base
+
+            // Selection cue = thin cyan outline (kept transparent until selected) — the fill stays #252A35.
+            Outline selectionOutline = cardBg.gameObject.AddComponent<Outline>();
+            selectionOutline.effectColor = new Color(DirectorCyan.r, DirectorCyan.g, DirectorCyan.b, 0f);
+            selectionOutline.effectDistance = new Vector2(2f, -2f);
+            selectionOutline.useGraphicAlpha = false;
 
             TextMeshProUGUI title = CreateText("TMP_Title", rt, skill.skillName, 17f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
             Stretch(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(14f, 44f), new Vector2(-12f, -8f));
@@ -2314,7 +2344,7 @@ namespace RIMA
             Stretch(desc.rectTransform, Vector2.zero, Vector2.one, new Vector2(14f, 8f), new Vector2(-12f, -38f));
 
             button.onClick.AddListener(() => SelectDirectorSkill(skill));
-            skillCards.Add(new SkillCardBinding(skill, button.GetComponent<Image>()));
+            skillCards.Add(new SkillCardBinding(skill, cardBg, selectionOutline));
         }
 
         private void SelectDirectorSkill(SkillData skill)
@@ -2328,8 +2358,12 @@ namespace RIMA
         {
             foreach (SkillCardBinding binding in skillCards)
             {
-                if (binding.Background != null)
-                    binding.Background.color = binding.Skill == selectedDirectorSkill ? DirectorCyan : DirectorRaised;
+                if (binding.SelectionOutline != null)
+                {
+                    bool selected = binding.Skill == selectedDirectorSkill;
+                    binding.SelectionOutline.effectColor = new Color(
+                        DirectorCyan.r, DirectorCyan.g, DirectorCyan.b, selected ? 1f : 0f);
+                }
             }
         }
 
@@ -3225,11 +3259,13 @@ namespace RIMA
         {
             public readonly SkillData Skill;
             public readonly Image Background;
+            public readonly Outline SelectionOutline;
 
-            public SkillCardBinding(SkillData skill, Image background)
+            public SkillCardBinding(SkillData skill, Image background, Outline selectionOutline)
             {
                 Skill = skill;
                 Background = background;
+                SelectionOutline = selectionOutline;
             }
         }
 

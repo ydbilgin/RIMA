@@ -7,12 +7,15 @@ namespace RIMA.MapDesigner.Props.Runtime
     [ExecuteAlways]
     public sealed class PropSorterRuntime : MonoBehaviour
     {
-        public const string DefaultPropsLayerName = "Props";
+        public const string DefaultPropsLayerName = "Props";        // legacy name; default routing now below
+        public const string UprightLayerName = "Entities";          // share the player's layer → props Y-interleave with characters
+        public const string FloorDecalLayerName = "Decals";         // below Entities → characters always render on top
 
         [SerializeField] private PropDefinitionSO propDef;
 
         private SpriteRenderer sr;
-        private static int cachedDefaultLayerId = int.MinValue;
+        private static int cachedUprightLayerId = int.MinValue;
+        private static int cachedDecalLayerId = int.MinValue;
 
         public PropDefinitionSO PropDef
         {
@@ -31,7 +34,7 @@ namespace RIMA.MapDesigner.Props.Runtime
 
             int targetLayerId = propDef.sortingLayerOverride != 0
                 ? propDef.sortingLayerOverride
-                : ResolveDefaultLayerId();
+                : ResolveDefaultLayerId(propDef.isFloorDecal);
             if (targetLayerId != 0)
             {
                 sr.sortingLayerID = targetLayerId;
@@ -68,12 +71,17 @@ namespace RIMA.MapDesigner.Props.Runtime
             if (sr == null) sr = GetComponent<SpriteRenderer>();
         }
 
-        private static int ResolveDefaultLayerId()
+        // Floor decals sit on "Decals" (under the player); upright props share the player's "Entities"
+        // layer so the per-frame -y*100 order interleaves them with characters by depth.
+        private static int ResolveDefaultLayerId(bool floorDecal)
         {
-            if (cachedDefaultLayerId != int.MinValue) return cachedDefaultLayerId;
-            int id = SortingLayer.NameToID(DefaultPropsLayerName);
-            cachedDefaultLayerId = id;
-            return id;
+            if (floorDecal)
+            {
+                if (cachedDecalLayerId == int.MinValue) cachedDecalLayerId = SortingLayer.NameToID(FloorDecalLayerName);
+                return cachedDecalLayerId;
+            }
+            if (cachedUprightLayerId == int.MinValue) cachedUprightLayerId = SortingLayer.NameToID(UprightLayerName);
+            return cachedUprightLayerId;
         }
     }
 }

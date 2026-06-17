@@ -50,12 +50,23 @@ namespace RIMA
         private Health     playerHealth;
         private ClassType  currentClass = ClassType.None;
 
-        // ── HP bar dims (Ashen Glyph spec) ───────────────────────────────
-        private const float HpBarWidth  = 212f;
-        private const float HpBarHeight = 16f;
-        private const float ResBarWidth  = 160f;
-        private const float ResBarHeight = 10f;
+        // ── HP/resource bar dims (bottom-left, Hades/Diablo spec) ────────
+        private const float HpBarWidth  = 260f;
+        private const float HpBarHeight = 20f;
+        private const float ResBarWidth  = 220f;
+        private const float ResBarHeight = 8f;
         private const float HudMargin    = 12f;
+
+        // Bottom-left layout offsets (anchored from bottom-left corner).
+        private const float HudLeft        = 24f;
+        private const float HpBarBottom    = 30f;   // HP track Y (px from screen bottom)
+        private const float ResBarBottom   = 16f;   // resource track Y, just under HP
+        private const float TextStackBottom = 60f;  // Echo + room name, above the bars
+
+        // Bottom-left bar colors (Hades/Diablo spec).
+        private static readonly Color HpFillCrimson  = new Color32(0xC0, 0x10, 0x20, 0xFF); // #C01020
+        private static readonly Color ResFillCyan    = new Color32(0x10, 0xA0, 0xC0, 0xFF); // #10A0C0
+        private static readonly Color BarTrackSlate  = new Color(0x1B / 255f, 0x1F / 255f, 0x28 / 255f, 0.8f); // #1B1F28 @ 0.8
         private const float LowHpThreshold = 0.20f;
         private const float LowHpMinAlpha = 0.12f;
         private const float LowHpMaxAlpha = 0.18f;
@@ -594,18 +605,18 @@ namespace RIMA
 
         private void BuildHpBar(RectTransform root)
         {
-            // HP track (empty bg)
+            // HP track (empty bg) — bottom-left.
             var trackGo = new GameObject("HPTrack", typeof(RectTransform));
             trackGo.transform.SetParent(root, false);
             var trackRt = trackGo.GetComponent<RectTransform>();
-            trackRt.anchorMin = new Vector2(0f, 1f);
-            trackRt.anchorMax = new Vector2(0f, 1f);
-            trackRt.pivot = new Vector2(0f, 1f);
-            trackRt.anchoredPosition = new Vector2(HudMargin, -HudMargin);
+            trackRt.anchorMin = new Vector2(0f, 0f);
+            trackRt.anchorMax = new Vector2(0f, 0f);
+            trackRt.pivot = new Vector2(0f, 0f);
+            trackRt.anchoredPosition = new Vector2(HudLeft, HpBarBottom);
             trackRt.sizeDelta = new Vector2(HpBarWidth, HpBarHeight);
 
             var trackImg = trackGo.AddComponent<Image>();
-            trackImg.color = RimaUITheme.HpEmpty;
+            trackImg.color = BarTrackSlate; // slate #1B1F28 @ 0.8 (not pitch black)
             trackImg.raycastTarget = false;
             ApplyPackSocket(trackImg); // iron-stone trough (overrides flat-color when art present)
 
@@ -620,21 +631,21 @@ namespace RIMA
             hpFill.sizeDelta = new Vector2(HpBarWidth, HpBarHeight);
 
             hpFillImage = fillGo.AddComponent<Image>();
-            hpFillImage.color = RimaUITheme.HpHealthy;
+            hpFillImage.color = HpFillCrimson; // crimson #C01020 init; OnHPChanged keeps the value-driven threshold tint
             hpFillImage.raycastTarget = false;
             // Share the on-brand fill SHAPE; tint stays health-red/warm (value-driven thresholds in
             // OnHPChanged), never cyan — cyan is reserved for the resource/seal bar.
             ApplyPackFill(hpFillImage);
 
-            // HP number label (left of bar)
+            // HP number label — right-aligned over the right edge of the HP bar.
             var labelGo = new GameObject("HPLabel", typeof(RectTransform));
             labelGo.transform.SetParent(root, false);
             var labelRt = labelGo.GetComponent<RectTransform>();
-            labelRt.anchorMin = new Vector2(0f, 1f);
-            labelRt.anchorMax = new Vector2(0f, 1f);
-            labelRt.pivot = new Vector2(1f, 1f);
-            labelRt.anchoredPosition = new Vector2(HudMargin - 6f, -HudMargin);
-            labelRt.sizeDelta = new Vector2(68f, 16f);
+            labelRt.anchorMin = new Vector2(0f, 0f);
+            labelRt.anchorMax = new Vector2(0f, 0f);
+            labelRt.pivot = new Vector2(1f, 0f);
+            labelRt.anchoredPosition = new Vector2(HudLeft + HpBarWidth - 6f, HpBarBottom + 2f);
+            labelRt.sizeDelta = new Vector2(68f, HpBarHeight);
 
             hpLabel = labelGo.AddComponent<TextMeshProUGUI>();
             hpLabel.text = "0";
@@ -647,14 +658,14 @@ namespace RIMA
 
         private void BuildResourceBar(RectTransform root)
         {
-            // Resource group (invisible at 0)
+            // Resource group (invisible at 0) — bottom-left, just under the HP bar.
             var groupGo = new GameObject("ResourceGroup", typeof(RectTransform));
             groupGo.transform.SetParent(root, false);
             var groupRt = groupGo.GetComponent<RectTransform>();
-            groupRt.anchorMin = new Vector2(0f, 1f);
-            groupRt.anchorMax = new Vector2(0f, 1f);
-            groupRt.pivot = new Vector2(0f, 1f);
-            groupRt.anchoredPosition = new Vector2(HudMargin, -HudMargin - HpBarHeight - 4f);
+            groupRt.anchorMin = new Vector2(0f, 0f);
+            groupRt.anchorMax = new Vector2(0f, 0f);
+            groupRt.pivot = new Vector2(0f, 0f);
+            groupRt.anchoredPosition = new Vector2(HudLeft, ResBarBottom);
             groupRt.sizeDelta = new Vector2(ResBarWidth, ResBarHeight);
 
             resourceGroup = groupGo.AddComponent<CanvasGroup>();
@@ -662,7 +673,7 @@ namespace RIMA
 
             // Track
             var trackImg = groupGo.AddComponent<Image>();
-            trackImg.color = RimaUITheme.HpEmpty;
+            trackImg.color = BarTrackSlate; // slate #1B1F28 @ 0.8
             trackImg.raycastTarget = false;
             ApplyPackSocket(trackImg); // iron-stone trough (overrides flat-color when art present)
 
@@ -677,7 +688,7 @@ namespace RIMA
             resourceFill.sizeDelta = new Vector2(0f, ResBarHeight);
 
             resourceFillImage = fillGo.AddComponent<Image>();
-            resourceFillImage.color = RimaUITheme.RageDefault;
+            resourceFillImage.color = ResFillCyan; // cyan #10A0C0 init; OnResourceChanged keeps the class tint
             resourceFillImage.raycastTarget = false;
             // Cyan seal-energy fill — this is its home. Color still set by OnResourceChanged (class tint).
             ApplyPackFill(resourceFillImage);
@@ -685,13 +696,14 @@ namespace RIMA
 
         private void BuildEchoDisplay(RectTransform root)
         {
+            // Above the bars, bottom-left, minimal.
             var groupGo = new GameObject("EchoDisplay", typeof(RectTransform));
             groupGo.transform.SetParent(root, false);
             var groupRt = groupGo.GetComponent<RectTransform>();
-            groupRt.anchorMin = new Vector2(0f, 1f);
-            groupRt.anchorMax = new Vector2(0f, 1f);
-            groupRt.pivot = new Vector2(0f, 1f);
-            groupRt.anchoredPosition = new Vector2(HudMargin, -HudMargin - HpBarHeight - ResBarHeight - 10f);
+            groupRt.anchorMin = new Vector2(0f, 0f);
+            groupRt.anchorMax = new Vector2(0f, 0f);
+            groupRt.pivot = new Vector2(0f, 0f);
+            groupRt.anchoredPosition = new Vector2(HudLeft, TextStackBottom);
             groupRt.sizeDelta = new Vector2(78f, 14f);
 
             var iconGo = new GameObject("EchoIcon", typeof(RectTransform));
@@ -719,9 +731,9 @@ namespace RIMA
 
             echoBalanceLabel = labelGo.AddComponent<TextMeshProUGUI>();
             echoBalanceLabel.text = "0";
-            echoBalanceLabel.fontSize = 10f;
-            echoBalanceLabel.fontStyle = FontStyles.Bold;
-            echoBalanceLabel.color = new Color(0.82f, 0.96f, 1f, 0.92f);
+            echoBalanceLabel.fontSize = 11f;
+            echoBalanceLabel.fontStyle = FontStyles.Italic;
+            echoBalanceLabel.color = new Color(0.82f, 0.96f, 1f, 0.70f);
             echoBalanceLabel.alignment = TextAlignmentOptions.Left;
             echoBalanceLabel.raycastTarget = false;
         }
@@ -741,14 +753,15 @@ namespace RIMA
 
         private void BuildRoomNameLabel(RectTransform root)
         {
+            // Above the Echo line, bottom-left, italic + minimal.
             var go = new GameObject("RoomName", typeof(RectTransform));
             go.transform.SetParent(root, false);
             var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = new Vector2(0f, 1f);
-            rt.anchorMax = new Vector2(0f, 1f);
-            rt.pivot = new Vector2(0f, 1f);
-            rt.anchoredPosition = new Vector2(HudMargin, -HudMargin - HpBarHeight - ResBarHeight - 28f);
-            rt.sizeDelta = new Vector2(200f, 18f);
+            rt.anchorMin = new Vector2(0f, 0f);
+            rt.anchorMax = new Vector2(0f, 0f);
+            rt.pivot = new Vector2(0f, 0f);
+            rt.anchoredPosition = new Vector2(HudLeft, TextStackBottom + 18f);
+            rt.sizeDelta = new Vector2(220f, 18f);
 
             roomNameLabel = go.AddComponent<TextMeshProUGUI>();
             roomNameLabel.text = "";

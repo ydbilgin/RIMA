@@ -40,6 +40,10 @@ namespace RIMA.MapDesigner.Props
         public string colliderLayer = "Walls";
 
         [Header("Visual Sorting")]
+        [Tooltip("Floor decals (crack/bones/blood/chasm) render UNDER characters on the 'Decals' sorting " +
+                 "layer. Upright props (chest/barrel/pillar/brazier) share the player's 'Entities' layer so " +
+                 "they interleave by Y (player behind when below the prop, in front when above).")]
+        public bool isFloorDecal = false;
         public PropSortingMode sortingMode = PropSortingMode.YPosition;
         public int sortingLayerOverride = 0;
         public int sortingOrder = 0;
