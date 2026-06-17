@@ -115,6 +115,17 @@ namespace RIMA.MapDesigner.Room.Runtime
         [SerializeField] private float clearSlowMoReturnDuration = 0.6f;
         [SerializeField] private RoomTemplateSO fallbackTemplate;
         [SerializeField] private int runSeed = 12345;
+
+        // ── Deterministic first room (Edit-to-Play centerpiece) ────────────────────
+        // forceDemoSequence=false re-rolls runSeed every BeginRun, so roomBank.Pick for
+        // the START node returns a different combat template each run (donut/cross/blob) —
+        // which breaks "place a prop in Build Mode, exit, play, see the SAME room". This
+        // flag pins ONLY the start-node template pick to firstRoomSeed so the FIRST room
+        // is identical every run, while all DOWNSTREAM branching keeps the per-run random
+        // seed (run-map "her run değişen harita" thesis is untouched).
+        [SerializeField] private bool deterministicFirstRoom = true;
+        [SerializeField] private int firstRoomSeed = 12345;
+
         [SerializeField] private bool buildOnStart = true;
         // Design target = 6 depths (0..5): Combat → Combat → branch → Elite/Merchant → convergence → Boss.
         [SerializeField] private int depthCount = 6;
@@ -326,7 +337,14 @@ namespace RIMA.MapDesigner.Room.Runtime
             lifecycle.BeginCombat();
 
             List<DungeonNode> choices = CurrentChoices;
-            RoomTemplateSO template = roomBank != null ? roomBank.Pick(CurrentRoomType, runSeed + CurrentNodeId, choices.Count) : null;
+            // Edit-to-Play centerpiece: the START node uses a fixed seed so the first room is
+            // deterministic across runs (props authored in Build Mode line up every time). Every
+            // other node keeps runSeed + nodeId so downstream branching stays per-run random.
+            bool isStartNode = graph != null && CurrentNodeId == graph.startId;
+            int templatePickSeed = (deterministicFirstRoom && isStartNode)
+                ? firstRoomSeed
+                : runSeed + CurrentNodeId;
+            RoomTemplateSO template = roomBank != null ? roomBank.Pick(CurrentRoomType, templatePickSeed, choices.Count) : null;
             if (template == null)
             {
                 template = fallbackTemplate;
