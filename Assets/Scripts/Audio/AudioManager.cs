@@ -176,7 +176,8 @@ namespace RIMA.Audio
             musicSrc.loop = true;
             musicSrc.playOnAwake = false;
             musicSrc.spatialBlend = 0f;
-            musicSrc.volume = 0.25f;
+            // Low bed: stays under SFX one-shots (which play up to volume 1.0) so combat cues read clearly.
+            musicSrc.volume = 0.16f;
             musicSrc.Play();
         }
 

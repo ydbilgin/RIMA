@@ -26,6 +26,10 @@ namespace RIMA
         [SerializeField] private float strokeWidth = 0.025f;   // thin fallback line
         [SerializeField] private Material lineMaterial;
 
+        // Distinct safe-zone tint (light green). Lets a SAFE telegraph read apart from the
+        // red DANGER ring so "two identical red rings" no longer means "where do I stand?".
+        public static readonly Color SafeZoneColor = new Color(0.45f, 1f, 0.55f, 0.70f);
+
         [Header("Decal alpha")]
         [SerializeField] private float decalPeakAlpha = 0.60f;
 
@@ -117,6 +121,18 @@ namespace RIMA
             Draw(BuildCirclePoints(Vector3.zero, radius, 40), true);
         }
 
+        /// <summary>Apply a distinct tint (RGB) to this telegraph's decal + fallback line.
+        /// Alpha is still driven per-frame by Update(); only the hue/value is overridden.</summary>
+        public void SetTint(Color tint)
+        {
+            color = new Color(tint.r, tint.g, tint.b, color.a);
+            if (decalSR != null)
+            {
+                Color dc = decalSR.color;
+                decalSR.color = new Color(color.r, color.g, color.b, dc.a);
+            }
+        }
+
         public void ShowLine(Vector2 start, Vector2 direction, float length, float width, float showDuration)
         {
             duration = Mathf.Max(0.01f, showDuration);
@@ -168,6 +184,15 @@ namespace RIMA
         {
             EnemyTelegraph t = Create("EnemyTelegraph_Circle");
             t.ShowCircle(center, radius, duration);
+            return t;
+        }
+
+        /// <summary>Tinted circle telegraph (e.g. green safe-zone ring vs red danger ring).</summary>
+        public static EnemyTelegraph SpawnCircle(Vector2 center, float radius, float duration, Color tint)
+        {
+            EnemyTelegraph t = Create("EnemyTelegraph_Circle");
+            t.ShowCircle(center, radius, duration);
+            t.SetTint(tint);
             return t;
         }
 

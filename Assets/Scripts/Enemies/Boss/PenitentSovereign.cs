@@ -342,19 +342,21 @@ namespace RIMA
         private IEnumerator Attack_ChainWhip()
         {
             rb.linearVelocity = Vector2.zero;
+            if (player == null) yield break;
+
+            // CORRECTNESS SNAPSHOT (ChatGPT review 04 §5): lock origin + direction at telegraph
+            // start; the post-windup damage cast reuses the SAME snapshot so the whip lands exactly
+            // where the line telegraph was drawn (no recalc drift if the player strafes during windup).
+            Vector2 snapOrigin = transform.position;
+            Vector2 dir = ((Vector2)player.position - snapOrigin).normalized;
 
             // T6: line telegraph (Art/Telegraphs/telegraph_line_beam.png → EnemyTelegraph LineRenderer).
-            if (player != null)
-            {
-                Vector2 telegraphDir = ((Vector2)player.position - (Vector2)transform.position).normalized;
-                EnemyTelegraph.SpawnLine(transform.position, telegraphDir, chainWhipLength, chainWhipWidth, telegraphDuration);
-            }
+            EnemyTelegraph.SpawnLine(snapOrigin, dir, chainWhipLength, chainWhipWidth, telegraphDuration);
 
             yield return StartCoroutine(Telegraph(telegraphDuration));
-            if (dead || player == null) yield break;
+            if (dead) yield break;
 
-            Vector2 dir = ((Vector2)player.position - (Vector2)transform.position).normalized;
-            Vector2 origin = (Vector2)transform.position + dir * 0.5f;
+            Vector2 origin = snapOrigin + dir * 0.5f;
 
             // Box cast along the direction
             var hits = Physics2D.BoxCastAll(
@@ -392,8 +394,8 @@ namespace RIMA
                 }
             }
 
-            EnemyTelegraph.FlashImpact((Vector2)transform.position + dir * (chainWhipLength * 0.5f));  // snap along the whip
-            Debug.DrawLine(transform.position, (Vector2)transform.position + dir * chainWhipLength, Color.red, 0.5f);
+            EnemyTelegraph.FlashImpact(snapOrigin + dir * (chainWhipLength * 0.5f));  // snap along the whip (major event)
+            Debug.DrawLine(snapOrigin, snapOrigin + dir * chainWhipLength, Color.red, 0.5f);
         }
 
         /// Penitent Surge — 4m çevreye AoE itme + hasar
@@ -441,24 +443,25 @@ namespace RIMA
         private IEnumerator Attack_HolyLash()
         {
             rb.linearVelocity = Vector2.zero;
+            if (player == null) yield break;
+
+            // CORRECTNESS SNAPSHOT (ChatGPT review 04 §5): lock the arc origin + facing at telegraph
+            // start; damage reuses the SAME forward so the 180° hit arc matches the drawn cone.
+            Vector2 snapOrigin = transform.position;
+            Vector2 forward = ((Vector2)player.position - snapOrigin).normalized;
 
             // Ground telegraph: 180° cone toward the player, matched to the real windup.
-            if (player != null)
-            {
-                Vector2 lashDir = ((Vector2)player.position - (Vector2)transform.position).normalized;
-                EnemyTelegraph.SpawnCone(transform.position, lashDir, holyLashRadius, 180f, WindupSeconds(telegraphDuration));
-            }
+            EnemyTelegraph.SpawnCone(snapOrigin, forward, holyLashRadius, 180f, WindupSeconds(telegraphDuration));
 
             yield return StartCoroutine(Telegraph(telegraphDuration));
-            if (dead || player == null) yield break;
+            if (dead) yield break;
 
-            Vector2 forward = ((Vector2)player.position - (Vector2)transform.position).normalized;
-            var hits = Physics2D.OverlapCircleAll(transform.position, holyLashRadius);
+            var hits = Physics2D.OverlapCircleAll(snapOrigin, holyLashRadius);
 
             foreach (var h in hits)
             {
                 if (!h.CompareTag("Player")) continue;
-                Vector2 toTarget = ((Vector2)h.transform.position - (Vector2)transform.position).normalized;
+                Vector2 toTarget = ((Vector2)h.transform.position - snapOrigin).normalized;
                 float angle = Vector2.Angle(forward, toTarget);
                 if (angle <= 90f)  // 180° arc = ±90° from forward
                 {
@@ -467,8 +470,8 @@ namespace RIMA
                 }
             }
 
-            // Snap-to-damage feedback at the arc origin.
-            EnemyTelegraph.FlashImpact((Vector2)transform.position + forward * (holyLashRadius * 0.5f));
+            // Snap-to-damage feedback at the arc origin (major event).
+            EnemyTelegraph.FlashImpact(snapOrigin + forward * (holyLashRadius * 0.5f));
         }
 
         // ─── Phase 2 Attacks ──────────────────────────────────────────────────
@@ -478,26 +481,34 @@ namespace RIMA
         {
             rb.linearVelocity = Vector2.zero;
 
+            // CORRECTNESS SNAPSHOT (ChatGPT review 04 §5): lock the strike origin at telegraph start;
+            // all 3 sub-strikes hit the SAME circle the telegraph drew (boss is rooted here anyway).
+            Vector2 snapOrigin = transform.position;
+
             // Ground telegraph: melee strike zone, matched to the 0.3s windup.
-            EnemyTelegraph.SpawnCircle(transform.position, meleeStopRange + 0.4f, WindupSeconds(0.3f));
+            EnemyTelegraph.SpawnCircle(snapOrigin, meleeStopRange + 0.4f, WindupSeconds(0.3f));
 
             yield return StartCoroutine(Telegraph(0.3f));
             if (dead) yield break;
 
             for (int i = 0; i < 3; i++)
             {
-                var hits = Physics2D.OverlapCircleAll(transform.position, meleeStopRange + 0.4f);
+                var hits = Physics2D.OverlapCircleAll(snapOrigin, meleeStopRange + 0.4f);
                 foreach (var h in hits)
                 {
                     if (!h.CompareTag("Player")) continue;
                     h.GetComponent<Health>()?.TakeDamage(fractureStrikeDmg);
 
                     if (i == 2) // final hit: knockback
-                        h.GetComponent<KnockbackComponent>()?.ApplyKnockbackFrom(transform.position, 8f);
+                        h.GetComponent<KnockbackComponent>()?.ApplyKnockbackFrom(snapOrigin, 8f);
                 }
 
+                // Per-strike feedback is the cheap color flash. FlashImpact is RESERVED for the major
+                // event (ChatGPT review 04 §5 VFX rule) — fire the strong snap only on the final strike,
+                // not 3× per combo, so small hits do not over-fire the impact motor.
                 FlashColor(phase2Color, 0.08f);
-                EnemyTelegraph.FlashImpact(transform.position, VfxElement.Void);  // snap per strike
+                if (i == 2)
+                    EnemyTelegraph.FlashImpact(snapOrigin, VfxElement.Void);  // major snap: combo finisher only
                 yield return new WaitForSeconds(0.18f);
             }
         }
@@ -554,26 +565,32 @@ namespace RIMA
         {
             rb.linearVelocity = Vector2.zero;
 
-            // Ground telegraph: outer danger ring + inner safe-zone ring, matched to the long windup.
+            // CORRECTNESS SNAPSHOT (ChatGPT review 04 §5): lock the AoE origin at telegraph start;
+            // damage below uses the SAME snapshot so the warning ring == the hit ring.
+            Vector2 wrathOrigin = transform.position;
+
+            // Ground telegraph: outer DANGER ring (red) + inner SAFE-ZONE ring (distinct green).
+            // Two identical red rings did not communicate "stand in the centre" — the safe ring now
+            // reads apart by hue (red = leave, green = safe) so the player can parse where to dodge.
             float wrathWindup = WindupSeconds(telegraphDuration + 0.7f);
-            EnemyTelegraph.SpawnCircle(transform.position, wrathOuterRadius, wrathWindup);  // danger
-            EnemyTelegraph.SpawnCircle(transform.position, wrathSafeRadius, wrathWindup);   // safe centre
+            EnemyTelegraph.SpawnCircle(wrathOrigin, wrathOuterRadius, wrathWindup);                           // danger (default red)
+            EnemyTelegraph.SpawnCircle(wrathOrigin, wrathSafeRadius, wrathWindup, EnemyTelegraph.SafeZoneColor); // safe centre (green)
 
             // Longer telegraph — player needs time to find safe zone
             yield return StartCoroutine(Telegraph(telegraphDuration + 0.7f));
             if (dead) yield break;
 
-            var hits = Physics2D.OverlapCircleAll(transform.position, wrathOuterRadius);
+            var hits = Physics2D.OverlapCircleAll(wrathOrigin, wrathOuterRadius);
             foreach (var h in hits)
             {
                 if (!h.CompareTag("Player")) continue;
-                float dist = Vector2.Distance(transform.position, h.transform.position);
+                float dist = Vector2.Distance(wrathOrigin, h.transform.position);
                 if (dist <= wrathSafeRadius) continue;  // güvenli bölge
 
                 h.GetComponent<Health>()?.TakeDamage(sovereignWrathDmg);
             }
 
-            EnemyTelegraph.FlashImpact(transform.position, VfxElement.Void);  // big snap at the boss centre
+            EnemyTelegraph.FlashImpact(wrathOrigin, VfxElement.Void);  // big snap at the boss centre (major event)
             RIMA.Combat.ScreenShakeDriver.Instance?.Shake(0.50f, 0.42f);
         }
 
@@ -583,18 +600,20 @@ namespace RIMA
             rb.linearVelocity = Vector2.zero;
             if (player == null) yield break;
 
+            // CORRECTNESS SNAPSHOT (ChatGPT review 04 §5): lock the dash start + direction at telegraph
+            // start; the dash below reuses the SAME start/dir so the charge follows the drawn lane exactly
+            // (no recalc — telegraph and travel path stay identical even if the player moves during windup).
+            Vector2 startPos = transform.position;
+            Vector2 dir      = ((Vector2)player.position - startPos).normalized;
+            Vector2 endPos   = startPos + dir * 16f;   // arena-wide
+
             // Ground telegraph: pre-draw the dash lane toward the player, matched to the windup.
             // Width = the dash hit radius (meleeStopRange + 0.3f) doubled, so the lane reads at true scale.
-            Vector2 chargeDir = ((Vector2)player.position - (Vector2)transform.position).normalized;
-            EnemyTelegraph.SpawnLine(transform.position, chargeDir, 16f, (meleeStopRange + 0.3f) * 2f,
+            EnemyTelegraph.SpawnLine(startPos, dir, 16f, (meleeStopRange + 0.3f) * 2f,
                                      WindupSeconds(telegraphDuration - 0.1f));
 
             yield return StartCoroutine(Telegraph(telegraphDuration - 0.1f));
             if (dead) yield break;
-
-            Vector2 startPos = transform.position;
-            Vector2 dir      = ((Vector2)player.position - startPos).normalized;
-            Vector2 endPos   = startPos + dir * 16f;   // arena-wide
 
             // Dash
             float elapsed = 0f;
