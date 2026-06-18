@@ -15,7 +15,6 @@ namespace RIMA.Tests.BuildMode
     public class TmpFallbackWiredTests
     {
         private const string FallbackPath = "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset";
-        private const string JerseyPath = "Assets/Fonts/Jersey10/Jersey10-Regular SDF.asset";
         private const string TmpSettingsPath = "Assets/TextMesh Pro/Resources/TMP Settings.asset";
 
         [Test]
@@ -27,18 +26,9 @@ namespace RIMA.Tests.BuildMode
                 "The fallback must be DYNAMIC so it renders any missing glyph on demand.");
         }
 
-        [Test]
-        public void Jersey10_FallbackTable_ContainsDynamicFallback()
-        {
-            var fb = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FallbackPath);
-            var jersey = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(JerseyPath);
-            Assert.IsNotNull(jersey, "Jersey10 SDF asset must exist.");
-            Assert.IsNotNull(jersey.fallbackFontAssetTable);
-            Assert.Greater(jersey.fallbackFontAssetTable.Count, 0,
-                "Jersey10 per-font fallback must be non-empty (it was [] = garbled glyphs).");
-            Assert.Contains(fb, jersey.fallbackFontAssetTable,
-                "Jersey10 fallback must include the dynamic LiberationSans fallback.");
-        }
+        // NOTE: Jersey10_FallbackTable_ContainsDynamicFallback removed — Jersey10 font assets were
+        // deleted (commit d3a08954); BuildMode UI now falls back to the TMP default. The two remaining
+        // tests still guard the garbled-text regression (LiberationSans dynamic fallback wiring).
 
         [Test]
         public void TmpSettings_GlobalFallback_ContainsDynamicFallback()
