@@ -4,10 +4,8 @@
 
 **Durum:** Demo-hardening maratonu. Rapor demo-hazır (önceki commit'ler). Bu oturumda: skill-fix'ler + editör-stall çözümü + chamber skill-deneme + bug-avı + demo-polish. **2 bug-hunt workflow ARKADA KOŞUYOR** — /clear sonrası bildirimle dönecek, plan aşağıda.
 
-### 🟢 ARKADA KOŞAN (clear sonrası bildirimle gelir — KAYBOLMAZ)
-- **Deep-systems-logic hunt** `w47oqbov3` — combat-kuralı / AI-boss / state-progression-economy mantığı. **HÂLÂ KOŞUYOR** → bildirim gelince confirmed-list'i aşağıdaki bug listesine EKLE.
-- ✅ Game-logic hunt `wvkdr15rt` BİTTİ (15→7 confirmed, aşağıdaki listede). ✅ Architectural hunt BİTTİ (3 confirmed). ✅ Demo-polish council 3/3 BİTTİ (sentez aşağıda).
-- Read-only (Unity'ye dokunmaz). Bildirim gelince **bu RESUME'u oku + PLAN'ı uygula.**
+### ✅ TÜM HUNT + POLISH BİTTİ — arkada bekleyen iş YOK
+- Architectural (3) + game-logic (15→7) + **deep-logic `w47oqbov3` (16→9)** + demo-polish council 3/3 — hepsi tamamlandı, confirmed'ler aşağıdaki listede. Yeni session SADECE PLAN'ı uygular (bekleme yok).
 
 ### 📋 İKİ HUNT DÖNÜNCE PLAN (yeni session)
 1. Gelen confirmed bug'ları + **aşağıdaki architectural-3** + **polish-sentezi** birleştir.
@@ -26,7 +24,15 @@
 **🟢 LOW:**
 - **Arcane Blast escalating mana off-by-one** (önceki cast'in maliyetini alıyor, finisher undercharged).
 - **Evasion "%100 dodge" yine 1 hasar** (incomingMult=0 ama Health her vuruşu ≥1'e floor'luyor).
-> ⏳ **Deep-logic hunt (`w47oqbov3`) dönünce confirmed'leri buraya EKLE**, sonra PLAN'ı uygula.
+**🔴 HIGH (deep-logic — boss/progression demo-etkili):**
+- **RunStats progression-desync** — `_Arena` RoomRunDirector room-clear'ı RunStats'a bildirmiyor (köprü yok) → roomsCleared=0, **Echo award floored + death/victory ekranı hep "ODA 1"** (meta-tez ekranda çökiyor). **Fix:** RoomRunDirector.HandleEncounterCleared/BuildCurrentRoom → `RunStats` notify.
+- **Boss Phase-2 burst-skip** (`PenitentSovereign.cs:225-240`) — 8s phase-lock yok → burst ile Faz-2 atlanıp Faz-3'e geçiyor (canon ihlali, Faz-2 mekaniği hiç görünmüyor). **Fix:** Faz-3 trigger'ı `Time-since-Faz2 >= 8s` ile gate'le.
+- **Boss i-frame yok** (phase-transition cinematic'inde canon invuln gerek) · **Boss no-pursuit** (>14u kiting → boss sonsuza idle). **Fix:** transition'da SetImmune + detection-dışı pursuit.
+**🟡 MED (deep-logic):**
+- **Merchant PERSISTENT Echo harcıyor** (`ShopStand.TryPurchase`→EchoWallet) — run-içi consumable meta-currency'i drain ediyor (run-vs-meta sınır ihlali). **Fix:** shop `PlayerEconomy.Gold` kullansın.
+- **Dead-but-acting** — ~2.3s ölüm penceresinde oyuncu kapı/ödül etkileşimi yapabiliyor. **Fix:** ölümde input/interaction kilitle.
+- **Glacial Spike + Burn combo Burn DoT'u detonate etmiyor** (kendi base'inin %150'sini veriyor) · **Ice-Shatter 3x combo DEAD CODE** (UI vaat ediyor, `TryTriggerIceShatter` çağrısız) · **Severance execute 1 Scar'da** (canon 3+ Scar).
+> ✅ Tüm hunt'lar bitti. Sıradaki: yukarıdaki HIGH'ları **tek Unity fix-batch**'te root-fix önceliğiyle uygula → auditor-gate → commit. Demo-darsa: movement-off-map + SkillBase-veto + RunStats-desync + boss-phase-skip = ilk 4.
 
 ### 🎨 DEMO-POLISH SENTEZİ (council 3/3 — 0 PixelLab gen; dosyalar `STAGING/_process/2026-06/_council_demo_polish_*.md`)
 - **Tier-1 (yap):** URP Bloom+Color Grading (Global Volume, en ucuz büyük sıçrama) · Dinamik 2D ışık SkillVfx'e (global kıs) · düşman hit-flash beyaz + combat hit-okunabilirliği · **Build Mode centerpiece cilası** (sakin grid+tool-state+placement) · HUD lerp HP-bar+toast ease + **low-HP/Rage kırmızı-ekran de-stack** (glitch).
