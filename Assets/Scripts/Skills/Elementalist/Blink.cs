@@ -54,8 +54,13 @@ namespace RIMA
                 status?.ApplyEffect(StatusEffectType.Stunned, 0.5f);
             }
 
+            // Arcane blink-out spark at the start point, blink-in spark at the destination.
+            SkillVfx.ImpactBurst((Vector3)start, VfxElement.Arcane);
+
             if (rb != null) rb.position = end;
             else transform.position = end;
+
+            SkillVfx.ImpactBurst((Vector3)end, VfxElement.Arcane);
 
             nextSpellEmpowered = true;
         }

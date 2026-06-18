@@ -29,7 +29,11 @@ namespace RIMA
             ctrl = GetComponentInParent<Elementalist_SkillController>();
         }
 
-        protected override void Execute() => StartCoroutine(BlizzardRoutine());
+        protected override void Execute()
+        {
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Frost);
+            StartCoroutine(BlizzardRoutine());
+        }
 
         private IEnumerator BlizzardRoutine()
         {
@@ -40,6 +44,9 @@ namespace RIMA
             Vector2 target = player != null
                 ? (Vector2)player.transform.position + player.FacingDirection * 3f
                 : (Vector2)transform.position;
+
+            // Frost burst when the storm lands at the targeted zone.
+            SkillVfx.ImpactBurst((Vector3)target, VfxElement.Frost);
 
             if (damageZonePrefab != null)
             {

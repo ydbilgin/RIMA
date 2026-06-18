@@ -29,12 +29,16 @@ namespace RIMA
 
         protected override void Execute()
         {
+            // Arcane buff activation flash on the caster.
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Arcane);
             ctrl?.ActivateArcaneSurge(duration);
 
             // Blink gücü kontrolü — Blink.ConsumeEmpowerment() çağrılmışsa patlama
             var blink = GetComponentInParent<Blink>();
             if (blink != null && blink.ConsumeEmpowerment())
             {
+                // Arcane detonation at the Blink-empowered location.
+                SkillVfx.ImpactBurst(transform.position, VfxElement.Arcane);
                 var hits = Physics2D.OverlapCircleAll(transform.position, blinkExplosionRadius);
                 foreach (var h in hits)
                 {

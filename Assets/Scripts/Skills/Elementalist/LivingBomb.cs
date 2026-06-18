@@ -29,6 +29,7 @@ namespace RIMA
         {
             var target = FindNearestEnemy();
             if (target == null) return;
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Fire);
             ctrl?.RegisterElementCast(ElementalistElement.Fire, 1);
             StartCoroutine(BombRoutine(target));
         }
@@ -49,6 +50,9 @@ namespace RIMA
 
         private void Explode(Vector2 center, float radius, GameObject origin = null)
         {
+            // Fire detonation burst at the bomb site — every fuse pop reads as fire.
+            SkillVfx.ImpactBurst((Vector3)center, VfxElement.Fire);
+
             var hits = Physics2D.OverlapCircleAll(center, radius);
             bool killedSomeone = false;
 

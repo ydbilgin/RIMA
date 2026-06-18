@@ -27,11 +27,13 @@ namespace RIMA
         protected override void Execute()
         {
             Vector2 dir = player != null ? player.FacingDirection : Vector2.right;
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Frost);
             var go = orbPrefab != null
                 ? Instantiate(orbPrefab, transform.position, Quaternion.identity)
                 : CreateRuntimeOrb();
             var orb = go.GetComponent<FrozenOrbObject>();
             if (orb != null) orb.Init(dir * orbSpeed, orbLifetime);
+            SkillVfx.ProjectileTrail(go, VfxElement.Frost);
             ctrl?.RegisterElementCast(ElementalistElement.Frost, 1);
         }
 
@@ -114,6 +116,7 @@ namespace RIMA
         {
             if (exploded) return;
             exploded = true;
+            SkillVfx.ImpactBurst(transform.position, VfxElement.Frost);
             var hits = Physics2D.OverlapCircleAll(transform.position, 3f);
             foreach (var h in hits)
             {

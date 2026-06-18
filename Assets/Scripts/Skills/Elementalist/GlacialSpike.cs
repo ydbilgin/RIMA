@@ -37,6 +37,8 @@ namespace RIMA
             Vector2 dir = player != null ? player.FacingDirection : Vector2.right;
             Vector2 origin = transform.position;
 
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Frost);
+
             var hits = Physics2D.BoxCastAll(origin + dir * (lineLength * 0.5f),
                 new Vector2(lineWidth, lineLength), Vector2.SignedAngle(Vector2.up, dir), Vector2.zero);
 
@@ -68,6 +70,8 @@ namespace RIMA
             ctrl?.ConsumeFireState(1);
 
             SpawnSpikeVisuals(origin, dir);
+            // Frost impact burst at the far end of the line — same spark layering as Fireball's impact.
+            SkillVfx.ImpactBurst((Vector3)(origin + dir * lineLength), VfxElement.Frost);
         }
 
         /// <summary>

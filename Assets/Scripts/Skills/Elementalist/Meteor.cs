@@ -38,6 +38,8 @@ namespace RIMA
                 ? (Vector2)player.transform.position + player.FacingDirection * 4f
                 : (Vector2)transform.position;
 
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Fire);
+
             // Channel — spawn falling visual 0.3s before impact
             float waitBeforeFall = Mathf.Max(0f, channelTime - FallVisualDuration);
             yield return new WaitForSeconds(waitBeforeFall);
@@ -45,6 +47,8 @@ namespace RIMA
             yield return new WaitForSeconds(channelTime - waitBeforeFall);
 
             ctrl?.RegisterElementCast(ElementalistElement.Fire, 1);
+            // Fire impact burst at the meteor crater — mirrors Fireball's impact spark layering.
+            SkillVfx.ImpactBurst((Vector3)target, VfxElement.Fire);
 
             var hits = Physics2D.OverlapCircleAll(target, impactRadius);
             foreach (var hit in hits)

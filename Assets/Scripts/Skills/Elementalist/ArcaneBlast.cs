@@ -29,6 +29,8 @@ namespace RIMA
 
         protected override void Execute()
         {
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Arcane);
+
             if (Time.time - lastCastTime > resetWindow) castCount = 0;
             castCount++;
             lastCastTime = Time.time;
@@ -49,10 +51,42 @@ namespace RIMA
 
         private void FireProjectile(Vector2 dir, int dmg)
         {
-            if (projectilePrefab == null) return;
-            var go = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            // Mirror Fireball: when no authored prefab is assigned, build an arcane-tinted runtime
+            // projectile so the skill still fires + deals damage instead of silently no-op'ing.
+            var go = projectilePrefab != null
+                ? Instantiate(projectilePrefab, transform.position, Quaternion.identity)
+                : CreateRuntimeProjectile();
             var proj = go.GetComponent<PlayerProjectile>();
-            proj?.Init(dir * projectileSpeed, dmg, life: 3f);
+            SkillVfx.ProjectileTrail(go, VfxElement.Arcane);
+            if (proj != null)
+            {
+                proj.Init(dir * projectileSpeed, dmg, life: 3f,
+                    attacker: player != null ? player.gameObject : null, element: "arcane");
+                proj.SetOnHit(hit => SkillVfx.ImpactBurst(hit != null ? hit.transform.position : go.transform.position, VfxElement.Arcane));
+            }
+        }
+
+        private GameObject CreateRuntimeProjectile()
+        {
+            var go = new GameObject("ArcaneBlast_Runtime");
+            go.transform.position = transform.position;
+            go.transform.localScale = new Vector3(0.42f, 0.42f, 1f);
+
+            var rb = go.AddComponent<Rigidbody2D>();
+            rb.gravityScale = 0f;
+
+            var col = go.AddComponent<CircleCollider2D>();
+            col.radius = 0.18f;
+            col.isTrigger = true;
+
+            var renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sprite = ElementalistRuntimeVisuals.GetCircleSprite();
+            renderer.color = new Color(0.62f, 0.38f, 1f, 0.95f); // arcane violet
+            renderer.sortingLayerName = "VFX";
+            renderer.sortingOrder = 20;
+
+            go.AddComponent<PlayerProjectile>();
+            return go;
         }
 
         private void FireBarrage(int dmg)

@@ -70,7 +70,8 @@ namespace RIMA
             SkillVfx.ProjectileTrail(go, VfxElement.Fire);
             if (proj != null)
             {
-                proj.Init(dir * projectileSpeed, damage, applyBurning: true, burnDuration: burnDuration, life: 3f);
+                proj.Init(dir * projectileSpeed, damage, applyBurning: true, burnDuration: burnDuration, life: 3f,
+                    attacker: player != null ? player.gameObject : null, element: "fire");
                 proj.SetOnHit(hit => PlayFireballImpact(hit != null ? hit.transform.position : go.transform.position));
             }
         }

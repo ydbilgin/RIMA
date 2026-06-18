@@ -25,6 +25,8 @@ namespace RIMA
 
         protected override void Execute()
         {
+            // Fire buff activation flash on the caster.
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Fire);
             bool freeMana = ctrl != null && ctrl.FireState >= 5;
             ctrl?.ActivateCombustion(duration);
             if (freeMana) ctrl?.ConsumeFireState(5);

@@ -29,12 +29,16 @@ namespace RIMA
         protected override void Execute()
         {
             if (clonePrefab == null) return;
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Arcane);
             for (int i = 0; i < cloneCount; i++)
             {
                 Vector2 offset = Random.insideUnitCircle.normalized * 1.2f;
-                var go = Instantiate(clonePrefab, transform.position + (Vector3)offset, Quaternion.identity);
+                Vector3 spawnPos = transform.position + (Vector3)offset;
+                var go = Instantiate(clonePrefab, spawnPos, Quaternion.identity);
                 var mc = go.GetComponent<MirrorClone>();
                 mc?.Init(cloneHealth, cloneDuration, deathExplosionRadius, deathExplosionDamage);
+                // Arcane pop as each mirror image materializes.
+                SkillVfx.ImpactBurst(spawnPos, VfxElement.Arcane);
             }
         }
     }
@@ -62,6 +66,7 @@ namespace RIMA
 
         private void OnCloneDeath()
         {
+            SkillVfx.ImpactBurst(transform.position, VfxElement.Arcane);
             var hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
             foreach (var h in hits)
             {

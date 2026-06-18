@@ -26,9 +26,12 @@ namespace RIMA
             Vector2 right = new Vector2(-dir.y, dir.x).normalized;
             Vector2 center = (Vector2)transform.position + dir * 2f;
 
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Frost);
+
             foreach (var health in SkillRuntime.EnemiesInLine(center - right * (length * 0.5f), right, length, width))
             {
-                SkillRuntime.DealDamage(health, damage);
+                SkillRuntime.DealDamage(health, damage, true,
+                    player != null ? player.gameObject : null, dir, element: "frost");
                 var status = health.GetComponent<StatusEffectSystem>();
                 if (status != null)
                 {
@@ -40,6 +43,8 @@ namespace RIMA
 
             ctrl?.RegisterElementCast(ElementalistElement.Frost, 1);
             SkillRuntime.SpawnCircleVisual(center, new Color(0.58f, 0.92f, 1f, 0.55f), 1.45f, 4f, "FrostWall_Runtime");
+            // Frost burst marking the raised wall.
+            SkillVfx.ImpactBurst((Vector3)center, VfxElement.Frost);
         }
     }
 }

@@ -28,6 +28,8 @@ namespace RIMA
 
         protected override void Execute()
         {
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Lightning);
+
             var first = FindNearestEnemy(transform.position, null);
             if (first == null) return;
 
@@ -49,6 +51,9 @@ namespace RIMA
                     current.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Shocked, shockedDuration);
                     SkillRuntime.SpawnCircleVisual(current.transform.position, new Color(0.98f, 0.92f, 0.26f, 0.58f), 0.58f, 0.16f, "ChainLightning_Hit");
                     SpawnArcVisual(previousPoint, current.transform.position);
+                    // Additive lightning bolt + spark on each jump — reads the Lightning palette cleanly.
+                    SkillVfx.ChainBolt(previousPoint, current.transform.position, VfxElement.Lightning);
+                    SkillVfx.ImpactBurst(current.transform.position, VfxElement.Lightning);
                     previousPoint = current.transform.position;
                 }
                 hit.Add(current);
