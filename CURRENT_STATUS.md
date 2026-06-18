@@ -1,40 +1,52 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-18 DEMO-PREP FINALIZE — TAMAMLANDI) — demo ~19 Haziran (YARIN)
+## ⏯️ RESUME (2026-06-18 AKŞAM — demo-hardening, /clear handoff) — demo ~yarın, EDİTÖRDE
 
-**Durum:** Demo-prep maratonu bitti, 6 commit master'a düştü (`f4bcc9ad`..`708cd810`). Rapor demo-hazır; oyun-içi araçlar + bug-fix'ler council-onaylı (ağırlıklı APPROVE-WITH-FIXES → fix'ler uygulandı).
+**Durum:** Demo-hardening maratonu. Rapor demo-hazır (önceki commit'ler). Bu oturumda: skill-fix'ler + editör-stall çözümü + chamber skill-deneme + bug-avı + demo-polish. **2 bug-hunt workflow ARKADA KOŞUYOR** — /clear sonrası bildirimle dönecek, plan aşağıda.
 
-### ✅ COMMIT (master, 6 grup)
-- `f4bcc9ad` Elementalist 8-yön idle `.anim` → gerçek sprite (stale GUID fix)
-- `8a03c756` Elementalist 13 skill **SkillVfx** + **ArcaneBlast** ölü-skill fix + damage telemetri
-- `9dc1116c` **F3 DebugLogOverlay** (logMessageReceived + `[Cast]/[Damage]/[Grant]`) + pasif HUD toast
-- `2784089b` demo-safety: **pedestal-lock** (IsDemoPlayable, 2 oynanabilir/8 kilitli) + **husk-fallback** + PlayerPrefs leak kapatıldı (Director bypass korundu)
-- `8118c90f` rapor council-fix (metin + Şekil9 caption dürüst + DOCX regen) + SUNUM_QA
-- `708cd810` process artifacts
+### 🟢 ARKADA KOŞAN (clear sonrası bildirimle gelir — KAYBOLMAZ)
+- **Deep-systems-logic hunt** `w47oqbov3` — combat-kuralı / AI-boss / state-progression-economy mantığı. **HÂLÂ KOŞUYOR** → bildirim gelince confirmed-list'i aşağıdaki bug listesine EKLE.
+- ✅ Game-logic hunt `wvkdr15rt` BİTTİ (15→7 confirmed, aşağıdaki listede). ✅ Architectural hunt BİTTİ (3 confirmed). ✅ Demo-polish council 3/3 BİTTİ (sentez aşağıda).
+- Read-only (Unity'ye dokunmaz). Bildirim gelince **bu RESUME'u oku + PLAN'ı uygula.**
 
-### 🎯 RAPOR DEMO-HAZIR
-Council CONDITIONAL → tüm must-fix uygulandı. DOCX 12 figür + kapak logo, masaüstü-sızıntısı yok, iddialar kodla doğrulandı (111/67 yetenek, test 549 savunulabilir, 4 controller / 2 oynanabilir, boss bespoke). Savunma: `STAGING/report/SUNUM_QA_VE_CERCEVE_2026-06-18.md`. Karar: `STAGING/PRECOMMIT_COUNCIL_DECISION_2026-06-18.md`.
+### 📋 İKİ HUNT DÖNÜNCE PLAN (yeni session)
+1. Gelen confirmed bug'ları + **aşağıdaki architectural-3** + **polish-sentezi** birleştir.
+2. Önceliklendir: **ROOT-FIX önce** (SkillBase veto → tüm "ölü buton" skilleri tek yerde) → demo-etkili bug'lar → Tier-1 polish.
+3. **TEK Unity-batch**, serial (tek-Unity-ajan), builder-opus. Stall mitigasyonu: kısa Play, FrameRateGuard aktif, execute_code data-proof tercih.
+4. auditor-opus gate (özellikle ChamberSelectBootstrap/SkillBase/DraftManager demo-kritik) → selective commit.
 
-### 🧰 YENİ ARAÇ: F3 log overlay
-Play'de **F3** = ekranda Debug.Log/Warning/Error (kırmızı/sarı) + `[Cast]/[Damage]/[Grant]` event'leri = demo geri-bildirim + canlı hata-avı. `Assets/Scripts/Debug/DebugLogOverlay.cs`.
+### 🐞 CONFIRMED BUG (architectural 3 + game-logic 7, deduped — KAYBOLMASIN)
+**🔴 HIGH / demo-killer:**
+- **MOVEMENT OFF-MAP (GERÇEK odalarda!)** — Blink (`Blink.cs:32-66`: ölü "Wall" raycast + hard teleport, WalkabilityMap check YOK) + Iron Charge (`IronCharge.cs:53`) + Blade Rush (`BladeRush.cs:40`) raw velocity, clamp YOK → void'e ışınlanma/strand, irrecoverable. **Fix (ROOT):** hepsini `WalkabilityMap.ClampVelocityToWalkable`/`IsDashableWorld`'den geçir (PlayerController.TryDash + KnockbackReceiver zaten kullanıyor). Chamber guard SADECE chamber; gerçek run korumasız.
+- **🔑 SkillBase spend-before-veto** (`SkillBase.cs:72-87`) — Execute no-op'sa mana+cd boşa = ölü buton (Chain Lightning menzilde düşman yokken). **Fix:** `CanExecute()` veto + cost/cd SADECE başarıda.
+- **Yetersiz-kaynak = SESSİZ no-op** (Gravity Cleave Q 25 rage / run 0 rage başlar; tüm skiller — ses/flash/mesaj YOK). **Fix:** failed-cast feedback (toast/SFX/flash).
+**🟡 MED:**
+- **healMultiplier KALICI bozulma** — Penitent boss AntiHealAura × Warblade Crippling Blow concurrent save/restore race (boss path). **Fix:** save/restore stack-guard.
+- **Director dup-slot** (`DraftManager.AssignActive:740-750`) — zaten-equipped skill 2. slota → aynı component, shared cd. **Fix:** bind öncesi diğer slotu temizle.
+**🟢 LOW:**
+- **Arcane Blast escalating mana off-by-one** (önceki cast'in maliyetini alıyor, finisher undercharged).
+- **Evasion "%100 dodge" yine 1 hasar** (incomingMult=0 ama Health her vuruşu ≥1'e floor'luyor).
+> ⏳ **Deep-logic hunt (`w47oqbov3`) dönünce confirmed'leri buraya EKLE**, sonra PLAN'ı uygula.
 
-### 🎮 SKILL/VFX FIX (workflow `wf_79468e61` — playtest-PASS + auditor PASS)
-- **LMB basic-atak VFX** (`Assets/Scripts/Combat/BasicAttack/CastRhythmBehavior.cs`) — Elementalist sol-click artık VFX'li.
-- **Skiller dummy'e atılıyor+vuruyor** = chamber/practice'te skill slotları BOŞTU (skiller run'da draft'la gelir) → `ChamberSelectBootstrap.GrantPracticeLoadout` seçili sınıfın Q/E/R/F'sini doldurur (= "karakter seçerken skill deneme" özelliği). **Run-start boş-loadout + pedestal-gate'e DOKUNULMADI** (chamber-only/additive; auditor 3-katman doğruladı).
-- ArcaneBlast gerçek-oynanışta doğrulandı (HP −35). Tüm Q/E/R/F+LMB cast+hit, canlı `[Cast]/[Damage]/[Grant]`.
-- ⚠️ Skiller **FARE-nişanlı** → dummy'i vurmak için fareyi dummy'e tut (bug değil).
+### 🎨 DEMO-POLISH SENTEZİ (council 3/3 — 0 PixelLab gen; dosyalar `STAGING/_process/2026-06/_council_demo_polish_*.md`)
+- **Tier-1 (yap):** URP Bloom+Color Grading (Global Volume, en ucuz büyük sıçrama) · Dinamik 2D ışık SkillVfx'e (global kıs) · düşman hit-flash beyaz + combat hit-okunabilirliği · **Build Mode centerpiece cilası** (sakin grid+tool-state+placement) · HUD lerp HP-bar+toast ease + **low-HP/Rage kırmızı-ekran de-stack** (glitch).
+- **Tier-2 (mevcudu tune, YENİ kod yok):** hit-stop/shake/camera-zoom/damage-numbers zaten var (`HitPauseDriver`/`ScreenShakeDriver`/`DamagePopup`). ⚠️ hit-stop SADECE HitPauseDriver'la (yeni `timeScale=0` YOK — donma riski).
 
-### 🖥️ EDİTÖR STABİLİTE (demo EDİTÖRDE olacak — build değil)
-- Hang = native **D3D11 `Assertion failed: SUCCEEDED(hr)`** (RTX 5080) + uncapped FPS + eşzamanlı MCP yükü. **KOD DEĞİL** (census temiz: 0 sızıntı, overlay/SkillVfx temiz).
-- **`Assets/Scripts/Core/FrameRateGuard.cs`** = 60 FPS hard-cap (vSync=0+targetFPS=60) → GPU thrash kalkar.
-- **DEMO CHECKLIST:** (1) Play'i bir kez durdur → recompile → taze Play (cap+F3-overlay+commit'li kod yüklenir) · (2) **canlı demoda MCP'yi KAPAT** (Claude'u aktif tutma; eşzamanlı bridge yükü = stall'ın muhtemel ana tetikleyicisi) · (3) hâlâ takılırsa: editör grafik API → **D3D12** (projede destekli, restart) + NVIDIA RTX 5080 sürücü güncelle.
-- ✅ **`timeScale=0` donma KÖKÜ BULUNDU + FİX (`eb3a16cd`):** dual-owner race — obsolete `HitStop` (MarkPulseBehavior basic-atak) ham `timeScale=0` yapıyor, ardından `HitPauseDriver.PauseRoutine` `previousTimeScale`'i 0 iken yakalayıp 0'a "restore" ediyor → KALICI DONMA (combat'taki "takılı kalıyor"). Fix: MarkPulse → `HitPauseDriver.TriggerPause(0.03f)` (tek guard'lı sahip). Logic-kanıtlı + validate temiz; gerçek-oynanışta teyit önerilir. Post-demo: 4 Ronin HitStop çağrısı (demo-dışı sınıf) + `HitStop` emekliye ayır.
+### ✅ BU OTURUMDA COMMIT (master)
+`f4bcc9ad` 8-yön anim · `8a03c756` Elementalist VFX+ArcaneBlast+telemetri · `9dc1116c` F3 log overlay+enstrümantasyon+pasif-toast · `2784089b` pedestal-lock+husk-fallback · `8118c90f` rapor council-fix+DOCX · `708cd810` process · `859237d7` LMB-VFX+chamber-loadout+FrameRateGuard · `eb3a16cd` **timeScale donma-fix** · `9568d85b` status · `d6e6ce0f` **chamber skill-bar+off-map-guard** (gerçek-test).
 
-### ⏸️ ERTELENEN (post-demo) — Task #1/#3
-**Silah mount × animasyon:** silah pivot bıçak-merkezi + per-yön hand-socket verisi 8 yönden 1'inde var → gerçek el-hizalama = weaponless-anim (kilitli) işi. Şekil 9 caption buna göre dürüstleştirildi; demo statik figürle idare.
+### 🖥️ EDİTÖR STABİLİTE (demo EDİTÖRDE) — DEMO CHECKLIST
+- Hang sebepleri çözüldü: **timeScale stuck-0** (HitStop×HitPauseDriver dual-owner → `eb3a16cd`) + **uncapped FPS** (RTX 5080 D3D11 thrash → `FrameRateGuard` 60-cap, `859237d7`).
+- **Demo günü:** (1) Play'i bir kez durdur→recompile→taze Play (cap+overlay+kod yüklenir) · (2) **canlı demoda MCP'yi KAPAT** (eşzamanlı bridge yükü = stall'ın ana tetikleyicisi) · (3) hâlâ takılırsa D3D12'ye geç (projede var, restart) + NVIDIA sürücü güncelle.
 
-### 🛑 DOKUNMA / NOT
-- Working tree'de KALAN (BENİM DEĞİL, dokunma): `Jersey10 SDF` (M) · `Assets/_Recovery/0 (2).unity`+meta (Unity crash artifact) · `capture_v3.zip`.
-- Locked sistemler: GATE / Boss-akış / reward-bleed / Build-çekirdek / weaponless-anim / branching-seed.
-- ⚠️ **Uzun `_Arena` Play session Unity ana-thread'i STALL ediyor** (bu session 1× crash) → playtest'te `execute_code` data-proof tercih et, Play kısa tut.
-- Council oy ağırlığı: cx2/opus2/ax_pro1/ax_flash0.5 (memory `feedback_council_vote_weighting`).
+### 🧰 ARAÇLAR / METOT
+- **F3 DebugLogOverlay** (Play'de ekranda Debug.Log/Warn/Error + `[Cast]/[Damage]/[Grant]`).
+- **graphify query ÇALIŞIYOR:** `cd STAGING/_process/2026-06/graphify_fullmap && python -m graphify query "<soru>" --budget N` (graph Jun-14, çekirdek mimari; en yeni kod eksik olabilir). GRAPH_REPORT.md de var.
+- Dispatch cheat-sheet: memory `reference_dispatch_skills`. Council oy-ağırlığı: cx2/opus2/ax_pro1/ax_flash0.5 (`feedback_council_vote_weighting`).
+- ⚠️ Skiller **fare-nişanlı** (dummy'i vurmak için fareyi tut) — bug değil.
+
+### ⏸️ ERTELENEN (post-demo) · 🛑 DOKUNMA
+- **Task #1/#3 silah mount × animasyon:** pivot bıçak-merkezi + per-yön hand-socket 8'den 1'inde → gerçek el-hizalama = weaponless-anim (kilitli). Şekil 9 caption dürüst.
+- Ronin (demo-dışı) 4 HitStop çağrısı + HitStop emekliye ayır.
+- Working tree'de KALAN (BENİM DEĞİL, dokunma): `Jersey10 SDF` · `Assets/_Recovery/0 (2).unity` (crash artifact) · `capture_v3.zip`.
+- Locked: GATE/Boss/reward-bleed/Build-core/weaponless-anim/branching-seed.
