@@ -28,7 +28,7 @@ Play'de **F3** = ekranda Debug.Log/Warning/Error (kırmızı/sarı) + `[Cast]/[D
 - Hang = native **D3D11 `Assertion failed: SUCCEEDED(hr)`** (RTX 5080) + uncapped FPS + eşzamanlı MCP yükü. **KOD DEĞİL** (census temiz: 0 sızıntı, overlay/SkillVfx temiz).
 - **`Assets/Scripts/Core/FrameRateGuard.cs`** = 60 FPS hard-cap (vSync=0+targetFPS=60) → GPU thrash kalkar.
 - **DEMO CHECKLIST:** (1) Play'i bir kez durdur → recompile → taze Play (cap+F3-overlay+commit'li kod yüklenir) · (2) **canlı demoda MCP'yi KAPAT** (Claude'u aktif tutma; eşzamanlı bridge yükü = stall'ın muhtemel ana tetikleyicisi) · (3) hâlâ takılırsa: editör grafik API → **D3D12** (projede destekli, restart) + NVIDIA RTX 5080 sürücü güncelle.
-- ⚠️ recurring **`timeScale=0`** (pause) 2× görüldü → "takılı" hissinin bir kısmı hang DEĞİL, PAUSE olabilir. Kök TBD (DraftManager timeScale'e dokunmuyor → Director/menü şüpheli).
+- ✅ **`timeScale=0` donma KÖKÜ BULUNDU + FİX (`eb3a16cd`):** dual-owner race — obsolete `HitStop` (MarkPulseBehavior basic-atak) ham `timeScale=0` yapıyor, ardından `HitPauseDriver.PauseRoutine` `previousTimeScale`'i 0 iken yakalayıp 0'a "restore" ediyor → KALICI DONMA (combat'taki "takılı kalıyor"). Fix: MarkPulse → `HitPauseDriver.TriggerPause(0.03f)` (tek guard'lı sahip). Logic-kanıtlı + validate temiz; gerçek-oynanışta teyit önerilir. Post-demo: 4 Ronin HitStop çağrısı (demo-dışı sınıf) + `HitStop` emekliye ayır.
 
 ### ⏸️ ERTELENEN (post-demo) — Task #1/#3
 **Silah mount × animasyon:** silah pivot bıçak-merkezi + per-yön hand-socket verisi 8 yönden 1'inde var → gerçek el-hizalama = weaponless-anim (kilitli) işi. Şekil 9 caption buna göre dürüstleştirildi; demo statik figürle idare.
