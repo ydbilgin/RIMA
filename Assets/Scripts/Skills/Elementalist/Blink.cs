@@ -39,6 +39,24 @@ namespace RIMA
             var hit = Physics2D.Raycast(start, dir, blinkDistance, LayerMask.GetMask("Wall"));
             if (hit.collider != null) end = hit.point - dir * 0.2f;
 
+            // FIX (off-map): the teleport destination must be walkable, otherwise Blink strands the
+            // player in the void. Mirrors PlayerController.IsReachableDashDestination (IsDashableWorld).
+            // If the destination is not dashable, walk back along the blink ray to the furthest
+            // walkable point; if none is found, cancel the teleport (stay at start). Permissive when
+            // no WalkabilityMap exists (legacy behavior preserved).
+            var walkMap = RIMA.Environment.WalkabilityMap.Instance;
+            if (walkMap != null && !walkMap.IsDashableWorld(end))
+            {
+                bool snapped = false;
+                const int steps = 12;
+                for (int i = steps - 1; i >= 1; i--)
+                {
+                    Vector2 candidate = Vector2.Lerp(start, end, i / (float)steps);
+                    if (walkMap.IsDashableWorld(candidate)) { end = candidate; snapped = true; break; }
+                }
+                if (!snapped) end = start; // no walkable point along the path → cancel teleport
+            }
+
             // Geçilen yoldaki düşmanları vur
             var hits = Physics2D.CircleCastAll(start, 0.4f, dir,
                 Vector2.Distance(start, end), LayerMask.GetMask("Enemy"));

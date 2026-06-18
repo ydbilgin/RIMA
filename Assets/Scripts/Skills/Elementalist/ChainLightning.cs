@@ -26,6 +26,14 @@ namespace RIMA
             ctrl = GetComponentInParent<Elementalist_SkillController>();
         }
 
+        // FIX-2 wiring: read-only mirror of Execute's no-op gate (`FindNearestEnemy(...) == null`).
+        // No state/cost/VFX — only the same OverlapCircleAll query, so casting with no enemy in
+        // jumpRange is rejected before mana/cooldown is spent (the demo "dead button" bug).
+        protected override bool CanExecute()
+        {
+            return FindNearestEnemy(transform.position, null) != null;
+        }
+
         protected override void Execute()
         {
             SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Lightning);

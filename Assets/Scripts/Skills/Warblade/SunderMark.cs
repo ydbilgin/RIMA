@@ -26,6 +26,15 @@ namespace RIMA
             chain = ChainWindowTracker.For(this);
         }
 
+        // FIX-2 wiring: read-only mirror of Execute's primary no-op gate (`FindNearest(range) == null`).
+        // Same OverlapCircleAll(range, "Enemy") query, no side effects — rejects the throw before
+        // cost/cooldown when nothing is in range. (Execute also returns if the found target lacks a
+        // StatusEffectSystem, but that secondary guard is not mirrored to avoid blocking a valid cast.)
+        protected override bool CanExecute()
+        {
+            return FindNearest(range) != null;
+        }
+
         protected override void Execute()
         {
             var target = FindNearest(range);

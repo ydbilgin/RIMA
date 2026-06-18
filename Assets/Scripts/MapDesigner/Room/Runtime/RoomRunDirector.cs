@@ -1267,6 +1267,11 @@ namespace RIMA.MapDesigner.Room.Runtime
             }
 
             RoomCleared?.Invoke();
+            // FIX (progression-desync): the _Arena path clears rooms through this UnityEvent, not
+            // RoomLoader.OnRoomCleared (which RunStats subscribes to). Bridge the clear into RunStats
+            // so roomsCleared advances → Echo award + death/victory screen show the real room count.
+            // Guarded by lifecycle.MarkCleared() above → fires exactly once per room.
+            RIMA.RunStats.Instance?.NotifyRoomCleared();
             RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.RoomClear);
             Debug.Log($"[RoomRunDirector] RoomCleared node={CurrentNodeId} type={CurrentRoomType}");
 

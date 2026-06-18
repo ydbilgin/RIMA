@@ -37,7 +37,12 @@ namespace RIMA
         {
             if (!charging) return;
             chargeTimer -= Time.fixedDeltaTime;
-            rb.linearVelocity = chargeDir * chargeSpeed;
+            // FIX (off-map): clamp the rush velocity to walkable cells so the dash cannot strand
+            // the player in the void. Mirrors PlayerController.FixedUpdate / KnockbackReceiver;
+            // ClampVelocityToWalkable is permissive (returns desired) when no WalkabilityMap exists.
+            Vector2 rushVel = RIMA.Environment.WalkabilityMap.ClampVelocityToWalkable(
+                RIMA.Environment.WalkabilityMap.Instance, rb.position, chargeDir * chargeSpeed, Time.fixedDeltaTime);
+            rb.linearVelocity = rushVel;
 
             var hits = Physics2D.CircleCastAll(rb.position, hitRadius, chargeDir, 0.05f, LayerMask.GetMask("Enemy"));
             foreach (var hit in hits)

@@ -116,6 +116,12 @@ namespace RIMA
         private bool phase3Active;
         private bool phase3Done;
 
+        // FIX (Phase-2 burst-skip): minimum real seconds the boss must spend in Phase 2 before the
+        // 33% "Unleashed" (Phase 3) overlay can trigger. A single burst that drops HP from >50% to
+        // <33% would otherwise skip Phase 2 mechanics entirely; this lock guarantees Phase 2 is shown.
+        private const float Phase2MinDuration = 8f;
+        private float phase2EnterTime = float.NegativeInfinity;
+
         // ─── Components ───────────────────────────────────────────────────────
 
         private Rigidbody2D  rb;
@@ -226,12 +232,19 @@ namespace RIMA
                 if (!phaseTransitionDone && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.5f))
                 {
                     phaseTransitionDone = true;
+                    // FIX (Phase-2 burst-skip): stamp Phase-2 entry so the 33% overlay is locked out
+                    // for Phase2MinDuration seconds even if a burst already pushed HP below 33%.
+                    phase2EnterTime = Time.time;
                     yield return StartCoroutine(DoPhaseTransition());
                     continue;
                 }
 
                 // Phase 3 "Unleashed" overlay — the last chains shatter at 33% HP (modifier layer on Phase 2).
-                if (phaseTransitionDone && !phase3Done && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.33f))
+                // FIX (Phase-2 burst-skip): also require >= Phase2MinDuration s since Phase-2 entry so a
+                // single burst can never skip Phase 2; the threshold is re-checked every loop until then.
+                if (phaseTransitionDone && !phase3Done
+                    && Time.time - phase2EnterTime >= Phase2MinDuration
+                    && health.CurrentHP <= Mathf.CeilToInt(health.MaxHP * 0.33f))
                 {
                     phase3Done = true;
                     phase3Active = true;

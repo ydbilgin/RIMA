@@ -19,6 +19,27 @@ namespace RIMA
             rageCost = 0;
         }
 
+        // FIX-2 wiring: read-only mirror of Execute's no-op gate (`target == null`). Same
+        // OverlapCircleAll(range, "Enemy") + player-exclusion + non-dead Health filter, no side
+        // effects — rejects the cast before cost/cooldown when no enemy is in range.
+        protected override bool CanExecute()
+        {
+            return HasEnemyInRange();
+        }
+
+        private bool HasEnemyInRange()
+        {
+            var hits = Physics2D.OverlapCircleAll(transform.position, range, LayerMask.GetMask("Enemy"));
+            foreach (var h in hits)
+            {
+                if (h.gameObject == player.gameObject) continue;
+                var hp = h.GetComponent<Health>();
+                if (hp == null || hp.IsDead) continue;
+                return true;
+            }
+            return false;
+        }
+
         protected override void Execute()
         {
             var hits = Physics2D.OverlapCircleAll(transform.position, range, LayerMask.GetMask("Enemy"));

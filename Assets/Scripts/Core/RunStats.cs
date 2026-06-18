@@ -172,6 +172,17 @@ namespace RIMA
             roomsCleared++;
         }
 
+        /// <summary>
+        /// Public room-clear bridge for the _Arena RoomRunDirector path, which drives clears through
+        /// its own EncounterController.OnRoomCleared (UnityEvent) rather than RoomLoader.OnRoomCleared
+        /// (the static event this class subscribes to). Without this bridge roomsCleared stays 0 on the
+        /// demo path → Echo award floored, death/victory screen stuck on "ODA 1". Mirrors OnRoomCleared.
+        /// </summary>
+        public void NotifyRoomCleared()
+        {
+            OnRoomCleared();
+        }
+
         public void RecordRewardCollected()
         {
             if (!runStarted) StartRunIfNeeded();

@@ -69,6 +69,16 @@ namespace RIMA
                 cooldownTimer -= Time.deltaTime;
         }
 
+        /// <summary>
+        /// Veto hook checked by <see cref="TryActivate"/> BEFORE any cost/cooldown is spent.
+        /// Default = true (every existing skill behaves exactly as before). A range-gated skill
+        /// that would otherwise be a guaranteed no-op (e.g. Chain Lightning with no enemy in range)
+        /// overrides this to return false so the cast is rejected without burning mana/cooldown —
+        /// fixing the "dead button" spend-before-veto bug. Cost is still spent only AFTER this passes,
+        /// so an override returning true never changes legacy behavior.
+        /// </summary>
+        protected virtual bool CanExecute() => true;
+
         public bool TryActivate()
         {
             if (!IsReady) return false;
@@ -76,6 +86,9 @@ namespace RIMA
             if (rage == null) rage = GetComponentInParent<RageSystem>();
             resource = ResolvePreferredResource();
             if (flowTracker == null) flowTracker = GetComponentInParent<SkillFlowTracker>();
+            // Veto BEFORE spending: range-gated no-op skills reject here without burning cost/cooldown.
+            // Default CanExecute()==true → all existing skills unaffected.
+            if (!CanExecute()) return false;
             if (rageCost > 0 && (rage == null || !rage.TrySpend(rageCost))) return false;
             if (resourceCost > 0 && (resource == null || !resource.TrySpend(resourceCost))) return false;
             player?.FaceCombatTarget();
