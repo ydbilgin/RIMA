@@ -96,6 +96,11 @@ namespace RIMA
         private bool classicTabOpen;
         private bool dummySelectOpen;
         private bool busyAttuning;
+        // Chamber-only skill picker (K): assign any implemented active skill of the current class to Q/E/R/F.
+        private bool skillPickerOpen;
+        private int pickerSelectedSkill = -1;          // index into the current class's implemented active-skill list
+        private readonly string[] pickerSlotKit = new string[4];   // pending Q/E/R/F selection (null = keep default)
+        private Vector2 pickerSkillScroll;
         private float practiceRefillTimer;   // chamber-only: keep skill resource topped so Q/E/R/F can be practised
         private SkillBarUI chamberSkillBar;   // chamber-only practice skill bar (Q/E/R/F readout)
         private Vector3 exitWorld;
@@ -250,6 +255,16 @@ namespace RIMA
             ClassType nearbyClass = FindNearbyClassStation(out EchoStation nearbyStation);
             bool nearDoor = Vector2.Distance(player.position, exitWorld) <= DoorInteractRadius;
             bool nearDummy = dummyTransform != null && Vector2.Distance(player.position, dummyTransform.position) <= DummyInteractRadius;
+
+            // Chamber-only: K toggles the skill picker while near the dummy; auto-close when leaving.
+            if (nearDummy && IsDemoSelectable(currentClass) &&
+                WasPressed(UnityEngine.InputSystem.Keyboard.current?.kKey))
+            {
+                skillPickerOpen = !skillPickerOpen;
+                if (skillPickerOpen) pickerSelectedSkill = -1;
+            }
+            if (skillPickerOpen && !nearDummy) skillPickerOpen = false;
+
             if (dummySelectOpen && !nearDummy)
             {
                 dummySelectOpen = false;
@@ -349,7 +364,7 @@ namespace RIMA
             {
                 highlightedClass = ClassType.None;
                 SetClassicOverlayVisible(dummySelectOpen || classicTabOpen);
-                ShowPrompt(Vector3.zero, "Dummy — LMB + Q/E/R/F ile dene    [G] Sınıf Seç");
+                ShowPrompt(Vector3.zero, "Dummy — LMB + Q/E/R/F ile dene    [K] Skill Seç    [G] Sınıf Seç");
 
                 if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
                 {
@@ -1853,7 +1868,32 @@ namespace RIMA
         {
             if (player == null) return;
             if (!PracticeKits.TryGetValue(cls, out string[] kit)) return;   // non-demo class: leave empty
+            ApplyLoadoutKit(cls, kit, "Practice");
+        }
 
+        /// <summary>
+        /// Chamber-only: bind a player-chosen Q/E/R/F kit (full-roster picker). Starts from the class's
+        /// default practice kit and overlays any non-null entry from <paramref name="picked"/>, so slots
+        /// the player left untouched keep the default. Same chamber-only guarantees as GrantPracticeLoadout:
+        /// in-memory components destroyed on scene unload; the run gets a fresh _Arena + empty draft.
+        /// </summary>
+        private void GrantCustomLoadout(ClassType cls, string[] picked)
+        {
+            if (player == null) return;
+            if (!PracticeKits.TryGetValue(cls, out string[] defaults)) return;   // non-demo class: ignore
+
+            string[] kit = (string[])defaults.Clone();
+            if (picked != null)
+                for (int i = 0; i < kit.Length && i < picked.Length; i++)
+                    if (!string.IsNullOrEmpty(picked[i])) kit[i] = picked[i];
+
+            ApplyLoadoutKit(cls, kit, "Custom");
+        }
+
+        // Shared bind loop for GrantPracticeLoadout / GrantCustomLoadout. Mirrors DraftManager.AssignActive
+        // (AddComponent(skillType) → copy name/icon/cd → SetSlot Q/E/R/F).
+        private void ApplyLoadoutKit(ClassType cls, string[] kit, string label)
+        {
             Component host = cls == ClassType.Elementalist
                 ? (Component)player.GetComponent<Elementalist_SkillController>()
                 : player.GetComponent<Warblade_SkillController>();
@@ -1867,7 +1907,7 @@ namespace RIMA
                 SkillData data = db?.FindByName(kit[i]);
                 if (data == null || data.skillType == null)
                 {
-                    Debug.LogWarning($"[ChamberSelectBootstrap] Practice kit skill '{kit[i]}' unresolved for {cls}; slot {i} left empty.");
+                    Debug.LogWarning($"[ChamberSelectBootstrap] {label} kit skill '{kit[i]}' unresolved for {cls}; slot {i} left empty.");
                     continue;
                 }
 
@@ -1875,7 +1915,7 @@ namespace RIMA
                         ?? host.gameObject.AddComponent(data.skillType) as SkillBase;
                 if (comp == null)
                 {
-                    Debug.LogWarning($"[ChamberSelectBootstrap] Practice kit '{kit[i]}' component add failed (type={data.skillType}).");
+                    Debug.LogWarning($"[ChamberSelectBootstrap] {label} kit '{kit[i]}' component add failed (type={data.skillType}).");
                     continue;
                 }
 
@@ -1889,7 +1929,7 @@ namespace RIMA
 
             practiceRefillTimer = 0f;   // top up resource on the next Update tick
             TopUpPracticeResource();
-            Debug.Log($"[ChamberSelectBootstrap] Practice loadout granted for {cls}: {kit.Length} skills on Q/E/R/F.");
+            Debug.Log($"[ChamberSelectBootstrap] {label} loadout granted for {cls}: {kit.Length} skills on Q/E/R/F.");
         }
 
         /// <summary>Chamber-only: refill the player's active skill resource to max so practice casts are
@@ -2116,6 +2156,88 @@ namespace RIMA
             classicCanvasGroup.alpha = visible ? 1f : 0f;
             classicCanvasGroup.interactable = visible;
             classicCanvasGroup.blocksRaycasts = visible;
+        }
+
+        // Chamber-only IMGUI skill picker. Lists the active class's implemented active skills; the player
+        // picks one then assigns it to a Q/E/R/F slot, then "Uygula" binds via GrantCustomLoadout. Reset is
+        // automatic (in-memory skill components destroyed on scene unload) — no persistence, run untouched.
+        private static readonly string[] PickerSlotLabels = { "Q", "E", "R", "F" };
+
+        private void OnGUI()
+        {
+            if (!skillPickerOpen) return;
+
+            SkillDatabase db = SkillDatabase.Instance;
+            if (db == null) return;
+            db.EnsureBuilt();
+
+            // Implemented, slottable (non-passive) skills of the active class.
+            List<SkillData> pool = db.GetPool(currentClass, ClassType.None);
+            var skills = new List<SkillData>(pool.Count);
+            foreach (SkillData s in pool)
+                if (!s.isPassive && s.skillType != null) skills.Add(s);
+
+            const float panelW = 340f;
+            float panelH = Mathf.Min(Screen.height - 80f, 430f);
+            var panel = new Rect(Screen.width - panelW - 24f, 60f, panelW, panelH);
+
+            GUI.color = new Color(0f, 0f, 0f, 0.82f);
+            GUI.Box(panel, GUIContent.none);
+            GUI.color = Color.white;
+
+            GUILayout.BeginArea(new Rect(panel.x + 12f, panel.y + 10f, panel.width - 24f, panel.height - 20f));
+
+            GUILayout.Label($"SKİLL SEÇİCİ — {currentClass.ToString().ToUpperInvariant()}");
+            GUILayout.Label("Skill seç, sonra bir slota (Q/E/R/F) ata.");
+
+            // Pending Q/E/R/F slot buttons — click to assign the selected skill.
+            GUILayout.BeginHorizontal();
+            for (int slot = 0; slot < 4; slot++)
+            {
+                string assigned = string.IsNullOrEmpty(pickerSlotKit[slot]) ? "—" : pickerSlotKit[slot];
+                if (GUILayout.Button($"{PickerSlotLabels[slot]}\n{assigned}", GUILayout.Height(46f)))
+                {
+                    if (pickerSelectedSkill >= 0 && pickerSelectedSkill < skills.Count)
+                        pickerSlotKit[slot] = skills[pickerSelectedSkill].skillName;
+                    else
+                        pickerSlotKit[slot] = null;   // no selection: clear back to default
+                }
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(4f);
+
+            pickerSkillScroll = GUILayout.BeginScrollView(pickerSkillScroll);
+            for (int i = 0; i < skills.Count; i++)
+            {
+                bool sel = i == pickerSelectedSkill;
+                GUI.color = sel ? new Color(1f, 0.85f, 0.4f, 1f) : Color.white;
+                if (GUILayout.Button(skills[i].skillName, GUILayout.Height(26f)))
+                    pickerSelectedSkill = i;
+            }
+            GUI.color = Color.white;
+            GUILayout.EndScrollView();
+
+            GUILayout.Space(4f);
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Uygula", GUILayout.Height(30f)))
+            {
+                GrantCustomLoadout(currentClass, pickerSlotKit);
+            }
+            if (GUILayout.Button("Varsayılan", GUILayout.Height(30f)))
+            {
+                for (int s = 0; s < pickerSlotKit.Length; s++) pickerSlotKit[s] = null;
+                pickerSelectedSkill = -1;
+                GrantPracticeLoadout(currentClass);
+            }
+            if (GUILayout.Button("Kapat [K]", GUILayout.Height(30f)))
+            {
+                skillPickerOpen = false;
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndArea();
         }
 
         private void StartRun()

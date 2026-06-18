@@ -619,8 +619,10 @@ namespace RIMA
                 if (ui.cdTimer != null)
                 {
                     float remaining = skill.RemainingCooldown;
-                    if (remaining >= 5f)
+                    if (remaining >= 1f)
                         ui.cdTimer.text = Mathf.CeilToInt(remaining).ToString();
+                    else if (remaining > 0.05f)
+                        ui.cdTimer.text = remaining.ToString("0.0");
                     else
                         ui.cdTimer.text = "";
                 }
