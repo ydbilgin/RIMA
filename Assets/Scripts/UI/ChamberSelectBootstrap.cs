@@ -97,6 +97,7 @@ namespace RIMA
         private bool dummySelectOpen;
         private bool busyAttuning;
         private float practiceRefillTimer;   // chamber-only: keep skill resource topped so Q/E/R/F can be practised
+        private SkillBarUI chamberSkillBar;   // chamber-only practice skill bar (Q/E/R/F readout)
         private Vector3 exitWorld;
         private Vector2Int chamberSpawnCell;
         private Vector2Int chamberDummyCell;
@@ -997,7 +998,82 @@ namespace RIMA
             // tried on the dummy before committing at the rift. Chamber-only; run-start loadout
             // (DraftManager) is untouched.
             GrantPracticeLoadout(currentClass);
+            // Show the practice skill bar (Q/E/R/F readout) so the player can see what each key does.
+            ShowChamberSkillBar();
+            // Off-map safety: dash/charge skills (e.g. Iron Charge, Blink) can fling the player off the
+            // small diamond platform. Attach a chamber-only guard that snaps them back to spawn.
+            AttachChamberBoundsGuard(instance, spawn);
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: player spawned as {currentClass} at {spawn}.");
+        }
+
+        /// <summary>
+        /// Chamber-only: host the standard gameplay <see cref="SkillBarUI"/> on the chamber overlay
+        /// canvas so the granted practice Q/E/R/F (icon + key + name) are visible. The bar auto-resolves
+        /// the active player + class and populates itself, exactly like the in-run HUD. The whole canvas
+        /// (and this bar) is torn down with the chamber scene / cleanup, so it is hidden on leaving.
+        /// </summary>
+        private void ShowChamberSkillBar()
+        {
+            if (chamberSkillBar != null) return;
+
+            RectTransform canvasRoot = EnsureChamberOverlayCanvas();
+            GameObject barGo = new GameObject("ChamberSkillBar", typeof(RectTransform));
+            barGo.transform.SetParent(canvasRoot, false);
+            RectTransform rt = barGo.GetComponent<RectTransform>();
+            // Bottom-center, raised ABOVE the [G] prompt panel (prompt sits at anchor y=0.06).
+            rt.anchorMin = new Vector2(0.5f, 0f);
+            rt.anchorMax = new Vector2(0.5f, 0f);
+            rt.pivot = new Vector2(0.5f, 0f);
+            rt.anchoredPosition = new Vector2(0f, 96f);
+            rt.sizeDelta = new Vector2(420f, 72f);
+            chamberSkillBar = barGo.AddComponent<SkillBarUI>();
+            Debug.Log("[ChamberSelectBootstrap] Practice skill bar shown on chamber overlay (Q/E/R/F readout).");
+        }
+
+        /// <summary>
+        /// Chamber-only: attach a snap-back guard to the practice player so movement/dash skills cannot
+        /// strand it off the small platform. Walkable bounds are derived from the built floor cells; if
+        /// the player leaves them (or drops below a Y floor), it is teleported back to the spawn point.
+        /// This component is ONLY ever added here, so real gameplay rooms are unaffected.
+        /// </summary>
+        private void AttachChamberBoundsGuard(GameObject playerObject, Vector3 spawnWorld)
+        {
+            if (playerObject == null) return;
+
+            // World-space center + radius of the walkable diamond, with a small margin.
+            Vector3 center = spawnWorld;
+            float radius = 6f;
+            float yFloor = spawnWorld.y - 8f;
+            if (builder?.LastFloorCells != null && builder.LastFloorCells.Count > 0 && grid != null)
+            {
+                Vector3 sum = Vector3.zero;
+                float maxSqr = 0f;
+                int count = 0;
+                Vector3 minW = new Vector3(float.MaxValue, float.MaxValue, 0f);
+                foreach (Vector3Int cell in builder.LastFloorCells)
+                {
+                    Vector3 w = grid.GetCellCenterWorld(cell);
+                    sum += w;
+                    count++;
+                    if (w.y < minW.y) minW.y = w.y;
+                }
+                if (count > 0)
+                {
+                    center = sum / count;
+                    foreach (Vector3Int cell in builder.LastFloorCells)
+                    {
+                        Vector3 w = grid.GetCellCenterWorld(cell);
+                        float sqr = (w - center).sqrMagnitude;
+                        if (sqr > maxSqr) maxSqr = sqr;
+                    }
+                    radius = Mathf.Sqrt(maxSqr) + 1.0f;   // margin so the edge tile stays valid
+                    yFloor = minW.y - 1.5f;               // anything below the lowest tile is off-map
+                }
+            }
+
+            ChamberBoundsGuard guard = playerObject.AddComponent<ChamberBoundsGuard>();
+            guard.Initialize(spawnWorld, center, radius, yFloor);
+            Debug.Log($"[ChamberSelectBootstrap] Chamber bounds guard attached: center={center}, radius={radius:F2}, yFloor={yFloor:F2}, spawn={spawnWorld}.");
         }
 
         private IEnumerator ArrivalRingRoutine(Transform ring, SpriteRenderer sr)
@@ -2449,6 +2525,50 @@ namespace RIMA
                 }
 
                 hpBar.SetPercent(max > 0 ? current / (float)max : 0f);
+            }
+        }
+
+        /// <summary>
+        /// Chamber-only off-map safety. If the practice player leaves the walkable platform (outside the
+        /// floor radius or below the Y floor) — e.g. flung by a dash/charge skill such as Iron Charge or
+        /// Blink — snap it back to the spawn point and kill velocity. Robust against the small diamond
+        /// platform (radius/Y test, not fragile perimeter colliders). Only added by ChamberSelectBootstrap,
+        /// so real gameplay rooms never carry this component.
+        /// </summary>
+        private sealed class ChamberBoundsGuard : MonoBehaviour
+        {
+            private Vector3 spawnWorld;
+            private Vector3 center;
+            private float radiusSqr;
+            private float yFloor;
+            private Rigidbody2D body;
+
+            public void Initialize(Vector3 spawn, Vector3 platformCenter, float platformRadius, float yLimit)
+            {
+                spawnWorld = spawn;
+                center = platformCenter;
+                radiusSqr = platformRadius * platformRadius;
+                yFloor = yLimit;
+                body = GetComponent<Rigidbody2D>();
+            }
+
+            // FixedUpdate so the check runs in the same step the dash physics move the body.
+            private void FixedUpdate()
+            {
+                Vector3 pos = body != null ? (Vector3)body.position : transform.position;
+                Vector2 planar = new Vector2(pos.x - center.x, pos.y - center.y);
+                bool outOfRadius = planar.sqrMagnitude > radiusSqr;
+                bool belowFloor = pos.y < yFloor;
+                if (!outOfRadius && !belowFloor) return;
+
+                if (body != null)
+                {
+                    body.linearVelocity = Vector2.zero;
+                    body.angularVelocity = 0f;
+                    body.position = spawnWorld;
+                }
+                transform.position = spawnWorld;
+                Debug.Log($"[ChamberSelectBootstrap] Off-map guard: player at {pos} snapped back to spawn {spawnWorld}.");
             }
         }
     }
