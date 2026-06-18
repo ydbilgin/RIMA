@@ -1,24 +1,40 @@
 # CURRENT_STATUS
 
-## ⏯️ RESUME (2026-06-18 OTONOM RUN — TAMAMLANDI) — demo ~19 Haziran
+## ⏯️ RESUME (2026-06-18 DEMO-PREP FINALIZE — TAMAMLANDI) — demo ~19 Haziran (YARIN)
 
-**Durum:** Tam-otonom maraton bitti, 3 commit master'a düştü. cx limitleri reset (tam council kullanıldı). Demo + akademik rapor yarına hazır.
+**Durum:** Demo-prep maratonu bitti, 6 commit master'a düştü (`f4bcc9ad`..`708cd810`). Rapor demo-hazır; oyun-içi araçlar + bug-fix'ler council-onaylı (ağırlıklı APPROVE-WITH-FIXES → fix'ler uygulandı).
 
-### ✅ DONE + COMMIT (master)
-- `3493f523` **Unity polish batch-2** (auditor-opus PASS): HUD HP→crimson #C01020 (`HUDController`), `PropColliderAutoBuilder` offset taban-merkez, `RewardPickup` radius 0.45→0.22, `Chasm` Decals+merkez-collider. Console 0/0.
-- `0142abfa` **Akademik rapor r2** (`STAGING/report/RIMA_Senior_Design_Report.docx/.md`): council 3/3 PASS. 12 figür. **Şekil 6=6 oda cliff-island grid** (IsoRoomBuilder, gerçek oyun görünümü), **Şekil 7=JSON→tilemap schematic + door_graph**, **§8.6 İnsan-YZ iş bölümü** (dengeli ton). AI-odağı azaltıldı, ChatGPT-vari budandı, §2.2 klasör/sınıf yapısı eklendi. 0 placeholder. + `SUNUM_CANLI_CLI_DEMO.md` (hocaya 2-3 dk canlı CLI demo, güvenli, 6 adım+B-planı).
-- `b916f8ea` process artifacts (council kararları/dispatch/done) + CURRENT_STATUS.
-- 🔑 **DERS:** Eski Şekil 6 `11_map_designer.png` = masaüstü+Steam+"Task Bar Hero" screenshot'ıydı (Unity değil) → silindi. Odalar = tile+**auto-cliff yüzen ada** (IsoRoomBuilder.BuildCliffs); bare scratch sahne DÜZ/yanlış verir → _Arena rig'inde (void+ışık) render+revert-capture şart. Room-capture builder 1 blank InitTestScene leak'i bıraktı → temizlendi.
+### ✅ COMMIT (master, 6 grup)
+- `f4bcc9ad` Elementalist 8-yön idle `.anim` → gerçek sprite (stale GUID fix)
+- `8a03c756` Elementalist 13 skill **SkillVfx** + **ArcaneBlast** ölü-skill fix + damage telemetri
+- `9dc1116c` **F3 DebugLogOverlay** (logMessageReceived + `[Cast]/[Damage]/[Grant]`) + pasif HUD toast
+- `2784089b` demo-safety: **pedestal-lock** (IsDemoPlayable, 2 oynanabilir/8 kilitli) + **husk-fallback** + PlayerPrefs leak kapatıldı (Director bypass korundu)
+- `8118c90f` rapor council-fix (metin + Şekil9 caption dürüst + DOCX regen) + SUNUM_QA
+- `708cd810` process artifacts
 
-### ⏳ KULLANICI AKSİYONU BEKLEYEN
-- **PixelLab `/mcp` reconnect** (token güncellendi `.mcp.json`+`~/.claude.json` d17c…) → #9b Elementalist 8-yön açılır.
-- Jersey10 font (M) + `capture_v3.zip` (untracked) working tree'de — BENİM DEĞİL, dokunulmadı.
+### 🎯 RAPOR DEMO-HAZIR
+Council CONDITIONAL → tüm must-fix uygulandı. DOCX 12 figür + kapak logo, masaüstü-sızıntısı yok, iddialar kodla doğrulandı (111/67 yetenek, test 549 savunulabilir, 4 controller / 2 oynanabilir, boss bespoke). Savunma: `STAGING/report/SUNUM_QA_VE_CERCEVE_2026-06-18.md`. Karar: `STAGING/PRECOMMIT_COUNCIL_DECISION_2026-06-18.md`.
 
-### 📋 KALAN DEMO KUYRUĞU (bu run'da yapılmadı)
-- **#9a Elementalist skill VFX** (Fireball dışı skillere trail/VFX — `SkillVfx`/`SkillRuntime`).
-- **#9b Elementalist 8-yön** (PixelLab reconnect sonrası char ID'den 8 yön indir→import).
-- Silah mount: SE doğrulandı, diğer 7 yön playtest-pending.
+### 🧰 YENİ ARAÇ: F3 log overlay
+Play'de **F3** = ekranda Debug.Log/Warning/Error (kırmızı/sarı) + `[Cast]/[Damage]/[Grant]` event'leri = demo geri-bildirim + canlı hata-avı. `Assets/Scripts/Debug/DebugLogOverlay.cs`.
 
-### 🔑 METOT / 🛑 DOKUNMA
-- **Screenshot (kanıtlı):** `manage_camera game_view` (HUD/overlay) + `scene_view` (dünya) = saf Unity, masaüstü ASLA çıkmaz. Editor pencereleri (Map Designer) çekilemez. Oda→ada: `IsoRoomBuilder.Build(RoomTemplateSO)` _Arena rig'inde, revert-capture (no-leak).
-- DOKUNMA: GATE / Boss-akış / reward-bleed / Build-çekirdek / weaponless-anim / branching-seed. Prop collider B-2 refactor YAPMA.
+### 🎮 SKILL/VFX FIX (workflow `wf_79468e61` — playtest-PASS + auditor PASS)
+- **LMB basic-atak VFX** (`Assets/Scripts/Combat/BasicAttack/CastRhythmBehavior.cs`) — Elementalist sol-click artık VFX'li.
+- **Skiller dummy'e atılıyor+vuruyor** = chamber/practice'te skill slotları BOŞTU (skiller run'da draft'la gelir) → `ChamberSelectBootstrap.GrantPracticeLoadout` seçili sınıfın Q/E/R/F'sini doldurur (= "karakter seçerken skill deneme" özelliği). **Run-start boş-loadout + pedestal-gate'e DOKUNULMADI** (chamber-only/additive; auditor 3-katman doğruladı).
+- ArcaneBlast gerçek-oynanışta doğrulandı (HP −35). Tüm Q/E/R/F+LMB cast+hit, canlı `[Cast]/[Damage]/[Grant]`.
+- ⚠️ Skiller **FARE-nişanlı** → dummy'i vurmak için fareyi dummy'e tut (bug değil).
+
+### 🖥️ EDİTÖR STABİLİTE (demo EDİTÖRDE olacak — build değil)
+- Hang = native **D3D11 `Assertion failed: SUCCEEDED(hr)`** (RTX 5080) + uncapped FPS + eşzamanlı MCP yükü. **KOD DEĞİL** (census temiz: 0 sızıntı, overlay/SkillVfx temiz).
+- **`Assets/Scripts/Core/FrameRateGuard.cs`** = 60 FPS hard-cap (vSync=0+targetFPS=60) → GPU thrash kalkar.
+- **DEMO CHECKLIST:** (1) Play'i bir kez durdur → recompile → taze Play (cap+F3-overlay+commit'li kod yüklenir) · (2) **canlı demoda MCP'yi KAPAT** (Claude'u aktif tutma; eşzamanlı bridge yükü = stall'ın muhtemel ana tetikleyicisi) · (3) hâlâ takılırsa: editör grafik API → **D3D12** (projede destekli, restart) + NVIDIA RTX 5080 sürücü güncelle.
+- ⚠️ recurring **`timeScale=0`** (pause) 2× görüldü → "takılı" hissinin bir kısmı hang DEĞİL, PAUSE olabilir. Kök TBD (DraftManager timeScale'e dokunmuyor → Director/menü şüpheli).
+
+### ⏸️ ERTELENEN (post-demo) — Task #1/#3
+**Silah mount × animasyon:** silah pivot bıçak-merkezi + per-yön hand-socket verisi 8 yönden 1'inde var → gerçek el-hizalama = weaponless-anim (kilitli) işi. Şekil 9 caption buna göre dürüstleştirildi; demo statik figürle idare.
+
+### 🛑 DOKUNMA / NOT
+- Working tree'de KALAN (BENİM DEĞİL, dokunma): `Jersey10 SDF` (M) · `Assets/_Recovery/0 (2).unity`+meta (Unity crash artifact) · `capture_v3.zip`.
+- Locked sistemler: GATE / Boss-akış / reward-bleed / Build-çekirdek / weaponless-anim / branching-seed.
+- ⚠️ **Uzun `_Arena` Play session Unity ana-thread'i STALL ediyor** (bu session 1× crash) → playtest'te `execute_code` data-proof tercih et, Play kısa tut.
+- Council oy ağırlığı: cx2/opus2/ax_pro1/ax_flash0.5 (memory `feedback_council_vote_weighting`).

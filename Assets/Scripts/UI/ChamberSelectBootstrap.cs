@@ -96,6 +96,7 @@ namespace RIMA
         private bool classicTabOpen;
         private bool dummySelectOpen;
         private bool busyAttuning;
+        private float practiceRefillTimer;   // chamber-only: keep skill resource topped so Q/E/R/F can be practised
         private Vector3 exitWorld;
         private Vector2Int chamberSpawnCell;
         private Vector2Int chamberDummyCell;
@@ -230,6 +231,15 @@ namespace RIMA
                 return;
             }
 
+            // Chamber practice: keep the active skill resource topped (Rage decays to 0 otherwise)
+            // so the player can repeatedly cast Q/E/R/F on the dummy without grinding.
+            practiceRefillTimer -= Time.deltaTime;
+            if (practiceRefillTimer <= 0f)
+            {
+                practiceRefillTimer = 0.5f;
+                TopUpPracticeResource();
+            }
+
             if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.tabKey))
             {
                 classicTabOpen = !classicTabOpen;
@@ -338,7 +348,7 @@ namespace RIMA
             {
                 highlightedClass = ClassType.None;
                 SetClassicOverlayVisible(dummySelectOpen || classicTabOpen);
-                ShowPrompt(Vector3.zero, "[G] Dummy — Sınıf Seç");
+                ShowPrompt(Vector3.zero, "Dummy — LMB + Q/E/R/F ile dene    [G] Sınıf Seç");
 
                 if (WasPressed(UnityEngine.InputSystem.Keyboard.current?.gKey))
                 {
@@ -983,6 +993,10 @@ namespace RIMA
             // FIX 6: Assign SlashArcVFX so hit VFX fires.
             AssignSlashArcVFXToPlayer(instance);
             ApplyChamberPlayerVisual(instance, currentClass);
+            // Chamber practice: grant the class demo kit + top up resources so Q/E/R/F can be
+            // tried on the dummy before committing at the rift. Chamber-only; run-start loadout
+            // (DraftManager) is untouched.
+            GrantPracticeLoadout(currentClass);
             Debug.Log($"[ChamberSelectBootstrap] P3 evidence: player spawned as {currentClass} at {spawn}.");
         }
 
@@ -1736,7 +1750,85 @@ namespace RIMA
                 // FIX 1: Update attack profile when class changes via attune.
                 AssignAttackProfileToPlayer(player.gameObject, cls);
                 ApplyChamberPlayerVisual(player.gameObject, cls);
+                // Re-grant the practice loadout for the newly attuned class so the dummy stays castable.
+                GrantPracticeLoadout(cls);
             }
+        }
+
+        // Chamber-only demo kit (Q/E/R/F). Names resolve to SkillData via SkillDatabase exactly like
+        // the run-start draft, so practice skills carry their real cooldown/cost/icon. The first three
+        // mirror DraftManager.ClassKits; a 4th implemented skill fills the F slot. Only the two
+        // demo-selectable classes (Warblade/Elementalist) need an entry.
+        private static readonly System.Collections.Generic.Dictionary<ClassType, string[]> PracticeKits =
+            new System.Collections.Generic.Dictionary<ClassType, string[]>
+            {
+                { ClassType.Warblade,     new[] { "Iron Charge", "Gravity Cleave", "Earthsplitter", "Cleave" } },
+                { ClassType.Elementalist, new[] { "Fireball", "Glacial Spike", "Chain Lightning", "Frozen Orb" } },
+            };
+
+        /// <summary>
+        /// Chamber-only: fill the active class controller's Q/E/R/F slots with its demo kit so the
+        /// player can cast skills on the training dummy before committing at the rift. Mirrors the
+        /// bind pattern in DraftManager.AssignActive (AddComponent(skillType) → copy name/icon/cd →
+        /// SetSlot). Does NOT touch the run-start empty-loadout design lock — this only runs in the
+        /// Attunement Chamber and the player gets a fresh _Arena instance + draft when they enter a run.
+        /// </summary>
+        private void GrantPracticeLoadout(ClassType cls)
+        {
+            if (player == null) return;
+            if (!PracticeKits.TryGetValue(cls, out string[] kit)) return;   // non-demo class: leave empty
+
+            Component host = cls == ClassType.Elementalist
+                ? (Component)player.GetComponent<Elementalist_SkillController>()
+                : player.GetComponent<Warblade_SkillController>();
+            if (host == null) return;
+
+            SkillDatabase db = SkillDatabase.Instance;
+            db?.EnsureBuilt();
+
+            for (int i = 0; i < kit.Length; i++)
+            {
+                SkillData data = db?.FindByName(kit[i]);
+                if (data == null || data.skillType == null)
+                {
+                    Debug.LogWarning($"[ChamberSelectBootstrap] Practice kit skill '{kit[i]}' unresolved for {cls}; slot {i} left empty.");
+                    continue;
+                }
+
+                var comp = host.GetComponent(data.skillType) as SkillBase
+                        ?? host.gameObject.AddComponent(data.skillType) as SkillBase;
+                if (comp == null)
+                {
+                    Debug.LogWarning($"[ChamberSelectBootstrap] Practice kit '{kit[i]}' component add failed (type={data.skillType}).");
+                    continue;
+                }
+
+                comp.skillName = data.skillName;
+                comp.icon = data.icon;
+                comp.cooldown = data.cooldown;
+
+                if (host is Elementalist_SkillController el) el.SetSlot(i, comp);
+                else if (host is Warblade_SkillController wb) wb.SetSlot(i, comp);
+            }
+
+            practiceRefillTimer = 0f;   // top up resource on the next Update tick
+            TopUpPracticeResource();
+            Debug.Log($"[ChamberSelectBootstrap] Practice loadout granted for {cls}: {kit.Length} skills on Q/E/R/F.");
+        }
+
+        /// <summary>Chamber-only: refill the player's active skill resource to max so practice casts are
+        /// never blocked. Resolves the SAME resource SkillBase.TryActivate spends (Elementalist=Mana,
+        /// else Rage) — the player carries both RageSystem and ManaSystem after an Elementalist attune,
+        /// so a bare GetComponent&lt;PlayerResourceBase&gt; could top up the wrong one.</summary>
+        private void TopUpPracticeResource()
+        {
+            if (player == null) return;
+            PlayerResourceBase resource = currentClass == ClassType.Elementalist
+                ? (PlayerResourceBase)player.GetComponent<ManaSystem>()
+                : player.GetComponent<RageSystem>();
+            if (resource == null) resource = player.GetComponent<PlayerResourceBase>();
+            if (resource != null && resource.Current < resource.Max)
+                resource.Add(resource.Max);
         }
 
         private void ApplySelectedClassToDummyOnly(ClassType cls)

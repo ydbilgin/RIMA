@@ -57,6 +57,11 @@ namespace RIMA
                 ? Mathf.RoundToInt(profile.projectileDamage * 1.6f)
                 : profile.projectileDamage;
 
+            // VFX parity with Q/E/R/F skills: cast flash + projectile trail + impact burst,
+            // element-aware so the glow matches the bolt's per-element tint (Fireball.cs pattern).
+            VfxElement vfx = GetVfxElement(elementalist);
+            SkillVfx.CastFlash(owner.gameObject, vfx);
+
             var go = new GameObject("RiftBolt_Runtime");
             go.transform.position = owner.transform.position + (Vector3)(dir * 0.35f);
 
@@ -76,6 +81,8 @@ namespace RIMA
             float scale = empowered ? 0.52f : 0.34f;
             go.transform.localScale = new Vector3(scale, scale, 1f);
 
+            SkillVfx.ProjectileTrail(go, vfx);
+
             var projectile = go.AddComponent<PlayerProjectile>();
             projectile.Init(dir * profile.projectileSpeed, damage, life: 2.2f, piercing: false, attacker: owner.gameObject);
             projectile.SetDamagePacket(RIMA.Balance.DamagePacket.Create(
@@ -88,6 +95,7 @@ namespace RIMA
                 elementTag: GetElementTag(elementalist)));
             projectile.SetOnHit(hit =>
             {
+                SkillVfx.ImpactBurst(hit != null ? hit.transform.position : go.transform.position, vfx);
                 elementalist?.RegisterRiftBoltHit(empowered);
                 var status = hit.GetComponent<StatusEffectSystem>();
                 if (status == null || elementalist == null) return;
@@ -123,6 +131,18 @@ namespace RIMA
                 ElementalistElement.Frost => RIMA.Balance.ElementTag.Frost,
                 ElementalistElement.Light => RIMA.Balance.ElementTag.Lightning,
                 _ => RIMA.Balance.ElementTag.None
+            };
+        }
+
+        private static VfxElement GetVfxElement(Elementalist_SkillController elementalist)
+        {
+            if (elementalist == null) return VfxElement.Arcane;
+            return elementalist.ActiveElement switch
+            {
+                ElementalistElement.Fire  => VfxElement.Fire,
+                ElementalistElement.Frost => VfxElement.Frost,
+                ElementalistElement.Light => VfxElement.Lightning,
+                _                         => VfxElement.Arcane
             };
         }
 
