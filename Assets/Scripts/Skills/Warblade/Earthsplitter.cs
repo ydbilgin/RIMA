@@ -38,6 +38,7 @@ namespace RIMA
                 foreach (var health in SkillRuntime.EnemiesInLine(origin, dir, length, width))
                 {
                     SkillRuntime.DealDamage(health, damage);
+                    Debug.Log($"[Damage] {damage} -> {health.name} (earthsplitter)"); // F3 telemetry: bypasses Player-tagged DealDamage log
                     health.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Stunned, stunDuration);
                     SkillRuntime.State(health)?.Apply(SkillStateTracker.Broken, 6f, 1, 3);
                 }

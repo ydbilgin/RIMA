@@ -142,6 +142,8 @@ namespace RIMA
 
             int finalDamage = amount;
             health.TakeDamage(finalDamage);
+            if (attacker != null && attacker.CompareTag("Player"))
+                Debug.Log($"[Damage] {finalDamage} -> {health.name} ({element})");
 
             // Telemetri için ham sonuç (çarpan yok): finalDamage = amount, çarpanlar nötr.
             var result = new DamageCalculationResult
@@ -191,6 +193,8 @@ namespace RIMA
             }
 
             health.TakeDamage(finalDamage);
+            if (packet.attacker != null && packet.attacker.CompareTag("Player"))
+                Debug.Log($"[Damage] {finalDamage} -> {health.name} ({(element ?? packet.damageType.ToString())})");
             OnDamageApplied?.Invoke(new DamageTelemetryEvent(packet, result, finalDamage, health, Time.unscaledTime));
             string hitElement = element ?? (packet.elementTag != ElementTag.None
                 ? packet.elementTag.ToString().ToLowerInvariant()

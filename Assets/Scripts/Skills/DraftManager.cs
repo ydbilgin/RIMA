@@ -515,6 +515,10 @@ namespace RIMA
             }
 
             Debug.Log($"[Draft] Pasif '{passive.skillName}' → Lv {lvl + 1}");
+            Debug.Log($"[Grant] {passive.skillName} -> passive Lv {lvl + 1}");
+            // BUG-2: a passive takes no skill-bar slot, so without this the player gets no feedback that
+            // anything happened. Show a distinct HUD toast (skill grants land visibly in the bar instead).
+            HUDController.Instance?.ShowToast($"Pasif kazanıldı: {passive.skillName} (Sv {lvl + 1})");
             FinishPick(passive);
         }
 
@@ -745,6 +749,7 @@ namespace RIMA
                     comp.cooldown = skill.cooldown;
                     SetControllerSlot(host, slot, comp);
                     bound = true;
+                    Debug.Log($"[Grant] {skill.skillName} -> slot {slot}");
                 }
                 else
                     Debug.LogWarning($"[Draft] '{skill.skillName}' bileşeni eklenemedi (skillType={skill.skillType}).");

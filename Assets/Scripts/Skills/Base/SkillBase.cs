@@ -82,6 +82,7 @@ namespace RIMA
             Execute();
             cooldownTimer = cooldown;
             flowTracker?.NotifySkillUsed(this);
+            Debug.Log($"[Cast] {skillName} ({(player != null ? player.name : name)})");
             return true;
         }
 

@@ -65,7 +65,8 @@ namespace RIMA
                 if (hp == null || hp.IsDead) continue;
                 if (!hitTargets.Add(hp)) continue;
 
-                SkillRuntime.DealDamage(hp, damage);
+                SkillRuntime.DealDamage(hp, damage, true,
+                    player != null ? player.gameObject : null, chargeDir, element: "physical");
                 rage?.OnHitEnemy();
                 rage?.AddRage(ragePerHit);
                 hp.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Stunned, 1.5f);

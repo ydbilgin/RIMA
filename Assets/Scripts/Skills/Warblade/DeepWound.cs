@@ -35,6 +35,7 @@ namespace RIMA
             if (target == null) return;
 
             SkillRuntime.DealDamage(target, hitDamage);
+            Debug.Log($"[Damage] {hitDamage} -> {target.name} (deepwound)"); // F3 telemetry: bypasses Player-tagged DealDamage log
             target.GetComponent<StatusEffectSystem>()?.ApplyEffect(StatusEffectType.Bleed, bleedDuration);
             rage?.AddRage(35);
             StartCoroutine(BleedTick(target, bleedDuration));

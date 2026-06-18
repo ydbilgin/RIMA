@@ -511,6 +511,55 @@ namespace RIMA
             if (interactionPanel != null) interactionPanel.gameObject.SetActive(false);
         }
 
+        // ─── Toast (transient on-screen notice) ─────────────────────────
+
+        // Brief center-screen text notice for events the skill bar can't show (e.g. a granted passive).
+        // Text-only, outline-only — matches the 'UI yoktur bilgi vardır' rule used by the unlock banner.
+        public void ShowToast(string message, float duration = 2.5f)
+        {
+            if (string.IsNullOrEmpty(message)) return;
+            StartCoroutine(ToastRoutine(message, duration));
+        }
+
+        private IEnumerator ToastRoutine(string message, float duration)
+        {
+            var go = new GameObject("HudToast", typeof(RectTransform));
+            go.transform.SetParent(transform, false);
+
+            var tmp = go.AddComponent<TextMeshProUGUI>();
+            tmp.text = message;
+            tmp.fontSize = 30f;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.color = new Color(0.85f, 0.78f, 1f, 1f); // soft arcane-violet notice
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.outlineWidth = 0.26f;
+            tmp.outlineColor = new Color32(0, 0, 0, 230);
+            tmp.raycastTarget = false;
+
+            var rt = tmp.rectTransform;
+            rt.anchorMin = new Vector2(0.1f, 0.70f);
+            rt.anchorMax = new Vector2(0.9f, 0.78f);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            float elapsed = 0f;
+            const float fadeLen = 0.4f;
+            while (elapsed < duration && tmp != null)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float fadeStart = duration - fadeLen;
+                if (elapsed > fadeStart)
+                {
+                    Color c = tmp.color;
+                    c.a = 1f - Mathf.Clamp01((elapsed - fadeStart) / fadeLen);
+                    tmp.color = c;
+                }
+                yield return null;
+            }
+
+            if (go != null) Destroy(go);
+        }
+
         // ─── Class Change (preserved API) ───────────────────────────────
 
         /// <summary>Call when the player's primary class changes to refresh resource bar color.</summary>
