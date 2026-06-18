@@ -15,6 +15,8 @@ namespace RIMA.Combat
 
         private int _selectedDirectionIndex = 0;
         private bool _showAllOffsets = false;
+        private bool _showAllRotations = false;
+        private bool _largeStep = false;
 
         public override void OnInspectorGUI()
         {
@@ -29,6 +31,10 @@ namespace RIMA.Combat
                     if (prop.name == "handOffsets")
                     {
                         DrawCustomOffsetsSection(prop);
+                    }
+                    else if (prop.name == "weaponRotations")
+                    {
+                        // Drawn in the tuning tool together with the matching offset.
                     }
                     else if (prop.name != "m_Script")
                     {
@@ -47,13 +53,13 @@ namespace RIMA.Combat
 
             EditorGUILayout.Space(10);
             GUI.backgroundColor = new Color(0.6f, 1f, 0.6f);
-            if (GUILayout.Button("Offsets + Rotations -> Player.prefab KAYDET", GUILayout.Height(28)))
+            if (GUILayout.Button("Offsets + Rotations -> SOURCE PREFAB KAYDET", GUILayout.Height(28)))
             {
                 SaveOffsetsToPrefab();
             }
             GUI.backgroundColor = Color.white;
             EditorGUILayout.HelpBox(
-                "Play modda yaptigin ayarlar cikinca kaybolur -> bu buton Player.prefab'a yazar (kalici). " +
+                "Play modda yaptigin ayarlar cikinca kaybolur -> bu buton live instance'in source prefab'ina yazar (kalici). " +
                 "NOT: Scene'de SILAHI surukleme (Sync her kare geri alir); sari Active-yon isaretcisini surukle ya da Offset/Weapon Rotations sayilarini gir + Enter.",
                 MessageType.Info);
         }
@@ -61,16 +67,9 @@ namespace RIMA.Combat
         private void SaveOffsetsToPrefab()
         {
             var sync = (OrientationSync)target;
-            OrientationSync prefabSync = PrefabUtility.GetCorrespondingObjectFromSource(sync) as OrientationSync;
-            GameObject prefabGo = null;
-            if (prefabSync == null)
+            if (!TryResolveSaveTarget(sync, out GameObject prefabGo, out OrientationSync prefabSync, out string path))
             {
-                prefabGo = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
-                if (prefabGo != null) prefabSync = prefabGo.GetComponentInChildren<OrientationSync>(true);
-            }
-            if (prefabSync == null)
-            {
-                EditorUtility.DisplayDialog("Kayit basarisiz", "Player.prefab / OrientationSync bulunamadi.", "Tamam");
+                EditorUtility.DisplayDialog("Kayit basarisiz", "Source prefab / OrientationSync bulunamadi.", "Tamam");
                 return;
             }
 
@@ -80,9 +79,38 @@ namespace RIMA.Combat
             CopyArrayProp(src, dst, "weaponRotations");
             dst.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(prefabSync);
-            if (prefabGo != null) PrefabUtility.SavePrefabAsset(prefabGo);
+            PrefabUtility.SavePrefabAsset(prefabGo);
             AssetDatabase.SaveAssets();
-            Debug.Log("[OrientationSync] handOffsets + weaponRotations -> Player.prefab kaydedildi.");
+            Debug.Log($"[OrientationSync] handOffsets + weaponRotations -> {path} kaydedildi.");
+        }
+
+        private static bool TryResolveSaveTarget(OrientationSync source, out GameObject prefabGo, out OrientationSync prefabSync, out string path)
+        {
+            prefabGo = null;
+            prefabSync = null;
+            path = null;
+
+            OrientationSync sourcePrefabSync = null;
+            if (source != null && !EditorUtility.IsPersistent(source))
+                sourcePrefabSync = PrefabUtility.GetCorrespondingObjectFromSource(source) as OrientationSync;
+
+            if (sourcePrefabSync != null)
+            {
+                path = AssetDatabase.GetAssetPath(sourcePrefabSync);
+                prefabGo = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                prefabSync = prefabGo != null ? prefabGo.GetComponentInChildren<OrientationSync>(true) : null;
+                return prefabGo != null && prefabSync != null;
+            }
+
+            if (source != null && EditorUtility.IsPersistent(source))
+            {
+                path = AssetDatabase.GetAssetPath(source);
+                prefabGo = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                prefabSync = source;
+                return prefabGo != null;
+            }
+
+            return false;
         }
 
         private static void CopyArrayProp(SerializedObject src, SerializedObject dst, string propName)
@@ -107,17 +135,21 @@ namespace RIMA.Combat
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Hand Anchor Offsets Tuning Tool", EditorStyles.boldLabel);
             
-            EditorGUILayout.HelpBox("Select a direction below or click the markers in SceneView to edit the hand anchor offsets.", MessageType.Info);
+            EditorGUILayout.HelpBox(
+                "1) Select direction. 2) Face that direction in Play. 3) Use Nudge + Rotate until it looks right. 4) Press Player.prefab KAYDET.",
+                MessageType.Info);
 
             EditorGUI.BeginChangeCheck();
             _selectedDirectionIndex = EditorGUILayout.Popup("Active Direction", _selectedDirectionIndex, DirectionNames);
             _selectedDirectionIndex = GUILayout.SelectionGrid(_selectedDirectionIndex, DirectionNames, 4);
             if (EditorGUI.EndChangeCheck())
             {
+                ApplySelectedDirectionPreview(sync);
                 SceneView.RepaintAll();
             }
 
             EditorGUILayout.Space(5);
+            _largeStep = EditorGUILayout.ToggleLeft("Large step (offset 0.05 / rotation 15)", _largeStep);
 
             if (handOffsetsProp.arraySize >= 8)
             {
@@ -131,8 +163,13 @@ namespace RIMA.Combat
                     activeOffsetProp.vector2Value = newOffset;
                     serializedObject.ApplyModifiedProperties();
                     EditorUtility.SetDirty(sync);
+                    ApplySelectedDirectionPreview(sync);
                     SceneView.RepaintAll();
                 }
+
+                DrawOffsetNudgeControls(sync, activeOffsetProp);
+                DrawRotationControls(sync);
+                DrawSortRuleHint();
 
                 EditorGUILayout.Space(5);
 
@@ -158,6 +195,39 @@ namespace RIMA.Combat
                             elementProp.vector2Value = val;
                             serializedObject.ApplyModifiedProperties();
                             EditorUtility.SetDirty(sync);
+                            if (i == _selectedDirectionIndex)
+                                ApplySelectedDirectionPreview(sync);
+                            SceneView.RepaintAll();
+                        }
+                    }
+                    EditorGUI.indentLevel--;
+                }
+
+                SerializedProperty rotationsProp = serializedObject.FindProperty("weaponRotations");
+                _showAllRotations = EditorGUILayout.Foldout(_showAllRotations, "Show All 8 Rotations List", true);
+                if (_showAllRotations && rotationsProp != null && rotationsProp.arraySize >= 8)
+                {
+                    EditorGUI.indentLevel++;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        SerializedProperty rotProp = rotationsProp.GetArrayElementAtIndex(i);
+                        EditorGUI.BeginChangeCheck();
+
+                        GUIStyle labelStyle = (i == _selectedDirectionIndex) ? EditorStyles.boldLabel : EditorStyles.label;
+
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField(DirectionNames[i], labelStyle, GUILayout.Width(50));
+                        float val = EditorGUILayout.FloatField(rotProp.floatValue);
+                        EditorGUILayout.EndHorizontal();
+
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            Undo.RecordObject(sync, "Modify Weapon Rotation");
+                            rotProp.floatValue = val;
+                            serializedObject.ApplyModifiedProperties();
+                            EditorUtility.SetDirty(sync);
+                            if (i == _selectedDirectionIndex)
+                                ApplySelectedDirectionPreview(sync);
                             SceneView.RepaintAll();
                         }
                     }
@@ -168,6 +238,93 @@ namespace RIMA.Combat
             {
                 EditorGUILayout.HelpBox("handOffsets array is not initialized with 8 elements.", MessageType.Error);
             }
+        }
+
+        private void DrawOffsetNudgeControls(OrientationSync sync, SerializedProperty activeOffsetProp)
+        {
+            float step = _largeStep ? 0.05f : 0.01f;
+
+            EditorGUILayout.Space(4);
+            EditorGUILayout.LabelField($"Nudge Offset ({step:0.00})", EditorStyles.miniBoldLabel);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Left")) NudgeOffset(sync, activeOffsetProp, new Vector2(-step, 0f));
+            if (GUILayout.Button("Right")) NudgeOffset(sync, activeOffsetProp, new Vector2(step, 0f));
+            if (GUILayout.Button("Up")) NudgeOffset(sync, activeOffsetProp, new Vector2(0f, step));
+            if (GUILayout.Button("Down")) NudgeOffset(sync, activeOffsetProp, new Vector2(0f, -step));
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void NudgeOffset(OrientationSync sync, SerializedProperty activeOffsetProp, Vector2 delta)
+        {
+            Undo.RecordObject(sync, "Nudge Hand Offset");
+            activeOffsetProp.vector2Value += delta;
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(sync);
+            ApplySelectedDirectionPreview(sync);
+            SceneView.RepaintAll();
+        }
+
+        private void DrawRotationControls(OrientationSync sync)
+        {
+            SerializedProperty rotationsProp = serializedObject.FindProperty("weaponRotations");
+            if (rotationsProp == null || rotationsProp.arraySize < 8)
+            {
+                EditorGUILayout.HelpBox("weaponRotations array is not initialized with 8 elements.", MessageType.Error);
+                return;
+            }
+
+            SerializedProperty activeRotationProp = rotationsProp.GetArrayElementAtIndex(_selectedDirectionIndex);
+
+            EditorGUILayout.Space(4);
+            EditorGUI.BeginChangeCheck();
+            float newRotation = EditorGUILayout.FloatField($"Rotation ({DirectionNames[_selectedDirectionIndex]})", activeRotationProp.floatValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(sync, "Modify Weapon Rotation");
+                activeRotationProp.floatValue = newRotation;
+                serializedObject.ApplyModifiedProperties();
+                EditorUtility.SetDirty(sync);
+                ApplySelectedDirectionPreview(sync);
+                SceneView.RepaintAll();
+            }
+
+            float small = 5f;
+            float large = 15f;
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(_largeStep ? "-15" : "-5")) NudgeRotation(sync, activeRotationProp, _largeStep ? -large : -small);
+            if (GUILayout.Button(_largeStep ? "+15" : "+5")) NudgeRotation(sync, activeRotationProp, _largeStep ? large : small);
+            if (GUILayout.Button("Apply Selected Now")) ApplySelectedDirectionPreview(sync);
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void NudgeRotation(OrientationSync sync, SerializedProperty activeRotationProp, float delta)
+        {
+            Undo.RecordObject(sync, "Nudge Weapon Rotation");
+            activeRotationProp.floatValue += delta;
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(sync);
+            ApplySelectedDirectionPreview(sync);
+            SceneView.RepaintAll();
+        }
+
+        private void DrawSortRuleHint()
+        {
+            bool behindBody = _selectedDirectionIndex == (int)FacingDir8.N
+                || _selectedDirectionIndex == (int)FacingDir8.NE
+                || _selectedDirectionIndex == (int)FacingDir8.NW
+                || _selectedDirectionIndex == (int)FacingDir8.W;
+
+            EditorGUILayout.HelpBox(
+                $"{DirectionNames[_selectedDirectionIndex]} render: weapon {(behindBody ? "BEHIND body" : "IN FRONT of body")} (right-hand rule).",
+                MessageType.None);
+        }
+
+        private void ApplySelectedDirectionPreview(OrientationSync sync)
+        {
+            if (sync == null) return;
+            sync.Sync((FacingDir8)_selectedDirectionIndex);
+            EditorUtility.SetDirty(sync);
+            SceneView.RepaintAll();
         }
 
         private void OnSceneGUI()
@@ -211,6 +368,7 @@ namespace RIMA.Combat
                         elementProp.vector2Value = localPos;
                         serializedObject.ApplyModifiedProperties();
                         EditorUtility.SetDirty(sync);
+                        ApplySelectedDirectionPreview(sync);
                         Repaint();
                     }
                 }

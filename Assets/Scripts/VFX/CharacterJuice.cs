@@ -62,6 +62,11 @@ namespace RIMA
 
         private float PixelStep => pixelsPerUnit > 0.01f ? 1f / pixelsPerUnit : 1f / 64f;
 
+        public void SetHandBasePosition(Vector3 localPosition)
+        {
+            handBasePos = localPosition;
+        }
+
         private void Awake()
         {
             controller = GetComponent<PlayerController>();

@@ -382,6 +382,8 @@ namespace RIMA
 
         private void Update()
         {
+            EnsureSlotReferences();
+
             int active = GetActiveSlotCount();
             for (int i = 0; i < SlotCount; i++)
             {
@@ -544,21 +546,70 @@ namespace RIMA
 
         private static void EnsureSkillDatabase()
         {
-            if (SkillDatabase.Instance != null)
+            SkillDatabase.EnsureRuntime();
+        }
+
+        private void EnsureSlotReferences()
+        {
+            if (slots == null || slots.Length != SlotCount)
+                slots = new SlotUI[SlotCount];
+
+            bool hasUsableRefs = true;
+            for (int i = 0; i < SlotCount; i++)
             {
-                SkillDatabase.Instance.EnsureBuilt();
+                if (slots[i].root != null && slots[i].icon != null && slots[i].cdOverlay != null)
+                    continue;
+
+                hasUsableRefs = false;
+                break;
+            }
+
+            if (hasUsableRefs) return;
+
+            RectTransform container = GetComponent<RectTransform>();
+            if (container == null) return;
+
+            var slotRoots = new System.Collections.Generic.List<Transform>(SlotCount);
+            for (int i = 0; i < container.childCount; i++)
+            {
+                Transform child = container.GetChild(i);
+                if (child != null && child.name.StartsWith("Slot_"))
+                    slotRoots.Add(child);
+            }
+
+            if (slotRoots.Count >= SlotCount)
+            {
+                for (int i = 0; i < SlotCount; i++)
+                    BindSlotReferences(i, slotRoots[i]);
                 return;
             }
 
-            var existing = FindObjectOfType<SkillDatabase>();
-            if (existing != null)
-            {
-                existing.EnsureBuilt();
-                return;
-            }
+            // If Start has not built the bar yet, build it now. This keeps runtime-created
+            // chamber HUD bars from staying visually empty if their first frame was missed.
+            BuildSlots();
+        }
 
-            var go = new GameObject("SkillDatabase_Auto");
-            go.AddComponent<SkillDatabase>();
+        private void BindSlotReferences(int index, Transform slotRoot)
+        {
+            if (slotRoot == null || index < 0 || index >= SlotCount) return;
+
+            float size = index < 2 ? PrimarySize : SecondarySize;
+            if (slotRoot is RectTransform rt && rt.sizeDelta.x > 0f)
+                size = rt.sizeDelta.x;
+
+            slots[index] = new SlotUI
+            {
+                root = slotRoot.gameObject,
+                bg = slotRoot.GetComponent<Image>(),
+                rim = slotRoot.Find("Rim")?.GetComponent<Image>(),
+                icon = slotRoot.Find("Icon")?.GetComponent<Image>(),
+                cdOverlay = slotRoot.Find("CD")?.GetComponent<Image>(),
+                cdTimer = slotRoot.Find("CDTimer")?.GetComponent<TextMeshProUGUI>(),
+                glowBorder = slotRoot.Find("Glow")?.GetComponent<Image>(),
+                keyLabel = slotRoot.Find("Key")?.GetComponent<TextMeshProUGUI>(),
+                nameLabel = slotRoot.Find("Name")?.GetComponent<TextMeshProUGUI>(),
+                size = size
+            };
         }
 
         private void EnsureTooltipSystem()

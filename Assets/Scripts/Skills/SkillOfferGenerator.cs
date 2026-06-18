@@ -319,8 +319,9 @@ namespace RIMA
 
         private List<SkillData> GetSource(ClassType primary, ClassType secondary)
         {
-            if (SkillDatabase.Instance != null)
-                return SkillDatabase.Instance.GetPool(primary, secondary);
+            SkillDatabase database = SkillDatabase.EnsureRuntime();
+            if (database != null)
+                return database.GetPool(primary, secondary);
 
             var list = new List<SkillData>();
             if (allSkills == null) return list;

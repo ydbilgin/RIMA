@@ -64,6 +64,8 @@ namespace RIMA.Combat
             if (handAnchor != null && handOffsets != null && index < handOffsets.Length)
             {
                 handAnchor.localPosition = handOffsets[index];
+                if (TryGetComponent<RIMA.CharacterJuice>(out var juice))
+                    juice.SetHandBasePosition(handAnchor.localPosition);
             }
 
             ApplyFlipY(dir);
@@ -176,4 +178,3 @@ namespace RIMA.Combat
         }
     }
 }
-

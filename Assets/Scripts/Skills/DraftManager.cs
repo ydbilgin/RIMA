@@ -300,10 +300,10 @@ namespace RIMA
             var primary = PlayerClassManager.Instance?.PrimaryClass ?? ClassType.Warblade;
             if (!ClassKits.TryGetValue(primary, out string[] kit)) return;
 
-            SkillDatabase.Instance?.EnsureBuilt();
+            SkillDatabase db = SkillDatabase.EnsureRuntime();
             foreach (string name in kit)
             {
-                var sd = SkillDatabase.Instance?.FindByName(name);
+                var sd = db?.FindByName(name);
                 if (sd == null || currentActiveSkills.Contains(sd)) continue;
                 AssignActive(sd, 0);
                 Debug.Log($"[DraftManager] Opening kit timeout — auto-picked '{sd.skillName}' into slot 0 for {primary}.");
@@ -335,11 +335,11 @@ namespace RIMA
                 return;
             }
 
-            SkillDatabase.Instance?.EnsureBuilt();
+            SkillDatabase db = SkillDatabase.EnsureRuntime();
             var candidates = new List<SkillData>(kit.Length);
             foreach (string name in kit)
             {
-                var sd = SkillDatabase.Instance?.FindByName(name);
+                var sd = db?.FindByName(name);
                 if (sd == null)
                 {
                     Debug.LogWarning($"[DraftManager] Kit skill '{name}' not found in SkillDatabase.");
@@ -609,12 +609,7 @@ namespace RIMA
         {
             // Codex #1 blocker fix: SkillDatabase is not guaranteed in the playable scene.
             // Without it, SkillOfferGenerator falls back to an unwired serialized list and the draft is empty.
-            if (SkillDatabase.Instance == null && FindAnyObjectByType<SkillDatabase>() == null)
-            {
-                var dbGo = new GameObject("SkillDatabase_Auto");
-                dbGo.AddComponent<SkillDatabase>();
-                Debug.Log("[DraftManager] SkillDatabase otomatik oluşturuldu.");
-            }
+            SkillDatabase.EnsureRuntime();
             if (offerUI == null)
             {
                 offerUI = FindAnyObjectByType<SkillOfferUI>();

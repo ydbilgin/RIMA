@@ -17,9 +17,45 @@ namespace RIMA
 
         private void Awake()
         {
-            if (Instance != null && Instance != this) { Destroy(this); return; }
+            if (Instance != null && Instance != this && Instance.IsUsable()) { Destroy(this); return; }
             Instance = this;
-            Build();
+            EnsureBuilt();
+        }
+
+        public static SkillDatabase EnsureRuntime()
+        {
+            if (Instance != null)
+            {
+                Instance.EnsureBuilt();
+                if (Instance.IsUsable()) return Instance;
+            }
+
+            var databases = FindObjectsByType<SkillDatabase>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+
+            for (int i = 0; i < databases.Length; i++)
+            {
+                SkillDatabase candidate = databases[i];
+                if (candidate == null) continue;
+
+                candidate.EnsureBuilt();
+                if (!candidate.IsUsable()) continue;
+
+                Instance = candidate;
+                return candidate;
+            }
+
+            var go = new GameObject("SkillDatabase_Auto");
+            SkillDatabase created = go.AddComponent<SkillDatabase>();
+            created.EnsureBuilt();
+            Instance = created;
+            return created;
+        }
+
+        private bool IsUsable()
+        {
+            return built && db.Count > 0;
         }
 
         // ─────────────────────────────────────────────────────────
@@ -27,7 +63,7 @@ namespace RIMA
         // ─────────────────────────────────────────────────────────
         private void Build()
         {
-            if (built) return;
+            if (built && db.Count > 0) return;
             built = true;
             db.Clear();
 
@@ -566,7 +602,11 @@ namespace RIMA
 
         // ── Query ────────────────────────────────────────────────
 
-        public void EnsureBuilt() { if (!built) Build(); }
+        public void EnsureBuilt()
+        {
+            if (!built || db.Count == 0) Build();
+            if (Instance == null && IsUsable()) Instance = this;
+        }
 
         public List<SkillData> GetAll() => db;
 

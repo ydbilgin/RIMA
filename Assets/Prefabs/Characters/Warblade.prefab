@@ -120,6 +120,66 @@ PrefabInstance:
       propertyPath: m_UsedByEffector
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[0].x
+      value: -0.22000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[0].y
+      value: 0.029999992
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[1].x
+      value: -0.12999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[1].y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[2].x
+      value: -0.029999984
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[2].y
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[3].x
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[3].y
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[4].x
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[4].y
+      value: 0.11999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[5].x
+      value: 0.119999975
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[5].y
+      value: 0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[6].y
+      value: 0.13999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[7].x
+      value: -0.22000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[7].y
+      value: 0.059999995
+      objectReference: {fileID: 0}
     - target: {fileID: 6976688939510951028, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_BodyType
       value: 0
@@ -130,7 +190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7741234598012345678, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: sortReference
-      value:
+      value: 
       objectReference: {fileID: 6087234464528791844, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

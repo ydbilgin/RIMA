@@ -31,6 +31,8 @@ namespace RIMA
         [Header("Orientation Bridge (A2)")]
         [SerializeField] private OrientationSync orientationSync;
         [SerializeField] private SpriteRenderer weaponRenderer; // set after spawn; auto-found if null
+        [Tooltip("Use PlayerAnimator's smoothed 8-way visual facing for weapon mount/sort. Disable to return to raw PlayerController.FacingDirection.")]
+        [SerializeField] private bool useAnimatorVisualFacing = true;
 
         [Header("Swing visibility (3-AI verdict R — keep weapon VISIBLE, fade it)")]
         [Tooltip("Weapon opacity during a swing. NOT hidden (that kills weapon identity / motion tracking — Hades keeps it visible). Faded so the slash VFX reads on top. ~0.3-0.5.")]
@@ -38,6 +40,7 @@ namespace RIMA
 
         private PlayerController _playerController;
         private PlayerAttack _playerAttack;
+        private PlayerAnimator _playerAnimator;
         private GameObject _weaponInstance;
         private WeaponDatabaseSO.WeaponEntry _currentEntry;
         private FacingDir8 _lastDir = (FacingDir8)(-1); // force first sync
@@ -50,6 +53,7 @@ namespace RIMA
             // PlayerController/PlayerAttack are not in the prefab asset; acquire at runtime.
             _playerController = GetComponent<PlayerController>();
             _playerAttack = GetComponent<PlayerAttack>();
+            _playerAnimator = GetComponent<PlayerAnimator>();
         }
 
         private void OnEnable()
@@ -70,7 +74,7 @@ namespace RIMA
         private void HandleComboStep(int step)
         {
             if (orientationSync == null || _playerController == null) return;
-            FacingDir8 dir = VectorToDir8(_playerController.FacingDirection);
+            FacingDir8 dir = GetVisualFacingDir();
             // Keep flip/offset/sort current for the swing direction before it starts.
             orientationSync.Sync(dir);
             UpdateWeaponSortOrder(dir);
@@ -123,7 +127,7 @@ namespace RIMA
             // --- A2: Orientation bridge (Level1Static) ---
             if (attachMode == AttachMode.Level1Static && _playerController != null && orientationSync != null)
             {
-                FacingDir8 dir = VectorToDir8(_playerController.FacingDirection);
+                FacingDir8 dir = GetVisualFacingDir();
                 // Don't advance _lastDir while a swing owns the rotation: Sync() skips the
                 // rotation write mid-swing, so we must let the swing finish (IsSwinging false)
                 // and then resync to the current dir, otherwise the weapon stays stuck at the
@@ -140,7 +144,7 @@ namespace RIMA
             // movement while bodyRenderer.sortingOrder changed continuously.
             if (attachMode == AttachMode.Level1Static && _playerController != null)
             {
-                FacingDir8 dir = VectorToDir8(_playerController.FacingDirection);
+                FacingDir8 dir = GetVisualFacingDir();
                 UpdateWeaponSortOrder(dir);
             }
 
@@ -224,6 +228,16 @@ namespace RIMA
             remapped = ((remapped % 360f) + 360f) % 360f;
             int index = Mathf.RoundToInt(remapped / 45f) % 8;
             return (FacingDir8)index;
+        }
+
+        private FacingDir8 GetVisualFacingDir()
+        {
+            if (useAnimatorVisualFacing && _playerAnimator != null)
+                return _playerAnimator.VisualFacingDir;
+
+            return _playerController != null
+                ? VectorToDir8(_playerController.FacingDirection)
+                : FacingDir8.S;
         }
 
         private void UpdateWeaponSortOrder(FacingDir8 dir)

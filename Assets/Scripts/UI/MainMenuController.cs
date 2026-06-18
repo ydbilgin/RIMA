@@ -232,7 +232,8 @@ namespace RIMA.UI
             colors.selectedColor = Color.clear;
             colors.disabledColor = Color.clear;
             button.colors = colors;
-            button.onClick.AddListener(onClick);
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => onClick?.Invoke());
 
             var arrow = AddText(rt, "HoverArrow", ">", 20f, Cyan, TextAlignmentOptions.Left);
             arrow.fontStyle = FontStyles.Bold;
