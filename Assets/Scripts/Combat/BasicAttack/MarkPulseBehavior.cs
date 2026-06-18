@@ -126,7 +126,7 @@ namespace RIMA
 
                 hp.TakeDamage(finalDmg);
                 rage?.OnHitEnemy();
-                HitStop.Instance?.FreezeLight();
+                RIMA.Combat.HitPauseDriver.Instance?.TriggerPause(0.03f); // single timeScale owner — obsolete HitStop here caused a dual-owner stuck-0 (frozen game) race in combat
                 DamagePopup.Show(col.transform.position, finalDmg);
 
                 var kb = col.GetComponent<KnockbackReceiver>();
