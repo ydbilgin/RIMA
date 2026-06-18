@@ -81,6 +81,8 @@ namespace RIMA
 
         public bool TryActivate()
         {
+            // A1: cooldown (IsReady false) stays SILENT — key-spam must not fire deny feedback.
+            // Only veto + insufficient-resource paths below give failed-cast feedback.
             if (!IsReady) return false;
             if (player == null) player = GetComponentInParent<PlayerController>();
             if (rage == null) rage = GetComponentInParent<RageSystem>();
@@ -88,15 +90,28 @@ namespace RIMA
             if (flowTracker == null) flowTracker = GetComponentInParent<SkillFlowTracker>();
             // Veto BEFORE spending: range-gated no-op skills reject here without burning cost/cooldown.
             // Default CanExecute()==true → all existing skills unaffected.
-            if (!CanExecute()) return false;
-            if (rageCost > 0 && (rage == null || !rage.TrySpend(rageCost))) return false;
-            if (resourceCost > 0 && (resource == null || !resource.TrySpend(resourceCost))) return false;
+            if (!CanExecute()) { FailedCastFeedback("Uygun hedef yok"); return false; }
+            if (rageCost > 0 && (rage == null || !rage.TrySpend(rageCost))) { FailedCastFeedback("Yetersiz kaynak"); return false; }
+            if (resourceCost > 0 && (resource == null || !resource.TrySpend(resourceCost))) { FailedCastFeedback("Yetersiz kaynak"); return false; }
             player?.FaceCombatTarget();
             Execute();
             cooldownTimer = cooldown;
             flowTracker?.NotifySkillUsed(this);
             Debug.Log($"[Cast] {skillName} ({(player != null ? player.name : name)})");
             return true;
+        }
+
+        // A1: failed-cast feedback (veto / insufficient-resource ONLY — cooldown stays silent).
+        // Mirrors existing systems, adds no new infra: AudioManager.Play (DraftHover = neutral UI tick,
+        // closest deny cue in the existing enum), SkillVfx.CastFlash on the caster (the established
+        // caster-flash idiom used by every Elementalist skill), VfxElement.Void = the "negative" tint
+        // so it never reads as a successful cast. HUD toast via the existing HUDController.ShowToast.
+        // Presentation only — touches no combat/cooldown/cost state.
+        private void FailedCastFeedback(string reason)
+        {
+            RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.DraftHover);
+            SkillVfx.CastFlash(player != null ? player.gameObject : gameObject, VfxElement.Void);
+            HUDController.Instance?.ShowToast(reason);
         }
 
         public void ForceReady() => cooldownTimer = 0f;

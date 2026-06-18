@@ -436,6 +436,21 @@ namespace RIMA
             Component host = ResolvePrimarySlotHost();
             if (host == null) { error = "primary skill controller missing"; return false; }
 
+            // A3 dup-slot REJECT: assigning the SAME skill type to a second slot would let
+            // AssignActive bind one shared SkillBase component into two slots (one cooldown timer
+            // driving both). Reject BEFORE AssignActive/AddComponent so no orphan component leaks.
+            // Same-slot re-assign is allowed (idempotent — the dup lives in another slot, not this one).
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == slot) continue;
+                var occupant = GetControllerSlot(host, i);
+                if (occupant != null && occupant.GetType() == skill.skillType)
+                {
+                    error = $"{skill.skillName} zaten {i + 1}. yuvada — aynı yetenek iki yuvaya atanamaz";
+                    return false;
+                }
+            }
+
             RemoveOwnedSkill(GetControllerSlot(host, slot));
             AssignActive(skill, slot);
             OnSkillPicked.Invoke(skill);
