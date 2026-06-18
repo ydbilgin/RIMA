@@ -294,7 +294,7 @@ namespace RIMA
                 if (!IsDemoSelectable(nearbyClass))
                 {
                     ShowPrompt(Vector3.zero,
-                        $"{nearbyClass.ToString().ToUpperInvariant()} — Kilitli",
+                        $"{nearbyClass.ToString().ToUpperInvariant()} — {Loc.T("char_select.in_development")}",
                         PromptTint.Unaffordable);
                 }
                 else if (!IsUnlocked(nearbyClass))
@@ -1971,7 +1971,7 @@ namespace RIMA
 
         private static bool IsDemoSelectable(ClassType cls)
         {
-            return cls == ClassType.Warblade || cls == ClassType.Elementalist;
+            return ClassUnlockPolicy.IsDemoPlayable(cls);
         }
 
         private static bool CanUnlock(ClassType cls)

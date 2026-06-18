@@ -153,7 +153,12 @@ namespace RIMA.UI
             return IsUnlocked(cls);
         }
 
-        private static bool IsUnlocked(ClassType cls) => ClassUnlockPolicy.IsUnlocked(cls);
+        // DEMO SAFETY (2026-06-18): mirror CharacterSelectScreen.OnStartRun — this latent second
+        // class-select screen must never let a non-demo-playable class reach a live run. Routing the
+        // shared gate through IsDemoPlayable hardens all select/confirm sites (grid, selected,
+        // confirm) at once, since they all consult IsUnlocked.
+        private static bool IsUnlocked(ClassType cls) =>
+            ClassUnlockPolicy.IsUnlocked(cls) && ClassUnlockPolicy.IsDemoPlayable(cls);
 
         private ClassData[] GetDefaultClasses() => new ClassData[]
         {

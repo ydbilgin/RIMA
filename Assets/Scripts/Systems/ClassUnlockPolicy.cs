@@ -6,6 +6,16 @@ namespace RIMA
     {
         public const string UnlockPrefsPrefix = "rima_class_unlocked_";
 
+        // DEMO SAFETY (2026-06-18): single source of truth for "this class is safe to play
+        // end-to-end in the demo". Only Warblade + Elementalist have complete, verified kits;
+        // every other class is controller-less or unverified, so it must never reach a live run.
+        // IsUnlocked() still governs the echo-purchase economy; IsDemoPlayable() is the hard gate
+        // that the chamber pedestals and the classic start path both consult.
+        public static bool IsDemoPlayable(ClassType cls)
+        {
+            return cls == ClassType.Warblade || cls == ClassType.Elementalist;
+        }
+
         public static bool IsUnlocked(ClassType cls)
         {
             return cls == ClassType.Warblade ||

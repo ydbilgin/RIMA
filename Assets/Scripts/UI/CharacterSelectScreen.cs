@@ -538,8 +538,13 @@ namespace RIMA
                 lockImg.color = WithAlpha(RimaUITheme.CharSelectButtonFill, 0.52f);
                 lockImg.raycastTarget = false;
 
-                var lockLabel = MakeText(Loc.T("char_select.locked"), lockRt, 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
+                // DEMO SAFETY (2026-06-18): demo-locked classes (no verified kit) read "in development"
+                // and hide the echo cost line, so the jury is never invited to buy a broken class.
+                bool demoLocked = !ClassUnlockPolicy.IsDemoPlayable(cls);
+                var lockLabel = MakeText(demoLocked ? Loc.T("char_select.in_development") : Loc.T("char_select.locked"), lockRt, demoLocked ? 6.5f : 8.5f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
                 lockLabel.alignment = TextAlignmentOptions.Center;
+                lockLabel.enableWordWrapping = false;
+                lockLabel.overflowMode = TextOverflowModes.Ellipsis;
                 var lockLabelRt = lockLabel.transform as RectTransform;
                 lockLabelRt.anchorMin = Vector2.zero; lockLabelRt.anchorMax = Vector2.one;
                 lockLabelRt.offsetMin = lockLabelRt.offsetMax = Vector2.zero;
@@ -549,7 +554,7 @@ namespace RIMA
                 chipRt.anchoredPosition = new Vector2(0f, footY - 52f);
                 chipRt.sizeDelta = new Vector2(boxSize.x - 12f, 18f);
 
-                costChip = MakeText(UnlockOrPathText(cls), chipRt, 7.2f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
+                costChip = MakeText(demoLocked ? "" : UnlockOrPathText(cls), chipRt, 7.2f, FontStyles.Bold, RimaUITheme.CharSelectTextBody);
                 costChip.alignment = TextAlignmentOptions.Center;
                 costChip.enableWordWrapping = false;
                 costChip.overflowMode = TextOverflowModes.Ellipsis;
@@ -951,25 +956,30 @@ namespace RIMA
 
             if (startButton != null)
             {
-                bool canUnlock = CanUnlock(cls);
-                startButton.interactable = unlocked || canUnlock;
+                // DEMO SAFETY (2026-06-18): non-demo-playable classes are never startable or
+                // purchasable from this screen; the action button reads "in development".
+                bool demoPlayable = ClassUnlockPolicy.IsDemoPlayable(cls);
+                bool canUnlock = demoPlayable && CanUnlock(cls);
+                startButton.interactable = demoPlayable && (unlocked || canUnlock);
                 if (startButtonRoot != null) startButtonRoot.localScale = Vector3.one;
                 if (startButtonBorder != null) startButtonBorder.color = RimaUITheme.CharSelectIronGrey;
                 if (startButtonFill != null)
                 {
                     var fill = RimaUITheme.CharSelectButtonFill;
-                    fill.a = unlocked || canUnlock ? 1f : 0.50f;
+                    fill.a = (demoPlayable && (unlocked || canUnlock)) ? 1f : 0.50f;
                     startButtonFill.color = fill;
                 }
                 if (startButtonLabel != null)
                 {
-                    startButtonLabel.text = unlocked
-                        ? Loc.T("char_select.btn.select")
-                        : canUnlock
-                            ? Loc.T("char_select.btn.unlock", LockedButtonText(cls))
-                            : Loc.T("char_select.not_enough_echo");
-                    startButtonLabel.fontSize = unlocked ? 21f : 12f;
-                    startButtonLabel.color = unlocked
+                    startButtonLabel.text = !demoPlayable
+                        ? Loc.T("char_select.in_development")
+                        : unlocked
+                            ? Loc.T("char_select.btn.select")
+                            : canUnlock
+                                ? Loc.T("char_select.btn.unlock", LockedButtonText(cls))
+                                : Loc.T("char_select.not_enough_echo");
+                    startButtonLabel.fontSize = (demoPlayable && unlocked) ? 21f : 12f;
+                    startButtonLabel.color = (demoPlayable && unlocked)
                         ? RimaUITheme.CharSelectParchment
                         : canUnlock
                             ? RimaUITheme.CharSelectOrange
@@ -1215,6 +1225,15 @@ namespace RIMA
             ChamberSelectBootstrap chamber = GetComponent<ChamberSelectBootstrap>();
             if (chamber != null && chamber.AcceptClassicSelectionFromPopup(selectedClass))
             {
+                return;
+            }
+
+            // DEMO SAFETY (2026-06-18): hard gate so the TAB-overlay fallback can never launch a
+            // run with a class that lacks a complete, verified kit (controller-less classes would
+            // crash / leave an empty run). Only Warblade + Elementalist are demo-playable.
+            if (!ClassUnlockPolicy.IsDemoPlayable(selectedClass))
+            {
+                Debug.LogWarning($"[CharacterSelectScreen] Demo-locked class rejected at start: {selectedClass}");
                 return;
             }
 

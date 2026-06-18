@@ -50,10 +50,17 @@ namespace RIMA
         public void SetPrimaryClass(ClassType type)
         {
             if (type == ClassType.None) return;
-            if (!DirectorBypassClassUnlock && !ClassUnlockPolicy.IsUnlocked(type))
+            // Defense-in-depth (ANOMALY-2): mirror the CharacterSelect hardening — a primary class must be
+            // BOTH unlocked AND demo-playable (Warblade/Elementalist) before it can reach a live run.
+            // DirectorBypassClassUnlock still escapes for the Director tool.
+            if (!DirectorBypassClassUnlock &&
+                !(ClassUnlockPolicy.IsUnlocked(type) && ClassUnlockPolicy.IsDemoPlayable(type)))
             {
-                Debug.LogWarning($"[PlayerClassManager] Locked primary class rejected: {type}");
-                return;
+                // Husk-fallback (council P0): never leave the player classless. A locked/non-demo class on the
+                // apply path falls back to a known demo-playable class so setup still COMPLETES. The Director
+                // bypass above still escapes this and may set any class; UI selection gates are unchanged.
+                Debug.LogWarning($"[PlayerClassManager] Locked primary class '{type}' rejected on apply path — falling back to Warblade.");
+                type = ClassType.Warblade;
             }
 
             SelectedClass = type;

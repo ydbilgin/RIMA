@@ -109,6 +109,7 @@ namespace RIMA
             // Karakter Seçim
             { "char_select.title",          "RIMA <color=#B0B3BC>- KARAKTER SEÇ</color>" },
             { "char_select.locked",         "KİLİTLİ" },
+            { "char_select.in_development",  "GELİŞTİRME AŞAMASINDA" },
             { "char_select.skills",         "YETENEKLER" },
             { "char_select.skills_soon",    "Yetenekler yakında" },
             { "char_select.btn.select",     "SEÇ" },
@@ -290,6 +291,7 @@ namespace RIMA
             // Character Select
             { "char_select.title",          "RIMA <color=#B0B3BC>- SELECT CHARACTER</color>" },
             { "char_select.locked",         "LOCKED" },
+            { "char_select.in_development",  "IN DEVELOPMENT" },
             { "char_select.skills",         "SKILLS" },
             { "char_select.skills_soon",    "Skills Coming Soon" },
             { "char_select.btn.select",     "SELECT" },
