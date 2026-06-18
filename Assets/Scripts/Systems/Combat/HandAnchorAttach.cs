@@ -229,8 +229,11 @@ namespace RIMA
         private void UpdateWeaponSortOrder(FacingDir8 dir)
         {
             if (weaponRenderer == null || bodyRenderer == null) return;
-            // Weapon behind body when facing N/NE/NW (player back is visible, weapon arm goes behind).
-            bool behindBody = dir == FacingDir8.N || dir == FacingDir8.NE || dir == FacingDir8.NW;
+            // Right-hand weapon: behind the body on the upper-left hemisphere (N/NE/NW/W) where the
+            // right hand is on the far side from the camera; in front on the lower-right (S/SE/E/SW).
+            // W added so a West-facing right-hand weapon hides behind the torso (was rendering in front).
+            bool behindBody = dir == FacingDir8.N || dir == FacingDir8.NE
+                || dir == FacingDir8.NW || dir == FacingDir8.W;
             weaponRenderer.sortingOrder = bodyRenderer.sortingOrder + (behindBody ? -1 : 1);
         }
 

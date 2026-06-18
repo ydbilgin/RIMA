@@ -44,6 +44,60 @@ namespace RIMA.Combat
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.Space(10);
+            GUI.backgroundColor = new Color(0.6f, 1f, 0.6f);
+            if (GUILayout.Button("Offsets + Rotations -> Player.prefab KAYDET", GUILayout.Height(28)))
+            {
+                SaveOffsetsToPrefab();
+            }
+            GUI.backgroundColor = Color.white;
+            EditorGUILayout.HelpBox(
+                "Play modda yaptigin ayarlar cikinca kaybolur -> bu buton Player.prefab'a yazar (kalici). " +
+                "NOT: Scene'de SILAHI surukleme (Sync her kare geri alir); sari Active-yon isaretcisini surukle ya da Offset/Weapon Rotations sayilarini gir + Enter.",
+                MessageType.Info);
+        }
+
+        private void SaveOffsetsToPrefab()
+        {
+            var sync = (OrientationSync)target;
+            OrientationSync prefabSync = PrefabUtility.GetCorrespondingObjectFromSource(sync) as OrientationSync;
+            GameObject prefabGo = null;
+            if (prefabSync == null)
+            {
+                prefabGo = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
+                if (prefabGo != null) prefabSync = prefabGo.GetComponentInChildren<OrientationSync>(true);
+            }
+            if (prefabSync == null)
+            {
+                EditorUtility.DisplayDialog("Kayit basarisiz", "Player.prefab / OrientationSync bulunamadi.", "Tamam");
+                return;
+            }
+
+            var src = new SerializedObject(sync);
+            var dst = new SerializedObject(prefabSync);
+            CopyArrayProp(src, dst, "handOffsets");
+            CopyArrayProp(src, dst, "weaponRotations");
+            dst.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(prefabSync);
+            if (prefabGo != null) PrefabUtility.SavePrefabAsset(prefabGo);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[OrientationSync] handOffsets + weaponRotations -> Player.prefab kaydedildi.");
+        }
+
+        private static void CopyArrayProp(SerializedObject src, SerializedObject dst, string propName)
+        {
+            var s = src.FindProperty(propName);
+            var d = dst.FindProperty(propName);
+            if (s == null || d == null || !s.isArray) return;
+            d.arraySize = s.arraySize;
+            for (int i = 0; i < s.arraySize; i++)
+            {
+                var se = s.GetArrayElementAtIndex(i);
+                var de = d.GetArrayElementAtIndex(i);
+                if (se.propertyType == SerializedPropertyType.Vector2) de.vector2Value = se.vector2Value;
+                else if (se.propertyType == SerializedPropertyType.Float) de.floatValue = se.floatValue;
+            }
         }
 
         private void DrawCustomOffsetsSection(SerializedProperty handOffsetsProp)
