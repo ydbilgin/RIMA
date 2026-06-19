@@ -14,7 +14,7 @@ namespace RIMA.MapDesigner.Brush.Editor.UI.Hotkeys
             if (w != null) w.SetMode(BrushToolMode.Brush);
         }
 
-        [Shortcut("RIMA/Brush/Mode/Erase", KeyCode.E)]
+        [Shortcut("RIMA/Brush/Mode/Erase", KeyCode.E, ShortcutModifiers.Shift)]
         public static void ToEraseMode()
         {
             var w = MapDesignerBrushWindow.GetCurrent();
