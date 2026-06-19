@@ -1,1 +1,0 @@
-Generated 6 opaque 64x64 top-down 3/4 cracked-stone floor variants plus td_floor_sheet.png 384x64; all tile edges verified LR/TB mismatch 0.

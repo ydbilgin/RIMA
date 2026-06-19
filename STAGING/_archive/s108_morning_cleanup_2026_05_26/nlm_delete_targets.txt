@@ -1,7 +1,0 @@
-G|6a35c166-e432-424a-ac57-984ed619a7be|codex_antigravity_4_p0_iter2.md
-G|76bcf41f-c23b-43c4-a35b-f97dac657493|codex_asama2_implementation.md
-G|30f87cbf-c2f7-435b-b0aa-44eb225f679d|codex_karar_118_tile_import_wizard.md
-G|cc857cae-b411-48f7-964a-bff79778c7ae|codex_karar_118a_wizard_only.md
-G|8828c37f-0407-40f2-abbb-4c6850ba6f6c|codex_karar_118b_tilemap_layers.md
-G|555543cf-a61f-435c-9779-110ea2bda932|codex_karar_128_tile_metadata_wang_resolver.md
-G|96d15b2b-0afc-47d6-ab79-b826ab685bdb|codex_karar_129_f1_biome_preset.md

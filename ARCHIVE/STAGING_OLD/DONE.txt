@@ -1,5 +1,0 @@
-[DONE-REDO3] Warblade/quick-horizontal-slash/south-west | 2026-04-05
-[DONE-REDO3] Warblade/quick-horizontal-slash/north-west | 2026-04-05
-[DONE-REDO3] Warblade/basic_attack_2/south-west | 2026-04-05
-[DONE-REDO3] Warblade/basic_attack_2/north-west | 2026-04-05
-[DONE-REDO3] Warblade/basic_attack_3/north | 2026-04-05

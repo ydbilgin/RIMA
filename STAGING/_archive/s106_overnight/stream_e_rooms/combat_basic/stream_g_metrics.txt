@@ -1,8 +1,0 @@
-wallPiecesBefore=38
-wallPiecesAfter=38
-realPiecesAfter=15
-floorTilesBefore=168
-floorTilesAfter=168
-rearWallBoundsX=2.000
-rearWallBoundsY=1.000
-elapsedSeconds=1.0

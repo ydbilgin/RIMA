@@ -1,6 +1,0 @@
-VERDICT: FAIL
-- Backquote polling is not blocked during overlays, letting players toggle Director state behind active overlays (like SkillOfferUI). When the overlay closes, the Director overlay/freeze wrongly activates mid-gameplay.
-- ClassSelectionUI (dual-class UI) and DemoCompleteOverlay do not set UIManager flags. If a player presses backquote while ClassSelectionUI is open, it triggers DirectorMode, drawing the Director overlay (sortingOrder 950) on top of ClassSelectionUI (190) and softlocking the game.
-- Exact Fix: Add IsAnyBlockingUIOpen() helper in DirectorMode.cs:
-  private bool IsAnyBlockingUIOpen() => (UIManager.Instance != null && UIManager.Instance.IsAnyOverlayOpen) || GameObject.Find("ClassSelection_Canvas") != null || GameObject.Find("DemoCompleteOverlay") != null || (FindDeathScreenManager() != null && FindDeathScreenManager().IsDeathActiveForDemo);
-- Use !IsAnyBlockingUIOpen() to guard the backquote ToggleState() check in Update(), and replace UIManager.Instance.IsAnyOverlayOpen with IsAnyBlockingUIOpen() in UpdateOverlayBleedGuard().

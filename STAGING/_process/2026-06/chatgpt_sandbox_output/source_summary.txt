@@ -1,1 +1,0 @@
-Based on provided RIMA_sandbox_tool_pack_for_chatgpt.zip: 00_PROMPT, vision, systems, council synthesis, stat decision, chrome kit slices.

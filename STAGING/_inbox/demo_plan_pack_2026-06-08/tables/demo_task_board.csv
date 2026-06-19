@@ -1,9 +1,0 @@
-id,phase,title,owner,priority,status,acceptance
-T1,UI,ESC opens PauseMenu not SkillCodex,Claude/Codex,P0,TODO,ESC gameplay opens pause and codex only opens from menu/debug
-T2,UI,CharacterSelect demo allowlist Warblade Elementalist,Claude/Codex,P0,TODO,Only Warblade and Elementalist can start demo run
-T3,Combat,WeaponMount minimal Warblade sword Elementalist rune disc,Claude/Codex,P0,TODO,Weapons render above floor/cliff and follow player direction
-T4,Rooms,Forced demo room sequence,Claude/Codex,P0,TODO,Combat-Combat-Shop-Combat-Boss-Clear works
-T5,Rooms,Walkability collider debug and fix,Claude/Codex,P0,TODO,Visible floor is walkable no invisible wall
-T6,Shop,3 item shop minimum,Claude/Codex,P1,TODO,Heal damage maxHP/cooldown item buy applies effect
-T7,Boss,Boss demo 3 attacks and death clear,Claude/Codex,P1,TODO,Boss is killable by both classes and triggers demo clear
-T8,QA,Full demo smoke 5 runs,QA,P0,TODO,3 Warblade and 2 Elementalist runs without softlock

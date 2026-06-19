@@ -1,7 +1,0 @@
-﻿scenePath=Assets/Scenes/Demo/PathC_BaseTest.unity
-sceneDirty=False
-pilotATestExists=False
-layerCounts=Entities:8, Walls:55
-wallsByRoot=Grid:43, Props_Root:12
-gridChildren=52
-propsRootChildren=12

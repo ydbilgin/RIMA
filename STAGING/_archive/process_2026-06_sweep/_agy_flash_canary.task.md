@@ -1,1 +1,0 @@
-Reply with EXACTLY one line and nothing else: AGY_DETACHED_OK followed by the current working directory path.

@@ -1,9 +1,0 @@
-{
-  "generatedAt": "20260530_144650_628",
-  "scene": "PlayableArena_Test01",
-  "pass": 0,
-  "fail": 1,
-  "results": [
-    {"test":"T2_GateFlow_Fragment_G_Draft_Gate_Unlock","passed":false,"details":"One or more of 1 gate(s) NOT Unlocked. Check MapFragmentBridge OnRoomCleared handler and Gate wiring."}
-  ]
-}

@@ -1,8 +1,0 @@
-{
-  "state": "opening_draft",
-  "pre": { "scene": "_Arena", "IsDraftActive": false, "IsDraftPending": true },
-  "action": "scene loaded, draft auto-opened",
-  "post": { "IsDraftActive": true, "IsDraftPending": false, "TimeScale": 0 },
-  "result": "PASS",
-  "note": "Draft açık, TimeScale=0 doğru"
-}

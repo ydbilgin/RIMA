@@ -1,9 +1,0 @@
-{
-  "generatedAt": "20260527_144708_897",
-  "scene": "PlayableArena_Test01",
-  "pass": 0,
-  "fail": 1,
-  "results": [
-    {"test":"T1_MapBoundary_North","passed":false,"details":"Player ended at (-6.59, 15.80, 0.00) which is NOT walkable after 1.5s. Boundary did not push player back."}
-  ]
-}
