@@ -126,7 +126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[0].y
-      value: 0.029999992
+      value: 0.009999992
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[1].x
@@ -146,15 +146,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[3].x
-      value: 0.15
+      value: 0.16000001
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[3].y
-      value: 0.08
+      value: 0.07
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[4].x
-      value: 0.18
+      value: 0.19000001
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[4].y
@@ -169,16 +169,20 @@ PrefabInstance:
       value: 0.14
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
+      propertyPath: handOffsets.Array.data[6].x
+      value: -0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[6].y
-      value: 0.13999999
+      value: 0.109999985
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[7].x
-      value: -0.22000004
+      value: -0.23000005
       objectReference: {fileID: 0}
     - target: {fileID: 6829785233186328636, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: handOffsets.Array.data[7].y
-      value: 0.059999995
+      value: 0.07999999
       objectReference: {fileID: 0}
     - target: {fileID: 6976688939510951028, guid: 64f340ef3dbef474da6aa6b17fe976f4, type: 3}
       propertyPath: m_BodyType
