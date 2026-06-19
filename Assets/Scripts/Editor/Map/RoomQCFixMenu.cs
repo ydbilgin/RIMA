@@ -112,7 +112,7 @@ namespace RIMA.Editor.Map
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            WriteReport("STAGING/ROOM_QC_FIX_REPAIR_yasinderyabilgin.txt", report.ToString());
+            WriteReport("STAGING/ROOM_QC_FIX_REPAIR.txt", report.ToString());
             Debug.Log(report.ToString());
         }
 
@@ -174,13 +174,13 @@ namespace RIMA.Editor.Map
             if (ok)
             {
                 string text = report.ToString() + "[RoomQCFix] PASS\n";
-                WriteReport("STAGING/ROOM_QC_FIX_VERIFY_yasinderyabilgin.txt", text);
+                WriteReport("STAGING/ROOM_QC_FIX_VERIFY.txt", text);
                 Debug.Log(report.ToString());
                 Debug.Log("[RoomQCFix] PASS");
             }
             else
             {
-                WriteReport("STAGING/ROOM_QC_FIX_VERIFY_yasinderyabilgin.txt", report.ToString());
+                WriteReport("STAGING/ROOM_QC_FIX_VERIFY.txt", report.ToString());
                 Debug.LogError(report.ToString());
             }
 
@@ -273,7 +273,7 @@ namespace RIMA.Editor.Map
             bool pass = exceptions == 0;
             report.AppendLine($"exceptions={exceptions}, propValidationFailures={propValidationFailures}, totalBuiltProps={totalProps}");
             report.AppendLine(pass ? "[RoomSmokeTest] PASS (build exceptions=0)" : "[RoomSmokeTest] FAIL");
-            WriteReport("STAGING/ROOM_SMOKE_ALL_TEMPLATES_laurethayday.txt", report.ToString());
+            WriteReport("STAGING/ROOM_SMOKE_ALL_TEMPLATES.txt", report.ToString());
 
             if (pass)
             {
