@@ -256,6 +256,83 @@ namespace RIMA.Editor.MapDesigner
             }
         }
 
+        // User 2026-06-19 ("yeni oda ekleme"): create a blank RoomTemplateSO ready for grid-paint
+        // authoring (expand grid + Paint Walkable/Void + Set Entry/N). Cliffs are AUTOMATIC —
+        // IsoRoomBuilder wraps the painted floor edge on Build, so there is NO manual cliff step in
+        // this pipeline. New asset lands in Rooms/Custom and is selected immediately. To make it
+        // spawn in a run, add it to the matching RoomBankSO list (combat/elite/boss/...).
+        private void CreateNewRoomTemplate()
+        {
+            const string customFolder = RoomsRoot + "/Custom";
+            if (!AssetDatabase.IsValidFolder(customFolder))
+                AssetDatabase.CreateFolder(RoomsRoot, "Custom");
+
+            const int w = 16, h = 12;
+            RoomTemplateSO room = ScriptableObject.CreateInstance<RoomTemplateSO>();
+            room.schemaVersion = "1.0";
+            room.biomeId = "ShatteredKeep";
+            room.roomType = RIMA.RoomType.Combat;
+            room.bounds = new RectInt(0, 0, w, h);
+            room.cameraBounds = CameraBounds.FromBounds(room.bounds);
+            bool[] grid = new bool[w * h];
+            for (int i = 0; i < grid.Length; i++) grid[i] = true; // start fully walkable; reshape via paint
+            room.walkableGrid = grid;
+            room.playerSpawn = new PlayerSpawnSocket
+            {
+                socketId = "player_spawn_01",
+                position = new Vector2Int(w / 2, 1),
+                facing = RIMA.DoorDirection.South
+            };
+            // Default = all 3 north exit slots (NW / N / NE). The run picks a subset by branch
+            // count (1→N · 2→NW+NE · 3→all), so a room with all 3 valid slots is usable at any
+            // node. Each must be a walkable north-edge cell (void above, 2 walkable south) and the
+            // slots must be >=3 tiles apart — these positions satisfy that on the default rectangle.
+            room.doorSockets = new List<DoorSocket>
+            {
+                new DoorSocket
+                {
+                    socketId = RoomTemplateSO.ExitSlotNorthWestId,
+                    position = new Vector2Int(3, h - 1),
+                    direction = RIMA.DoorDirection.North,
+                    widthInTiles = 2,
+                    isExit = true
+                },
+                new DoorSocket
+                {
+                    socketId = RoomTemplateSO.ExitSlotNorthId,
+                    position = new Vector2Int(w / 2, h - 1),
+                    direction = RIMA.DoorDirection.North,
+                    widthInTiles = 2,
+                    isExit = true
+                },
+                new DoorSocket
+                {
+                    socketId = RoomTemplateSO.ExitSlotNorthEastId,
+                    position = new Vector2Int(w - 4, h - 1),
+                    direction = RIMA.DoorDirection.North,
+                    widthInTiles = 2,
+                    isExit = true
+                }
+            };
+            room.encounterTags = new List<string> { "combat" };
+            room.difficultyTags = new List<string>();
+            room.blockerTags = new List<string>();
+
+            string path = AssetDatabase.GenerateUniqueAssetPath(customFolder + "/custom_room_01.asset");
+            room.roomId = Path.GetFileNameWithoutExtension(path);
+            AssetDatabase.CreateAsset(room, path);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            _roomHasError.Clear();
+            RefreshRoomTemplates();
+            _selectedTemplate = room;
+            _autoPropsSeed = RoomTemplateAutoPropsUtility.StableSeed(room.name);
+            RunFullValidation(room);
+            Repaint();
+            Debug.Log($"[UnifiedMapDesigner] Yeni oda olusturuldu: {path}");
+        }
+
         private void DrawRooms()
         {
             HandleRoomsKeyboard();
@@ -271,6 +348,11 @@ namespace RIMA.Editor.MapDesigner
                             _roomHasError.Clear(); // B2: invalidate badge cache
                             RefreshRoomTemplates();
                         }
+                    }
+
+                    if (DrawColoredButton("+ Yeni Oda", new Color(0.35f, 0.8f, 0.35f), GUILayout.Height(22f)))
+                    {
+                        CreateNewRoomTemplate();
                     }
 
                     EditorGUILayout.LabelField($"RoomTemplateSO Library ({_roomTemplates.Count})", EditorStyles.boldLabel);
@@ -375,16 +457,9 @@ namespace RIMA.Editor.MapDesigner
                     }
                 }
 
-                // A6 — seed + Auto Props on same row (seed is Auto Props' parameter)
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    EditorGUILayout.LabelField("Seed", GUILayout.Width(34f));
-                    _autoPropsSeed = EditorGUILayout.IntField(_autoPropsSeed, GUILayout.Width(80f));
-                    if (GUILayout.Button("Rnd", GUILayout.Width(36f)))
-                        _autoPropsSeed = UnityEngine.Random.Range(1, int.MaxValue);
-                    if (DrawColoredButton("Auto Props", new Color(0.35f, 0.6f, 1f), GUILayout.Height(18f)))
-                        AutoPopulateSelectedTemplate();
-                }
+                // Auto Props UI removed (user 2026-06-19): props are placed in-game via F2 Build
+                // Mode, not here. Map Designer rooms stay floor + cliff + doors. The AutoProps
+                // utility + AutoPopulateSelectedTemplate() are kept (unwired) for easy re-enable.
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -455,6 +530,9 @@ namespace RIMA.Editor.MapDesigner
                 if (GUILayout.Button("None [Esc]", GUILayout.Width(70f)))
                     _schematicMode = SchematicEditMode.None;
             }
+
+            DrawSchematicBrushControls();
+            DrawGridSizeControls(_selectedTemplate);
 
             // A4 — active mode banner
             if (_schematicMode != SchematicEditMode.None)
@@ -603,22 +681,26 @@ namespace RIMA.Editor.MapDesigner
             switch (_schematicMode)
             {
                 case SchematicEditMode.PaintWalkable:
-                    SetWalkable(template, cell, !isErase);
+                    PaintBrush(template, cell, !isErase);
                     break;
                 case SchematicEditMode.PaintVoid:
-                    SetWalkable(template, cell, isErase); // paint void = set NOT walkable
+                    PaintBrush(template, cell, isErase); // paint void = set NOT walkable
                     break;
                 case SchematicEditMode.SetEntry:
-                    if (!isErase) SetPlayerSpawn(template, cell);
+                    if (isErase) ClearPlayerSpawn(template);
+                    else SetPlayerSpawn(template, cell);
                     break;
                 case SchematicEditMode.SetNW:
-                    if (!isErase) SetExitSlot(template, cell, 0);
+                    if (isErase) RemoveExitSlot(template, 0);
+                    else SetExitSlot(template, cell, 0);
                     break;
                 case SchematicEditMode.SetN:
-                    if (!isErase) SetExitSlot(template, cell, 1);
+                    if (isErase) RemoveExitSlot(template, 1);
+                    else SetExitSlot(template, cell, 1);
                     break;
                 case SchematicEditMode.SetNE:
-                    if (!isErase) SetExitSlot(template, cell, 2);
+                    if (isErase) RemoveExitSlot(template, 2);
+                    else SetExitSlot(template, cell, 2);
                     break;
             }
 
@@ -648,6 +730,163 @@ namespace RIMA.Editor.MapDesigner
             int ly = cell.y - template.bounds.yMin;
             if (lx < 0 || lx >= w || ly < 0 || ly >= h) return;
             template.walkableGrid[ly * w + lx] = walkable;
+        }
+
+        // User 2026-06-19: bigger paint/erase brush for the schematic. Applies an N×N block around
+        // the clicked cell. Paint Walkable: LMB paints walkable / RMB erases (void). Paint Void is
+        // the inverse. Single-point modes (Set Entry/N/NW/NE) ignore brush size. Cells outside the
+        // current grid are skipped (SetWalkable guards) — expand the grid first to paint wider.
+        private static readonly int[] SchematicBrushSizes = { 1, 3, 5, 10 };
+        private int _schematicBrushSize = 1;
+
+        private void DrawSchematicBrushControls()
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Fırça", EditorStyles.miniBoldLabel, GUILayout.Width(40f));
+                foreach (int sz in SchematicBrushSizes)
+                {
+                    bool on = _schematicBrushSize == sz;
+                    if (GUILayout.Toggle(on, $"{sz}×{sz}", EditorStyles.miniButton, GUILayout.Width(42f)) && !on)
+                        _schematicBrushSize = sz;
+                }
+                EditorGUILayout.LabelField("LMB boya · RMB sil (Paint Walkable/Void)", EditorStyles.miniLabel);
+            }
+        }
+
+        private void PaintBrush(RoomTemplateSO template, Vector2Int center, bool walkable)
+        {
+            int size = Mathf.Max(1, _schematicBrushSize);
+            int start = -(size / 2);
+            int end = start + size - 1;
+            for (int dy = start; dy <= end; dy++)
+                for (int dx = start; dx <= end; dx++)
+                    SetWalkable(template, new Vector2Int(center.x + dx, center.y + dy), walkable);
+        }
+
+        // RMB in a Set NW/N/NE mode removes that exit door (user 2026-06-19: "kapı boyayınca
+        // silemiyorum"). RMB in Set Entry clears the player spawn.
+        private static void RemoveExitSlot(RoomTemplateSO template, int slotIndex)
+        {
+            if (template.doorSockets == null) return;
+            string socketId = RoomTemplateSO.ExitSlotId(slotIndex);
+            template.doorSockets.RemoveAll(d => d != null && d.socketId == socketId);
+        }
+
+        private static void ClearPlayerSpawn(RoomTemplateSO template)
+        {
+            template.playerSpawn = null;
+        }
+
+        // ── Dynamic grid resize (user 2026-06-19: "grid büyüyüp küçülecek, istediğim kadar
+        // boyayacam, oda oda ama kısıtlı değil; boşluk bırakıp adacık yapabileyim"). The schematic
+        // painter clamps to template.bounds, so the paintable area == bounds. These controls grow/
+        // shrink bounds in any direction and REMAP walkableGrid/overlayMask so already-painted
+        // cells keep their WORLD position. Doors/spawns/props are world-coord → untouched (the
+        // validator flags any that fall off the new edge). Gaps/islands already work: walkable is
+        // per-cell, so a void border between painted patches reads as separate islands.
+        private int _gridExpandStep = 4;
+
+        private void DrawGridSizeControls(RoomTemplateSO template)
+        {
+            if (template == null) return;
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField($"Grid {template.bounds.width}×{template.bounds.height}",
+                    EditorStyles.miniBoldLabel, GUILayout.Width(92f));
+                EditorGUILayout.LabelField("Adım", GUILayout.Width(32f));
+                _gridExpandStep = Mathf.Clamp(EditorGUILayout.IntField(_gridExpandStep, GUILayout.Width(34f)), 1, 64);
+
+                if (GUILayout.Button(new GUIContent("◀+", "Sola genişlet"), EditorStyles.miniButtonLeft, GUILayout.Width(32f)))
+                    ExpandGrid(template, _gridExpandStep, 0, 0, 0);
+                if (GUILayout.Button(new GUIContent("+▶", "Sağa genişlet"), EditorStyles.miniButtonMid, GUILayout.Width(32f)))
+                    ExpandGrid(template, 0, _gridExpandStep, 0, 0);
+                if (GUILayout.Button(new GUIContent("▲+", "Yukarı genişlet"), EditorStyles.miniButtonMid, GUILayout.Width(32f)))
+                    ExpandGrid(template, 0, 0, _gridExpandStep, 0);
+                if (GUILayout.Button(new GUIContent("+▼", "Aşağı genişlet"), EditorStyles.miniButtonMid, GUILayout.Width(32f)))
+                    ExpandGrid(template, 0, 0, 0, _gridExpandStep);
+                if (GUILayout.Button(new GUIContent("Kırp", "Boyalı hücrelere göre küçült"), EditorStyles.miniButtonRight, GUILayout.Width(40f)))
+                {
+                    Undo.RecordObject(template, "Trim Room Grid");
+                    if (FitBoundsToPainted(template)) CommitGridResize(template);
+                }
+            }
+        }
+
+        private void ExpandGrid(RoomTemplateSO template, int left, int right, int up, int down)
+        {
+            if (template == null || (left | right | up | down) == 0) return;
+            Undo.RecordObject(template, "Expand Room Grid");
+            RectInt b = template.bounds;
+            RectInt nb = new RectInt(b.xMin - left, b.yMin - down, b.width + left + right, b.height + up + down);
+            ResizeBoundsRemap(template, nb);
+            CommitGridResize(template);
+        }
+
+        private void CommitGridResize(RoomTemplateSO template)
+        {
+            EditorUtility.SetDirty(template);
+            ScheduleExport(template);
+            if (_validatedTemplate == template) _validatedTemplate = null;
+            _roomHasError.Remove(template);
+            RunFullValidation(template);
+            RoomTemplateBuildUtility.TryRebuildIfActiveArenaTemplate(template);
+            Repaint();
+        }
+
+        // Remap walkableGrid + overlayMask from the current bounds to newBounds. Cells present in
+        // BOTH rects keep their value (world-coordinate stable); newly added cells default to void/0.
+        private static void ResizeBoundsRemap(RoomTemplateSO t, RectInt newBounds)
+        {
+            int nw = newBounds.width, nh = newBounds.height;
+            if (nw <= 0 || nh <= 0) return;
+            RectInt old = t.bounds;
+
+            bool[] newWalk = new bool[nw * nh];
+            bool hadOverlay = t.overlayMask != null && t.overlayMask.Length > 0;
+            int[] newOverlay = hadOverlay ? new int[nw * nh] : null;
+
+            for (int ly = 0; ly < nh; ly++)
+            {
+                for (int lx = 0; lx < nw; lx++)
+                {
+                    int wx = newBounds.xMin + lx;
+                    int wy = newBounds.yMin + ly;
+                    bool inOld = wx >= old.xMin && wx < old.xMax && wy >= old.yMin && wy < old.yMax;
+                    Vector2Int world = new Vector2Int(wx, wy);
+                    newWalk[ly * nw + lx] = inOld && t.IsWalkable(world);
+                    if (newOverlay != null)
+                        newOverlay[ly * nw + lx] = inOld ? t.GetOverlayTileIndex(world) : 0;
+                }
+            }
+
+            t.bounds = newBounds;
+            t.walkableGrid = newWalk;
+            if (newOverlay != null) t.overlayMask = newOverlay;
+            t.cameraBounds = CameraBounds.FromBounds(newBounds);
+        }
+
+        // Shrink bounds to the tight bounding box of walkable cells (so the grid can shrink after
+        // erasing). Returns false (and leaves bounds unchanged) if nothing is walkable.
+        private static bool FitBoundsToPainted(RoomTemplateSO t)
+        {
+            int minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
+            bool any = false;
+            for (int y = t.bounds.yMin; y < t.bounds.yMax; y++)
+            {
+                for (int x = t.bounds.xMin; x < t.bounds.xMax; x++)
+                {
+                    if (!t.IsWalkable(new Vector2Int(x, y))) continue;
+                    any = true;
+                    if (x < minX) minX = x;
+                    if (y < minY) minY = y;
+                    if (x > maxX) maxX = x;
+                    if (y > maxY) maxY = y;
+                }
+            }
+            if (!any) return false;
+            ResizeBoundsRemap(t, new RectInt(minX, minY, (maxX - minX) + 1, (maxY - minY) + 1));
+            return true;
         }
 
         private static void SetPlayerSpawn(RoomTemplateSO template, Vector2Int cell)

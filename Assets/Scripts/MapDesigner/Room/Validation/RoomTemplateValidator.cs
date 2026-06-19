@@ -26,8 +26,14 @@ namespace RIMA.MapDesigner.Room.Validation
 
             if (template.prefabRef == null)
             {
-                issues.Add(new RoomValidationIssue(ValidationSeverity.Error,
-                    "ERR_MISSING_PREFAB_REF", "prefabRef is null; authoring incomplete.", id));
+                // Procedural rooms (Rooms/Generated + Library) are built at runtime via
+                // IsoRoomBuilder.Build(template), not instantiated from a prefab — so a null
+                // prefabRef is the normal authored state, not an error. Only the legacy
+                // prefab-based path (RoomPainter SaveRoom) populates prefabRef, and its
+                // consumers (RoomTemplateLoader / SubRoomSequenceController / RoomBankRuntimeTester)
+                // all null-guard. Kept as Info for traceability (filtered out of the panel).
+                issues.Add(new RoomValidationIssue(ValidationSeverity.Info,
+                    "INFO_NO_PREFAB_REF", "prefabRef is null (procedural room; built via IsoRoomBuilder).", id));
             }
 
             ValidatePlayerSpawn(template, id, issues);

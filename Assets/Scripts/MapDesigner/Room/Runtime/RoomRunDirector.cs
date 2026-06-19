@@ -358,12 +358,13 @@ namespace RIMA.MapDesigner.Room.Runtime
 
             CurrentTemplate = template;
 
-            // F1 (2026-06-10 playtest): combat arenas are floor + cliff ONLY. Template prop
-            // clusters (ritual circle / brazier / obelisk) boxed the player in at the spawn
-            // between prop colliders and the south cliff. Shop/Boss/Chamber prop flows are
-            // separate systems; only Combat and its Elite variant disable template props.
-            builder.spawnProps = CurrentRoomType != RIMA.RoomType.Combat
-                && CurrentRoomType != RIMA.RoomType.Elite;
+            // F1 (2026-06-10) + user 2026-06-19: template props are disabled in ALL room types.
+            // Prop clusters (ritual circle / brazier / obelisk / statue) box the player in against
+            // doors, spawn and cliffs — the original F1 fix covered only Combat/Elite, but props
+            // still blocked the exit doors in Boss/Merchant/Chest rooms ("odaya giremiyorum").
+            // Props are now an in-game F2 Build Mode concern; gameplay rooms stay floor + cliff +
+            // doors. (Template prop data is untouched — IsoRoomBuilder just skips it at build time.)
+            builder.spawnProps = false;
 
             builder.Build(template);
 
