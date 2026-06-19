@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 4827926787933439702}
   - component: {fileID: 8962750750378415194}
   - component: {fileID: 1717162011277953568}
+  - component: {fileID: 7397178014413017500}
   m_Layer: 0
   m_Name: HalfThrall
   m_TagString: Enemy
@@ -355,3 +356,29 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   flashDuration: 0.08
   flashColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &7397178014413017500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4323755310132711544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5601cf42781ddc43bd451a75610e059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.StatusEffectSystem
+  moveSpeedMultiplier: 1
+  damageMultiplierIncoming: 1
+  OnEffectApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEffectRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  OnIceShatter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnVoidBurst:
+    m_PersistentCalls:
+      m_Calls: []

@@ -62,6 +62,11 @@ namespace RIMA
 
         private void Awake() => health = GetComponent<Health>();
 
+        private void Start()
+        {
+            if (GetComponent<StatusEffectTint>() == null) gameObject.AddComponent<StatusEffectTint>();
+        }
+
         // ─── Public API ───────────────────────────────────────────────────────
 
         public void ApplyEffect(StatusEffectType type, float duration, int stacks = 1)

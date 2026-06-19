@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 9049514035774914}
   - component: {fileID: 8186515387987573445}
   - component: {fileID: 8410683367125559235}
+  - component: {fileID: 7413506263017163266}
   m_Layer: 0
   m_Name: FractureImp
   m_TagString: Enemy
@@ -364,3 +365,29 @@ MonoBehaviour:
   knockbackResistance: 0
   isKnockdownable: 1
   defaultKnockdownProfile: {fileID: 0}
+--- !u!114 &7413506263017163266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7373608451472963539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5601cf42781ddc43bd451a75610e059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RIMA.Runtime::RIMA.StatusEffectSystem
+  moveSpeedMultiplier: 1
+  damageMultiplierIncoming: 1
+  OnEffectApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEffectRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  OnIceShatter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnVoidBurst:
+    m_PersistentCalls:
+      m_Calls: []
