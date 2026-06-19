@@ -96,6 +96,24 @@ namespace RIMA
             Object.Destroy(template);
         }
 
+        public static void ImpactExplosion(Vector3 pos, VfxElement element)
+        {
+            Sprite sprite = Resources.Load<Sprite>("VFX/Skills/vfx_explosion_b");
+            if (sprite == null)
+            {
+                Sprite[] all = Resources.LoadAll<Sprite>("VFX/Skills");
+                if (all != null && all.Length > 0)
+                    sprite = all[0];
+            }
+            if (sprite == null)
+                return;
+
+            GameObject source = CreateRuntimeSpritePrefab("ImpactExplosion", sprite);
+            // Basic-attack pop: smaller than a Fireball skill burst (scaleFrom 0.3 → 0.65, life 0.18s)
+            PlayBurst(source, pos, element, scaleFrom: 0.3f, scaleTo: 0.65f, life: 0.18f);
+            Object.Destroy(source);
+        }
+
         public static void ProjectileTrail(GameObject go, VfxElement element)
         {
             if (go == null)
@@ -116,6 +134,124 @@ namespace RIMA
             trail.startColor = color;
             trail.endColor = WithAlpha(color, 0f);
             ForceSorting(trail, SortingOrder + 2);
+        }
+
+        // Three-layer juicy fireball trail: richer trail + ember particles + glowing core.
+        // Skips Light2D to avoid URP package dependency; additive glow sprite covers the bloom need.
+        public static void ProjectileBlaze(GameObject go, VfxElement element)
+        {
+            if (go == null)
+                return;
+
+            Color palette = Palette(element);
+
+            // --- Layer 1: Richer Trail ---
+            TrailRenderer trail = go.GetComponent<TrailRenderer>();
+            if (trail == null)
+                trail = go.AddComponent<TrailRenderer>();
+
+            trail.time = 0.05f;
+            trail.numCapVertices = 4;
+            trail.minVertexDistance = 0.02f;
+            trail.autodestruct = false;
+            trail.sharedMaterial = SharedAdditiveMaterial;
+
+            Color hotCore = Color.Lerp(palette, Color.white, 0.15f);
+            Gradient trailGrad = new Gradient();
+            trailGrad.SetKeys(
+                new[]
+                {
+                    new GradientColorKey(hotCore, 0f),
+                    new GradientColorKey(palette, 0.45f),
+                    new GradientColorKey(palette, 1f)
+                },
+                new[]
+                {
+                    new GradientAlphaKey(1f, 0f),
+                    new GradientAlphaKey(1f, 0.45f),
+                    new GradientAlphaKey(0f, 1f)
+                });
+            trail.colorGradient = trailGrad;
+
+            // widthCurve defines shape (1→0 taper); widthMultiplier sets the actual world width.
+            // Setting startWidth/endWidth after widthCurve is overridden by widthMultiplier — use
+            // widthMultiplier only to avoid the Unity reset-on-assign bug.
+            AnimationCurve widthTaper = new AnimationCurve(
+                new Keyframe(0f, 1f), new Keyframe(1f, 0f));
+            trail.widthCurve = widthTaper;
+            trail.widthMultiplier = 0.10f;
+
+            ForceSorting(trail, SortingOrder + 2);
+
+            // --- Layer 2: Ember Particles ---
+            GameObject emberGO = new GameObject("Blaze_Embers");
+            emberGO.transform.SetParent(go.transform, false);
+            emberGO.transform.localPosition = Vector3.zero;
+
+            ParticleSystem embers = emberGO.AddComponent<ParticleSystem>();
+
+            ParticleSystem.MainModule main = embers.main;
+            main.startSize = new ParticleSystem.MinMaxCurve(0.04f, 0.08f);
+            main.startLifetime = new ParticleSystem.MinMaxCurve(0.35f);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.2f, 0.4f);
+            main.startColor = WithAlpha(palette, 0.6f);
+            main.gravityModifier = -0.15f;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
+            main.maxParticles = 8;
+            main.loop = true;
+            main.playOnAwake = true;
+
+            ParticleSystem.EmissionModule emission = embers.emission;
+            emission.rateOverTime = 6f;
+
+            ParticleSystem.ShapeModule shape = embers.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Sphere;
+            shape.radius = 0.05f;
+
+            ParticleSystemRenderer emberRend = emberGO.GetComponent<ParticleSystemRenderer>();
+            emberRend.sharedMaterial = SharedAdditiveMaterial;
+            ForceSorting(emberRend, SortingOrder + 1);
+
+            embers.Play();
+
+            // --- Layer 3: Glowing Core ---
+            GameObject glowGO = new GameObject("Blaze_Glow");
+            glowGO.transform.SetParent(go.transform, false);
+            glowGO.transform.localPosition = Vector3.zero;
+
+            Sprite circleSprite = ElementalistRuntimeVisuals.GetCircleSprite();
+            SpriteRenderer glowSR = glowGO.AddComponent<SpriteRenderer>();
+            glowSR.sprite = circleSprite;
+            glowSR.sharedMaterial = SharedAdditiveMaterial;
+            glowSR.color = WithAlpha(palette, 0.10f);
+            ForceSorting(glowSR, SortingOrder + 1);
+
+            // Scale glow ~0.6× relative to the parent orb scale (tight core highlight, not a halo)
+            glowGO.transform.localScale = Vector3.one * 0.6f;
+
+            Runner.Run(BlazeGlowFlicker(glowSR));
+        }
+
+        private static IEnumerator BlazeGlowFlicker(SpriteRenderer sr)
+        {
+            const float baseAlpha = 0.10f;
+            const float alphaRange = 0.02f;
+            const float scaleBase = 0.6f;
+            const float scaleRange = 0.02f;
+            const float freq = 7.5f;
+
+            float t = 0f;
+            while (sr != null && sr.gameObject != null)
+            {
+                float sin = Mathf.Sin(t * freq);
+                Color c = sr.color;
+                c.a = baseAlpha + sin * alphaRange;
+                sr.color = c;
+                sr.transform.localScale = Vector3.one * (scaleBase + sin * scaleRange);
+                t += Time.deltaTime;
+                yield return null;
+            }
         }
 
         public static void MeleeArc(Vector3 pos, Vector2 dir, VfxElement element)

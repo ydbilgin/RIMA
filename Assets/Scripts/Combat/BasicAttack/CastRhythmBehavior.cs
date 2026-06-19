@@ -78,10 +78,10 @@ namespace RIMA
             renderer.sortingLayerName = "VFX";
             renderer.sortingOrder = 20;
 
-            float scale = empowered ? 0.52f : 0.34f;
+            float scale = empowered ? 0.32f : 0.28f;
             go.transform.localScale = new Vector3(scale, scale, 1f);
 
-            SkillVfx.ProjectileTrail(go, vfx);
+            SkillVfx.ProjectileBlaze(go, vfx);
 
             var projectile = go.AddComponent<PlayerProjectile>();
             projectile.Init(dir * profile.projectileSpeed, damage, life: 2.2f, piercing: false, attacker: owner.gameObject);
@@ -95,8 +95,11 @@ namespace RIMA
                 elementTag: GetElementTag(elementalist)));
             projectile.SetOnHit(hit =>
             {
-                SkillVfx.ImpactBurst(hit != null ? hit.transform.position : go.transform.position, vfx);
+                Vector3 hitPos = hit != null ? hit.transform.position : go.transform.position;
+                SkillVfx.ImpactBurst(hitPos, vfx);
+                SkillVfx.ImpactExplosion(hitPos, vfx);
                 elementalist?.RegisterRiftBoltHit(empowered);
+                if (hit == null) return;
                 var status = hit.GetComponent<StatusEffectSystem>();
                 if (status == null || elementalist == null) return;
                 if (elementalist.ActiveElement == ElementalistElement.Fire)

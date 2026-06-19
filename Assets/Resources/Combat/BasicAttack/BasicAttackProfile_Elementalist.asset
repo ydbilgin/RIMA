@@ -43,7 +43,7 @@ MonoBehaviour:
   knockdownProfile: {fileID: 0}
   projectileDamage: 18
   projectileSpeed: 15
-  projectileCooldown: 0.34
+  projectileCooldown: 0.42
   chargeThreshold: 0.2
   rmbCost: 0
   rmbDamage: 0
