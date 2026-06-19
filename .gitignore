@@ -218,3 +218,8 @@ STAGING/**/*.png.meta
 /tmp_walless_v1_batch2_start.txt
 /vid_transcript.txt
 /vid_transcript_utf8.txt
+/Assets/Screenshots/
+Assets/_archive~/
+Assets/_archive~*
+Assets/Editor/MapDesigner/VisualEditor/EDITOR_GUIDE.md
+Assets/Editor/MapDesigner/VisualEditor/DESIGN_LOG.md

@@ -89,7 +89,7 @@ namespace RIMA.Tests.EditMode
         /// the developer must also increment ExplicitBehaviorCases in CombatContract.
         /// The test fails if someone forgets to update the contract constant.
         ///
-        /// NOTE (for Opus review): this is a documentation-style enforcement.
+        /// NOTE: this is a documentation-style enforcement.
         /// A stronger approach would be source-parsing the switch via Roslyn,
         /// but that adds heavy dependency for modest gain.
         /// </summary>

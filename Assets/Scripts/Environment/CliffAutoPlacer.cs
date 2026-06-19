@@ -21,7 +21,7 @@ namespace RIMA.Environment
         // OPEN below. If floor exists within southClearCells screen-south steps, the cliff would
         // hang over/in-front-of that lower floor and read as a "standing column" on concave
         // notches / back peninsulas. 0 = off.
-        [Tooltip("Cut cliffs with floor within this many SOUTH steps (overflow/standing-column fix). 0 = off. agy: 5 (sprite ~4.9 cells tall).")]
+        [Tooltip("Cut cliffs with floor within this many SOUTH steps (overflow/standing-column fix). 0 = off. Default: 5 (sprite ~4.9 cells tall).")]
         public int southClearCells = 5;
 
         // F1: Adaptive cluster filter rules (optional — if null, no filtering applied)
@@ -133,7 +133,7 @@ namespace RIMA.Environment
         //   cell ( 1, 1) -> world (0, +0.609) = screen UP    (true north)
         //   cell ( 1,-1) -> world (+1.0, 0)   = screen RIGHT (east)
         //   cell (-1, 1) -> world (-1.0, 0)   = screen LEFT  (west)
-        // Antigravity's revise was MATHEMATICALLY CORRECT — S108 memory was wrong.
+        // Coordinate revise was MATHEMATICALLY CORRECT — S108 memory was wrong.
         private static readonly Vector3Int SouthCell = new Vector3Int(-1, -1, 0);     // Screen South (DOWN)
         private static readonly Vector3Int NorthCell = new Vector3Int(1, 1, 0);       // Screen North (UP)
         private static readonly Vector3Int EastCell = new Vector3Int(1, -1, 0);       // Screen East (RIGHT)
@@ -260,7 +260,7 @@ namespace RIMA.Environment
             //
             // Spike filter kaldırıldı (S108 lock): void-cell yerleşimi yapmadığımız
             // için "half-drop spike" durumu artık üretilemez.
-            // S114 S5 robust rule (triple-AI: Opus+agy+Codex converge). Place a cliff only where a
+            // S114 S5 robust rule (design-review consensus). Place a cliff only where a
             // camera-facing (S/SE/SW) neighbour is EXTERIOR void AND the drop opens monotonically
             // south for southClearCells. NO diagonal floor veto — that over-cut the diamond (57/59).
             // Interior pockets / concave notches / back peninsulas are skipped (their void is not

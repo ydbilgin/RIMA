@@ -130,7 +130,7 @@ namespace RIMA.RoomPainter.Editor
             return null;
         }
 
-        // S110 — Sonnet Day 2 review HIGH #1 fix (2026-05-26): keyword set
+        // S110 — Day 2 review HIGH #1 fix (2026-05-26): keyword set
         // genişletildi. Önce daha spesifik (Cliff/Wall/Lighting) sonra geniş
         // (Floor) sırasıyla evaluate — ilk match kazanır.
         private static readonly (string Keyword, RoomLayer Layer)[] _layerKeywords = new[]

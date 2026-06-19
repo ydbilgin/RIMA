@@ -45,7 +45,7 @@ namespace RIMA.Systems.Map
 
                 var band = GetBand(node.depth);
                 if (band != null && band.floorTiles != null && band.floorTiles.Length > 0)
-                    // TODO: SetTilePool writes shared state — see Gemini audit B1.6
+                    // TODO: SetTilePool writes shared state — see audit B1.6
                     painter.SetTilePool(band.floorTiles, band.wallTiles);
 
                 painter.PaintTemplateAtOffset(layout, offset);

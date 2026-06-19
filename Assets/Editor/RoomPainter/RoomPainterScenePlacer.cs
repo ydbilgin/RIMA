@@ -16,7 +16,7 @@ namespace RIMA.RoomPainter.Editor
         private readonly HashSet<Vector3Int> _paintedCells = new HashSet<Vector3Int>();
         private bool _isPainting;
         private int _undoGroup;
-        // S110 Sonnet Day 3 review HIGH #3 fix — R rotate. 90deg increments.
+        // S110 Day 3 review HIGH #3 fix — R rotate. 90deg increments.
         private float _rotationDegrees;
 
         public void Reset()
@@ -130,7 +130,7 @@ namespace RIMA.RoomPainter.Editor
             Undo.RegisterCreatedObjectUndo(go, undoName);
             go.transform.SetParent(grid.transform, true);
             go.transform.position = snappedWorld;
-            // S110 Sonnet Day 3 review HIGH #3 fix — apply current rotation (R key cycles 90deg).
+            // S110 Day 3 review HIGH #3 fix — apply current rotation (R key cycles 90deg).
             go.transform.rotation = Quaternion.Euler(0f, 0f, _rotationDegrees);
 
             RoomPainterAsset metadata = selectedAsset.metadata;

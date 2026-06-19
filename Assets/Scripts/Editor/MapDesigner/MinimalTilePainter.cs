@@ -59,7 +59,7 @@ namespace RIMA.Editor.MapDesigner
         }
 
         // Default groupings for the existing 16 iso-35 tiles.
-        // Verified against TILE_CATEGORIZATION.md (2026-05-25 Opus visual inspection).
+        // Verified against TILE_CATEGORIZATION.md (2026-05-25 visual inspection).
         private static readonly ThemeGroup[] DefaultGroups =
         {
             new ThemeGroup("Cobblestone (stone)", 0, 4, new Color(0.55f, 0.55f, 0.55f)),

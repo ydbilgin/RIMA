@@ -19,7 +19,7 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         private const string RoomPath = "Assets/Data/Blueprint/Rooms/combat_room_v15b.asset";
         private const string V15bRootName = "Pro_Redesign_v15b_FullAdjacency_CombatRoom";
         private const string V15cRootName = "Pro_Redesign_v15c_8LayerPainted_CombatRoom";
-        private const string MetricsPath = "STAGING/CODEX_DONE_v15e_B_secondary_cluster_cap_metrics.txt";
+        private const string MetricsPath = "STAGING/BUILD_DONE_v15e_B_secondary_cluster_cap_metrics.txt";
         private const string ScreenshotPath = "Assets/Screenshots/PlayableRoom_combat_v15e_B_secondary_cap_LIVE.png";
 
         public static void Build()

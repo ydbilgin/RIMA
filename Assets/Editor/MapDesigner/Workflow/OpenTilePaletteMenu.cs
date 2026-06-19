@@ -18,7 +18,7 @@ namespace RIMA.MapDesigner.Editor.Workflow
         private const string PaletteFolder = "Assets/Editor/TilePalettes";
         private const string PalettePath = PaletteFolder + "/RIMA_Combat_v15g.prefab";
         private const string WorkflowDocPath = "STAGING/UNITY_TILE_PALETTE_WORKFLOW.md";
-        private const string DonePath = "STAGING/CODEX_TASK_enable_tile_palette_DONE.md";
+        private const string DonePath = "STAGING/BUILD_TASK_enable_tile_palette_DONE.md";
 
         [MenuItem("RIMA/Legacy/Open Tile Palette")]
         public static void OpenTilePalette()

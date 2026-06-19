@@ -12,7 +12,7 @@ namespace RIMA.Environment
     /// DirectionalCliffTile_Hades.asset — uses SetTile with plain Tile assets that mirror
     /// the source tile's transformOffset / spriteScale / flags.
     ///
-    /// Fix log (Opus CONDITIONAL → PASS):
+    /// Fix log (review CONDITIONAL → PASS):
     ///   • 8-direction pool (spritesS/SE/SW/E/W/N/NE/NW each get their own Tile[]).
     ///   • transformOffset + spriteScale preserved via Tile.transform (Matrix4x4.TRS).
     ///   • flags = LockTransform | LockColor to match DirectionalCliffTile behaviour.

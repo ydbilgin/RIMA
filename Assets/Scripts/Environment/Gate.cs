@@ -137,7 +137,7 @@ namespace RIMA.Environment
         /// <summary>Unlock the gate: SetState(Unlocked) + play open animation.</summary>
         public void Unlock()
         {
-            if (CurrentState == State.Unlocked) return;   // Codex: idempotence — repeated calls replay SFX + restart anim
+            if (CurrentState == State.Unlocked) return;   // idempotence — repeated calls replay SFX + restart anim
             SetState(State.Unlocked);
             OnUnlocked?.Invoke(this);
             RIMA.Audio.AudioManager.Play(RIMA.Audio.Sfx.GateOpen);

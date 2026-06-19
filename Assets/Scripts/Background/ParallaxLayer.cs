@@ -33,7 +33,7 @@ namespace RIMA.Background
         public Camera target;
 
         [Tooltip("How much the layer moves relative to the camera. 1=glued to camera, 0=world-static. " +
-                 "Suggested per Codex verdict: L0 void (0.03, 0.02), L1 nebula (0.05, 0.04), " +
+                 "Suggested per design-review verdict: L0 void (0.03, 0.02), L1 nebula (0.05, 0.04), " +
                  "L2 ruins (0.08, 0.05), L3 islands (0.14, 0.08), L4 fog (0.10, 0.06).")]
         public Vector2 factor = new Vector2(0.1f, 0.05f);
 

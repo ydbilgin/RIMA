@@ -24,10 +24,10 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         public const string WangSheetPath = WangFolder + "/wang_dirt_cobble_32px.png";
         public const string WangRuleTilePath = WangFolder + "/rule_dirt_cobble_wang.asset";
         public const string V15hRootName = "Pro_Redesign_v15h_Playable_CombatRoom";
-        public const string MetricsPath = "STAGING/CODEX_DONE_v15h_playable_map_metrics.txt";
+        public const string MetricsPath = "STAGING/BUILD_DONE_v15h_playable_map_metrics.txt";
         public const string ScreenshotPath = "Assets/Screenshots/PlayableRoom_combat_v15h_playable_LIVE.png";
         public const string SideBySidePath = "Assets/Screenshots/PlayableRoom_combat_v15g_vs_v15h.png";
-        public const string DoneMarkerPath = "STAGING/CODEX_TASK_v15h_playable_map_DONE.md";
+        public const string DoneMarkerPath = "STAGING/BUILD_TASK_v15h_playable_map_DONE.md";
 
         private const string SourceWangSheetPath = "STAGING/pixellab_wang_v2_32px/wang_dirt_cobble_32px.png";
         private const string ZoneFolder = "Assets/Data/Blueprint/ZoneTypes/v15h";

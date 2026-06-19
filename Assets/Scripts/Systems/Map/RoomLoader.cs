@@ -47,7 +47,7 @@ namespace RIMA.Systems.Map
         private void OnDestroy()
         {
             // Scene reload (death / demo-complete) destroys RoomLoader without a room swap —
-            // drop the static fragment-pickup subscriber so it can't leak across the reload (agy A3 review).
+            // drop the static fragment-pickup subscriber so it can't leak across the reload (A3 review).
             ClearPendingFragmentPickup();
             ClearPendingRoomClearUnlock();
         }
@@ -549,7 +549,7 @@ namespace RIMA.Systems.Map
 
         private IEnumerator WireBossDeathListener(GameObject roomContent)
         {
-            // Codex #2 fix: poll for the boss Health over ~0.5s instead of a single frame.
+            // fix: poll for the boss Health over ~0.5s instead of a single frame.
             // If Health is on a child added in Start(), a one-frame wait misses it and DemoComplete never fires (win softlock).
             Health bossHealth = null;
             for (int i = 0; i < 30 && bossHealth == null; i++)

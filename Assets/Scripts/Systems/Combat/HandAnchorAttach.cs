@@ -34,7 +34,7 @@ namespace RIMA
         [Tooltip("Use PlayerAnimator's smoothed 8-way visual facing for weapon mount/sort. Disable to return to raw PlayerController.FacingDirection.")]
         [SerializeField] private bool useAnimatorVisualFacing = true;
 
-        [Header("Swing visibility (3-AI verdict R — keep weapon VISIBLE, fade it)")]
+        [Header("Swing visibility (design-review verdict R — keep weapon VISIBLE, fade it)")]
         [Tooltip("Weapon opacity during a swing. NOT hidden (that kills weapon identity / motion tracking — Hades keeps it visible). Faded so the slash VFX reads on top. ~0.3-0.5.")]
         [SerializeField, Range(0f, 1f)] private float swingWeaponAlpha = 0.4f;
 
@@ -110,7 +110,7 @@ namespace RIMA
 
         private void LateUpdate()
         {
-            // --- Swing visibility (3-AI verdict R, supersedes the old "hide weapon" canon) ---
+            // --- Swing visibility (design-review verdict R, supersedes the old "hide weapon" canon) ---
             // Keep the weapon VISIBLE but fade it during the swing so the slash VFX dominates while the
             // weapon's identity + trajectory stay readable. ~0.06s ease so it isn't a hard pop.
             if (weaponRenderer != null && orientationSync != null)

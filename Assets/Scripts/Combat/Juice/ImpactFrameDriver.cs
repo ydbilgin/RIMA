@@ -6,7 +6,7 @@ namespace RIMA.Combat.Juice
 {
     /// <summary>
     /// Chromatic impact frame — a brief full-screen cyan->purple flash on HEAVY hits
-    /// (crit/finisher) and kills, to sell crunch (DESIGN_LOCK_DEMO_S6 §9 agy fold).
+    /// (crit/finisher) and kills, to sell crunch (DESIGN_LOCK_DEMO_S6 §9).
     /// Cheap approximation of a true chromatic-aberration shader.
     /// TODO: replace with a URP renderer feature for real RGB split.
     /// Self-building (RuntimeInitializeOnLoad), unscaled-time so it reads during hitstop.

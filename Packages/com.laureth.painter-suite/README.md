@@ -36,4 +36,4 @@ Embedded UPM package. Manifest entry:
 
 ## Roadmap
 
-See `STAGING/LAURETH_2D_PAINTER_SUITE_PLAN_V2_RIMA_REUSE.md` (project root).
+See internal planning documents (project root).

@@ -25,7 +25,7 @@ namespace RIMA.UI.Map
         };
 
         [Header("Behaviour")]
-        [SerializeField] private float revealFlashSeconds = 0.8f; // agy: 2.2s lock too long for action tempo
+        [SerializeField] private float revealFlashSeconds = 0.8f; // 2.2s lock too long for action tempo
         [SerializeField] private float nodeSpacing = 110f;
 
         private MapGraphData graph;

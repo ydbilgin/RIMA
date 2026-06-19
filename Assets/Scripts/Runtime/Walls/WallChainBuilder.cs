@@ -279,7 +279,7 @@ namespace RIMA.Walls
         }
 
         // Rectangular projection with Y-compression for HIGH TOP-DOWN foreshortening.
-        // Karar #149 (Iso Tilemap) REVOKED 2026-05-24 - Opus debugging Iter 1 verdict.
+        // Karar #149 (Iso Tilemap) REVOKED 2026-05-24 - debugging Iter 1 verdict.
         // Y-compression value targets PURE TOP-DOWN (~85-90deg camera, chatgpt_ref match).
         // Tune: 0.5=iso, 0.6-0.7=3/4 Hades, 0.85=near top-down, 1.0=pure top-down.
         public static Vector3 GridToWorld(Vector2Int cell)

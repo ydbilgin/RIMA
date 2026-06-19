@@ -20,7 +20,7 @@ namespace RIMA.Environment
         public Vector3 transformOffset;
         public Vector2 spriteScale = Vector2.one;
 
-        [Header("Organic Variation (3-AI consensus)")]
+        [Header("Organic Variation (design-review consensus)")]
         [Tooltip("Cluster cells into short/mid/full hang tiers via Perlin noise + x jitter. Top contact line stays fixed.")]
         public bool heightVariation = true;
         [Tooltip("Lower = larger clusters (slower noise). ~0.10-0.20 gives 2-5 cell runs.")]
@@ -39,7 +39,7 @@ namespace RIMA.Environment
             tileData.flags = TileFlags.LockTransform | TileFlags.LockColor;
             tileData.color = Color.white;
             
-            // 3-AI consensus (Opus+agy+Codex): break "wallpaper" repetition with clustered
+            // Design-review consensus: break "wallpaper" repetition with clustered
             // height variation while keeping the TOP contact line stable. We lift some cells
             // UP (further under the floor = shorter visible hang, never a gap below), seeded by
             // low-frequency Perlin noise so neighbours cluster into 2-5 cell runs. A tiny x

@@ -9,7 +9,7 @@ namespace RIMA.Tests
 {
     /// <summary>
     /// PlayMode integration tests — scene yüklenir, gerçek runtime test edilir.
-    /// MCP run_tests ile çalıştırılır: Claude otomatik koşar, sonuçları analiz eder.
+    /// MCP run_tests ile çalıştırılır: CI'da otomatik koşar, sonuçları analiz eder.
     /// </summary>
     [Ignore("legacy _IsoGame scene retired — live demo scene is PlayableArena_Test01 (see WORK_ORDER A5)")]
     public class RoomFlowTests

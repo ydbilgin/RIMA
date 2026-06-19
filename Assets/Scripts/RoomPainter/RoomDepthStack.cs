@@ -11,7 +11,7 @@ namespace RIMA.RoomPainter
     ///   L1 Floor      — walkable iso tiles, just above the cliff lip
     ///   L2 Cliff      — directly UNDER the floor, near-depth drop
     ///   (preview)     — next-room preview islands, BELOW the cliff, in the void  (see PORTAL spec)
-    ///   L3 Backdrop   — Codex depth art, FAR below (parallax)
+    ///   L3 Backdrop   — Deep background art, FAR below (parallax)
     ///
     /// All sorting-layer names here MUST exist in ProjectSettings/TagManager.asset
     /// (Default, Ground, Floor, Decals, Walls, Entities, VFX, Player, BackwallLandmark,

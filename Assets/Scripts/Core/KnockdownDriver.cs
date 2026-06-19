@@ -73,7 +73,7 @@ namespace RIMA
 
         private void OnDisable()
         {
-            // Knockdown ortasında destroy/deactivate olursa immunity/AI/shadow leak'ini önle (axopus review MAJOR #1)
+            // Knockdown ortasında destroy/deactivate olursa immunity/AI/shadow leak'ini önle (review MAJOR #1)
             if (IsDownOrGettingUp) Cancel();
         }
 

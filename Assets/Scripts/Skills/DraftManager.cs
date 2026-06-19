@@ -522,7 +522,7 @@ namespace RIMA
             {
                 var comp = player.GetComponent(passive.skillType) as PassiveBase
                         ?? player.GetComponentInChildren(passive.skillType) as PassiveBase;
-                // Codex #1 fix: attach the passive component on demand if not already present.
+                // fix: attach the passive component on demand if not already present.
                 if (comp == null)
                     comp = player.AddComponent(passive.skillType) as PassiveBase;
                 comp?.LevelUp();
@@ -606,7 +606,7 @@ namespace RIMA
 
         private void EnsureDependencies()
         {
-            // Codex #1 blocker fix: SkillDatabase is not guaranteed in the playable scene.
+            // blocker fix: SkillDatabase is not guaranteed in the playable scene.
             // Without it, SkillOfferGenerator falls back to an unwired serialized list and the draft is empty.
             SkillDatabase.EnsureRuntime();
             if (offerUI == null)
@@ -630,7 +630,7 @@ namespace RIMA
                 }
             }
 
-            // Codex #1 fix: picks can't equip without a Warblade_SkillController on the player.
+            // fix: picks can't equip without a Warblade_SkillController on the player.
             // Start() caches it once (null if the prefab/scene lacks one) — re-fetch lazily and create on demand.
             if (skillController == null)
             {
@@ -748,7 +748,7 @@ namespace RIMA
             {
                 var comp = host.GetComponent(skill.skillType) as SkillBase
                         ?? host.GetComponentInChildren(skill.skillType) as SkillBase;
-                // Codex #1 fix: attach the picked skill component on demand.
+                // fix: attach the picked skill component on demand.
                 if (comp == null)
                     comp = host.gameObject.AddComponent(skill.skillType) as SkillBase;
                 if (comp != null)

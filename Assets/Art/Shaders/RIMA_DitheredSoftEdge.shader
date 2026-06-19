@@ -58,7 +58,7 @@ Shader "RIMA/DitheredSoftEdge"
             }
 
             // 4x4 Bayer Matrix (normalized 0.0 to 1.0)
-            // Per Gemini research §Q5: pixel-honest dithering, no blur.
+            // Per research §Q5: pixel-honest dithering, no blur.
             // Used in Return of the Obra Dinn + Super Mario Odyssey.
             static const float bayer[16] = {
                  0.0000, 0.5000, 0.1250, 0.6250,

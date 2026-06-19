@@ -19,10 +19,10 @@ namespace RIMA.MapDesigner.Editor.Blueprint
         public const string RoomPath = "Assets/Data/Blueprint/Rooms/combat_room_v15b.asset";
         public const string AssetPartsPath = "Assets/Data/Brush/AssetParts_v3/CombatBiome_v15g";
         public const string V15gRootName = "Pro_Redesign_v15g_Minimal_PixelLab_CombatRoom";
-        public const string MetricsPath = "STAGING/CODEX_DONE_v15g_metrics.txt";
+        public const string MetricsPath = "STAGING/BUILD_DONE_v15g_metrics.txt";
         public const string ScreenshotPath = "Assets/Screenshots/PlayableRoom_combat_v15g_minimal_pixellab_LIVE.png";
         public const string SideBySidePath = "Assets/Screenshots/PlayableRoom_combat_v15d_vs_v15g_minimal_pixellab.png";
-        public const string DoneMarkerPath = "STAGING/CODEX_TASK_v15g_map_cleanup_redesign_DONE.md";
+        public const string DoneMarkerPath = "STAGING/BUILD_TASK_v15g_map_cleanup_redesign_DONE.md";
 
         private const string AutoRunFlagPath = "STAGING/RUN_V15G_COMPOSER.flag";
         private const string ZoneFolder = "Assets/Data/Blueprint/ZoneTypes/v15g";
