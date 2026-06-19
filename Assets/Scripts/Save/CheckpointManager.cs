@@ -59,7 +59,6 @@ namespace RIMA.Save
             if (instance == this)
             {
                 instance = null;
-                _shuttingDown = true;
             }
         }
 

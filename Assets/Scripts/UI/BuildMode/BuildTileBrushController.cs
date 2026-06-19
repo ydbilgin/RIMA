@@ -149,7 +149,6 @@ namespace RIMA.UI.BuildMode
             if (_instance == this)
             {
                 _instance = null;
-                _shuttingDown = true;
             }
             TeardownAll();
         }

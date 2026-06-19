@@ -121,7 +121,7 @@ namespace RIMA.Combat
 
         private IEnumerator PauseRoutine(float duration)
         {
-            previousTimeScale = Time.timeScale;
+            previousTimeScale = Time.timeScale > 0.0001f ? Time.timeScale : 1f;
             Time.timeScale = Mathf.Clamp01(pauseTimeScale);
             pendingExtraSeconds = 0f;
 

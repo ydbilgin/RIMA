@@ -1939,6 +1939,13 @@ namespace RIMA.MapDesigner.Room.Runtime
 
         private static void RestoreGameplayTimeScale()
         {
+            bool skillOfferOpen = UIManager.Instance != null && UIManager.Instance.IsSkillOfferOpen;
+            DraftManager draft = DraftManager.Instance;
+            if (skillOfferOpen || (draft != null && (draft.IsDraftPending || draft.IsDraftActive)))
+            {
+                return;
+            }
+
             if (Mathf.Abs(Time.timeScale - 1f) > 0.001f)
             {
                 Time.timeScale = 1f;

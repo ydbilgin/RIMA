@@ -127,7 +127,6 @@ namespace RIMA
             if (instance == this)
             {
                 instance = null;
-                _shuttingDown = true;
             }
         }
 
