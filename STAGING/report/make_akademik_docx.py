@@ -36,6 +36,7 @@ FIG_2026 = BASE / "figures_2026-06-18"
 FIG_V2 = BASE / "figures_v2"
 GRAPHIFY = BASE / "graphify"
 SCREENSHOTS = BASE.parent / "report_screenshots"
+PLAYTEST_2026 = BASE.parent.parent / "Assets" / "Screenshots" / "Playtest_2026-06-19"
 LOGO = FIG_2026 / "kto_logo.png"
 OUT = BASE / "RIMA_Senior_Design_Report.docx"
 
@@ -54,7 +55,7 @@ C_TABLE  = "E3ECF0"  # acik teal-gri baslik hucresi
 # Brief figure caption suffix "| <path>" verir; path birden cok klasore gore
 # cozulur. Asagidaki harita yedek cozumdur (caption'da path yoksa).
 # ---------------------------------------------------------------------------
-FIGURE_DIRS = [BASE, FIG_2026, FIG_V2, GRAPHIFY, SCREENSHOTS, BASE.parent]
+FIGURE_DIRS = [BASE, FIG_2026, FIG_V2, GRAPHIFY, SCREENSHOTS, PLAYTEST_2026, BASE.parent]
 
 
 def _resolve_figure(path_hint: str) -> Path | None:
